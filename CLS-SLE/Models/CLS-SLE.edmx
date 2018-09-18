@@ -1,0 +1,1493 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SLE_TrackingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Assessment">
+          <Key>
+            <PropertyRef Name="AssessmentID" />
+          </Key>
+          <Property Name="AssessmentID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Category" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Description" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="AssessmentLevel">
+          <Key>
+            <PropertyRef Name="AssessmentLevelCode" />
+          </Key>
+          <Property Name="AssessmentLevelCode" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AssessmentRubric">
+          <Key>
+            <PropertyRef Name="RubricID" />
+          </Key>
+          <Property Name="RubricID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Description" Type="varchar(max)" />
+          <Property Name="AssessmentID" Type="tinyint" Nullable="false" />
+          <Property Name="OutcomePassRate" Type="numeric" Precision="4" Scale="3" />
+          <Property Name="CalculateOutcomePassRate" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AssessmentStatus">
+          <Key>
+            <PropertyRef Name="AssessmentStatusCode" />
+          </Key>
+          <Property Name="AssessmentStatusCode" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Course">
+          <Key>
+            <PropertyRef Name="CourseID" />
+          </Key>
+          <Property Name="CourseID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CourseName" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="ProgramID" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CourseProgram">
+          <Key>
+            <PropertyRef Name="CourseProgramID" />
+          </Key>
+          <Property Name="CourseProgramID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CourseID" Type="smallint" Nullable="false" />
+          <Property Name="ProgramID" Type="smallint" Nullable="false" />
+          <Property Name="CatalogYear" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Criteria">
+          <Key>
+            <PropertyRef Name="CriteriaID" />
+          </Key>
+          <Property Name="CriteriaID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OutcomeID" Type="smallint" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ExampleText" Type="varchar" MaxLength="200" />
+          <Property Name="SortOrder" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DepartmentID" />
+          </Key>
+          <Property Name="DepartmentID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DepartmentNumber" Type="varchar" MaxLength="20" />
+          <Property Name="Name" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Enrollment">
+          <Key>
+            <PropertyRef Name="EnrollmentID" />
+          </Key>
+          <Property Name="EnrollmentID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SectionID" Type="smallint" Nullable="false" />
+          <Property Name="StudentID" Type="int" Nullable="false" />
+          <Property Name="EnrollmentStatusCode" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="StatusDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EnrollmentStatus">
+          <Key>
+            <PropertyRef Name="StatusID" />
+          </Key>
+          <Property Name="StatusID" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Outcome">
+          <Key>
+            <PropertyRef Name="OutcomeID" />
+          </Key>
+          <Property Name="OutcomeID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RubricID" Type="smallint" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Description" Type="varchar(max)" />
+          <Property Name="SortOrder" Type="tinyint" Nullable="false" />
+          <Property Name="CriteriaPassRate" Type="numeric" Precision="4" Scale="3" />
+          <Property Name="CalculateCriteriaPassRate" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="PersonID" />
+          </Key>
+          <Property Name="PersonID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdNumber" Type="char" MaxLength="9" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Program">
+          <Key>
+            <PropertyRef Name="ProgramID" />
+          </Key>
+          <Property Name="ProgramID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Number" Type="varchar" MaxLength="20" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProgramDepartment">
+          <Key>
+            <PropertyRef Name="ProgramDepartmentID" />
+          </Key>
+          <Property Name="ProgramDepartmentID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProgramID" Type="smallint" Nullable="false" />
+          <Property Name="DepartmentID" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ScoreType">
+          <Key>
+            <PropertyRef Name="ScoreTypeID" />
+          </Key>
+          <Property Name="ScoreTypeID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RubricID" Type="smallint" Nullable="false" />
+          <Property Name="Description" Type="varchar(max)" />
+          <Property Name="Value" Type="tinyint" Nullable="false" />
+          <Property Name="SortOrder" Type="tinyint" Nullable="false" />
+          <Property Name="IsUnassessedScore" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Section">
+          <Key>
+            <PropertyRef Name="SectionID" />
+          </Key>
+          <Property Name="SectionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CRN" Type="int" Nullable="false" />
+          <Property Name="SemesterID" Type="smallint" Nullable="false" />
+          <Property Name="CourseID" Type="smallint" Nullable="false" />
+          <Property Name="LeadInstructorID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SectionRubric">
+          <Key>
+            <PropertyRef Name="SectionRubricID" />
+          </Key>
+          <Property Name="SectionRubricID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SectionID" Type="int" Nullable="false" />
+          <Property Name="RubricID" Type="smallint" Nullable="false" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
+          <Property Name="EndDate" Type="date" Nullable="false" />
+          <Property Name="AssessmentLevelCode" Type="char" MaxLength="1" />
+          <Property Name="AssessmentStatusCode" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="StatusDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Semester">
+          <Key>
+            <PropertyRef Name="SemesterID" />
+          </Key>
+          <Property Name="SemesterID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SemesterCode" Type="smallint" />
+          <Property Name="Name" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StudentProgram">
+          <Key>
+            <PropertyRef Name="StudentProgramID" />
+          </Key>
+          <Property Name="StudentProgramID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StudentID" Type="int" Nullable="false" />
+          <Property Name="ProgramID" Type="smallint" Nullable="false" />
+          <Property Name="SemesterID" Type="smallint" Nullable="false" />
+          <Property Name="IsPrimary" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StudentScore">
+          <Key>
+            <PropertyRef Name="StudentScoreID" />
+          </Key>
+          <Property Name="StudentScoreID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EnrollmentID" Type="bigint" Nullable="false" />
+          <Property Name="CriteriaID" Type="smallint" Nullable="false" />
+          <Property Name="ScoreTypeID" Type="smallint" Nullable="false" />
+          <Property Name="AssessedByID" Type="int" Nullable="false" />
+          <Property Name="DateTimeAssessed" Type="datetime" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="PersonID" />
+          </Key>
+          <Property Name="PersonID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Login" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="LastLogin" Type="datetime" />
+        </EntityType>
+        <EntityType Name="UserRole">
+          <Key>
+            <PropertyRef Name="UserRoleID" />
+          </Key>
+          <Property Name="UserRoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonID" Type="int" Nullable="false" />
+          <Property Name="RoleID" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <Association Name="fk_AssessmentRubric_AssessmentID">
+          <End Role="Assessment" Type="Self.Assessment" Multiplicity="1" />
+          <End Role="AssessmentRubric" Type="Self.AssessmentRubric" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assessment">
+              <PropertyRef Name="AssessmentID" />
+            </Principal>
+            <Dependent Role="AssessmentRubric">
+              <PropertyRef Name="AssessmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Course_ProgramID">
+          <End Role="Program" Type="Self.Program" Multiplicity="1" />
+          <End Role="Course" Type="Self.Course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="ProgramID" />
+            </Principal>
+            <Dependent Role="Course">
+              <PropertyRef Name="ProgramID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_CourseProgram_CourseID">
+          <End Role="Course" Type="Self.Course" Multiplicity="1" />
+          <End Role="CourseProgram" Type="Self.CourseProgram" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseID" />
+            </Principal>
+            <Dependent Role="CourseProgram">
+              <PropertyRef Name="CourseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_CourseProgram_ProgramID">
+          <End Role="Program" Type="Self.Program" Multiplicity="1" />
+          <End Role="CourseProgram" Type="Self.CourseProgram" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="ProgramID" />
+            </Principal>
+            <Dependent Role="CourseProgram">
+              <PropertyRef Name="ProgramID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Criteria_Outcome">
+          <End Role="Outcome" Type="Self.Outcome" Multiplicity="1" />
+          <End Role="Criteria" Type="Self.Criteria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Outcome">
+              <PropertyRef Name="OutcomeID" />
+            </Principal>
+            <Dependent Role="Criteria">
+              <PropertyRef Name="OutcomeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Outcome_RubricID">
+          <End Role="AssessmentRubric" Type="Self.AssessmentRubric" Multiplicity="1" />
+          <End Role="Outcome" Type="Self.Outcome" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssessmentRubric">
+              <PropertyRef Name="RubricID" />
+            </Principal>
+            <Dependent Role="Outcome">
+              <PropertyRef Name="RubricID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ScoreType_RubricID">
+          <End Role="AssessmentRubric" Type="Self.AssessmentRubric" Multiplicity="1" />
+          <End Role="ScoreType" Type="Self.ScoreType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssessmentRubric">
+              <PropertyRef Name="RubricID" />
+            </Principal>
+            <Dependent Role="ScoreType">
+              <PropertyRef Name="RubricID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Section_CourseID">
+          <End Role="Course" Type="Self.Course" Multiplicity="1" />
+          <End Role="Section" Type="Self.Section" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseID" />
+            </Principal>
+            <Dependent Role="Section">
+              <PropertyRef Name="CourseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Section_LeadInstructorID">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="Section" Type="Self.Section" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="Section">
+              <PropertyRef Name="LeadInstructorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Section_SemesterID">
+          <End Role="Semester" Type="Self.Semester" Multiplicity="1" />
+          <End Role="Section" Type="Self.Section" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Semester">
+              <PropertyRef Name="SemesterID" />
+            </Principal>
+            <Dependent Role="Section">
+              <PropertyRef Name="SemesterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_SectionRubric_AssessmentLevelID">
+          <End Role="AssessmentLevel" Type="Self.AssessmentLevel" Multiplicity="0..1" />
+          <End Role="SectionRubric" Type="Self.SectionRubric" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssessmentLevel">
+              <PropertyRef Name="AssessmentLevelCode" />
+            </Principal>
+            <Dependent Role="SectionRubric">
+              <PropertyRef Name="AssessmentLevelCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_SectionRubric_AssessmentStatusID">
+          <End Role="AssessmentStatus" Type="Self.AssessmentStatus" Multiplicity="1" />
+          <End Role="SectionRubric" Type="Self.SectionRubric" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssessmentStatus">
+              <PropertyRef Name="AssessmentStatusCode" />
+            </Principal>
+            <Dependent Role="SectionRubric">
+              <PropertyRef Name="AssessmentStatusCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_SectionRubric_RubricID">
+          <End Role="AssessmentRubric" Type="Self.AssessmentRubric" Multiplicity="1" />
+          <End Role="SectionRubric" Type="Self.SectionRubric" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssessmentRubric">
+              <PropertyRef Name="RubricID" />
+            </Principal>
+            <Dependent Role="SectionRubric">
+              <PropertyRef Name="RubricID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_SectionRubric_SectionID">
+          <End Role="Section" Type="Self.Section" Multiplicity="1" />
+          <End Role="SectionRubric" Type="Self.SectionRubric" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Section">
+              <PropertyRef Name="SectionID" />
+            </Principal>
+            <Dependent Role="SectionRubric">
+              <PropertyRef Name="SectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_StudentProgram_ProgramID">
+          <End Role="Program" Type="Self.Program" Multiplicity="1" />
+          <End Role="StudentProgram" Type="Self.StudentProgram" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="ProgramID" />
+            </Principal>
+            <Dependent Role="StudentProgram">
+              <PropertyRef Name="ProgramID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_StudentProgram_SemesterID">
+          <End Role="Semester" Type="Self.Semester" Multiplicity="1" />
+          <End Role="StudentProgram" Type="Self.StudentProgram" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Semester">
+              <PropertyRef Name="SemesterID" />
+            </Principal>
+            <Dependent Role="StudentProgram">
+              <PropertyRef Name="SemesterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_StudentProgram_StudentID">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="StudentProgram" Type="Self.StudentProgram" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="StudentProgram">
+              <PropertyRef Name="StudentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_StudentScore_AssessedByID">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="StudentScore" Type="Self.StudentScore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="StudentScore">
+              <PropertyRef Name="AssessedByID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_StudentScore_Criteria">
+          <End Role="Criteria" Type="Self.Criteria" Multiplicity="1" />
+          <End Role="StudentScore" Type="Self.StudentScore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Criteria">
+              <PropertyRef Name="CriteriaID" />
+            </Principal>
+            <Dependent Role="StudentScore">
+              <PropertyRef Name="CriteriaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_StudentScore_EnrollmentID">
+          <End Role="Enrollment" Type="Self.Enrollment" Multiplicity="1" />
+          <End Role="StudentScore" Type="Self.StudentScore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Enrollment">
+              <PropertyRef Name="EnrollmentID" />
+            </Principal>
+            <Dependent Role="StudentScore">
+              <PropertyRef Name="EnrollmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_StudentScore_ScoreTypeID">
+          <End Role="ScoreType" Type="Self.ScoreType" Multiplicity="1" />
+          <End Role="StudentScore" Type="Self.StudentScore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ScoreType">
+              <PropertyRef Name="ScoreTypeID" />
+            </Principal>
+            <Dependent Role="StudentScore">
+              <PropertyRef Name="ScoreTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_User_PersonID">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SLE_TrackingModelStoreContainer">
+          <EntitySet Name="Assessment" EntityType="Self.Assessment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AssessmentLevel" EntityType="Self.AssessmentLevel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AssessmentRubric" EntityType="Self.AssessmentRubric" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AssessmentStatus" EntityType="Self.AssessmentStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Course" EntityType="Self.Course" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CourseProgram" EntityType="Self.CourseProgram" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Criteria" EntityType="Self.Criteria" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Enrollment" EntityType="Self.Enrollment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EnrollmentStatus" EntityType="Self.EnrollmentStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Outcome" EntityType="Self.Outcome" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Person" EntityType="Self.Person" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Program" EntityType="Self.Program" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProgramDepartment" EntityType="Self.ProgramDepartment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ScoreType" EntityType="Self.ScoreType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Section" EntityType="Self.Section" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SectionRubric" EntityType="Self.SectionRubric" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Semester" EntityType="Self.Semester" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StudentProgram" EntityType="Self.StudentProgram" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StudentScore" EntityType="Self.StudentScore" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserRole" EntityType="Self.UserRole" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk_AssessmentRubric_AssessmentID" Association="Self.fk_AssessmentRubric_AssessmentID">
+            <End Role="Assessment" EntitySet="Assessment" />
+            <End Role="AssessmentRubric" EntitySet="AssessmentRubric" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Course_ProgramID" Association="Self.fk_Course_ProgramID">
+            <End Role="Program" EntitySet="Program" />
+            <End Role="Course" EntitySet="Course" />
+          </AssociationSet>
+          <AssociationSet Name="fk_CourseProgram_CourseID" Association="Self.fk_CourseProgram_CourseID">
+            <End Role="Course" EntitySet="Course" />
+            <End Role="CourseProgram" EntitySet="CourseProgram" />
+          </AssociationSet>
+          <AssociationSet Name="fk_CourseProgram_ProgramID" Association="Self.fk_CourseProgram_ProgramID">
+            <End Role="Program" EntitySet="Program" />
+            <End Role="CourseProgram" EntitySet="CourseProgram" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Criteria_Outcome" Association="Self.fk_Criteria_Outcome">
+            <End Role="Outcome" EntitySet="Outcome" />
+            <End Role="Criteria" EntitySet="Criteria" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Outcome_RubricID" Association="Self.fk_Outcome_RubricID">
+            <End Role="AssessmentRubric" EntitySet="AssessmentRubric" />
+            <End Role="Outcome" EntitySet="Outcome" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ScoreType_RubricID" Association="Self.fk_ScoreType_RubricID">
+            <End Role="AssessmentRubric" EntitySet="AssessmentRubric" />
+            <End Role="ScoreType" EntitySet="ScoreType" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Section_CourseID" Association="Self.fk_Section_CourseID">
+            <End Role="Course" EntitySet="Course" />
+            <End Role="Section" EntitySet="Section" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Section_LeadInstructorID" Association="Self.fk_Section_LeadInstructorID">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="Section" EntitySet="Section" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Section_SemesterID" Association="Self.fk_Section_SemesterID">
+            <End Role="Semester" EntitySet="Semester" />
+            <End Role="Section" EntitySet="Section" />
+          </AssociationSet>
+          <AssociationSet Name="fk_SectionRubric_AssessmentLevelID" Association="Self.fk_SectionRubric_AssessmentLevelID">
+            <End Role="AssessmentLevel" EntitySet="AssessmentLevel" />
+            <End Role="SectionRubric" EntitySet="SectionRubric" />
+          </AssociationSet>
+          <AssociationSet Name="fk_SectionRubric_AssessmentStatusID" Association="Self.fk_SectionRubric_AssessmentStatusID">
+            <End Role="AssessmentStatus" EntitySet="AssessmentStatus" />
+            <End Role="SectionRubric" EntitySet="SectionRubric" />
+          </AssociationSet>
+          <AssociationSet Name="fk_SectionRubric_RubricID" Association="Self.fk_SectionRubric_RubricID">
+            <End Role="AssessmentRubric" EntitySet="AssessmentRubric" />
+            <End Role="SectionRubric" EntitySet="SectionRubric" />
+          </AssociationSet>
+          <AssociationSet Name="fk_SectionRubric_SectionID" Association="Self.fk_SectionRubric_SectionID">
+            <End Role="Section" EntitySet="Section" />
+            <End Role="SectionRubric" EntitySet="SectionRubric" />
+          </AssociationSet>
+          <AssociationSet Name="fk_StudentProgram_ProgramID" Association="Self.fk_StudentProgram_ProgramID">
+            <End Role="Program" EntitySet="Program" />
+            <End Role="StudentProgram" EntitySet="StudentProgram" />
+          </AssociationSet>
+          <AssociationSet Name="fk_StudentProgram_SemesterID" Association="Self.fk_StudentProgram_SemesterID">
+            <End Role="Semester" EntitySet="Semester" />
+            <End Role="StudentProgram" EntitySet="StudentProgram" />
+          </AssociationSet>
+          <AssociationSet Name="fk_StudentProgram_StudentID" Association="Self.fk_StudentProgram_StudentID">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="StudentProgram" EntitySet="StudentProgram" />
+          </AssociationSet>
+          <AssociationSet Name="fk_StudentScore_AssessedByID" Association="Self.fk_StudentScore_AssessedByID">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="StudentScore" EntitySet="StudentScore" />
+          </AssociationSet>
+          <AssociationSet Name="fk_StudentScore_Criteria" Association="Self.fk_StudentScore_Criteria">
+            <End Role="Criteria" EntitySet="Criteria" />
+            <End Role="StudentScore" EntitySet="StudentScore" />
+          </AssociationSet>
+          <AssociationSet Name="fk_StudentScore_EnrollmentID" Association="Self.fk_StudentScore_EnrollmentID">
+            <End Role="Enrollment" EntitySet="Enrollment" />
+            <End Role="StudentScore" EntitySet="StudentScore" />
+          </AssociationSet>
+          <AssociationSet Name="fk_StudentScore_ScoreTypeID" Association="Self.fk_StudentScore_ScoreTypeID">
+            <End Role="ScoreType" EntitySet="ScoreType" />
+            <End Role="StudentScore" EntitySet="StudentScore" />
+          </AssociationSet>
+          <AssociationSet Name="fk_User_PersonID" Association="Self.fk_User_PersonID">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SLE_TrackingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Assessment">
+          <Key>
+            <PropertyRef Name="AssessmentID" />
+          </Key>
+          <Property Name="AssessmentID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Category" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AssessmentRubrics" Relationship="Self.fk_AssessmentRubric_AssessmentID" FromRole="Assessment" ToRole="AssessmentRubric" />
+        </EntityType>
+        <EntityType Name="AssessmentLevel">
+          <Key>
+            <PropertyRef Name="AssessmentLevelCode" />
+          </Key>
+          <Property Name="AssessmentLevelCode" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="SectionRubrics" Relationship="Self.fk_SectionRubric_AssessmentLevelID" FromRole="AssessmentLevel" ToRole="SectionRubric" />
+        </EntityType>
+        <EntityType Name="AssessmentRubric">
+          <Key>
+            <PropertyRef Name="RubricID" />
+          </Key>
+          <Property Name="RubricID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AssessmentID" Type="Byte" Nullable="false" />
+          <Property Name="OutcomePassRate" Type="Decimal" Precision="4" Scale="3" />
+          <Property Name="CalculateOutcomePassRate" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Assessment" Relationship="Self.fk_AssessmentRubric_AssessmentID" FromRole="AssessmentRubric" ToRole="Assessment" />
+          <NavigationProperty Name="Outcomes" Relationship="Self.fk_Outcome_RubricID" FromRole="AssessmentRubric" ToRole="Outcome" />
+          <NavigationProperty Name="ScoreTypes" Relationship="Self.fk_ScoreType_RubricID" FromRole="AssessmentRubric" ToRole="ScoreType" />
+          <NavigationProperty Name="SectionRubrics" Relationship="Self.fk_SectionRubric_RubricID" FromRole="AssessmentRubric" ToRole="SectionRubric" />
+        </EntityType>
+        <EntityType Name="AssessmentStatu">
+          <Key>
+            <PropertyRef Name="AssessmentStatusCode" />
+          </Key>
+          <Property Name="AssessmentStatusCode" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="SectionRubrics" Relationship="Self.fk_SectionRubric_AssessmentStatusID" FromRole="AssessmentStatus" ToRole="SectionRubric" />
+        </EntityType>
+        <EntityType Name="Course">
+          <Key>
+            <PropertyRef Name="CourseID" />
+          </Key>
+          <Property Name="CourseID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CourseName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProgramID" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="Program" Relationship="Self.fk_Course_ProgramID" FromRole="Course" ToRole="Program" />
+          <NavigationProperty Name="CoursePrograms" Relationship="Self.fk_CourseProgram_CourseID" FromRole="Course" ToRole="CourseProgram" />
+          <NavigationProperty Name="Sections" Relationship="Self.fk_Section_CourseID" FromRole="Course" ToRole="Section" />
+        </EntityType>
+        <EntityType Name="CourseProgram">
+          <Key>
+            <PropertyRef Name="CourseProgramID" />
+          </Key>
+          <Property Name="CourseProgramID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CourseID" Type="Int16" Nullable="false" />
+          <Property Name="ProgramID" Type="Int16" Nullable="false" />
+          <Property Name="CatalogYear" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Course" Relationship="Self.fk_CourseProgram_CourseID" FromRole="CourseProgram" ToRole="Course" />
+          <NavigationProperty Name="Program" Relationship="Self.fk_CourseProgram_ProgramID" FromRole="CourseProgram" ToRole="Program" />
+        </EntityType>
+        <EntityType Name="Criterion">
+          <Key>
+            <PropertyRef Name="CriteriaID" />
+          </Key>
+          <Property Name="CriteriaID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OutcomeID" Type="Int16" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ExampleText" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="SortOrder" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Outcome" Relationship="Self.fk_Criteria_Outcome" FromRole="Criteria" ToRole="Outcome" />
+          <NavigationProperty Name="StudentScores" Relationship="Self.fk_StudentScore_Criteria" FromRole="Criteria" ToRole="StudentScore" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DepartmentID" />
+          </Key>
+          <Property Name="DepartmentID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DepartmentNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Enrollment">
+          <Key>
+            <PropertyRef Name="EnrollmentID" />
+          </Key>
+          <Property Name="EnrollmentID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SectionID" Type="Int16" Nullable="false" />
+          <Property Name="StudentID" Type="Int32" Nullable="false" />
+          <Property Name="EnrollmentStatusCode" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="StatusDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="StudentScores" Relationship="Self.fk_StudentScore_EnrollmentID" FromRole="Enrollment" ToRole="StudentScore" />
+        </EntityType>
+        <EntityType Name="EnrollmentStatu">
+          <Key>
+            <PropertyRef Name="StatusID" />
+          </Key>
+          <Property Name="StatusID" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Outcome">
+          <Key>
+            <PropertyRef Name="OutcomeID" />
+          </Key>
+          <Property Name="OutcomeID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RubricID" Type="Int16" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SortOrder" Type="Byte" Nullable="false" />
+          <Property Name="CriteriaPassRate" Type="Decimal" Precision="4" Scale="3" />
+          <Property Name="CalculateCriteriaPassRate" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AssessmentRubric" Relationship="Self.fk_Outcome_RubricID" FromRole="Outcome" ToRole="AssessmentRubric" />
+          <NavigationProperty Name="Criteria" Relationship="Self.fk_Criteria_Outcome" FromRole="Outcome" ToRole="Criteria" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="PersonID" />
+          </Key>
+          <Property Name="PersonID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdNumber" Type="String" MaxLength="9" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Sections" Relationship="Self.fk_Section_LeadInstructorID" FromRole="Person" ToRole="Section" />
+          <NavigationProperty Name="StudentPrograms" Relationship="Self.fk_StudentProgram_StudentID" FromRole="Person" ToRole="StudentProgram" />
+          <NavigationProperty Name="StudentScores" Relationship="Self.fk_StudentScore_AssessedByID" FromRole="Person" ToRole="StudentScore" />
+          <NavigationProperty Name="User" Relationship="Self.fk_User_PersonID" FromRole="Person" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Program">
+          <Key>
+            <PropertyRef Name="ProgramID" />
+          </Key>
+          <Property Name="ProgramID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Number" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Courses" Relationship="Self.fk_Course_ProgramID" FromRole="Program" ToRole="Course" />
+          <NavigationProperty Name="CoursePrograms" Relationship="Self.fk_CourseProgram_ProgramID" FromRole="Program" ToRole="CourseProgram" />
+          <NavigationProperty Name="StudentPrograms" Relationship="Self.fk_StudentProgram_ProgramID" FromRole="Program" ToRole="StudentProgram" />
+        </EntityType>
+        <EntityType Name="ProgramDepartment">
+          <Key>
+            <PropertyRef Name="ProgramDepartmentID" />
+          </Key>
+          <Property Name="ProgramDepartmentID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProgramID" Type="Int16" Nullable="false" />
+          <Property Name="DepartmentID" Type="Int16" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ScoreType">
+          <Key>
+            <PropertyRef Name="ScoreTypeID" />
+          </Key>
+          <Property Name="ScoreTypeID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RubricID" Type="Int16" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Value" Type="Byte" Nullable="false" />
+          <Property Name="SortOrder" Type="Byte" Nullable="false" />
+          <Property Name="IsUnassessedScore" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AssessmentRubric" Relationship="Self.fk_ScoreType_RubricID" FromRole="ScoreType" ToRole="AssessmentRubric" />
+          <NavigationProperty Name="StudentScores" Relationship="Self.fk_StudentScore_ScoreTypeID" FromRole="ScoreType" ToRole="StudentScore" />
+        </EntityType>
+        <EntityType Name="Section">
+          <Key>
+            <PropertyRef Name="SectionID" />
+          </Key>
+          <Property Name="SectionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CRN" Type="Int32" Nullable="false" />
+          <Property Name="SemesterID" Type="Int16" Nullable="false" />
+          <Property Name="CourseID" Type="Int16" Nullable="false" />
+          <Property Name="LeadInstructorID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Course" Relationship="Self.fk_Section_CourseID" FromRole="Section" ToRole="Course" />
+          <NavigationProperty Name="Person" Relationship="Self.fk_Section_LeadInstructorID" FromRole="Section" ToRole="Person" />
+          <NavigationProperty Name="Semester" Relationship="Self.fk_Section_SemesterID" FromRole="Section" ToRole="Semester" />
+          <NavigationProperty Name="SectionRubrics" Relationship="Self.fk_SectionRubric_SectionID" FromRole="Section" ToRole="SectionRubric" />
+        </EntityType>
+        <EntityType Name="SectionRubric">
+          <Key>
+            <PropertyRef Name="SectionRubricID" />
+          </Key>
+          <Property Name="SectionRubricID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SectionID" Type="Int32" Nullable="false" />
+          <Property Name="RubricID" Type="Int16" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="AssessmentLevelCode" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="AssessmentStatusCode" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="StatusDateTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="AssessmentLevel" Relationship="Self.fk_SectionRubric_AssessmentLevelID" FromRole="SectionRubric" ToRole="AssessmentLevel" />
+          <NavigationProperty Name="AssessmentRubric" Relationship="Self.fk_SectionRubric_RubricID" FromRole="SectionRubric" ToRole="AssessmentRubric" />
+          <NavigationProperty Name="AssessmentStatu" Relationship="Self.fk_SectionRubric_AssessmentStatusID" FromRole="SectionRubric" ToRole="AssessmentStatus" />
+          <NavigationProperty Name="Section" Relationship="Self.fk_SectionRubric_SectionID" FromRole="SectionRubric" ToRole="Section" />
+        </EntityType>
+        <EntityType Name="Semester">
+          <Key>
+            <PropertyRef Name="SemesterID" />
+          </Key>
+          <Property Name="SemesterID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SemesterCode" Type="Int16" />
+          <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Sections" Relationship="Self.fk_Section_SemesterID" FromRole="Semester" ToRole="Section" />
+          <NavigationProperty Name="StudentPrograms" Relationship="Self.fk_StudentProgram_SemesterID" FromRole="Semester" ToRole="StudentProgram" />
+        </EntityType>
+        <EntityType Name="StudentProgram">
+          <Key>
+            <PropertyRef Name="StudentProgramID" />
+          </Key>
+          <Property Name="StudentProgramID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StudentID" Type="Int32" Nullable="false" />
+          <Property Name="ProgramID" Type="Int16" Nullable="false" />
+          <Property Name="SemesterID" Type="Int16" Nullable="false" />
+          <Property Name="IsPrimary" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Person" Relationship="Self.fk_StudentProgram_StudentID" FromRole="StudentProgram" ToRole="Person" />
+          <NavigationProperty Name="Program" Relationship="Self.fk_StudentProgram_ProgramID" FromRole="StudentProgram" ToRole="Program" />
+          <NavigationProperty Name="Semester" Relationship="Self.fk_StudentProgram_SemesterID" FromRole="StudentProgram" ToRole="Semester" />
+        </EntityType>
+        <EntityType Name="StudentScore">
+          <Key>
+            <PropertyRef Name="StudentScoreID" />
+          </Key>
+          <Property Name="StudentScoreID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EnrollmentID" Type="Int64" Nullable="false" />
+          <Property Name="CriteriaID" Type="Int16" Nullable="false" />
+          <Property Name="ScoreTypeID" Type="Int16" Nullable="false" />
+          <Property Name="AssessedByID" Type="Int32" Nullable="false" />
+          <Property Name="DateTimeAssessed" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Criterion" Relationship="Self.fk_StudentScore_Criteria" FromRole="StudentScore" ToRole="Criteria" />
+          <NavigationProperty Name="Enrollment" Relationship="Self.fk_StudentScore_EnrollmentID" FromRole="StudentScore" ToRole="Enrollment" />
+          <NavigationProperty Name="Person" Relationship="Self.fk_StudentScore_AssessedByID" FromRole="StudentScore" ToRole="Person" />
+          <NavigationProperty Name="ScoreType" Relationship="Self.fk_StudentScore_ScoreTypeID" FromRole="StudentScore" ToRole="ScoreType" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="PersonID" />
+          </Key>
+          <Property Name="PersonID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Login" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LastLogin" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Person" Relationship="Self.fk_User_PersonID" FromRole="User" ToRole="Person" />
+        </EntityType>
+        <EntityType Name="UserRole">
+          <Key>
+            <PropertyRef Name="UserRoleID" />
+          </Key>
+          <Property Name="UserRoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonID" Type="Int32" Nullable="false" />
+          <Property Name="RoleID" Type="Byte" Nullable="false" />
+        </EntityType>
+        <Association Name="fk_AssessmentRubric_AssessmentID">
+          <End Role="Assessment" Type="Self.Assessment" Multiplicity="1" />
+          <End Role="AssessmentRubric" Type="Self.AssessmentRubric" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assessment">
+              <PropertyRef Name="AssessmentID" />
+            </Principal>
+            <Dependent Role="AssessmentRubric">
+              <PropertyRef Name="AssessmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_SectionRubric_AssessmentLevelID">
+          <End Role="AssessmentLevel" Type="Self.AssessmentLevel" Multiplicity="0..1" />
+          <End Role="SectionRubric" Type="Self.SectionRubric" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssessmentLevel">
+              <PropertyRef Name="AssessmentLevelCode" />
+            </Principal>
+            <Dependent Role="SectionRubric">
+              <PropertyRef Name="AssessmentLevelCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Outcome_RubricID">
+          <End Role="AssessmentRubric" Type="Self.AssessmentRubric" Multiplicity="1" />
+          <End Role="Outcome" Type="Self.Outcome" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssessmentRubric">
+              <PropertyRef Name="RubricID" />
+            </Principal>
+            <Dependent Role="Outcome">
+              <PropertyRef Name="RubricID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ScoreType_RubricID">
+          <End Role="AssessmentRubric" Type="Self.AssessmentRubric" Multiplicity="1" />
+          <End Role="ScoreType" Type="Self.ScoreType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssessmentRubric">
+              <PropertyRef Name="RubricID" />
+            </Principal>
+            <Dependent Role="ScoreType">
+              <PropertyRef Name="RubricID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_SectionRubric_RubricID">
+          <End Role="AssessmentRubric" Type="Self.AssessmentRubric" Multiplicity="1" />
+          <End Role="SectionRubric" Type="Self.SectionRubric" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssessmentRubric">
+              <PropertyRef Name="RubricID" />
+            </Principal>
+            <Dependent Role="SectionRubric">
+              <PropertyRef Name="RubricID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_SectionRubric_AssessmentStatusID">
+          <End Role="AssessmentStatus" Type="Self.AssessmentStatu" Multiplicity="1" />
+          <End Role="SectionRubric" Type="Self.SectionRubric" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssessmentStatus">
+              <PropertyRef Name="AssessmentStatusCode" />
+            </Principal>
+            <Dependent Role="SectionRubric">
+              <PropertyRef Name="AssessmentStatusCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Course_ProgramID">
+          <End Role="Program" Type="Self.Program" Multiplicity="1" />
+          <End Role="Course" Type="Self.Course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="ProgramID" />
+            </Principal>
+            <Dependent Role="Course">
+              <PropertyRef Name="ProgramID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_CourseProgram_CourseID">
+          <End Role="Course" Type="Self.Course" Multiplicity="1" />
+          <End Role="CourseProgram" Type="Self.CourseProgram" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseID" />
+            </Principal>
+            <Dependent Role="CourseProgram">
+              <PropertyRef Name="CourseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Section_CourseID">
+          <End Role="Course" Type="Self.Course" Multiplicity="1" />
+          <End Role="Section" Type="Self.Section" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseID" />
+            </Principal>
+            <Dependent Role="Section">
+              <PropertyRef Name="CourseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_CourseProgram_ProgramID">
+          <End Role="Program" Type="Self.Program" Multiplicity="1" />
+          <End Role="CourseProgram" Type="Self.CourseProgram" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="ProgramID" />
+            </Principal>
+            <Dependent Role="CourseProgram">
+              <PropertyRef Name="ProgramID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Criteria_Outcome">
+          <End Role="Outcome" Type="Self.Outcome" Multiplicity="1" />
+          <End Role="Criteria" Type="Self.Criterion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Outcome">
+              <PropertyRef Name="OutcomeID" />
+            </Principal>
+            <Dependent Role="Criteria">
+              <PropertyRef Name="OutcomeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_StudentScore_Criteria">
+          <End Role="Criteria" Type="Self.Criterion" Multiplicity="1" />
+          <End Role="StudentScore" Type="Self.StudentScore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Criteria">
+              <PropertyRef Name="CriteriaID" />
+            </Principal>
+            <Dependent Role="StudentScore">
+              <PropertyRef Name="CriteriaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_StudentScore_EnrollmentID">
+          <End Role="Enrollment" Type="Self.Enrollment" Multiplicity="1" />
+          <End Role="StudentScore" Type="Self.StudentScore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Enrollment">
+              <PropertyRef Name="EnrollmentID" />
+            </Principal>
+            <Dependent Role="StudentScore">
+              <PropertyRef Name="EnrollmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Section_LeadInstructorID">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="Section" Type="Self.Section" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="Section">
+              <PropertyRef Name="LeadInstructorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_StudentProgram_StudentID">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="StudentProgram" Type="Self.StudentProgram" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="StudentProgram">
+              <PropertyRef Name="StudentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_StudentScore_AssessedByID">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="StudentScore" Type="Self.StudentScore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="StudentScore">
+              <PropertyRef Name="AssessedByID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_User_PersonID">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_StudentProgram_ProgramID">
+          <End Role="Program" Type="Self.Program" Multiplicity="1" />
+          <End Role="StudentProgram" Type="Self.StudentProgram" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="ProgramID" />
+            </Principal>
+            <Dependent Role="StudentProgram">
+              <PropertyRef Name="ProgramID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_StudentScore_ScoreTypeID">
+          <End Role="ScoreType" Type="Self.ScoreType" Multiplicity="1" />
+          <End Role="StudentScore" Type="Self.StudentScore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ScoreType">
+              <PropertyRef Name="ScoreTypeID" />
+            </Principal>
+            <Dependent Role="StudentScore">
+              <PropertyRef Name="ScoreTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Section_SemesterID">
+          <End Role="Semester" Type="Self.Semester" Multiplicity="1" />
+          <End Role="Section" Type="Self.Section" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Semester">
+              <PropertyRef Name="SemesterID" />
+            </Principal>
+            <Dependent Role="Section">
+              <PropertyRef Name="SemesterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_SectionRubric_SectionID">
+          <End Role="Section" Type="Self.Section" Multiplicity="1" />
+          <End Role="SectionRubric" Type="Self.SectionRubric" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Section">
+              <PropertyRef Name="SectionID" />
+            </Principal>
+            <Dependent Role="SectionRubric">
+              <PropertyRef Name="SectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_StudentProgram_SemesterID">
+          <End Role="Semester" Type="Self.Semester" Multiplicity="1" />
+          <End Role="StudentProgram" Type="Self.StudentProgram" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Semester">
+              <PropertyRef Name="SemesterID" />
+            </Principal>
+            <Dependent Role="StudentProgram">
+              <PropertyRef Name="SemesterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SLE_TrackingEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Assessments" EntityType="Self.Assessment" />
+          <EntitySet Name="AssessmentLevels" EntityType="Self.AssessmentLevel" />
+          <EntitySet Name="AssessmentRubrics" EntityType="Self.AssessmentRubric" />
+          <EntitySet Name="AssessmentStatus" EntityType="Self.AssessmentStatu" />
+          <EntitySet Name="Courses" EntityType="Self.Course" />
+          <EntitySet Name="CoursePrograms" EntityType="Self.CourseProgram" />
+          <EntitySet Name="Criteria" EntityType="Self.Criterion" />
+          <EntitySet Name="Departments" EntityType="Self.Department" />
+          <EntitySet Name="Enrollments" EntityType="Self.Enrollment" />
+          <EntitySet Name="EnrollmentStatus" EntityType="Self.EnrollmentStatu" />
+          <EntitySet Name="Outcomes" EntityType="Self.Outcome" />
+          <EntitySet Name="People" EntityType="Self.Person" />
+          <EntitySet Name="Programs" EntityType="Self.Program" />
+          <EntitySet Name="ProgramDepartments" EntityType="Self.ProgramDepartment" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="ScoreTypes" EntityType="Self.ScoreType" />
+          <EntitySet Name="Sections" EntityType="Self.Section" />
+          <EntitySet Name="SectionRubrics" EntityType="Self.SectionRubric" />
+          <EntitySet Name="Semesters" EntityType="Self.Semester" />
+          <EntitySet Name="StudentPrograms" EntityType="Self.StudentProgram" />
+          <EntitySet Name="StudentScores" EntityType="Self.StudentScore" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="UserRoles" EntityType="Self.UserRole" />
+          <AssociationSet Name="fk_AssessmentRubric_AssessmentID" Association="Self.fk_AssessmentRubric_AssessmentID">
+            <End Role="Assessment" EntitySet="Assessments" />
+            <End Role="AssessmentRubric" EntitySet="AssessmentRubrics" />
+          </AssociationSet>
+          <AssociationSet Name="fk_SectionRubric_AssessmentLevelID" Association="Self.fk_SectionRubric_AssessmentLevelID">
+            <End Role="AssessmentLevel" EntitySet="AssessmentLevels" />
+            <End Role="SectionRubric" EntitySet="SectionRubrics" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Outcome_RubricID" Association="Self.fk_Outcome_RubricID">
+            <End Role="AssessmentRubric" EntitySet="AssessmentRubrics" />
+            <End Role="Outcome" EntitySet="Outcomes" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ScoreType_RubricID" Association="Self.fk_ScoreType_RubricID">
+            <End Role="AssessmentRubric" EntitySet="AssessmentRubrics" />
+            <End Role="ScoreType" EntitySet="ScoreTypes" />
+          </AssociationSet>
+          <AssociationSet Name="fk_SectionRubric_RubricID" Association="Self.fk_SectionRubric_RubricID">
+            <End Role="AssessmentRubric" EntitySet="AssessmentRubrics" />
+            <End Role="SectionRubric" EntitySet="SectionRubrics" />
+          </AssociationSet>
+          <AssociationSet Name="fk_SectionRubric_AssessmentStatusID" Association="Self.fk_SectionRubric_AssessmentStatusID">
+            <End Role="AssessmentStatus" EntitySet="AssessmentStatus" />
+            <End Role="SectionRubric" EntitySet="SectionRubrics" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Course_ProgramID" Association="Self.fk_Course_ProgramID">
+            <End Role="Program" EntitySet="Programs" />
+            <End Role="Course" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="fk_CourseProgram_CourseID" Association="Self.fk_CourseProgram_CourseID">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="CourseProgram" EntitySet="CoursePrograms" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Section_CourseID" Association="Self.fk_Section_CourseID">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="Section" EntitySet="Sections" />
+          </AssociationSet>
+          <AssociationSet Name="fk_CourseProgram_ProgramID" Association="Self.fk_CourseProgram_ProgramID">
+            <End Role="Program" EntitySet="Programs" />
+            <End Role="CourseProgram" EntitySet="CoursePrograms" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Criteria_Outcome" Association="Self.fk_Criteria_Outcome">
+            <End Role="Outcome" EntitySet="Outcomes" />
+            <End Role="Criteria" EntitySet="Criteria" />
+          </AssociationSet>
+          <AssociationSet Name="fk_StudentScore_Criteria" Association="Self.fk_StudentScore_Criteria">
+            <End Role="Criteria" EntitySet="Criteria" />
+            <End Role="StudentScore" EntitySet="StudentScores" />
+          </AssociationSet>
+          <AssociationSet Name="fk_StudentScore_EnrollmentID" Association="Self.fk_StudentScore_EnrollmentID">
+            <End Role="Enrollment" EntitySet="Enrollments" />
+            <End Role="StudentScore" EntitySet="StudentScores" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Section_LeadInstructorID" Association="Self.fk_Section_LeadInstructorID">
+            <End Role="Person" EntitySet="People" />
+            <End Role="Section" EntitySet="Sections" />
+          </AssociationSet>
+          <AssociationSet Name="fk_StudentProgram_StudentID" Association="Self.fk_StudentProgram_StudentID">
+            <End Role="Person" EntitySet="People" />
+            <End Role="StudentProgram" EntitySet="StudentPrograms" />
+          </AssociationSet>
+          <AssociationSet Name="fk_StudentScore_AssessedByID" Association="Self.fk_StudentScore_AssessedByID">
+            <End Role="Person" EntitySet="People" />
+            <End Role="StudentScore" EntitySet="StudentScores" />
+          </AssociationSet>
+          <AssociationSet Name="fk_User_PersonID" Association="Self.fk_User_PersonID">
+            <End Role="Person" EntitySet="People" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="fk_StudentProgram_ProgramID" Association="Self.fk_StudentProgram_ProgramID">
+            <End Role="Program" EntitySet="Programs" />
+            <End Role="StudentProgram" EntitySet="StudentPrograms" />
+          </AssociationSet>
+          <AssociationSet Name="fk_StudentScore_ScoreTypeID" Association="Self.fk_StudentScore_ScoreTypeID">
+            <End Role="ScoreType" EntitySet="ScoreTypes" />
+            <End Role="StudentScore" EntitySet="StudentScores" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Section_SemesterID" Association="Self.fk_Section_SemesterID">
+            <End Role="Semester" EntitySet="Semesters" />
+            <End Role="Section" EntitySet="Sections" />
+          </AssociationSet>
+          <AssociationSet Name="fk_SectionRubric_SectionID" Association="Self.fk_SectionRubric_SectionID">
+            <End Role="Section" EntitySet="Sections" />
+            <End Role="SectionRubric" EntitySet="SectionRubrics" />
+          </AssociationSet>
+          <AssociationSet Name="fk_StudentProgram_SemesterID" Association="Self.fk_StudentProgram_SemesterID">
+            <End Role="Semester" EntitySet="Semesters" />
+            <End Role="StudentProgram" EntitySet="StudentPrograms" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SLE_TrackingModelStoreContainer" CdmEntityContainer="SLE_TrackingEntities">
+          <EntitySetMapping Name="Assessments">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.Assessment">
+              <MappingFragment StoreEntitySet="Assessment">
+                <ScalarProperty Name="AssessmentID" ColumnName="AssessmentID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AssessmentLevels">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.AssessmentLevel">
+              <MappingFragment StoreEntitySet="AssessmentLevel">
+                <ScalarProperty Name="AssessmentLevelCode" ColumnName="AssessmentLevelCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AssessmentRubrics">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.AssessmentRubric">
+              <MappingFragment StoreEntitySet="AssessmentRubric">
+                <ScalarProperty Name="RubricID" ColumnName="RubricID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="AssessmentID" ColumnName="AssessmentID" />
+                <ScalarProperty Name="OutcomePassRate" ColumnName="OutcomePassRate" />
+                <ScalarProperty Name="CalculateOutcomePassRate" ColumnName="CalculateOutcomePassRate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AssessmentStatus">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.AssessmentStatu">
+              <MappingFragment StoreEntitySet="AssessmentStatus">
+                <ScalarProperty Name="AssessmentStatusCode" ColumnName="AssessmentStatusCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Courses">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.Course">
+              <MappingFragment StoreEntitySet="Course">
+                <ScalarProperty Name="CourseID" ColumnName="CourseID" />
+                <ScalarProperty Name="CourseName" ColumnName="CourseName" />
+                <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CoursePrograms">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.CourseProgram">
+              <MappingFragment StoreEntitySet="CourseProgram">
+                <ScalarProperty Name="CourseProgramID" ColumnName="CourseProgramID" />
+                <ScalarProperty Name="CourseID" ColumnName="CourseID" />
+                <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
+                <ScalarProperty Name="CatalogYear" ColumnName="CatalogYear" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Criteria">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.Criterion">
+              <MappingFragment StoreEntitySet="Criteria">
+                <ScalarProperty Name="CriteriaID" ColumnName="CriteriaID" />
+                <ScalarProperty Name="OutcomeID" ColumnName="OutcomeID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ExampleText" ColumnName="ExampleText" />
+                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="DepartmentNumber" ColumnName="DepartmentNumber" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Enrollments">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.Enrollment">
+              <MappingFragment StoreEntitySet="Enrollment">
+                <ScalarProperty Name="EnrollmentID" ColumnName="EnrollmentID" />
+                <ScalarProperty Name="SectionID" ColumnName="SectionID" />
+                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+                <ScalarProperty Name="EnrollmentStatusCode" ColumnName="EnrollmentStatusCode" />
+                <ScalarProperty Name="StatusDate" ColumnName="StatusDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EnrollmentStatus">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.EnrollmentStatu">
+              <MappingFragment StoreEntitySet="EnrollmentStatus">
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Outcomes">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.Outcome">
+              <MappingFragment StoreEntitySet="Outcome">
+                <ScalarProperty Name="OutcomeID" ColumnName="OutcomeID" />
+                <ScalarProperty Name="RubricID" ColumnName="RubricID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+                <ScalarProperty Name="CriteriaPassRate" ColumnName="CriteriaPassRate" />
+                <ScalarProperty Name="CalculateCriteriaPassRate" ColumnName="CalculateCriteriaPassRate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="People">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.Person">
+              <MappingFragment StoreEntitySet="Person">
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="IdNumber" ColumnName="IdNumber" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Programs">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.Program">
+              <MappingFragment StoreEntitySet="Program">
+                <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProgramDepartments">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.ProgramDepartment">
+              <MappingFragment StoreEntitySet="ProgramDepartment">
+                <ScalarProperty Name="ProgramDepartmentID" ColumnName="ProgramDepartmentID" />
+                <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ScoreTypes">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.ScoreType">
+              <MappingFragment StoreEntitySet="ScoreType">
+                <ScalarProperty Name="ScoreTypeID" ColumnName="ScoreTypeID" />
+                <ScalarProperty Name="RubricID" ColumnName="RubricID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+                <ScalarProperty Name="IsUnassessedScore" ColumnName="IsUnassessedScore" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sections">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.Section">
+              <MappingFragment StoreEntitySet="Section">
+                <ScalarProperty Name="SectionID" ColumnName="SectionID" />
+                <ScalarProperty Name="CRN" ColumnName="CRN" />
+                <ScalarProperty Name="SemesterID" ColumnName="SemesterID" />
+                <ScalarProperty Name="CourseID" ColumnName="CourseID" />
+                <ScalarProperty Name="LeadInstructorID" ColumnName="LeadInstructorID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SectionRubrics">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.SectionRubric">
+              <MappingFragment StoreEntitySet="SectionRubric">
+                <ScalarProperty Name="SectionRubricID" ColumnName="SectionRubricID" />
+                <ScalarProperty Name="SectionID" ColumnName="SectionID" />
+                <ScalarProperty Name="RubricID" ColumnName="RubricID" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="AssessmentLevelCode" ColumnName="AssessmentLevelCode" />
+                <ScalarProperty Name="AssessmentStatusCode" ColumnName="AssessmentStatusCode" />
+                <ScalarProperty Name="StatusDateTime" ColumnName="StatusDateTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Semesters">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.Semester">
+              <MappingFragment StoreEntitySet="Semester">
+                <ScalarProperty Name="SemesterID" ColumnName="SemesterID" />
+                <ScalarProperty Name="SemesterCode" ColumnName="SemesterCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StudentPrograms">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.StudentProgram">
+              <MappingFragment StoreEntitySet="StudentProgram">
+                <ScalarProperty Name="StudentProgramID" ColumnName="StudentProgramID" />
+                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+                <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
+                <ScalarProperty Name="SemesterID" ColumnName="SemesterID" />
+                <ScalarProperty Name="IsPrimary" ColumnName="IsPrimary" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StudentScores">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.StudentScore">
+              <MappingFragment StoreEntitySet="StudentScore">
+                <ScalarProperty Name="StudentScoreID" ColumnName="StudentScoreID" />
+                <ScalarProperty Name="EnrollmentID" ColumnName="EnrollmentID" />
+                <ScalarProperty Name="CriteriaID" ColumnName="CriteriaID" />
+                <ScalarProperty Name="ScoreTypeID" ColumnName="ScoreTypeID" />
+                <ScalarProperty Name="AssessedByID" ColumnName="AssessedByID" />
+                <ScalarProperty Name="DateTimeAssessed" ColumnName="DateTimeAssessed" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRoles">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.UserRole">
+              <MappingFragment StoreEntitySet="UserRole">
+                <ScalarProperty Name="UserRoleID" ColumnName="UserRoleID" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

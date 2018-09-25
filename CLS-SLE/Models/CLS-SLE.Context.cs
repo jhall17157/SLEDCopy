@@ -48,5 +48,8 @@ namespace CLS_SLE.Models
         public virtual DbSet<StudentScore> StudentScores { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
+        public virtual DbSet<InstructorAssessment> InstructorAssessments { get; set; }
+        public virtual DbSet<RubricDetail> RubricDetails { get; set; }
+        public virtual DbSet<SectionEnrollment> SectionEnrollments { get; set; }
     }
 }

@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "TSA Assessment";
+}
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+<h3>Awesome Program TSA Assessment for 321-123-34567 Awesome Program Capstone</h3>
+
+<h4>All about this TSA Assessment. Enter a score for each student</h4>
+
+<table width="100%" class="table-bordered">
+    <thead>
+        <tr>
+            <td></td>
+            <td colspan="3" class="col-xs-offset-1 text-center">Ojective 1</td>
+            <td colspan="4" class="text-center">Objective 2</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="col-xs-offset-1 text-center">Criteria 1</td>
+            <td class="text-center">Criteria 2</td>
+            <td class="text-center">Criteria 3</td>
+            <td class="text-center">Criteria 4</td>
+            <td class="text-center">Criteria 5</td>
+            <td class="text-center">Criteria 6</td>
+            <td class="text-center">Criteria 7</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Jenny Student</td>
+            <td class="text-center">Met</td>
+            <td class="text-center"><div ng-app="myApp" ng-controller="myCtrl">
+                    <select ng-model="selectedName" ng-options="x for x in names">
+                    </select>
+                </div></td>
+            <td class="text-center">Not Met</td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center">Not Assessed</td>
+            <td class="text-center"></td>
+        </tr>
+        <tr>
+            <td>Joe Student</td>
+            <td class="text-center">Met</td>
+            <td class="text-center"></td>
+            <td class="text-center">Not Met</td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center">Not Assessed</td>
+            <td class="text-center"></td>
+        </tr>
+    </tbody>
+</table>
+
+<br>
+<input type="button" value="Mark as Complete">
+<input type="button" value="Cancel" id="cancel">
+<input type="button" value="Save Progress">
+
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope) {
+    $scope.names = ["Met", "Not Met", "Not Assessed"];
+});
+</script>
+
+@section scripts
+{
+    <script>
+        $('#cancel').on('click', function () {
+            location.href = "/Home/FacultyLandingPage";
+        });
+    </script>
+}

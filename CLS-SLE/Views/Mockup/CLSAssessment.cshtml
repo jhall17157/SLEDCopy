@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "CLS Assessment";
+}
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+
+<h2>Communication Summative Assessment for 123-123-12345 Communication</h2>
+
+<h3>All about this Communication Assessment Rubric. Enter a score for each student</h3>
+
+<table width="100%" class="table-bordered">
+    <thead>
+        <tr>
+            <td colspan="6" class="text-center">Communication</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="text-center">Verbale</td>
+            <td class="text-center">Non-Verbal</td>
+            <td class="text-center">Listening/Reading</td>
+            <td class="text-center">Written</td>
+            <td class="text-center">Global Awareness</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Jenny Student</td>
+            <td class="text-center">Met</td>
+            <td class="text-center">
+                <div ng-app="myApp" ng-controller="myCtrl">
+                    <select ng-model="selectedName" ng-options="x for x in names">
+                    </select>
+                </div>
+            </td>
+            <td class="text-center">Not Met</td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+        </tr>
+        <tr>
+            <td>Joe Student</td>
+            <td class="text-center">Met</td>
+            <td class="text-center"></td>
+            <td class="text-center">Not Met</td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+        </tr>
+    </tbody>
+</table>
+
+<br>
+<input type="button" value="Mark as Complete">
+<input type="button" value="Cancel" id="cancel">
+<input type="button" value="Save Progress">
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope) {
+    $scope.names = ["Exceeding Expectations (4)","Meeting Expectations (3)", "Approaching Expectations (2)", "Not meeting Expectations (1)", "Not Assessed (0)"];
+    });
+</script>
+
+@section scripts
+{
+    <script>
+        $('#cancel').on('click', function () {
+            location.href = "/Home/FacultyLandingPage";
+        });
+    </script>
+}

@@ -1,0 +1,26 @@
+﻿@model CLS_SLE.Models.InstructorAssessment
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>InstructorAssessment</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AssessmentLevel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AssessmentLevel)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

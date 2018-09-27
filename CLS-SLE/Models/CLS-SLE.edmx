@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SLE_TrackingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SLE_TrackingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Assessment">
           <Key>
             <PropertyRef Name="AssessmentID" />
@@ -174,7 +174,7 @@
             <PropertyRef Name="SemesterID" />
           </Key>
           <Property Name="SemesterID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="SemesterCode" Type="smallint" />
+          <Property Name="SemesterCode" Type="int" />
           <Property Name="Name" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <EntityType Name="StudentProgram">
@@ -202,7 +202,7 @@
           <Key>
             <PropertyRef Name="PersonID" />
           </Key>
-          <Property Name="PersonID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonID" Type="int" Nullable="false" />
           <Property Name="Login" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="LastLogin" Type="datetime" />
@@ -214,6 +214,73 @@
           <Property Name="UserRoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PersonID" Type="int" Nullable="false" />
           <Property Name="RoleID" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SLE_Tracking.dbo.InstructorAssessments' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="InstructorAssessments">
+          <Key>
+            <PropertyRef Name="Login" />
+            <PropertyRef Name="PersonID" />
+            <PropertyRef Name="CourseID" />
+            <PropertyRef Name="CourseName" />
+            <PropertyRef Name="SectionID" />
+            <PropertyRef Name="CRN" />
+            <PropertyRef Name="AssessmentName" />
+            <PropertyRef Name="RubricID" />
+            <PropertyRef Name="RubricName" />
+            <PropertyRef Name="DueDate" />
+            <PropertyRef Name="Status" />
+          </Key>
+          <Property Name="Login" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="PersonID" Type="int" Nullable="false" />
+          <Property Name="CourseID" Type="smallint" Nullable="false" />
+          <Property Name="CourseName" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="SectionID" Type="int" Nullable="false" />
+          <Property Name="CRN" Type="int" Nullable="false" />
+          <Property Name="AssessmentName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="RubricID" Type="smallint" Nullable="false" />
+          <Property Name="RubricName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="AssessmentLevel" Type="char" MaxLength="1" />
+          <Property Name="DueDate" Type="date" Nullable="false" />
+          <Property Name="Status" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SLE_Tracking.dbo.RubricDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="RubricDetails">
+          <Key>
+            <PropertyRef Name="AssessmentName" />
+            <PropertyRef Name="RubricID" />
+            <PropertyRef Name="RubricName" />
+            <PropertyRef Name="OutcomeName" />
+            <PropertyRef Name="OutcomeSortOrder" />
+            <PropertyRef Name="CriteriaID" />
+            <PropertyRef Name="CriteriaName" />
+            <PropertyRef Name="CriteriaSortOrder" />
+          </Key>
+          <Property Name="AssessmentName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="RubricID" Type="smallint" Nullable="false" />
+          <Property Name="RubricName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Description" Type="varchar(max)" />
+          <Property Name="OutcomeName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="OutcomeSortOrder" Type="tinyint" Nullable="false" />
+          <Property Name="CriteriaID" Type="smallint" Nullable="false" />
+          <Property Name="CriteriaName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ExampleText" Type="varchar" MaxLength="200" />
+          <Property Name="CriteriaSortOrder" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="SectionEnrollment">
+          <Key>
+            <PropertyRef Name="sectionID" />
+            <PropertyRef Name="EnrollmentID" />
+            <PropertyRef Name="StudentID" />
+          </Key>
+          <Property Name="sectionID" Type="int" Nullable="false" />
+          <Property Name="EnrollmentID" Type="bigint" Nullable="false" />
+          <Property Name="StudentID" Type="char" MaxLength="9" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
         </EntityType>
         <Association Name="fk_AssessmentRubric_AssessmentID">
           <End Role="Assessment" Type="Self.Assessment" Multiplicity="1" />
@@ -503,6 +570,45 @@
           <EntitySet Name="StudentScore" EntityType="Self.StudentScore" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRole" EntityType="Self.UserRole" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InstructorAssessments" EntityType="Self.InstructorAssessments" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [InstructorAssessments].[Login] AS [Login], 
+    [InstructorAssessments].[PersonID] AS [PersonID], 
+    [InstructorAssessments].[CourseID] AS [CourseID], 
+    [InstructorAssessments].[CourseName] AS [CourseName], 
+    [InstructorAssessments].[SectionID] AS [SectionID], 
+    [InstructorAssessments].[CRN] AS [CRN], 
+    [InstructorAssessments].[AssessmentName] AS [AssessmentName], 
+    [InstructorAssessments].[RubricID] AS [RubricID], 
+    [InstructorAssessments].[RubricName] AS [RubricName], 
+    [InstructorAssessments].[AssessmentLevel] AS [AssessmentLevel], 
+    [InstructorAssessments].[DueDate] AS [DueDate], 
+    [InstructorAssessments].[Status] AS [Status]
+    FROM [dbo].[InstructorAssessments] AS [InstructorAssessments]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="RubricDetails" EntityType="Self.RubricDetails" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [RubricDetails].[AssessmentName] AS [AssessmentName], 
+    [RubricDetails].[RubricID] AS [RubricID], 
+    [RubricDetails].[RubricName] AS [RubricName], 
+    [RubricDetails].[Description] AS [Description], 
+    [RubricDetails].[OutcomeName] AS [OutcomeName], 
+    [RubricDetails].[OutcomeSortOrder] AS [OutcomeSortOrder], 
+    [RubricDetails].[CriteriaID] AS [CriteriaID], 
+    [RubricDetails].[CriteriaName] AS [CriteriaName], 
+    [RubricDetails].[ExampleText] AS [ExampleText], 
+    [RubricDetails].[CriteriaSortOrder] AS [CriteriaSortOrder]
+    FROM [dbo].[RubricDetails] AS [RubricDetails]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="SectionEnrollment" EntityType="Self.SectionEnrollment" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [SectionEnrollment].[sectionID] AS [sectionID], 
+    [SectionEnrollment].[EnrollmentID] AS [EnrollmentID], 
+    [SectionEnrollment].[StudentID] AS [StudentID], 
+    [SectionEnrollment].[FirstName] AS [FirstName], 
+    [SectionEnrollment].[LastName] AS [LastName]
+    FROM [dbo].[SectionEnrollment] AS [SectionEnrollment]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="fk_AssessmentRubric_AssessmentID" Association="Self.fk_AssessmentRubric_AssessmentID">
             <End Role="Assessment" EntitySet="Assessment" />
             <End Role="AssessmentRubric" EntitySet="AssessmentRubric" />
@@ -592,8 +698,7 @@
             <End Role="User" EntitySet="User" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SLE_TrackingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1227,7 +1332,71 @@
             <End Role="Semester" EntitySet="Semesters" />
             <End Role="StudentProgram" EntitySet="StudentPrograms" />
           </AssociationSet>
+          <EntitySet Name="InstructorAssessments" EntityType="SLE_TrackingModel.InstructorAssessment" />
+          <EntitySet Name="RubricDetails" EntityType="SLE_TrackingModel.RubricDetail" />
+          <EntitySet Name="SectionEnrollments" EntityType="SLE_TrackingModel.SectionEnrollment" />
         </EntityContainer>
+        <EntityType Name="InstructorAssessment">
+          <Key>
+            <PropertyRef Name="Login" />
+            <PropertyRef Name="PersonID" />
+            <PropertyRef Name="CourseID" />
+            <PropertyRef Name="CourseName" />
+            <PropertyRef Name="SectionID" />
+            <PropertyRef Name="CRN" />
+            <PropertyRef Name="AssessmentName" />
+            <PropertyRef Name="RubricID" />
+            <PropertyRef Name="RubricName" />
+            <PropertyRef Name="DueDate" />
+            <PropertyRef Name="Status" />
+          </Key>
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PersonID" Type="Int32" Nullable="false" />
+          <Property Name="CourseID" Type="Int16" Nullable="false" />
+          <Property Name="CourseName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="SectionID" Type="Int32" Nullable="false" />
+          <Property Name="CRN" Type="Int32" Nullable="false" />
+          <Property Name="AssessmentName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="RubricID" Type="Int16" Nullable="false" />
+          <Property Name="RubricName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="AssessmentLevel" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="DueDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="RubricDetail">
+          <Key>
+            <PropertyRef Name="AssessmentName" />
+            <PropertyRef Name="RubricID" />
+            <PropertyRef Name="RubricName" />
+            <PropertyRef Name="OutcomeName" />
+            <PropertyRef Name="OutcomeSortOrder" />
+            <PropertyRef Name="CriteriaID" />
+            <PropertyRef Name="CriteriaName" />
+            <PropertyRef Name="CriteriaSortOrder" />
+          </Key>
+          <Property Name="AssessmentName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="RubricID" Type="Int16" Nullable="false" />
+          <Property Name="RubricName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="OutcomeName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="OutcomeSortOrder" Type="Byte" Nullable="false" />
+          <Property Name="CriteriaID" Type="Int16" Nullable="false" />
+          <Property Name="CriteriaName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ExampleText" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CriteriaSortOrder" Type="Byte" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SectionEnrollment">
+          <Key>
+            <PropertyRef Name="sectionID" />
+            <PropertyRef Name="EnrollmentID" />
+            <PropertyRef Name="StudentID" />
+          </Key>
+          <Property Name="sectionID" Type="Int32" Nullable="false" />
+          <Property Name="EnrollmentID" Type="Int64" Nullable="false" />
+          <Property Name="StudentID" Type="String" Nullable="false" MaxLength="9" FixedLength="true" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1464,6 +1633,51 @@
                 <ScalarProperty Name="UserRoleID" ColumnName="UserRoleID" />
                 <ScalarProperty Name="PersonID" ColumnName="PersonID" />
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InstructorAssessments">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.InstructorAssessment">
+              <MappingFragment StoreEntitySet="InstructorAssessments">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="AssessmentLevel" ColumnName="AssessmentLevel" />
+                <ScalarProperty Name="RubricName" ColumnName="RubricName" />
+                <ScalarProperty Name="RubricID" ColumnName="RubricID" />
+                <ScalarProperty Name="AssessmentName" ColumnName="AssessmentName" />
+                <ScalarProperty Name="CRN" ColumnName="CRN" />
+                <ScalarProperty Name="SectionID" ColumnName="SectionID" />
+                <ScalarProperty Name="CourseName" ColumnName="CourseName" />
+                <ScalarProperty Name="CourseID" ColumnName="CourseID" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RubricDetails">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.RubricDetail">
+              <MappingFragment StoreEntitySet="RubricDetails">
+                <ScalarProperty Name="CriteriaSortOrder" ColumnName="CriteriaSortOrder" />
+                <ScalarProperty Name="ExampleText" ColumnName="ExampleText" />
+                <ScalarProperty Name="CriteriaName" ColumnName="CriteriaName" />
+                <ScalarProperty Name="CriteriaID" ColumnName="CriteriaID" />
+                <ScalarProperty Name="OutcomeSortOrder" ColumnName="OutcomeSortOrder" />
+                <ScalarProperty Name="OutcomeName" ColumnName="OutcomeName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="RubricName" ColumnName="RubricName" />
+                <ScalarProperty Name="RubricID" ColumnName="RubricID" />
+                <ScalarProperty Name="AssessmentName" ColumnName="AssessmentName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SectionEnrollments">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.SectionEnrollment">
+              <MappingFragment StoreEntitySet="SectionEnrollment">
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+                <ScalarProperty Name="EnrollmentID" ColumnName="EnrollmentID" />
+                <ScalarProperty Name="sectionID" ColumnName="sectionID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

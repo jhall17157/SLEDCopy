@@ -157,6 +157,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AssessmentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InstructorAssessmentsController.cs" />
     <Compile Include="Controllers\MockupController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -321,6 +322,11 @@
     <Content Include="Views\Mockup\CLSAssessment.cshtml" />
     <Content Include="Views\Mockup\FacultyLandingPage.cshtml" />
     <Content Include="Views\Mockup\TSAAssessment.cshtml" />
+    <Content Include="Views\InstructorAssessments\Create.cshtml" />
+    <Content Include="Views\InstructorAssessments\Delete.cshtml" />
+    <Content Include="Views\InstructorAssessments\Details.cshtml" />
+    <Content Include="Views\InstructorAssessments\Edit.cshtml" />
+    <Content Include="Views\InstructorAssessments\Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -7,47 +7,100 @@
 
 <h4>All about this TSA Assessment. Enter a score for each student</h4>
 
+<div ng-app="myApp" ng-controller="myCtrl">
+    <select ng-model="selectedName" ng-options="x for x in names"></select>
+</div>
+
+<br>
+
 <table width="100%" class="table-bordered">
     <thead>
         <tr>
-            <td></td>
-            <td colspan="3" class="col-xs-offset-1 text-center">Ojective 1</td>
-            <td colspan="4" class="text-center">Objective 2</td>
+            <th colspan="2" class="text-center"><h2>Student 3</h2></th>
         </tr>
         <tr>
-            <td></td>
-            <td class="col-xs-offset-1 text-center">Criteria 1</td>
-            <td class="text-center">Criteria 2</td>
-            <td class="text-center">Criteria 3</td>
-            <td class="text-center">Criteria 4</td>
-            <td class="text-center">Criteria 5</td>
-            <td class="text-center">Criteria 6</td>
-            <td class="text-center">Criteria 7</td>
+            <th>Criteria</th>
+            <th class="text-center">Grading</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>Jenny Student</td>
-            <td class="text-center">Met</td>
-            <td class="text-center"><div ng-app="myApp" ng-controller="myCtrl">
-                    <select ng-model="selectedName" ng-options="x for x in names">
-                    </select>
-                </div></td>
-            <td class="text-center">Not Met</td>
-            <td class="text-center"></td>
-            <td class="text-center"></td>
-            <td class="text-center">Not Assessed</td>
-            <td class="text-center"></td>
+            <td class="text-center col-lg-7">Criteria 1</td>
+            <td class="text-center">
+                <label for="metCriteria1">Met</label>
+                <input type="radio" name="metCriteria1" id="metCriteria1" style="margin-right:20px">
+
+                <label for="notMetCriteria1">Met</label>
+                <input type="radio" name="notMetCriteria1" id="notMetCriteria1" style="margin-right:20px">
+
+                <label for="notAssessedCriteria1">Not Assessed</label>
+                <input type="radio" name="notAssessedCriteria1" id="notAssessedCriteria1">
+            </td>
         </tr>
         <tr>
-            <td>Joe Student</td>
-            <td class="text-center">Met</td>
-            <td class="text-center"></td>
-            <td class="text-center">Not Met</td>
-            <td class="text-center"></td>
-            <td class="text-center"></td>
-            <td class="text-center">Not Assessed</td>
-            <td class="text-center"></td>
+            <td class="text-center col-lg-7">Criteria 2</td>
+            <td class="text-center">
+                <label for="metCriteria1">Met</label>
+                <input type="radio" name="metCriteria1" id="metCriteria1" style="margin-right:20px">
+
+                <label for="notMetCriteria1">Met</label>
+                <input type="radio" name="notMetCriteria1" id="notMetCriteria1" style="margin-right:20px">
+
+                <label for="notAssessedCriteria1">Not Assessed</label>
+                <input type="radio" name="notAssessedCriteria1" id="notAssessedCriteria1">
+            </td>
+        </tr>
+        <tr>
+            <td class="text-center col-lg-7">Criteria 3</td>
+            <td class="text-center">
+                <label for="metCriteria1">Met</label>
+                <input type="radio" name="metCriteria1" id="metCriteria1" style="margin-right:20px">
+
+                <label for="notMetCriteria1">Met</label>
+                <input type="radio" name="notMetCriteria1" id="notMetCriteria1" style="margin-right:20px">
+
+                <label for="notAssessedCriteria1">Not Assessed</label>
+                <input type="radio" name="notAssessedCriteria1" id="notAssessedCriteria1">
+            </td>
+        </tr>
+        <tr>
+            <td class="text-center col-lg-7">Criteria 4</td>
+            <td class="text-center">
+                <label for="metCriteria1">Met</label>
+                <input type="radio" name="metCriteria1" id="metCriteria1" style="margin-right:20px">
+
+                <label for="notMetCriteria1">Met</label>
+                <input type="radio" name="notMetCriteria1" id="notMetCriteria1" style="margin-right:20px">
+
+                <label for="notAssessedCriteria1">Not Assessed</label>
+                <input type="radio" name="notAssessedCriteria1" id="notAssessedCriteria1">
+            </td>
+        </tr>
+        <tr>
+            <td class="text-center col-lg-7">Criteria 5</td>
+            <td class="text-center">
+                <label for="metCriteria1">Met</label>
+                <input type="radio" name="metCriteria1" id="metCriteria1" style="margin-right:20px">
+
+                <label for="notMetCriteria1">Met</label>
+                <input type="radio" name="notMetCriteria1" id="notMetCriteria1" style="margin-right:20px">
+
+                <label for="notAssessedCriteria1">Not Assessed</label>
+                <input type="radio" name="notAssessedCriteria1" id="notAssessedCriteria1">
+            </td>
+        </tr>
+        <tr>
+            <td class="text-center col-lg-7">Criteria 6</td>
+            <td class="text-center">
+                <label for="metCriteria1">Met</label>
+                <input type="radio" name="metCriteria1" id="metCriteria1" style="margin-right:20px">
+
+                <label for="notMetCriteria1">Met</label>
+                <input type="radio" name="notMetCriteria1" id="notMetCriteria1" style="margin-right:20px">
+
+                <label for="notAssessedCriteria1">Not Assessed</label>
+                <input type="radio" name="notAssessedCriteria1" id="notAssessedCriteria1">
+            </td>
         </tr>
     </tbody>
 </table>
@@ -61,7 +114,7 @@
 <script>
 var app = angular.module('myApp', []);
 app.controller('myCtrl', function($scope) {
-    $scope.names = ["Met", "Not Met", "Not Assessed"];
+    $scope.names = ["Student 1", "Student 2", "Student 3", "Student 4", "Student 5", "Student 6"];
 });
 </script>
 

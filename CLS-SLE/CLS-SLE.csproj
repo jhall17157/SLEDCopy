@@ -339,6 +339,7 @@
     <Content Include="Views\SectionEnrollments\Details.cshtml" />
     <Content Include="Views\SectionEnrollments\Edit.cshtml" />
     <Content Include="Views\SectionEnrollments\Index.cshtml" />
+    <Content Include="Views\Mockup\TSAAssessment2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

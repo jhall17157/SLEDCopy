@@ -18,6 +18,11 @@ namespace CLS_SLE.Controllers
             return View();
         }
 
+        public ActionResult TSAAssessment2()
+        {
+            return View();
+        }
+
         public ActionResult CLSAssessment()
         {
             return View();

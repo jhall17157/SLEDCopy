@@ -10,98 +10,107 @@ using CLS_SLE.Models;
 
 namespace CLS_SLE.Controllers
 {
-    public class InstructorAssessmentsController : Controller
+    public class SectionEnrollmentsController : Controller
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
 
-        // GET: InstructorAssessments
-        public ActionResult Dashboard()
+        // GET: SectionEnrollments
+        public ActionResult Index()
         {
-            return View(db.InstructorAssessments.ToList());
+            return View(db.SectionEnrollments.ToList());
         }
 
-        // GET: InstructorAssessments/Details/5
-        public ActionResult Details()
+        // GET: SectionEnrollments/Details/5
+        public ActionResult Details(int? id)
         {
-            return View(db.RubricDetails.ToList());
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            SectionEnrollment sectionEnrollment = db.SectionEnrollments.Find(id);
+            if (sectionEnrollment == null)
+            {
+                return HttpNotFound();
+            }
+            return View(sectionEnrollment);
         }
 
-        // GET: InstructorAssessments/Create
+        // GET: SectionEnrollments/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: InstructorAssessments/Create
+        // POST: SectionEnrollments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Login,PersonID,CourseID,CourseName,SectionID,CRN,AssessmentName,RubricID,RubricName,AssessmentLevel,DueDate,Status")] InstructorAssessment instructorAssessment)
+        public ActionResult Create([Bind(Include = "sectionID,EnrollmentID,StudentID,FirstName,LastName")] SectionEnrollment sectionEnrollment)
         {
             if (ModelState.IsValid)
             {
-                db.InstructorAssessments.Add(instructorAssessment);
+                db.SectionEnrollments.Add(sectionEnrollment);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(instructorAssessment);
+            return View(sectionEnrollment);
         }
 
-        // GET: InstructorAssessments/Edit/5
-        public ActionResult Edit(string id)
+        // GET: SectionEnrollments/Edit/5
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            InstructorAssessment instructorAssessment = db.InstructorAssessments.Find(id);
-            if (instructorAssessment == null)
+            SectionEnrollment sectionEnrollment = db.SectionEnrollments.Find(id);
+            if (sectionEnrollment == null)
             {
                 return HttpNotFound();
             }
-            return View(instructorAssessment);
+            return View(sectionEnrollment);
         }
 
-        // POST: InstructorAssessments/Edit/5
+        // POST: SectionEnrollments/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Login,PersonID,CourseID,CourseName,SectionID,CRN,AssessmentName,RubricID,RubricName,AssessmentLevel,DueDate,Status")] InstructorAssessment instructorAssessment)
+        public ActionResult Edit([Bind(Include = "sectionID,EnrollmentID,StudentID,FirstName,LastName")] SectionEnrollment sectionEnrollment)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(instructorAssessment).State = EntityState.Modified;
+                db.Entry(sectionEnrollment).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(instructorAssessment);
+            return View(sectionEnrollment);
         }
 
-        // GET: InstructorAssessments/Delete/5
-        public ActionResult Delete(string id)
+        // GET: SectionEnrollments/Delete/5
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            InstructorAssessment instructorAssessment = db.InstructorAssessments.Find(id);
-            if (instructorAssessment == null)
+            SectionEnrollment sectionEnrollment = db.SectionEnrollments.Find(id);
+            if (sectionEnrollment == null)
             {
                 return HttpNotFound();
             }
-            return View(instructorAssessment);
+            return View(sectionEnrollment);
         }
 
-        // POST: InstructorAssessments/Delete/5
+        // POST: SectionEnrollments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
+        public ActionResult DeleteConfirmed(int id)
         {
-            InstructorAssessment instructorAssessment = db.InstructorAssessments.Find(id);
-            db.InstructorAssessments.Remove(instructorAssessment);
+            SectionEnrollment sectionEnrollment = db.SectionEnrollments.Find(id);
+            db.SectionEnrollments.Remove(sectionEnrollment);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

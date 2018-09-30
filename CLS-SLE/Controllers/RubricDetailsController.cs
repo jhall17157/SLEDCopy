@@ -10,98 +10,107 @@ using CLS_SLE.Models;
 
 namespace CLS_SLE.Controllers
 {
-    public class InstructorAssessmentsController : Controller
+    public class RubricDetailsController : Controller
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
 
-        // GET: InstructorAssessments
-        public ActionResult Dashboard()
-        {
-            return View(db.InstructorAssessments.ToList());
-        }
-
-        // GET: InstructorAssessments/Details/5
-        public ActionResult Details()
+        // GET: RubricDetails
+        public ActionResult Index()
         {
             return View(db.RubricDetails.ToList());
         }
 
-        // GET: InstructorAssessments/Create
+        // GET: RubricDetails/Details/5
+        public ActionResult Details(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            RubricDetail rubricDetail = db.RubricDetails.Find(id);
+            if (rubricDetail == null)
+            {
+                return HttpNotFound();
+            }
+            return View(rubricDetail);
+        }
+
+        // GET: RubricDetails/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: InstructorAssessments/Create
+        // POST: RubricDetails/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Login,PersonID,CourseID,CourseName,SectionID,CRN,AssessmentName,RubricID,RubricName,AssessmentLevel,DueDate,Status")] InstructorAssessment instructorAssessment)
+        public ActionResult Create([Bind(Include = "AssessmentName,RubricID,RubricName,Description,OutcomeName,OutcomeSortOrder,CriteriaID,CriteriaName,ExampleText,CriteriaSortOrder")] RubricDetail rubricDetail)
         {
             if (ModelState.IsValid)
             {
-                db.InstructorAssessments.Add(instructorAssessment);
+                db.RubricDetails.Add(rubricDetail);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(instructorAssessment);
+            return View(rubricDetail);
         }
 
-        // GET: InstructorAssessments/Edit/5
+        // GET: RubricDetails/Edit/5
         public ActionResult Edit(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            InstructorAssessment instructorAssessment = db.InstructorAssessments.Find(id);
-            if (instructorAssessment == null)
+            RubricDetail rubricDetail = db.RubricDetails.Find(id);
+            if (rubricDetail == null)
             {
                 return HttpNotFound();
             }
-            return View(instructorAssessment);
+            return View(rubricDetail);
         }
 
-        // POST: InstructorAssessments/Edit/5
+        // POST: RubricDetails/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Login,PersonID,CourseID,CourseName,SectionID,CRN,AssessmentName,RubricID,RubricName,AssessmentLevel,DueDate,Status")] InstructorAssessment instructorAssessment)
+        public ActionResult Edit([Bind(Include = "AssessmentName,RubricID,RubricName,Description,OutcomeName,OutcomeSortOrder,CriteriaID,CriteriaName,ExampleText,CriteriaSortOrder")] RubricDetail rubricDetail)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(instructorAssessment).State = EntityState.Modified;
+                db.Entry(rubricDetail).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(instructorAssessment);
+            return View(rubricDetail);
         }
 
-        // GET: InstructorAssessments/Delete/5
+        // GET: RubricDetails/Delete/5
         public ActionResult Delete(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            InstructorAssessment instructorAssessment = db.InstructorAssessments.Find(id);
-            if (instructorAssessment == null)
+            RubricDetail rubricDetail = db.RubricDetails.Find(id);
+            if (rubricDetail == null)
             {
                 return HttpNotFound();
             }
-            return View(instructorAssessment);
+            return View(rubricDetail);
         }
 
-        // POST: InstructorAssessments/Delete/5
+        // POST: RubricDetails/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            InstructorAssessment instructorAssessment = db.InstructorAssessments.Find(id);
-            db.InstructorAssessments.Remove(instructorAssessment);
+            RubricDetail rubricDetail = db.RubricDetails.Find(id);
+            db.RubricDetails.Remove(rubricDetail);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

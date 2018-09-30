@@ -159,6 +159,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstructorAssessmentsController.cs" />
     <Compile Include="Controllers\MockupController.cs" />
+    <Compile Include="Controllers\RubricDetailsController.cs" />
+    <Compile Include="Controllers\SectionEnrollmentsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -327,6 +329,16 @@
     <Content Include="Views\InstructorAssessments\Details.cshtml" />
     <Content Include="Views\InstructorAssessments\Edit.cshtml" />
     <Content Include="Views\InstructorAssessments\Dashboard.cshtml" />
+    <Content Include="Views\RubricDetails\Create.cshtml" />
+    <Content Include="Views\RubricDetails\Delete.cshtml" />
+    <Content Include="Views\RubricDetails\Details.cshtml" />
+    <Content Include="Views\RubricDetails\Edit.cshtml" />
+    <Content Include="Views\RubricDetails\Index.cshtml" />
+    <Content Include="Views\SectionEnrollments\Create.cshtml" />
+    <Content Include="Views\SectionEnrollments\Delete.cshtml" />
+    <Content Include="Views\SectionEnrollments\Details.cshtml" />
+    <Content Include="Views\SectionEnrollments\Edit.cshtml" />
+    <Content Include="Views\SectionEnrollments\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

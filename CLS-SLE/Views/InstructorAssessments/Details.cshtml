@@ -1,5 +1,5 @@
-﻿@model IEnumerable<CLS_SLE.Models.RubricDetail>
-
+﻿@using CLS_SLE.Models;
+@model CLS_SLE.Models.RubricDetail
 @{
     ViewBag.Title = "Details";
 }
@@ -9,15 +9,50 @@
 <div>
     <h4>InstructorAssessment</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.RubricDetail)
-        </dt>
-
-
-    </dl>
+    <table>
+        @foreach(RubricDetail rubric )
+        <tr>
+            <td>@Rubric.AssessmentName</td>
+        </tr>
+        <tr>
+            <td>@Model.RubricID</td>
+        </tr>
+        <tr>
+            <td>@Model.RubricName</td>
+        </tr>
+        <tr>
+            <td>@Model.Description</td>
+        </tr>
+        <tr>
+            <td>@Model.OutcomeName</td>
+        </tr>
+        <tr>
+            <td>@Model.OutcomeSortOrder</td>
+        </tr>
+        <tr>
+            <td>@Model.CriteriaID</td>
+        </tr>
+        <tr>
+            <td>@Model.CriteriaName</td>
+        </tr>
+        <tr>
+            <td>@Model.ExampleText</td>
+        </tr>
+        <tr>
+            <td>@Model.CriteriaSortOrder</td>
+        </tr>
+    </table>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit") |
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+@section scripts
+{
+    <script>
+        $(function () {
+
+        });
+    </script>
+}

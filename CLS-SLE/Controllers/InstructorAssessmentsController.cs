@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Dynamic;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -17,13 +18,22 @@ namespace CLS_SLE.Controllers
         // GET: InstructorAssessments
         public ActionResult Dashboard()
         {
-            return View(db.InstructorAssessments.ToList());
+            var instructorAssessments = from x in db.InstructorAssessments select x;
+            return View(instructorAssessments.ToList());
         }
 
         // GET: InstructorAssessments/Details/5
-        public ActionResult Details()
+        public ActionResult Details(int id)
         {
-            return View(db.RubricDetails.ToList());
+            
+            RubricDetail rubric = db.RubricDetails.FirstOrDefault(r => r.RubricID == id);
+            InstructorAssessment assessment = db.InstructorAssessments.FirstOrDefault(r => r.RubricID == id);
+
+            dynamic mymodel = new ExpandoObject();
+            mymodel.Rubric = rubric;
+            mymodel.Assessment = assessment;
+
+            return View(mymodel);
         }
 
         // GET: InstructorAssessments/Create

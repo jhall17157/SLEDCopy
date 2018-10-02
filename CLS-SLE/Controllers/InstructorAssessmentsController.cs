@@ -25,15 +25,10 @@ namespace CLS_SLE.Controllers
         // GET: InstructorAssessments/Details/5
         public ActionResult Details(int id)
         {
-            
+
             RubricDetail rubric = db.RubricDetails.FirstOrDefault(r => r.RubricID == id);
-            InstructorAssessment assessment = db.InstructorAssessments.FirstOrDefault(r => r.RubricID == id);
 
-            dynamic mymodel = new ExpandoObject();
-            mymodel.Rubric = rubric;
-            mymodel.Assessment = assessment;
-
-            return View(mymodel);
+            return View(rubric);
         }
 
         // GET: InstructorAssessments/Create
@@ -115,6 +110,8 @@ namespace CLS_SLE.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+
 
         protected override void Dispose(bool disposing)
         {

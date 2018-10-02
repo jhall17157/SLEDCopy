@@ -132,13 +132,7 @@ namespace CLS_SLE.Controllers
             dynamic mymodel = new ExpandoObject();
             mymodel.Selectors = numberOfSelectors.ToList();
             mymodel.Criteria = criteria.ToList();
-
-            var counter = 0;
-            foreach(ScoreType s in numberOfSelectors)
-            {
-                counter++;
-            }
-            ViewBag.Counter = counter;
+            
 
             return View(mymodel);
         }

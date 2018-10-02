@@ -14,8 +14,8 @@
                 <td>
                     @foreach(ScoreType i in Model.Selectors)
                     {
-                        <label for="selector_@i.ScoreTypeID">&nbsp;@i.Description</label>
-                        <input type="radio" id="selector_@i.ScoreTypeID" name="selector_@i.ScoreTypeID">
+                        <label for="selector_@i.ScoreTypeID@o.OutcomeID">&nbsp;@i.Description</label>
+                        <input type="radio" id="selector_@i.ScoreTypeID@o.OutcomeID" name="@o.OutcomeID">
                     }
                 </td>
             </tr>

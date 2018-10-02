@@ -10,9 +10,9 @@
         @foreach(SectionEnrollment student in Model)
         {
             <tr id="@student.sectionID" class="student-row">
-                <td>@student.sectionID</td>
-                <td>@student.EnrollmentID</td>
-                <td>@student.StudentID</td>
+                <td class="hidden">@student.sectionID</td>
+                <td class="hidden">@student.EnrollmentID</td>
+                <td class="hidden">@student.StudentID</td>
                 <td>@student.FirstName</td>
                 <td>@student.LastName</td>
             </tr>

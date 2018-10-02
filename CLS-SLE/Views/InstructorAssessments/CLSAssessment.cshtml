@@ -1,0 +1,35 @@
+﻿@using CLS_SLE.Models;
+@{
+    ViewBag.Title = "CLSAssessment";
+}
+
+<h2>CLSAssessment</h2>
+
+<table class="table table-hover table-responsive">
+    <tbody id="students">
+        @foreach(SectionEnrollment student in Model)
+        {
+            <tr id="student_@student.sectionID" class="student-row">
+                <td>@student.sectionID</td>
+                <td>@student.EnrollmentID</td>
+                <td>@student.StudentID</td>
+                <td>@student.FirstName</td>
+                <td>@student.LastName</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+        $(function () {
+            $('#students').each(function () {
+            });
+
+            $('#students').on('click', '.student-row', function () {
+                console.log(this.id);
+            });
+        })
+    </script>    
+}

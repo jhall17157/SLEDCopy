@@ -24,10 +24,8 @@
                 @Html.DisplayFor(modelItem => item.AssessmentName)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Details", "Details", new { id =item.RubricID } ) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Assess", "CLSAssessment", new { rubricID = item.RubricID })
             </td>
         </tr>
     }

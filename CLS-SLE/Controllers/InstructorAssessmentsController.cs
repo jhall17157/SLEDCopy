@@ -111,7 +111,14 @@ namespace CLS_SLE.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult CLSAssessment(int rubricID)
+        {
+            var instructor = db.InstructorAssessments.FirstOrDefault(r => r.RubricID == rubricID);
 
+            var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID);
+
+            return View(students.ToList());
+        }
 
         protected override void Dispose(bool disposing)
         {

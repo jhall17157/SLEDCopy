@@ -25,7 +25,7 @@
             </td>
             <td>
                 @Html.ActionLink("Details", "Details", new { id =item.RubricID } ) |
-                @Html.ActionLink("Assess", "CLSAssessment", new { rubricID = item.RubricID })
+                @Html.ActionLink("Assess", "StudentList", new { rubricID = item.RubricID })
             </td>
         </tr>
     }

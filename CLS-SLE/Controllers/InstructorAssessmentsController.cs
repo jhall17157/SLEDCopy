@@ -111,13 +111,36 @@ namespace CLS_SLE.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult CLSAssessment(int rubricID)
+        public ActionResult StudentList(int rubricID)
         {
             var instructor = db.InstructorAssessments.FirstOrDefault(r => r.RubricID == rubricID);
 
             var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID);
 
             return View(students.ToList());
+        }
+
+        public ActionResult CLSAssessment(int sectionID)
+        {
+            var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID);
+                
+            var criteria = db.Outcomes.Where(c => c.RubricID == instructor.RubricID);
+
+            var numberOfSelectors = db.ScoreTypes.Where(n => n.RubricID == instructor.RubricID);
+
+
+            dynamic mymodel = new ExpandoObject();
+            mymodel.Selectors = numberOfSelectors.ToList();
+            mymodel.Criteria = criteria.ToList();
+
+            var counter = 0;
+            foreach(ScoreType s in numberOfSelectors)
+            {
+                counter++;
+            }
+            ViewBag.Counter = counter;
+
+            return View(mymodel);
         }
 
         protected override void Dispose(bool disposing)

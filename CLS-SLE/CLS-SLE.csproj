@@ -323,6 +323,7 @@
     <Content Include="Views\InstructorAssessments\Dashboard.cshtml" />
     <Content Include="Views\Mockup\TSAAssessment2.cshtml" />
     <Content Include="Views\InstructorAssessments\CLSAssessment.cshtml" />
+    <Content Include="Views\InstructorAssessments\StudentList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

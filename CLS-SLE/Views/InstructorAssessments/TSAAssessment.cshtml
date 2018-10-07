@@ -1,13 +1,11 @@
 ﻿@using CLS_SLE.Models;
 @{
     ViewBag.Title = "TSA Assessment";
+    var r = Model.Rubric;
 }
 
 <h2>
-    @foreach (InstructorAssessment r in Model.Rubric)
-    {
-        @r.AssessmentName
-    }
+    @r.AssessmentName
 </h2>
 
 <table class="table">

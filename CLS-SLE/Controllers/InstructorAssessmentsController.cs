@@ -133,7 +133,7 @@ namespace CLS_SLE.Controllers
         {
             var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID);
 
-            var rubric = db.InstructorAssessments.Where(n => n.RubricID == instructor.RubricID);
+            var rubric = db.InstructorAssessments.FirstOrDefault(n => n.RubricID == instructor.RubricID);
                 
             var criteria = db.Outcomes.Where(c => c.RubricID == instructor.RubricID);
 
@@ -141,7 +141,7 @@ namespace CLS_SLE.Controllers
 
 
             dynamic mymodel = new ExpandoObject();
-            mymodel.Rubric = rubric.ToList();
+            mymodel.Rubric = rubric;
             mymodel.Selectors = numberOfSelectors.ToList();
             mymodel.Criteria = criteria.ToList();
             
@@ -153,7 +153,7 @@ namespace CLS_SLE.Controllers
         {
             var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID);
 
-            var rubric = db.InstructorAssessments.Where(n => n.RubricID == instructor.RubricID);
+            var rubric = db.InstructorAssessments.FirstOrDefault(n => n.RubricID == instructor.RubricID);
 
             var criteria = db.Outcomes.Where(c => c.RubricID == instructor.RubricID);
 
@@ -161,7 +161,7 @@ namespace CLS_SLE.Controllers
 
 
             dynamic mymodel = new ExpandoObject();
-            mymodel.Rubric = rubric.ToList();
+            mymodel.Rubric = rubric;
             mymodel.Selectors = numberOfSelectors.ToList();
             mymodel.Criteria = criteria.ToList();
 

@@ -111,11 +111,20 @@ namespace CLS_SLE.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult StudentList(int rubricID)
+        public ActionResult CLSStudentList(int rubricID)
         {
             var instructor = db.InstructorAssessments.FirstOrDefault(r => r.RubricID == rubricID);
 
-            var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID);
+            var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID).OrderBy(c => c.LastName);
+
+            return View(students.ToList());
+        }
+
+        public ActionResult TSAStudentList(int rubricID)
+        {
+            var instructor = db.InstructorAssessments.FirstOrDefault(r => r.RubricID == rubricID);
+
+            var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID).OrderBy(c => c.LastName);
 
             return View(students.ToList());
         }
@@ -123,6 +132,8 @@ namespace CLS_SLE.Controllers
         public ActionResult CLSAssessment(int sectionID)
         {
             var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID);
+
+            var rubric = db.InstructorAssessments.Where(n => n.RubricID == instructor.RubricID);
                 
             var criteria = db.Outcomes.Where(c => c.RubricID == instructor.RubricID);
 
@@ -130,9 +141,30 @@ namespace CLS_SLE.Controllers
 
 
             dynamic mymodel = new ExpandoObject();
+            mymodel.Rubric = rubric.ToList();
             mymodel.Selectors = numberOfSelectors.ToList();
             mymodel.Criteria = criteria.ToList();
             
+
+            return View(mymodel);
+        }
+
+        public ActionResult TSAAssessment(int sectionID)
+        {
+            var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID);
+
+            var rubric = db.InstructorAssessments.Where(n => n.RubricID == instructor.RubricID);
+
+            var criteria = db.Outcomes.Where(c => c.RubricID == instructor.RubricID);
+
+            var numberOfSelectors = db.ScoreTypes.Where(n => n.RubricID == instructor.RubricID);
+
+
+            dynamic mymodel = new ExpandoObject();
+            mymodel.Rubric = rubric.ToList();
+            mymodel.Selectors = numberOfSelectors.ToList();
+            mymodel.Criteria = criteria.ToList();
+
 
             return View(mymodel);
         }

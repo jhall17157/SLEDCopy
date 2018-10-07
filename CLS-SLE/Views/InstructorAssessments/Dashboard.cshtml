@@ -11,23 +11,63 @@
 </p>
 <table class="table">
     <tr>
-        <th>
-            <h2>Assessment</h2>
+        <th class="col-xs-6">
+            <h2>CLS Assessments</h2>
         </th>
-        <th></th>
+        <th><h3>Class</h3></th>
+        <th colspan="2"><h3>CRN</h3></th>
     </tr>
 
     @foreach (InstructorAssessment item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.AssessmentName)
-            </td>
-            <td>
-                @Html.ActionLink("Details", "Details", new { id =item.RubricID } ) |
-                @Html.ActionLink("Assess", "StudentList", new { rubricID = item.RubricID })
-            </td>
-        </tr>
+        if(item.AssessmentLevel == "S")
+        {
+            <tr>
+                <td class="col-xs-6">
+                    @item.AssessmentName
+                </td>
+                <td class="col-xs-3">
+                    @item.CourseName
+                </td>
+                <td>
+                    @item.CRN
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id =item.RubricID } ) |
+                    @Html.ActionLink("Assess", "CLSStudentList", new { rubricID = item.RubricID })
+                </td>
+            </tr>
+        }
+    }
+</table>
+
+<table class="table">
+    <tr>
+        <th colspan="4">
+            <h2>TSA Assessments</h2>
+        </th>
+    </tr>
+
+    @foreach (InstructorAssessment item in Model)
+    {
+        if(item.AssessmentLevel != "S")
+        {
+            <tr>
+                <td class="col-xs-6">
+                    @item.AssessmentName
+                </td>
+                <td class="col-xs-3">
+                    @item.CourseName
+                </td>
+                <td>
+                    @item.CRN
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id =item.RubricID } ) |
+                    @Html.ActionLink("Assess", "TSAStudentList", new { rubricID = item.RubricID })
+                </td>
+            </tr>
+        }
     }
 
 </table>

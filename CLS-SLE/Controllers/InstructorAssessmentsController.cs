@@ -19,13 +19,15 @@ namespace CLS_SLE.Controllers
         public ActionResult Dashboard()
         {
             var instructorAssessments = from x in db.InstructorAssessments select x;
+            Session["personID"] = 2;
+
+
             return View(instructorAssessments.ToList());
         }
 
         // GET: InstructorAssessments/Details/5
         public ActionResult Details(int id)
         {
-
             RubricDetail rubric = db.RubricDetails.FirstOrDefault(r => r.RubricID == id);
 
             return View(rubric);
@@ -149,24 +151,32 @@ namespace CLS_SLE.Controllers
             return View(mymodel);
         }
 
-        public ActionResult TSAAssessment(int sectionID)
+        public ActionResult TSAAssessment(int sectionID, int enrollmentID)
         {
             var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID);
+
+            var student = db.SectionEnrollments.FirstOrDefault(s => s.sectionID == sectionID && s.EnrollmentID == enrollmentID);
 
             var rubric = db.InstructorAssessments.FirstOrDefault(n => n.RubricID == instructor.RubricID);
 
             var criteria = db.Outcomes.Where(c => c.RubricID == instructor.RubricID);
-
+            
             var numberOfSelectors = db.ScoreTypes.Where(n => n.RubricID == instructor.RubricID);
-
-
+            
             dynamic mymodel = new ExpandoObject();
+            mymodel.Student = student;
             mymodel.Rubric = rubric;
             mymodel.Selectors = numberOfSelectors.ToList();
             mymodel.Criteria = criteria.ToList();
 
 
             return View(mymodel);
+        }
+
+        public ActionResult AssessmentInput(int enrollmentID, int criteriaID, int scoreTypeID, int assessedByID, int rubricID)
+        {
+
+            return RedirectToAction(actionName: "TSAStudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID });
         }
 
         protected override void Dispose(bool disposing)

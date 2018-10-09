@@ -2,17 +2,18 @@
 @{
     ViewBag.Title = "TSA Assessment";
     var r = Model.Rubric;
+    var s = Model.Student;
 }
 
 <h2>
-    @r.AssessmentName
+    @r.AssessmentName - @s.FirstName @s.LastName
 </h2>
 
 <table class="table">
     <tbody>
         @foreach(Outcome o in Model.Criteria)
         {
-            <tr id="outcome_@o.OutcomeID">
+            <tr id="@o.OutcomeID">
                 <td>@o.Name</td>
                 <td>
                     @foreach(ScoreType i in Model.Selectors)
@@ -25,3 +26,29 @@
         }
     </tbody>
 </table>
+
+@section scripts
+{
+    <script>
+        $(function ()
+        {
+            var rubricID = @r.RubricID;
+            var sectionID = @r.SectionID;
+            var enrollmentID = @s.EnrollmentID;
+            var personID = '@Session["personID"]';
+
+
+            console.log(enrollmentID);
+
+            var outcomes;
+            var scoreTypes;
+
+            function Criteria()
+            {
+
+            }
+
+
+        });
+    </script>    
+}

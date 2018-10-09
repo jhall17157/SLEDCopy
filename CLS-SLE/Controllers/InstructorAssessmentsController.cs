@@ -154,8 +154,10 @@ namespace CLS_SLE.Controllers
         public ActionResult TSAAssessment(int sectionID, int enrollmentID)
         {
             var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID);
+            Session["rubricID"] = instructor.RubricID;
 
             var student = db.SectionEnrollments.FirstOrDefault(s => s.sectionID == sectionID && s.EnrollmentID == enrollmentID);
+            Session["enrollmentID"] = student.EnrollmentID;
 
             var rubric = db.InstructorAssessments.FirstOrDefault(n => n.RubricID == instructor.RubricID);
 
@@ -173,10 +175,18 @@ namespace CLS_SLE.Controllers
             return View(mymodel);
         }
 
-        public ActionResult AssessmentInput(int enrollmentID, int criteriaID, int scoreTypeID, int assessedByID, int rubricID)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AssessmentInput(FormCollection fc)
         {
+            var counter = 0;
+            foreach(var t in fc)
+            {
+                var temp = t;
+                counter++;
+            }
 
-            return RedirectToAction(actionName: "TSAStudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID });
+            return RedirectToAction(actionName: "TSAStudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
         }
 
         protected override void Dispose(bool disposing)

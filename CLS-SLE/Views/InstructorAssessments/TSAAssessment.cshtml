@@ -8,24 +8,40 @@
 <h2>
     @r.AssessmentName - @s.FirstName @s.LastName
 </h2>
+<form action="/InstructorAssessments/AssessmentInput" method="post">
+    @Html.AntiForgeryToken()
+    <table class="table">
+        <tbody id="criteria">
+            @foreach(Outcome o in Model.Criteria)
+            {
+                <tr id="@o.OutcomeID">
+                    <td>@o.Name</td>
+                    <td class="col-md-2">
+                        @foreach(ScoreType i in Model.Selectors)
+                        {
+                            <div class="criteria">
+                                <label for="@i.ScoreTypeID@o.OutcomeID">&nbsp;@i.Description</label>
+                                <input type="radio" id="@i.ScoreTypeID@o.OutcomeID" name="@o.OutcomeID" class="@i.ScoreTypeID@o.OutcomeID" value="@i.ScoreTypeID">
+                            </div>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <input type="submit" value="Submit" id="submit">
+</form>
 
-<table class="table">
-    <tbody>
-        @foreach(Outcome o in Model.Criteria)
-        {
-            <tr id="@o.OutcomeID">
-                <td>@o.Name</td>
-                <td>
-                    @foreach(ScoreType i in Model.Selectors)
-                    {
-                        <label for="selector_@i.ScoreTypeID@o.OutcomeID">&nbsp;@i.Description</label>
-                        <input type="radio" id="selector_@i.ScoreTypeID@o.OutcomeID" name="@o.OutcomeID">
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<style>
+    input[type=radio]{
+        float:right;
+    }
+    .criteria{
+        display:block;
+    }
+</style>
+
+
 
 @section scripts
 {
@@ -37,18 +53,11 @@
             var enrollmentID = @s.EnrollmentID;
             var personID = '@Session["personID"]';
 
-
-            console.log(enrollmentID);
-
-            var outcomes;
-            var scoreTypes;
-
-            function Criteria()
-            {
-
-            }
-
-
+            //$("form").on("submit", function (e)
+            //{
+            //    e.preventDefault();
+            //    console.log($(this).serialize());
+            //});
         });
     </script>    
 }

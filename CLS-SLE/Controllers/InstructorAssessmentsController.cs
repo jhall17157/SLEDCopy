@@ -155,6 +155,7 @@ namespace CLS_SLE.Controllers
         public ActionResult TSAAssessment(int sectionID, int enrollmentID)
         {
             var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID);
+            Session["instructorID"] = instructor.PersonID;
             Session["rubricID"] = instructor.RubricID;
 
             var student = db.SectionEnrollments.FirstOrDefault(s => s.sectionID == sectionID && s.EnrollmentID == enrollmentID);
@@ -162,7 +163,7 @@ namespace CLS_SLE.Controllers
 
             var rubric = db.InstructorAssessments.FirstOrDefault(n => n.RubricID == instructor.RubricID);
 
-            var criteria = db.Outcomes.Where(c => c.RubricID == instructor.RubricID);
+            var outcomes = db.Outcomes.Where(c => c.RubricID == instructor.RubricID);
             
             var numberOfSelectors = db.ScoreTypes.Where(n => n.RubricID == instructor.RubricID);
             
@@ -170,7 +171,7 @@ namespace CLS_SLE.Controllers
             mymodel.Student = student;
             mymodel.Rubric = rubric;
             mymodel.Selectors = numberOfSelectors.ToList();
-            mymodel.Criteria = criteria.ToList();
+            mymodel.Outcomes = outcomes.ToList();
 
 
             return View(mymodel);
@@ -183,9 +184,39 @@ namespace CLS_SLE.Controllers
             var outcomeIDs = fc.AllKeys;
             for (var t = 1; t < fc.Count; t++)
             {
-                var outcomeID = outcomeIDs[t];
-                var scoreTypeID = fc.GetValue(outcomeID).AttemptedValue;
+                Int16 outcomeID = Convert.ToInt16(outcomeIDs[t]);
+                var scoreTypeID = fc.GetValue(outcomeID.ToString()).AttemptedValue;
+                
+                Outcome outcome = db.Outcomes.FirstOrDefault(o => o.OutcomeID == outcomeID);
+                
+                Criterion criteria = db.Criteria.FirstOrDefault(c => c.OutcomeID == outcome.OutcomeID && c.SortOrder == outcome.SortOrder);
+
+                int enrollmentID = Convert.ToInt32(Session["enrollmentID"]);
+
+                StudentScore check = db.StudentScores.FirstOrDefault(c => c.EnrollmentID == enrollmentID && c.CriteriaID == criteria.CriteriaID);
+
+                if (check != null)
+                {
+                    check.ScoreTypeID = Convert.ToInt16(scoreTypeID);
+                    check.DateTimeAssessed = DateTime.Now;
+                    check.AssessedByID = Convert.ToInt32(Session["instructorID"]);
+                }
+                else
+                {
+                    StudentScore score = new StudentScore()
+                    {
+                        EnrollmentID = Convert.ToInt32(Session["enrollmentID"]),
+                        CriteriaID = criteria.CriteriaID,
+                        ScoreTypeID = Convert.ToSByte(scoreTypeID),
+                        AssessedByID = Convert.ToInt32(Session["instructorID"]),
+                        DateTimeAssessed = DateTime.Now,
+                    };
+
+                    db.StudentScores.Add(score);
+                }
+                
             }
+            db.SaveChanges();
 
             return RedirectToAction(actionName: "TSAStudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
         }

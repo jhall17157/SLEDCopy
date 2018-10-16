@@ -177,12 +177,12 @@ namespace CLS_SLE.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AssessmentInput(FormCollection fc)
+        public ActionResult AssessmentInput(FormCollection form)
         {
-            for(var t = 1; t < fc.Count; t++)
+            for(var t = 1; t < form.Count; t++)
             {
-                var outcome = fc[t];
-                var scoreTypeID = Request.Form[t];
+                var outcome = form[t];
+                var scoreTypeID = form.GetValue(outcome);
             }
 
             return RedirectToAction(actionName: "TSAStudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });

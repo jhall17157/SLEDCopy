@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CLS_SLE.Models;
+using System.Collections.Specialized;
 
 namespace CLS_SLE.Controllers
 {
@@ -177,12 +178,13 @@ namespace CLS_SLE.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AssessmentInput(FormCollection form)
+        public ActionResult AssessmentInput(FormCollection fc)
         {
-            for(var t = 1; t < form.Count; t++)
+            var outcomeIDs = fc.AllKeys;
+            for (var t = 1; t < fc.Count; t++)
             {
-                var outcome = form[t];
-                var scoreTypeID = form.GetValue(outcome);
+                var outcomeID = outcomeIDs[t];
+                var scoreTypeID = fc.GetValue(outcomeID).AttemptedValue;
             }
 
             return RedirectToAction(actionName: "TSAStudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });

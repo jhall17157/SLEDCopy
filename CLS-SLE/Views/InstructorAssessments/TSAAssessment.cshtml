@@ -5,29 +5,38 @@
     var s = Model.Student;
 }
 
-<h2>
-    @r.AssessmentName - @s.FirstName @s.LastName
-</h2>
+<h1>@r.AssessmentName - @s.FirstName @s.LastName</h1>
 <form action="/InstructorAssessments/AssessmentInput" method="post">
     @Html.AntiForgeryToken()
     <table class="table">
         <tbody id="criteria">
             @foreach(Outcome o in Model.Outcomes)
             {
-                <tr id="@o.OutcomeID">
-                    <td>@o.Name</td>
-                    <td class="col-md-2">
-                        @foreach(ScoreType i in Model.Selectors)
-                        {
-                            <div class="criteria">
-                                @*<label for="@i.ScoreTypeID@o.OutcomeID">&nbsp;@i.Description</label>
-                                <input type="radio" id="@i.ScoreTypeID@o.OutcomeID" name="@o.OutcomeID" class="@i.ScoreTypeID@o.OutcomeID" value="@i.ScoreTypeID">*@
+                 <tr id="@o.OutcomeID">
+                    <td colspan="2"><h3>@o.Name</h3></td>
+                 </tr>
+                 foreach(RubricDetail rb in Model.Criteria)
+                 {
+                    if(o.Name.Equals(rb.OutcomeName))
+                    {
+                        <tr>
+                            <td>
+                                <h4>@rb.CriteriaName</h4>
+                            </td>
+                            <td class="col-md-3">
+                                @foreach(ScoreType i in Model.Selectors)
+                                {
+                                    <div class="criteria">
+                                        @*<label for="@i.ScoreTypeID@o.OutcomeID">&nbsp;@i.Description</label>
+                                        <input type="radio" id="@i.ScoreTypeID@o.OutcomeID" name="@o.OutcomeID" class="@i.ScoreTypeID@o.OutcomeID" value="@i.ScoreTypeID">*@
 
-                                @i.Description @Html.RadioButton(o.OutcomeID.ToString(), i.ScoreTypeID);
-                            </div>
-                        }
-                    </td>
-                </tr>
+                                        @i.Description @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID)
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                    }
+                 }
             }
         </tbody>
     </table>

@@ -164,6 +164,8 @@ namespace CLS_SLE.Controllers
             var rubric = db.InstructorAssessments.FirstOrDefault(n => n.RubricID == instructor.RubricID);
 
             var outcomes = db.Outcomes.Where(c => c.RubricID == instructor.RubricID);
+
+            var criteria = db.RubricDetails.Where(c => c.RubricID == instructor.RubricID);
             
             var numberOfSelectors = db.ScoreTypes.Where(n => n.RubricID == instructor.RubricID);
             
@@ -172,8 +174,8 @@ namespace CLS_SLE.Controllers
             mymodel.Rubric = rubric;
             mymodel.Selectors = numberOfSelectors.ToList();
             mymodel.Outcomes = outcomes.ToList();
-
-
+            mymodel.Criteria = criteria.ToList();
+            
             return View(mymodel);
         }
 
@@ -186,36 +188,26 @@ namespace CLS_SLE.Controllers
             {
                 Int16 outcomeID = Convert.ToInt16(outcomeIDs[t]);
                 var scoreTypeID = fc.GetValue(outcomeID.ToString()).AttemptedValue;
-                
+                int enrollmentID = Convert.ToInt32(Session["enrollmentID"]);
+
                 Outcome outcome = db.Outcomes.FirstOrDefault(o => o.OutcomeID == outcomeID);
                 
                 Criterion criteria = db.Criteria.FirstOrDefault(c => c.OutcomeID == outcome.OutcomeID && c.SortOrder == outcome.SortOrder);
-
-                int enrollmentID = Convert.ToInt32(Session["enrollmentID"]);
-
-                StudentScore check = db.StudentScores.FirstOrDefault(c => c.EnrollmentID == enrollmentID && c.CriteriaID == criteria.CriteriaID);
-
-                if (check != null)
-                {
-                    check.ScoreTypeID = Convert.ToInt16(scoreTypeID);
-                    check.DateTimeAssessed = DateTime.Now;
-                    check.AssessedByID = Convert.ToInt32(Session["instructorID"]);
-                }
-                else
-                {
-                    StudentScore score = new StudentScore()
-                    {
-                        EnrollmentID = Convert.ToInt32(Session["enrollmentID"]),
-                        CriteriaID = criteria.CriteriaID,
-                        ScoreTypeID = Convert.ToSByte(scoreTypeID),
-                        AssessedByID = Convert.ToInt32(Session["instructorID"]),
-                        DateTimeAssessed = DateTime.Now,
-                    };
-
-                    db.StudentScores.Add(score);
-                }
+                var criteriaID = criteria.CriteriaID;
                 
+                StudentScore score = new StudentScore()
+                {
+                    EnrollmentID = Convert.ToInt32(Session["enrollmentID"]),
+                    CriteriaID = criteria.CriteriaID,
+                    ScoreTypeID = Convert.ToSByte(scoreTypeID),
+                    AssessedByID = Convert.ToInt32(Session["instructorID"]),
+                    DateTimeAssessed = DateTime.Now,
+                };
+
+                db.StudentScores.Add(score);
             }
+
+        
             db.SaveChanges();
 
             return RedirectToAction(actionName: "TSAStudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });

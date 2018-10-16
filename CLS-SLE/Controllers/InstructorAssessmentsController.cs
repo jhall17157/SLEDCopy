@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CLS_SLE.Models;
+using System.Collections.Specialized;
 
 namespace CLS_SLE.Controllers
 {
@@ -180,7 +181,7 @@ namespace CLS_SLE.Controllers
         public ActionResult AssessmentInput(FormCollection fc)
         {
             var outcomeIDs = fc.AllKeys;
-            for(var t = 1; t < fc.Count; t++)
+            for (var t = 1; t < fc.Count; t++)
             {
                 var outcomeID = outcomeIDs[t];
                 var scoreTypeID = fc.GetValue(outcomeID).AttemptedValue;

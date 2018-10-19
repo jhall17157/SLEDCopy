@@ -206,6 +206,9 @@
           <Property Name="Login" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="LastLogin" Type="datetime" />
+          <Property Name="Salt" Type="varchar" MaxLength="25" />
+          <Property Name="Hash" Type="binary" MaxLength="64" />
+          <Property Name="MustResetPassword" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="UserRole">
           <Key>
@@ -947,6 +950,9 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="LastLogin" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Person" Relationship="Self.fk_User_PersonID" FromRole="User" ToRole="Person" />
+          <Property Name="Salt" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Hash" Type="Binary" MaxLength="64" FixedLength="true" />
+          <Property Name="MustResetPassword" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="UserRole">
           <Key>
@@ -1620,6 +1626,9 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="SLE_TrackingModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="MustResetPassword" ColumnName="MustResetPassword" />
+                <ScalarProperty Name="Hash" ColumnName="Hash" />
+                <ScalarProperty Name="Salt" ColumnName="Salt" />
                 <ScalarProperty Name="PersonID" ColumnName="PersonID" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
                 <ScalarProperty Name="Email" ColumnName="Email" />

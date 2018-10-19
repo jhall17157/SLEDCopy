@@ -16,18 +16,22 @@ namespace CLS_SLE.Controllers
         {
             return View();
         }
-
-        public ActionResult About()
+        //GET: Home/SignOut
+        public ActionResult SignOut()
         {
-            ViewBag.Message = "Your application description page.";
+            FormsAuthentication.SignOut();
+            return RedirectToAction(actionName: "SignedOut", controllerName: "Home");
+        }
 
+        //GET: Home/SignedOut
+        public ActionResult SignedOut()
+        {
             return View();
         }
 
-        public ActionResult Contact()
+        //GET: Home/CheckEmail
+        public ActionResult CheckEmail()
         {
-            ViewBag.Message = "Your contact page.";
-
             return View();
         }
     }

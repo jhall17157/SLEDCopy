@@ -158,6 +158,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstructorAssessmentsController.cs" />
     <Compile Include="Controllers\MockupController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -251,9 +252,11 @@
     <Compile Include="Models\User.cs">
       <DependentUpon>CLS-SLE.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\UserPasswordReset.cs" />
     <Compile Include="Models\UserRole.cs">
       <DependentUpon>CLS-SLE.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\UserSignIn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\UserAccount.cs" />
   </ItemGroup>
@@ -310,8 +313,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Mockup\AdministratorLandingPage.cshtml" />
     <Content Include="Views\Mockup\CLSAssessment.cshtml" />
@@ -327,6 +328,9 @@
     <Content Include="Views\InstructorAssessments\CLSStudentList.cshtml" />
     <Content Include="Views\InstructorAssessments\TSAStudentList.cshtml" />
     <Content Include="Views\InstructorAssessments\TSAAssessment.cshtml" />
+    <Content Include="Views\Home\SignedOut.cshtml" />
+    <Content Include="Views\Home\CheckEmail.cshtml" />
+    <Content Include="Views\User\SignIn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -346,6 +350,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

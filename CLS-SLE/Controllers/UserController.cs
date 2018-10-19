@@ -12,6 +12,7 @@ namespace CLS_SLE.Controllers
 {
     public class UserController : Controller
     {
+
         public ActionResult SignIn()
         {
             return View();
@@ -25,7 +26,7 @@ namespace CLS_SLE.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    // find customer by CustomerId
+                    // find User by UserID
                     User user = db.Users.Find(userSignIn.PersonID);
                     // hash & salt the posted password
                     string str = UserAccount.HashSHA512(userSignIn.Hash + user.PersonID);
@@ -33,7 +34,7 @@ namespace CLS_SLE.Controllers
                     if (str == userSignIn.Hash)
                     {
                         // Passwords match
-                        // authenticate user (this stores the CustomerID in an encrypted cookie)
+                        // authenticate user (Stores the UserID in an encrypted cookie)
                         // normally, you would require HTTPS
                         FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
 

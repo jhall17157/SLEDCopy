@@ -27,21 +27,22 @@ namespace CLS_SLE.Controllers
                 if (ModelState.IsValid)
                 {
                     // find User by UserID
-                    User user = db.Users.Find(userSignIn.PersonID);
+                    Person person = db.People.Where(p=>p.IdNumber == userSignIn.PersonID).FirstOrDefault();
                     // hash & salt the posted password
-                    string str = UserAccount.HashSHA512(userSignIn.Hash + user.PersonID);
+                    string str = UserAccount.HashSHA512(userSignIn.Hash + person.PersonID);
                     // Compared posted Password to customer password
                     if (str == userSignIn.Hash)
                     {
                         // Passwords match
                         // authenticate user (Stores the UserID in an encrypted cookie)
                         // normally, you would require HTTPS
-                        FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
+                        FormsAuthentication.SetAuthCookie(person.PersonID.ToString(), false);
 
                         // send a cookie to the client to indicate that this is a customer
                         HttpCookie myCookie = new HttpCookie("role");
                         myCookie.Value = "user";
                         Response.Cookies.Add(myCookie);
+                        //Sql "SELECT \r\n    [Extent1].[PersonID] AS [PersonID], \r\n    [Extent1].[IdNumber] AS [IdNumber], \r\n    [Extent1].[FirstName] AS [FirstName], \r\n    [Extent1].[LastName] AS [LastName]\r\n    FROM [dbo].[Person] AS [Extent1]"   string
 
                         // if there is a return url, redirect to the url
                         if (ReturnUrl != null)

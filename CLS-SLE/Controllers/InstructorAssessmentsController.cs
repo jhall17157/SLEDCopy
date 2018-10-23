@@ -80,6 +80,8 @@ namespace CLS_SLE.Controllers
             var criteria = db.RubricDetails.Where(c => c.RubricID == instructor.RubricID);
             
             var numberOfSelectors = db.ScoreTypes.Where(n => n.RubricID == instructor.RubricID);
+
+            var studentScores = db.StudentScores.Where(s => s.EnrollmentID == student.EnrollmentID);
             
             dynamic mymodel = new ExpandoObject();
             mymodel.Student = student;
@@ -87,6 +89,7 @@ namespace CLS_SLE.Controllers
             mymodel.Selectors = numberOfSelectors.ToList();
             mymodel.Outcomes = outcomes.ToList();
             mymodel.Criteria = criteria.ToList();
+            mymodel.StudentScores = studentScores.ToList();
             
             return View(mymodel);
         }
@@ -98,15 +101,10 @@ namespace CLS_SLE.Controllers
             var outcomeIDs = fc.AllKeys;
             for (var t = 1; t < fc.Count; t++)
             {
-                Int16 outcomeID = Convert.ToInt16(outcomeIDs[t]);
-                Int16 scoreTypeID = Convert.ToInt16(fc.GetValue(outcomeID.ToString()).AttemptedValue);
+                Int16 criteriaID = Convert.ToInt16(outcomeIDs[t]);
+                Int16 scoreTypeID = Convert.ToInt16(fc.GetValue(criteriaID.ToString()).AttemptedValue);
                 int enrollmentID = Convert.ToInt32(Session["enrollmentID"]);
-
-                Outcome outcome = db.Outcomes.FirstOrDefault(o => o.OutcomeID == outcomeID);
                 
-                Criterion criteria = db.Criteria.FirstOrDefault(c => c.OutcomeID == outcome.OutcomeID && c.SortOrder == outcome.SortOrder);
-                var criteriaID = criteria.CriteriaID;
-
                 var checkIfExists = db.StudentScores.Where(c => c.EnrollmentID == enrollmentID && c.CriteriaID == criteriaID).FirstOrDefault();
                 if(checkIfExists != null)
                 {
@@ -117,7 +115,7 @@ namespace CLS_SLE.Controllers
                     StudentScore score = new StudentScore()
                     {
                         EnrollmentID = Convert.ToInt32(Session["enrollmentID"]),
-                        CriteriaID = criteria.CriteriaID,
+                        CriteriaID = criteriaID,
                         ScoreTypeID = Convert.ToSByte(scoreTypeID),
                         AssessedByID = Convert.ToInt32(Session["instructorID"]),
                         DateTimeAssessed = DateTime.Now,

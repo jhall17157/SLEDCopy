@@ -14,7 +14,7 @@
             @foreach(Outcome o in Model.Outcomes)
              {
                  <tr id="@o.OutcomeID">
-                    <td colspan="2"><h3>@o.Name - @o.OutcomeID</h3></td>
+                    <td colspan="2"><h3>@o.Name</h3></td>
                  </tr>
                  foreach(RubricDetail rb in Model.Criteria)
                  {
@@ -22,7 +22,7 @@
                     {
                         <tr>
                             <td>
-                                <h4>@rb.CriteriaName - @rb.CriteriaID</h4>
+                                <h4>@rb.CriteriaName</h4>
                             </td>
                             <td class="col-md-3">
                                 @foreach(ScoreType i in Model.Selectors)

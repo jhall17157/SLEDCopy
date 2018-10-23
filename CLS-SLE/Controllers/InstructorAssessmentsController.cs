@@ -187,28 +187,33 @@ namespace CLS_SLE.Controllers
             for (var t = 1; t < fc.Count; t++)
             {
                 Int16 outcomeID = Convert.ToInt16(outcomeIDs[t]);
-                var scoreTypeID = fc.GetValue(outcomeID.ToString()).AttemptedValue;
+                Int16 scoreTypeID = Convert.ToInt16(fc.GetValue(outcomeID.ToString()).AttemptedValue);
                 int enrollmentID = Convert.ToInt32(Session["enrollmentID"]);
 
                 Outcome outcome = db.Outcomes.FirstOrDefault(o => o.OutcomeID == outcomeID);
                 
                 Criterion criteria = db.Criteria.FirstOrDefault(c => c.OutcomeID == outcome.OutcomeID && c.SortOrder == outcome.SortOrder);
                 var criteriaID = criteria.CriteriaID;
-                
-                StudentScore score = new StudentScore()
+
+                var checkIfExists = db.StudentScores.Where(c => c.EnrollmentID == enrollmentID && c.CriteriaID == criteriaID).FirstOrDefault();
+                if(checkIfExists != null)
                 {
-                    EnrollmentID = Convert.ToInt32(Session["enrollmentID"]),
-                    CriteriaID = criteria.CriteriaID,
-                    ScoreTypeID = Convert.ToSByte(scoreTypeID),
-                    AssessedByID = Convert.ToInt32(Session["instructorID"]),
-                    DateTimeAssessed = DateTime.Now,
-                };
-
-                db.StudentScores.Add(score);
+                    checkIfExists.ScoreTypeID = scoreTypeID;
+                }
+                else
+                {
+                    StudentScore score = new StudentScore()
+                    {
+                        EnrollmentID = Convert.ToInt32(Session["enrollmentID"]),
+                        CriteriaID = criteria.CriteriaID,
+                        ScoreTypeID = Convert.ToSByte(scoreTypeID),
+                        AssessedByID = Convert.ToInt32(Session["instructorID"]),
+                        DateTimeAssessed = DateTime.Now,
+                    };
+                    db.StudentScores.Add(score);
+                }
+                db.SaveChanges();
             }
-
-        
-            db.SaveChanges();
 
             return RedirectToAction(actionName: "TSAStudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
         }

@@ -51,7 +51,7 @@ namespace CLS_SLE.Controllers
                         }
 
                         // Redirect to Home page
-                        return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessmentsController");
+                        return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
                     }
                     else
                     {

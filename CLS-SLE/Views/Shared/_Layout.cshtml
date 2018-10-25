@@ -21,29 +21,14 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="~/User/SignIn"><i class="fa fa-sign-in"></i> Sign In</a></li>
-                    @*<li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                <i class="fa fa-users"></i>&nbsp;Account <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-                @if (!Request.IsAuthenticated)
-                {
-                    <li><a href="~/User/SignIn"><i class="fa fa-sign-in"></i> Sign In</a></li>
-                    <li><a href="~/User/Register"><i class="fa fa-user-plus"></i> Register</a></li>
-                    <li role="separator" class="divider"></li>
-                }
-                <li><a href="~/User/Account"><i class="fa fa-user"></i> Your Account</a></li>
-            </ul>
 
-
-        </li>*@
                 </ul>
-                @*@if (Request.IsAuthenticated)
+                @if (Request.IsAuthenticated)
                 {
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="~/Home/SignOut"><i class="fa fa-sign-out"></i> Sign Out</a></li>
                     </ul>
-                }*@
+                }
             </div>
         </div>
     </div>

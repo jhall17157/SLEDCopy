@@ -12,10 +12,6 @@ namespace CLS_SLE.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
-        {
-            return View();
-        }
         //GET: Home/SignOut
         public ActionResult SignOut()
         {

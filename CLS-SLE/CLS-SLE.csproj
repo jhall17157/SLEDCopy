@@ -157,7 +157,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstructorAssessmentsController.cs" />
-    <Compile Include="Controllers\MockupController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -314,16 +313,11 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Mockup\AdministratorLandingPage.cshtml" />
-    <Content Include="Views\Mockup\CLSAssessment.cshtml" />
-    <Content Include="Views\Mockup\FacultyLandingPage.cshtml" />
-    <Content Include="Views\Mockup\TSAAssessment.cshtml" />
     <Content Include="Views\InstructorAssessments\Create.cshtml" />
     <Content Include="Views\InstructorAssessments\Delete.cshtml" />
     <Content Include="Views\InstructorAssessments\Details.cshtml" />
     <Content Include="Views\InstructorAssessments\Edit.cshtml" />
     <Content Include="Views\InstructorAssessments\Dashboard.cshtml" />
-    <Content Include="Views\Mockup\TSAAssessment2.cshtml" />
     <Content Include="Views\InstructorAssessments\CLSAssessment.cshtml" />
     <Content Include="Views\InstructorAssessments\CLSStudentList.cshtml" />
     <Content Include="Views\InstructorAssessments\TSAStudentList.cshtml" />

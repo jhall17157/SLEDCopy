@@ -38,7 +38,7 @@ namespace CLS_SLE.Controllers
                         // normally, you would require HTTPS
                         FormsAuthentication.SetAuthCookie(person.PersonID.ToString(), false);
 
-                        // send a cookie to the client to indicate that this is a customer
+                        // send a cookie to the client to indicate user
                         HttpCookie myCookie = new HttpCookie("role");
                         myCookie.Value = "user";
                         Response.Cookies.Add(myCookie);
@@ -51,7 +51,7 @@ namespace CLS_SLE.Controllers
                         }
 
                         // Redirect to Home page
-                        return RedirectToAction(actionName: "Index", controllerName: "Home");
+                        return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessmentsController");
                     }
                     else
                     {

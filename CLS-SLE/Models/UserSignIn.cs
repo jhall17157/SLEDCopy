@@ -10,7 +10,7 @@ namespace CLS_SLE.Models
     public class UserSignIn
     {
         [DisplayName("Username")]
-        public string PersonID { get; set; }
+        public string IdNumber { get; set; }
         [Required(ErrorMessage = "Password Required")]
         [DisplayName("Password")]
         public string Hash { get; set; }

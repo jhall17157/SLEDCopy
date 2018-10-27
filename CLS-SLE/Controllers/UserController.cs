@@ -21,16 +21,16 @@ namespace CLS_SLE.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SignIn([Bind(Include = "PersonID,Hash")] UserSignIn userSignIn, string ReturnUrl)
+        public ActionResult SignIn([Bind(Include = "IdNumber,Hash")] UserSignIn userSignIn, string ReturnUrl)
         {
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())
             {
                 if (ModelState.IsValid)
                 {
                     // find User by UserID
-                    Person person = db.People.Where(p=>p.IdNumber == userSignIn.PersonID).FirstOrDefault();
+                    Person person = db.People.Where(p=>p.IdNumber == userSignIn.IdNumber).FirstOrDefault();
                     // hash & salt the posted password
-                    string str = UserAccount.HashSHA512(userSignIn.Hash + person.PersonID);
+                    string str = UserAccount.HashSHA512(userSignIn.Hash + person.IdNumber);
                     // Compared posted Password to customer password
                     if (str == userSignIn.Hash)
                     {
@@ -73,7 +73,7 @@ namespace CLS_SLE.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PasswordReset([Bind(Include = "PersonId, Hash ,Email")] UserPasswordReset pwReset)
+        public ActionResult PasswordReset([Bind(Include = "IdNumber, Hash ,Email")] UserPasswordReset pwReset)
         {
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())
             {

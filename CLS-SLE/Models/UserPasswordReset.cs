@@ -9,7 +9,7 @@ namespace CLS_SLE.Models
 {
     public class UserPasswordReset
     {
-        public int PersonID { get; set; }
+        public int IdNumber { get; set; }
         public string Login { get; set; }
         [Required(ErrorMessage = "Password Required")]
         public string Email { get; set; }

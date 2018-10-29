@@ -44,22 +44,32 @@ namespace CLS_SLE.Controllers
             return View(students.ToList());
         }
 
-        public ActionResult CLSAssessment(int sectionID)
+        public ActionResult CLSAssessment(int sectionID, int enrollmentID)
         {
             var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID);
+            Session["instructorID"] = instructor.PersonID;
+            Session["rubricID"] = instructor.RubricID;
+
+            var student = db.SectionEnrollments.FirstOrDefault(s => s.sectionID == sectionID && s.EnrollmentID == enrollmentID);
+            Session["enrollmentID"] = student.EnrollmentID;
 
             var rubric = db.InstructorAssessments.FirstOrDefault(n => n.RubricID == instructor.RubricID);
-                
-            var criteria = db.Outcomes.Where(c => c.RubricID == instructor.RubricID);
+
+            var outcomes = db.Outcomes.Where(c => c.RubricID == instructor.RubricID);
+
+            var criteria = db.RubricDetails.Where(c => c.RubricID == instructor.RubricID);
 
             var numberOfSelectors = db.ScoreTypes.Where(n => n.RubricID == instructor.RubricID);
 
+            var studentScores = db.StudentScores.Where(s => s.EnrollmentID == student.EnrollmentID);
 
             dynamic mymodel = new ExpandoObject();
+            mymodel.Student = student;
             mymodel.Rubric = rubric;
             mymodel.Selectors = numberOfSelectors.ToList();
+            mymodel.Outcomes = outcomes.ToList();
             mymodel.Criteria = criteria.ToList();
-            
+            mymodel.StudentScores = studentScores.ToList();
 
             return View(mymodel);
         }

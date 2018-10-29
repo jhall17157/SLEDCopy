@@ -2,26 +2,87 @@
 @{
     ViewBag.Title = "CLS Assessment";
     var r = Model.Rubric;
+    var s = Model.Student;
+    bool exists = false;
 }
 
-<h2>
-    @r.AssessmentName
-</h2>
-
-<table class="table">
-    <tbody>
-        @foreach(Outcome o in Model.Criteria)
-        {
-            <tr id="outcome_@o.OutcomeID">
-                <td>@o.Name</td>
-                <td>
-                    @foreach(ScoreType i in Model.Selectors)
+<h1>@r.AssessmentName - @s.FirstName @s.LastName</h1>
+<form action="/InstructorAssessments/AssessmentInput" method="post">
+    @Html.AntiForgeryToken()
+    <table class="table">
+        <tbody id="criteria">
+            @foreach (Outcome o in Model.Outcomes)
+            {
+                <tr id="@o.OutcomeID">
+                    <td colspan="2"><h3>@o.Name</h3></td>
+                </tr>
+                foreach (RubricDetail rb in Model.Criteria)
+                {
+                    if (o.Name.Equals(rb.OutcomeName))
                     {
-                        <label for="selector_@i.ScoreTypeID@o.OutcomeID">&nbsp;@i.Description</label>
-                        <input type="radio" id="selector_@i.ScoreTypeID@o.OutcomeID" name="@o.OutcomeID">
+                        <tr>
+                            <td>
+                                <h4>@rb.CriteriaName</h4>
+                            </td>
+                            <td class="col-md-3">
+                                @foreach (ScoreType i in Model.Selectors)
+                                {
+                                    <div class="criteria">
+                                        @foreach (StudentScore ss in Model.StudentScores)
+                                        {
+                                            exists = false;
+                                            if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
+                                            {
+                                                @i.Description @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { Checked = "checked" })
+                                                exists = true;
+                                                break;
+                                            }
+                                        }
+
+                                        @if (!exists)
+                                        {
+                                            @i.Description @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID)
+                                        }
+
+                                    </div>
+                                }
+                            </td>
+                        </tr>
                     }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                }
+            }
+        </tbody>
+    </table>
+    <input type="submit" value="Submit" id="submit">
+</form>
+
+<style>
+    input[type=radio] {
+        float: right;
+    }
+
+    .criteria {
+        display: block;
+    }
+</style>
+
+
+
+@section scripts
+{
+    <script>
+        $(function ()
+        {
+            var rubricID = @r.RubricID;
+            var sectionID = @r.SectionID;
+            var enrollmentID = @s.EnrollmentID;
+            var personID = '@Session["personID"]';
+
+            //$("form").on("submit", function (e)
+            //{
+            //    e.preventDefault();
+            //    console.log($(this).serialize());
+            //});
+        });
+    </script>
+}

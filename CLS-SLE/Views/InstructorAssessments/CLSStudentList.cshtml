@@ -9,9 +9,9 @@
     <tbody id="students">
         @foreach(SectionEnrollment student in Model)
         {
-            <tr id="@student.sectionID" class="student-row">
-                <td class="hidden">@student.sectionID</td>
-                <td class="hidden">@student.EnrollmentID</td>
+            <tr id="@student.EnrollmentID" class="student-row">
+                <td id="sectionID_@student.EnrollmentID">@student.sectionID</td>
+                <td id="enrollmentID_@student.EnrollmentID" class="hidden">@student.EnrollmentID</td>
                 <td>@student.LastName, @student.FirstName</td>
                 <td>@student.StudentID</td>
             </tr>
@@ -29,7 +29,7 @@
 
             $('#students').on('click', '.student-row', function () {
                 console.log(this.id);
-                location.href = "/InstructorAssessments/CLSAssessment?sectionID=" + this.id;
+                location.href = "/InstructorAssessments/CLSAssessment?sectionID=" + $('#sectionID_' + this.id).html() + "&enrollmentID=" + $('#enrollmentID_' + this.id).html();
             });
         })
     </script>    

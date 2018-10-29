@@ -28,9 +28,6 @@
                                 @foreach(ScoreType i in Model.Selectors)
                                 {
                                     <div class="criteria">
-                                        @*<label for="@i.ScoreTypeID@o.OutcomeID">&nbsp;@i.Description</label>
-                                        <input type="radio" id="@i.ScoreTypeID@o.OutcomeID" name="@o.OutcomeID" class="@i.ScoreTypeID@o.OutcomeID" value="@i.ScoreTypeID">*@
-
                                         @foreach(StudentScore ss in Model.StudentScores)
                                         {
                                             exists = false;

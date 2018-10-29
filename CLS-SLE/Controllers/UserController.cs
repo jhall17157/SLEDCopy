@@ -21,18 +21,18 @@ namespace CLS_SLE.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SignIn([Bind(Include = "IdNumber,Hash")] UserSignIn userSignIn, string ReturnUrl)
+        public ActionResult SignIn([Bind(Include = "UserId,Password")] UserSignIn userSignIn, string ReturnUrl)
         {
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())
             {
                 if (ModelState.IsValid)
                 {
                     // find User by UserID
-                    Person person = db.People.Where(p=>p.IdNumber == userSignIn.IdNumber).FirstOrDefault();
+                    Person person = db.People.Where(p=>p.IdNumber == userSignIn.UserId).FirstOrDefault();
                     // hash & salt the posted password
-                    string str = UserAccount.HashSHA512(userSignIn.Hash + person.IdNumber);
+                    string str = UserAccount.HashSHA512(userSignIn.Password + person.IdNumber);
                     // Compared posted Password to customer password
-                    if (str == userSignIn.Hash)
+                    if (str == userSignIn.Password)
                     {
                         // Passwords match
                         // authenticate user (Stores the UserID in an encrypted cookie)
@@ -49,7 +49,7 @@ namespace CLS_SLE.Controllers
                         if (ReturnUrl != null)
                         {
                             //return Redirect(ReturnUrl);
-                            return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessmentsController");
+                            return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
 
                         }
 

@@ -38,7 +38,6 @@ namespace CLS_SLE.Controllers
             mymodel.Students = students.ToList();
             mymodel.Assessment = assessment;
 
-
             return View(mymodel);
         }
 
@@ -53,7 +52,6 @@ namespace CLS_SLE.Controllers
             dynamic mymodel = new ExpandoObject();
             mymodel.Students = students.ToList();
             mymodel.Assessment = assessment;
-
 
             return View(mymodel);
         }

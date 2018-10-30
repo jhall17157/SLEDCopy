@@ -6,7 +6,7 @@
     bool exists = false;
 }
 
-<h1>@r.AssessmentName - @s.FirstName @s.LastName</h1>
+<h1>@r.RubricName - @s.FirstName @s.LastName</h1>
 <form action="/InstructorAssessments/AssessmentInput" method="post">
     @Html.AntiForgeryToken()
     <table class="table">

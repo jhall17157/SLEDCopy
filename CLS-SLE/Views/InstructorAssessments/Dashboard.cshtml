@@ -8,13 +8,14 @@
 <p>
     @*@Html.ActionLink("Create New", "Create")*@
 </p>
-<table class="table">
+<table class="table" id="CLSAssessments">
     <tr>
-        <th class="col-xs-6">
+        <th class="col-xs-5">
             <h2>CLS Assessments</h2>
         </th>
         <th><h3>Class</h3></th>
-        <th colspan="2"><h3>CRN</h3></th>
+        <th><h3>CRN</h3></th>
+        <th><h3>Due Date</h3></th>
     </tr>
 
     @foreach (InstructorAssessment item in Model)
@@ -22,8 +23,8 @@
         if(item.AssessmentLevel == "S")
         {
             <tr>
-                <td class="col-xs-6">
-                    @item.AssessmentName
+                <td class="col-xs-5">
+                    @item.RubricName
                 </td>
                 <td class="col-xs-3">
                     @item.CourseName
@@ -32,7 +33,9 @@
                     @item.CRN
                 </td>
                 <td>
-                    @Html.ActionLink("Details", "Details", new { id = item.RubricID } ) |
+                    @item.DueDate
+                </td>
+                <td>
                     @Html.ActionLink("Assess", "CLSStudentList", new { rubricID = item.RubricID })
                 </td>
             </tr>
@@ -42,7 +45,7 @@
 
 <table class="table">
     <tr>
-        <th colspan="4">
+        <th colspan="5">
             <h2>TSA Assessments</h2>
         </th>
     </tr>
@@ -52,8 +55,8 @@
         if(item.AssessmentLevel != "S")
         {
             <tr>
-                <td class="col-xs-6">
-                    @item.AssessmentName
+                <td class="col-xs-5">
+                    @item.RubricName
                 </td>
                 <td class="col-xs-3">
                     @item.CourseName
@@ -62,7 +65,9 @@
                     @item.CRN
                 </td>
                 <td>
-                    @Html.ActionLink("Details", "Details", new { id =item.RubricID } ) |
+                    @item.DueDate
+                </td>
+                <td>
                     @Html.ActionLink("Assess", "TSAStudentList", new { rubricID = item.RubricID })
                 </td>
             </tr>
@@ -70,3 +75,12 @@
     }
 
 </table>
+
+@section scripts
+{
+    <script>
+        $(function ()
+        {
+        });
+    </script>
+}

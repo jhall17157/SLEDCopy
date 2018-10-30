@@ -4,19 +4,27 @@
     var a = Model.Assessment;
 }
 
+<h4>@Html.ActionLink("Dashboard", "Dashboard") / Student List</h4>
+
 <h2>@a.AssessmentName</h2>
 <h3>@a.RubricName - @a.CourseName CRN: @a.CRN</h3>
 
 <table class="table table-hover table-responsive">
+    <thead>
+        <tr>
+            <th>Student ID</th>
+            <th>Name</th>
+        </tr>
+    </thead>
     <tbody id="students">
         @foreach(SectionEnrollment student in Model.Students)
         {
-            <tr id="@student.EnrollmentID" class="student-row">
-                <td id="sectionID_@student.EnrollmentID" class="hidden">@student.sectionID</td>
-                <td id="enrollmentID_@student.EnrollmentID" class="hidden">@student.EnrollmentID</td>
-                <td>@student.LastName, @student.FirstName</td>
-                <td>@student.StudentID</td>
-            </tr>
+        <tr id="@student.EnrollmentID" class="student-row">
+            <td id="sectionID_@student.EnrollmentID" class="hidden">@student.sectionID</td>
+            <td id="enrollmentID_@student.EnrollmentID" class="hidden">@student.EnrollmentID</td>
+            <td class="col-xs-1">@student.StudentID</td>
+            <td>@student.LastName, @student.FirstName</td>
+        </tr>
         }
     </tbody>
 </table>

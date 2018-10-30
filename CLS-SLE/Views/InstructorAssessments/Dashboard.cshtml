@@ -5,17 +5,14 @@
 
 <h2>Your Dashboard</h2>
 
-<p>
-    @*@Html.ActionLink("Create New", "Create")*@
-</p>
-<table class="table" id="CLSAssessments">
+<table class="table">
     <tr>
         <th class="col-xs-5">
             <h2>CLS Assessments</h2>
         </th>
         <th><h3>Class</h3></th>
         <th><h3>CRN</h3></th>
-        <th><h3>Due Date</h3></th>
+        <th colspan="2"><h3>Due Date</h3></th>
     </tr>
 
     @foreach (InstructorAssessment item in Model)

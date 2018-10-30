@@ -6,6 +6,8 @@
     bool exists = false;
 }
 
+<h4>@Html.ActionLink("Dashboard", "Dashboard") / @Html.ActionLink("Student List", "CLSStudentList", new { rubricID = r.RubricID }) / Assessment</h4>
+
 <h1>@r.RubricName - @s.FirstName @s.LastName</h1>
 <form action="/InstructorAssessments/AssessmentInput" method="post">
     @Html.AntiForgeryToken()
@@ -22,7 +24,7 @@
                     {
                         <tr>
                             <td>
-                                <h4>@rb.CriteriaName</h4>
+                                <h4 style="margin-left:45px">@rb.CriteriaName</h4>
                             </td>
                             <td class="col-md-3">
                                 @foreach (ScoreType i in Model.Selectors)
@@ -58,7 +60,7 @@
 
 <style>
     input[type=radio] {
-        float: right;
+        float: left;
     }
 
     .criteria {

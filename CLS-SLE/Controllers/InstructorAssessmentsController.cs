@@ -32,7 +32,14 @@ namespace CLS_SLE.Controllers
 
             var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID).OrderBy(c => c.LastName);
 
-            return View(students.ToList());
+            var assessment = db.InstructorAssessments.Where(a => a.RubricID == rubricID).FirstOrDefault();
+
+            dynamic mymodel = new ExpandoObject();
+            mymodel.Students = students.ToList();
+            mymodel.Assessment = assessment;
+
+
+            return View(mymodel);
         }
 
         public ActionResult TSAStudentList(int rubricID)
@@ -41,7 +48,14 @@ namespace CLS_SLE.Controllers
 
             var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID).OrderBy(c => c.LastName);
 
-            return View(students.ToList());
+            var assessment = db.InstructorAssessments.Where(a => a.RubricID == rubricID).FirstOrDefault();
+
+            dynamic mymodel = new ExpandoObject();
+            mymodel.Students = students.ToList();
+            mymodel.Assessment = assessment;
+
+
+            return View(mymodel);
         }
 
         public ActionResult CLSAssessment(int sectionID, int enrollmentID)

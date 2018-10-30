@@ -1,17 +1,18 @@
 ﻿@using CLS_SLE.Models;
 @{
     ViewBag.Title = "Students";
+    var a = Model.Assessment;
 }
 
-<h2>Students</h2>
+<h2>@a.AssessmentName</h2>
 
 <table class="table table-hover table-responsive">
     <tbody id="students">
-        @foreach(SectionEnrollment student in Model)
+        @foreach(SectionEnrollment student in Model.Students)
         {
             <tr id="@student.EnrollmentID" class="student-row">
-                <td id="sectionID_@student.EnrollmentID">@student.sectionID</td>
-                <td id="enrollmentID_@student.EnrollmentID">@student.EnrollmentID</td>
+                <td id="sectionID_@student.EnrollmentID" class="hidden">@student.sectionID</td>
+                <td id="enrollmentID_@student.EnrollmentID" class="hidden">@student.EnrollmentID</td>
                 <td>@student.LastName, @student.FirstName</td>
                 <td>@student.StudentID</td>
             </tr>
@@ -22,11 +23,8 @@
 @section scripts
 {
     <script>
-        $(function () {
-            $('#students').each(function () {
-                
-            });
-
+        $(function ()
+        {
             $('#students').on('click', '.student-row', function () {
                 console.log(this.id);
                 location.href = "/InstructorAssessments/TSAAssessment?sectionID=" + $('#sectionID_' + this.id).html() + "&enrollmentID=" + $('#enrollmentID_' + this.id).html();

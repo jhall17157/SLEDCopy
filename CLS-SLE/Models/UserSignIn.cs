@@ -8,8 +8,8 @@ namespace CLS_SLE.Models
 {
     public class UserSignIn
     {
-        public string UserId { get; set; }
-        [Required(ErrorMessage = "Password Required")]
-        public string Password { get; set; }
+        public string Login { get; set; }
+        [Required(ErrorMessage = "PersonID Required")]
+        public string PersonID { get; set; }
     }
 }

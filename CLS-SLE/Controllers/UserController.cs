@@ -21,29 +21,29 @@ namespace CLS_SLE.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SignIn([Bind(Include = "UserId,Password")] UserSignIn userSignIn, string ReturnUrl)
+        public ActionResult SignIn([Bind(Include = "Login,PersonID")] UserSignIn userSignIn, string ReturnUrl)
         {
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())
             {
                 if (ModelState.IsValid)
                 {
-                    // find User by UserID
-                    Person person = db.People.Where(p=>p.IdNumber == userSignIn.UserId).FirstOrDefault();
+                    //Person person = db.People.Where(p=>p.PersonID == userSignIn.Login).FirstOrDefault();
+                    User user = db.Users.Where(u => u.Login == userSignIn.Login).FirstOrDefault();
                     // hash & salt the posted password
-                    string str = UserAccount.HashSHA512(userSignIn.Password + person.IdNumber);
-                    // Compared posted Password to customer password
-                    if (str == userSignIn.Password)
+                    //string str = UserAccount.HashSHA512(userSignIn.PersonID);
+                    // Compared posted PersonID to customer password
+                    if (user.PersonID.ToString() == userSignIn.PersonID)
                     {
                         // Passwords match
                         // authenticate user (Stores the UserID in an encrypted cookie)
                         // normally, you would require HTTPS
-                        FormsAuthentication.SetAuthCookie(person.PersonID.ToString(), false);
+                        FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
 
                         // send a cookie to the client to indicate user
                         HttpCookie myCookie = new HttpCookie("role");
                         myCookie.Value = "user";
                         Response.Cookies.Add(myCookie);
-                        //Sql "SELECT \r\n    [Extent1].[PersonID] AS [PersonID], \r\n    [Extent1].[IdNumber] AS [IdNumber], \r\n    [Extent1].[FirstName] AS [FirstName], \r\n    [Extent1].[LastName] AS [LastName]\r\n    FROM [dbo].[Person] AS [Extent1]"   string
+                        //Sql "SELECT \r\n    [Extent1].[Login] AS [Login], \r\n    [Extent1].[PersonID] AS [PersonID], \r\n    [Extent1].[FirstName] AS [FirstName], \r\n    [Extent1].[LastName] AS [LastName]\r\n    FROM [dbo].[Person] AS [Extent1]"   string
 
                         // if there is a return url, redirect to the url
                         if (ReturnUrl != null)
@@ -59,7 +59,7 @@ namespace CLS_SLE.Controllers
                     else
                     {
                         // Passwords do not match
-                        ModelState.AddModelError("Password", "Incorrect password");
+                        ModelState.AddModelError("PersonID", "Incorrect password");
                     }
                 }
                 return View();
@@ -73,7 +73,7 @@ namespace CLS_SLE.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PasswordReset([Bind(Include = "IdNumber, Hash ,Email")] UserPasswordReset pwReset)
+        public ActionResult PasswordReset([Bind(Include = "PersonID, PersonID ,Email")] UserPasswordReset pwReset)
         {
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())
             {

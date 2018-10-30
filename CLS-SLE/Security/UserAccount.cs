@@ -14,12 +14,12 @@ namespace CLS_SLE.Security
             var sha512 = System.Security.Cryptography.SHA512.Create();
             var inputBytes = Encoding.ASCII.GetBytes(value);
             var hash = sha512.ComputeHash(inputBytes);
-            var sb = new StringBuilder();
-            for (var i = 0; i < hash.Length; i++)
-            {
-                sb.Append(hash[i].ToString("X2"));
-            }
-            return sb.ToString();
+            //var sb = new StringBuilder();
+            //for (var i = 0; i < hash.Length; i++)
+            //{
+            //    sb.Append(hash[i].ToString("X2"));
+            //}
+            return hash.ToString();
         }
 
         public static Int32 GetUserID()

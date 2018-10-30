@@ -10,18 +10,18 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <!-- PersonID -->
         <div class="form-group">
-            @Html.LabelFor(model => model.IdNumber, "Username", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Login, "Login", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBoxFor(model => model.IdNumber, new { @class = "form-control", placeholder = "Enter UserID" })
-                @Html.ValidationMessageFor(model => model.IdNumber, "", new { @class = "text-danger" })
+                @Html.TextBoxFor(model => model.Login, new { @class = "form-control", placeholder = "Enter UserID" })
+                @Html.ValidationMessageFor(model => model.Login, "", new { @class = "text-danger" })
             </div>
         </div>
         <!-- Password -->
         <div class="form-group">
-            @Html.LabelFor(model => model.Hash, "Password", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.PersonID, "PersonID", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.PasswordFor(model => model.Hash, new { @class = "form-control", placeholder = "Enter Password" })
-                @Html.ValidationMessageFor(model => model.Hash, "", new { @class = "text-danger" })
+                @Html.PasswordFor(model => model.PersonID, new { @class = "form-control", placeholder = "Enter Hash" })
+                @Html.ValidationMessageFor(model => model.PersonID, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">

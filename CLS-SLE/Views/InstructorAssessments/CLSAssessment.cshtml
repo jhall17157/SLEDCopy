@@ -19,42 +19,50 @@
 
 <form action="/InstructorAssessments/AssessmentInput" method="post">
     @Html.AntiForgeryToken()
-    <table class="table">
+    <table class="table table-sm">
         <tbody id="criteria">
             @foreach (Outcome o in Model.Outcomes)
             {
-                <tr id="@o.OutcomeID">
-                    <td colspan="2"><h3>@o.Name</h3></td>
-                </tr>
+            <tr id="@o.OutcomeID" class="table-active">
+                <td colspan="2" class="bg-dark table-dark"><h2>@o.Name</h2></td>
+            </tr>
                 foreach (RubricDetail rb in Model.Criteria)
                 {
                     if (o.Name.Equals(rb.OutcomeName))
                     {
                         <tr>
-                            <td>
-                                <h4 style="margin-left:45px">@rb.CriteriaName</h4>
+                            <td class="col-10">
+                                @rb.CriteriaName
                             </td>
-                            <td class="col-md-3">
+                            <td>
                                 @foreach (ScoreType i in Model.Selectors)
                                 {
-                                    <div class="criteria">
-                                        @foreach (StudentScore ss in Model.StudentScores)
+                                <div class="form-check">
+                                    @foreach (StudentScore ss in Model.StudentScores)
+                                    {
+                                        exists = false;
+                                        if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
                                         {
-                                            exists = false;
-                                            if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
-                                            {
-                                                @i.Description @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { Checked = "checked" })
-                                                exists = true;
-                                                break;
-                                            }
-                                        }
+                                    <label class="form-check-label desc">
 
-                                        @if (!exists)
-                                        {
-                                            @i.Description @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID)
+                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { Checked = "checked", @class = "form-check-input" })
+                                        @i.Description
+                                    </label>
+                                            exists = true;
+                                            break;
                                         }
+                                    }
 
-                                    </div>
+                                    @if (!exists)
+                                    {
+                                        <label class="form-check-label desc">
+
+                                            @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { @class = "form-check-input" })
+                                            @i.Description
+                                        </label>
+                                    }
+
+                                </div>
                                 }
                             </td>
                         </tr>

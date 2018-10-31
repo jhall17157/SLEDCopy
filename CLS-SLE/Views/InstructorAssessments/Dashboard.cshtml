@@ -3,34 +3,34 @@
     ViewBag.Title = "Dashboard";
 }
 
-<h2>Your Dashboard</h2>
+<h1>Dashboard</h1>
 
-<table class="table">
-    <tr>
-        <th class="col-xs-5">
-            <h2>CLS Assessments</h2>
-        </th>
-        <th><h3>Class</h3></th>
-        <th><h3>CRN</h3></th>
-        <th colspan="2"><h3>Due Date</h3></th>
-    </tr>
-
+<table class="table table-borderless table-responsive-lg">
+    <thead>
+        <tr>
+            <th><h2>CLS Assessments</h2></th>
+            <th>Class</th>
+            <th>CRN</th>
+            <th>Due Date</th>
+            <th></th>
+        </tr>
+    </thead>
     @foreach (InstructorAssessment item in Model)
     {
         if(item.AssessmentLevel == "S")
         {
             <tr>
-                <td class="col-xs-5">
+                <td>
                     @item.RubricName
                 </td>
-                <td class="col-xs-3">
+                <td>
                     @item.CourseName
                 </td>
                 <td>
                     @item.CRN
                 </td>
                 <td>
-                    @item.DueDate
+                    @item.DueDate.ToShortDateString()
                 </td>
                 <td>
                     @Html.ActionLink("Assess", "CLSStudentList", new { rubricID = item.RubricID })
@@ -40,36 +40,41 @@
     }
 </table>
 
-<table class="table">
-    <tr>
-        <th colspan="5">
-            <h2>TSA Assessments</h2>
-        </th>
-    </tr>
-
-    @foreach (InstructorAssessment item in Model)
-    {
-        if(item.AssessmentLevel != "S")
+<table class="table table-borderless">
+    <thead>
+        <tr>
+            <th>
+                <h2>TSA Assessments</h2>
+            </th>
+            <th>Class</th>
+            <th>CRN</th>
+            <th>Due Date</th>
+            <th></th>
+        </tr>
+        </thead>
+        @foreach (InstructorAssessment item in Model)
         {
-            <tr>
-                <td class="col-xs-5">
-                    @item.RubricName
-                </td>
-                <td class="col-xs-3">
-                    @item.CourseName
-                </td>
-                <td>
-                    @item.CRN
-                </td>
-                <td>
-                    @item.DueDate
-                </td>
-                <td>
-                    @Html.ActionLink("Assess", "TSAStudentList", new { rubricID = item.RubricID })
-                </td>
-            </tr>
+            if (item.AssessmentLevel != "S")
+            {
+                <tr>
+                    <td>
+                        @item.RubricName
+                    </td>
+                    <td>
+                        @item.CourseName
+                    </td>
+                    <td>
+                        @item.CRN
+                    </td>
+                    <td>
+                        @item.DueDate.ToShortDateString()
+                    </td>
+                    <td>
+                        @Html.ActionLink("Assess", "TSAStudentList", new { rubricID = item.RubricID })
+                    </td>
+                </tr>
+            }
         }
-    }
 
 </table>
 

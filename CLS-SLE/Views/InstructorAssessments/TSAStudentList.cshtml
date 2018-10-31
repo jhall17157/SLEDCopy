@@ -4,26 +4,32 @@
     var a = Model.Assessment;
 }
 
-<h4>@Html.ActionLink("Dashboard", "Dashboard") / Student List</h4>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Dashboard", "Dashboard")</li>
+        <li class="breadcrumb-item active" aria-current="page">Student List</li>
+    </ol>
+</nav>
 
-<h2>@a.AssessmentName</h2>
-<h3>@a.RubricName - @a.CourseName CRN: @a.CRN</h3>
+<h1>@a.AssessmentName</h1>
+<h2>@a.RubricName   </h2>
+<small>CRN#</small> @a.CRN <i style="float:right;">@a.CourseName</i>
 
-<table class="table table-hover table-responsive">
-    <thead>
+<table class="table table-hover">
+    <thead class="thead-dark">
         <tr>
             <th>Student ID</th>
             <th>Name</th>
+            <th>Progress</th>
         </tr>
     </thead>
     <tbody id="students">
         @foreach (SectionEnrollment student in Model.Students)
         {
-            <tr id="@student.EnrollmentID" class="student-row">
-                <td id="sectionID_@student.EnrollmentID" class="hidden">@student.sectionID</td>
-                <td id="enrollmentID_@student.EnrollmentID" class="hidden">@student.EnrollmentID</td>
+            <tr data-section="@student.sectionID" data-enrollment="@student.EnrollmentID" id="@student.EnrollmentID" class="student-row">
                 <td class="col-xs-2">@student.StudentID</td>
                 <td>@student.LastName, @student.FirstName</td>
+                <td>7 / 8</td>
             </tr>
         }
     </tbody>
@@ -32,13 +38,12 @@
 @section scripts
 {
     <script>
-        $(function ()
-        {
+        $(function () {
             $('#students').on('click', '.student-row', function () {
                 console.log(this.id);
-                location.href = "/InstructorAssessments/TSAAssessment?sectionID=" + $('#sectionID_' + this.id).html() + "&enrollmentID=" + $('#enrollmentID_' + this.id).html();
+                location.href = "/InstructorAssessments/TSAAssessment?sectionID=" + this.dataset.section + "&enrollmentID=" + this.dataset.enrollment;
                 //console.log("/InstructorAssessments/TSAAssessment?sectionID=" + $('#sectionID_' + this.id).html() + "&enrollmentID=" + $('#enrollmentID_' + this.id).html());
             });
         })
-    </script>    
+    </script>
 }

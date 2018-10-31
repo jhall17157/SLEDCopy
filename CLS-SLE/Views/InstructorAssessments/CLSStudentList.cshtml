@@ -4,26 +4,32 @@
     var a = Model.Assessment;
 }
 
-<h4>@Html.ActionLink("Dashboard", "Dashboard") / Student List</h4>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Dashboard", "Dashboard")</li>
+        <li class="breadcrumb-item active" aria-current="page">Student List</li>
+    </ol>
+</nav>
 
-<h2>@a.AssessmentName</h2>
-<h3>@a.RubricName - @a.CourseName CRN: @a.CRN</h3>
 
-<table class="table table-hover table-responsive">
-    <thead>
+<h1>@a.AssessmentName</h1>
+<p>@a.RubricName | @a.CourseName CRN: @a.CRN</p>
+
+<table class="table table-hover ">
+    <thead class="thead-dark">
         <tr>
             <th>Student ID</th>
             <th>Name</th>
+            <th>Progress</th>
         </tr>
     </thead>
     <tbody id="students">
         @foreach(SectionEnrollment student in Model.Students)
         {
-        <tr id="@student.EnrollmentID" class="student-row">
-            <td id="sectionID_@student.EnrollmentID" class="hidden">@student.sectionID</td>
-            <td id="enrollmentID_@student.EnrollmentID" class="hidden">@student.EnrollmentID</td>
-            <td class="col-xs-1">@student.StudentID</td>
+        <tr data-section="@student.sectionID" data-enrollment="@student.EnrollmentID" class="student-row">
+            <td>@student.StudentID</td>
             <td>@student.LastName, @student.FirstName</td>
+            <td>5 / 6</td>
         </tr>
         }
     </tbody>
@@ -35,9 +41,10 @@
         $(function ()
         {
             $('#students').on('click', '.student-row', function () {
-                console.log(this.id);
-                location.href = "/InstructorAssessments/CLSAssessment?sectionID=" + $('#sectionID_' + this.id).html() + "&enrollmentID=" + $('#enrollmentID_' + this.id).html();
-            });
+                console.log(this.dataset.section);
+                console.log(this.dataset.enrollment);
+                location.href = "/InstructorAssessments/CLSAssessment?sectionID=" + this.dataset.section + "&enrollmentID=" + this.dataset.enrollment;
+                });
         })
     </script>    
 }

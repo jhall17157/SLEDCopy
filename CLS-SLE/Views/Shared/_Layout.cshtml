@@ -8,35 +8,17 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="~/InstructorAssessments/Dashboard" class="navbar-brand"><i class="fa fa-home"></i> Dashboard</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                @*<ul class="nav navbar-nav">
-                    <li><a href="~/User/SignIn"><i class="fa fa-sign-in"></i> Sign In</a></li>
-                </ul>*@
-                @if (Request.IsAuthenticated)
-                {
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="~/Home/SignOut"><i class="fa fa-sign-out"></i> Sign Out</a></li>
-                    </ul>
-                }
-            </div>
-        </div>
-    </div>
+    <ul class="nav justify-content-end">
+        
+        @if (Request.IsAuthenticated)
+        {
+        <li class="nav-item">
+            <a class="nav-link active" href="~/Home/SignOut">Sign Out</a>
+        </li>
+        }
+    </ul>
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - CLS-SLE</p>
-        </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")

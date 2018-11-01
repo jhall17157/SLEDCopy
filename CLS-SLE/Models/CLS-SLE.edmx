@@ -206,9 +206,8 @@
           <Property Name="Login" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="LastLogin" Type="datetime" />
-          <Property Name="Salt" Type="varchar" MaxLength="25" />
-          <Property Name="Hash" Type="binary" MaxLength="64" />
           <Property Name="MustResetPassword" Type="bit" Nullable="false" />
+          <Property Name="Hash" Type="varchar" MaxLength="60" />
         </EntityType>
         <EntityType Name="UserRole">
           <Key>
@@ -831,7 +830,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <NavigationProperty Name="Sections" Relationship="Self.fk_Section_LeadInstructorID" FromRole="Person" ToRole="Section" />
           <NavigationProperty Name="StudentPrograms" Relationship="Self.fk_StudentProgram_StudentID" FromRole="Person" ToRole="StudentProgram" />
           <NavigationProperty Name="StudentScores" Relationship="Self.fk_StudentScore_AssessedByID" FromRole="Person" ToRole="StudentScore" />
-          <NavigationProperty Name="User" Relationship="Self.fk_User_PersonID" FromRole="Person" ToRole="User" />
+          <NavigationProperty Name="User" Relationship="SLE_TrackingModel.fk_User_PersonID" FromRole="Person" ToRole="User" />
         </EntityType>
         <EntityType Name="Program">
           <Key>
@@ -940,19 +939,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <NavigationProperty Name="Enrollment" Relationship="Self.fk_StudentScore_EnrollmentID" FromRole="StudentScore" ToRole="Enrollment" />
           <NavigationProperty Name="Person" Relationship="Self.fk_StudentScore_AssessedByID" FromRole="StudentScore" ToRole="Person" />
           <NavigationProperty Name="ScoreType" Relationship="Self.fk_StudentScore_ScoreTypeID" FromRole="StudentScore" ToRole="ScoreType" />
-        </EntityType>
-        <EntityType Name="User">
-          <Key>
-            <PropertyRef Name="PersonID" />
-          </Key>
-          <Property Name="PersonID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Login" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="LastLogin" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Person" Relationship="Self.fk_User_PersonID" FromRole="User" ToRole="Person" />
-          <Property Name="Salt" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="Hash" Type="Binary" MaxLength="64" FixedLength="true" />
-          <Property Name="MustResetPassword" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="UserRole">
           <Key>
@@ -1154,18 +1140,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_User_PersonID">
-          <End Role="Person" Type="Self.Person" Multiplicity="1" />
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="Person">
-              <PropertyRef Name="PersonID" />
-            </Principal>
-            <Dependent Role="User">
-              <PropertyRef Name="PersonID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="fk_StudentProgram_ProgramID">
           <End Role="Program" Type="Self.Program" Multiplicity="1" />
           <End Role="StudentProgram" Type="Self.StudentProgram" Multiplicity="*" />
@@ -1248,7 +1222,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <EntitySet Name="Semesters" EntityType="Self.Semester" />
           <EntitySet Name="StudentPrograms" EntityType="Self.StudentProgram" />
           <EntitySet Name="StudentScores" EntityType="Self.StudentScore" />
-          <EntitySet Name="Users" EntityType="Self.User" />
           <EntitySet Name="UserRoles" EntityType="Self.UserRole" />
           <AssociationSet Name="fk_AssessmentRubric_AssessmentID" Association="Self.fk_AssessmentRubric_AssessmentID">
             <End Role="Assessment" EntitySet="Assessments" />
@@ -1314,10 +1287,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             <End Role="Person" EntitySet="People" />
             <End Role="StudentScore" EntitySet="StudentScores" />
           </AssociationSet>
-          <AssociationSet Name="fk_User_PersonID" Association="Self.fk_User_PersonID">
-            <End Role="Person" EntitySet="People" />
-            <End Role="User" EntitySet="Users" />
-          </AssociationSet>
           <AssociationSet Name="fk_StudentProgram_ProgramID" Association="Self.fk_StudentProgram_ProgramID">
             <End Role="Program" EntitySet="Programs" />
             <End Role="StudentProgram" EntitySet="StudentPrograms" />
@@ -1341,6 +1310,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <EntitySet Name="InstructorAssessments" EntityType="SLE_TrackingModel.InstructorAssessment" />
           <EntitySet Name="RubricDetails" EntityType="SLE_TrackingModel.RubricDetail" />
           <EntitySet Name="SectionEnrollments" EntityType="SLE_TrackingModel.SectionEnrollment" />
+          <EntitySet Name="User" EntityType="SLE_TrackingModel.User" />
+          <AssociationSet Name="fk_User_PersonID" Association="SLE_TrackingModel.fk_User_PersonID">
+            <End Role="Person" EntitySet="People" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="InstructorAssessment">
           <Key>
@@ -1403,6 +1377,30 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="PersonID" />
+          </Key>
+          <Property Name="PersonID" Type="Int32" Nullable="false" />
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="LastLogin" Type="DateTime" Precision="3" />
+          <Property Name="MustResetPassword" Type="Boolean" Nullable="false" />
+          <Property Name="Hash" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Person" Relationship="SLE_TrackingModel.fk_User_PersonID" FromRole="User" ToRole="Person" />
+        </EntityType>
+        <Association Name="fk_User_PersonID">
+          <End Type="SLE_TrackingModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.User" Role="User" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1623,19 +1621,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="SLE_TrackingModel.User">
-              <MappingFragment StoreEntitySet="User">
-                <ScalarProperty Name="MustResetPassword" ColumnName="MustResetPassword" />
-                <ScalarProperty Name="Hash" ColumnName="Hash" />
-                <ScalarProperty Name="Salt" ColumnName="Salt" />
-                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
-                <ScalarProperty Name="Login" ColumnName="Login" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="UserRoles">
             <EntityTypeMapping TypeName="SLE_TrackingModel.UserRole">
               <MappingFragment StoreEntitySet="UserRole">
@@ -1687,6 +1672,18 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
                 <ScalarProperty Name="StudentID" ColumnName="StudentID" />
                 <ScalarProperty Name="EnrollmentID" ColumnName="EnrollmentID" />
                 <ScalarProperty Name="sectionID" ColumnName="sectionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Hash" ColumnName="Hash" />
+                <ScalarProperty Name="MustResetPassword" ColumnName="MustResetPassword" />
+                <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

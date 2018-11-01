@@ -9,7 +9,7 @@ namespace CLS_SLE.Models
     public class UserSignIn
     {
         public string Login { get; set; }
-        [Required(ErrorMessage = "PersonID Required")]
-        public string PersonID { get; set; }
+        [Required(ErrorMessage = "Hash Required")]
+        public string Hash { get; set; }
     }
 }

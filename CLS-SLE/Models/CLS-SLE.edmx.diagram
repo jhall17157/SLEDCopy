@@ -26,7 +26,6 @@
         <EntityTypeShape EntityType="SLE_TrackingModel.Semester" Width="1.5" PointX="0.75" PointY="33.625" IsExpanded="true" />
         <EntityTypeShape EntityType="SLE_TrackingModel.StudentProgram" Width="1.5" PointX="6" PointY="7.875" IsExpanded="true" />
         <EntityTypeShape EntityType="SLE_TrackingModel.StudentScore" Width="1.5" PointX="3" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SLE_TrackingModel.User" Width="1.5" PointX="3" PointY="18.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SLE_TrackingModel.UserRole" Width="1.5" PointX="2.75" PointY="12" IsExpanded="true" />
         <AssociationConnector Association="SLE_TrackingModel.fk_AssessmentRubric_AssessmentID" ManuallyRouted="false" />
         <AssociationConnector Association="SLE_TrackingModel.fk_SectionRubric_AssessmentLevelID" ManuallyRouted="false" />
@@ -44,7 +43,6 @@
         <AssociationConnector Association="SLE_TrackingModel.fk_Section_LeadInstructorID" ManuallyRouted="false" />
         <AssociationConnector Association="SLE_TrackingModel.fk_StudentProgram_StudentID" ManuallyRouted="false" />
         <AssociationConnector Association="SLE_TrackingModel.fk_StudentScore_AssessedByID" ManuallyRouted="false" />
-        <AssociationConnector Association="SLE_TrackingModel.fk_User_PersonID" ManuallyRouted="false" />
         <AssociationConnector Association="SLE_TrackingModel.fk_StudentProgram_ProgramID" ManuallyRouted="false" />
         <AssociationConnector Association="SLE_TrackingModel.fk_StudentScore_ScoreTypeID" ManuallyRouted="false" />
         <AssociationConnector Association="SLE_TrackingModel.fk_Section_SemesterID" ManuallyRouted="false" />
@@ -53,6 +51,8 @@
         <EntityTypeShape EntityType="SLE_TrackingModel.InstructorAssessment" Width="2.375" PointX="6.125" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SLE_TrackingModel.RubricDetail" Width="2.5" PointX="9.125" PointY="0.75" />
         <EntityTypeShape EntityType="SLE_TrackingModel.SectionEnrollment" Width="2.375" PointX="12" PointY="0.75" />
+        <EntityTypeShape EntityType="SLE_TrackingModel.User" Width="1.5" PointX="3" PointY="15" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_User_PersonID" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

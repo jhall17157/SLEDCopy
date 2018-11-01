@@ -11,7 +11,7 @@ namespace CLS_SLE.Models
     {
         public int IdNumber { get; set; }
         public string Login { get; set; }
-        [Required(ErrorMessage = "PersonID Required")]
+        [Required(ErrorMessage = "Hash Required")]
         public string Email { get; set; }
     }
 }

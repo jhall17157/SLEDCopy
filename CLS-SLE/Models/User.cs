@@ -18,9 +18,8 @@ namespace CLS_SLE.Models
         public string Login { get; set; }
         public string Email { get; set; }
         public Nullable<System.DateTime> LastLogin { get; set; }
-        public string Salt { get; set; }
-        public byte[] Hash { get; set; }
         public bool MustResetPassword { get; set; }
+        public string Hash { get; set; }
     
         public virtual Person Person { get; set; }
     }

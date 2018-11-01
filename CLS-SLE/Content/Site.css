@@ -15,15 +15,34 @@
     white-space: normal;
 }
 
+th {
+    white-space: nowrap;
+}
+
+
 
 /* Sets the size of headers to scale with the screen view width */
 h1 {
+    margin-left: -1vw;
+    white-space: nowrap;
     font-size: 3vw;
     color: #003e7a;
 }
 
+/* prevents h1 from getting crazy big on huge monitors */
+@media only screen and (min-width: 2000px) {
+    h1 {
+        font-size: 3.5em;
+    }
+}
+
 h2 {
-    font-size: 2.5vw;
+    font-size: 2em;
+    font-weight: 200;
+}
+
+h3 {
+    font-size: 1.5em;
     font-weight: 200;
 }
 

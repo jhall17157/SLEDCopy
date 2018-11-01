@@ -21,46 +21,46 @@
 <form action="/InstructorAssessments/AssessmentInput" method="post">
     @Html.AntiForgeryToken()
     <table class="table table-sm">
-        <tbody id="criteria" >
-            @foreach(Outcome o in Model.Outcomes)
-             {
-                 <tr id="@o.OutcomeID" class="table-active">
-                    <td colspan="2" class="bg-dark table-dark"><h2>@o.Name</h2></td>
-                 </tr>
-                 foreach(RubricDetail rb in Model.Criteria)
-                 {
-                    if(o.Name.Equals(rb.OutcomeName))
+        <tbody id="criteria">
+            @foreach (Outcome o in Model.Outcomes)
+            {
+                <tr id="@o.OutcomeID" class="table-active">
+                    <td colspan="2" class="bg-dark table-dark"><h3>@o.Name</h3></td>
+                </tr>
+                foreach (RubricDetail rb in Model.Criteria)
+                {
+                    if (o.Name.Equals(rb.OutcomeName))
                     {
                         <tr>
                             <td>
                                 @rb.CriteriaName
                             </td>
                             <td>
-                                @foreach(ScoreType i in Model.Selectors)
+                                @foreach (ScoreType i in Model.Selectors)
                                 {
                                     <div class="form-check">
-                                        @foreach(StudentScore ss in Model.StudentScores)
+                                        @foreach (StudentScore ss in Model.StudentScores)
                                         {
                                             exists = false;
-                                            if(ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
+                                            if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
                                             {
-                                        <label class="form-check-label">
-                                            @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { Checked = "checked" , @class = "form-check-input" })
-                                            @i.Description
-                                        </label>
-                                                    exists = true;
+                                                <label class="form-check-label">
+                                                    @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { Checked = "checked", @class = "form-check-input" })
+                                                    @i.Description
+                                                </label>
+                                                exists = true;
                                                 break;
                                             }
                                         }
 
-                                        @if(!exists)
+                                        @if (!exists)
                                         {
-                                            
-                                        <label class="form-check-label desc">
-                                             
-                                            @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { @class = "form-check-input" })
-                                            @i.Description
-                                        </label>
+
+                                            <label class="form-check-label desc">
+
+                                                @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { @class = "form-check-input" })
+                                                @i.Description
+                                            </label>
                                         }
 
                                     </div>
@@ -68,19 +68,19 @@
                             </td>
                         </tr>
                     }
-                 }
-             }
+                }
+            }
         </tbody>
     </table>
-    <input type="submit" value="Submit" id="submit">
+    <div class="btn-group" role="group">
+    <input type="submit" class="btn btn-outline-dark" value="Submit" id="submit">
+    <input type="submit" class="btn btn-outline-dark" value="Next Student" id="submit">
+ </div>
 </form>
 
 <style>
     input[type=radio]{
         float:left;
-    }
-    .criteria{
-        display:block;
     }
 </style>
 

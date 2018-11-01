@@ -9,9 +9,9 @@
     <thead>
         <tr>
             <th><h2>CLS Assessments</h2></th>
-            <th>Class</th>
-            <th>CRN</th>
-            <th>Due Date</th>
+            <th><h2>Class</h2></th>
+            <th><h2>CRN</h2></th>
+            <th><h2>Due Date</h2></th>
             <th></th>
         </tr>
     </thead>
@@ -38,25 +38,19 @@
             </tr>
         }
     }
-</table>
 
-<table class="table table-borderless">
     <thead>
         <tr>
             <th>
                 <h2>TSA Assessments</h2>
             </th>
-            <th>Class</th>
-            <th>CRN</th>
-            <th>Due Date</th>
-            <th></th>
         </tr>
         </thead>
         @foreach (InstructorAssessment item in Model)
         {
             if (item.AssessmentLevel != "S")
             {
-                <tr>
+                <tr style="">
                     <td>
                         @item.RubricName
                     </td>
@@ -73,6 +67,7 @@
                         @Html.ActionLink("Assess", "TSAStudentList", new { rubricID = item.RubricID })
                     </td>
                 </tr>
+                
             }
         }
 

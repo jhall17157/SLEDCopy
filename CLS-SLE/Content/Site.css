@@ -1,9 +1,11 @@
 ﻿body {
-
+    
+    font-family: 'Karla', sans-serif;
 }
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
+    margin-top: 100px;
     padding-left: 15px;
     padding-right: 15px;
 }
@@ -19,7 +21,10 @@ th {
     white-space: nowrap;
 }
 
-
+img {
+    
+    filter: drop-shadow(-1px -1px 35px rgba(0,0,0,1));
+}
 
 /* Sets the size of headers to scale with the screen view width */
 h1 {

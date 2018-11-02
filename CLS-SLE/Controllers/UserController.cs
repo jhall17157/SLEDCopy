@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using CLS_SLE.Models;
 using System.Web.Security;
 using System.Net.Mail;
+using BCrypt.Net;
 
 namespace CLS_SLE.Controllers
 {
@@ -26,12 +27,13 @@ namespace CLS_SLE.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                
+
                     User user = db.User.Where(u => u.Login == userSignIn.Login).FirstOrDefault();
                     // hash & salt the posted password
-                    string str = BCrypt.Net.BCrypt.HashString(userSignIn.Hash);
+                    string str = BCrypt.Net.BCrypt.HashString(userSignIn.Hash, 10);
+                    bool bcb = BCrypt.Net.BCrypt.Verify(userSignIn.Hash, user.Hash);
                     // Compared posted Hash to customer password
-                    if (user.Hash.ToString() == str)
+                    if (bcb == true)
                     {
                         // Passwords match
                         // authenticate user (Stores the UserID in an encrypted cookie)

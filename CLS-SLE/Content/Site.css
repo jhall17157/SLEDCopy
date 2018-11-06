@@ -17,6 +17,11 @@
     white-space: normal;
 }
 
+.student-row, label, input[type=radio] {
+    cursor: pointer;
+}
+
+
 th {
     white-space: nowrap;
 }

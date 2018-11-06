@@ -17,8 +17,8 @@
             <a class="navbar-brand my-0 mr-md-auto" href="/"><img src="https://www.wctc.edu/_resources/images/waukesha_logo.svg" alt="Waukesha County Technical College" width="200" height="62"></a>
             <ul class="nav border-bottom ">
 
-                @if (Request.IsAuthenticated)
-                {
+                @if (Request.LogonUserIdentity.IsAuthenticated)
+                        {
                     <li class="nav-item">
                         <a class="nav-link active" href="~/Home/SignOut">Sign Out</a>
                     </li>

@@ -14,7 +14,7 @@ namespace CLS_SLE.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
         }
 
         //GET: Home/SignOut

@@ -44,7 +44,7 @@
                                             exists = false;
                                             if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
                                             {
-                                                <label class="form-check-label">
+                                                <label class="form-check-label desc">
                                                     @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { Checked = "checked", @class = "form-check-input" })
                                                     @i.Description
                                                 </label>

@@ -18,9 +18,9 @@
         </div>
         <!-- Password -->
         <div class="form-group">
-            @Html.LabelFor(model => model.Hash, "Hash", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Hash, "Password", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.PasswordFor(model => model.Hash, new { @class = "form-control", placeholder = "Enter Hash" })
+                @Html.PasswordFor(model => model.Hash, new { @class = "form-control", placeholder = "Enter Password" })
                 @Html.ValidationMessageFor(model => model.Hash, "", new { @class = "text-danger" })
             </div>
         </div>

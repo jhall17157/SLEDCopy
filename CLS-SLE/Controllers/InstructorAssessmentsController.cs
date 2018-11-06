@@ -17,10 +17,10 @@ namespace CLS_SLE.Controllers
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
 
         // GET: InstructorAssessments
-        public ActionResult Dashboard()
+        public ActionResult Dashboard(int p)
         {
-            var instructorAssessments = from x in db.InstructorAssessments select x;
-            Session["personID"] = 2;
+            Session["personID"] = p;
+            var instructorAssessments = db.InstructorAssessments.Where(i => i.PersonID == p);            
 
 
             return View(instructorAssessments.ToList());

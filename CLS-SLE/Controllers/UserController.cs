@@ -50,12 +50,12 @@ namespace CLS_SLE.Controllers
                         if (ReturnUrl != null)
                         {
                             //return Redirect(ReturnUrl);
-                            return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
+                            return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments", routeValues: new { p = user.PersonID });
 
                         }
 
                         // Redirect to Home page
-                        return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
+                        return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments", routeValues: new { p = user.PersonID});
                     }
                     else
                     {

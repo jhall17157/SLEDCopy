@@ -40,11 +40,10 @@
     <script>
         $(function ()
         {
-            $('#students').on('click', '.student-row', function () {
-                console.log(this.dataset.section);
-                console.log(this.dataset.enrollment);
+            $('#students').on('click', '.student-row', function ()
+            {
                 location.href = "/InstructorAssessments/CLSAssessment?sectionID=" + this.dataset.section + "&enrollmentID=" + this.dataset.enrollment;
-                });
+            });
         })
     </script>    
 }

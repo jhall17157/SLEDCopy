@@ -28,9 +28,9 @@ img {
 
 /* Sets the size of headers to scale with the screen view width */
 h1 {
-    margin-left: -1vw;
+    text-align: center;
     white-space: nowrap;
-    font-size: 3vw;
+    font-size: 2.5vw;
     color: #003e7a;
 }
 

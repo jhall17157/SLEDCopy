@@ -4,6 +4,8 @@
     var r = Model.Rubric;
     var s = Model.Student;
     bool exists = false;
+    var numCriteria = 0;
+    var filledCriteria = 0;
 }
 
 <nav aria-label="breadcrumb">
@@ -23,9 +25,30 @@
         <tbody id="criteria">
             @foreach (Outcome o in Model.Outcomes)
             {
-            <tr id="@o.OutcomeID" class="table-active">
-                <td colspan="2" class="bg-dark table-dark"><h2>@o.Name</h2></td>
-            </tr>
+                numCriteria = 0;
+                filledCriteria = 0;
+                foreach (RubricDetail rb in Model.Criteria)
+                {
+                    if (o.Name.Equals(rb.OutcomeName))
+                    {
+                        numCriteria++;
+                        foreach (ScoreType i in Model.Selectors)
+                        {
+
+                            foreach (StudentScore ss in Model.StudentScores)
+                            {
+                                if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
+                                {
+                                    filledCriteria++;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                <tr id="@o.OutcomeID" class="table-active">
+                    <td colspan="2" class="bg-dark table-dark"><h2 class="float-left">@o.Name</h2> <span class="float-right">@filledCriteria / @numCriteria</span></td>
+                </tr>
                 foreach (RubricDetail rb in Model.Criteria)
                 {
                     if (o.Name.Equals(rb.OutcomeName))
@@ -37,32 +60,31 @@
                             <td>
                                 @foreach (ScoreType i in Model.Selectors)
                                 {
-                                <div class="form-check">
-                                    @foreach (StudentScore ss in Model.StudentScores)
-                                    {
-                                        exists = false;
-                                        if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
+                                    <div class="form-check">
+                                        @foreach (StudentScore ss in Model.StudentScores)
                                         {
-                                    <label class="form-check-label desc">
-
-                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { Checked = "checked", @class = "form-check-input" })
-                                        @i.Description
-                                    </label>
-                                            exists = true;
-                                            break;
+                                            exists = false;
+                                            if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
+                                            {
+                                                <label class="form-check-label desc">
+                                                    @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { Checked = "checked", @class = "form-check-input" })
+                                                    @i.Description
+                                                </label>
+                                                exists = true;
+                                                break;
+                                            }
                                         }
-                                    }
 
-                                    @if (!exists)
-                                    {
-                                        <label class="form-check-label desc">
+                                        @if (!exists)
+                                        {
+                                            <label class="form-check-label desc">
 
-                                            @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { @class = "form-check-input" })
-                                            @i.Description
-                                        </label>
-                                    }
+                                                @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { @class = "form-check-input" })
+                                                @i.Description
+                                            </label>
+                                        }
 
-                                </div>
+                                    </div>
                                 }
                             </td>
                         </tr>

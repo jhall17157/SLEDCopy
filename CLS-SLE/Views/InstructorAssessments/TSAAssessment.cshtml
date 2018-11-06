@@ -4,6 +4,8 @@
     var r = Model.Rubric;
     var s = Model.Student;
     bool exists = false;
+    var numCriteria = 0;
+    var filledCriteria = 0;
 }
 
 <nav aria-label="breadcrumb">
@@ -17,16 +19,37 @@
 <h1>@r.RubricName</h1>
 <h2>@s.FirstName @s.LastName</h2>
 
-
 <form action="/InstructorAssessments/AssessmentInput" method="post">
     @Html.AntiForgeryToken()
     <table class="table table-sm">
         <tbody id="criteria">
             @foreach (Outcome o in Model.Outcomes)
             {
+                numCriteria = 0;
+                filledCriteria = 0;
+                foreach (RubricDetail rb in Model.Criteria)
+                {
+                    if (o.Name.Equals(rb.OutcomeName))
+                    {
+                        numCriteria++;
+                        foreach (ScoreType i in Model.Selectors)
+                        {
+                            
+                            foreach (StudentScore ss in Model.StudentScores)
+                            {
+                                if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
+                                {
+                                    filledCriteria++;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
                 <tr id="@o.OutcomeID" class="table-active">
-                    <td colspan="2" class="bg-dark table-dark"><h3>@o.Name</h3></td>
+                    <td colspan="2" class="bg-dark table-dark"><h3 class="float-left">@o.Name</h3> <span class="float-right">@filledCriteria / @numCriteria</span></td>
                 </tr>
+
                 foreach (RubricDetail rb in Model.Criteria)
                 {
                     if (o.Name.Equals(rb.OutcomeName))
@@ -52,12 +75,9 @@
                                                 break;
                                             }
                                         }
-
                                         @if (!exists)
                                         {
-
                                             <label class="form-check-label desc">
-
                                                 @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { @class = "form-check-input" })
                                                 @i.Description
                                             </label>

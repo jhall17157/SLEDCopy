@@ -20,7 +20,7 @@
         <tr>
             <th>Student ID</th>
             <th>Name</th>
-            <th style="text-align: center">Progress</th>
+            @*<th style="text-align: center">Progress</th>*@
         </tr>
     </thead>
     <tbody id="students">
@@ -29,7 +29,7 @@
             <tr data-section="@student.sectionID" data-enrollment="@student.EnrollmentID" id="@student.EnrollmentID" class="student-row">
                 <td style="width: 120px;">@student.StudentID</td>
                 <td>@student.LastName, @student.FirstName</td>
-                <td style="width: 100px; text-align: center">7 / 8</td>
+                @*<td style="width: 100px; text-align: center">7 / 8</td>*@
             </tr>
         }
     </tbody>

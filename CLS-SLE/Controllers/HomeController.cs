@@ -21,6 +21,7 @@ namespace CLS_SLE.Controllers
         public ActionResult SignOut()
         {
             FormsAuthentication.SignOut();
+            Session.Abandon();
             return RedirectToAction(actionName: "SignedOut", controllerName: "Home");
         }
 

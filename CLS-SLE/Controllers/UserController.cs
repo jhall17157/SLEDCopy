@@ -30,6 +30,7 @@ namespace CLS_SLE.Controllers
                 if (ModelState.IsValid)
                 {
                     User user = db.User.Where(u => u.Login == userSignIn.Login).FirstOrDefault();
+                    
                     // hash & salt the posted password
                     string str = BCrypt.Net.BCrypt.HashString(userSignIn.Hash, 10);
                     bool bcb = BCrypt.Net.BCrypt.Verify(userSignIn.Hash, user.Hash);

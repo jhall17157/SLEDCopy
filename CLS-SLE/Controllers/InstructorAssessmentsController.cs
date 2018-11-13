@@ -64,6 +64,13 @@ namespace CLS_SLE.Controllers
 
                 var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID).OrderBy(c => c.LastName);
 
+                List<float> EnrollmentIDs = new List<float>();
+                foreach(var student in students)
+                {
+                    EnrollmentIDs.Add(student.EnrollmentID);
+                }
+                Session["assessmentEnrollment"] = EnrollmentIDs;
+
                 var assessment = db.InstructorAssessments.Where(a => a.RubricID == rubricID).FirstOrDefault();
 
                 dynamic mymodel = new ExpandoObject();
@@ -84,7 +91,7 @@ namespace CLS_SLE.Controllers
             {
                 var personID = Convert.ToInt32(Session["personID"].ToString());
                 var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID && i.PersonID == personID);
-                Session["instructorID"] = instructor.PersonID;
+
                 Session["rubricID"] = instructor.RubricID;
 
                 var student = db.SectionEnrollments.FirstOrDefault(s => s.sectionID == sectionID && s.EnrollmentID == enrollmentID);
@@ -122,9 +129,9 @@ namespace CLS_SLE.Controllers
             {
                 var personID = Convert.ToInt32(Session["personID"].ToString());
                 var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID && i.PersonID == personID);
-                Session["instructorID"] = instructor.PersonID;
+                
                 Session["rubricID"] = instructor.RubricID;
-
+                
                 var student = db.SectionEnrollments.FirstOrDefault(s => s.sectionID == sectionID && s.EnrollmentID == enrollmentID);
                 Session["enrollmentID"] = student.EnrollmentID;
 
@@ -159,11 +166,11 @@ namespace CLS_SLE.Controllers
         public ActionResult AssessmentInput(FormCollection fc)
         {
             var outcomeIDs = fc.AllKeys;
-            for (var t = 1; t < fc.Count; t++)
+            int enrollmentID = Convert.ToInt32(Session["enrollmentID"]);
+            for (var t = 1; t < fc.Count - 1; t++)
             {
                 Int16 criteriaID = Convert.ToInt16(outcomeIDs[t]);
                 Int16 scoreTypeID = Convert.ToInt16(fc.GetValue(criteriaID.ToString()).AttemptedValue);
-                int enrollmentID = Convert.ToInt32(Session["enrollmentID"]);
                 
                 var checkIfExists = db.StudentScores.Where(c => c.EnrollmentID == enrollmentID && c.CriteriaID == criteriaID).FirstOrDefault();
                 if(checkIfExists != null)
@@ -177,14 +184,68 @@ namespace CLS_SLE.Controllers
                         EnrollmentID = Convert.ToInt32(Session["enrollmentID"]),
                         CriteriaID = criteriaID,
                         ScoreTypeID = Convert.ToSByte(scoreTypeID),
-                        AssessedByID = Convert.ToInt32(Session["instructorID"]),
+                        AssessedByID = Convert.ToInt32(Session["personID"]),
                         DateTimeAssessed = DateTime.Now,
                     };
                     db.StudentScores.Add(score);
                 }
                 db.SaveChanges();
             }
+            var submitType = outcomeIDs[outcomeIDs.Count() - 1];
 
+            if(submitType.Equals("nextStudent"))
+            {
+                return NextStudent();
+            }
+            else if(submitType.Equals("lastStudent"))
+            {
+                return LastStudent();
+            }
+
+            return RedirectToAction(actionName: "TSAStudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
+        }
+
+        private ActionResult NextStudent()
+        {
+            var enrollmentID = Convert.ToInt32(Session["enrollmentID"]);
+            var enrollment = db.SectionEnrollments.FirstOrDefault(e => e.EnrollmentID == enrollmentID);
+            var list = (List<float>)Session["assessmentEnrollment"];
+            for (var x = 0; x < list.Count; x++)
+            {
+                if (enrollmentID == list[x])
+                {
+                    try
+                    {
+                        return RedirectToAction(actionName: "TSAAssessment", controllerName: "InstructorAssessments", routeValues: new { sectionID = enrollment.sectionID, enrollmentID = list[x+1] });
+                    }
+                    catch
+                    {
+                        return RedirectToAction(actionName: "TSAStudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
+                    }
+                }
+            }
+            return RedirectToAction(actionName: "TSAStudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
+        }
+
+        private ActionResult LastStudent()
+        {
+            var enrollmentID = Convert.ToInt32(Session["enrollmentID"]);
+            var enrollment = db.SectionEnrollments.FirstOrDefault(e => e.EnrollmentID == enrollmentID);
+            var list = (List<float>)Session["assessmentEnrollment"];
+            for (var x = 0; x < list.Count; x++)
+            {
+                if (enrollmentID == list[x])
+                {
+                    try
+                    {
+                        return RedirectToAction(actionName: "TSAAssessment", controllerName: "InstructorAssessments", routeValues: new { sectionID = enrollment.sectionID, enrollmentID = list[x - 1] });
+                    }
+                    catch
+                    {
+                        return RedirectToAction(actionName: "TSAStudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
+                    }
+                }
+            }
             return RedirectToAction(actionName: "TSAStudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
         }
 

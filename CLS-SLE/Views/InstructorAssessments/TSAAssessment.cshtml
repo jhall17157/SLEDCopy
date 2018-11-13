@@ -93,9 +93,10 @@
         </tbody>
     </table>
     <div class="btn-group" role="group">
-    <input type="submit" class="btn btn-outline-dark" value="Submit" id="submit">
-    <input type="submit" class="btn btn-outline-dark" value="Next Student" id="submit">
- </div>
+        <input type="submit" class="btn btn-outline-dark" value="Last Student" id="submit" name="lastStudent">
+        <input type="submit" class="btn btn-outline-dark" value="Submit" id="submit" name="submit">
+        <input type="submit" class="btn btn-outline-dark" value="Next Student" id="submit" name="nextStudent">
+    </div>
 </form>
 
 <style>
@@ -111,16 +112,6 @@
     <script>
         $(function ()
         {
-            var rubricID = @r.RubricID;
-            var sectionID = @r.SectionID;
-            var enrollmentID = @s.EnrollmentID;
-            var personID = '@Session["personID"]';
-
-            //$("form").on("submit", function (e)
-            //{
-            //    e.preventDefault();
-            //    console.log($(this).serialize());
-            //});
         });
     </script>    
 }

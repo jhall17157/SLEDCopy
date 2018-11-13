@@ -48,21 +48,24 @@
                     }
                 }
                 <tr id="@o.OutcomeID" class="table-active">
-                    <td colspan="2" class="bg-dark table-dark"><h3 class="float-left">@o.Name</h3> <span class="float-right">@filledCriteria / @numCriteria</span></td>
+                    <td colspan="2" class="bg-dark table-dark">
+                        <h3 class="float-left">@o.Name</h3> <span class="float-right">
+                        <span id="filled_@o.OutcomeID">@filledCriteria</span> / @numCriteria</span>
+                    </td>
                 </tr>
 
                 foreach (RubricDetail rb in Model.Criteria)
                 {
                     if (o.Name.Equals(rb.OutcomeName))
                     {
-                        <tr id="@rb.CriteriaID">
+                        <tr id="@o.OutcomeID">
                             <td>
                                 @rb.CriteriaName
                             </td>
                             <td>
                                 @foreach (ScoreType i in Model.Selectors)
                                 {
-                                    <div class="form-check">
+                                    <div class="form-check" id="@o.OutcomeID">
                                         @foreach (StudentScore ss in Model.StudentScores)
                                         {
                                             exists = false;
@@ -114,7 +117,7 @@
         $(function ()
         {
             $('input[type=radio]').on('change', function () {
-                var outcomeID = this.id;
+                var outcomeID = this.parentElement.parentElement.id;
 
                 var filled = $('#filled_' + outcomeID).html() ;
                 filled++;

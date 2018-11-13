@@ -12,7 +12,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Dashboard", "Dashboard", new { p = Session["personID"] })</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Student List", "TSAStudentList", new { rubricID = r.RubricID })</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Student List", "StudentList", new { rubricID = r.RubricID })</li>
         <li class="breadcrumb-item active" aria-current="page">Assessment</li>
     </ol>
 </nav>
@@ -122,6 +122,8 @@
                 var filled = $('#filled_' + outcomeID).html() ;
                 filled++;
                 $('#filled_' + outcomeID).html(filled);
+
+                //add alert when changes are made
             });
         });
     </script>    

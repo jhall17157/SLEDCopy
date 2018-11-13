@@ -32,30 +32,30 @@ namespace CLS_SLE.Controllers
             }
         }
 
-        public ActionResult CLSStudentList(int rubricID)
-        {
-            try
-            {
-                var personID = Convert.ToInt32(Session["personID"].ToString());
-                var instructor = db.InstructorAssessments.FirstOrDefault(r => r.RubricID == rubricID && r.PersonID == personID);
+        //public ActionResult CLSStudentList(int rubricID)
+        //{
+        //    try
+        //    {
+        //        var personID = Convert.ToInt32(Session["personID"].ToString());
+        //        var instructor = db.InstructorAssessments.FirstOrDefault(r => r.RubricID == rubricID && r.PersonID == personID);
 
-                var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID).OrderBy(c => c.LastName);
+        //        var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID).OrderBy(c => c.LastName);
 
-                var assessment = db.InstructorAssessments.Where(a => a.RubricID == rubricID).FirstOrDefault();
+        //        var assessment = db.InstructorAssessments.Where(a => a.RubricID == rubricID).FirstOrDefault();
 
-                dynamic mymodel = new ExpandoObject();
-                mymodel.Students = students.ToList();
-                mymodel.Assessment = assessment;
+        //        dynamic mymodel = new ExpandoObject();
+        //        mymodel.Students = students.ToList();
+        //        mymodel.Assessment = assessment;
 
-                return View(mymodel);
-            }
-            catch
-            {
-                return Exceptions();
-            }
-        }
+        //        return View(mymodel);
+        //    }
+        //    catch
+        //    {
+        //        return Exceptions();
+        //    }
+        //}
 
-        public ActionResult TSAStudentList(int rubricID)
+        public ActionResult StudentList(int rubricID)
         {
             try
             {
@@ -80,7 +80,6 @@ namespace CLS_SLE.Controllers
                             if(score.CriteriaID == detail.CriteriaID)
                             {
                                 filled++;
-                                
                             }
                         }
                     }
@@ -106,45 +105,45 @@ namespace CLS_SLE.Controllers
             }
         }
 
-        public ActionResult CLSAssessment(int sectionID, int enrollmentID)
-        {
-            try
-            {
-                var personID = Convert.ToInt32(Session["personID"].ToString());
-                var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID && i.PersonID == personID);
+        //public ActionResult CLSAssessment(int sectionID, int enrollmentID)
+        //{
+        //    try
+        //    {
+        //        var personID = Convert.ToInt32(Session["personID"].ToString());
+        //        var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID && i.PersonID == personID);
 
-                Session["rubricID"] = instructor.RubricID;
+        //        Session["rubricID"] = instructor.RubricID;
 
-                var student = db.SectionEnrollments.FirstOrDefault(s => s.sectionID == sectionID && s.EnrollmentID == enrollmentID);
-                Session["enrollmentID"] = student.EnrollmentID;
+        //        var student = db.SectionEnrollments.FirstOrDefault(s => s.sectionID == sectionID && s.EnrollmentID == enrollmentID);
+        //        Session["enrollmentID"] = student.EnrollmentID;
 
-                var rubric = db.InstructorAssessments.FirstOrDefault(n => n.RubricID == instructor.RubricID);
+        //        var rubric = db.InstructorAssessments.FirstOrDefault(n => n.RubricID == instructor.RubricID);
 
-                var outcomes = db.Outcomes.Where(c => c.RubricID == instructor.RubricID);
+        //        var outcomes = db.Outcomes.Where(c => c.RubricID == instructor.RubricID);
 
-                var criteria = db.RubricDetails.Where(c => c.RubricID == instructor.RubricID);
+        //        var criteria = db.RubricDetails.Where(c => c.RubricID == instructor.RubricID);
 
-                var numberOfSelectors = db.ScoreTypes.Where(n => n.RubricID == instructor.RubricID);
+        //        var numberOfSelectors = db.ScoreTypes.Where(n => n.RubricID == instructor.RubricID);
 
-                var studentScores = db.StudentScores.Where(s => s.EnrollmentID == student.EnrollmentID);
+        //        var studentScores = db.StudentScores.Where(s => s.EnrollmentID == student.EnrollmentID);
 
-                dynamic mymodel = new ExpandoObject();
-                mymodel.Student = student;
-                mymodel.Rubric = rubric;
-                mymodel.Selectors = numberOfSelectors.ToList();
-                mymodel.Outcomes = outcomes.ToList();
-                mymodel.Criteria = criteria.ToList();
-                mymodel.StudentScores = studentScores.ToList();
+        //        dynamic mymodel = new ExpandoObject();
+        //        mymodel.Student = student;
+        //        mymodel.Rubric = rubric;
+        //        mymodel.Selectors = numberOfSelectors.ToList();
+        //        mymodel.Outcomes = outcomes.ToList();
+        //        mymodel.Criteria = criteria.ToList();
+        //        mymodel.StudentScores = studentScores.ToList();
 
-                return View(mymodel);
-            }
-            catch
-            {
-                return Exceptions();
-            }
-        }
+        //        return View(mymodel);
+        //    }
+        //    catch
+        //    {
+        //        return Exceptions();
+        //    }
+        //}
 
-        public ActionResult TSAAssessment(int sectionID, int enrollmentID)
+        public ActionResult Assessment(int sectionID, int enrollmentID)
         {
             try
             {
@@ -223,7 +222,7 @@ namespace CLS_SLE.Controllers
                 return LastStudent();
             }
 
-            return RedirectToAction(actionName: "TSAStudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
+            return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
         }
 
         private ActionResult NextStudent()
@@ -237,15 +236,15 @@ namespace CLS_SLE.Controllers
                 {
                     try
                     {
-                        return RedirectToAction(actionName: "TSAAssessment", controllerName: "InstructorAssessments", routeValues: new { sectionID = enrollment.sectionID, enrollmentID = list[x+1] });
+                        return RedirectToAction(actionName: "Assessment", controllerName: "InstructorAssessments", routeValues: new { sectionID = enrollment.sectionID, enrollmentID = list[x+1] });
                     }
                     catch
                     {
-                        return RedirectToAction(actionName: "TSAStudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
+                        return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
                     }
                 }
             }
-            return RedirectToAction(actionName: "TSAStudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
+            return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
         }
 
         private ActionResult LastStudent()
@@ -259,15 +258,15 @@ namespace CLS_SLE.Controllers
                 {
                     try
                     {
-                        return RedirectToAction(actionName: "TSAAssessment", controllerName: "InstructorAssessments", routeValues: new { sectionID = enrollment.sectionID, enrollmentID = list[x - 1] });
+                        return RedirectToAction(actionName: "Assessment", controllerName: "InstructorAssessments", routeValues: new { sectionID = enrollment.sectionID, enrollmentID = list[x - 1] });
                     }
                     catch
                     {
-                        return RedirectToAction(actionName: "TSAStudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
+                        return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
                     }
                 }
             }
-            return RedirectToAction(actionName: "TSAStudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
+            return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
         }
 
         private ActionResult Exceptions()

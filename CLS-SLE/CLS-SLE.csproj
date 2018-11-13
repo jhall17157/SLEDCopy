@@ -378,8 +378,8 @@
     <Content Include="Views\InstructorAssessments\Dashboard.cshtml" />
     <Content Include="Views\InstructorAssessments\CLSAssessment.cshtml" />
     <Content Include="Views\InstructorAssessments\CLSStudentList.cshtml" />
-    <Content Include="Views\InstructorAssessments\TSAStudentList.cshtml" />
-    <Content Include="Views\InstructorAssessments\TSAAssessment.cshtml" />
+    <Content Include="Views\InstructorAssessments\StudentList.cshtml" />
+    <Content Include="Views\InstructorAssessments\Assessment.cshtml" />
     <Content Include="Views\Home\SignedOut.cshtml" />
     <Content Include="Views\Home\CheckEmail.cshtml" />
     <Content Include="Views\User\SignIn.cshtml" />

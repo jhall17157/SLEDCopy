@@ -8,11 +8,8 @@
 <h1>Dashboard</h1>
 
 <table class="table table-borderless table-responsive-lg">
-
-
     @foreach (InstructorAssessment item in Model)
     {
-
         if (item.AssessmentLevel == "S")
         {
             if (firstItem)
@@ -41,7 +38,7 @@
                     @item.DueDate.ToShortDateString()
                 </td>
                 <td>
-                    @Html.ActionLink("Assess", "CLSStudentList", new { rubricID = item.RubricID })
+                    @Html.ActionLink("Assess", "StudentList", new { rubricID = item.RubricID })
                 </td>
             </tr>
 
@@ -88,7 +85,7 @@
                     @item.DueDate.ToShortDateString()
                 </td>
                 <td>
-                    @Html.ActionLink("Assess", "TSAStudentList", new { rubricID = item.RubricID })
+                    @Html.ActionLink("Assess", "StudentList", new { rubricID = item.RubricID })
                 </td>
             </tr>
 

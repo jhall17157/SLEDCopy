@@ -6,6 +6,7 @@
     bool exists = false;
     var numCriteria = 0;
     var filledCriteria = 0;
+    var rubricID = -1;
 }
 
 <nav aria-label="breadcrumb">
@@ -47,14 +48,14 @@
                     }
                 }
                 <tr id="@o.OutcomeID" class="table-active">
-                    <td colspan="2" class="bg-dark table-dark"><h3 class="float-left">@o.Name</h3> <span class="float-right">@filledCriteria / @numCriteria</span></td>
+                    <td colspan="2" class="bg-dark table-dark"><h3 class="float-left">@o.Name</h3> <span class="float-right"><span id="filled">@filledCriteria</span> / @numCriteria</span></td>
                 </tr>
 
                 foreach (RubricDetail rb in Model.Criteria)
                 {
                     if (o.Name.Equals(rb.OutcomeName))
                     {
-                        <tr>
+                        <tr id="@rb.CriteriaID">
                             <td>
                                 @rb.CriteriaName
                             </td>
@@ -112,6 +113,13 @@
     <script>
         $(function ()
         {
+            $('input[type=radio]').on('change', function () {
+                var outcomeID = this.id;
+
+                var filled = $('#filled_' + outcomeID).html() ;
+                filled++;
+                $('#filled_' + outcomeID).html(filled);
+            });
         });
     </script>    
 }

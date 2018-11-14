@@ -8,13 +8,13 @@ using CLS_SLE.Models;
 using System.Web.Security;
 using System.Net.Mail;
 using BCrypt.Net;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace CLS_SLE.Controllers
 {
     public class UserController : Controller
     {
+        [AllowAnonymous]
+        [OutputCache(NoStore = true, Location = System.Web.UI.OutputCacheLocation.None)]
         [HttpGet]
         public ActionResult SignIn()
         {

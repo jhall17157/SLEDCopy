@@ -22,19 +22,22 @@
 }
 
 
+.fixed-top {
+    /* Prevents the navigation from overlapping the body content */
+    z-index: -1;
+}
+
 th {
     white-space: nowrap;
 }
+
+
 
 img {
     /* Drop shadow for images */
     filter: drop-shadow(0px 5px 1px rgba(0,0,0,0.2));
     -webkit-transition: width 1s; /* Safari */
     transition: width 1s;
-}
-
-img:hover {
-    width: 100px;
 }
 
 /* Sets the size of headers to scale with the screen view width */

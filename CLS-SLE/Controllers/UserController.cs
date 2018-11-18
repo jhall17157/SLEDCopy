@@ -42,6 +42,8 @@ namespace CLS_SLE.Controllers
                         // normally, you would require HTTPS
                         FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
                         Session["personID"] = user.PersonID;
+                        user.LastLogin = DateTime.Now;
+                        db.SaveChanges();
                         // send a cookie to the client to indicate user
                         //HttpCookie myCookie = new HttpCookie("role");
                         //myCookie.Value = "user";

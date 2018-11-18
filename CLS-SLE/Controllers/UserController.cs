@@ -23,7 +23,7 @@ namespace CLS_SLE.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SignIn([Bind(Include = "Login,Hash")] UserSignIn userSignIn, string ReturnUrl)
+        public ActionResult SignIn([Bind(Include = "Login,Password")] UserSignIn userSignIn, string ReturnUrl)
         {
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())
             {

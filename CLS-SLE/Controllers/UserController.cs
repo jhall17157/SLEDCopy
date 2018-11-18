@@ -32,8 +32,8 @@ namespace CLS_SLE.Controllers
                     User user = db.User.Where(u => u.Login == userSignIn.Login).FirstOrDefault();
                     
                     // hash & salt the posted password
-                    string str = BCrypt.Net.BCrypt.HashString(userSignIn.Hash, 10);
-                    bool bcb = BCrypt.Net.BCrypt.Verify(userSignIn.Hash, user.Hash);
+                    string str = BCrypt.Net.BCrypt.HashString(userSignIn.Password, 10);
+                    bool bcb = BCrypt.Net.BCrypt.Verify(userSignIn.Password, user.Hash);
                     // Compared posted Hash to customer password
                     if (bcb == true)
                     {

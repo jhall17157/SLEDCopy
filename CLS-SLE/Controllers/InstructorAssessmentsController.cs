@@ -24,36 +24,18 @@ namespace CLS_SLE.Controllers
                 var personID = Convert.ToInt32(Session["personID"].ToString());
                 var instructorAssessments = db.InstructorAssessments.Where(i => i.PersonID == personID);
 
-                return View(instructorAssessments.ToList());
+                dynamic model = new ExpandoObject();
+
+                model.assessments = instructorAssessments.ToList();
+                model.name = instructorAssessments.First().Login;
+
+                return View(model);
             }
             catch
             {
                 return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
         }
-
-        //public ActionResult CLSStudentList(int rubricID)
-        //{
-        //    try
-        //    {
-        //        var personID = Convert.ToInt32(Session["personID"].ToString());
-        //        var instructor = db.InstructorAssessments.FirstOrDefault(r => r.RubricID == rubricID && r.PersonID == personID);
-
-        //        var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID).OrderBy(c => c.LastName);
-
-        //        var assessment = db.InstructorAssessments.Where(a => a.RubricID == rubricID).FirstOrDefault();
-
-        //        dynamic mymodel = new ExpandoObject();
-        //        mymodel.Students = students.ToList();
-        //        mymodel.Assessment = assessment;
-
-        //        return View(mymodel);
-        //    }
-        //    catch
-        //    {
-        //        return Exceptions();
-        //    }
-        //}
 
         public ActionResult StudentList(int rubricID)
         {
@@ -104,45 +86,7 @@ namespace CLS_SLE.Controllers
                 return Exceptions();
             }
         }
-
-        //public ActionResult CLSAssessment(int sectionID, int enrollmentID)
-        //{
-        //    try
-        //    {
-        //        var personID = Convert.ToInt32(Session["personID"].ToString());
-        //        var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID && i.PersonID == personID);
-
-        //        Session["rubricID"] = instructor.RubricID;
-
-        //        var student = db.SectionEnrollments.FirstOrDefault(s => s.sectionID == sectionID && s.EnrollmentID == enrollmentID);
-        //        Session["enrollmentID"] = student.EnrollmentID;
-
-        //        var rubric = db.InstructorAssessments.FirstOrDefault(n => n.RubricID == instructor.RubricID);
-
-        //        var outcomes = db.Outcomes.Where(c => c.RubricID == instructor.RubricID);
-
-        //        var criteria = db.RubricDetails.Where(c => c.RubricID == instructor.RubricID);
-
-        //        var numberOfSelectors = db.ScoreTypes.Where(n => n.RubricID == instructor.RubricID);
-
-        //        var studentScores = db.StudentScores.Where(s => s.EnrollmentID == student.EnrollmentID);
-
-        //        dynamic mymodel = new ExpandoObject();
-        //        mymodel.Student = student;
-        //        mymodel.Rubric = rubric;
-        //        mymodel.Selectors = numberOfSelectors.ToList();
-        //        mymodel.Outcomes = outcomes.ToList();
-        //        mymodel.Criteria = criteria.ToList();
-        //        mymodel.StudentScores = studentScores.ToList();
-
-        //        return View(mymodel);
-        //    }
-        //    catch
-        //    {
-        //        return Exceptions();
-        //    }
-        //}
-
+        
         public ActionResult Assessment(int sectionID, int enrollmentID)
         {
             try

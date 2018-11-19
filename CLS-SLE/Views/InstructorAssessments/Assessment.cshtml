@@ -20,7 +20,7 @@
 <h1>@r.RubricName</h1>
 <h2>@s.FirstName @s.LastName</h2>
 
-<form action="/InstructorAssessments/AssessmentInput" method="post">
+<form id="form" action="/InstructorAssessments/AssessmentInput" method="post">
     @Html.AntiForgeryToken()
     <table class="table table-sm">
         <tbody id="criteria">
@@ -116,13 +116,28 @@
     <script>
         $(function ()
         {
+
+            var serialized = $('#form').serializeArray();
             $('input[type=radio]').on('change', function () {
                 var outcomeID = this.parentElement.parentElement.id;
-
-                var filled = $('#filled_' + outcomeID).html() ;
-                filled++;
-                $('#filled_' + outcomeID).html(filled);
-
+                var name = this.getAttribute("name");
+                var count = 0;
+                $.each(serialized, function (key, value) {
+                    
+                    if (value.name == name) {
+                        count++;
+                        
+                    }
+                    
+                });
+                if (count == 0) {
+                    var filled = $('#filled_' + outcomeID).html();
+                    filled++;
+                    $('#filled_' + outcomeID).html(filled);
+                    serialized = $('#form').serializeArray();
+                } 
+                
+                //Normally i would do $('#form').serialize.length - 1 but it is broken up into multiple sections
                 //add alert when changes are made
             });
         });

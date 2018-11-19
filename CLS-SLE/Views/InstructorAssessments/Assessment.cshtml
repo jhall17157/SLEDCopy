@@ -49,14 +49,14 @@
             }
             <div id="@o.OutcomeID" class="list-group-item">
                 <div class="">
-                    <a class="" data-toggle="collapse" href="#group_@o.OutcomeID" role="button" aria-expanded="false" aria-controls="group_@o.OutcomeID">
+                    <a class="" style="font-size: 1.2rem" data-toggle="collapse" href="#group_@o.OutcomeID" role="button" aria-expanded="false" aria-controls="group_@o.OutcomeID">
                         @o.Name
                     </a>
                     <span class="float-right badge"><span id="filled_@o.OutcomeID">@filledCriteria</span> / @numCriteria</span>
                 </div>
 
 
-                <ul class="list-group list-group-flush collapse show" id="group_@o.OutcomeID">
+                <ul class="list-group list-group-flush collapse show" id="group_@o.OutcomeID" style="margin-top: 5px;">
 
 
                     @foreach (RubricDetail rb in Model.Criteria)

@@ -64,7 +64,7 @@ namespace CLS_SLE.Controllers
                     else
                     {
                         // Passwords do not match
-                        ModelState.AddModelError("Hash", "Incorrect password");
+                        ModelState.AddModelError("Password", "Incorrect password");
                     }
                 }
                 return View();

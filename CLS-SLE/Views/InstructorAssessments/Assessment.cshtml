@@ -22,85 +22,99 @@
 
 <form id="form" action="/InstructorAssessments/AssessmentInput" method="post">
     @Html.AntiForgeryToken()
-    <table class="table table-sm">
-        <tbody id="criteria">
-            @foreach (Outcome o in Model.Outcomes)
+
+    <div class="list-group">
+        @foreach (Outcome o in Model.Outcomes)
+        {
+            numCriteria = 0;
+            filledCriteria = 0;
+            foreach (RubricDetail rb in Model.Criteria)
             {
-                numCriteria = 0;
-                filledCriteria = 0;
-                foreach (RubricDetail rb in Model.Criteria)
+                if (o.Name.Equals(rb.OutcomeName))
                 {
-                    if (o.Name.Equals(rb.OutcomeName))
+                    numCriteria++;
+                    foreach (ScoreType i in Model.Selectors)
                     {
-                        numCriteria++;
-                        foreach (ScoreType i in Model.Selectors)
+
+                        foreach (StudentScore ss in Model.StudentScores)
                         {
-                            
-                            foreach (StudentScore ss in Model.StudentScores)
+                            if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
                             {
-                                if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
-                                {
-                                    filledCriteria++;
-                                    break;
-                                }
+                                filledCriteria++;
+                                break;
                             }
                         }
                     }
                 }
-                <tr id="@o.OutcomeID" class="table-active">
-                    <td colspan="2" class="bg-dark table-dark">
-                        <h3 class="float-left">@o.Name</h3> <span class="float-right">
-                        <span id="filled_@o.OutcomeID">@filledCriteria</span> / @numCriteria</span>
-                    </td>
-                </tr>
+            }
+            <div id="@o.OutcomeID" class="list-group-item">
+                <div class="">
+                    <a class="" data-toggle="collapse" href="#group_@o.OutcomeID" role="button" aria-expanded="false" aria-controls="group_@o.OutcomeID">
+                        @o.Name
+                    </a>
+                    <span class="float-right badge"><span id="filled_@o.OutcomeID">@filledCriteria</span> / @numCriteria</span>
+                </div>
 
-                foreach (RubricDetail rb in Model.Criteria)
-                {
-                    if (o.Name.Equals(rb.OutcomeName))
+
+                <ul class="list-group list-group-flush collapse show" id="group_@o.OutcomeID">
+
+
+                    @foreach (RubricDetail rb in Model.Criteria)
                     {
-                        <tr id="@o.OutcomeID">
-                            <td>
-                                @rb.CriteriaName
-                            </td>
-                            <td>
-                                @foreach (ScoreType i in Model.Selectors)
-                                {
-                                    <div class="form-check" id="@o.OutcomeID">
-                                        @foreach (StudentScore ss in Model.StudentScores)
-                                        {
-                                            exists = false;
-                                            if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
+                        if (o.Name.Equals(rb.OutcomeName))
+                        {
+
+                            <li class="list-group-item">
+                                <div class="float-left">
+                                    @rb.CriteriaName
+                                </div>
+                                <div class="float-right">
+                                    @foreach (ScoreType i in Model.Selectors)
+                                    {
+                                        <div class="form-check" id="@o.OutcomeID">
+                                            @foreach (StudentScore ss in Model.StudentScores)
+                                            {
+                                                exists = false;
+                                                if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
+                                                {
+                                                    <label class="form-check-label desc">
+                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { Checked = "checked", @class = "form-check-input" })
+                                                        @i.Description
+                                                    </label>
+                                                    exists = true;
+                                                    break;
+                                                }
+                                            }
+                                            @if (!exists)
                                             {
                                                 <label class="form-check-label desc">
-                                                    @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { Checked = "checked", @class = "form-check-input" })
+                                                    @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { @class = "form-check-input" })
                                                     @i.Description
                                                 </label>
-                                                exists = true;
-                                                break;
                                             }
-                                        }
-                                        @if (!exists)
-                                        {
-                                            <label class="form-check-label desc">
-                                                @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { @class = "form-check-input" })
-                                                @i.Description
-                                            </label>
-                                        }
 
-                                    </div>
-                                }
-                            </td>
-                        </tr>
+                                        </div>
+                                    }
+                                </div>
+
+
+
+                            </li>
+
+                        }
                     }
-                }
-            }
-        </tbody>
-    </table>
-    <div class="btn-group" role="group">
-        <input type="submit" class="btn btn-outline-dark" value="Previous Student" id="submit" name="lastStudent">
-        <input type="submit" class="btn btn-outline-dark" value="Back to all students" id="submit" name="submit">
-        <input type="submit" class="btn btn-outline-dark" value="Next Student" id="submit" name="nextStudent">
-    </div>
+
+                </ul>
+            </div>
+
+        }
+        </div>
+
+        <div class="btn-group float-right" role="group" style="margin-top: 50px;">
+            <input type="submit" class="btn btn-outline-dark" value="Previous Student" id="submit" name="lastStudent">
+            <input type="submit" class="btn btn-outline-dark" value="Back to all students" id="submit" name="submit">
+            <input type="submit" class="btn btn-outline-dark" value="Next Student" id="submit" name="nextStudent">
+        </div>
 </form>
 
 <style>
@@ -130,7 +144,7 @@
                     }
                     
                 });
-                if (count == 0) {
+                if (count === 0) {
                     var filled = $('#filled_' + outcomeID).html();
                     filled++;
                     $('#filled_' + outcomeID).html(filled);

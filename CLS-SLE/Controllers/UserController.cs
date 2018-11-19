@@ -44,20 +44,12 @@ namespace CLS_SLE.Controllers
                         Session["personID"] = user.PersonID;
                         user.LastLogin = DateTime.Now;
                         db.SaveChanges();
-                        // send a cookie to the client to indicate user
-                        //HttpCookie myCookie = new HttpCookie("role");
-                        //myCookie.Value = "user";
-                        //Response.Cookies.Add(myCookie);
-                        //Sql "SELECT \r\n    [Extent1].[Login] AS [Login], \r\n    [Extent1].[Hash] AS [Hash], \r\n    [Extent1].[FirstName] AS [FirstName], \r\n    [Extent1].[LastName] AS [LastName]\r\n    FROM [dbo].[Person] AS [Extent1]"   string
 
                         // if there is a return url, redirect to the url
                         if (ReturnUrl != null)
                         {
-                            //return Redirect(ReturnUrl);
-                            return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
-
+                            return Redirect(ReturnUrl);
                         }
-
                         // Redirect to Home page
                         return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
                     }

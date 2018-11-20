@@ -27,20 +27,23 @@ namespace CLS_SLE.Controllers
                 dynamic model = new ExpandoObject();
 
                 // \/\/\/  comment code below to disable completed student progress on dashboard \/\/\/
+                // All these lists are parallel to each assessment 
                 List<Int32> assessmentSectionIDs = new List<int>();
-                List<Int32> numberOfStudentPerAssessment = new List<int>();
+                List<Int32> numberOfStudentsPerAssessment = new List<int>();
                 List<Int32> numberOfCompleteStudentsPerAssessment = new List<int>();
                 
                 foreach (InstructorAssessment assessment in instructorAssessments)
                 {
+                    //number of students per assessment
                     var numStudents = db.SectionEnrollments.Count(n => n.sectionID == assessment.SectionID);
                     assessmentSectionIDs.Add(assessment.SectionID);
-                    numberOfStudentPerAssessment.Add(numStudents);
+                    numberOfStudentsPerAssessment.Add(numStudents);
 
+                    //students enrolled in assessment
                     var students = db.SectionEnrollments.Where(s => s.sectionID == assessment.SectionID);
-
+                    //number of criteria for assessment
                     var numCriteria = db.RubricDetails.Count(c => c.RubricID == assessment.RubricID);
-
+                    //criteria for assessment
                     var rubricDetails = db.RubricDetails.Where(r => r.RubricID == assessment.RubricID);
 
                     var completedStudents = 0;
@@ -66,10 +69,8 @@ namespace CLS_SLE.Controllers
                     numberOfCompleteStudentsPerAssessment.Add(completedStudents);
                 }
                 
-                
-                
                 model.completestudents = numberOfCompleteStudentsPerAssessment;
-                model.students = numberOfStudentPerAssessment;
+                model.students = numberOfStudentsPerAssessment;
                 model.sections = assessmentSectionIDs;
                 // ^^^ comment code above to disable completed student progress on dashboard ^^^ 
 

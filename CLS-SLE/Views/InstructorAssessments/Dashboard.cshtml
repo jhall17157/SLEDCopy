@@ -3,6 +3,10 @@
     ViewBag.Title = "Dashboard";
 
     Boolean firstItem = true;
+
+    var students = (List<int>)Model.students;
+    var sections = (List<int>)Model.sections;
+    var completeStudents = (List<int>)Model.completestudents;
 }
 
 <h1>Dashboard</h1>
@@ -38,7 +42,15 @@
                 <td>
                     @item.DueDate.ToShortDateString()
                 </td>
-                <td></td>
+                <td class="text-center">
+                    @for(int x = 0; x < sections.Count(); x++)
+                    {
+                        if (sections[x] == item.SectionID)
+                        {
+                            <span> @completeStudents[x] / @students[x]</span>
+                        }
+                    }
+                </td>
                 <td>
                     @Html.ActionLink("Assess", "StudentList", new { rubricID = item.RubricID })
                 </td>
@@ -86,7 +98,15 @@
                 <td>
                     @item.DueDate.ToShortDateString()
                 </td>
-                <td></td>
+                <td class="text-center">
+                    @for (int x = 0; x < sections.Count(); x++)
+                    {
+                        if (sections[x] == item.SectionID)
+                        {
+                            <span> @completeStudents[x] / @students[x]</span>
+                        }
+                    }
+                </td>
                 <td>
                     @Html.ActionLink("Assess", "StudentList", new { rubricID = item.RubricID })
                 </td>

@@ -26,6 +26,53 @@ namespace CLS_SLE.Controllers
 
                 dynamic model = new ExpandoObject();
 
+                // \/\/\/  comment code below to disable completed student progress on dashboard \/\/\/
+                List<Int32> assessmentSectionIDs = new List<int>();
+                List<Int32> numberOfStudentPerAssessment = new List<int>();
+                List<Int32> numberOfCompleteStudentsPerAssessment = new List<int>();
+                
+                foreach (InstructorAssessment assessment in instructorAssessments)
+                {
+                    var numStudents = db.SectionEnrollments.Count(n => n.sectionID == assessment.SectionID);
+                    assessmentSectionIDs.Add(assessment.SectionID);
+                    numberOfStudentPerAssessment.Add(numStudents);
+
+                    var students = db.SectionEnrollments.Where(s => s.sectionID == assessment.SectionID);
+
+                    var numCriteria = db.RubricDetails.Count(c => c.RubricID == assessment.RubricID);
+
+                    var rubricDetails = db.RubricDetails.Where(r => r.RubricID == assessment.RubricID);
+
+                    var completedStudents = 0;
+                    foreach (var student in students)
+                    {
+                        var studentScores = db.StudentScores.Where(s => s.EnrollmentID == student.EnrollmentID);
+                        var filled = 0;
+                        foreach (var score in studentScores)
+                        {
+                            foreach (var detail in rubricDetails)
+                            {
+                                if (score.CriteriaID == detail.CriteriaID)
+                                {
+                                    filled++;
+                                }
+                            }
+                        }
+                        if (filled == numCriteria)
+                        {
+                            completedStudents++;
+                        }
+                    }
+                    numberOfCompleteStudentsPerAssessment.Add(completedStudents);
+                }
+                
+                
+                
+                model.completestudents = numberOfCompleteStudentsPerAssessment;
+                model.students = numberOfStudentPerAssessment;
+                model.sections = assessmentSectionIDs;
+                // ^^^ comment code above to disable completed student progress on dashboard ^^^ 
+
                 model.assessments = instructorAssessments.ToList();
                 model.name = instructorAssessments.First().Login;
 

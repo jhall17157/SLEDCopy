@@ -11,7 +11,7 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item">@Html.ActionLink("Dashboard", "Dashboard", new { p = Session["personID"] })</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Dashboard", "Dashboard")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Student List", "StudentList", new { rubricID = r.RubricID })</li>
         <li class="breadcrumb-item active" aria-current="page">Assessment</li>
     </ol>
@@ -35,7 +35,6 @@
                     numCriteria++;
                     foreach (ScoreType i in Model.Selectors)
                     {
-
                         foreach (StudentScore ss in Model.StudentScores)
                         {
                             if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
@@ -59,12 +58,10 @@
                     <span class="float-right badge"><span id="filled_@o.OutcomeID">@filledCriteria</span> / @numCriteria</span>
                 </div>
                 <ul class="list-group list-group-flush collapse show" id="group_@o.OutcomeID">
-
                     @foreach (RubricDetail rb in Model.Criteria)
                     {
                         if (o.Name.Equals(rb.OutcomeName))
                         {
-
                             <li class="list-group-item">
                                 <div class="float-left">
                                     @rb.CriteriaName
@@ -97,17 +94,11 @@
                                         </div>
                                     }
                                 </div>
-
-
-
                             </li>
-
                         }
                     }
-
                 </ul>
             </div>
-
         }
         </div>
     <div class="text-center">

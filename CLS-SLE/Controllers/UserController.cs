@@ -18,6 +18,8 @@ namespace CLS_SLE.Controllers
         [HttpGet]
         public ActionResult SignIn()
         {
+            FormsAuthentication.SignOut();
+            Session.Abandon();
             return View();
         }
 
@@ -42,6 +44,7 @@ namespace CLS_SLE.Controllers
                         // normally, you would require HTTPS
                         FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
                         Session["personID"] = user.PersonID;
+                        Session["User"] = user;
                         user.LastLogin = DateTime.Now;
                         db.SaveChanges();
 

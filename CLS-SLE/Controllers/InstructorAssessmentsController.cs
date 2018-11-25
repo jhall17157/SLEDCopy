@@ -27,7 +27,6 @@ namespace CLS_SLE.Controllers
                 dynamic model = new ExpandoObject();
 
                 model.assessments = instructorAssessments.ToList();
-                model.name = instructorAssessments.First().Login;
 
                 return View(model);
             }

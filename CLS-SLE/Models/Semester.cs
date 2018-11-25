@@ -22,7 +22,7 @@ namespace CLS_SLE.Models
         }
     
         public short SemesterID { get; set; }
-        public Nullable<short> SemesterCode { get; set; }
+        public Nullable<int> SemesterCode { get; set; }
         public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

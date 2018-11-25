@@ -12,11 +12,13 @@ namespace CLS_SLE.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
-    public partial class SLE_TrackingEntities : DbContext
+    public partial class SLE_DB_ : DbContext
     {
-        public SLE_TrackingEntities()
-            : base("name=SLE_TrackingEntities")
+        public SLE_DB_()
+            : base("name=SLE_DB_")
         {
         }
     
@@ -46,10 +48,20 @@ namespace CLS_SLE.Models
         public virtual DbSet<Semester> Semesters { get; set; }
         public virtual DbSet<StudentProgram> StudentPrograms { get; set; }
         public virtual DbSet<StudentScore> StudentScores { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<InstructorAssessment> InstructorAssessments { get; set; }
         public virtual DbSet<RubricDetail> RubricDetails { get; set; }
         public virtual DbSet<SectionEnrollment> SectionEnrollments { get; set; }
-        public virtual DbSet<User> User { get; set; }
+    
+        [DbFunction("SLE_DB_", "GetCompletedCountBySectionRubric")]
+        public virtual IQueryable<GetCompletedCountBySectionRubric_Result> GetCompletedCountBySectionRubric(Nullable<int> sectionRubricID)
+        {
+            var sectionRubricIDParameter = sectionRubricID.HasValue ?
+                new ObjectParameter("SectionRubricID", sectionRubricID) :
+                new ObjectParameter("SectionRubricID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetCompletedCountBySectionRubric_Result>("[SLE_DB_].[GetCompletedCountBySectionRubric](@SectionRubricID)", sectionRubricIDParameter);
+        }
     }
 }

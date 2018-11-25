@@ -191,98 +191,101 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Assessment.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AssessmentLevel.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AssessmentRubric.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AssessmentStatu.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CLS-SLE.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CLS-SLE.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CLS-SLE.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CLS-SLE.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CLS-SLE.edmx</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Course.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CourseProgram.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Criterion.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Department.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Enrollment.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EnrollmentStatu.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetCompletedCountBySectionRubric_Result.cs">
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\InstructorAssessment.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Outcome.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Person.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Program.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProgramDepartment.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Role.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\RubricDetail.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ScoreType.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Section.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SectionEnrollment.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SectionRubric.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Semester.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SLE.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SLE.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SLE.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SLE.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SLE.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SLE.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\StudentProgram.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\StudentScore.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserPasswordReset.cs" />
     <Compile Include="Models\UserRole.cs">
-      <DependentUpon>CLS-SLE.tt</DependentUpon>
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserSignIn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -301,26 +304,19 @@
     <Content Include="Global.asax" />
     <Content Include="Content\site.css" />
     <Content Include="LICENSE.txt" />
-    <Content Include="Models\CLS-SLE.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CLS-SLE.edmx</DependentUpon>
-      <LastGenOutput>CLS-SLE.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\CLS-SLE.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CLS-SLE.edmx</DependentUpon>
-      <LastGenOutput>CLS-SLE.cs</LastGenOutput>
-    </Content>
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <EntityDeploy Include="Models\CLS-SLE.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>CLS-SLE.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\CLS-SLE.edmx.diagram">
-      <DependentUpon>CLS-SLE.edmx</DependentUpon>
+    <Content Include="Models\SLE.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SLE.edmx</DependentUpon>
+      <LastGenOutput>SLE.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\SLE.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SLE.edmx</DependentUpon>
+      <LastGenOutput>SLE.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -349,6 +345,13 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
+    <EntityDeploy Include="Models\SLE.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SLE.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\SLE.edmx.diagram">
+      <DependentUpon>SLE.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

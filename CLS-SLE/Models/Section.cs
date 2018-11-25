@@ -17,6 +17,7 @@ namespace CLS_SLE.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Section()
         {
+            this.Enrollments = new HashSet<Enrollment>();
             this.SectionRubrics = new HashSet<SectionRubric>();
         }
     
@@ -27,6 +28,8 @@ namespace CLS_SLE.Models
         public int LeadInstructorID { get; set; }
     
         public virtual Course Course { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Enrollment> Enrollments { get; set; }
         public virtual Person Person { get; set; }
         public virtual Semester Semester { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

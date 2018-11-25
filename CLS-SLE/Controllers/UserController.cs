@@ -25,11 +25,11 @@ namespace CLS_SLE.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SignIn([Bind(Include = "Login,Password")] UserSignIn userSignIn, string ReturnUrl)
         {
-            using (SLE_TrackingEntities db = new SLE_TrackingEntities())
+            using (SLE_DB_ db = new SLE_DB_())
             {
                 if (ModelState.IsValid)
                 {
-                    User user = db.User.Where(u => u.Login == userSignIn.Login).FirstOrDefault();
+                    User user = db.Users.Where(u => u.Login == userSignIn.Login).FirstOrDefault();
                     
                     // hash & salt the posted password
                     string str = BCrypt.Net.BCrypt.HashString(userSignIn.Password, 10);

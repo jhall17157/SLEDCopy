@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="SLE_TrackingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="SLE_TrackingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Assessment">
           <Key>
             <PropertyRef Name="AssessmentID" />
@@ -79,7 +79,7 @@
             <PropertyRef Name="EnrollmentID" />
           </Key>
           <Property Name="EnrollmentID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="SectionID" Type="smallint" Nullable="false" />
+          <Property Name="SectionID" Type="int" Nullable="false" />
           <Property Name="StudentID" Type="int" Nullable="false" />
           <Property Name="EnrollmentStatusCode" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="StatusDate" Type="datetime" Nullable="false" />
@@ -198,6 +198,28 @@
           <Property Name="AssessedByID" Type="int" Nullable="false" />
           <Property Name="DateTimeAssessed" Type="datetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'SLE_Tracking.dbo.tmp_Assessments' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tmp_Assessments">
+          <Property Name="AssessmentName" Type="varchar" MaxLength="255" />
+          <Property Name="Description" Type="varchar(max)" />
+          <Property Name="Category" Type="varchar" MaxLength="255" />
+          <Property Name="OutcomePassRate" Type="decimal" Precision="3" Scale="2" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'SLE_Tracking.dbo.tmp_rubrics' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tmp_rubrics">
+          <Property Name="ID" Type="int" />
+          <Property Name="AssessmentName" Type="varchar" MaxLength="255" />
+          <Property Name="RubricName" Type="varchar" MaxLength="255" />
+          <Property Name="RubricDescription" Type="varchar(max)" />
+          <Property Name="Program" Type="varchar" MaxLength="255" />
+          <Property Name="Outcome" Type="varchar" MaxLength="255" />
+          <Property Name="OutcomeDescription" Type="varchar(max)" />
+          <Property Name="CriteriaPassRate" Type="decimal" Precision="3" Scale="2" />
+          <Property Name="Criteria" Type="varchar" MaxLength="255" />
+          <Property Name="ExampleText" Type="varchar(max)" />
+        </EntityType>-->
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="PersonID" />
@@ -245,6 +267,8 @@ warning 6002: The table/view 'SLE_Tracking.dbo.InstructorAssessments' does not h
           <Property Name="AssessmentLevel" Type="char" MaxLength="1" />
           <Property Name="DueDate" Type="date" Nullable="false" />
           <Property Name="Status" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="StudentCount" Type="int" />
+          <Property Name="CompletedCount" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'SLE_Tracking.dbo.RubricDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -341,6 +365,42 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             </Principal>
             <Dependent Role="Criteria">
               <PropertyRef Name="OutcomeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Enrollment_EnrollmentStatusCode">
+          <End Role="EnrollmentStatus" Type="Self.EnrollmentStatus" Multiplicity="1" />
+          <End Role="Enrollment" Type="Self.Enrollment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnrollmentStatus">
+              <PropertyRef Name="StatusID" />
+            </Principal>
+            <Dependent Role="Enrollment">
+              <PropertyRef Name="EnrollmentStatusCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Enrollment_SectionID">
+          <End Role="Section" Type="Self.Section" Multiplicity="1" />
+          <End Role="Enrollment" Type="Self.Enrollment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Section">
+              <PropertyRef Name="SectionID" />
+            </Principal>
+            <Dependent Role="Enrollment">
+              <PropertyRef Name="SectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Enrollment_StudentID">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="Enrollment" Type="Self.Enrollment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="Enrollment">
+              <PropertyRef Name="StudentID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -548,6 +608,18 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="GetCompletedCountBySectionRubric" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SectionRubricID" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="SectionRubricID" Type="int" Nullable="false" />
+                <Property Name="CompletedCount" Type="int" />
+                <Property Name="StudentCount" Type="int" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
         <EntityContainer Name="SLE_TrackingModelStoreContainer">
           <EntitySet Name="Assessment" EntityType="Self.Assessment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AssessmentLevel" EntityType="Self.AssessmentLevel" Schema="dbo" store:Type="Tables" />
@@ -585,7 +657,9 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
     [InstructorAssessments].[RubricName] AS [RubricName], 
     [InstructorAssessments].[AssessmentLevel] AS [AssessmentLevel], 
     [InstructorAssessments].[DueDate] AS [DueDate], 
-    [InstructorAssessments].[Status] AS [Status]
+    [InstructorAssessments].[Status] AS [Status], 
+    [InstructorAssessments].[StudentCount] AS [StudentCount], 
+    [InstructorAssessments].[CompletedCount] AS [CompletedCount]
     FROM [dbo].[InstructorAssessments] AS [InstructorAssessments]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="RubricDetails" EntityType="Self.RubricDetails" store:Type="Views" store:Schema="dbo">
@@ -630,6 +704,18 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <AssociationSet Name="fk_Criteria_Outcome" Association="Self.fk_Criteria_Outcome">
             <End Role="Outcome" EntitySet="Outcome" />
             <End Role="Criteria" EntitySet="Criteria" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Enrollment_EnrollmentStatusCode" Association="Self.fk_Enrollment_EnrollmentStatusCode">
+            <End Role="EnrollmentStatus" EntitySet="EnrollmentStatus" />
+            <End Role="Enrollment" EntitySet="Enrollment" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Enrollment_SectionID" Association="Self.fk_Enrollment_SectionID">
+            <End Role="Section" EntitySet="Section" />
+            <End Role="Enrollment" EntitySet="Enrollment" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Enrollment_StudentID" Association="Self.fk_Enrollment_StudentID">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="Enrollment" EntitySet="Enrollment" />
           </AssociationSet>
           <AssociationSet Name="fk_Outcome_RubricID" Association="Self.fk_Outcome_RubricID">
             <End Role="AssessmentRubric" EntitySet="AssessmentRubric" />
@@ -700,10 +786,16 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             <End Role="User" EntitySet="User" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SLE_TrackingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <ComplexType Name="GetCompletedCountBySectionRubric_Result">
+          <Property Name="SectionRubricID" Type="Int32" Nullable="false" />
+          <Property Name="CompletedCount" Type="Int32" />
+          <Property Name="StudentCount" Type="Int32" />
+        </ComplexType>
         <EntityType Name="Assessment">
           <Key>
             <PropertyRef Name="AssessmentID" />
@@ -792,10 +884,13 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             <PropertyRef Name="EnrollmentID" />
           </Key>
           <Property Name="EnrollmentID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SectionID" Type="Int16" Nullable="false" />
+          <Property Name="SectionID" Type="Int32" Nullable="false" />
           <Property Name="StudentID" Type="Int32" Nullable="false" />
           <Property Name="EnrollmentStatusCode" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="StatusDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="EnrollmentStatu" Relationship="Self.fk_Enrollment_EnrollmentStatusCode" FromRole="Enrollment" ToRole="EnrollmentStatus" />
+          <NavigationProperty Name="Section" Relationship="Self.fk_Enrollment_SectionID" FromRole="Enrollment" ToRole="Section" />
+          <NavigationProperty Name="Person" Relationship="Self.fk_Enrollment_StudentID" FromRole="Enrollment" ToRole="Person" />
           <NavigationProperty Name="StudentScores" Relationship="Self.fk_StudentScore_EnrollmentID" FromRole="Enrollment" ToRole="StudentScore" />
         </EntityType>
         <EntityType Name="EnrollmentStatu">
@@ -804,6 +899,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           </Key>
           <Property Name="StatusID" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Enrollments" Relationship="Self.fk_Enrollment_EnrollmentStatusCode" FromRole="EnrollmentStatus" ToRole="Enrollment" />
         </EntityType>
         <EntityType Name="Outcome">
           <Key>
@@ -827,10 +923,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <Property Name="IdNumber" Type="String" MaxLength="9" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Enrollments" Relationship="Self.fk_Enrollment_StudentID" FromRole="Person" ToRole="Enrollment" />
           <NavigationProperty Name="Sections" Relationship="Self.fk_Section_LeadInstructorID" FromRole="Person" ToRole="Section" />
           <NavigationProperty Name="StudentPrograms" Relationship="Self.fk_StudentProgram_StudentID" FromRole="Person" ToRole="StudentProgram" />
           <NavigationProperty Name="StudentScores" Relationship="Self.fk_StudentScore_AssessedByID" FromRole="Person" ToRole="StudentScore" />
-          <NavigationProperty Name="User" Relationship="SLE_TrackingModel.fk_User_PersonID" FromRole="Person" ToRole="User" />
+          <NavigationProperty Name="User" Relationship="Self.fk_User_PersonID" FromRole="Person" ToRole="User" />
         </EntityType>
         <EntityType Name="Program">
           <Key>
@@ -881,6 +978,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <Property Name="CourseID" Type="Int16" Nullable="false" />
           <Property Name="LeadInstructorID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Course" Relationship="Self.fk_Section_CourseID" FromRole="Section" ToRole="Course" />
+          <NavigationProperty Name="Enrollments" Relationship="Self.fk_Enrollment_SectionID" FromRole="Section" ToRole="Enrollment" />
           <NavigationProperty Name="Person" Relationship="Self.fk_Section_LeadInstructorID" FromRole="Section" ToRole="Person" />
           <NavigationProperty Name="Semester" Relationship="Self.fk_Section_SemesterID" FromRole="Section" ToRole="Semester" />
           <NavigationProperty Name="SectionRubrics" Relationship="Self.fk_SectionRubric_SectionID" FromRole="Section" ToRole="SectionRubric" />
@@ -907,7 +1005,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             <PropertyRef Name="SemesterID" />
           </Key>
           <Property Name="SemesterID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SemesterCode" Type="Int16" />
+          <Property Name="SemesterCode" Type="Int32" />
           <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Sections" Relationship="Self.fk_Section_SemesterID" FromRole="Semester" ToRole="Section" />
           <NavigationProperty Name="StudentPrograms" Relationship="Self.fk_StudentProgram_SemesterID" FromRole="Semester" ToRole="StudentProgram" />
@@ -940,6 +1038,18 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <NavigationProperty Name="Person" Relationship="Self.fk_StudentScore_AssessedByID" FromRole="StudentScore" ToRole="Person" />
           <NavigationProperty Name="ScoreType" Relationship="Self.fk_StudentScore_ScoreTypeID" FromRole="StudentScore" ToRole="ScoreType" />
         </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="PersonID" />
+          </Key>
+          <Property Name="PersonID" Type="Int32" Nullable="false" />
+          <Property Name="Login" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LastLogin" Type="DateTime" Precision="3" />
+          <Property Name="MustResetPassword" Type="Boolean" Nullable="false" />
+          <Property Name="Hash" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Person" Relationship="Self.fk_User_PersonID" FromRole="User" ToRole="Person" />
+        </EntityType>
         <EntityType Name="UserRole">
           <Key>
             <PropertyRef Name="UserRoleID" />
@@ -947,6 +1057,69 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <Property Name="UserRoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PersonID" Type="Int32" Nullable="false" />
           <Property Name="RoleID" Type="Byte" Nullable="false" />
+        </EntityType>
+        <EntityType Name="InstructorAssessment">
+          <Key>
+            <PropertyRef Name="Login" />
+            <PropertyRef Name="PersonID" />
+            <PropertyRef Name="CourseID" />
+            <PropertyRef Name="CourseName" />
+            <PropertyRef Name="SectionID" />
+            <PropertyRef Name="CRN" />
+            <PropertyRef Name="AssessmentName" />
+            <PropertyRef Name="RubricID" />
+            <PropertyRef Name="RubricName" />
+            <PropertyRef Name="DueDate" />
+            <PropertyRef Name="Status" />
+          </Key>
+          <Property Name="Login" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PersonID" Type="Int32" Nullable="false" />
+          <Property Name="CourseID" Type="Int16" Nullable="false" />
+          <Property Name="CourseName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SectionID" Type="Int32" Nullable="false" />
+          <Property Name="CRN" Type="Int32" Nullable="false" />
+          <Property Name="AssessmentName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RubricID" Type="Int16" Nullable="false" />
+          <Property Name="RubricName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AssessmentLevel" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="DueDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="StudentCount" Type="Int32" />
+          <Property Name="CompletedCount" Type="Int32" />
+        </EntityType>
+        <EntityType Name="RubricDetail">
+          <Key>
+            <PropertyRef Name="AssessmentName" />
+            <PropertyRef Name="RubricID" />
+            <PropertyRef Name="RubricName" />
+            <PropertyRef Name="OutcomeName" />
+            <PropertyRef Name="OutcomeSortOrder" />
+            <PropertyRef Name="CriteriaID" />
+            <PropertyRef Name="CriteriaName" />
+            <PropertyRef Name="CriteriaSortOrder" />
+          </Key>
+          <Property Name="AssessmentName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RubricID" Type="Int16" Nullable="false" />
+          <Property Name="RubricName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="OutcomeName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="OutcomeSortOrder" Type="Byte" Nullable="false" />
+          <Property Name="CriteriaID" Type="Int16" Nullable="false" />
+          <Property Name="CriteriaName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ExampleText" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CriteriaSortOrder" Type="Byte" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SectionEnrollment">
+          <Key>
+            <PropertyRef Name="sectionID" />
+            <PropertyRef Name="EnrollmentID" />
+            <PropertyRef Name="StudentID" />
+          </Key>
+          <Property Name="sectionID" Type="Int32" Nullable="false" />
+          <Property Name="EnrollmentID" Type="Int64" Nullable="false" />
+          <Property Name="StudentID" Type="String" MaxLength="9" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="fk_AssessmentRubric_AssessmentID">
           <End Role="Assessment" Type="Self.Assessment" Multiplicity="1" />
@@ -1092,6 +1265,42 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_Enrollment_EnrollmentStatusCode">
+          <End Role="EnrollmentStatus" Type="Self.EnrollmentStatu" Multiplicity="1" />
+          <End Role="Enrollment" Type="Self.Enrollment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnrollmentStatus">
+              <PropertyRef Name="StatusID" />
+            </Principal>
+            <Dependent Role="Enrollment">
+              <PropertyRef Name="EnrollmentStatusCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Enrollment_SectionID">
+          <End Role="Section" Type="Self.Section" Multiplicity="1" />
+          <End Role="Enrollment" Type="Self.Enrollment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Section">
+              <PropertyRef Name="SectionID" />
+            </Principal>
+            <Dependent Role="Enrollment">
+              <PropertyRef Name="SectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Enrollment_StudentID">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="Enrollment" Type="Self.Enrollment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="Enrollment">
+              <PropertyRef Name="StudentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_StudentScore_EnrollmentID">
           <End Role="Enrollment" Type="Self.Enrollment" Multiplicity="1" />
           <End Role="StudentScore" Type="Self.StudentScore" Multiplicity="*" />
@@ -1137,6 +1346,18 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             </Principal>
             <Dependent Role="StudentScore">
               <PropertyRef Name="AssessedByID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_User_PersonID">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="PersonID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1200,7 +1421,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="SLE_TrackingEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="SLE_DB_" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Assessments" EntityType="Self.Assessment" />
           <EntitySet Name="AssessmentLevels" EntityType="Self.AssessmentLevel" />
           <EntitySet Name="AssessmentRubrics" EntityType="Self.AssessmentRubric" />
@@ -1222,7 +1443,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <EntitySet Name="Semesters" EntityType="Self.Semester" />
           <EntitySet Name="StudentPrograms" EntityType="Self.StudentProgram" />
           <EntitySet Name="StudentScores" EntityType="Self.StudentScore" />
+          <EntitySet Name="Users" EntityType="Self.User" />
           <EntitySet Name="UserRoles" EntityType="Self.UserRole" />
+          <EntitySet Name="InstructorAssessments" EntityType="Self.InstructorAssessment" />
+          <EntitySet Name="RubricDetails" EntityType="Self.RubricDetail" />
+          <EntitySet Name="SectionEnrollments" EntityType="Self.SectionEnrollment" />
           <AssociationSet Name="fk_AssessmentRubric_AssessmentID" Association="Self.fk_AssessmentRubric_AssessmentID">
             <End Role="Assessment" EntitySet="Assessments" />
             <End Role="AssessmentRubric" EntitySet="AssessmentRubrics" />
@@ -1271,6 +1496,18 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             <End Role="Criteria" EntitySet="Criteria" />
             <End Role="StudentScore" EntitySet="StudentScores" />
           </AssociationSet>
+          <AssociationSet Name="fk_Enrollment_EnrollmentStatusCode" Association="Self.fk_Enrollment_EnrollmentStatusCode">
+            <End Role="EnrollmentStatus" EntitySet="EnrollmentStatus" />
+            <End Role="Enrollment" EntitySet="Enrollments" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Enrollment_SectionID" Association="Self.fk_Enrollment_SectionID">
+            <End Role="Section" EntitySet="Sections" />
+            <End Role="Enrollment" EntitySet="Enrollments" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Enrollment_StudentID" Association="Self.fk_Enrollment_StudentID">
+            <End Role="Person" EntitySet="People" />
+            <End Role="Enrollment" EntitySet="Enrollments" />
+          </AssociationSet>
           <AssociationSet Name="fk_StudentScore_EnrollmentID" Association="Self.fk_StudentScore_EnrollmentID">
             <End Role="Enrollment" EntitySet="Enrollments" />
             <End Role="StudentScore" EntitySet="StudentScores" />
@@ -1286,6 +1523,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <AssociationSet Name="fk_StudentScore_AssessedByID" Association="Self.fk_StudentScore_AssessedByID">
             <End Role="Person" EntitySet="People" />
             <End Role="StudentScore" EntitySet="StudentScores" />
+          </AssociationSet>
+          <AssociationSet Name="fk_User_PersonID" Association="Self.fk_User_PersonID">
+            <End Role="Person" EntitySet="People" />
+            <End Role="User" EntitySet="Users" />
           </AssociationSet>
           <AssociationSet Name="fk_StudentProgram_ProgramID" Association="Self.fk_StudentProgram_ProgramID">
             <End Role="Program" EntitySet="Programs" />
@@ -1307,106 +1548,16 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             <End Role="Semester" EntitySet="Semesters" />
             <End Role="StudentProgram" EntitySet="StudentPrograms" />
           </AssociationSet>
-          <EntitySet Name="InstructorAssessments" EntityType="SLE_TrackingModel.InstructorAssessment" />
-          <EntitySet Name="RubricDetails" EntityType="SLE_TrackingModel.RubricDetail" />
-          <EntitySet Name="SectionEnrollments" EntityType="SLE_TrackingModel.SectionEnrollment" />
-          <EntitySet Name="User" EntityType="SLE_TrackingModel.User" />
-          <AssociationSet Name="fk_User_PersonID" Association="SLE_TrackingModel.fk_User_PersonID">
-            <End Role="Person" EntitySet="People" />
-            <End Role="User" EntitySet="User" />
-          </AssociationSet>
+          <FunctionImport Name="GetCompletedCountBySectionRubric" IsComposable="true" ReturnType="Collection(SLE_TrackingModel.GetCompletedCountBySectionRubric_Result)">
+            <Parameter Name="SectionRubricID" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
-        <EntityType Name="InstructorAssessment">
-          <Key>
-            <PropertyRef Name="Login" />
-            <PropertyRef Name="PersonID" />
-            <PropertyRef Name="CourseID" />
-            <PropertyRef Name="CourseName" />
-            <PropertyRef Name="SectionID" />
-            <PropertyRef Name="CRN" />
-            <PropertyRef Name="AssessmentName" />
-            <PropertyRef Name="RubricID" />
-            <PropertyRef Name="RubricName" />
-            <PropertyRef Name="DueDate" />
-            <PropertyRef Name="Status" />
-          </Key>
-          <Property Name="Login" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="PersonID" Type="Int32" Nullable="false" />
-          <Property Name="CourseID" Type="Int16" Nullable="false" />
-          <Property Name="CourseName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="SectionID" Type="Int32" Nullable="false" />
-          <Property Name="CRN" Type="Int32" Nullable="false" />
-          <Property Name="AssessmentName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="RubricID" Type="Int16" Nullable="false" />
-          <Property Name="RubricName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="AssessmentLevel" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="DueDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
-        </EntityType>
-        <EntityType Name="RubricDetail">
-          <Key>
-            <PropertyRef Name="AssessmentName" />
-            <PropertyRef Name="RubricID" />
-            <PropertyRef Name="RubricName" />
-            <PropertyRef Name="OutcomeName" />
-            <PropertyRef Name="OutcomeSortOrder" />
-            <PropertyRef Name="CriteriaID" />
-            <PropertyRef Name="CriteriaName" />
-            <PropertyRef Name="CriteriaSortOrder" />
-          </Key>
-          <Property Name="AssessmentName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="RubricID" Type="Int16" Nullable="false" />
-          <Property Name="RubricName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="OutcomeName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="OutcomeSortOrder" Type="Byte" Nullable="false" />
-          <Property Name="CriteriaID" Type="Int16" Nullable="false" />
-          <Property Name="CriteriaName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="ExampleText" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="CriteriaSortOrder" Type="Byte" Nullable="false" />
-        </EntityType>
-        <EntityType Name="SectionEnrollment">
-          <Key>
-            <PropertyRef Name="sectionID" />
-            <PropertyRef Name="EnrollmentID" />
-            <PropertyRef Name="StudentID" />
-          </Key>
-          <Property Name="sectionID" Type="Int32" Nullable="false" />
-          <Property Name="EnrollmentID" Type="Int64" Nullable="false" />
-          <Property Name="StudentID" Type="String" Nullable="false" MaxLength="9" FixedLength="true" Unicode="false" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="User">
-          <Key>
-            <PropertyRef Name="PersonID" />
-          </Key>
-          <Property Name="PersonID" Type="Int32" Nullable="false" />
-          <Property Name="Login" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="LastLogin" Type="DateTime" Precision="3" />
-          <Property Name="MustResetPassword" Type="Boolean" Nullable="false" />
-          <Property Name="Hash" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Person" Relationship="SLE_TrackingModel.fk_User_PersonID" FromRole="User" ToRole="Person" />
-        </EntityType>
-        <Association Name="fk_User_PersonID">
-          <End Type="SLE_TrackingModel.Person" Role="Person" Multiplicity="1" />
-          <End Type="SLE_TrackingModel.User" Role="User" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="Person">
-              <PropertyRef Name="PersonID" />
-            </Principal>
-            <Dependent Role="User">
-              <PropertyRef Name="PersonID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="SLE_TrackingModelStoreContainer" CdmEntityContainer="SLE_TrackingEntities">
+        <EntityContainerMapping StorageEntityContainer="SLE_TrackingModelStoreContainer" CdmEntityContainer="SLE_DB_">
           <EntitySetMapping Name="Assessments">
             <EntityTypeMapping TypeName="SLE_TrackingModel.Assessment">
               <MappingFragment StoreEntitySet="Assessment">
@@ -1621,6 +1772,18 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+                <ScalarProperty Name="MustResetPassword" ColumnName="MustResetPassword" />
+                <ScalarProperty Name="Hash" ColumnName="Hash" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="UserRoles">
             <EntityTypeMapping TypeName="SLE_TrackingModel.UserRole">
               <MappingFragment StoreEntitySet="UserRole">
@@ -1633,60 +1796,59 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <EntitySetMapping Name="InstructorAssessments">
             <EntityTypeMapping TypeName="SLE_TrackingModel.InstructorAssessment">
               <MappingFragment StoreEntitySet="InstructorAssessments">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
-                <ScalarProperty Name="AssessmentLevel" ColumnName="AssessmentLevel" />
-                <ScalarProperty Name="RubricName" ColumnName="RubricName" />
-                <ScalarProperty Name="RubricID" ColumnName="RubricID" />
-                <ScalarProperty Name="AssessmentName" ColumnName="AssessmentName" />
-                <ScalarProperty Name="CRN" ColumnName="CRN" />
-                <ScalarProperty Name="SectionID" ColumnName="SectionID" />
-                <ScalarProperty Name="CourseName" ColumnName="CourseName" />
-                <ScalarProperty Name="CourseID" ColumnName="CourseID" />
-                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="CourseID" ColumnName="CourseID" />
+                <ScalarProperty Name="CourseName" ColumnName="CourseName" />
+                <ScalarProperty Name="SectionID" ColumnName="SectionID" />
+                <ScalarProperty Name="CRN" ColumnName="CRN" />
+                <ScalarProperty Name="AssessmentName" ColumnName="AssessmentName" />
+                <ScalarProperty Name="RubricID" ColumnName="RubricID" />
+                <ScalarProperty Name="RubricName" ColumnName="RubricName" />
+                <ScalarProperty Name="AssessmentLevel" ColumnName="AssessmentLevel" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="StudentCount" ColumnName="StudentCount" />
+                <ScalarProperty Name="CompletedCount" ColumnName="CompletedCount" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="RubricDetails">
             <EntityTypeMapping TypeName="SLE_TrackingModel.RubricDetail">
               <MappingFragment StoreEntitySet="RubricDetails">
-                <ScalarProperty Name="CriteriaSortOrder" ColumnName="CriteriaSortOrder" />
-                <ScalarProperty Name="ExampleText" ColumnName="ExampleText" />
-                <ScalarProperty Name="CriteriaName" ColumnName="CriteriaName" />
-                <ScalarProperty Name="CriteriaID" ColumnName="CriteriaID" />
-                <ScalarProperty Name="OutcomeSortOrder" ColumnName="OutcomeSortOrder" />
-                <ScalarProperty Name="OutcomeName" ColumnName="OutcomeName" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="RubricName" ColumnName="RubricName" />
-                <ScalarProperty Name="RubricID" ColumnName="RubricID" />
                 <ScalarProperty Name="AssessmentName" ColumnName="AssessmentName" />
+                <ScalarProperty Name="RubricID" ColumnName="RubricID" />
+                <ScalarProperty Name="RubricName" ColumnName="RubricName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="OutcomeName" ColumnName="OutcomeName" />
+                <ScalarProperty Name="OutcomeSortOrder" ColumnName="OutcomeSortOrder" />
+                <ScalarProperty Name="CriteriaID" ColumnName="CriteriaID" />
+                <ScalarProperty Name="CriteriaName" ColumnName="CriteriaName" />
+                <ScalarProperty Name="ExampleText" ColumnName="ExampleText" />
+                <ScalarProperty Name="CriteriaSortOrder" ColumnName="CriteriaSortOrder" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SectionEnrollments">
             <EntityTypeMapping TypeName="SLE_TrackingModel.SectionEnrollment">
               <MappingFragment StoreEntitySet="SectionEnrollment">
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
-                <ScalarProperty Name="EnrollmentID" ColumnName="EnrollmentID" />
                 <ScalarProperty Name="sectionID" ColumnName="sectionID" />
+                <ScalarProperty Name="EnrollmentID" ColumnName="EnrollmentID" />
+                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="User">
-            <EntityTypeMapping TypeName="SLE_TrackingModel.User">
-              <MappingFragment StoreEntitySet="User">
-                <ScalarProperty Name="Hash" ColumnName="Hash" />
-                <ScalarProperty Name="MustResetPassword" ColumnName="MustResetPassword" />
-                <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Login" ColumnName="Login" />
-                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
+          <FunctionImportMapping FunctionName="SLE_TrackingModel.Store.GetCompletedCountBySectionRubric" FunctionImportName="GetCompletedCountBySectionRubric">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SLE_TrackingModel.GetCompletedCountBySectionRubric_Result">
+                <ScalarProperty Name="SectionRubricID" ColumnName="SectionRubricID" />
+                <ScalarProperty Name="CompletedCount" ColumnName="CompletedCount" />
+                <ScalarProperty Name="StudentCount" ColumnName="StudentCount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1701,7 +1863,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />

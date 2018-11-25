@@ -14,7 +14,16 @@ namespace CLS_SLE.Models
     
     public partial class EnrollmentStatu
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public EnrollmentStatu()
+        {
+            this.Enrollments = new HashSet<Enrollment>();
+        }
+    
         public string StatusID { get; set; }
         public string Name { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Enrollment> Enrollments { get; set; }
     }
 }

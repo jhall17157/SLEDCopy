@@ -21,11 +21,14 @@ namespace CLS_SLE.Models
         }
     
         public long EnrollmentID { get; set; }
-        public short SectionID { get; set; }
+        public int SectionID { get; set; }
         public int StudentID { get; set; }
         public string EnrollmentStatusCode { get; set; }
         public System.DateTime StatusDate { get; set; }
     
+        public virtual EnrollmentStatu EnrollmentStatu { get; set; }
+        public virtual Section Section { get; set; }
+        public virtual Person Person { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StudentScore> StudentScores { get; set; }
     }

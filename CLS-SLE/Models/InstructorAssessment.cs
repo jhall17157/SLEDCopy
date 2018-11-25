@@ -26,5 +26,7 @@ namespace CLS_SLE.Models
         public string AssessmentLevel { get; set; }
         public System.DateTime DueDate { get; set; }
         public string Status { get; set; }
+        public Nullable<int> StudentCount { get; set; }
+        public Nullable<int> CompletedCount { get; set; }
     }
 }

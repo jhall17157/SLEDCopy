@@ -14,7 +14,7 @@ namespace CLS_SLE.Controllers
 {
     public class InstructorAssessmentsController : Controller
     {
-        private SLE_TrackingEntities db = new SLE_TrackingEntities();
+        private SLE_DB_ db = new SLE_DB_();
 
         // GET: InstructorAssessments
         public ActionResult Dashboard()
@@ -25,54 +25,6 @@ namespace CLS_SLE.Controllers
                 var instructorAssessments = db.InstructorAssessments.Where(i => i.PersonID == personID);
 
                 dynamic model = new ExpandoObject();
-
-                // \/\/\/  comment code below to disable completed student progress on dashboard \/\/\/
-                // All these lists are parallel to each assessment 
-                List<Int32> assessmentSectionIDs = new List<int>();
-                List<Int32> numberOfStudentsPerAssessment = new List<int>();
-                List<Int32> numberOfCompleteStudentsPerAssessment = new List<int>();
-                
-                foreach (InstructorAssessment assessment in instructorAssessments)
-                {
-                    //number of students per assessment
-                    var numStudents = db.SectionEnrollments.Count(n => n.sectionID == assessment.SectionID);
-                    assessmentSectionIDs.Add(assessment.SectionID);
-                    numberOfStudentsPerAssessment.Add(numStudents);
-
-                    //students enrolled in assessment
-                    var students = db.SectionEnrollments.Where(s => s.sectionID == assessment.SectionID);
-                    //number of criteria for assessment
-                    var numCriteria = db.RubricDetails.Count(c => c.RubricID == assessment.RubricID);
-                    //criteria for assessment
-                    var rubricDetails = db.RubricDetails.Where(r => r.RubricID == assessment.RubricID);
-
-                    var completedStudents = 0;
-                    foreach (var student in students)
-                    {
-                        var studentScores = db.StudentScores.Where(s => s.EnrollmentID == student.EnrollmentID);
-                        var filled = 0;
-                        foreach (var score in studentScores)
-                        {
-                            foreach (var detail in rubricDetails)
-                            {
-                                if (score.CriteriaID == detail.CriteriaID)
-                                {
-                                    filled++;
-                                }
-                            }
-                        }
-                        if (filled == numCriteria)
-                        {
-                            completedStudents++;
-                        }
-                    }
-                    numberOfCompleteStudentsPerAssessment.Add(completedStudents);
-                }
-                
-                model.completestudents = numberOfCompleteStudentsPerAssessment;
-                model.students = numberOfStudentsPerAssessment;
-                model.sections = assessmentSectionIDs;
-                // ^^^ comment code above to disable completed student progress on dashboard ^^^ 
 
                 model.assessments = instructorAssessments.ToList();
                 model.name = instructorAssessments.First().Login;

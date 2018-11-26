@@ -47,17 +47,17 @@
                 }
             }
             <div id="@o.OutcomeID" class="list-group-item" style="padding: 0;">
-                <div class="btn btn-outline-dark" style="font-size: 1.2rem; display: block;
+                <div class="btn btn-outline-dark" style="font-size: 1.2rem; display: block; text-align: left;
                     text-decoration: none; border-radius: 0px;"
                      data-toggle="collapse"
                      href="#group_@o.OutcomeID" role="button" aria-expanded="false"
                      aria-controls="group_@o.OutcomeID">
-                    <span class="fa fa-caret-down"></span>
                     @o.Name
-                    <span class="fa fa-caret-down"></span>
                     <span class="float-right badge"><span id="filled_@o.OutcomeID">@filledCriteria</span> / @numCriteria</span>
                 </div>
-                <ul class="list-group list-group-flush collapse show" id="group_@o.OutcomeID">
+                <ul class="list-group list-group-flush collapse  @(@filledCriteria == @numCriteria ? "" : "show") " id="group_@o.OutcomeID">
+
+
                     @foreach (RubricDetail rb in Model.Criteria)
                     {
                         if (o.Name.Equals(rb.OutcomeName))

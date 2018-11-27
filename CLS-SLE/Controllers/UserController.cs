@@ -87,15 +87,15 @@ namespace CLS_SLE.Controllers
                     {
                         // Send email
                         MailMessage msg = new MailMessage();
-                        System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient();
+                        System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient("10.1.3.214", 25);
                         try
                         {
                             msg.Subject = "Add Subject";
                             msg.Body = "Add Email Body Part";
-                            msg.From = new MailAddress("10.1.3.214");
+                            msg.From = new MailAddress("NoReply@wctc.edu");
                             msg.To.Add(user.Email);
                             msg.IsBodyHtml = true;
-                            client.Host = "smtp.gmail.com";
+                            client.Host = "10.1.3.214";
                             System.Net.NetworkCredential basicauthenticationinfo = new System.Net.NetworkCredential("billdelarosa218@gmail.com", "D3lar0sa");
                             client.Port = int.Parse("587");
                             client.EnableSsl = true;

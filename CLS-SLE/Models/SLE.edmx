@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SLE_TrackingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SLE_TrackingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Assessment">
           <Key>
             <PropertyRef Name="AssessmentID" />
@@ -198,28 +198,6 @@
           <Property Name="AssessedByID" Type="int" Nullable="false" />
           <Property Name="DateTimeAssessed" Type="datetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'SLE_Tracking.dbo.tmp_Assessments' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tmp_Assessments">
-          <Property Name="AssessmentName" Type="varchar" MaxLength="255" />
-          <Property Name="Description" Type="varchar(max)" />
-          <Property Name="Category" Type="varchar" MaxLength="255" />
-          <Property Name="OutcomePassRate" Type="decimal" Precision="3" Scale="2" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'SLE_Tracking.dbo.tmp_rubrics' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tmp_rubrics">
-          <Property Name="ID" Type="int" />
-          <Property Name="AssessmentName" Type="varchar" MaxLength="255" />
-          <Property Name="RubricName" Type="varchar" MaxLength="255" />
-          <Property Name="RubricDescription" Type="varchar(max)" />
-          <Property Name="Program" Type="varchar" MaxLength="255" />
-          <Property Name="Outcome" Type="varchar" MaxLength="255" />
-          <Property Name="OutcomeDescription" Type="varchar(max)" />
-          <Property Name="CriteriaPassRate" Type="decimal" Precision="3" Scale="2" />
-          <Property Name="Criteria" Type="varchar" MaxLength="255" />
-          <Property Name="ExampleText" Type="varchar(max)" />
-        </EntityType>-->
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="PersonID" />
@@ -250,10 +228,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.InstructorAssessments' does not h
             <PropertyRef Name="SectionID" />
             <PropertyRef Name="CRN" />
             <PropertyRef Name="AssessmentName" />
+            <PropertyRef Name="Category" />
             <PropertyRef Name="RubricID" />
             <PropertyRef Name="RubricName" />
             <PropertyRef Name="DueDate" />
-            <PropertyRef Name="Status" />
           </Key>
           <Property Name="Login" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="PersonID" Type="int" Nullable="false" />
@@ -262,11 +240,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.InstructorAssessments' does not h
           <Property Name="SectionID" Type="int" Nullable="false" />
           <Property Name="CRN" Type="int" Nullable="false" />
           <Property Name="AssessmentName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Category" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="RubricID" Type="smallint" Nullable="false" />
           <Property Name="RubricName" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="AssessmentLevel" Type="char" MaxLength="1" />
           <Property Name="DueDate" Type="date" Nullable="false" />
-          <Property Name="Status" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="StudentCount" Type="int" />
           <Property Name="CompletedCount" Type="int" />
         </EntityType>
@@ -653,11 +631,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
     [InstructorAssessments].[SectionID] AS [SectionID], 
     [InstructorAssessments].[CRN] AS [CRN], 
     [InstructorAssessments].[AssessmentName] AS [AssessmentName], 
+    [InstructorAssessments].[Category] AS [Category], 
     [InstructorAssessments].[RubricID] AS [RubricID], 
     [InstructorAssessments].[RubricName] AS [RubricName], 
     [InstructorAssessments].[AssessmentLevel] AS [AssessmentLevel], 
     [InstructorAssessments].[DueDate] AS [DueDate], 
-    [InstructorAssessments].[Status] AS [Status], 
     [InstructorAssessments].[StudentCount] AS [StudentCount], 
     [InstructorAssessments].[CompletedCount] AS [CompletedCount]
     FROM [dbo].[InstructorAssessments] AS [InstructorAssessments]</DefiningQuery>
@@ -786,8 +764,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             <End Role="User" EntitySet="User" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SLE_TrackingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1070,7 +1047,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             <PropertyRef Name="RubricID" />
             <PropertyRef Name="RubricName" />
             <PropertyRef Name="DueDate" />
-            <PropertyRef Name="Status" />
+            <PropertyRef Name="Category" />
           </Key>
           <Property Name="Login" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="PersonID" Type="Int32" Nullable="false" />
@@ -1083,9 +1060,9 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <Property Name="RubricName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="AssessmentLevel" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="DueDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="StudentCount" Type="Int32" />
           <Property Name="CompletedCount" Type="Int32" />
+          <Property Name="Category" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="RubricDetail">
           <Key>
@@ -1549,7 +1526,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             <End Role="StudentProgram" EntitySet="StudentPrograms" />
           </AssociationSet>
           <FunctionImport Name="GetCompletedCountBySectionRubric" IsComposable="true" ReturnType="Collection(SLE_TrackingModel.GetCompletedCountBySectionRubric_Result)">
-            <Parameter Name="SectionRubricID" Mode="In" Type="Int32" />
+          <Parameter Name="SectionRubricID" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
       </Schema>
@@ -1796,6 +1773,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <EntitySetMapping Name="InstructorAssessments">
             <EntityTypeMapping TypeName="SLE_TrackingModel.InstructorAssessment">
               <MappingFragment StoreEntitySet="InstructorAssessments">
+                <ScalarProperty Name="Category" ColumnName="Category" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
                 <ScalarProperty Name="PersonID" ColumnName="PersonID" />
                 <ScalarProperty Name="CourseID" ColumnName="CourseID" />
@@ -1807,7 +1785,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
                 <ScalarProperty Name="RubricName" ColumnName="RubricName" />
                 <ScalarProperty Name="AssessmentLevel" ColumnName="AssessmentLevel" />
                 <ScalarProperty Name="DueDate" ColumnName="DueDate" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="StudentCount" ColumnName="StudentCount" />
                 <ScalarProperty Name="CompletedCount" ColumnName="CompletedCount" />
               </MappingFragment>

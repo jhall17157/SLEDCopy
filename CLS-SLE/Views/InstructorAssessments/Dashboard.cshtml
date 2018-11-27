@@ -8,10 +8,10 @@
 
 <h1>Dashboard</h1>
 
-<table class="table table-borderless">
+<table class="table table-borderless table-hover">
     @foreach (InstructorAssessment item in Model.assessments)
     {
-        if (item.AssessmentLevel == "S")
+        if (item.Category == "CLS")
         {
             if (firstItem)
             {
@@ -61,7 +61,7 @@
     }
     @foreach (InstructorAssessment item in Model.assessments)
     {
-        if (item.AssessmentLevel != "S")
+        if (item.Category == "TSA")
         {
             if (firstItem)
             {

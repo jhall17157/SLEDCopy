@@ -11,8 +11,10 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item">@Html.ActionLink("Dashboard", "Dashboard")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Student List", "StudentList", new { rubricID = r.RubricID })</li>
+        @*<li class="breadcrumb-item">@Html.ActionLink("Dashboard", "Dashboard")</li>*@
+        @*<li class="breadcrumb-item">@Html.ActionLink("Student List", "StudentList", new { rubricID = r.RubricID })</li>*@
+        <li class="breadcrumb-item"><a href="#" id="dashboardLink">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="#" id="studentLink">Student List</a></li>
         <li class="breadcrumb-item active" aria-current="page">Assessment</li>
     </ol>
 </nav>
@@ -100,7 +102,7 @@
                 </ul>
             </div>
         }
-        </div>
+    </div>
     <div class="text-center">
         <div class="btn-group" role="group" style="margin-top:10px;">
             <input type="submit" class="btn btn-outline-dark" value="Previous Student" id="submit" name="lastStudent" style="width:180px;">
@@ -110,11 +112,41 @@
     </div>
 </form>
 
+
+
 <style>
-    input[type=radio]{
-        float:left;
+    input[type=radio] {
+        float: left;
     }
 </style>
+
+<div id="changesMade" class="modal fade modal-spacing" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title float-left">Unsaved Changes</h2>
+                <button type="button" class="close float-right" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="confirmText">
+                <p><strong>Do you want to save changes?</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" id="save" data-dismiss="modal" data-toggle="modal">Yes</button>
+                <div id="studentList" class="hidden">
+                    <a href="StudentList?rubricID=@r.RubricID" class="btn btn-primary">No</a>
+                    @*@Html.ActionLink("No", "StudentList", new { rubricID = r.RubricID }, htmlAttributes: new { @class = "btn btn-primary" })*@
+                </div>
+                <div id="dashboard" class="hidden">
+                    <a href="Dashboard" class="btn btn-primary">Yes</a>
+                    @*@Html.ActionLink("No", "Dashboard", null, htmlAttributes: new { @class = "btn btn-primary" })*@
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -123,30 +155,56 @@
     <script>
         $(function ()
         {
+            $('#studentLink').on('click', function ()
+            {
+                if (changesMade) {
+                    $('#studentList').removeClass('hidden');
+                    $('#changesMade').modal();
+                }
+                else {
+                    location.href = "StudentList?rubricID=@r.RubricID";
+                }
+            });
+
+            $('#dashboardLink').on('click', function ()
+            {
+                if (changesMade) {
+                    $('#dashboard').removeClass('hidden')
+                    $('#changesMade').modal();
+                }
+                else {
+                    location.href = "Dashboard";
+                }
+            });
+
+            $('#save').on('click', function () {
+                $('#form').submit();
+            });
 
             var serialized = $('#form').serializeArray();
+            var changesMade = false;
             $('input[type=radio]').on('change', function () {
+                changesMade = true;
                 var outcomeID = this.parentElement.parentElement.id;
                 var name = this.getAttribute("name");
                 var count = 0;
                 $.each(serialized, function (key, value) {
-                    
+
                     if (value.name == name) {
                         count++;
-                        
                     }
-                    
+
                 });
                 if (count === 0) {
                     var filled = $('#filled_' + outcomeID).html();
                     filled++;
                     $('#filled_' + outcomeID).html(filled);
                     serialized = $('#form').serializeArray();
-                } 
-                
+                }
+
                 //Normally i would do $('#form').serialize.length - 1 but it is broken up into multiple sections
                 //add alert when changes are made
             });
         });
-    </script>    
+    </script>
 }

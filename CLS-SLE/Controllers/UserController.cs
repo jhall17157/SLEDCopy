@@ -25,7 +25,7 @@ namespace CLS_SLE.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SignIn([Bind(Include = "Login,Password")] UserSignIn userSignIn, string ReturnUrl)
+        public ActionResult SignIn([Bind(Include = "Login,Password")] UserSignIn userSignIn)
         {
             using (SLE_DB_ db = new SLE_DB_())
             {
@@ -47,12 +47,7 @@ namespace CLS_SLE.Controllers
                         Session["User"] = user;
                         user.LastLogin = DateTime.Now;
                         db.SaveChanges();
-
-                        // if there is a return url, redirect to the url
-                        if (ReturnUrl != null)
-                        {
-                            return Redirect(ReturnUrl);
-                        }
+                        
                         // Redirect to Home page
                         return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
                     }

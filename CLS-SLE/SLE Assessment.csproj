@@ -383,7 +383,7 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\User\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\InstructorAssessments\Dashboard.cshtml" />
     <Content Include="Views\InstructorAssessments\StudentList.cshtml" />

@@ -22,7 +22,7 @@
 <h1>@r.RubricName</h1>
 <h2>@s.FirstName @s.LastName</h2>
 
-<form id="form" action="/InstructorAssessments/AssessmentInput" method="post">
+<form id="assessmentInputForm" action="/InstructorAssessments/AssessmentInput" method="post">
     @Html.AntiForgeryToken()
 
     <div class="list-group">
@@ -107,11 +107,10 @@
     </div>
     <div class="text-center">
         <div class="btn-group" role="group" style="margin-top:10px;">
-            <input type="submit" class="btn btn-outline-dark" value="Previous Student" id="submit" name="lastStudent" style="width:180px;">
-            <input type="submit" class="btn btn-outline-dark" value="Back to all students" id="submit" name="submit" style="width:180px;">
-            <input type="submit" class="btn btn-outline-dark" value="Next Student" id="submit" name="nextStudent" style="width:180px;">
+            <input type="submit" class="btn btn-outline-dark" value="Previous Student" id="prevStudentSubmit" name="lastStudent" style="width:180px;">
+            <input type="submit" class="btn btn-outline-dark" value="Back to all students" id="allStudentSubmit" name="backToStudents" style="width:180px;">
+            <input type="submit" class="btn btn-outline-dark" value="Next Student" id="nextStudentSubmit" name="nextStudent" style="width:180px;">
         </div>
-    </div>
     </div>
 </form>
 
@@ -136,16 +135,10 @@
                 <p><strong>Do you want to save changes?</strong></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-warning" id="save" data-dismiss="modal" data-toggle="modal">Yes</button>
-                <div id="studentList" class="hidden">
-                    <a href="StudentList?rubricID=@r.RubricID" class="btn btn-primary">No</a>
-                    @*@Html.ActionLink("No", "StudentList", new { rubricID = r.RubricID }, htmlAttributes: new { @class = "btn btn-primary" })*@
-                </div>
-                <div id="dashboard" class="hidden">
-                    <a href="Dashboard" class="btn btn-primary">Yes</a>
-                    @*@Html.ActionLink("No", "Dashboard", null, htmlAttributes: new { @class = "btn btn-primary" })*@
-                </div>
-                
+                <button type="button" class="btn btn-warning" id="modalSave" data-dismiss="modal" data-toggle="modal">Yes</button>
+
+                <a href="StudentList?rubricID=@r.RubricID" class="btn btn-primary" hidden id="studentList">No</a>
+                <a href="Dashboard" class="btn btn-primary" hidden id="dashboard">No</a>            
             </div>
         </div>
     </div>
@@ -161,7 +154,7 @@
             $('#studentLink').on('click', function ()
             {
                 if (changesMade) {
-                    $('#studentList').removeClass('hidden');
+                    $('#studentList').removeAttr('hidden');
                     $('#changesMade').modal();
                 }
                 else {
@@ -172,7 +165,7 @@
             $('#dashboardLink').on('click', function ()
             {
                 if (changesMade) {
-                    $('#dashboard').removeClass('hidden')
+                    $('#dashboard').removeAttr('hidden');
                     $('#changesMade').modal();
                 }
                 else {
@@ -180,11 +173,15 @@
                 }
             });
 
-            $('#save').on('click', function () {
-                $('#form').submit();
+            $('#modalSave').on('click', function (e)
+            {
+                e.preventDefault();
+                $('#assessmentInputForm').submit();
             });
+            
 
-            var serialized = $('#form').serializeArray();
+
+            var serialized = $('#assessmentInputForm').serializeArray();
             var changesMade = false;
             $('input[type=radio]').on('change', function () {
                 changesMade = true;
@@ -202,7 +199,7 @@
                     var filled = $('#filled_' + outcomeID).html();
                     filled++;
                     $('#filled_' + outcomeID).html(filled);
-                    serialized = $('#form').serializeArray();
+                    serialized = $('#assessmentInputForm').serializeArray();
                 }
 
                 //Normally i would do $('#form').serialize.length - 1 but it is broken up into multiple sections

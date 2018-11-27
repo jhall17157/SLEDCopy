@@ -65,5 +65,59 @@ namespace CLS_SLE.Controllers
                 return View();
             }
         }
+
+        public ActionResult PasswordReset()
+        {
+            using (SLE_DB_ db = new SLE_DB_())
+            return View();
+        }
+
+        // POST: Customer/PasswordReset
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PasswordReset([Bind(Include = "Email")] PasswordReset pwReset)
+        {
+            using (SLE_DB_ db = new SLE_DB_())
+            {
+                if (ModelState.IsValid)
+                {
+                    User user = db.Users.Where(u => u.Email == pwReset.Email).FirstOrDefault();
+    
+                    if (user.Email == pwReset.Email)
+                    {
+                        // Send email
+                        MailMessage msg = new MailMessage();
+                        System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient();
+                        try
+                        {
+                            msg.Subject = "Add Subject";
+                            msg.Body = "Add Email Body Part";
+                            msg.From = new MailAddress("10.1.3.214");
+                            msg.To.Add(user.Email);
+                            msg.IsBodyHtml = true;
+                            client.Host = "smtp.gmail.com";
+                            System.Net.NetworkCredential basicauthenticationinfo = new System.Net.NetworkCredential("billdelarosa218@gmail.com", "D3lar0sa");
+                            client.Port = int.Parse("587");
+                            client.EnableSsl = true;
+                            client.UseDefaultCredentials = false;
+                            client.Credentials = basicauthenticationinfo;
+                            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                            client.Send(msg);
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        // Redirect
+
+                        return RedirectToAction(actionName: "CheckEmail", controllerName: "Home");
+                    }
+                }
+            }
+            return View();
+        }
     }
 }

@@ -164,6 +164,10 @@ namespace CLS_SLE.Controllers
             {
                 return LastStudent();
             }
+            else if(submitType.Equals("dashboardBreadcrum"))
+            {
+                return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
+            }
 
             return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
         }

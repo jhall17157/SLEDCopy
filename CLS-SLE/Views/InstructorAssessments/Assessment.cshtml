@@ -24,7 +24,6 @@
 
 <form id="assessmentInputForm" action="/InstructorAssessments/AssessmentInput" method="post">
     @Html.AntiForgeryToken()
-
     <div class="list-group">
         @foreach (Outcome o in Model.Outcomes)
         {
@@ -162,9 +161,11 @@
                 }
             });
 
+            var dashboardNav = false;
             $('#dashboardLink').on('click', function ()
             {
                 if (changesMade) {
+                    dashboardNav = true;
                     $('#dashboard').removeAttr('hidden');
                     $('#changesMade').modal();
                 }
@@ -178,9 +179,14 @@
                 e.preventDefault();
                 $('#assessmentInputForm').submit();
             });
+
+            $('#assessmentInputForm').submit(function (eventObj) {
+                if (dashboardNav == true) {
+                    $(this).append('<input type="hidden" name="dashboardBreadcrum"/> ');
+                    return true;
+                }
+            });
             
-
-
             var serialized = $('#assessmentInputForm').serializeArray();
             var changesMade = false;
             $('input[type=radio]').on('change', function () {

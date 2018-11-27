@@ -73,54 +73,55 @@ namespace CLS_SLE.Controllers
         }
 
         // POST: Customer/PasswordReset
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult PasswordReset([Bind(Include = "Email")] PasswordReset pwReset)
-        {
-            using (SLE_DB_ db = new SLE_DB_())
-            {
-                if (ModelState.IsValid)
-                {
-                    User user = db.Users.Where(u => u.Email == pwReset.Email).FirstOrDefault();
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult PasswordReset([Bind(Include = "Email")] PasswordReset pwReset)
+        //{
+        //    using (SLE_DB_ db = new SLE_DB_())
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            User user = db.Users.Where(u => u.Email == pwReset.Email).FirstOrDefault();
     
-                    if (user.Email == pwReset.Email)
-                    {
-                        // Send email
-                        MailMessage msg = new MailMessage();
-                        System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient("10.1.3.214", 25);
-                        try
-                        {
-                            msg.Subject = "Add Subject";
-                            msg.Body = "Add Email Body Part";
-                            msg.From = new MailAddress("NoReply@wctc.edu");
-                            msg.To.Add(user.Email);
-                            msg.IsBodyHtml = true;
-                            client.Host = "10.1.3.214";
-                            System.Net.NetworkCredential basicauthenticationinfo = new System.Net.NetworkCredential("billdelarosa218@gmail.com", "D3lar0sa");
-                            client.Port = int.Parse("587");
-                            client.EnableSsl = true;
-                            client.UseDefaultCredentials = false;
-                            client.Credentials = basicauthenticationinfo;
-                            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                            client.Send(msg);
-                        }
-                        catch (Exception ex)
-                        {
+        //            if (user.Email == pwReset.Email)
+        //            {
+        //                // Send email
+        //                MailMessage msg = new MailMessage();
+        //                System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient("10.1.3.214", 25);
+        //                try
+        //                {
+        //                    msg.Subject = "Add Subject";
+        //                    msg.Body = "Add Email Body Part";
+        //                    msg.From = new MailAddress("NoReply@wctc.edu");
+        //                    msg.To.Add(user.Email);
+        //                    msg.IsBodyHtml = true;
+        //                    client.Host = "10.1.3.214";
+        //                    System.Net.NetworkCredential basicauthenticationinfo = new System.Net.NetworkCredential("billdelarosa218@gmail.com", "D3lar0sa");
+        //                    client.Port = int.Parse("587");
+        //                    client.EnableSsl = true;
+        //                    client.UseDefaultCredentials = false;
+        //                    client.Credentials = basicauthenticationinfo;
+        //                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+        //                    client.Send(msg);
+        //                }
+        //                catch (Exception ex)
+        //                {
 
-                        }
-                    }
-                    else
-                    {
-                        // Redirect
+        //                }
+        //            }
+        //            else
+        //            {
+        //                // Redirect
 
-                        return RedirectToAction(actionName: "CheckEmail", controllerName: "Home");
-                    }
-                }
-            }
-            return View();
-        }
+        //                return RedirectToAction(actionName: "CheckEmail", controllerName: "Home");
+        //            }
+        //        }
+        //    }
+        //    return View();
+        //}
 
         // POST: Customer/PasswordReset
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult PasswordReset([Bind(Include = "Email")] PasswordReset pwReset)
@@ -129,26 +130,23 @@ namespace CLS_SLE.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    User user = db.Users.Where(u => u.Email == pwReset.Email).FirstOrDefault();
+                    //User user = db.Users.Where(u => u.Email == pwReset.Email).FirstOrDefault();
 
-                    if (user.Email == pwReset.Email)
-                    {
+                    //if (user.Email == pwReset.Email)
+                    //{
                         // Send email
                         MailMessage msg = new MailMessage();
                         System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient("10.1.3.214", 25);
                         try
                         {
-                            msg.Subject = "Add Subject";
-                            msg.Body = "Add Email Body Part";
+                            msg.Subject = "TEST";
+                            msg.Body = "TESTING PASSWORD RESET";
                             msg.From = new MailAddress("NoReply@wctc.edu");
-                            msg.To.Add(user.Email);
+                            msg.To.Add(pwReset.Email);
                             msg.IsBodyHtml = true;
                             client.Host = "10.1.3.214";
-                            System.Net.NetworkCredential basicauthenticationinfo = new System.Net.NetworkCredential("billdelarosa218@gmail.com", "D3lar0sa");
-                            client.Port = int.Parse("587");
-                            client.EnableSsl = true;
-                            client.UseDefaultCredentials = false;
-                            client.Credentials = basicauthenticationinfo;
+                            client.EnableSsl = false;
+                            client.UseDefaultCredentials = true;
                             client.DeliveryMethod = SmtpDeliveryMethod.Network;
                             client.Send(msg);
                         }
@@ -156,13 +154,13 @@ namespace CLS_SLE.Controllers
                         {
 
                         }
-                    }
-                    else
-                    {
+                    //}
+                    //else
+                    //{
                         // Redirect
 
                         return RedirectToAction(actionName: "CheckEmail", controllerName: "Home");
-                    }
+                    //}
                 }
             }
             return View();

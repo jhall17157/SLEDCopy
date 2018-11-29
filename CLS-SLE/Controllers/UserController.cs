@@ -63,7 +63,6 @@ namespace CLS_SLE.Controllers
 
         public ActionResult PasswordReset()
         {
-            using (SLE_TrackingEntities db = new SLE_TrackingEntities())
             return View();
         }
 

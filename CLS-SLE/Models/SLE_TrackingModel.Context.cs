@@ -12,13 +12,11 @@ namespace CLS_SLE.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    using System.Data.Entity.Core.Objects;
-    using System.Linq;
     
-    public partial class SLE_DB_ : DbContext
+    public partial class SLE_TrackingEntities : DbContext
     {
-        public SLE_DB_()
-            : base("name=SLE_DB_")
+        public SLE_TrackingEntities()
+            : base("name=SLE_TrackingEntities")
         {
         }
     
@@ -28,9 +26,9 @@ namespace CLS_SLE.Models
         }
     
         public virtual DbSet<Assessment> Assessments { get; set; }
+        public virtual DbSet<AssessmentCategory> AssessmentCategories { get; set; }
         public virtual DbSet<AssessmentLevel> AssessmentLevels { get; set; }
         public virtual DbSet<AssessmentRubric> AssessmentRubrics { get; set; }
-        public virtual DbSet<AssessmentStatu> AssessmentStatus { get; set; }
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<CourseProgram> CoursePrograms { get; set; }
         public virtual DbSet<Criterion> Criteria { get; set; }
@@ -53,30 +51,5 @@ namespace CLS_SLE.Models
         public virtual DbSet<InstructorAssessment> InstructorAssessments { get; set; }
         public virtual DbSet<RubricDetail> RubricDetails { get; set; }
         public virtual DbSet<SectionEnrollment> SectionEnrollments { get; set; }
-        public virtual DbSet<AssessmentCategory> AssessmentCategories { get; set; }
-    
-        [DbFunction("SLE_DB_", "GetCompletedCountBySectionRubric")]
-        public virtual IQueryable<GetCompletedCountBySectionRubric_Result> GetCompletedCountBySectionRubric(Nullable<int> sectionRubricID)
-        {
-            var sectionRubricIDParameter = sectionRubricID.HasValue ?
-                new ObjectParameter("SectionRubricID", sectionRubricID) :
-                new ObjectParameter("SectionRubricID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetCompletedCountBySectionRubric_Result>("[SLE_DB_].[GetCompletedCountBySectionRubric](@SectionRubricID)", sectionRubricIDParameter);
-        }
-    
-        [DbFunction("SLE_DB_", "Split")]
-        public virtual IQueryable<Split_Result> Split(string @string, string delimiter)
-        {
-            var stringParameter = @string != null ?
-                new ObjectParameter("String", @string) :
-                new ObjectParameter("String", typeof(string));
-    
-            var delimiterParameter = delimiter != null ?
-                new ObjectParameter("Delimiter", delimiter) :
-                new ObjectParameter("Delimiter", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<Split_Result>("[SLE_DB_].[Split](@String, @Delimiter)", stringParameter, delimiterParameter);
-        }
     }
 }

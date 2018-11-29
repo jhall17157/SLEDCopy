@@ -191,108 +191,99 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Assessment.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AssessmentCategory.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AssessmentLevel.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AssessmentRubric.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AssessmentStatu.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Course.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CourseProgram.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Criterion.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Department.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Enrollment.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EnrollmentStatu.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GetCompletedCountBySectionRubric_Result.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\InstructorAssessment.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Outcome.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PasswordReset.cs" />
     <Compile Include="Models\Person.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Program.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProgramDepartment.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Role.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\RubricDetail.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ScoreType.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Section.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SectionEnrollment.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SectionRubric.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Semester.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SLE.Context.cs">
+    <Compile Include="Models\SLE_TrackingModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SLE.Context.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SLE.cs">
+    <Compile Include="Models\SLE_TrackingModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SLE.Designer.cs">
+    <Compile Include="Models\SLE_TrackingModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SLE.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Split_Result.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\StudentProgram.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\StudentScore.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserPasswordReset.cs" />
     <Compile Include="Models\UserRole.cs">
-      <DependentUpon>SLE.tt</DependentUpon>
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserSignIn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -315,15 +306,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Models\SLE.Context.tt">
+    <Content Include="Models\SLE_TrackingModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>SLE.edmx</DependentUpon>
-      <LastGenOutput>SLE.Context.cs</LastGenOutput>
+      <DependentUpon>SLE_TrackingModel.edmx</DependentUpon>
+      <LastGenOutput>SLE_TrackingModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\SLE.tt">
+    <Content Include="Models\SLE_TrackingModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>SLE.edmx</DependentUpon>
-      <LastGenOutput>SLE.cs</LastGenOutput>
+      <DependentUpon>SLE_TrackingModel.edmx</DependentUpon>
+      <LastGenOutput>SLE_TrackingModel.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -352,12 +343,12 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
-    <EntityDeploy Include="Models\SLE.edmx">
+    <EntityDeploy Include="Models\SLE_TrackingModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>SLE.Designer.cs</LastGenOutput>
+      <LastGenOutput>SLE_TrackingModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\SLE.edmx.diagram">
-      <DependentUpon>SLE.edmx</DependentUpon>
+    <Content Include="Models\SLE_TrackingModel.edmx.diagram">
+      <DependentUpon>SLE_TrackingModel.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />

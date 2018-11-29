@@ -27,8 +27,8 @@ namespace CLS_SLE.Models
         public Nullable<decimal> OutcomePassRate { get; set; }
         public bool CalculateOutcomePassRate { get; set; }
     
+        public virtual AssessmentCategory AssessmentCategory { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AssessmentRubric> AssessmentRubrics { get; set; }
-        public virtual AssessmentCategory AssessmentCategory { get; set; }
     }
 }

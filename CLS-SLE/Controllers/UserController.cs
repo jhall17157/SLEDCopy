@@ -27,7 +27,7 @@ namespace CLS_SLE.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SignIn([Bind(Include = "Login,Password")] UserSignIn userSignIn)
         {
-            using (SLE_DB_ db = new SLE_DB_())
+            using (SLE_TrackingEntities db = new SLE_TrackingEntities())
             {
                 if (ModelState.IsValid)
                 {
@@ -63,7 +63,7 @@ namespace CLS_SLE.Controllers
 
         public ActionResult PasswordReset()
         {
-            using (SLE_DB_ db = new SLE_DB_())
+            using (SLE_TrackingEntities db = new SLE_TrackingEntities())
             return View();
         }
 
@@ -121,7 +121,7 @@ namespace CLS_SLE.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PasswordReset([Bind(Include = "Email")] PasswordReset pwReset)
         {
-            using (SLE_DB_ db = new SLE_DB_())
+            using (SLE_TrackingEntities db = new SLE_TrackingEntities())
             {
                 if (ModelState.IsValid)
                 {

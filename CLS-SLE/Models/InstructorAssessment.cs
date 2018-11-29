@@ -21,13 +21,13 @@ namespace CLS_SLE.Models
         public int SectionID { get; set; }
         public int CRN { get; set; }
         public string AssessmentName { get; set; }
+        public string Category { get; set; }
+        public string CategoryName { get; set; }
         public short RubricID { get; set; }
         public string RubricName { get; set; }
         public string AssessmentLevel { get; set; }
         public System.DateTime DueDate { get; set; }
         public Nullable<int> StudentCount { get; set; }
         public Nullable<int> CompletedCount { get; set; }
-        public string Category { get; set; }
-        public string CategoryName { get; set; }
     }
 }

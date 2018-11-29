@@ -26,8 +26,6 @@ namespace CLS_SLE.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public byte AssessmentID { get; set; }
-        public Nullable<decimal> OutcomePassRate { get; set; }
-        public bool CalculateOutcomePassRate { get; set; }
     
         public virtual Assessment Assessment { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

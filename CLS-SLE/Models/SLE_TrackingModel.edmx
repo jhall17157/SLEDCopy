@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="SLE_TrackingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="SLE_TrackingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Assessment">
           <Key>
             <PropertyRef Name="AssessmentID" />
@@ -587,30 +587,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="GetCompletedCountBySectionRubric" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="SectionRubricID" Type="int" Mode="In" />
-          <ReturnType>
-            <CollectionType>
-              <RowType>
-                <Property Name="SectionRubricID" Type="int" Nullable="false" />
-                <Property Name="CompletedCount" Type="int" />
-                <Property Name="StudentCount" Type="int" />
-              </RowType>
-            </CollectionType>
-          </ReturnType>
-        </Function>
-        <Function Name="Split" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="String" Type="nvarchar" Mode="In" />
-          <Parameter Name="Delimiter" Type="nchar" Mode="In" />
-          <ReturnType>
-            <CollectionType>
-              <RowType>
-                <Property Name="Id" Type="bigint" />
-                <Property Name="Data" Type="nvarchar" MaxLength="4000" />
-              </RowType>
-            </CollectionType>
-          </ReturnType>
-        </Function>
         <EntityContainer Name="SLE_TrackingModelStoreContainer">
           <EntitySet Name="Assessment" EntityType="Self.Assessment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AssessmentCategory" EntityType="Self.AssessmentCategory" Schema="dbo" store:Type="Tables" />
@@ -778,15 +754,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             <End Role="User" EntitySet="User" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SLE_TrackingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <ComplexType Name="GetCompletedCountBySectionRubric_Result">
-          <Property Name="SectionRubricID" Type="Int32" Nullable="false" />
-          <Property Name="CompletedCount" Type="Int32" />
-          <Property Name="StudentCount" Type="Int32" />
-        </ComplexType>
         <EntityType Name="Assessment">
           <Key>
             <PropertyRef Name="AssessmentID" />
@@ -795,10 +767,19 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Category" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="AssessmentRubrics" Relationship="Self.fk_AssessmentRubric_AssessmentID" FromRole="Assessment" ToRole="AssessmentRubric" />
           <Property Name="OutcomePassRate" Type="Decimal" Precision="4" Scale="3" />
           <Property Name="CalculateOutcomePassRate" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="AssessmentCategory" Relationship="SLE_TrackingModel.fk_Assessment_Category" FromRole="Assessment" ToRole="AssessmentCategory" />
+          <NavigationProperty Name="AssessmentCategory" Relationship="Self.fk_Assessment_Category" FromRole="Assessment" ToRole="AssessmentCategory" />
+          <NavigationProperty Name="AssessmentRubrics" Relationship="Self.fk_AssessmentRubric_AssessmentID" FromRole="Assessment" ToRole="AssessmentRubric" />
+        </EntityType>
+        <EntityType Name="AssessmentCategory">
+          <Key>
+            <PropertyRef Name="CategoryCode" />
+          </Key>
+          <Property Name="CategoryCode" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Assessments" Relationship="Self.fk_Assessment_Category" FromRole="AssessmentCategory" ToRole="Assessment" />
         </EntityType>
         <EntityType Name="AssessmentLevel">
           <Key>
@@ -816,20 +797,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="AssessmentID" Type="Byte" Nullable="false" />
-          <Property Name="OutcomePassRate" Type="Decimal" Precision="4" Scale="3" />
-          <Property Name="CalculateOutcomePassRate" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Assessment" Relationship="Self.fk_AssessmentRubric_AssessmentID" FromRole="AssessmentRubric" ToRole="Assessment" />
           <NavigationProperty Name="Outcomes" Relationship="Self.fk_Outcome_RubricID" FromRole="AssessmentRubric" ToRole="Outcome" />
           <NavigationProperty Name="ScoreTypes" Relationship="Self.fk_ScoreType_RubricID" FromRole="AssessmentRubric" ToRole="ScoreType" />
           <NavigationProperty Name="SectionRubrics" Relationship="Self.fk_SectionRubric_RubricID" FromRole="AssessmentRubric" ToRole="SectionRubric" />
-        </EntityType>
-        <EntityType Name="AssessmentStatu">
-          <Key>
-            <PropertyRef Name="AssessmentStatusCode" />
-          </Key>
-          <Property Name="AssessmentStatusCode" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="SectionRubrics" Relationship="Self.fk_SectionRubric_AssessmentStatusID" FromRole="AssessmentStatus" ToRole="SectionRubric" />
         </EntityType>
         <EntityType Name="Course">
           <Key>
@@ -987,11 +958,8 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="AssessmentLevelCode" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="AssessmentStatusCode" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="StatusDateTime" Type="DateTime" Precision="3" />
           <NavigationProperty Name="AssessmentLevel" Relationship="Self.fk_SectionRubric_AssessmentLevelID" FromRole="SectionRubric" ToRole="AssessmentLevel" />
           <NavigationProperty Name="AssessmentRubric" Relationship="Self.fk_SectionRubric_RubricID" FromRole="SectionRubric" ToRole="AssessmentRubric" />
-          <NavigationProperty Name="AssessmentStatu" Relationship="Self.fk_SectionRubric_AssessmentStatusID" FromRole="SectionRubric" ToRole="AssessmentStatus" />
           <NavigationProperty Name="Section" Relationship="Self.fk_SectionRubric_SectionID" FromRole="SectionRubric" ToRole="Section" />
         </EntityType>
         <EntityType Name="Semester">
@@ -1061,11 +1029,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             <PropertyRef Name="SectionID" />
             <PropertyRef Name="CRN" />
             <PropertyRef Name="AssessmentName" />
+            <PropertyRef Name="Category" />
+            <PropertyRef Name="CategoryName" />
             <PropertyRef Name="RubricID" />
             <PropertyRef Name="RubricName" />
             <PropertyRef Name="DueDate" />
-            <PropertyRef Name="Category" />
-            <PropertyRef Name="CategoryName" />
           </Key>
           <Property Name="Login" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="PersonID" Type="Int32" Nullable="false" />
@@ -1074,14 +1042,14 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <Property Name="SectionID" Type="Int32" Nullable="false" />
           <Property Name="CRN" Type="Int32" Nullable="false" />
           <Property Name="AssessmentName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Category" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="RubricID" Type="Int16" Nullable="false" />
           <Property Name="RubricName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="AssessmentLevel" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="DueDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="StudentCount" Type="Int32" />
           <Property Name="CompletedCount" Type="Int32" />
-          <Property Name="Category" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="CategoryName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="RubricDetail">
           <Key>
@@ -1117,6 +1085,18 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
+        <Association Name="fk_Assessment_Category">
+          <End Role="AssessmentCategory" Type="Self.AssessmentCategory" Multiplicity="1" />
+          <End Role="Assessment" Type="Self.Assessment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssessmentCategory">
+              <PropertyRef Name="CategoryCode" />
+            </Principal>
+            <Dependent Role="Assessment">
+              <PropertyRef Name="Category" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_AssessmentRubric_AssessmentID">
           <End Role="Assessment" Type="Self.Assessment" Multiplicity="1" />
           <End Role="AssessmentRubric" Type="Self.AssessmentRubric" Multiplicity="*" />
@@ -1174,18 +1154,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             </Principal>
             <Dependent Role="SectionRubric">
               <PropertyRef Name="RubricID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_SectionRubric_AssessmentStatusID">
-          <End Role="AssessmentStatus" Type="Self.AssessmentStatu" Multiplicity="1" />
-          <End Role="SectionRubric" Type="Self.SectionRubric" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AssessmentStatus">
-              <PropertyRef Name="AssessmentStatusCode" />
-            </Principal>
-            <Dependent Role="SectionRubric">
-              <PropertyRef Name="AssessmentStatusCode" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1417,11 +1385,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="SLE_DB_" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="SLE_TrackingEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Assessments" EntityType="Self.Assessment" />
+          <EntitySet Name="AssessmentCategories" EntityType="Self.AssessmentCategory" />
           <EntitySet Name="AssessmentLevels" EntityType="Self.AssessmentLevel" />
           <EntitySet Name="AssessmentRubrics" EntityType="Self.AssessmentRubric" />
-          <EntitySet Name="AssessmentStatus" EntityType="Self.AssessmentStatu" />
           <EntitySet Name="Courses" EntityType="Self.Course" />
           <EntitySet Name="CoursePrograms" EntityType="Self.CourseProgram" />
           <EntitySet Name="Criteria" EntityType="Self.Criterion" />
@@ -1444,6 +1412,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <EntitySet Name="InstructorAssessments" EntityType="Self.InstructorAssessment" />
           <EntitySet Name="RubricDetails" EntityType="Self.RubricDetail" />
           <EntitySet Name="SectionEnrollments" EntityType="Self.SectionEnrollment" />
+          <AssociationSet Name="fk_Assessment_Category" Association="Self.fk_Assessment_Category">
+            <End Role="AssessmentCategory" EntitySet="AssessmentCategories" />
+            <End Role="Assessment" EntitySet="Assessments" />
+          </AssociationSet>
           <AssociationSet Name="fk_AssessmentRubric_AssessmentID" Association="Self.fk_AssessmentRubric_AssessmentID">
             <End Role="Assessment" EntitySet="Assessments" />
             <End Role="AssessmentRubric" EntitySet="AssessmentRubrics" />
@@ -1462,10 +1434,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           </AssociationSet>
           <AssociationSet Name="fk_SectionRubric_RubricID" Association="Self.fk_SectionRubric_RubricID">
             <End Role="AssessmentRubric" EntitySet="AssessmentRubrics" />
-            <End Role="SectionRubric" EntitySet="SectionRubrics" />
-          </AssociationSet>
-          <AssociationSet Name="fk_SectionRubric_AssessmentStatusID" Association="Self.fk_SectionRubric_AssessmentStatusID">
-            <End Role="AssessmentStatus" EntitySet="AssessmentStatus" />
             <End Role="SectionRubric" EntitySet="SectionRubrics" />
           </AssociationSet>
           <AssociationSet Name="fk_Course_ProgramID" Association="Self.fk_Course_ProgramID">
@@ -1544,58 +1512,30 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             <End Role="Semester" EntitySet="Semesters" />
             <End Role="StudentProgram" EntitySet="StudentPrograms" />
           </AssociationSet>
-          <FunctionImport Name="GetCompletedCountBySectionRubric" IsComposable="true" ReturnType="Collection(SLE_TrackingModel.GetCompletedCountBySectionRubric_Result)">
-          <Parameter Name="SectionRubricID" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <EntitySet Name="AssessmentCategories" EntityType="SLE_TrackingModel.AssessmentCategory" />
-          <AssociationSet Name="fk_Assessment_Category" Association="SLE_TrackingModel.fk_Assessment_Category">
-            <End Role="AssessmentCategory" EntitySet="AssessmentCategories" />
-            <End Role="Assessment" EntitySet="Assessments" />
-          </AssociationSet>
-          <FunctionImport Name="Split" IsComposable="true" ReturnType="Collection(SLE_TrackingModel.Split_Result)">
-            <Parameter Name="String" Mode="In" Type="String" />
-            <Parameter Name="Delimiter" Mode="In" Type="String" />
-          </FunctionImport>
         </EntityContainer>
-        <EntityType Name="AssessmentCategory">
-          <Key>
-            <PropertyRef Name="CategoryCode" />
-          </Key>
-          <Property Name="CategoryCode" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Assessments" Relationship="SLE_TrackingModel.fk_Assessment_Category" FromRole="AssessmentCategory" ToRole="Assessment" />
-        </EntityType>
-        <Association Name="fk_Assessment_Category">
-          <End Type="SLE_TrackingModel.AssessmentCategory" Role="AssessmentCategory" Multiplicity="1" />
-          <End Type="SLE_TrackingModel.Assessment" Role="Assessment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AssessmentCategory">
-              <PropertyRef Name="CategoryCode" />
-            </Principal>
-            <Dependent Role="Assessment">
-              <PropertyRef Name="Category" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <ComplexType Name="Split_Result">
-          <Property Type="Int64" Name="Id" Nullable="true" />
-          <Property Type="String" Name="Data" Nullable="true" MaxLength="4000" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="SLE_TrackingModelStoreContainer" CdmEntityContainer="SLE_DB_">
+        <EntityContainerMapping StorageEntityContainer="SLE_TrackingModelStoreContainer" CdmEntityContainer="SLE_TrackingEntities">
           <EntitySetMapping Name="Assessments">
             <EntityTypeMapping TypeName="SLE_TrackingModel.Assessment">
               <MappingFragment StoreEntitySet="Assessment">
-                <ScalarProperty Name="CalculateOutcomePassRate" ColumnName="CalculateOutcomePassRate" />
-                <ScalarProperty Name="OutcomePassRate" ColumnName="OutcomePassRate" />
                 <ScalarProperty Name="AssessmentID" ColumnName="AssessmentID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="OutcomePassRate" ColumnName="OutcomePassRate" />
+                <ScalarProperty Name="CalculateOutcomePassRate" ColumnName="CalculateOutcomePassRate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AssessmentCategories">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.AssessmentCategory">
+              <MappingFragment StoreEntitySet="AssessmentCategory">
+                <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1615,7 +1555,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="AssessmentID" ColumnName="AssessmentID" />
-                </MappingFragment>
+              </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Courses">
@@ -1757,7 +1697,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="AssessmentLevelCode" ColumnName="AssessmentLevelCode" />
-                </MappingFragment>
+              </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Semesters">
@@ -1816,8 +1756,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <EntitySetMapping Name="InstructorAssessments">
             <EntityTypeMapping TypeName="SLE_TrackingModel.InstructorAssessment">
               <MappingFragment StoreEntitySet="InstructorAssessments">
-                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-                <ScalarProperty Name="Category" ColumnName="Category" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
                 <ScalarProperty Name="PersonID" ColumnName="PersonID" />
                 <ScalarProperty Name="CourseID" ColumnName="CourseID" />
@@ -1825,6 +1763,8 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
                 <ScalarProperty Name="SectionID" ColumnName="SectionID" />
                 <ScalarProperty Name="CRN" ColumnName="CRN" />
                 <ScalarProperty Name="AssessmentName" ColumnName="AssessmentName" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
                 <ScalarProperty Name="RubricID" ColumnName="RubricID" />
                 <ScalarProperty Name="RubricName" ColumnName="RubricName" />
                 <ScalarProperty Name="AssessmentLevel" ColumnName="AssessmentLevel" />
@@ -1861,32 +1801,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionName="SLE_TrackingModel.Store.GetCompletedCountBySectionRubric" FunctionImportName="GetCompletedCountBySectionRubric">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SLE_TrackingModel.GetCompletedCountBySectionRubric_Result">
-                <ScalarProperty Name="SectionRubricID" ColumnName="SectionRubricID" />
-                <ScalarProperty Name="CompletedCount" ColumnName="CompletedCount" />
-                <ScalarProperty Name="StudentCount" ColumnName="StudentCount" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <EntitySetMapping Name="AssessmentCategories">
-            <EntityTypeMapping TypeName="SLE_TrackingModel.AssessmentCategory">
-              <MappingFragment StoreEntitySet="AssessmentCategory">
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="Split" FunctionName="SLE_TrackingModel.Store.Split">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SLE_TrackingModel.Split_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Data" ColumnName="Data" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

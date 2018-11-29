@@ -2,7 +2,9 @@
 @{
     ViewBag.Title = "Dashboard";
 
-    Boolean firstItem = true;
+    Boolean clsFirstItem = true;
+    Boolean tsaFirstItem = true;
+    Boolean poFirstItem = true;
     
 }
 
@@ -13,7 +15,7 @@
     {
         if (item.Category == "CLS")
         {
-            if (firstItem)
+            if (clsFirstItem)
             {
                 <thead>
                     <tr>
@@ -24,6 +26,7 @@
                         <th class="text-center">Progress</th>
                     </tr>
                 </thead>
+                clsFirstItem = false;
             }
             <tr>
                 <td>
@@ -45,25 +48,25 @@
                     @Html.ActionLink("Assess", "StudentList", new { rubricID = item.RubricID })
                 </td>
             </tr>
-
-            firstItem = false;
+            
         }
+    }
 
-    }
-    @if (!firstItem) {
-    <thead>
-        <tr>
-            <th>
-                <h2>TSA Assessments</h2>
-            </th>
-        </tr>
-    </thead>
-    }
     @foreach (InstructorAssessment item in Model.assessments)
     {
+        if (tsaFirstItem)
+        {
+            <thead>
+                <tr>
+                    <th>
+                        <h2>TSA Assessments</h2>
+                    </th>
+                </tr>
+            </thead>
+        }
         if (item.Category == "TSA")
         {
-            if (firstItem)
+            if (tsaFirstItem)
             {
                 <thead>
                     <tr>
@@ -74,6 +77,7 @@
                         <th class="text-center">Progress</th>
                     </tr>
                 </thead>
+                tsaFirstItem = false;
             }
             <tr style="">
                 <td>
@@ -95,7 +99,58 @@
                     @Html.ActionLink("Assess", "StudentList", new { rubricID = item.RubricID })
                 </td>
             </tr>
+            
+        }
+    }
 
+    @foreach (InstructorAssessment item in Model.assessments)
+    {
+        if (poFirstItem)
+        {
+            <thead>
+                <tr>
+                    <th>
+                        <h2>PO Assessments</h2>
+                    </th>
+                </tr>
+            </thead>
+        }
+        if (item.Category == "PO")
+        {
+            if (poFirstItem)
+            {
+                <thead>
+                    <tr>
+                        <th><h2>TSA Assessments</h2></th>
+                        <th>Class</th>
+                        <th>CRN</th>
+                        <th>Due Date</th>
+                        <th class="text-center">Progress</th>
+                    </tr>
+                </thead>
+                poFirstItem = true;
+            }
+            <tr style="">
+                <td>
+                    @item.RubricName
+                </td>
+                <td>
+                    @item.CourseName
+                </td>
+                <td>
+                    @item.CRN
+                </td>
+                <td>
+                    @item.DueDate.ToShortDateString()
+                </td>
+                <td class="text-center">
+                    @item.CompletedCount / @item.StudentCount
+                </td>
+                <td>
+                    @Html.ActionLink("Assess", "StudentList", new { rubricID = item.RubricID })
+                </td>
+            </tr>
+            
         }
     }
 

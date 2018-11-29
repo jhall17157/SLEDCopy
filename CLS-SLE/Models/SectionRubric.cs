@@ -20,12 +20,9 @@ namespace CLS_SLE.Models
         public System.DateTime StartDate { get; set; }
         public System.DateTime EndDate { get; set; }
         public string AssessmentLevelCode { get; set; }
-        public string AssessmentStatusCode { get; set; }
-        public Nullable<System.DateTime> StatusDateTime { get; set; }
     
         public virtual AssessmentLevel AssessmentLevel { get; set; }
         public virtual AssessmentRubric AssessmentRubric { get; set; }
-        public virtual AssessmentStatu AssessmentStatu { get; set; }
         public virtual Section Section { get; set; }
     }
 }

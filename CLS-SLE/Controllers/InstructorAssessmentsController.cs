@@ -14,7 +14,7 @@ namespace CLS_SLE.Controllers
 {
     public class InstructorAssessmentsController : Controller
     {
-        private SLE_DB_ db = new SLE_DB_();
+        private SLE_TrackingEntities db = new SLE_TrackingEntities();
 
         // GET: InstructorAssessments
         public ActionResult Dashboard()

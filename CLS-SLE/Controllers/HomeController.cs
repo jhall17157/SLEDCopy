@@ -22,7 +22,7 @@ namespace CLS_SLE.Controllers
         {
             FormsAuthentication.SignOut();
             Session.Abandon();
-            return RedirectToAction(actionName: "SignIn", controllerName: "Home");
+            return RedirectToAction(actionName: "SignIn", controllerName: "User");
         }
 
         //GET: Home/SignedOut

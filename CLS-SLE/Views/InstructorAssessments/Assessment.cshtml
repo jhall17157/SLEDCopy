@@ -20,7 +20,13 @@
 </nav>
 
 <h1>@r.RubricName</h1>
-<h2>@s.FirstName @s.LastName</h2>
+<h2 class="float-left">@s.FirstName @s.LastName</h2>
+
+<div class="btn-group" role="group" style="margin-top:10px; margin-left:50px;">
+    <input type="button" class="btn btn-outline-dark" value="Previous Student" id="prevStudentSubmitTop" name="lastStudent" style="width:180px;">
+    <input type="button" class="btn btn-outline-dark" value="Back to all students" id="allStudentSubmitTop" name="backToStudents" style="width:180px;">
+    <input type="button" class="btn btn-outline-dark" value="Next Student" id="nextStudentSubmitTop" name="nextStudent" style="width:180px;">
+</div>
 
 <form id="assessmentInputForm" action="/InstructorAssessments/AssessmentInput" method="post">
     @Html.AntiForgeryToken()
@@ -180,9 +186,37 @@
                 $('#assessmentInputForm').submit();
             });
 
+            var prevStudentTop = false;
+            $('#prevStudentSubmitTop').on('click', function (e) {
+                e.preventDefault();
+                prevStudentTop = true;
+                $('#assessmentInputForm').submit();
+            });
+
+            var nextStudentTop = false;
+            $('#nextStudentSubmitTop').on('click', function (e) {
+                e.preventDefault();
+                nextStudentTop = true;
+                $('#assessmentInputForm').submit();
+            });
+
+            $('#allStudentSubmitTop').on('click', function (e) {
+                e.preventDefault();
+                $('#assessmentInputForm').submit();
+            });
+
+
             $('#assessmentInputForm').submit(function (eventObj) {
                 if (dashboardNav == true) {
                     $(this).append('<input type="hidden" name="dashboardBreadcrum"/> ');
+                    return true;
+                }
+                if (prevStudentTop == true) {
+                    $(this).append('<input type="hidden" name="lastStudent"/> ');
+                    return true;
+                }
+                if (nextStudentTop == true) {
+                    $(this).append('<input type="hidden" name="nextStudent"/> ');
                     return true;
                 }
             });

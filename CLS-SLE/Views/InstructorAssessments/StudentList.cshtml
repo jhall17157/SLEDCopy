@@ -29,7 +29,7 @@
     <tbody id="students">
         @foreach (SectionEnrollment student in Model.Students)
         {
-            <tr data-section="@student.sectionID" data-enrollment="@student.EnrollmentID" id="@student.EnrollmentID" class="student-row">
+            <tr data-section="@student.sectionID" data-enrollment="@student.EnrollmentID" data-rubricid="@a.RubricID" id="@student.EnrollmentID" class="student-row">
                 <td style="width: 120px;">@student.StudentID</td>
                 <td>@student.LastName, @student.FirstName</td>
                 <td style="width: 100px; text-align: center"> <span class="badge">@totalScoredFilled[x] / @totalCriteria</span></td>
@@ -44,7 +44,7 @@
     <script>
         $(function () {
             $('#students').on('click', '.student-row', function () {
-                location.href = "/InstructorAssessments/Assessment?sectionID=" + this.dataset.section + "&enrollmentID=" + this.dataset.enrollment;
+                location.href = "/InstructorAssessments/Assessment?sectionID=" + this.dataset.section + "&enrollmentID=" + this.dataset.enrollment + "&rubricID=" + this.dataset.rubricid;
             });
         })
     </script>

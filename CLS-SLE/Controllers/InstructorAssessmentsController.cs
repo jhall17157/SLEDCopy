@@ -86,12 +86,12 @@ namespace CLS_SLE.Controllers
             }
         }
         
-        public ActionResult Assessment(int sectionID, int enrollmentID)
+        public ActionResult Assessment(int sectionID, int enrollmentID, int rubricID)
         {
             try
             {
                 var personID = Convert.ToInt32(Session["personID"].ToString());
-                var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID && i.PersonID == personID);
+                var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID && i.PersonID == personID && i.RubricID == rubricID);
                 
                 Session["rubricID"] = instructor.RubricID;
                 

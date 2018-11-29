@@ -53,6 +53,7 @@ namespace CLS_SLE.Models
         public virtual DbSet<InstructorAssessment> InstructorAssessments { get; set; }
         public virtual DbSet<RubricDetail> RubricDetails { get; set; }
         public virtual DbSet<SectionEnrollment> SectionEnrollments { get; set; }
+        public virtual DbSet<AssessmentCategory> AssessmentCategories { get; set; }
     
         [DbFunction("SLE_DB_", "GetCompletedCountBySectionRubric")]
         public virtual IQueryable<GetCompletedCountBySectionRubric_Result> GetCompletedCountBySectionRubric(Nullable<int> sectionRubricID)
@@ -62,6 +63,20 @@ namespace CLS_SLE.Models
                 new ObjectParameter("SectionRubricID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetCompletedCountBySectionRubric_Result>("[SLE_DB_].[GetCompletedCountBySectionRubric](@SectionRubricID)", sectionRubricIDParameter);
+        }
+    
+        [DbFunction("SLE_DB_", "Split")]
+        public virtual IQueryable<Split_Result> Split(string @string, string delimiter)
+        {
+            var stringParameter = @string != null ?
+                new ObjectParameter("String", @string) :
+                new ObjectParameter("String", typeof(string));
+    
+            var delimiterParameter = delimiter != null ?
+                new ObjectParameter("Delimiter", delimiter) :
+                new ObjectParameter("Delimiter", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<Split_Result>("[SLE_DB_].[Split](@String, @Delimiter)", stringParameter, delimiterParameter);
         }
     }
 }

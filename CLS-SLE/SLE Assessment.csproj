@@ -193,6 +193,9 @@
     <Compile Include="Models\Assessment.cs">
       <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AssessmentCategory.cs">
+      <DependentUpon>SLE.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\AssessmentLevel.cs">
       <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
@@ -274,6 +277,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SLE.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Split_Result.cs">
+      <DependentUpon>SLE.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\StudentProgram.cs">
       <DependentUpon>SLE.tt</DependentUpon>

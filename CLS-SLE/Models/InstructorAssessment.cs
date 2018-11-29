@@ -28,5 +28,6 @@ namespace CLS_SLE.Models
         public Nullable<int> StudentCount { get; set; }
         public Nullable<int> CompletedCount { get; set; }
         public string Category { get; set; }
+        public string CategoryName { get; set; }
     }
 }

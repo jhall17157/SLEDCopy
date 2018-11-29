@@ -56,6 +56,8 @@
         <AssociationConnector Association="SLE_TrackingModel.fk_Section_SemesterID" ManuallyRouted="false" />
         <AssociationConnector Association="SLE_TrackingModel.fk_SectionRubric_SectionID" ManuallyRouted="false" />
         <AssociationConnector Association="SLE_TrackingModel.fk_StudentProgram_SemesterID" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="SLE_TrackingModel.AssessmentCategory" Width="1.5" PointX="11.5" PointY="23.625" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_Assessment_Category" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

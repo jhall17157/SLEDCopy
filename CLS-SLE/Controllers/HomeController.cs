@@ -24,13 +24,7 @@ namespace CLS_SLE.Controllers
             Session.Abandon();
             return RedirectToAction(actionName: "SignIn", controllerName: "User");
         }
-
-        //GET: Home/SignedOut
-        public ActionResult SignedOut()
-        {
-            return View();
-        }
-
+        
         //GET: Home/CheckEmail
         public ActionResult CheckEmail()
         {

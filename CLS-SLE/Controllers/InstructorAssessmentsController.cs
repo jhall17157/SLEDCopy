@@ -183,7 +183,7 @@ namespace CLS_SLE.Controllers
                 {
                     try
                     {
-                        return RedirectToAction(actionName: "Assessment", controllerName: "InstructorAssessments", routeValues: new { sectionID = enrollment.sectionID, enrollmentID = list[x+1] });
+                        return RedirectToAction(actionName: "Assessment", controllerName: "InstructorAssessments", routeValues: new { sectionID = enrollment.sectionID, enrollmentID = list[x+1], rubricID = Session["rubricID"] });
                     }
                     catch
                     {
@@ -205,7 +205,7 @@ namespace CLS_SLE.Controllers
                 {
                     try
                     {
-                        return RedirectToAction(actionName: "Assessment", controllerName: "InstructorAssessments", routeValues: new { sectionID = enrollment.sectionID, enrollmentID = list[x - 1] });
+                        return RedirectToAction(actionName: "Assessment", controllerName: "InstructorAssessments", routeValues: new { sectionID = enrollment.sectionID, enrollmentID = list[x - 1], rubricID = Session["rubricID"] });
                     }
                     catch
                     {

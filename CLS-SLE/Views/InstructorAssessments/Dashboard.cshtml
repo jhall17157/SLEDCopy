@@ -48,22 +48,12 @@
                     @Html.ActionLink("Assess", "StudentList", new { rubricID = item.RubricID })
                 </td>
             </tr>
-            
+
         }
     }
 
     @foreach (InstructorAssessment item in Model.assessments)
     {
-        if (tsaFirstItem)
-        {
-            <thead>
-                <tr>
-                    <th>
-                        <h2>TSA Assessments</h2>
-                    </th>
-                </tr>
-            </thead>
-        }
         if (item.Category == "TSA")
         {
             if (tsaFirstItem)
@@ -99,29 +89,18 @@
                     @Html.ActionLink("Assess", "StudentList", new { rubricID = item.RubricID })
                 </td>
             </tr>
-            
+
         }
     }
-
     @foreach (InstructorAssessment item in Model.assessments)
     {
-        if (poFirstItem)
-        {
-            <thead>
-                <tr>
-                    <th>
-                        <h2>PO Assessments</h2>
-                    </th>
-                </tr>
-            </thead>
-        }
         if (item.Category == "PO")
         {
             if (poFirstItem)
             {
                 <thead>
                     <tr>
-                        <th><h2>TSA Assessments</h2></th>
+                        <th><h2>PO Assessments</h2></th>
                         <th>Class</th>
                         <th>CRN</th>
                         <th>Due Date</th>
@@ -150,7 +129,7 @@
                     @Html.ActionLink("Assess", "StudentList", new { rubricID = item.RubricID })
                 </td>
             </tr>
-            
+
         }
     }
 

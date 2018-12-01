@@ -6,12 +6,14 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace CLS_SLE.Models
+
 {
-    public class UserPasswordReset
+    public class PasswordResetEdit
     {
         public string Login { get; set; }
-        public string Email { get; set; }
+        [Required]
+        public string Hash { get; set; }
         public string PWResetKey { get; set; }
-        public DateTime PWKeySentTime { get; set; }
+        public DateTime PWKeySentTime { get; }
     }
 }

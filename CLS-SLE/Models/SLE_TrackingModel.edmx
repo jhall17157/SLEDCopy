@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SLE_TrackingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SLE_TrackingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Assessment">
           <Key>
             <PropertyRef Name="AssessmentID" />
@@ -207,6 +207,9 @@
           <Property Name="LastLogin" Type="datetime" />
           <Property Name="MustResetPassword" Type="bit" Nullable="false" />
           <Property Name="Hash" Type="varchar" MaxLength="60" />
+          <Property Name="TemporaryPasswordHash" Type="varchar" MaxLength="60" />
+          <Property Name="TemporaryPasswordIssued" Type="datetime" />
+          <Property Name="TemporaryPasswordExpires" Type="datetime" />
         </EntityType>
         <EntityType Name="UserRole">
           <Key>
@@ -754,8 +757,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
             <End Role="User" EntitySet="User" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SLE_TrackingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1011,6 +1013,9 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <Property Name="MustResetPassword" Type="Boolean" Nullable="false" />
           <Property Name="Hash" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Person" Relationship="Self.fk_User_PersonID" FromRole="User" ToRole="Person" />
+          <Property Name="TemporaryPasswordHash" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="TemporaryPasswordIssued" Type="DateTime" Precision="3" />
+          <Property Name="TemporaryPasswordExpires" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="UserRole">
           <Key>
@@ -1735,6 +1740,9 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="SLE_TrackingModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="TemporaryPasswordExpires" ColumnName="TemporaryPasswordExpires" />
+                <ScalarProperty Name="TemporaryPasswordIssued" ColumnName="TemporaryPasswordIssued" />
+                <ScalarProperty Name="TemporaryPasswordHash" ColumnName="TemporaryPasswordHash" />
                 <ScalarProperty Name="PersonID" ColumnName="PersonID" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
                 <ScalarProperty Name="Email" ColumnName="Email" />

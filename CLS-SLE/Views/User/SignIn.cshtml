@@ -10,7 +10,7 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <!-- PersonID -->
         <div class="form-group">
-            @Html.LabelFor(model => model.Login, "Login", htmlAttributes: new { @class = "control-label col-md-2" })
+            <h3>Login</h3>
             <div class="col-md-10">
                 @Html.TextBoxFor(model => model.Login, new { @class = "form-control", placeholder = "Enter UserID" })
                 @Html.ValidationMessageFor(model => model.Login, "", new { @class = "text-danger" })
@@ -18,7 +18,7 @@
         </div>
         <!-- Password -->
         <div class="form-group">
-            @Html.LabelFor(model => model.Hash, "Hash", htmlAttributes: new { @class = "control-label col-md-2" })
+            <h3>Password</h3>
             <div class="col-md-10">
                 @Html.PasswordFor(model => model.Hash, new { @class = "form-control", placeholder = "Enter Password" })
                 @Html.ValidationMessageFor(model => model.Hash, "", new { @class = "text-danger" })

@@ -10,10 +10,15 @@ namespace CLS_SLE.Models
 {
     public class PasswordResetEdit
     {
+        [Required]
         public string Login { get; set; }
         [Required]
-        public string Hash { get; set; }
+        public string email { get; set; }
+        [Required]
         public string PWResetKey { get; set; }
-        public DateTime PWKeySentTime { get; }
+        [Required]
+        public string Hash { get; set; }
+        [Required]
+        public string SecondHash { get; set; }
     }
 }

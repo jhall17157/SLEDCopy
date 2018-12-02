@@ -155,7 +155,8 @@ namespace CLS_SLE.Controllers
                 {
                     using (SLE_TrackingEntities db = new SLE_TrackingEntities())
                     {
-                        User user = db.Users.Where(u => u.Login == (((User)Session["User"]).Login)).FirstOrDefault();
+                        String userLogin = ((User)Session["User"]).Login;
+                        User user = db.Users.Where(u => u.Login == userLogin).FirstOrDefault();
 
                         if (BCrypt.Net.BCrypt.Verify(cPassword.Password, user.Hash))
                         {
@@ -165,7 +166,7 @@ namespace CLS_SLE.Controllers
                             db.SaveChanges();
                         } else
                         {
-                            return View();
+                            ModelState.AddModelError("Password", "Current password is Incorrect");
                         }
 
                     }

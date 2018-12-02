@@ -36,7 +36,7 @@ namespace CLS_SLE.Controllers
                     // hash & salt the posted password
                     bool bcb = BCrypt.Net.BCrypt.Verify(userSignIn.Hash, user.Hash);
                     // Compared posted Hash to customer password
-                    if (bcb == true)
+                    if (bcb)
                     {
                         if (user.MustResetPassword == false)
                         {
@@ -71,7 +71,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [OutputCache(NoStore = true, Location = System.Web.UI.OutputCacheLocation.None)]
         [HttpGet]
         public ActionResult PasswordReset()
@@ -130,6 +130,51 @@ namespace CLS_SLE.Controllers
         //    }
         //    return View();
         //}
+
+        public ActionResult ChangePassword()
+        {
+            if (Session["User"] != null)
+            {
+                
+                return View();
+            }
+
+            return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
+
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePassword(UserChangePassword cPassword)
+        {
+            
+           if (Session["User"] != null )
+            {
+                if (ModelState.IsValid)
+                {
+                    using (SLE_TrackingEntities db = new SLE_TrackingEntities())
+                    {
+                        User user = db.Users.Where(u => u.Login == (((User)Session["User"]).Login)).FirstOrDefault();
+
+                        if (BCrypt.Net.BCrypt.Verify(cPassword.Password, user.Hash))
+                        {
+                            String hash = BCrypt.Net.BCrypt.HashPassword(cPassword.NewPassword);
+
+                            user.Hash = hash;
+                            db.SaveChanges();
+                        } else
+                        {
+                            return View();
+                        }
+
+                    }
+                }
+
+                return View();
+            }
+            return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]

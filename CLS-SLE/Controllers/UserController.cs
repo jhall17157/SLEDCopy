@@ -25,7 +25,7 @@ namespace CLS_SLE.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SignIn([Bind(Include = "Login,Password")] UserSignIn userSignIn)
+        public ActionResult SignIn([Bind(Include = "Login,Hash")] UserSignIn userSignIn)
         {
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())
             {
@@ -34,68 +34,87 @@ namespace CLS_SLE.Controllers
                     User user = db.Users.Where(u => u.Login == userSignIn.Login).FirstOrDefault();
                     
                     // hash & salt the posted password
-                    string str = BCrypt.Net.BCrypt.HashString(userSignIn.Password, 10);
-                    bool bcb = BCrypt.Net.BCrypt.Verify(userSignIn.Password, user.Hash);
+                    bool bcb = BCrypt.Net.BCrypt.Verify(userSignIn.Hash, user.Hash);
                     // Compared posted Hash to customer password
                     if (bcb == true)
                     {
-                        // Passwords match
-                        // authenticate user (Stores the UserID in an encrypted cookie)
-                        // normally, you would require HTTPS
-                        FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
-                        Session["personID"] = user.PersonID;
-                        Session["User"] = user;
-                        user.LastLogin = DateTime.Now;
-                        db.SaveChanges();
-                        
-                        // Redirect to Home page
-                        return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
+                        if (user.MustResetPassword == false)
+                        {
+                            // Passwords match
+                            // authenticate user (Stores the UserID in an encrypted cookie)
+                            FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
+                            Session["personID"] = user.PersonID;
+                            Session["User"] = user;
+                            user.LastLogin = DateTime.Now;
+                            db.SaveChanges();
+                            return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
+                        }
+                        else
+                        {
+                            // Passwords match
+                            // authenticate user (Stores the UserID in an encrypted cookie)
+                            FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
+                            Session["personID"] = user.PersonID;
+                            Session["User"] = user;
+                            user.LastLogin = DateTime.Now;
+                            db.SaveChanges();
+                            return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
+                        }
                     }
                     else
                     {
                         // Passwords do not match
-                        ModelState.AddModelError("Password", "Incorrect password");
+                        ModelState.AddModelError("Hash", "Incorrect password");
                     }
                 }
                 return View();
             }
         }
 
+        [AllowAnonymous]
+        [OutputCache(NoStore = true, Location = System.Web.UI.OutputCacheLocation.None)]
+        [HttpGet]
         public ActionResult PasswordReset()
         {
             return View();
         }
 
-        // POST: Customer/PasswordReset
+        //// POST: User/PasswordReset
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public ActionResult PasswordReset([Bind(Include = "Email")] PasswordReset pwReset)
         //{
-        //    using (SLE_DB_ db = new SLE_DB_())
+        //    using (SLE_TrackingEntities db = new SLE_TrackingEntities())
         //    {
         //        if (ModelState.IsValid)
         //        {
         //            User user = db.Users.Where(u => u.Email == pwReset.Email).FirstOrDefault();
-    
+
         //            if (user.Email == pwReset.Email)
         //            {
+        //                string alpha = "ABCDEFGHIJKLMNOPQRSTUWXYZ";
+        //                string rndChars = "";
+        //                Random rnd = new Random();
+        //                for (int i = 1; i <= 6; i++)
+        //                {
+        //                    rndChars += alpha[rnd.Next(alpha.Length)];
+        //                }
+        //                // reset key + time
+        //                user.TemporaryPasswordIssued = DateTime.Now;
+        //                user.TemporaryPasswordHash = rndChars;
+        //                db.SaveChanges();
         //                // Send email
         //                MailMessage msg = new MailMessage();
-        //                System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient("10.1.3.214", 25);
+        //                SmtpClient client = new SmtpClient();
         //                try
         //                {
-        //                    msg.Subject = "Add Subject";
-        //                    msg.Body = "Add Email Body Part";
+        //                    msg.Subject = "PASSWORD RESET";
+        //                    msg.Body = msg.Body = "Click the link below and enter the code to reset your password for SLE Assessment Login. <br> " +
+        //                               "https:/sle-dev.wctc.edu/User/PasswordResetForm/" + user.Login + "<br> Your unique code:" +
+        //                               "<br><strong>" + user.TemporaryPasswordHash + "</strong>";
         //                    msg.From = new MailAddress("NoReply@wctc.edu");
-        //                    msg.To.Add(user.Email);
+        //                    msg.To.Add(pwReset.Email);
         //                    msg.IsBodyHtml = true;
-        //                    client.Host = "10.1.3.214";
-        //                    System.Net.NetworkCredential basicauthenticationinfo = new System.Net.NetworkCredential("billdelarosa218@gmail.com", "D3lar0sa");
-        //                    client.Port = int.Parse("587");
-        //                    client.EnableSsl = true;
-        //                    client.UseDefaultCredentials = false;
-        //                    client.Credentials = basicauthenticationinfo;
-        //                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
         //                    client.Send(msg);
         //                }
         //                catch (Exception ex)
@@ -105,16 +124,12 @@ namespace CLS_SLE.Controllers
         //            }
         //            else
         //            {
-        //                // Redirect
-
         //                return RedirectToAction(actionName: "CheckEmail", controllerName: "Home");
         //            }
         //        }
         //    }
         //    return View();
         //}
-
-        // POST: Customer/PasswordReset
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -124,39 +139,89 @@ namespace CLS_SLE.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    //User user = db.Users.Where(u => u.Email == pwReset.Email).FirstOrDefault();
-
+                    User user = db.Users.Where(u => u.Login == "yoda").FirstOrDefault();
                     //if (user.Email == pwReset.Email)
                     //{
-                        // Send email
-                        MailMessage msg = new MailMessage();
-                        System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient("10.1.3.214", 25);
-                        try
-                        {
-                            msg.Subject = "TEST";
-                            msg.Body = "TESTING PASSWORD RESET";
-                            msg.From = new MailAddress("NoReply@wctc.edu");
-                            msg.To.Add(pwReset.Email);
-                            msg.IsBodyHtml = true;
-                            client.Host = "10.1.3.214";
-                            client.EnableSsl = false;
-                            client.UseDefaultCredentials = true;
-                            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                            client.Send(msg);
-                        }
-                        catch (Exception ex)
-                        {
+                    string alpha = "ABCDEFGHIJKLMNOPQRSTUWXYZ";
+                    string rndChars = "";
+                    Random rnd = new Random();
+                    for (int i = 1; i <= 6; i++)
+                    {
+                        rndChars += alpha[rnd.Next(alpha.Length)];
+                    }
+                    // reset key + time
+                    user.TemporaryPasswordIssued = DateTime.Now;
+                    user.TemporaryPasswordHash = rndChars;
+                    // Send email
+                    MailMessage msg = new MailMessage();
+                    SmtpClient client = new SmtpClient();
+                    try
+                    {
+                        msg.Subject = "PASSWORD RESET";
+                        msg.Body = msg.Body = "Click the link below and enter the code to reset your password for SLE Assessment Login. <br> " +
+                                   "<a Href = http//localhost:64901/User/PasswordResetForm/>" + user.Login + "</a><br> Your unique code:" +
+                                   "<br><strong>" + user.TemporaryPasswordHash + "</strong>";
+                        msg.From = new MailAddress("NoReply@wctc.edu");
+                        msg.To.Add(pwReset.Email);
+                        msg.IsBodyHtml = true;
+                        client.Send(msg);
+                    }
+                    catch (Exception ex)
+                    {
 
-                        }
+                    }
                     //}
                     //else
                     //{
-                        // Redirect
+                    // Redirect
 
-                        return RedirectToAction(actionName: "CheckEmail", controllerName: "Home");
+                    return RedirectToAction(actionName: "CheckEmail", controllerName: "Home");
                     //}
                 }
             }
+            return View();
+        }
+
+
+        // GET: User/PasswordResetForm
+        [AllowAnonymous]
+        [OutputCache(NoStore = true, Location = System.Web.UI.OutputCacheLocation.None)]
+        [HttpGet]
+        public ActionResult PasswordResetForm()
+        {
+            FormsAuthentication.SignOut();
+            Session.Abandon();
+            return View();
+        }
+
+        // POST
+        [HttpPost]
+        public ActionResult PasswordResetForm([Bind(Include = "Login,Hash,PWResetKey,PWKeySentTime")] PasswordResetEdit pwEdit)
+        {
+            using (SLE_TrackingEntities db = new SLE_TrackingEntities())
+            {
+                User user = db.Users.Where(u => u.Login == pwEdit.Login).FirstOrDefault();
+
+                if (user.TemporaryPasswordHash == pwEdit.PWResetKey &&
+                    (DateTime.Now - user.TemporaryPasswordIssued) < TimeSpan.Parse("00:15:00.0000000"))
+                {
+                    user.Hash = BCrypt.Net.BCrypt.HashPassword(pwEdit.Hash, user.Hash);
+                    db.SaveChanges();
+                }
+                else if ((DateTime.Now - user.TemporaryPasswordIssued) > TimeSpan.Parse("00:15:00.0000000"))
+                {
+                    return RedirectToAction(actionName: "BadCode", controllerName: "User");
+                }
+            }
+            return RedirectToAction(actionName: "Index", controllerName: "Home");
+        }
+
+        public ActionResult BadCode()
+        {
+            return View();
+        }
+        public ActionResult BadEmail()
+        {
             return View();
         }
     }

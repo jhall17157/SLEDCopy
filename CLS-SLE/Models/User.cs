@@ -22,7 +22,6 @@ namespace CLS_SLE.Models
         public string Hash { get; set; }
         public string TemporaryPasswordHash { get; set; }
         public Nullable<System.DateTime> TemporaryPasswordIssued { get; set; }
-        public Nullable<System.DateTime> TemporaryPasswordExpires { get; set; }
     
         public virtual Person Person { get; set; }
     }

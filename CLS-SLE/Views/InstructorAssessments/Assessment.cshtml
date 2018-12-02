@@ -11,8 +11,6 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        @*<li class="breadcrumb-item">@Html.ActionLink("Dashboard", "Dashboard")</li>*@
-        @*<li class="breadcrumb-item">@Html.ActionLink("Student List", "StudentList", new { rubricID = r.RubricID })</li>*@
         <li class="breadcrumb-item"><a href="#" id="dashboardLink">Dashboard</a></li>
         <li class="breadcrumb-item"><a href="#" id="studentLink">Student List</a></li>
         <li class="breadcrumb-item active" aria-current="page">Assessment</li>
@@ -22,7 +20,7 @@
 <h1>@r.RubricName</h1>
 <h2 class="float-left">@s.FirstName @s.LastName</h2>
 
-<div class="btn-group" role="group" style="margin-top:10px; margin-left:50px;">
+<div class="btn-group" role="group" style="margin-bottom:10px; margin-left:50px;">
     <input type="button" class="btn btn-outline-dark" value="Previous Student" id="prevStudentSubmitTop" name="lastStudent" style="width:180px;">
     <input type="button" class="btn btn-outline-dark" value="Back to all students" id="allStudentSubmitTop" name="backToStudents" style="width:180px;">
     <input type="button" class="btn btn-outline-dark" value="Next Student" id="nextStudentSubmitTop" name="nextStudent" style="width:180px;">

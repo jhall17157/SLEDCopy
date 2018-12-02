@@ -1015,7 +1015,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <NavigationProperty Name="Person" Relationship="Self.fk_User_PersonID" FromRole="User" ToRole="Person" />
           <Property Name="TemporaryPasswordHash" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
           <Property Name="TemporaryPasswordIssued" Type="DateTime" Precision="3" />
-          <Property Name="TemporaryPasswordExpires" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="UserRole">
           <Key>
@@ -1740,7 +1739,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have 
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="SLE_TrackingModel.User">
               <MappingFragment StoreEntitySet="User">
-                <ScalarProperty Name="TemporaryPasswordExpires" ColumnName="TemporaryPasswordExpires" />
                 <ScalarProperty Name="TemporaryPasswordIssued" ColumnName="TemporaryPasswordIssued" />
                 <ScalarProperty Name="TemporaryPasswordHash" ColumnName="TemporaryPasswordHash" />
                 <ScalarProperty Name="PersonID" ColumnName="PersonID" />

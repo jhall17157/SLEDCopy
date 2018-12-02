@@ -18,10 +18,10 @@
         </div>
         <!-- Password -->
         <div class="form-group">
-            @Html.LabelFor(model => model.Password, "Password", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Hash, "Hash", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.PasswordFor(model => model.Password, new { @class = "form-control", placeholder = "Enter Password" })
-                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                @Html.PasswordFor(model => model.Hash, new { @class = "form-control", placeholder = "Enter Password" })
+                @Html.ValidationMessageFor(model => model.Hash, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">

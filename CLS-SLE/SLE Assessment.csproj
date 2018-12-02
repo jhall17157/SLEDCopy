@@ -227,6 +227,7 @@
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PasswordReset.cs" />
+    <Compile Include="Models\PasswrodResetEdit.cs" />
     <Compile Include="Models\Person.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
@@ -398,6 +399,7 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\User\PasswordReset.cshtml" />
+    <Content Include="Views\User\PasswordResetForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -135,12 +135,9 @@ namespace CLS_SLE.Controllers
         {
             if (Session["User"] != null)
             {
-                
                 return View();
             }
-
             return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
-
         }
 
         [Authorize]
@@ -198,18 +195,19 @@ namespace CLS_SLE.Controllers
                     // reset key + time
                     user.TemporaryPasswordIssued = DateTime.Now;
                     user.TemporaryPasswordHash = rndChars;
+                    db.SaveChanges();
                     // Send email
                     MailMessage msg = new MailMessage();
                     SmtpClient client = new SmtpClient();
                     try
                     {
-                        msg.Subject = "PASSWORD RESET";
-                        msg.Body = msg.Body = "Click the link below and enter the code to reset your password for SLE Assessment Login. <br> " +
-                                   "<a Href = http//localhost:64901/User/PasswordResetForm/>" + user.Login + "</a><br> Your unique code:" +
-                                   "<br><strong>" + user.TemporaryPasswordHash + "</strong>";
                         msg.From = new MailAddress("NoReply@wctc.edu");
-                        msg.To.Add(pwReset.Email);
+                        msg.Subject = "PASSWORD RESET";
                         msg.IsBodyHtml = true;
+                        msg.Body = "Click the link below and enter the code to reset your password for SLE Assessment Login. <br> " +
+                                   "<a href = localhost:64901/User/PasswordResetForm>Link</a>" + "<br> Your unique code:" +
+                                   "<br><strong>" + user.TemporaryPasswordHash + "</strong>";
+                        msg.To.Add(pwReset.Email);
                         client.Send(msg);
                     }
                     catch (Exception ex)
@@ -242,24 +240,43 @@ namespace CLS_SLE.Controllers
 
         // POST
         [HttpPost]
-        public ActionResult PasswordResetForm([Bind(Include = "Login,Hash,PWResetKey,PWKeySentTime")] PasswordResetEdit pwEdit)
+        public ActionResult PasswordResetForm([Bind(Include = "Login,Email,PWResetKey,Hash,SecondHash")] PasswordResetEdit pwEdit)
         {
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())
-            {
-                User user = db.Users.Where(u => u.Login == pwEdit.Login).FirstOrDefault();
-
-                if (user.TemporaryPasswordHash == pwEdit.PWResetKey &&
-                    (DateTime.Now - user.TemporaryPasswordIssued) < TimeSpan.Parse("00:15:00.0000000"))
+                if (ModelState.IsValid)
                 {
-                    user.Hash = BCrypt.Net.BCrypt.HashPassword(pwEdit.Hash, user.Hash);
-                    db.SaveChanges();
+                    User user = db.Users.Where(u => u.Login == pwEdit.Login).FirstOrDefault();
+                    if (user.TemporaryPasswordHash == pwEdit.PWResetKey &&
+                        (DateTime.Now - user.TemporaryPasswordIssued) < TimeSpan.Parse("00:15:00.0000000"))
+                    {
+                        if (user.Login == pwEdit.Login && user.Email == pwEdit.Email && user.TemporaryPasswordHash == pwEdit.PWResetKey && pwEdit.Hash == pwEdit.SecondHash)
+                        {
+                            if (pwEdit.Hash != pwEdit.Login && pwEdit.Hash != "Password" && pwEdit.Hash != "Test")
+                            {
+                                user.Hash = BCrypt.Net.BCrypt.HashPassword(pwEdit.Hash);
+                                db.SaveChanges();
+                                return RedirectToAction(actionName: "GoodPass", controllerName: "User");
+                            }
+                            else
+                            {
+                                return RedirectToAction(actionName: "BadPass", controllerName: "User");
+                            }
+                        }
+                        else
+                        {
+                            return RedirectToAction(actionName: "BadPass", controllerName: "User");
+                        }
+                    }
+                    else if((DateTime.Now - user.TemporaryPasswordIssued) > TimeSpan.Parse("00:15:00.0000000"))
+                    {
+                        return RedirectToAction(actionName: "BadCode", controllerName: "User");
+                    }
+                    return RedirectToAction(actionName: "GoodPass", controllerName: "User");
                 }
-                else if ((DateTime.Now - user.TemporaryPasswordIssued) > TimeSpan.Parse("00:15:00.0000000"))
+                else
                 {
                     return RedirectToAction(actionName: "BadCode", controllerName: "User");
                 }
-            }
-            return RedirectToAction(actionName: "Index", controllerName: "Home");
         }
 
         public ActionResult BadCode()
@@ -267,6 +284,14 @@ namespace CLS_SLE.Controllers
             return View();
         }
         public ActionResult BadEmail()
+        {
+            return View();
+        }
+        public ActionResult GoodPass()
+        {
+            return View();
+        }
+        public ActionResult BadPass()
         {
             return View();
         }

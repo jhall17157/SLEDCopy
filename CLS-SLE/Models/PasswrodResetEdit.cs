@@ -13,10 +13,11 @@ namespace CLS_SLE.Models
         [Required]
         public string Login { get; set; }
         [Required]
-        public string email { get; set; }
+        public string Email { get; set; }
         [Required]
         public string PWResetKey { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Password Change Could Not Be Completed"), 
+        PasswordPropertyText, MinLength(8), MaxLength(16)]
         public string Hash { get; set; }
         [Required]
         public string SecondHash { get; set; }

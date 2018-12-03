@@ -20,15 +20,8 @@
 <div class="clearfix">
     <h1>@r.RubricName</h1>
     <h2 class="float-left">@s.FirstName @s.LastName</h2>
-
-    <div class="btn-group float-right" role="group" style="margin-bottom:10px; margin-left:50px;">
-        <input type="button" class="btn btn-outline-dark" value="Previous Student" id="prevStudentSubmitTop" name="lastStudent" style="width:170px;">
-        <input type="button" class="btn btn-outline-dark" value="Back to all students" id="allStudentSubmitTop" name="backToStudents" style="width:170px;">
-        <input type="button" class="btn btn-outline-dark" value="Next Student" id="nextStudentSubmitTop" name="nextStudent" style="width:170px;">
-    </div>
 </div>
 
-<div class="clearfix">
     <form id="assessmentInputForm" action="/InstructorAssessments/AssessmentInput" method="post">
         @Html.AntiForgeryToken()
         <div class="list-group">
@@ -54,62 +47,64 @@
                         }
                     }
                 }
-                <div id="@o.OutcomeID" class="list-group-item" style="padding: 0;">
-                    <div class="btn btn-outline-dark" style="font-size: 1.2rem; display: block; text-align:left; text-decoration: none; border-radius: 0px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"
-                         data-toggle="collapse"
-                         href="#group_@o.OutcomeID" role="button" aria-expanded="false"
-                         aria-controls="group_@o.OutcomeID">
-                        <span style="position: absolute; left: -5px;" class="fa fa-caret-down"></span>
-                        @o.Name
-                        <span style="position: absolute; right: -25px; top: 10px; width: 60px;" class="float-right badge badge-dark"><span id="filled_@o.OutcomeID">@filledCriteria</span> / @numCriteria</span>
-                    </div>
-                    <ul class="list-group list-group-flush collapse  @(@filledCriteria == @numCriteria ? "" : "show") " id="group_@o.OutcomeID">
+            <div id="@o.OutcomeID" class="list-group-item" style="padding: 0;">
+                
+                <div class="btn btn-outline-dark" style="font-size: 2.5ex; display: block; text-align:left; text-decoration: none; border-radius: 0px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"
+                     data-toggle="collapse"
+                     href="#group_@o.OutcomeID" role="button" aria-expanded="false"
+                     aria-controls="group_@o.OutcomeID">
+                    <i class="material-icons" style="@(@filledCriteria == @numCriteria ? "" : "transform: rotate(180deg); border-spacing: 180px;")">expand_more </i>
+                    @o.Name
+                    <span style="position: absolute; right: -25px; top: 10px; width: 60px;" class="float-right badge badge-dark"><span id="filled_@o.OutcomeID">@filledCriteria</span> / @numCriteria</span>
+                </div>
+
+                <ul class="list-group list-group-flush collapse  @(@filledCriteria == @numCriteria ? "" : "show") " id="group_@o.OutcomeID">
 
 
-                        @foreach (RubricDetail rb in Model.Criteria)
+                    @foreach (RubricDetail rb in Model.Criteria)
+                    {
+                        if (o.Name.Equals(rb.OutcomeName))
                         {
-                            if (o.Name.Equals(rb.OutcomeName))
-                            {
-                                <li class="list-group-item">
-                                    <div class="float-left">
-                                        @rb.CriteriaName
-                                    </div>
-                                    <div class="float-right">
-                                        @foreach (ScoreType i in Model.Selectors)
-                                        {
-                                            <div class="form-check" id="@o.OutcomeID">
-                                                @foreach (StudentScore ss in Model.StudentScores)
-                                                {
-                                                    exists = false;
-                                                    if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
-                                                    {
-                                                        <label class="form-check-label desc">
-                                                            @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { Checked = "checked", @class = "form-check-input" })
-                                                            @i.Description
-                                                        </label>
-                                                        exists = true;
-                                                        break;
-                                                    }
-                                                }
-                                                @if (!exists)
+                            <li class="list-group-item">
+                                <div class="float-left">
+                                    @rb.CriteriaName
+                                </div>
+                                <div class="float-right">
+                                    @foreach (ScoreType i in Model.Selectors)
+                                    {
+                                        <div class="form-check" id="@o.OutcomeID">
+                                            @foreach (StudentScore ss in Model.StudentScores)
+                                            {
+                                                exists = false;
+                                                if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
                                                 {
                                                     <label class="form-check-label desc">
-                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { @class = "form-check-input" })
+                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { Checked = "checked", @class = "form-check-input" })
                                                         @i.Description
                                                     </label>
+                                                    exists = true;
+                                                    break;
                                                 }
+                                            }
+                                            @if (!exists)
+                                            {
+                                                <label class="form-check-label desc">
+                                                    @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { @class = "form-check-input" })
+                                                    @i.Description
+                                                </label>
+                                            }
 
-                                            </div>
-                                        }
-                                    </div>
-                                </li>
-                            }
+                                        </div>
+                                    }
+                                </div>
+                            </li>
                         }
-                    </ul>
-                </div>
+                    }
+                </ul>
+            </div>
             }
         </div>
-        <div class="text-center right">
+        <div class="text-center">
             <div class="btn-group" role="group" style="margin-top:10px;">
                 <input type="submit" class="btn btn-outline-dark" value="Previous Student" id="prevStudentSubmit" name="lastStudent" style="width:170px;">
                 <input type="submit" class="btn btn-outline-dark" value="Back to all students" id="allStudentSubmit" name="backToStudents" style="width:170px;">
@@ -117,7 +112,7 @@
             </div>
         </div>
     </form>
-</div>
+
 
 
 <style>
@@ -155,6 +150,25 @@
     <script>
         $(function ()
         {
+            $('.list-group').on('show.bs.collapse', function () {
+                console.log();
+                $(this.parentElement.firstElementChild.firstElementChild).first().animate({ borderSpacing: 180 }, {
+                    step: function (now, fx) {
+                        $(this).css('transform', 'rotate(' + now + 'deg)');
+                    },
+                    duration: 'fast'
+                }, 'linear');
+            });
+
+            $('.list-group').on('hide.bs.collapse', function () {
+                $(this.parentElement.firstElementChild.firstElementChild).first().animate({ borderSpacing: 0 }, {
+                    step: function (now, fx) {
+                        $(this).css('transform', 'rotate(' + now + 'deg)');
+                    },
+                    duration: 'fast'
+                }, 'linear');
+            });
+
             $('#studentLink').on('click', function ()
             {
                 if (changesMade) {
@@ -184,42 +198,7 @@
                 e.preventDefault();
                 $('#assessmentInputForm').submit();
             });
-
-            var prevStudentTop = false;
-            $('#prevStudentSubmitTop').on('click', function (e) {
-                e.preventDefault();
-                prevStudentTop = true;
-                $('#assessmentInputForm').submit();
-            });
-
-            var nextStudentTop = false;
-            $('#nextStudentSubmitTop').on('click', function (e) {
-                e.preventDefault();
-                nextStudentTop = true;
-                $('#assessmentInputForm').submit();
-            });
-
-            $('#allStudentSubmitTop').on('click', function (e) {
-                e.preventDefault();
-                $('#assessmentInputForm').submit();
-            });
-
-
-            $('#assessmentInputForm').submit(function (eventObj) {
-                if (dashboardNav == true) {
-                    $(this).append('<input type="hidden" name="dashboardBreadcrum"/> ');
-                    return true;
-                }
-                if (prevStudentTop == true) {
-                    $(this).append('<input type="hidden" name="lastStudent"/> ');
-                    return true;
-                }
-                if (nextStudentTop == true) {
-                    $(this).append('<input type="hidden" name="nextStudent"/> ');
-                    return true;
-                }
-            });
-            
+                        
             var serialized = $('#assessmentInputForm').serializeArray();
             var changesMade = false;
             $('input[type=radio]').on('change', function () {

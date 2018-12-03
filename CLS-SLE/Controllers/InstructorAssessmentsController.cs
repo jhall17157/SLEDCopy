@@ -46,7 +46,7 @@ namespace CLS_SLE.Controllers
                 var personID = Convert.ToInt32(Session["personID"].ToString());
                 var instructor = db.InstructorAssessments.FirstOrDefault(r => r.RubricID == rubricID && r.PersonID == personID);
 
-                var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID).OrderBy(c => c.LastName);
+                var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID).OrderBy(c => c.LastName).ThenBy(c => c.FirstName);
 
                 var numCriteria = db.RubricDetails.Count(c => c.RubricID == instructor.RubricID);
                 var rubricDetails = db.RubricDetails.Where(r => r.RubricID == rubricID);
@@ -89,6 +89,7 @@ namespace CLS_SLE.Controllers
             }
         }
         
+        [Authorize]
         public ActionResult Assessment(int sectionID, int enrollmentID, int rubricID)
         {
             try

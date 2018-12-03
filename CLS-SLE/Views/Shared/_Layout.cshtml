@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - SLE Assessments</title>
     <link href="https://fonts.googleapis.com/css?family=Karla" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -20,15 +21,15 @@
             <ul class="navbar-nav" id="navLinkOverride">
                 @if (((CLS_SLE.Models.User)Session["user"]) != null)
                 {
-                    <div class="dropleft">
+                    <li class="nav-item dropleft">
                         <button type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             @(((CLS_SLE.Models.User)Session["user"]).Login)
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="nav-link active" href="~/Home/SignOut">Sign Out</a>
-                            <a class="nav-link active" href="~/User/ChangePassword">Change password</a>
+                        <div style="position: absolute;" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="~/Home/SignOut">Sign Out</a>
+                            <a class="dropdown-item" href="~/User/ChangePassword">Change password</a>
                         </div>
-                    </div>
+                    </li>
                 }
             </ul>
         </nav>

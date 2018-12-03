@@ -11,7 +11,6 @@ namespace CLS_SLE.Models
         [Required(ErrorMessage = "Wrong Password"), DataType(DataType.Password)]
         public string Password { get; set; }
         [Required, DataType(DataType.Password)]
-        
         public string NewPassword { get; set; }
     }
 }

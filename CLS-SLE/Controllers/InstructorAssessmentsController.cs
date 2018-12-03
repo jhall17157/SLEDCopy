@@ -21,12 +21,15 @@ namespace CLS_SLE.Controllers
         {
             try
             {
+
                 var personID = Convert.ToInt32(Session["personID"].ToString());
                 var instructorAssessments = db.InstructorAssessments.Where(i => i.PersonID == personID);
+                var categories = db.AssessmentCategories.ToList();
 
                 dynamic model = new ExpandoObject();
 
                 model.assessments = instructorAssessments.ToList();
+                model.categories = categories;
 
                 return View(model);
             }

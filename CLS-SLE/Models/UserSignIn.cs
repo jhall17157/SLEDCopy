@@ -10,6 +10,6 @@ namespace CLS_SLE.Models
     {
         public string Login { get; set; }
         [Required(ErrorMessage = "Password Required")]
-        public string Hash { get; set; }
+        public string Password { get; set; }
     }
 }

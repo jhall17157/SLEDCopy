@@ -89,6 +89,7 @@ namespace CLS_SLE.Controllers
             }
         }
         
+        [Authorize]
         public ActionResult Assessment(int sectionID, int enrollmentID, int rubricID)
         {
             try

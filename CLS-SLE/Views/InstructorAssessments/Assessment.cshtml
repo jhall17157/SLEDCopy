@@ -54,59 +54,63 @@
                         }
                     }
                 }
-                <div id="@o.OutcomeID" class="list-group-item" style="padding: 0;">
-                    <div class="btn btn-outline-dark" style="font-size: 1.2rem; display: block; text-align:left; text-decoration: none; border-radius: 0px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"
-                         data-toggle="collapse"
-                         href="#group_@o.OutcomeID" role="button" aria-expanded="false"
-                         aria-controls="group_@o.OutcomeID">
-                        <span style="position: absolute; left: -5px;" class="fa fa-caret-down"></span>
-                        @o.Name
-                        <span style="position: absolute; right: -25px; top: 10px; width: 60px;" class="float-right badge badge-dark"><span id="filled_@o.OutcomeID">@filledCriteria</span> / @numCriteria</span>
-                    </div>
-                    <ul class="list-group list-group-flush collapse  @(@filledCriteria == @numCriteria ? "" : "show") " id="group_@o.OutcomeID">
+            <div id="@o.OutcomeID" class="list-group-item" style="padding: 0;">
+                
+                <div class="btn btn-outline-dark" style="font-size: 1.2rem; display: block; text-align:left; text-decoration: none; border-radius: 0px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"
+                     data-toggle="collapse"
+                     href="#group_@o.OutcomeID" role="button" aria-expanded="false"
+                     aria-controls="group_@o.OutcomeID">
+                    <i class="material-icons" style="@(@filledCriteria == @numCriteria ? "" : "transform: rotate(180deg); border-spacing: 180px;")">
+                        expand_more
+                    </i>
+                    @o.Name
+                    <span style="position: absolute; right: -25px; top: 10px; width: 60px;" class="float-right badge badge-dark"><span id="filled_@o.OutcomeID">@filledCriteria</span> / @numCriteria</span>
+                </div>
+
+                <ul class="list-group list-group-flush collapse  @(@filledCriteria == @numCriteria ? "" : "show") " id="group_@o.OutcomeID">
 
 
-                        @foreach (RubricDetail rb in Model.Criteria)
+                    @foreach (RubricDetail rb in Model.Criteria)
+                    {
+                        if (o.Name.Equals(rb.OutcomeName))
                         {
-                            if (o.Name.Equals(rb.OutcomeName))
-                            {
-                                <li class="list-group-item">
-                                    <div class="float-left">
-                                        @rb.CriteriaName
-                                    </div>
-                                    <div class="float-right">
-                                        @foreach (ScoreType i in Model.Selectors)
-                                        {
-                                            <div class="form-check" id="@o.OutcomeID">
-                                                @foreach (StudentScore ss in Model.StudentScores)
-                                                {
-                                                    exists = false;
-                                                    if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
-                                                    {
-                                                        <label class="form-check-label desc">
-                                                            @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { Checked = "checked", @class = "form-check-input" })
-                                                            @i.Description
-                                                        </label>
-                                                        exists = true;
-                                                        break;
-                                                    }
-                                                }
-                                                @if (!exists)
+                            <li class="list-group-item">
+                                <div class="float-left">
+                                    @rb.CriteriaName
+                                </div>
+                                <div class="float-right">
+                                    @foreach (ScoreType i in Model.Selectors)
+                                    {
+                                        <div class="form-check" id="@o.OutcomeID">
+                                            @foreach (StudentScore ss in Model.StudentScores)
+                                            {
+                                                exists = false;
+                                                if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
                                                 {
                                                     <label class="form-check-label desc">
-                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { @class = "form-check-input" })
+                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { Checked = "checked", @class = "form-check-input" })
                                                         @i.Description
                                                     </label>
+                                                    exists = true;
+                                                    break;
                                                 }
+                                            }
+                                            @if (!exists)
+                                            {
+                                                <label class="form-check-label desc">
+                                                    @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { @class = "form-check-input" })
+                                                    @i.Description
+                                                </label>
+                                            }
 
-                                            </div>
-                                        }
-                                    </div>
-                                </li>
-                            }
+                                        </div>
+                                    }
+                                </div>
+                            </li>
                         }
-                    </ul>
-                </div>
+                    }
+                </ul>
+            </div>
             }
         </div>
         <div class="text-center right">
@@ -155,6 +159,25 @@
     <script>
         $(function ()
         {
+            $('.list-group').on('show.bs.collapse', function () {
+                console.log();
+                $(this.parentElement.firstElementChild.firstElementChild).first().animate({ borderSpacing: 180 }, {
+                    step: function (now, fx) {
+                        $(this).css('transform', 'rotate(' + now + 'deg)');
+                    },
+                    duration: 'fast'
+                }, 'linear');
+            });
+
+            $('.list-group').on('hide.bs.collapse', function () {
+                $(this.parentElement.firstElementChild.firstElementChild).first().animate({ borderSpacing: 0 }, {
+                    step: function (now, fx) {
+                        $(this).css('transform', 'rotate(' + now + 'deg)');
+                    },
+                    duration: 'fast'
+                }, 'linear');
+            });
+
             $('#studentLink').on('click', function ()
             {
                 if (changesMade) {

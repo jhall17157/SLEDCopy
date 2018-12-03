@@ -25,7 +25,7 @@ namespace CLS_SLE.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SignIn([Bind(Include = "Login,Hash")] UserSignIn userSignIn)
+        public ActionResult SignIn([Bind(Include = "Login,Password")] UserSignIn userSignIn)
         {
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())
             {
@@ -34,7 +34,7 @@ namespace CLS_SLE.Controllers
                     User user = db.Users.Where(u => u.Login == userSignIn.Login).FirstOrDefault();
                     
                     // hash & salt the posted password
-                    bool bcb = BCrypt.Net.BCrypt.Verify(userSignIn.Hash, user.Hash);
+                    bool bcb = BCrypt.Net.BCrypt.Verify(userSignIn.Password, user.Hash);
                     // Compared posted Hash to customer password
                     if (bcb)
                     {
@@ -64,7 +64,7 @@ namespace CLS_SLE.Controllers
                     else
                     {
                         // Passwords do not match
-                        ModelState.AddModelError("Hash", "Incorrect password");
+                        ModelState.AddModelError("Password", "Incorrect password");
                     }
                 }
                 return View();

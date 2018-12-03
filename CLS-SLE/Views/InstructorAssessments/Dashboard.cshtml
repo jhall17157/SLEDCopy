@@ -4,20 +4,19 @@
 }
 <h1>Dashboard</h1>
 
-<ul class="list-group">
+
     @foreach (AssessmentCategory category in Model.categories)
     {
-        <li class="list-group-item">
             <h2>@category.Name</h2>
             
-            <ul class="list-group-flush">
+            <ul class="list-group">
                 <small>@category.Description</small>
                 @foreach (InstructorAssessment assessment in Model.assessments)
                 {
                     if (assessment.Category.Equals(category.CategoryCode)) {
 
                 <li class="list-group-item">
-                    <span style="position: absolute; right: -35px; top: 0px; width: 60px;" class="float-right badge badge-dark">@assessment.CompletedCount / @assessment.StudentCount</span>
+                    <span style="position: absolute; right: -5px; top: 0px; width: 60px;" class="float-right badge badge-dark">@assessment.CompletedCount / @assessment.StudentCount</span>
                     <div class="">
                         <div class="row">
                             <div class="col-md-12">
@@ -25,24 +24,24 @@
                             </div>
                             </div>
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <b>Course name: </b>@assessment.CourseName
                             </div>
-                            <div class="col-md-4 ml-auto">
-                                <b>Due: </b>@assessment.DueDate.ToShortDateString()
+                            <div class="col-md-3 ml-auto">
+                                <b>CRN: </b>@assessment.CRN
+                                
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
-                                <b>CRN: </b>@assessment.CRN
+                            <div class="col-md-9">
+                                <b>Due: </b>@assessment.DueDate.ToShortDateString()
                             </div>
-                            <div class="col-md-2 ml-auto"><div class="col-md-4 ml-auto">@Html.ActionLink("Assess", "StudentList", new { rubricID = assessment.RubricID })</div></div>
+                            <div class="col-md-3 ml-auto">@Html.ActionLink("Assess", "StudentList", new { rubricID = assessment.RubricID })</div>
                         </div>
                     </div>
                 </li>
                     }
                 }
             </ul>
-        </li>
+        <br />
     }
-</ul>

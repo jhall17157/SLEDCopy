@@ -1,138 +1,47 @@
 ﻿@using CLS_SLE.Models;
 @{
     ViewBag.Title = "Dashboard";
-
-    Boolean clsFirstItem = true;
-    Boolean tsaFirstItem = true;
-    Boolean poFirstItem = true;
-    
 }
-
 <h1>Dashboard</h1>
 
-<table class="table table-borderless table-hover">
-    @foreach (InstructorAssessment item in Model.assessments)
+
+    @foreach (AssessmentCategory category in Model.categories)
     {
-        if (item.Category == "CLS")
-        {
-            if (clsFirstItem)
-            {
-                <thead>
-                    <tr>
-                        <th><h2>CLS Assessments</h2></th>
-                        <th>Class</th>
-                        <th>CRN</th>
-                        <th>Due Date</th>
-                        <th class="text-center">Progress</th>
-                    </tr>
-                </thead>
-                clsFirstItem = false;
-            }
-            <tr>
-                <td>
-                    @item.RubricName
-                </td>
-                <td>
-                    @item.CourseName
-                </td>
-                <td>
-                    @item.CRN
-                </td>
-                <td>
-                    @item.DueDate.ToShortDateString()
-                </td>
-                <td class="text-center">
-                    @item.CompletedCount / @item.StudentCount
-                </td>
-                <td>
-                    @Html.ActionLink("Assess", "StudentList", new { rubricID = item.RubricID })
-                </td>
-            </tr>
+            <h2>@category.Name</h2>
+            
+            <ul class="list-group">
+                <small>@category.Description</small>
+                @foreach (InstructorAssessment assessment in Model.assessments)
+                {
+                    if (assessment.Category.Equals(category.CategoryCode)) {
 
-        }
+                <li class="list-group-item">
+                    <span style="position: absolute; right: -5px; top: 0px; width: 60px;" class="float-right badge badge-dark">@assessment.CompletedCount / @assessment.StudentCount</span>
+                    <div class="">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <b style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"> @Html.ActionLink(assessment.RubricName, "StudentList", new { rubricID = assessment.RubricID }) </b>
+                            </div>
+                            </div>
+                        <div class="row">
+                            <div class="col-md-9">
+                                <b>Course name: </b>@assessment.CourseName
+                            </div>
+                            <div class="col-md-3 ml-auto">
+                                <b>CRN: </b>@assessment.CRN
+                                
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-9">
+                                <b>Due: </b>@assessment.DueDate.ToShortDateString()
+                            </div>
+                            <div class="col-md-3 ml-auto">@Html.ActionLink("Assess", "StudentList", new { rubricID = assessment.RubricID })</div>
+                        </div>
+                    </div>
+                </li>
+                    }
+                }
+            </ul>
+        <br />
     }
-
-    @foreach (InstructorAssessment item in Model.assessments)
-    {
-        if (item.Category == "TSA")
-        {
-            if (tsaFirstItem)
-            {
-                <thead>
-                    <tr>
-                        <th><h2>TSA Assessments</h2></th>
-                        <th>Class</th>
-                        <th>CRN</th>
-                        <th>Due Date</th>
-                        <th class="text-center">Progress</th>
-                    </tr>
-                </thead>
-                tsaFirstItem = false;
-            }
-            <tr style="">
-                <td>
-                    @item.RubricName
-                </td>
-                <td>
-                    @item.CourseName
-                </td>
-                <td>
-                    @item.CRN
-                </td>
-                <td>
-                    @item.DueDate.ToShortDateString()
-                </td>
-                <td class="text-center">
-                    @item.CompletedCount / @item.StudentCount
-                </td>
-                <td>
-                    @Html.ActionLink("Assess", "StudentList", new { rubricID = item.RubricID })
-                </td>
-            </tr>
-
-        }
-    }
-    @foreach (InstructorAssessment item in Model.assessments)
-    {
-        if (item.Category == "PO")
-        {
-            if (poFirstItem)
-            {
-                <thead>
-                    <tr>
-                        <th><h2>PO Assessments</h2></th>
-                        <th>Class</th>
-                        <th>CRN</th>
-                        <th>Due Date</th>
-                        <th class="text-center">Progress</th>
-                    </tr>
-                </thead>
-                poFirstItem = false;
-            }
-            <tr style="">
-                <td>
-                    @item.RubricName
-                </td>
-                <td>
-                    @item.CourseName
-                </td>
-                <td>
-                    @item.CRN
-                </td>
-                <td>
-                    @item.DueDate.ToShortDateString()
-                </td>
-                <td class="text-center">
-                    @item.CompletedCount / @item.StudentCount
-                </td>
-                <td>
-                    @Html.ActionLink("Assess", "StudentList", new { rubricID = item.RubricID })
-                </td>
-            </tr>
-
-        }
-    }
-
-</table>
-
-

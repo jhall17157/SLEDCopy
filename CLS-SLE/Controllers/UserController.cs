@@ -131,6 +131,7 @@ namespace CLS_SLE.Controllers
         //    return View();
         //}
 
+        [Authorize]
         public ActionResult ChangePassword()
         {
             if (Session["User"] != null)

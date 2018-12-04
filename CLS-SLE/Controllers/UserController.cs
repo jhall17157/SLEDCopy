@@ -188,15 +188,13 @@ namespace CLS_SLE.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PasswordReset([Bind(Include = "Email")] PasswordReset pwReset)
+        public ActionResult PasswordReset([Bind(Include = "Login")] PasswordReset pwReset)
         {
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())
             {
                 if (ModelState.IsValid)
                 {
-                    User user = db.Users.Where(u => u.Login == "yoda").FirstOrDefault();
-                    //if (user.Email == pwReset.Email)
-                    //{
+                    User user = db.Users.Where(u => u.Login == pwReset.Login).FirstOrDefault();
                     string alpha = "ABCDEFGHIJKLMNOPQRSTUWXYZ";
                     string rndChars = "";
                     Random rnd = new Random();
@@ -213,22 +211,22 @@ namespace CLS_SLE.Controllers
                     SmtpClient client = new SmtpClient();
                     try
                     {
-                        msg.From = new MailAddress("NoReply@wctc.edu");
                         msg.Subject = "PASSWORD RESET";
                         msg.IsBodyHtml = true;
                         msg.Body = "Click the link below and enter the code to reset your password for SLE Assessment Login. <br> " +
-                                   "<a href = localhost:64901/User/PasswordResetForm>Link</a>" + "<br> Your unique code:" +
+                                   "<a href = 'https://sle-dev.wctc.edu/User/PasswordResetForm'>Link</a>" + "<br> Your unique code:" +
                                    "<br><strong>" + user.TemporaryPasswordHash + "</strong>";
-                        msg.To.Add(pwReset.Email);
+                        msg.To.Add(user.Email);
                         client.Send(msg);
                     }
                     catch (Exception ex)
                     {
 
                     }
-                    //}
-                    //else
-                    //{
+                    return RedirectToAction(actionName: "CheckEmail", controllerName: "Home");
+                }
+                else
+                {
                     // Redirect
 
                     return RedirectToAction(actionName: "CheckEmail", controllerName: "Home");
@@ -252,7 +250,7 @@ namespace CLS_SLE.Controllers
 
         // POST
         [HttpPost]
-        public ActionResult PasswordResetForm([Bind(Include = "Login,Email,PWResetKey,Hash,SecondHash")] PasswordResetEdit pwEdit)
+        public ActionResult PasswordResetForm([Bind(Include = "Login,PWResetKey,Hash,SecondHash")] PasswordResetEdit pwEdit)
         {
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())
                 if (ModelState.IsValid)
@@ -261,7 +259,7 @@ namespace CLS_SLE.Controllers
                     if (user.TemporaryPasswordHash == pwEdit.PWResetKey &&
                         (DateTime.Now - user.TemporaryPasswordIssued) < TimeSpan.Parse("00:15:00.0000000"))
                     {
-                        if (user.Login == pwEdit.Login && user.Email == pwEdit.Email && user.TemporaryPasswordHash == pwEdit.PWResetKey && pwEdit.Hash == pwEdit.SecondHash)
+                        if (user.Login == pwEdit.Login && user.TemporaryPasswordHash == pwEdit.PWResetKey && pwEdit.Hash == pwEdit.SecondHash)
                         {
                             if (pwEdit.Hash != pwEdit.Login && pwEdit.Hash != "Password" && pwEdit.Hash != "Test")
                             {

@@ -228,7 +228,7 @@
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PasswordReset.cs" />
-    <Compile Include="Models\PasswrodResetEdit.cs" />
+    <Compile Include="Models\PasswordResetEdit.cs" />
     <Compile Include="Models\Person.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>

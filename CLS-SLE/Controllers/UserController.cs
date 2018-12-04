@@ -257,7 +257,7 @@ namespace CLS_SLE.Controllers
                 {
                     User user = db.Users.Where(u => u.Login == pwEdit.Login).FirstOrDefault();
                     if (user.TemporaryPasswordHash == pwEdit.PWResetKey &&
-                        (DateTime.Now - user.TemporaryPasswordIssued) < TimeSpan.Parse("00:15:00.0000000"))
+                        (DateTime.Now - user.TemporaryPasswordIssued) < TimeSpan.Parse("00:30:00.0000000"))
                     {
                         if (user.Login == pwEdit.Login && user.TemporaryPasswordHash == pwEdit.PWResetKey && pwEdit.Hash == pwEdit.SecondHash)
                         {

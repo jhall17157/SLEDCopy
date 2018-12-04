@@ -38,7 +38,7 @@ namespace CLS_SLE.Controllers
                     // Compared posted Hash to customer password
                     if (bcb)
                     {
-                        if (user.MustResetPassword == false)
+                        if (!user.MustResetPassword)
                         {
                             // Passwords match
                             // authenticate user (Stores the UserID in an encrypted cookie)
@@ -58,7 +58,7 @@ namespace CLS_SLE.Controllers
                             Session["User"] = user;
                             user.LastLogin = DateTime.Now;
                             db.SaveChanges();
-                            return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
+                            return RedirectToAction(actionName: "ChangePassword", controllerName: "User");
                         }
                     }
                     else
@@ -161,7 +161,9 @@ namespace CLS_SLE.Controllers
                             String hash = BCrypt.Net.BCrypt.HashPassword(cPassword.NewPassword);
 
                             user.Hash = hash;
+                            user.MustResetPassword = false;
                             db.SaveChanges();
+                            Session["user"] = user;
                         }
                         else
                         {

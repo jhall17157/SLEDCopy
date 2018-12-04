@@ -8,7 +8,7 @@
 {
     if (((List<InstructorAssessment>)Model.assessments).Where(a => a.Category == category.CategoryCode).Count() != 0) {
         <h2>@category.Name</h2>
-        <small>@category.Description</small>
+        <small>@category.Description <span class="float-right" style="margin-right:10px">Progress</span></small>
         <ul class="list-group">
 
             @foreach (InstructorAssessment assessment in Model.assessments)

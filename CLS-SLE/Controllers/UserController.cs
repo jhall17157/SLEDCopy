@@ -70,8 +70,7 @@ namespace CLS_SLE.Controllers
                 return View();
             }
         }
-
-        [Authorize]
+        
         [OutputCache(NoStore = true, Location = System.Web.UI.OutputCacheLocation.None)]
         [HttpGet]
         public ActionResult PasswordReset()

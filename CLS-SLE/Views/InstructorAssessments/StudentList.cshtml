@@ -32,7 +32,7 @@
             <tr data-section="@student.sectionID" data-enrollment="@student.EnrollmentID" data-rubricid="@a.RubricID" id="@student.EnrollmentID" class="student-row">
                 <td style="width: 120px;">@student.StudentID</td>
                 <td>@student.LastName, @student.FirstName</td>
-                <td style="width: 100px; text-align: center"> <span class="badge">@totalScoredFilled[x] / @totalCriteria</span></td>
+                <td style="width: 100px; text-align: center"> <span style="right: 0px; top: 0px; width: 60px;" class="badge badge-dark">@totalScoredFilled[x] / @totalCriteria</span></td>
             </tr>
             x++;
         }

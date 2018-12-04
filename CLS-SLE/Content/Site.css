@@ -4,8 +4,17 @@
     
 }
 
-/* Set padding to keep content from hitting the edges */
-.body-content {
+.btn-outline-dark.focus, .btn-outline-dark:focus {
+    box-shadow: none;
+}
+
+.btn.focus, .btn:focus {
+    outline: 0;
+    box-shadow: none;
+    /* Set padding to keep content from hitting the edges */
+}
+
+    .body-content {
     padding-left: 15px;
     padding-right: 15px;
 }

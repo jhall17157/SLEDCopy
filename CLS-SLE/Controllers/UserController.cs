@@ -146,33 +146,42 @@ namespace CLS_SLE.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangePassword(UserChangePassword cPassword)
         {
-            
-           if (Session["User"] != null )
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                using (SLE_TrackingEntities db = new SLE_TrackingEntities())
                 {
-                    using (SLE_TrackingEntities db = new SLE_TrackingEntities())
-                    {
-                        String userLogin = ((User)Session["User"]).Login;
-                        User user = db.Users.Where(u => u.Login == userLogin).FirstOrDefault();
+                    String userLogin = ((User)Session["User"]).Login;
+                    User user = db.Users.Where(u => u.Login == userLogin).FirstOrDefault();
 
-                        if (BCrypt.Net.BCrypt.Verify(cPassword.Password, user.Hash))
+                    
+                    if (BCrypt.Net.BCrypt.Verify(cPassword.Password, user.Hash))
+                    {
+                        if (cPassword.NewPassword.Equals(cPassword.ConfirmPassword))
                         {
                             String hash = BCrypt.Net.BCrypt.HashPassword(cPassword.NewPassword);
 
                             user.Hash = hash;
                             db.SaveChanges();
-                        } else
-                        {
-                            ModelState.AddModelError("Password", "Current password is Incorrect");
                         }
-
+                        else
+                        {
+                            ModelState.AddModelError("ConfirmPassword", "New passwords do not match");
+                            return View();
+                        }
                     }
+                    else
+                    {
+                        ModelState.AddModelError("Password", "Current password is Incorrect");
+                        return View();
+                    }
+                    
                 }
-
+                return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments"); ;
+            }
+            else
+            {
                 return View();
             }
-            return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
         }
 
         [HttpPost]

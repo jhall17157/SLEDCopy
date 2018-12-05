@@ -42,8 +42,8 @@
         <ObjectGroup Name="CLSdbConnect-Deployment" Order="1">
           <Destination Path="" />
           <Object Type="DbFullSql">
-            <PreSource Path="Data Source=bitsql.wctc.edu%3bInitial Catalog=SLE_Tracking%3bPersist Security Info=True%3bUser ID=SleWebApp%3bApplication Name=EntityFramework" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
-            <Source Path="obj\Debug\AutoScripts\CLSdbConnect-Deployment_SchemaOnly.sql" Transacted="True" />
+            <PreSource Path="Data Source=bitsql.wctc.edu%3bInitial Catalog=SLE_Tracking%3bPersist Security Info=True%3bUser ID=SleWebApp%3bApplication Name=EntityFramework" ScriptSchema="True" ScriptData="True" CopyAllFullTextCatalogs="False" DriDefaults="True" />
+            <Source Path="obj\Debug\AutoScripts\CLSdbConnect-Deployment_SchemaAndData.sql" Transacted="True" />
           </Object>
         </ObjectGroup>
         <ObjectGroup Name="SLE_TrackingEntities-Deployment" Order="2">
@@ -373,7 +373,9 @@
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="favicon.ico" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

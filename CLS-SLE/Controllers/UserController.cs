@@ -14,7 +14,7 @@ namespace CLS_SLE.Controllers
     public class UserController : Controller
     {
         [AllowAnonymous]
-        [OutputCache(NoStore = true, Location = System.Web.UI.OutputCacheLocation.None)]
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         [HttpGet]
         public ActionResult SignIn()
         {
@@ -45,6 +45,7 @@ namespace CLS_SLE.Controllers
                             FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
                             Session["personID"] = user.PersonID;
                             Session["User"] = user;
+                            Session.Timeout = 180;
                             user.LastLogin = DateTime.Now;
                             db.SaveChanges();
                             return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
@@ -56,6 +57,7 @@ namespace CLS_SLE.Controllers
                             FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
                             Session["personID"] = user.PersonID;
                             Session["User"] = user;
+                            Session.Timeout = 180;
                             user.LastLogin = DateTime.Now;
                             db.SaveChanges();
                             return RedirectToAction(actionName: "ChangePassword", controllerName: "User");
@@ -158,7 +160,6 @@ namespace CLS_SLE.Controllers
                         if (cPassword.NewPassword.Equals(cPassword.ConfirmPassword))
                         {
                             String hash = BCrypt.Net.BCrypt.HashPassword(cPassword.NewPassword);
-
                             user.Hash = hash;
                             user.MustResetPassword = false;
                             db.SaveChanges();
@@ -210,6 +211,7 @@ namespace CLS_SLE.Controllers
                     SmtpClient client = new SmtpClient();
                     try
                     {
+                        msg.From = new MailAddress("NOREPLY@wctc.edu");
                         msg.Subject = "PASSWORD RESET";
                         msg.IsBodyHtml = true;
                         msg.Body = "Click the link below and enter the code to reset your password for SLE Assessment Login. <br> " +

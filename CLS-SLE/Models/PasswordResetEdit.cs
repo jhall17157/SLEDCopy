@@ -19,13 +19,13 @@ namespace CLS_SLE.Models
         public string PWResetKey { get; set; }
 
         [Required(ErrorMessage = "Password Required")]
-        [DataType(DataType.Password)]
+        [PasswordPropertyText]
         [StringLength(16, MinimumLength = 8)]
         [DisplayName("Password")]
         public string Hash { get; set; }
 
         [Required(ErrorMessage = "Confirmation Password Required")]
-        [DataType(DataType.Password)]
+        [PasswordPropertyText]
         [StringLength(16, MinimumLength = 8)]
         [DisplayName("Confirm Password")]
         [Compare("Hash", ErrorMessage = "Passwords Do Not Match")]

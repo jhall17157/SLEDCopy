@@ -14,7 +14,7 @@ namespace CLS_SLE.Models
         public string Login { get; set; }
 
         [Required(ErrorMessage = "Password Required")]
-        [DataType(DataType.Password)]
+        [PasswordPropertyText]
         [DisplayName("Password")]
         public string Hash { get; set; }
 

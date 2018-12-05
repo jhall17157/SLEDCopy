@@ -10,14 +10,25 @@ namespace CLS_SLE.Models
 {
     public class PasswordResetEdit
     {
-        [Required]
+        [Required(ErrorMessage = "Login Required")]
+        [DisplayName("Login")]
         public string Login { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Code Required")]
+        [DisplayName("Unique Code")]
         public string PWResetKey { get; set; }
-        [Required(ErrorMessage = "Password Change Could Not Be Completed"), 
-        PasswordPropertyText, MinLength(8), MaxLength(16)]
+
+        [Required(ErrorMessage = "Password Required")]
+        [DataType(DataType.Password)]
+        [StringLength(16, MinimumLength = 8)]
+        [DisplayName("Password")]
         public string Hash { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Confirmation Password Required")]
+        [DataType(DataType.Password)]
+        [StringLength(16, MinimumLength = 8)]
+        [DisplayName("Confirm Password")]
+        [Compare("Hash", ErrorMessage = "Passwords Do Not Match")]
         public string SecondHash { get; set; }
     }
 }

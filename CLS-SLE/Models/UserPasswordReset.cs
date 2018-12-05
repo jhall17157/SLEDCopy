@@ -9,6 +9,8 @@ namespace CLS_SLE.Models
 {
     public class UserPasswordReset
     {
+        [Required(ErrorMessage = "Login Required")]
+        [DisplayName("Login")]
         public string Login { get; set; }
         public string Email { get; set; }
         public string PWResetKey { get; set; }

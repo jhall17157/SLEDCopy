@@ -25,18 +25,14 @@ namespace CLS_SLE.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SignIn([Bind(Include = "Login,Password")] UserSignIn userSignIn)
+        public ActionResult SignIn([Bind(Include = "Login,Hash")] UserSignIn userSignIn)
         {
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())
             {
                 if (ModelState.IsValid)
                 {
                     User user = db.Users.Where(u => u.Login == userSignIn.Login).FirstOrDefault();
-                    
-                    // hash & salt the posted password
-                    bool bcb = BCrypt.Net.BCrypt.Verify(userSignIn.Password, user.Hash);
-                    // Compared posted Hash to customer password
-                    if (bcb)
+                    if (BCrypt.Net.BCrypt.Verify(userSignIn.Hash, user.Hash))
                     {
                         if (!user.MustResetPassword)
                         {
@@ -65,125 +61,22 @@ namespace CLS_SLE.Controllers
                     }
                     else
                     {
-                        // Passwords do not match
-                        ModelState.AddModelError("Password", "Incorrect password");
+                        ModelState.AddModelError("Hash", "Current password is Incorrect");
+                        return View();
                     }
                 }
                 return View();
             }
         }
-        
+
+        [AllowAnonymous]
         [OutputCache(NoStore = true, Location = System.Web.UI.OutputCacheLocation.None)]
         [HttpGet]
         public ActionResult PasswordReset()
         {
+            FormsAuthentication.SignOut();
+            Session.Abandon();
             return View();
-        }
-
-        //// POST: User/PasswordReset
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult PasswordReset([Bind(Include = "Email")] PasswordReset pwReset)
-        //{
-        //    using (SLE_TrackingEntities db = new SLE_TrackingEntities())
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            User user = db.Users.Where(u => u.Email == pwReset.Email).FirstOrDefault();
-
-        //            if (user.Email == pwReset.Email)
-        //            {
-        //                string alpha = "ABCDEFGHIJKLMNOPQRSTUWXYZ";
-        //                string rndChars = "";
-        //                Random rnd = new Random();
-        //                for (int i = 1; i <= 6; i++)
-        //                {
-        //                    rndChars += alpha[rnd.Next(alpha.Length)];
-        //                }
-        //                // reset key + time
-        //                user.TemporaryPasswordIssued = DateTime.Now;
-        //                user.TemporaryPasswordHash = rndChars;
-        //                db.SaveChanges();
-        //                // Send email
-        //                MailMessage msg = new MailMessage();
-        //                SmtpClient client = new SmtpClient();
-        //                try
-        //                {
-        //                    msg.Subject = "PASSWORD RESET";
-        //                    msg.Body = msg.Body = "Click the link below and enter the code to reset your password for SLE Assessment Login. <br> " +
-        //                               "https:/sle-dev.wctc.edu/User/PasswordResetForm/" + user.Login + "<br> Your unique code:" +
-        //                               "<br><strong>" + user.TemporaryPasswordHash + "</strong>";
-        //                    msg.From = new MailAddress("NoReply@wctc.edu");
-        //                    msg.To.Add(pwReset.Email);
-        //                    msg.IsBodyHtml = true;
-        //                    client.Send(msg);
-        //                }
-        //                catch (Exception ex)
-        //                {
-
-        //                }
-        //            }
-        //            else
-        //            {
-        //                return RedirectToAction(actionName: "CheckEmail", controllerName: "Home");
-        //            }
-        //        }
-        //    }
-        //    return View();
-        //}
-
-        [Authorize]
-        public ActionResult ChangePassword()
-        {
-            if (Session["User"] != null)
-            {
-                return View();
-            }
-            return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
-        }
-
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ChangePassword(UserChangePassword cPassword)
-        {
-            if (ModelState.IsValid)
-            {
-                using (SLE_TrackingEntities db = new SLE_TrackingEntities())
-                {
-                    String userLogin = ((User)Session["User"]).Login;
-                    User user = db.Users.Where(u => u.Login == userLogin).FirstOrDefault();
-
-                    
-                    if (BCrypt.Net.BCrypt.Verify(cPassword.Password, user.Hash))
-                    {
-                        if (cPassword.NewPassword.Equals(cPassword.ConfirmPassword))
-                        {
-                            String hash = BCrypt.Net.BCrypt.HashPassword(cPassword.NewPassword);
-                            user.Hash = hash;
-                            user.MustResetPassword = false;
-                            db.SaveChanges();
-                            Session["user"] = user;
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("ConfirmPassword", "New passwords do not match");
-                            return View();
-                        }
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("Password", "Current password is Incorrect");
-                        return View();
-                    }
-                    
-                }
-                return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments"); ;
-            }
-            else
-            {
-                return View();
-            }
         }
 
         [HttpPost]
@@ -191,7 +84,6 @@ namespace CLS_SLE.Controllers
         public ActionResult PasswordReset([Bind(Include = "Login")] PasswordReset pwReset)
         {
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())
-            {
                 if (ModelState.IsValid)
                 {
                     User user = db.Users.Where(u => u.Login == pwReset.Login).FirstOrDefault();
@@ -228,13 +120,8 @@ namespace CLS_SLE.Controllers
                 }
                 else
                 {
-                    // Redirect
-
-                    return RedirectToAction(actionName: "CheckEmail", controllerName: "Home");
-                    //}
+                    return View();
                 }
-            }
-            return View();
         }
 
 
@@ -249,7 +136,6 @@ namespace CLS_SLE.Controllers
             return View();
         }
 
-        // POST
         [HttpPost]
         public ActionResult PasswordResetForm([Bind(Include = "Login,PWResetKey,Hash,SecondHash")] PasswordResetEdit pwEdit)
         {
@@ -266,28 +152,55 @@ namespace CLS_SLE.Controllers
                             {
                                 user.Hash = BCrypt.Net.BCrypt.HashPassword(pwEdit.Hash);
                                 db.SaveChanges();
-                                return RedirectToAction(actionName: "GoodPass", controllerName: "User");
-                            }
-                            else
-                            {
-                                return RedirectToAction(actionName: "BadPass", controllerName: "User");
+                                return RedirectToAction(actionName: "SignIn", controllerName: "User");
                             }
                         }
-                        else
-                        {
-                            return RedirectToAction(actionName: "BadPass", controllerName: "User");
-                        }
                     }
-                    else if((DateTime.Now - user.TemporaryPasswordIssued) > TimeSpan.Parse("00:15:00.0000000"))
-                    {
-                        return RedirectToAction(actionName: "BadCode", controllerName: "User");
-                    }
-                    return RedirectToAction(actionName: "GoodPass", controllerName: "User");
+                    return RedirectToAction(actionName: "SignIn", controllerName: "User");
                 }
                 else
                 {
-                    return RedirectToAction(actionName: "BadCode", controllerName: "User");
+                    return View();
                 }
+        }
+
+        [Authorize]
+        public ActionResult ChangePassword()
+        {
+            if (Session["User"] != null)
+            {
+                return View();
+            }
+            return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePassword(UserChangePassword cPassword)
+        {
+            if (ModelState.IsValid)
+            {
+                using (SLE_TrackingEntities db = new SLE_TrackingEntities())
+                {
+                    String userLogin = ((User)Session["User"]).Login;
+                    User user = db.Users.Where(u => u.Login == userLogin).FirstOrDefault();
+                    if (BCrypt.Net.BCrypt.Verify(cPassword.Hash, user.Hash))
+                    {
+                            user.Hash = BCrypt.Net.BCrypt.HashPassword(cPassword.NewHash);
+                            user.MustResetPassword = false;
+                            db.SaveChanges();
+                            Session["user"] = user;
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Hash", "Current password is Incorrect");
+                        return View();
+                    }
+                }
+                return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments"); ;
+            }
+            return View();
         }
 
         public ActionResult BadCode()

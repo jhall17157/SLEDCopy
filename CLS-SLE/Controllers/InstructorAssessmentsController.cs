@@ -52,33 +52,7 @@ namespace CLS_SLE.Controllers
                 logger.Info("Assessment student list loaded for " + instructor.Login + " with rubricID " + rubricID);
 
                 var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID).OrderBy(c => c.LastName).ThenBy(c => c.FirstName);
-
-                //var numCriteria = db.RubricDetails.Count(c => c.RubricID == instructor.RubricID);
-                //var rubricDetails = db.RubricDetails.Where(r => r.RubricID == rubricID);
-
-                //List<float> EnrollmentIDs = new List<float>();
-                //List<int> CriteriaAnswered = new List<int>();
-                //foreach(var student in students)
-                //{
-                //    var studentScores = db.StudentScores.Where(s => s.EnrollmentID == student.EnrollmentID);
-                //    var filled = 0;
-                //    foreach(var score in studentScores)
-                //    {
-                //        foreach(var detail in rubricDetails)
-                //        {
-                //            if(score.CriteriaID == detail.CriteriaID)
-                //            {
-                //                filled++;
-                //            }
-                //        }
-                //    }
-                //    CriteriaAnswered.Add(filled);
-
-                //    EnrollmentIDs.Add(student.EnrollmentID);
-                //}
-                //Session["totalScoredFilled"] = CriteriaAnswered;
-                //Session["assessmentEnrollment"] = EnrollmentIDs;
-
+                
                 var completedScores = db.StudentScoreCounts.Where(c => c.RubricID == rubricID && c.SectionID == instructor.SectionID);
                 
                 var assessment = db.InstructorAssessments.Where(a => a.RubricID == rubricID).FirstOrDefault();
@@ -86,7 +60,6 @@ namespace CLS_SLE.Controllers
                 dynamic mymodel = new ExpandoObject();
                 mymodel.Students = students.ToList();
                 mymodel.Assessment = assessment;
-                //mymodel.TotalCriteria = numCriteria;
                 mymodel.CompleteScores = completedScores.ToList();
 
                 return View(mymodel);

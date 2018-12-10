@@ -2,8 +2,8 @@
 @{
     ViewBag.Title = "Students";
     var a = Model.Assessment;
-    var totalCriteria = Model.TotalCriteria;
-    var totalScoredFilled = (List<int>)Session["totalScoredFilled"];
+    //var totalCriteria = Model.TotalCriteria;
+    //var totalScoredFilled = (List<int>)Session["totalScoredFilled"];
     var x = 0;
 }
 
@@ -32,7 +32,16 @@
             <tr data-section="@student.sectionID" data-enrollment="@student.EnrollmentID" data-rubricid="@a.RubricID" id="@student.EnrollmentID" class="student-row">
                 <td style="width: 120px;">@student.StudentID</td>
                 <td>@student.LastName, @student.FirstName</td>
-                <td style="width: 100px; text-align: center"> <span style="right: 0px; top: 0px; width: 60px;" class="badge badge-dark">@totalScoredFilled[x] / @totalCriteria</span></td>
+                <td style="width: 100px; text-align: center">
+
+                    @foreach (StudentScoreCount scoreCount in Model.CompleteScores)
+                    {
+                        if (scoreCount.EnrollmentID == Convert.ToInt32(student.EnrollmentID))
+                        {
+                            <span style="right: 0px; top: 0px; width: 60px;" class="badge badge-dark">@scoreCount.CompletedCount / @scoreCount.CriteriaCount</span>
+                        }
+                    } 
+                 </td>
             </tr>
             x++;
         }

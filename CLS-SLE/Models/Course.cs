@@ -23,9 +23,8 @@ namespace CLS_SLE.Models
     
         public short CourseID { get; set; }
         public string CourseName { get; set; }
-        public short ProgramID { get; set; }
+        public string Number { get; set; }
     
-        public virtual Program Program { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CourseProgram> CoursePrograms { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -35,6 +35,7 @@ namespace CLS_SLE.Models
         public virtual DbSet<Department> Departments { get; set; }
         public virtual DbSet<Enrollment> Enrollments { get; set; }
         public virtual DbSet<EnrollmentStatu> EnrollmentStatus { get; set; }
+        public virtual DbSet<ETL_StatusMapping> ETL_StatusMapping { get; set; }
         public virtual DbSet<Outcome> Outcomes { get; set; }
         public virtual DbSet<Person> People { get; set; }
         public virtual DbSet<Program> Programs { get; set; }
@@ -51,5 +52,7 @@ namespace CLS_SLE.Models
         public virtual DbSet<InstructorAssessment> InstructorAssessments { get; set; }
         public virtual DbSet<RubricDetail> RubricDetails { get; set; }
         public virtual DbSet<SectionEnrollment> SectionEnrollments { get; set; }
+        public virtual DbSet<SemesterDate> SemesterDates { get; set; }
+        public virtual DbSet<StudentScoreCount> StudentScoreCounts { get; set; }
     }
 }

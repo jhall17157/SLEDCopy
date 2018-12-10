@@ -18,6 +18,7 @@ namespace CLS_SLE.Models
         public EnrollmentStatu()
         {
             this.Enrollments = new HashSet<Enrollment>();
+            this.ETL_StatusMapping = new HashSet<ETL_StatusMapping>();
         }
     
         public string StatusID { get; set; }
@@ -25,5 +26,7 @@ namespace CLS_SLE.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Enrollment> Enrollments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ETL_StatusMapping> ETL_StatusMapping { get; set; }
     }
 }

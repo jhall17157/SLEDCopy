@@ -12,10 +12,13 @@ namespace CLS_SLE.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Department
+    public partial class StudentScoreCount
     {
-        public short DepartmentID { get; set; }
-        public string Number { get; set; }
-        public string Name { get; set; }
+        public int SectionID { get; set; }
+        public short RubricID { get; set; }
+        public int StudentID { get; set; }
+        public long EnrollmentID { get; set; }
+        public Nullable<int> CompletedCount { get; set; }
+        public Nullable<int> CriteriaCount { get; set; }
     }
 }

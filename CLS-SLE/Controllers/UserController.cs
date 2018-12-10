@@ -8,11 +8,14 @@ using CLS_SLE.Models;
 using System.Web.Security;
 using System.Net.Mail;
 using BCrypt.Net;
+using NLog;
 
 namespace CLS_SLE.Controllers
 {
     public class UserController : Controller
     {
+        private Logger logger = LogManager.GetCurrentClassLogger();
+
         [AllowAnonymous]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         [HttpGet]
@@ -31,7 +34,7 @@ namespace CLS_SLE.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    User user = db.Users.Where(u => u.Login == userSignIn.Login).FirstOrDefault();
+                    var user = db.Users.Where(u => u.Login == userSignIn.Login).FirstOrDefault();
                     if (BCrypt.Net.BCrypt.Verify(userSignIn.Hash, user.Hash))
                     {
                         if (!user.MustResetPassword)
@@ -44,6 +47,7 @@ namespace CLS_SLE.Controllers
                             Session.Timeout = 180;
                             user.LastLogin = DateTime.Now;
                             db.SaveChanges();
+                            logger.Info("Successful login for user: " + user.Login + ", loading dashboard");
                             return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
                         }
                         else
@@ -56,6 +60,7 @@ namespace CLS_SLE.Controllers
                             Session.Timeout = 180;
                             user.LastLogin = DateTime.Now;
                             db.SaveChanges();
+                            logger.Info("Successful login for user: " + user.Login + ", user must reset their password");
                             return RedirectToAction(actionName: "ChangePassword", controllerName: "User");
                         }
                     }
@@ -65,6 +70,7 @@ namespace CLS_SLE.Controllers
                         return View();
                     }
                 }
+                logger.Error("Login failed");
                 return View();
             }
         }
@@ -187,14 +193,16 @@ namespace CLS_SLE.Controllers
                     User user = db.Users.Where(u => u.Login == userLogin).FirstOrDefault();
                     if (BCrypt.Net.BCrypt.Verify(cPassword.Hash, user.Hash))
                     {
-                            user.Hash = BCrypt.Net.BCrypt.HashPassword(cPassword.NewHash);
-                            user.MustResetPassword = false;
-                            db.SaveChanges();
-                            Session["user"] = user;
+                        user.Hash = BCrypt.Net.BCrypt.HashPassword(cPassword.NewHash);
+                        user.MustResetPassword = false;
+                        db.SaveChanges();
+                        Session["user"] = user;
+                        logger.Info("User " + user.Login + " successfully changed their password");
                     }
                     else
                     {
                         ModelState.AddModelError("Hash", "Current password is Incorrect");
+                        logger.Error("User " + user.Login + " attempted to change their password but the inputed current password did not match.");
                         return View();
                     }
                 }

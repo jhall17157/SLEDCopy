@@ -12,10 +12,14 @@ namespace CLS_SLE.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Department
+    public partial class SemesterDate
     {
-        public short DepartmentID { get; set; }
-        public string Number { get; set; }
-        public string Name { get; set; }
+        public short SemesterID { get; set; }
+        public Nullable<int> SemesterCode { get; set; }
+        public string SemesterDescription { get; set; }
+        public string YearCode { get; set; }
+        public string TermCode { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
     }
 }

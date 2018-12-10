@@ -12,10 +12,12 @@ namespace CLS_SLE.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Department
+    public partial class ETL_StatusMapping
     {
-        public short DepartmentID { get; set; }
-        public string Number { get; set; }
-        public string Name { get; set; }
+        public string StatusCode { get; set; }
+        public string StatusDescription { get; set; }
+        public string EnrollmentStatusID { get; set; }
+    
+        public virtual EnrollmentStatu EnrollmentStatu { get; set; }
     }
 }

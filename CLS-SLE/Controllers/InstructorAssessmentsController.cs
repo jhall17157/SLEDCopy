@@ -9,21 +9,24 @@ using System.Web;
 using System.Web.Mvc;
 using CLS_SLE.Models;
 using System.Collections.Specialized;
+using NLog;
 
 namespace CLS_SLE.Controllers
 {
     public class InstructorAssessmentsController : Controller
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
+        private Logger logger = LogManager.GetCurrentClassLogger();
 
         // GET: InstructorAssessments
         public ActionResult Dashboard()
         {
             try
             {
-
                 var personID = Convert.ToInt32(Session["personID"].ToString());
+                var user = db.Users.FirstOrDefault(u => u.PersonID == personID);
                 var instructorAssessments = db.InstructorAssessments.Where(i => i.PersonID == personID);
+                logger.Info("Dashboard loaded for " + user.Login);
                 var categories = db.AssessmentCategories.ToList();
 
                 dynamic model = new ExpandoObject();
@@ -35,6 +38,7 @@ namespace CLS_SLE.Controllers
             }
             catch
             {
+                logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
                 return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
         }
@@ -45,46 +49,51 @@ namespace CLS_SLE.Controllers
             {
                 var personID = Convert.ToInt32(Session["personID"].ToString());
                 var instructor = db.InstructorAssessments.FirstOrDefault(r => r.RubricID == rubricID && r.PersonID == personID);
+                logger.Info("Assessment student list loaded for " + instructor.Login + " with rubricID " + rubricID);
 
                 var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID).OrderBy(c => c.LastName).ThenBy(c => c.FirstName);
 
-                var numCriteria = db.RubricDetails.Count(c => c.RubricID == instructor.RubricID);
-                var rubricDetails = db.RubricDetails.Where(r => r.RubricID == rubricID);
+                //var numCriteria = db.RubricDetails.Count(c => c.RubricID == instructor.RubricID);
+                //var rubricDetails = db.RubricDetails.Where(r => r.RubricID == rubricID);
 
-                List<float> EnrollmentIDs = new List<float>();
-                List<int> CriteriaAnswered = new List<int>();
-                foreach(var student in students)
-                {
-                    var studentScores = db.StudentScores.Where(s => s.EnrollmentID == student.EnrollmentID);
-                    var filled = 0;
-                    foreach(var score in studentScores)
-                    {
-                        foreach(var detail in rubricDetails)
-                        {
-                            if(score.CriteriaID == detail.CriteriaID)
-                            {
-                                filled++;
-                            }
-                        }
-                    }
-                    CriteriaAnswered.Add(filled);
+                //List<float> EnrollmentIDs = new List<float>();
+                //List<int> CriteriaAnswered = new List<int>();
+                //foreach(var student in students)
+                //{
+                //    var studentScores = db.StudentScores.Where(s => s.EnrollmentID == student.EnrollmentID);
+                //    var filled = 0;
+                //    foreach(var score in studentScores)
+                //    {
+                //        foreach(var detail in rubricDetails)
+                //        {
+                //            if(score.CriteriaID == detail.CriteriaID)
+                //            {
+                //                filled++;
+                //            }
+                //        }
+                //    }
+                //    CriteriaAnswered.Add(filled);
 
-                    EnrollmentIDs.Add(student.EnrollmentID);
-                }
-                Session["totalScoredFilled"] = CriteriaAnswered;
-                Session["assessmentEnrollment"] = EnrollmentIDs;
+                //    EnrollmentIDs.Add(student.EnrollmentID);
+                //}
+                //Session["totalScoredFilled"] = CriteriaAnswered;
+                //Session["assessmentEnrollment"] = EnrollmentIDs;
 
+                var completedScores = db.StudentScoreCounts.Where(c => c.RubricID == rubricID && c.SectionID == instructor.SectionID);
+                
                 var assessment = db.InstructorAssessments.Where(a => a.RubricID == rubricID).FirstOrDefault();
 
                 dynamic mymodel = new ExpandoObject();
                 mymodel.Students = students.ToList();
                 mymodel.Assessment = assessment;
-                mymodel.TotalCriteria = numCriteria;
+                //mymodel.TotalCriteria = numCriteria;
+                mymodel.CompleteScores = completedScores.ToList();
 
                 return View(mymodel);
             }
             catch 
             {
+                logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
                 return Exceptions();
             }
         }
@@ -102,6 +111,7 @@ namespace CLS_SLE.Controllers
                 var student = db.SectionEnrollments.FirstOrDefault(s => s.sectionID == sectionID && s.EnrollmentID == enrollmentID);
                 Session["enrollmentID"] = student.EnrollmentID;
 
+                logger.Info("Assessment loaded for student " + student.FirstName + " by " + instructor.Login + " in assesssment with rubricID " + rubricID);
                 var rubric = db.InstructorAssessments.FirstOrDefault(n => n.RubricID == instructor.RubricID);
 
                 var outcomes = db.Outcomes.Where(c => c.RubricID == instructor.RubricID);
@@ -124,6 +134,7 @@ namespace CLS_SLE.Controllers
             }
             catch
             {
+                logger.Error("User attempted to load assessment without being signed in, redirecting to sign in page.");
                 return Exceptions();
             }
         }
@@ -160,19 +171,23 @@ namespace CLS_SLE.Controllers
             }
             var submitType = outcomeIDs[outcomeIDs.Count() - 1];
 
+            
             if(submitType.Equals("nextStudent"))
             {
+                logger.Info("Submission recieved and saved, loading data for next student");
                 return NextStudent();
             }
             else if(submitType.Equals("lastStudent"))
             {
+                logger.Info("Submission recieved and saved, loading data for previous student");
                 return LastStudent();
             }
             else if(submitType.Equals("dashboardBreadcrum"))
             {
+                logger.Info("Submission recieved and saved, redirecting to dashboard");
                 return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
             }
-
+            logger.Info("Submission recieved and saved, redirecting to assessment student list");
             return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
         }
 

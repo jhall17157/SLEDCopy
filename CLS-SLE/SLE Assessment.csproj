@@ -82,11 +82,17 @@
       <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.2\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -221,6 +227,9 @@
     <Compile Include="Models\EnrollmentStatu.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ETL_StatusMapping.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\InstructorAssessment.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
@@ -259,6 +268,9 @@
     <Compile Include="Models\Semester.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SemesterDate.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SLE_TrackingModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -278,6 +290,9 @@
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\StudentScore.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StudentScoreCount.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
@@ -346,6 +361,9 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <EntityDeploy Include="Models\SLE_TrackingModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>SLE_TrackingModel.Designer.cs</LastGenOutput>
@@ -353,6 +371,9 @@
     <Content Include="Models\SLE_TrackingModel.edmx.diagram">
       <DependentUpon>SLE_TrackingModel.edmx</DependentUpon>
     </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

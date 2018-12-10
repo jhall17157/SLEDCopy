@@ -26,6 +26,8 @@ namespace CLS_SLE.Models
         public short SemesterID { get; set; }
         public short CourseID { get; set; }
         public int LeadInstructorID { get; set; }
+        public string OfferingNumber { get; set; }
+        public bool IsCancelled { get; set; }
     
         public virtual Course Course { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -53,6 +53,13 @@ namespace CLS_SLE.Controllers
 
                 var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID).OrderBy(c => c.LastName).ThenBy(c => c.FirstName);
                 
+                List<float> EnrollmentIDs = new List<float>();
+                foreach(var student in students)
+                {
+                    EnrollmentIDs.Add(student.EnrollmentID);
+                }
+                Session["assessmentEnrollment"] = EnrollmentIDs;
+
                 var completedScores = db.StudentScoreCounts.Where(c => c.RubricID == rubricID && c.SectionID == instructor.SectionID);
                 
                 var assessment = db.InstructorAssessments.Where(a => a.RubricID == rubricID).FirstOrDefault();

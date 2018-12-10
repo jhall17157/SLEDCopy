@@ -220,8 +220,14 @@
             });
 
             $('#allStudentSubmitTop').on('click', function (e) {
-                e.preventDefault();
-                $('#assessmentInputForm').submit();
+                if (changesMade == true) {
+                    e.preventDefault();
+                    $('#assessmentInputForm').submit();
+                }
+                else {
+                    location.href = "/InstructorAssessments/StudentList?rubricID=@r.RubricID";
+                }
+                
             });
 
 

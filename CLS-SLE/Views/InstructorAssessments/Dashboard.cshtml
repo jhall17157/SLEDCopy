@@ -4,6 +4,13 @@
 }
 <h1>Dashboard</h1>
 
+@if (((List<InstructorAssessment>)Model.assessments).Count() == 0)
+{
+    <li class="list-group-item">
+        <p>You currently have no assessments assigned to you. Please contact your instructional manager if you feel this is an error. </p>
+    </li>
+}
+
 @foreach (AssessmentCategory category in Model.categories)
 {
     if (((List<InstructorAssessment>)Model.assessments).Where(a => a.Category == category.CategoryCode).Count() != 0)
@@ -11,10 +18,14 @@
         <h2>@category.Name</h2>
         <small>@category.Description</small>
         <ul class="list-group">
+
+
+
             @foreach (InstructorAssessment assessment in Model.assessments)
             {
                 if (assessment.Category.Equals(category.CategoryCode))
                 {
+
                     <li class="list-group-item">
                         <small class="progress-head" style="position: absolute; right: 5px; top: -20px; width: 60px; text-align:center">Progress</small>
                         <span style="position: absolute; right: 5px; top: 5px; width: 60px;" class="float-right badge badge-dark">@assessment.CompletedCount / @assessment.StudentCount</span>

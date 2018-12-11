@@ -27,7 +27,7 @@ namespace CLS_SLE.Controllers
                 Session.Abandon();
                 return View();
             }
-            catch(HttpAntiForgeryException ex)
+            catch(Exception ex)
             {
                 return View();
             }
@@ -39,61 +39,66 @@ namespace CLS_SLE.Controllers
         {
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())
             {
-                if (ModelState.IsValid)
+                try
                 {
-                    try
+                    if (ModelState.IsValid)
                     {
-                        var user = db.Users.Where(u => u.Login == userSignIn.Login).FirstOrDefault();
-                        if (BCrypt.Net.BCrypt.Verify(userSignIn.Hash, user.Hash))
+                        try
                         {
-                            if (!user.MustResetPassword)
+                            var user = db.Users.Where(u => u.Login == userSignIn.Login).FirstOrDefault();
+                            if (BCrypt.Net.BCrypt.Verify(userSignIn.Hash, user.Hash))
                             {
-                                // Passwords match
-                                // authenticate user (Stores the UserID in an encrypted cookie)
-                                // User does not need to reset their password, send them straight to the dashboad
-                                FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
-                                Session["personID"] = user.PersonID;
-                                Session["User"] = user;
-                                Session.Timeout = 180;
-                                user.LastLogin = DateTime.Now;
-                                db.SaveChanges();
-                                logger.Info("Successful login for " + user.Login + ", loading dashboard");
-                                return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
+                                if (!user.MustResetPassword)
+                                {
+                                    // Passwords match
+                                    // authenticate user (Stores the UserID in an encrypted cookie)
+                                    // User does not need to reset their password, send them straight to the dashboad
+                                    FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
+                                    Session["personID"] = user.PersonID;
+                                    Session["User"] = user;
+                                    Session.Timeout = 180;
+                                    user.LastLogin = DateTime.Now;
+                                    db.SaveChanges();
+                                    logger.Info("Successful login for " + user.Login + ", loading dashboard");
+                                    return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
+                                }
+                                else
+                                {
+                                    // Passwords match
+                                    // authenticate user (Stores the UserID in an encrypted cookie)
+                                    // User must reset their password, send them to the reset password form
+                                    FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
+                                    Session["personID"] = user.PersonID;
+                                    Session["User"] = user;
+                                    Session.Timeout = 180;
+                                    user.LastLogin = DateTime.Now;
+                                    db.SaveChanges();
+                                    logger.Info("Successful login for " + user.Login + ", user must reset their password");
+                                    return RedirectToAction(actionName: "ChangePassword", controllerName: "User");
+                                }
                             }
                             else
                             {
-                                // Passwords match
-                                // authenticate user (Stores the UserID in an encrypted cookie)
-                                // User must reset their password, send them to the reset password form
-                                FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
-                                Session["personID"] = user.PersonID;
-                                Session["User"] = user;
-                                Session.Timeout = 180;
-                                user.LastLogin = DateTime.Now;
-                                db.SaveChanges();
-                                logger.Info("Successful login for " + user.Login + ", user must reset their password");
-                                return RedirectToAction(actionName: "ChangePassword", controllerName: "User");
+                                ModelState.AddModelError("Hash", "Username or password invalid");
+                                return View();
                             }
                         }
-                        else
+                        catch
                         {
                             ModelState.AddModelError("Hash", "Username or password invalid");
                             return View();
                         }
+
                     }
-                    catch
-                    {
-                        ModelState.AddModelError("Hash", "Username or password invalid");
-                        return View();
-                    }
-                    
+                    logger.Error("Login failed");
+                    return View();
+                } catch (Exception ex)
+                {
+                    FormsAuthentication.SignOut();
+                    Session.Abandon();
+                    return View();
                 }
-                logger.Error("Login failed");
-                return View();
             }
-            
-            
-            
         }
 
         [AllowAnonymous]

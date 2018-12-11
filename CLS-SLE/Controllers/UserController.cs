@@ -21,7 +21,6 @@ namespace CLS_SLE.Controllers
         [HttpGet]
         public ActionResult SignIn()
         {
-
             try
             {
                 FormsAuthentication.SignOut();
@@ -35,6 +34,7 @@ namespace CLS_SLE.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult SignIn([Bind(Include = "Login,Hash")] UserSignIn userSignIn)
         {
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())

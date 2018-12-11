@@ -176,9 +176,11 @@
                 }, 'linear');
             });
 
+            var studentListNav = false
             $('#studentLink').on('click', function ()
             {
                 if (changesMade) {
+                    studentListNav = true;
                     $('#studentList').removeAttr('hidden');
                     $('#changesMade').modal();
                 }
@@ -235,6 +237,10 @@
             $('#assessmentInputForm').submit(function (eventObj) {
                 if (dashboardNav == true) {
                     $(this).append('<input type="hidden" name="dashboardBreadcrum"/> ');
+                    return true;
+                }
+                if (studentListNav == true) {
+                    $(this).append('<input type="hidden" name="studentListBreadcrum"/> ');
                     return true;
                 }
                 if (prevStudentTop == true) {

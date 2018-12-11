@@ -167,6 +167,11 @@ namespace CLS_SLE.Controllers
                 logger.Info("Submission recieved and saved, redirecting to dashboard");
                 return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
             }
+            else if(submitType.Equals("studentListBreadcrum"))
+            {
+                logger.Info("Submission recieved and saved, redirecting to student list");
+                return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
+            }
             logger.Info("Submission recieved and saved, redirecting to assessment student list");
             return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
         }

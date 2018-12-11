@@ -21,9 +21,16 @@ namespace CLS_SLE.Controllers
         [HttpGet]
         public ActionResult SignIn()
         {
-            FormsAuthentication.SignOut();
-            Session.Abandon();
-            return View();
+            try
+            {
+                FormsAuthentication.SignOut();
+                Session.Abandon();
+                return View();
+            }
+            catch(HttpAntiForgeryException ex)
+            {
+                return View();
+            }
         }
 
         [HttpPost]

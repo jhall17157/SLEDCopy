@@ -16,7 +16,10 @@
 
     <div class="container-fluid">
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand my-0 mr-md-auto" href="/"><img id="logo" src="https://www.wctc.edu/_resources/images/waukesha_logo.svg" alt="Waukesha County Technical College" width="250" height="54"></a>
+            <a class="navbar-brand my-0 mr-md-auto" href="/">
+                @*<img  src="https://www.wctc.edu/_resources/images/waukesha_logo.svg"  >*@
+                <img id="logo" src="~/Images/waukesha_logo.svg" alt="Waukesha County Technical College" width="250" height="54" />
+            </a>
             
             <ul class="navbar-nav" id="navLinkOverride">
                 @if (((CLS_SLE.Models.User)Session["user"]) != null)

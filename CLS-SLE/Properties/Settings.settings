@@ -1,6 +1,17 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CLS_SLE.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="EmailFrom" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">NOREPLY@wctc.edu</Value>
+    </Setting>
+    <Setting Name="EmailBody" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Click the link below and enter the code to reset your password for the SLE Assessment Login. &lt;br&gt; 
+&lt;a href = '[emailLink]'&gt;Link&lt;/a&gt;&lt;br&gt; Your unique code:
+&lt;br&gt;&lt;strong&gt;[passwordHash]&lt;/strong&gt;</Value>
+    </Setting>
+    <Setting Name="EmailSubject" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">SLE Password Reset</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

@@ -132,12 +132,18 @@ namespace CLS_SLE.Controllers
                         SmtpClient client = new SmtpClient();
                         try
                         {
-                            msg.From = new MailAddress("NOREPLY@wctc.edu");
-                            msg.Subject = "PASSWORD RESET";
+                            var url = Request.Url.AbsoluteUri+"Form";
+
+                            msg.From = new MailAddress(CLS_SLE.Properties.Settings.Default.EmailFrom);
+                            msg.Subject = (CLS_SLE.Properties.Settings.Default.EmailSubject);
                             msg.IsBodyHtml = true;
-                            msg.Body = "Click the link below and enter the code to reset your password for SLE Assessment Login. <br> " +
-                                       "<a href = 'https://sle-dev.wctc.edu/User/PasswordResetForm'>Link</a>" + "<br> Your unique code:" +
+                            msg.Body = CLS_SLE.Properties.Settings.Default.EmailBody
+                                .Replace("[emailLink]", url)
+                                .Replace("[passwordHash]", user.TemporaryPasswordHash);
+                                /* "Click the link below and enter the code to reset your password for SLE Assessment Login. <br> " +
+                                       "<a href = '" + CLS_SLE.Properties.Settings.Default.EmailLink + "'>Link</a>" + "<br> Your unique code:" +
                                        "<br><strong>" + user.TemporaryPasswordHash + "</strong>";
+                                       */
                             msg.To.Add(user.Email);
                             client.Send(msg);
                         }

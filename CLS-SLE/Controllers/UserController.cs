@@ -94,35 +94,43 @@ namespace CLS_SLE.Controllers
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())
                 if (ModelState.IsValid)
                 {
-                    User user = db.Users.Where(u => u.Login == pwReset.Login).FirstOrDefault();
-                    string alpha = "ABCDEFGHIJKLMNOPQRSTUWXYZ";
-                    string rndChars = "";
-                    Random rnd = new Random();
-                    for (int i = 1; i <= 6; i++)
-                    {
-                        rndChars += alpha[rnd.Next(alpha.Length)];
-                    }
-                    // reset key + time
-                    user.TemporaryPasswordIssued = DateTime.Now;
-                    user.TemporaryPasswordHash = rndChars;
-                    db.SaveChanges();
-                    // Send email
-                    MailMessage msg = new MailMessage();
-                    SmtpClient client = new SmtpClient();
                     try
                     {
-                        msg.From = new MailAddress("NOREPLY@wctc.edu");
-                        msg.Subject = "PASSWORD RESET";
-                        msg.IsBodyHtml = true;
-                        msg.Body = "Click the link below and enter the code to reset your password for SLE Assessment Login. <br> " +
-                                   "<a href = 'https://sle-dev.wctc.edu/User/PasswordResetForm'>Link</a>" + "<br> Your unique code:" +
-                                   "<br><strong>" + user.TemporaryPasswordHash + "</strong>";
-                        msg.To.Add(user.Email);
-                        client.Send(msg);
+                        User user = db.Users.Where(u => u.Login == pwReset.Login).FirstOrDefault();
+                        string alpha = "ABCDEFGHIJKLMNOPQRSTUWXYZ";
+                        string rndChars = "";
+                        Random rnd = new Random();
+                        for (int i = 1; i <= 6; i++)
+                        {
+                            rndChars += alpha[rnd.Next(alpha.Length)];
+                        }
+                        // reset key + time
+                        user.TemporaryPasswordIssued = DateTime.Now;
+                        user.TemporaryPasswordHash = rndChars;
+                        db.SaveChanges();
+                        // Send email
+                        MailMessage msg = new MailMessage();
+                        SmtpClient client = new SmtpClient();
+                        try
+                        {
+                            msg.From = new MailAddress("NOREPLY@wctc.edu");
+                            msg.Subject = "PASSWORD RESET";
+                            msg.IsBodyHtml = true;
+                            msg.Body = "Click the link below and enter the code to reset your password for SLE Assessment Login. <br> " +
+                                       "<a href = 'https://sle-dev.wctc.edu/User/PasswordResetForm'>Link</a>" + "<br> Your unique code:" +
+                                       "<br><strong>" + user.TemporaryPasswordHash + "</strong>";
+                            msg.To.Add(user.Email);
+                            client.Send(msg);
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Error(ex.Message + ", Password Reset Email Exception");
+                        }
                     }
-                    catch (Exception ex)
+                    catch
                     {
-
+                        ModelState.AddModelError("Login", "Couldn't find user");
+                        return View();
                     }
                     return RedirectToAction(actionName: "CheckEmail", controllerName: "Home");
                 }
@@ -150,24 +158,34 @@ namespace CLS_SLE.Controllers
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())
                 if (ModelState.IsValid)
                 {
-                    User user = db.Users.Where(u => u.Login == pwEdit.Login).FirstOrDefault();
-                    if (user.TemporaryPasswordHash == pwEdit.PWResetKey &&
-                        (DateTime.Now - user.TemporaryPasswordIssued) < TimeSpan.Parse("00:30:00.0000000"))
+                    try
                     {
-                        if (user.Login == pwEdit.Login && user.TemporaryPasswordHash == pwEdit.PWResetKey && pwEdit.Hash == pwEdit.SecondHash)
+                        User user = db.Users.Where(u => u.Login == pwEdit.Login).FirstOrDefault();
+                        if (user.TemporaryPasswordHash == pwEdit.PWResetKey &&
+                            (DateTime.Now - user.TemporaryPasswordIssued) < TimeSpan.Parse("00:30:00.0000000"))
                         {
-                            if (pwEdit.Hash != pwEdit.Login && pwEdit.Hash != "Password" && pwEdit.Hash != "Test")
+                            if (user.Login == pwEdit.Login && user.TemporaryPasswordHash == pwEdit.PWResetKey && pwEdit.Hash == pwEdit.SecondHash)
                             {
-                                user.Hash = BCrypt.Net.BCrypt.HashPassword(pwEdit.Hash);
-                                db.SaveChanges();
-                                return RedirectToAction(actionName: "SignIn", controllerName: "User");
+                                if (pwEdit.Hash != pwEdit.Login && pwEdit.Hash != "Password" && pwEdit.Hash != "Test")
+                                {
+                                    user.Hash = BCrypt.Net.BCrypt.HashPassword(pwEdit.Hash);
+                                    db.SaveChanges();
+                                    logger.Info("User Password Reset Email Recovery Successful for user " + user.Login);
+                                    return RedirectToAction(actionName: "SignIn", controllerName: "User");
+                                }
                             }
                         }
+                    }
+                    catch
+                    {
+                        ModelState.AddModelError("Login", "Couldn't find user");
+                        return View();
                     }
                     return RedirectToAction(actionName: "SignIn", controllerName: "User");
                 }
                 else
                 {
+                    logger.Error("User Password Reset Email Recovery Unsuccessful");
                     return View();
                 }
         }

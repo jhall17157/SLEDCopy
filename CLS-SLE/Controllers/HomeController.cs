@@ -12,9 +12,12 @@ namespace CLS_SLE.Controllers
     public class HomeController : Controller
     {
 
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         public ActionResult Index()
         {
-            return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
+            FormsAuthentication.SignOut();
+            Session.Abandon();
+            return RedirectToAction(actionName: "SignIn", controllerName: "User");
         }
 
         //GET: Home/SignOut

@@ -21,9 +21,14 @@ namespace CLS_SLE.Controllers
         [HttpGet]
         public ActionResult SignIn()
         {
-            FormsAuthentication.SignOut();
-            Session.Abandon();
-            return View();
+            if (Session["user"] == null)
+            {
+                FormsAuthentication.SignOut();
+                Session.Abandon();
+
+                return View();
+            }
+            return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
         }
 
         [HttpPost]

@@ -11,6 +11,13 @@
         <small>@category.Description</small>
         <ul class="list-group">
 
+            @if(((List<InstructorAssessment>)Model.assessments).Count() == 0)
+            {
+                <li class="list-group-item">
+                    <p>You currently have no assessments assigned to you. Please contact your instructional manager if you feel this is an error. </p>
+                </li>
+            }
+
             @foreach (InstructorAssessment assessment in Model.assessments)
             {
                 if (assessment.Category.Equals(category.CategoryCode))

@@ -1,6 +1,5 @@
 ﻿body {
     font-family: 'Karla', sans-serif;
-
     
 }
 
@@ -48,25 +47,62 @@ img {
     transition: width 1s;
 }
 
+.btn-group > .btn {
+    width: 170px;
+}
 /* Sets the size of headers to scale with the screen view width */
 h1 {
-    
     white-space: nowrap;
     font-size: 2.5vw;
     color: #003e7a;
 }
 
+h2 {
+    font-size: 2vw;
+    font-weight: 200;
+    
+}
+
+small, a {
+    white-space:nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.right {
+    float: right;
+}
+
 /* prevents h1 from getting crazy big on huge monitors */
 @media only screen and (min-width: 2000px) {
     h1 {
-        font-size: 3.5em;
+        font-size: 2em;
+    }
+    h2 {
+        font-size: 1.5em;
+    }
+}
+@media only screen and (max-width: 1000px) {
+    .progress-head {
+        display: none;
+    }
+
+    .btn-group {
+        float: left;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    h2 {
+        font-size: 1em;
+        display: block;
+        width: 100%
     }
 }
 
-h2 {
-    font-size: 2em;
-    font-weight: 200;
-}
+
 
 h3 {
     font-size: 1.5em;
@@ -82,6 +118,3 @@ h3 {
     white-space: nowrap;
 }
 
-.right {
-    float: right;
-}

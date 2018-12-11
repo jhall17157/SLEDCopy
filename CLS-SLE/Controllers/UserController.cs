@@ -41,6 +41,7 @@ namespace CLS_SLE.Controllers
                         {
                             // Passwords match
                             // authenticate user (Stores the UserID in an encrypted cookie)
+                            // User does not need to reset their password, send them straight to the dashboad
                             FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
                             Session["personID"] = user.PersonID;
                             Session["User"] = user;
@@ -54,6 +55,7 @@ namespace CLS_SLE.Controllers
                         {
                             // Passwords match
                             // authenticate user (Stores the UserID in an encrypted cookie)
+                            // User must reset their password, send them to the reset password form
                             FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
                             Session["personID"] = user.PersonID;
                             Session["User"] = user;
@@ -208,23 +210,6 @@ namespace CLS_SLE.Controllers
                 }
                 return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments"); ;
             }
-            return View();
-        }
-
-        public ActionResult BadCode()
-        {
-            return View();
-        }
-        public ActionResult BadEmail()
-        {
-            return View();
-        }
-        public ActionResult GoodPass()
-        {
-            return View();
-        }
-        public ActionResult BadPass()
-        {
             return View();
         }
     }

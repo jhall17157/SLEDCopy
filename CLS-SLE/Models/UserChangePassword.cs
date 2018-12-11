@@ -23,7 +23,7 @@ namespace CLS_SLE.Models
         [Required(ErrorMessage = "Confirmation Password Required")]
         [PasswordPropertyText]
         [StringLength(16, MinimumLength = 8)]
-        [DisplayName("Confirm New Password")]
+        [DisplayName("Confirm Password")]
         [Compare("NewHash", ErrorMessage = "Passwords Do Not Match")]
         public string ConfirmNewHash { get; set; }
     }

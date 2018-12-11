@@ -6,7 +6,6 @@
     bool exists = false;
     var numCriteria = 0;
     var filledCriteria = 0;
-    var rubricID = -1;
 }
 
 <nav aria-label="breadcrumb">
@@ -65,8 +64,6 @@
                 </div>
 
                 <ul class="list-group list-group-flush collapse  @(@filledCriteria == @numCriteria ? "" : "show") " id="group_@o.OutcomeID">
-
-
                     @foreach (RubricDetail rb in Model.Criteria)
                     {
                         if (o.Name.Equals(rb.OutcomeName))
@@ -99,7 +96,6 @@
                                                     @i.Description
                                                 </label>
                                             }
-
                                         </div>
                                     }
                                 </div>
@@ -119,11 +115,9 @@
     </div>
 </form>
     
-
-
-
 <style>
-    input[type=radio] {
+    input[type=radio] 
+    {
         float: left;
     }
 </style>
@@ -150,8 +144,6 @@
     </div>
 </div>
 
-
-
 @section scripts
 {
     <script>
@@ -176,9 +168,11 @@
                 }, 'linear');
             });
 
+            var studentListNav = false
             $('#studentLink').on('click', function ()
             {
                 if (changesMade) {
+                    studentListNav = true;
                     $('#studentList').removeAttr('hidden');
                     $('#changesMade').modal();
                 }
@@ -230,11 +224,14 @@
                 }
                 
             });
-
-
+            
             $('#assessmentInputForm').submit(function (eventObj) {
                 if (dashboardNav == true) {
                     $(this).append('<input type="hidden" name="dashboardBreadcrum"/> ');
+                    return true;
+                }
+                if (studentListNav == true) {
+                    $(this).append('<input type="hidden" name="studentListBreadcrum"/> ');
                     return true;
                 }
                 if (prevStudentTop == true) {
@@ -255,11 +252,9 @@
                 var name = this.getAttribute("name");
                 var count = 0;
                 $.each(serialized, function (key, value) {
-
                     if (value.name == name) {
                         count++;
                     }
-
                 });
                 if (count === 0) {
                     var filled = $('#filled_' + outcomeID).html();
@@ -267,7 +262,6 @@
                     $('#filled_' + outcomeID).html(filled);
                     serialized = $('#assessmentInputForm').serializeArray();
                 }
-
             });
         });
     </script>

@@ -20,6 +20,12 @@
             </a>
             
             <ul class="navbar-nav" id="navLinkOverride">
+                
+                @if(Request.Url.Host.Contains("dev"))
+                {
+                    <li class="nav-item" style="margin-right: 10px;line-height: 40px;">Dev Mode</li>
+                }
+
                 @if (((CLS_SLE.Models.User)Session["user"]) != null)
                 {
                     <li class="nav-item dropleft">

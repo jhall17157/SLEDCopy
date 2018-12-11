@@ -21,18 +21,20 @@ namespace CLS_SLE.Controllers
         [HttpGet]
         public ActionResult SignIn()
         {
-            if (Session["user"] == null)
+
+            try
             {
                 FormsAuthentication.SignOut();
                 Session.Abandon();
-
                 return View();
             }
-            return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
+            catch(HttpAntiForgeryException ex)
+            {
+                return View();
+            }
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult SignIn([Bind(Include = "Login,Hash")] UserSignIn userSignIn)
         {
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())
@@ -53,7 +55,7 @@ namespace CLS_SLE.Controllers
                             Session.Timeout = 180;
                             user.LastLogin = DateTime.Now;
                             db.SaveChanges();
-                            logger.Info("Successful login for user: " + user.Login + ", loading dashboard");
+                            logger.Info("Successful login for " + user.Login + ", loading dashboard");
                             return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
                         }
                         else
@@ -67,7 +69,7 @@ namespace CLS_SLE.Controllers
                             Session.Timeout = 180;
                             user.LastLogin = DateTime.Now;
                             db.SaveChanges();
-                            logger.Info("Successful login for user: " + user.Login + ", user must reset their password");
+                            logger.Info("Successful login for " + user.Login + ", user must reset their password");
                             return RedirectToAction(actionName: "ChangePassword", controllerName: "User");
                         }
                     }
@@ -99,35 +101,43 @@ namespace CLS_SLE.Controllers
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())
                 if (ModelState.IsValid)
                 {
-                    User user = db.Users.Where(u => u.Login == pwReset.Login).FirstOrDefault();
-                    string alpha = "ABCDEFGHIJKLMNOPQRSTUWXYZ";
-                    string rndChars = "";
-                    Random rnd = new Random();
-                    for (int i = 1; i <= 6; i++)
-                    {
-                        rndChars += alpha[rnd.Next(alpha.Length)];
-                    }
-                    // reset key + time
-                    user.TemporaryPasswordIssued = DateTime.Now;
-                    user.TemporaryPasswordHash = rndChars;
-                    db.SaveChanges();
-                    // Send email
-                    MailMessage msg = new MailMessage();
-                    SmtpClient client = new SmtpClient();
                     try
                     {
-                        msg.From = new MailAddress("NOREPLY@wctc.edu");
-                        msg.Subject = "PASSWORD RESET";
-                        msg.IsBodyHtml = true;
-                        msg.Body = "Click the link below and enter the code to reset your password for SLE Assessment Login. <br> " +
-                                   "<a href = 'https://sle-dev.wctc.edu/User/PasswordResetForm'>Link</a>" + "<br> Your unique code:" +
-                                   "<br><strong>" + user.TemporaryPasswordHash + "</strong>";
-                        msg.To.Add(user.Email);
-                        client.Send(msg);
+                        User user = db.Users.Where(u => u.Login == pwReset.Login).FirstOrDefault();
+                        string alpha = "ABCDEFGHIJKLMNOPQRSTUWXYZ";
+                        string rndChars = "";
+                        Random rnd = new Random();
+                        for (int i = 1; i <= 6; i++)
+                        {
+                            rndChars += alpha[rnd.Next(alpha.Length)];
+                        }
+                        // reset key + time
+                        user.TemporaryPasswordIssued = DateTime.Now;
+                        user.TemporaryPasswordHash = rndChars;
+                        db.SaveChanges();
+                        // Send email
+                        MailMessage msg = new MailMessage();
+                        SmtpClient client = new SmtpClient();
+                        try
+                        {
+                            msg.From = new MailAddress("NOREPLY@wctc.edu");
+                            msg.Subject = "PASSWORD RESET";
+                            msg.IsBodyHtml = true;
+                            msg.Body = "Click the link below and enter the code to reset your password for SLE Assessment Login. <br> " +
+                                       "<a href = 'https://sle-dev.wctc.edu/User/PasswordResetForm'>Link</a>" + "<br> Your unique code:" +
+                                       "<br><strong>" + user.TemporaryPasswordHash + "</strong>";
+                            msg.To.Add(user.Email);
+                            client.Send(msg);
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Error("Password reset email exception: " + ex.Message);
+                        }
                     }
-                    catch (Exception ex)
+                    catch
                     {
-
+                        ModelState.AddModelError("Login", "User not found");
+                        return View();
                     }
                     return RedirectToAction(actionName: "CheckEmail", controllerName: "Home");
                 }
@@ -155,24 +165,34 @@ namespace CLS_SLE.Controllers
             using (SLE_TrackingEntities db = new SLE_TrackingEntities())
                 if (ModelState.IsValid)
                 {
-                    User user = db.Users.Where(u => u.Login == pwEdit.Login).FirstOrDefault();
-                    if (user.TemporaryPasswordHash == pwEdit.PWResetKey &&
-                        (DateTime.Now - user.TemporaryPasswordIssued) < TimeSpan.Parse("00:30:00.0000000"))
+                    try
                     {
-                        if (user.Login == pwEdit.Login && user.TemporaryPasswordHash == pwEdit.PWResetKey && pwEdit.Hash == pwEdit.SecondHash)
+                        User user = db.Users.Where(u => u.Login == pwEdit.Login).FirstOrDefault();
+                        if (user.TemporaryPasswordHash == pwEdit.PWResetKey &&
+                            (DateTime.Now - user.TemporaryPasswordIssued) < TimeSpan.Parse("00:30:00.0000000"))
                         {
-                            if (pwEdit.Hash != pwEdit.Login && pwEdit.Hash != "Password" && pwEdit.Hash != "Test")
+                            if (user.Login == pwEdit.Login && user.TemporaryPasswordHash == pwEdit.PWResetKey && pwEdit.Hash == pwEdit.SecondHash)
                             {
-                                user.Hash = BCrypt.Net.BCrypt.HashPassword(pwEdit.Hash);
-                                db.SaveChanges();
-                                return RedirectToAction(actionName: "SignIn", controllerName: "User");
+                                if (pwEdit.Hash != pwEdit.Login && pwEdit.Hash != "Password" && pwEdit.Hash != "Test")
+                                {
+                                    user.Hash = BCrypt.Net.BCrypt.HashPassword(pwEdit.Hash);
+                                    db.SaveChanges();
+                                    logger.Info("Password change successful for " + user.Login);
+                                    return RedirectToAction(actionName: "SignIn", controllerName: "User");
+                                }
                             }
                         }
+                    }
+                    catch
+                    {
+                        ModelState.AddModelError("Login", "User not found");
+                        return View();
                     }
                     return RedirectToAction(actionName: "SignIn", controllerName: "User");
                 }
                 else
                 {
+                    logger.Error("User Password Reset Email Recovery Unsuccessful");
                     return View();
                 }
         }
@@ -196,22 +216,31 @@ namespace CLS_SLE.Controllers
             {
                 using (SLE_TrackingEntities db = new SLE_TrackingEntities())
                 {
-                    String userLogin = ((User)Session["User"]).Login;
-                    User user = db.Users.Where(u => u.Login == userLogin).FirstOrDefault();
-                    if (BCrypt.Net.BCrypt.Verify(cPassword.Hash, user.Hash))
+                    try
                     {
-                        user.Hash = BCrypt.Net.BCrypt.HashPassword(cPassword.NewHash);
-                        user.MustResetPassword = false;
-                        db.SaveChanges();
-                        Session["user"] = user;
-                        logger.Info("User " + user.Login + " successfully changed their password");
+                        String userLogin = ((User)Session["User"]).Login;
+                        User user = db.Users.Where(u => u.Login == userLogin).FirstOrDefault();
+                        if (BCrypt.Net.BCrypt.Verify(cPassword.Hash, user.Hash))
+                        {
+                            user.Hash = BCrypt.Net.BCrypt.HashPassword(cPassword.NewHash);
+                            user.MustResetPassword = false;
+                            db.SaveChanges();
+                            Session["user"] = user;
+                            logger.Info("User " + user.Login + " successfully changed their password");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Hash", "Current password is Incorrect");
+                            logger.Error("User " + user.Login + " attempted to change their password but the inputed current password did not match.");
+                            return View();
+                        }
                     }
-                    else
+                    catch
                     {
-                        ModelState.AddModelError("Hash", "Current password is Incorrect");
-                        logger.Error("User " + user.Login + " attempted to change their password but the inputed current password did not match.");
+                        ModelState.AddModelError("Login", "User not found");
                         return View();
                     }
+                    
                 }
                 return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments"); ;
             }

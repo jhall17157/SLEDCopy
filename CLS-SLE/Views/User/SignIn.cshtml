@@ -25,9 +25,7 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <button type="submit" class="btn btn-outline-dark">Sign In</button>
-                @Html.ValidationMessageFor(model => model.Hash, "", new { @class = "text-danger" })
-                @Html.ValidationMessageFor(model => model.Hash, "", new { @class = "text-danger" })
-            </div>
+                @Html.ValidationMessageFor(model => model.Hash, "", new { @class = "text-danger" })            </div>
             <br />
             <a href="~/User/PasswordReset">Forgot password?</a>
         </div>

@@ -77,13 +77,13 @@ namespace CLS_SLE.Controllers
                         }
                         else
                         {
-                            ModelState.AddModelError("Hash", "Current password is Incorrect");
+                            ModelState.AddModelError("Hash", "Username or password invalid");
                             return View();
                         }
                     }
                     catch
                     {
-                        ModelState.AddModelError("Login", "User not found");
+                        ModelState.AddModelError("Hash", "Username or password invalid");
                         return View();
                     }
                     
@@ -140,10 +140,6 @@ namespace CLS_SLE.Controllers
                             msg.Body = CLS_SLE.Properties.Settings.Default.EmailBody
                                 .Replace("[emailLink]", url)
                                 .Replace("[passwordHash]", user.TemporaryPasswordHash);
-                                /* "Click the link below and enter the code to reset your password for SLE Assessment Login. <br> " +
-                                       "<a href = '" + CLS_SLE.Properties.Settings.Default.EmailLink + "'>Link</a>" + "<br> Your unique code:" +
-                                       "<br><strong>" + user.TemporaryPasswordHash + "</strong>";
-                                       */
                             msg.To.Add(user.Email);
                             client.Send(msg);
                         }

@@ -55,7 +55,7 @@ namespace CLS_SLE.Controllers
                             Session.Timeout = 180;
                             user.LastLogin = DateTime.Now;
                             db.SaveChanges();
-                            logger.Info("Successful login for user: " + user.Login + ", loading dashboard");
+                            logger.Info("Successful login for " + user.Login + ", loading dashboard");
                             return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
                         }
                         else
@@ -69,7 +69,7 @@ namespace CLS_SLE.Controllers
                             Session.Timeout = 180;
                             user.LastLogin = DateTime.Now;
                             db.SaveChanges();
-                            logger.Info("Successful login for user: " + user.Login + ", user must reset their password");
+                            logger.Info("Successful login for " + user.Login + ", user must reset their password");
                             return RedirectToAction(actionName: "ChangePassword", controllerName: "User");
                         }
                     }
@@ -131,12 +131,12 @@ namespace CLS_SLE.Controllers
                         }
                         catch (Exception ex)
                         {
-                            logger.Error(ex.Message + ", Password Reset Email Exception");
+                            logger.Error("Password reset email exception: " + ex.Message);
                         }
                     }
                     catch
                     {
-                        ModelState.AddModelError("Login", "Couldn't find user");
+                        ModelState.AddModelError("Login", "User not found");
                         return View();
                     }
                     return RedirectToAction(actionName: "CheckEmail", controllerName: "Home");
@@ -177,7 +177,7 @@ namespace CLS_SLE.Controllers
                                 {
                                     user.Hash = BCrypt.Net.BCrypt.HashPassword(pwEdit.Hash);
                                     db.SaveChanges();
-                                    logger.Info("User Password Reset Email Recovery Successful for user " + user.Login);
+                                    logger.Info("Password change successful for " + user.Login);
                                     return RedirectToAction(actionName: "SignIn", controllerName: "User");
                                 }
                             }
@@ -185,7 +185,7 @@ namespace CLS_SLE.Controllers
                     }
                     catch
                     {
-                        ModelState.AddModelError("Login", "Couldn't find user");
+                        ModelState.AddModelError("Login", "User not found");
                         return View();
                     }
                     return RedirectToAction(actionName: "SignIn", controllerName: "User");
@@ -216,22 +216,31 @@ namespace CLS_SLE.Controllers
             {
                 using (SLE_TrackingEntities db = new SLE_TrackingEntities())
                 {
-                    String userLogin = ((User)Session["User"]).Login;
-                    User user = db.Users.Where(u => u.Login == userLogin).FirstOrDefault();
-                    if (BCrypt.Net.BCrypt.Verify(cPassword.Hash, user.Hash))
+                    try
                     {
-                        user.Hash = BCrypt.Net.BCrypt.HashPassword(cPassword.NewHash);
-                        user.MustResetPassword = false;
-                        db.SaveChanges();
-                        Session["user"] = user;
-                        logger.Info("User " + user.Login + " successfully changed their password");
+                        String userLogin = ((User)Session["User"]).Login;
+                        User user = db.Users.Where(u => u.Login == userLogin).FirstOrDefault();
+                        if (BCrypt.Net.BCrypt.Verify(cPassword.Hash, user.Hash))
+                        {
+                            user.Hash = BCrypt.Net.BCrypt.HashPassword(cPassword.NewHash);
+                            user.MustResetPassword = false;
+                            db.SaveChanges();
+                            Session["user"] = user;
+                            logger.Info("User " + user.Login + " successfully changed their password");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Hash", "Current password is Incorrect");
+                            logger.Error("User " + user.Login + " attempted to change their password but the inputed current password did not match.");
+                            return View();
+                        }
                     }
-                    else
+                    catch
                     {
-                        ModelState.AddModelError("Hash", "Current password is Incorrect");
-                        logger.Error("User " + user.Login + " attempted to change their password but the inputed current password did not match.");
+                        ModelState.AddModelError("Login", "User not found");
                         return View();
                     }
+                    
                 }
                 return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments"); ;
             }

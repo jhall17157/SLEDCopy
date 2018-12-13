@@ -43,12 +43,12 @@ namespace CLS_SLE.Controllers
             }
         }
 
-        public ActionResult StudentList(int rubricID)
+        public ActionResult StudentList(int rubricID, int sectionID)
         {
             try
             {
                 var personID = Convert.ToInt32(Session["personID"].ToString());
-                var instructor = db.InstructorAssessments.FirstOrDefault(r => r.RubricID == rubricID && r.PersonID == personID);
+                var instructor = db.InstructorAssessments.FirstOrDefault(r => r.RubricID == rubricID && r.PersonID == personID && r.SectionID == sectionID);
                 logger.Info("Assessment student list loaded for " + instructor.Login + " with rubricID " + rubricID);
 
                 var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID).OrderBy(c => c.LastName).ThenBy(c => c.FirstName);

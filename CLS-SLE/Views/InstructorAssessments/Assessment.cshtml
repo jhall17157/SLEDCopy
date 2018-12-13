@@ -137,7 +137,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" id="modalSave" data-dismiss="modal" data-toggle="modal">Yes</button>
 
-                <a href="StudentList?rubricID=@r.RubricID" class="btn btn-primary" hidden id="studentList">No</a>
+                <a href="StudentList?rubricID=@r.RubricID&sectionID=@r.SectionID" class="btn btn-primary" hidden id="studentList">No</a>
                 <a href="Dashboard" class="btn btn-primary" hidden id="dashboard">No</a>
             </div>
         </div>
@@ -177,7 +177,7 @@
                     $('#changesMade').modal();
                 }
                 else {
-                    location.href = "StudentList?rubricID=@r.RubricID";
+                    location.href = "StudentList?rubricID=@r.RubricID&sectionID=@r.SectionID";
                 }
             });
 
@@ -220,9 +220,8 @@
                     $('#assessmentInputForm').submit();
                 }
                 else {
-                    location.href = "/InstructorAssessments/StudentList?rubricID=@r.RubricID";
+                    location.href = "/InstructorAssessments/StudentList?rubricID=@r.RubricID&sectionID=@r.SectionID";
                 }
-                
             });
             
             $('#assessmentInputForm').submit(function (eventObj) {

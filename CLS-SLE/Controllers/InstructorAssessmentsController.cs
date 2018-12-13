@@ -87,6 +87,7 @@ namespace CLS_SLE.Controllers
                 var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID && i.PersonID == personID && i.RubricID == rubricID);
                 
                 Session["rubricID"] = instructor.RubricID;
+                Session["sectionID"] = instructor.SectionID;
                 
                 var student = db.SectionEnrollments.FirstOrDefault(s => s.sectionID == sectionID && s.EnrollmentID == enrollmentID);
                 Session["enrollmentID"] = student.EnrollmentID;
@@ -170,10 +171,10 @@ namespace CLS_SLE.Controllers
             else if(submitType.Equals("studentListBreadcrum"))
             {
                 logger.Info("Submission recieved and saved, redirecting to student list");
-                return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
+                return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"], sectionID = Session["sectionID"] });
             }
             logger.Info("Submission recieved and saved, redirecting to assessment student list");
-            return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
+            return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"], sectionID = Session["sectionID"] });
         }
 
         private ActionResult NextStudent()
@@ -191,11 +192,11 @@ namespace CLS_SLE.Controllers
                     }
                     catch
                     {
-                        return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
+                        return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"], sectionID = Session["sectionID"] });
                     }
                 }
             }
-            return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
+            return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"], sectionID = Session["sectionID"] });
         }
 
         private ActionResult LastStudent()
@@ -213,11 +214,11 @@ namespace CLS_SLE.Controllers
                     }
                     catch
                     {
-                        return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
+                        return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"], sectionID = Session["sectionID"] });
                     }
                 }
             }
-            return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"] });
+            return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"], sectionID = Session["sectionID"] });
         }
 
         private ActionResult Exceptions()

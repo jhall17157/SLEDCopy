@@ -62,7 +62,7 @@ namespace CLS_SLE.Controllers
 
                 var completedScores = db.StudentScoreCounts.Where(c => c.RubricID == rubricID && c.SectionID == instructor.SectionID);
                 
-                var assessment = db.InstructorAssessments.Where(a => a.RubricID == rubricID).FirstOrDefault();
+                var assessment = db.InstructorAssessments.Where(a => a.RubricID == rubricID && a.SectionID == instructor.SectionID).FirstOrDefault();
 
                 dynamic mymodel = new ExpandoObject();
                 mymodel.Students = students.ToList();
@@ -92,7 +92,7 @@ namespace CLS_SLE.Controllers
                 Session["enrollmentID"] = student.EnrollmentID;
 
                 logger.Info("Assessment loaded for student " + student.FirstName + " by " + instructor.Login + " in assesssment with rubricID " + rubricID);
-                var rubric = db.InstructorAssessments.FirstOrDefault(n => n.RubricID == instructor.RubricID);
+                var rubric = db.InstructorAssessments.FirstOrDefault(n => n.RubricID == instructor.RubricID && n.SectionID == instructor.SectionID);
 
                 var outcomes = db.Outcomes.Where(c => c.RubricID == instructor.RubricID);
 

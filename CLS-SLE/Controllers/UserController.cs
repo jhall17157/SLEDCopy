@@ -48,17 +48,19 @@ namespace CLS_SLE.Controllers
                             var user = db.Users.Where(u => u.Login == userSignIn.Login).FirstOrDefault();
                             if (BCrypt.Net.BCrypt.Verify(userSignIn.Hash, user.Hash))
                             {
+                                FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
+                                Session["personID"] = user.PersonID;
+                                Session["User"] = user;
+                                Session.Timeout = 180;
+                                user.LastLogin = DateTime.Now;
+                                db.SaveChanges();
+
                                 if (!user.MustResetPassword)
                                 {
                                     // Passwords match
                                     // authenticate user (Stores the UserID in an encrypted cookie)
                                     // User does not need to reset their password, send them straight to the dashboad
-                                    FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
-                                    Session["personID"] = user.PersonID;
-                                    Session["User"] = user;
-                                    Session.Timeout = 180;
-                                    user.LastLogin = DateTime.Now;
-                                    db.SaveChanges();
+                                    
                                     logger.Info("Successful login for " + user.Login + ", loading dashboard");
                                     return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
                                 }
@@ -67,12 +69,7 @@ namespace CLS_SLE.Controllers
                                     // Passwords match
                                     // authenticate user (Stores the UserID in an encrypted cookie)
                                     // User must reset their password, send them to the reset password form
-                                    FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
-                                    Session["personID"] = user.PersonID;
-                                    Session["User"] = user;
-                                    Session.Timeout = 180;
-                                    user.LastLogin = DateTime.Now;
-                                    db.SaveChanges();
+                                    
                                     logger.Info("Successful login for " + user.Login + ", user must reset their password");
                                     return RedirectToAction(actionName: "ChangePassword", controllerName: "User");
                                 }

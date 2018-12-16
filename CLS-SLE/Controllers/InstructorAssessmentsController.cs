@@ -53,13 +53,8 @@ namespace CLS_SLE.Controllers
 
                 var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID).OrderBy(c => c.LastName).ThenBy(c => c.FirstName);
                 
-                List<float> EnrollmentIDs = new List<float>();
-                foreach(var student in students)
-                {
-                    EnrollmentIDs.Add(student.EnrollmentID);
-                }
-                Session["assessmentEnrollment"] = EnrollmentIDs;
-
+                Session["assessmentEnrollment"] = students.Select(u => u.EnrollmentID).ToList();
+                              
                 var completedScores = db.StudentScoreCounts.Where(c => c.RubricID == rubricID && c.SectionID == instructor.SectionID);
                 
                 var assessment = db.InstructorAssessments.Where(a => a.RubricID == rubricID && a.SectionID == instructor.SectionID).FirstOrDefault();
@@ -181,7 +176,7 @@ namespace CLS_SLE.Controllers
         {
             var enrollmentID = Convert.ToInt32(Session["enrollmentID"]);
             var enrollment = db.SectionEnrollments.FirstOrDefault(e => e.EnrollmentID == enrollmentID);
-            var list = (List<float>)Session["assessmentEnrollment"];
+            var list = (List<long>)Session["assessmentEnrollment"];
             for (var x = 0; x < list.Count; x++)
             {
                 if (enrollmentID == list[x])
@@ -203,7 +198,7 @@ namespace CLS_SLE.Controllers
         {
             var enrollmentID = Convert.ToInt32(Session["enrollmentID"]);
             var enrollment = db.SectionEnrollments.FirstOrDefault(e => e.EnrollmentID == enrollmentID);
-            var list = (List<float>)Session["assessmentEnrollment"];
+            var list = (List<long>)Session["assessmentEnrollment"];
             for (var x = 0; x < list.Count; x++)
             {
                 if (enrollmentID == list[x])

@@ -19,6 +19,7 @@ namespace CLS_SLE.Controllers
         private Logger logger = LogManager.GetCurrentClassLogger();
 
         // GET: InstructorAssessments
+
         public ActionResult Dashboard()
         {
             try
@@ -43,6 +44,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "Faculty")]
         public ActionResult StudentList(int rubricID, int sectionID)
         {
             try
@@ -73,7 +75,8 @@ namespace CLS_SLE.Controllers
             }
         }
         
-        [Authorize]
+        
+        [Authorize(Roles = "Faculty")]
         public ActionResult Assessment(int sectionID, int enrollmentID, int rubricID)
         {
             try

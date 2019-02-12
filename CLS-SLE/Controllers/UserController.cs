@@ -9,6 +9,8 @@ using System.Web.Security;
 using System.Net.Mail;
 using BCrypt.Net;
 using NLog;
+using System.Security.Principal;
+using System.Threading;
 
 namespace CLS_SLE.Controllers
 {
@@ -48,13 +50,14 @@ namespace CLS_SLE.Controllers
                             var user = db.Users.Where(u => u.Login == userSignIn.Login).FirstOrDefault();
                             if (BCrypt.Net.BCrypt.Verify(userSignIn.Hash, user.Hash))
                             {
+
                                 FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
                                 Session["personID"] = user.PersonID;
                                 Session["User"] = user;
                                 Session.Timeout = 180;
                                 user.LastLogin = DateTime.Now;
                                 db.SaveChanges();
-
+                                
                                 if (!user.MustResetPassword)
                                 {
                                     // Passwords match
@@ -62,6 +65,7 @@ namespace CLS_SLE.Controllers
                                     // User does not need to reset their password, send them straight to the dashboad
                                     
                                     logger.Info("Successful login for " + user.Login + ", loading dashboard");
+                                    AssignRoles(db, user);
                                     return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
                                 }
                                 else
@@ -262,5 +266,27 @@ namespace CLS_SLE.Controllers
             }
             return View();
         }
+
+        public void AssignRoles(SLE_TrackingEntities db, User user)
+        {
+
+
+            String[] RolesArray = (from Role in db.Roles
+                                   join UserRole in db.UserRoles
+                                   on Role.RoleID equals UserRole.RoleID
+                                   join User in db.Users
+                                   on UserRole.PersonID equals User.PersonID
+                                   where User.PersonID == user.PersonID
+                                   select Role.Name).ToArray();
+            GenericIdentity UserIdentity = new GenericIdentity(user.Login);
+            GenericPrincipal UserPrincipal = new GenericPrincipal(UserIdentity, RolesArray);
+            Thread.CurrentPrincipal = UserPrincipal;
+
+           
+
+
+
+        }
+
     }
 }

@@ -51,55 +51,63 @@ namespace CLS_SLE.Controllers
                             var user = db.Users.Where(u => u.Login == userSignIn.Login).FirstOrDefault();
                             if (BCrypt.Net.BCrypt.Verify(userSignIn.Hash, user.Hash))
                             {
-
-                                FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
-                                Session["personID"] = user.PersonID;
-                                Session["User"] = user;
-                                Session.Timeout = 180;
-                                user.LastLogin = DateTime.Now;
-                                db.SaveChanges();
-                                AuthorizeUser(db, user.Login, System.Web.HttpContext.Current);
-                                
-                                if (!user.MustResetPassword)
+                                if (user.IsActive)
                                 {
-                                    // Passwords match
-                                    // authenticate user (Stores the UserID in an encrypted cookie)
-                                    // User does not need to reset their password, send them straight to the dashboad
-                                    
-                                    logger.Info("Successful login for " + user.Login + ", loading dashboard");
-                                    
-                                    return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
+
+                                    FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
+                                    Session["personID"] = user.PersonID;
+                                    Session["User"] = user;
+                                    Session.Timeout = 180;
+                                    user.LastLogin = DateTime.Now;
+                                    db.SaveChanges();
+                                    AuthorizeUser(db, user.Login, System.Web.HttpContext.Current);
+
+                                    if (!user.MustResetPassword)
+                                    {
+                                        // Passwords match
+                                        // authenticate user (Stores the UserID in an encrypted cookie)
+                                        // User does not need to reset their password, send them straight to the dashboad
+
+                                        logger.Info("Successful login for " + user.Login + ", loading dashboard");
+
+                                        return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
+                                    }
+                                    else
+                                    {
+                                        // Passwords match
+                                        // authenticate user (Stores the UserID in an encrypted cookie)
+                                        // User must reset their password, send them to the reset password form
+
+                                        logger.Info("Successful login for " + user.Login + ", user must reset their password");
+                                        return RedirectToAction(actionName: "ChangePassword", controllerName: "User");
+                                    }
                                 }
                                 else
                                 {
-                                    // Passwords match
-                                    // authenticate user (Stores the UserID in an encrypted cookie)
-                                    // User must reset their password, send them to the reset password form
-                                    
-                                    logger.Info("Successful login for " + user.Login + ", user must reset their password");
-                                    return RedirectToAction(actionName: "ChangePassword", controllerName: "User");
+                                    logger.Error("InactiveUser");
+                                    return RedirectToAction(actionName: "Error", controllerName: "User");
                                 }
                             }
                             else
                             {
                                 ModelState.AddModelError("Hash", "Username or password invalid");
-                                return View();
+                                return RedirectToAction(actionName: "Error", controllerName: "User");
                             }
                         }
                         catch
                         {
                             ModelState.AddModelError("Hash", "Username or password invalid");
-                            return View();
+                            return RedirectToAction(actionName: "Error", controllerName: "User");
                         }
 
                     }
                     logger.Error("Login failed");
-                    return View();
+                    return RedirectToAction(actionName: "Error", controllerName: "User");
                 } catch (Exception ex)
                 {
                     FormsAuthentication.SignOut();
                     Session.Abandon();
-                    return View();
+                    return RedirectToAction(actionName: "Error", controllerName: "User");
                 }
             }
         }
@@ -266,6 +274,12 @@ namespace CLS_SLE.Controllers
                 }
                 return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments"); ;
             }
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult Error()
+        {
             return View();
         }
 

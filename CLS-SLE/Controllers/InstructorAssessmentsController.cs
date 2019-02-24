@@ -10,16 +10,18 @@ using System.Web.Mvc;
 using CLS_SLE.Models;
 using System.Collections.Specialized;
 using NLog;
+using System.Security.Permissions;
 
 namespace CLS_SLE.Controllers
 {
+    [Authorize(Roles = "Faculty")]
     public class InstructorAssessmentsController : Controller
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
         private Logger logger = LogManager.GetCurrentClassLogger();
 
         // GET: InstructorAssessments
-
+        
         public ActionResult Dashboard()
         {
             try
@@ -44,7 +46,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
-        [Authorize(Roles = "Faculty")]
+        
         public ActionResult StudentList(int rubricID, int sectionID)
         {
             try
@@ -74,9 +76,8 @@ namespace CLS_SLE.Controllers
                 return Exceptions();
             }
         }
+
         
-        
-        [Authorize(Roles = "Faculty")]
         public ActionResult Assessment(int sectionID, int enrollmentID, int rubricID)
         {
             try

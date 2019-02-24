@@ -11,6 +11,7 @@ using BCrypt.Net;
 using NLog;
 using System.Security.Principal;
 using System.Threading;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace CLS_SLE.Controllers
 {
@@ -57,6 +58,7 @@ namespace CLS_SLE.Controllers
                                 Session.Timeout = 180;
                                 user.LastLogin = DateTime.Now;
                                 db.SaveChanges();
+                                AuthorizeUser(db, user.Login, System.Web.HttpContext.Current);
                                 
                                 if (!user.MustResetPassword)
                                 {
@@ -65,7 +67,7 @@ namespace CLS_SLE.Controllers
                                     // User does not need to reset their password, send them straight to the dashboad
                                     
                                     logger.Info("Successful login for " + user.Login + ", loading dashboard");
-                                    AssignRoles(db, user);
+                                    
                                     return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
                                 }
                                 else
@@ -267,25 +269,32 @@ namespace CLS_SLE.Controllers
             return View();
         }
 
-        public void AssignRoles(SLE_TrackingEntities db, User user)
+        protected void AuthorizeUser(SLE_TrackingEntities db, String login, HttpContext Context)
         {
 
+            var user = Context.User;
 
-            String[] RolesArray = (from Role in db.Roles
-                                   join UserRole in db.UserRoles
-                                   on Role.RoleID equals UserRole.RoleID
-                                   join User in db.Users
-                                   on UserRole.PersonID equals User.PersonID
-                                   where User.PersonID == user.PersonID
-                                   select Role.Name).ToArray();
-            GenericIdentity UserIdentity = new GenericIdentity(user.Login);
-            GenericPrincipal UserPrincipal = new GenericPrincipal(UserIdentity, RolesArray);
-            Thread.CurrentPrincipal = UserPrincipal;
+                String[] RolesArray = (from Role in db.Roles
+                                       join UserRole in db.UserRoles
+                                       on Role.RoleID equals UserRole.RoleID
+                                       join User in db.Users
+                                       on UserRole.PersonID equals User.PersonID
+                                       where User.Login == login
+                                       select Role.Name).ToArray();
+            var UserIdentity = user.Identity;
+            Context.User = new GenericPrincipal(UserIdentity, RolesArray);
 
-           
-
-
-
+            FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(
+                                                    1,
+                                                    login,  //user id
+                                                    DateTime.Now,
+                                                    DateTime.Now.AddMinutes(20),  // expiry
+                                                    false,  //do not remember
+                                                    string.Join(",", RolesArray),
+                                                    "/");
+            HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName,
+                                               FormsAuthentication.Encrypt(authTicket));
+            Response.Cookies.Add(cookie);
         }
 
     }

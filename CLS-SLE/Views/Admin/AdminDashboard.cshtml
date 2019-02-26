@@ -4,19 +4,23 @@
     ViewBag.Title = "AdminDashboard";
 }
 
-<h2>Admin Dashboard | <a href="~/Views/InstructorAssessments/Assessment.cshtml">Faculty Dashboard</a></h2>
+<h2><a href="~/Views/Admin/AdminDashboard.cshtml">Admin Dashboard</a> | <a href="~/Views/InstructorAssessments/Assessment.cshtml">Faculty Dashboard</a></h2>
 
 <div>
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#first" aria-controls="first" role="tab" data-toggle="tab">First </a></li>
-        <li role="presentation"><a href="#second" aria-controls="second" role="tab" data-toggle="tab"> Second </a></li>
-        <li role="presentation"><a href="#third" aria-controls="first" role="tab" data-toggle="tab"> Third </a></li>
-        <li role="presentation"><a href="#fourth" aria-controls="second" role="tab" data-toggle="tab"> Fourth </a></li>
-        <li role="presentation"><a href="#fifth" aria-controls="second" role="tab" data-toggle="tab"> Fifth </a></li>
-        <li role="presentation"><a href="#sixth" aria-controls="first" role="tab" data-toggle="tab"> Sixth </a></li>
-        <li role="presentation"><a href="#seventh" aria-controls="second" role="tab" data-toggle="tab"> Seventh</a></li>
+        <li role="presentation" class="active"><a href="#dashboard" aria-controls="first" role="tab" data-toggle="tab">Admin Dashboard </a></li>
+        <li> | </li>
+        <li role="presentation"><a href="#userSecurity" aria-controls="second" role="tab" data-toggle="tab"> Users and Security </a></li>
+        <li> | </li>
+        <li role="presentation"><a href="#programCourses" aria-controls="first" role="tab" data-toggle="tab"> Programs and Courses </a></li>
+        <li> | </li>
+        <li role="presentation"><a href="#assessments" aria-controls="second" role="tab" data-toggle="tab"> Assessments </a></li>
+        <li> | </li>
+        <li role="presentation"><a href="#assessmentMapping" aria-controls="second" role="tab" data-toggle="tab"> Program Assessment Mappings </a></li>
+        <li> | </li>
+        <li role="presentation"><a href="#scheduling" aria-controls="first" role="tab" data-toggle="tab"> Assessment Scheduling </a></li>
     </ul>
 
     @{

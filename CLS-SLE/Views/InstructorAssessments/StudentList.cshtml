@@ -13,7 +13,18 @@
 </nav>
 
 <h1>@a.AssessmentName</h1>
-<h2>@a.RubricName</h2>
+<h2>
+    @a.RubricName
+
+    @{
+        if (@a.AssessmentLevel != null)
+        {
+            <div class="col-md-3 ml-auto">
+                <b>Assessment Level: </b>@a.AssessmentLevel
+            </div>
+        }
+    }
+</h2>
 @a.CourseName <span class="float-right">CRN# @a.CRN</span>
 
 <table class="table table-hover">
@@ -38,8 +49,8 @@
                         {
                             <span style="right: 0px; top: 0px; width: 60px;" class="badge badge-dark">@scoreCount.CompletedCount / @scoreCount.CriteriaCount</span>
                         }
-                    } 
-                 </td>
+                    }
+                </td>
             </tr>
             x++;
         }

@@ -15,25 +15,23 @@ namespace CLS_SLE.Models
 using System;
     using System.Collections.Generic;
     
-public partial class AssessmentLevel
+public partial class ScoreSet
 {
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-    public AssessmentLevel()
+    public ScoreSet()
     {
 
-        this.ProgramAssessmentMappings = new HashSet<ProgramAssessmentMapping>();
+        this.AssessmentRubrics = new HashSet<AssessmentRubric>();
 
-        this.SectionRubrics = new HashSet<SectionRubric>();
+        this.Scores = new HashSet<Score>();
 
     }
 
 
-    public string AssessmentLevelCode { get; set; }
+    public byte ScoreSetID { get; set; }
 
     public string Name { get; set; }
-
-    public bool IsActive { get; set; }
 
     public Nullable<System.DateTime> CreatedDateTime { get; set; }
 
@@ -43,15 +41,17 @@ public partial class AssessmentLevel
 
     public Nullable<int> ModifiedByLoginID { get; set; }
 
+    public bool IsActive { get; set; }
 
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
-    public virtual ICollection<ProgramAssessmentMapping> ProgramAssessmentMappings { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
-    public virtual ICollection<SectionRubric> SectionRubrics { get; set; }
+    public virtual ICollection<AssessmentRubric> AssessmentRubrics { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<Score> Scores { get; set; }
 
 }
 

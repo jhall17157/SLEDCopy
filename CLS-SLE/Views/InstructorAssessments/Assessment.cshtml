@@ -22,8 +22,9 @@
 
     <div class="btn-group right" role="group" style="margin-top:10px; margin-bottom:5px;">
         <input type="button" class="btn btn-outline-dark" value="Previous Student" id="prevStudentSubmitTop" name="lastStudent">
-        <input type="button" class="btn btn-outline-dark" value="Back to all students" id="allStudentSubmitTop" name="backToStudents" >
-        <input type="button" class="btn btn-outline-dark" value="Next Student" id="nextStudentSubmitTop" name="nextStudent" >
+        <input type="button" class="btn btn-outline-dark" value="Mark not assessed" id="markNotAssessed" name="markNotAssessed">
+        <input type="button" class="btn btn-outline-dark" value="Back to all students" id="allStudentSubmitTop" name="backToStudents">
+        <input type="button" class="btn btn-outline-dark" value="Next Student" id="nextStudentSubmitTop" name="nextStudent">
     </div>
 </div>
 
@@ -39,11 +40,13 @@
                 if (o.Name.Equals(rb.OutcomeName))
                 {
                     numCriteria++;
-                    foreach (ScoreType i in Model.Selectors)
+                    //foreach (ScoreType i in Model.Selectors)
+                    foreach (Score i in Model.Selectors)
                     {
                         foreach (StudentScore ss in Model.StudentScores)
                         {
-                            if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
+                            if (ss.CriteriaID == rb.CriteriaID && ss.ScoreID == i.ScoreID)
+                           // if (ss.CriteriaID == rb.CriteriaID && ss.ScoreID == i.RubricID)
                             {
                                 filledCriteria++;
                                 break;
@@ -73,16 +76,16 @@
                                     @rb.CriteriaName
                                 </div>
                                 <div class="float-right">
-                                    @foreach (ScoreType i in Model.Selectors)
+                                    @foreach (Score i in Model.Selectors)
                                     {
                                         <div class="form-check" id="@o.OutcomeID">
                                             @foreach (StudentScore ss in Model.StudentScores)
                                             {
                                                 exists = false;
-                                                if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
+                                                if (ss.CriteriaID == rb.CriteriaID && ss.ScoreID == i.ScoreID)
                                                 {
                                                     <label class="form-check-label desc">
-                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { Checked = "checked", @class = "form-check-input" })
+                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { Checked = "checked", @class = "form-check-input" })
                                                         @i.Description
                                                     </label>
                                                     exists = true;
@@ -91,10 +94,20 @@
                                             }
                                             @if (!exists)
                                             {
-                                                <label class="form-check-label desc">
-                                                    @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { @class = "form-check-input" })
-                                                    @i.Description
-                                                </label>
+                                                if (i.Description != "Not Assessed")
+                                                {
+                                                    <label class="form-check-label desc">
+                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input" })
+                                                        @i.Description
+                                                    </label>
+                                                }
+                                                else
+                                                {
+                                                    <label class="form-check-label desc">
+                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input notAssessed"})
+                                                        @i.Description
+                                                    </label>
+                                                }
                                             }
                                         </div>
                                     }
@@ -108,16 +121,15 @@
     </div>
     <div class="text-center">
         <div class="btn-group" role="group" style="margin-top:10px;">
-            <input type="submit" class="btn btn-outline-dark" value="Previous Student" id="prevStudentSubmit" name="lastStudent" >
-            <input type="submit" class="btn btn-outline-dark" value="Back to all students" id="allStudentSubmit" name="backToStudents" >
-            <input type="submit" class="btn btn-outline-dark" value="Next Student" id="nextStudentSubmit" name="nextStudent" >
+            <input type="submit" class="btn btn-outline-dark" value="Previous Student" id="prevStudentSubmit" name="lastStudent">
+            <input type="submit" class="btn btn-outline-dark" value="Back to all students" id="allStudentSubmit" name="backToStudents">
+            <input type="submit" class="btn btn-outline-dark" value="Next Student" id="nextStudentSubmit" name="nextStudent">
         </div>
     </div>
 </form>
-    
+
 <style>
-    input[type=radio] 
-    {
+    input[type=radio] {
         float: left;
     }
 </style>
@@ -138,6 +150,28 @@
                 <button type="button" class="btn btn-warning" id="modalSave" data-dismiss="modal" data-toggle="modal">Yes</button>
 
                 <a href="StudentList?rubricID=@r.RubricID&sectionID=@r.SectionID" class="btn btn-primary" hidden id="studentList">No</a>
+                <a href="Dashboard" class="btn btn-primary" hidden id="dashboard">No</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="notAssessedAll" class="modal fade modal-spacing" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title float-left">Notice:</h2>
+                <button type="button" class="close float-right" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="confirmText">
+                <p><strong>You are about to mark all answers as "Not Assessed". Do you wish to continue?</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" id="modalNotAssessed" data-dismiss="modal" data-toggle="modal">Yes</button>
+
+                <button type="button" class="btn btn-primary" id="close" data-dismiss="modal" data-toggle="modal">No</button>
                 <a href="Dashboard" class="btn btn-primary" hidden id="dashboard">No</a>
             </div>
         </div>
@@ -200,6 +234,15 @@
                 $('#assessmentInputForm').submit();
             });
 
+            $('#modalNotAssessed').on('click', function (e) {
+                $(".notAssessed").prop('checked', 'true');
+
+            });
+
+            $('#close').on('click', function (e) {
+                $('#modalNotAssessed').modal('hide');
+            })
+
             var prevStudentTop = false;
             $('#prevStudentSubmitTop').on('click', function (e) {
                 e.preventDefault();
@@ -223,7 +266,11 @@
                     location.href = "/InstructorAssessments/StudentList?rubricID=@r.RubricID&sectionID=@r.SectionID";
                 }
             });
-            
+
+            $('#markNotAssessed').on('click', function (e) {
+                $('#notAssessedAll').modal();
+            });
+
             $('#assessmentInputForm').submit(function (eventObj) {
                 if (dashboardNav == true) {
                     $(this).append('<input type="hidden" name="dashboardBreadcrum"/> ');

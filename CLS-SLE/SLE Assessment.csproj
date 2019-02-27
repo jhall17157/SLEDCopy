@@ -440,6 +440,12 @@
     <Content Include="Views\User\ChangePassword.cshtml" />
     <Content Include="Views\User\Error.cshtml" />
     <Content Include="Views\Admin\AdminDashboard.cshtml" />
+    <Content Include="Views\Admin\UsersSecurity.cshtml" />
+    <Content Include="Views\Admin\SchoolsDepartments.cshtml" />
+    <Content Include="Views\Admin\ProgramsCourses.cshtml" />
+    <Content Include="Views\Admin\Assessments.cshtml" />
+    <Content Include="Views\Admin\AssessmentMappings.cshtml" />
+    <Content Include="Views\Admin\AssessmentScheduling.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

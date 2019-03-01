@@ -3,19 +3,8 @@
     ViewBag.Title = "Dashboard";
 }
 
-@{foreach(Role role in Model.role)
-    
-        { 
-        if (@role.Name != "Faculty")
-        {
-            <h1><a href="~/Admin/AdminDashboard.cshtml">Admin Dashboard</a> | <a href="~/InstructorAssessments/Dashboard.cshtml">Faculty Dashboard</a></h1>
-        }
-        else
-        {
-            <h1>Faculty Dashboard</h1>
-        }
-    }
-}
+<h1><a href="~/Admin/AdminDashboard">Admin Dashboard</a> | <a href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a></h1>
+
 
 @if (((List<InstructorAssessment>)Model.assessments).Count() == 0)
 {

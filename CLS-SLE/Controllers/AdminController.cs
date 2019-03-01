@@ -18,5 +18,35 @@ namespace CLS_SLE.Controllers
         {
             return View();
         }
+
+        public ActionResult AssessmentMappings()
+        {
+            return View();
+        }
+
+        public ActionResult Assessments()
+        {
+            return View();
+        }
+
+        public ActionResult AssessmentsScheduling()
+        {
+            return View();
+        }
+
+        public ActionResult ProgramsCourses()
+        {
+            return View();
+        }
+
+        public ActionResult SchoolsDepartments()
+        {
+            return View();
+        }
+
+        public ActionResult UsersSecurity()
+        {
+            return View();
+        }
     }
 }

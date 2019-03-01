@@ -4,24 +4,16 @@
     ViewBag.Title = "AdminDashboard";
 }
 
-<h2><a href="~/Admin/AdminDashboard.cshtml">Admin Dashboard</a> | <a href="~/InstructorAssessments/Dashboard.cshtml">Faculty Dashboard</a></h2>
+<h2><a href="~/Admin/AdminDashboard">Admin Dashboard</a> | <a href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a></h2>
 
-<div>
 
     <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="~/Views/Admin/AdminDashboard.cshtml" aria-controls="first" role="tab" data-toggle="tab">Admin Dashboard </a></li>
-        <li> | </li>
-        <li role="presentation"><a href="~/Views/Admin/UsersSecurity.cshtml" aria-controls="second" role="tab" data-toggle="tab"> Users and Security </a></li>
-        <li> | </li>
-        <li role="presentation"><a href="~/Views/Admin/ProgramsCourses.cshtml" aria-controls="first" role="tab" data-toggle="tab"> Programs and Courses </a></li>
-        <li> | </li>
-        <li role="presentation"><a href="~/Views/Admin/Assessments.cshtml" aria-controls="second" role="tab" data-toggle="tab"> Assessments </a></li>
-        <li> | </li>
-        <li role="presentation"><a href="~/Views/Admin/AssessmentMappings.cshtml" aria-controls="second" role="tab" data-toggle="tab"> Program Assessment Mappings </a></li>
-        <li> | </li>
-        <li role="presentation"><a href="~/Views/Admin/AssessmentScheduling.cshtml" aria-controls="first" role="tab" data-toggle="tab"> Assessment Scheduling </a></li>
-    </ul>
+    <a href="~/Admin/AdminDashboard">Admin Dashboard </a> | 
+    <a href="~/Admin/UsersSecurity"> Users and Security </a> | 
+    <a href="~/Admin/ProgramsCourses"> Programs and Courses </a> | 
+    <a href="~/Admin/Assessments"> Assessments </a> | 
+    <a href="~/Admin/AssessmentMappings"> Program Assessment Mappings </a> | 
+    <a href="~/Admin/AssessmentScheduling"> Assessment Scheduling </a>
 
     @{
         // Users and Security (Admin only)

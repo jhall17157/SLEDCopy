@@ -2,7 +2,15 @@
 @{
     ViewBag.Title = "Dashboard";
 }
-<h1>Dashboard</h1>
+
+@if (HttpContext.Current.User.IsInRole("Administrator"))
+{
+<h2><a href="~/Admin/AdminDashboard">Admin Dashboard</a> | <a href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a></h2>
+} else
+{
+<h2> <a href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a></h2>
+}
+
 
 @if (((List<InstructorAssessment>)Model.assessments).Count() == 0)
 {
@@ -41,8 +49,15 @@
                                 </div>
                                 <div class="col-md-3 ml-auto">
                                     <b>CRN: </b>@assessment.CRN
-
                                 </div>
+                                @{
+                                    if (@assessment.AssessmentLevel != null)
+                                    {
+                                        <div class="col-md-3 ml-auto">
+                                            <b>Assessment Level: </b>@assessment.AssessmentLevel
+                                        </div>
+                                    }
+                                }
                             </div>
                             <div class="row">
                                 <div class="col-md-9">

@@ -15,21 +15,21 @@ namespace CLS_SLE.Models
 using System;
     using System.Collections.Generic;
     
-public partial class AssessmentLevel
+public partial class School
 {
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-    public AssessmentLevel()
+    public School()
     {
 
-        this.ProgramAssessmentMappings = new HashSet<ProgramAssessmentMapping>();
+        this.Departments = new HashSet<Department>();
 
-        this.SectionRubrics = new HashSet<SectionRubric>();
+        this.SchoolSecurities = new HashSet<SchoolSecurity>();
 
     }
 
 
-    public string AssessmentLevelCode { get; set; }
+    public byte SchoolID { get; set; }
 
     public string Name { get; set; }
 
@@ -47,11 +47,11 @@ public partial class AssessmentLevel
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
-    public virtual ICollection<ProgramAssessmentMapping> ProgramAssessmentMappings { get; set; }
+    public virtual ICollection<Department> Departments { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
-    public virtual ICollection<SectionRubric> SectionRubrics { get; set; }
+    public virtual ICollection<SchoolSecurity> SchoolSecurities { get; set; }
 
 }
 

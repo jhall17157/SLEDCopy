@@ -13,22 +13,19 @@ namespace CLS_SLE.Models
 {
 
 using System;
-    using System.Collections.Generic;
     
-public partial class StudentScoreCount
+public partial class sp_helpdiagrams_Result
 {
 
-    public int SectionID { get; set; }
+    public string Database { get; set; }
 
-    public short RubricID { get; set; }
+    public string Name { get; set; }
 
-    public int StudentID { get; set; }
+    public int ID { get; set; }
 
-    public long EnrollmentID { get; set; }
+    public string Owner { get; set; }
 
-    public Nullable<int> CompletedCount { get; set; }
-
-    public Nullable<int> CriteriaCount { get; set; }
+    public int OwnerID { get; set; }
 
 }
 

@@ -9,9 +9,6 @@ using System.Web.Security;
 using System.Net.Mail;
 using BCrypt.Net;
 using NLog;
-using System.Security.Principal;
-using System.Threading;
-using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace CLS_SLE.Controllers
 {
@@ -85,36 +82,45 @@ namespace CLS_SLE.Controllers
                                         // authenticate user (Stores the UserID in an encrypted cookie)
                                         // User must reset their password, send them to the reset password form
 
-                                        logger.Info("Successful login for " + user.Login + ", user must reset their password");
-                                        return RedirectToAction(actionName: "ChangePassword", controllerName: "User");
-                                    }
+                                if (!user.MustResetPassword)
+                                {
+                                    // Passwords match
+                                    // authenticate user (Stores the UserID in an encrypted cookie)
+                                    // User does not need to reset their password, send them straight to the dashboad
+                                    
+                                    logger.Info("Successful login for " + user.Login + ", loading dashboard");
+                                    return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
                                 }
                                 else
                                 {
-                                    logger.Error("InactiveUser");
-                                    return RedirectToAction(actionName: "Error", controllerName: "User");
+                                    // Passwords match
+                                    // authenticate user (Stores the UserID in an encrypted cookie)
+                                    // User must reset their password, send them to the reset password form
+                                    
+                                    logger.Info("Successful login for " + user.Login + ", user must reset their password");
+                                    return RedirectToAction(actionName: "ChangePassword", controllerName: "User");
                                 }
                             }
                             else
                             {
                                 ModelState.AddModelError("Hash", "Username or password invalid");
-                                return RedirectToAction(actionName: "Error", controllerName: "User");
+                                return View();
                             }
                         }
                         catch
                         {
                             ModelState.AddModelError("Hash", "Username or password invalid");
-                            return RedirectToAction(actionName: "Error", controllerName: "User");
+                            return View();
                         }
 
                     }
                     logger.Error("Login failed");
-                    return RedirectToAction(actionName: "Error", controllerName: "User");
+                    return View();
                 } catch (Exception ex)
                 {
                     FormsAuthentication.SignOut();
                     Session.Abandon();
-                    return RedirectToAction(actionName: "Error", controllerName: "User");
+                    return View();
                 }
             }
         }
@@ -283,40 +289,5 @@ namespace CLS_SLE.Controllers
             }
             return View();
         }
-
-        [AllowAnonymous]
-        public ActionResult Error()
-        {
-            return View();
-        }
-
-        protected void AuthorizeUser(SLE_TrackingEntities db, String login, HttpContext Context)
-        {
-
-            var user = Context.User;
-
-                String[] RolesArray = (from Role in db.Roles
-                                       join UserRole in db.UserRoles
-                                       on Role.RoleID equals UserRole.RoleID
-                                       join User in db.Users
-                                       on UserRole.PersonID equals User.PersonID
-                                       where User.Login == login
-                                       select Role.Name).ToArray();
-            var UserIdentity = user.Identity;
-            Context.User = new GenericPrincipal(UserIdentity, RolesArray);
-
-            FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(
-                                                    1,
-                                                    login,  //user id
-                                                    DateTime.Now,
-                                                    DateTime.Now.AddMinutes(20),  // expiry
-                                                    false,  //do not remember
-                                                    string.Join(",", RolesArray),
-                                                    "/");
-            HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName,
-                                               FormsAuthentication.Encrypt(authTicket));
-            Response.Cookies.Add(cookie);
-        }
-
     }
 }

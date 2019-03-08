@@ -15,28 +15,18 @@ namespace CLS_SLE.Models
 using System;
     using System.Collections.Generic;
     
-public partial class RubricDetail
+public partial class sysdiagram
 {
 
-    public string AssessmentName { get; set; }
+    public string name { get; set; }
 
-    public short RubricID { get; set; }
+    public int principal_id { get; set; }
 
-    public string RubricName { get; set; }
+    public int diagram_id { get; set; }
 
-    public string Description { get; set; }
+    public Nullable<int> version { get; set; }
 
-    public string OutcomeName { get; set; }
-
-    public byte OutcomeSortOrder { get; set; }
-
-    public short CriteriaID { get; set; }
-
-    public string CriteriaName { get; set; }
-
-    public string ExampleText { get; set; }
-
-    public byte CriteriaSortOrder { get; set; }
+    public byte[] definition { get; set; }
 
 }
 

@@ -29,7 +29,7 @@ namespace CLS_SLE.Controllers
             return View();
         }
 
-        public ActionResult AssessmentsScheduling()
+        public ActionResult AssessmentScheduling()
         {
             return View();
         }

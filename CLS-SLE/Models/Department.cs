@@ -14,8 +14,33 @@ namespace CLS_SLE.Models
     
     public partial class Department
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Department()
+        {
+            this.Courses = new HashSet<Course>();
+            this.CourseSubjects = new HashSet<CourseSubject>();
+            this.DepartmentSecurities = new HashSet<DepartmentSecurity>();
+            this.ProgramDepartments = new HashSet<ProgramDepartment>();
+        }
+    
         public short DepartmentID { get; set; }
         public string Number { get; set; }
         public string Name { get; set; }
+        public Nullable<byte> SchoolID { get; set; }
+        public bool IsActive { get; set; }
+        public Nullable<System.DateTime> CreatedDateTime { get; set; }
+        public Nullable<int> CreatedByLoginID { get; set; }
+        public Nullable<System.DateTime> ModifiedDateTime { get; set; }
+        public Nullable<int> ModifiedByLoginID { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Course> Courses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CourseSubject> CourseSubjects { get; set; }
+        public virtual School School { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DepartmentSecurity> DepartmentSecurities { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProgramDepartment> ProgramDepartments { get; set; }
     }
 }

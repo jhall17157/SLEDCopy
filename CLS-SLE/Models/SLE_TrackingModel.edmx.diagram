@@ -12,7 +12,7 @@
         <EntityTypeShape EntityType="SLE_TrackingModel.Course" Width="1.5" PointX="3.75" PointY="13" IsExpanded="true" />
         <EntityTypeShape EntityType="SLE_TrackingModel.CourseProgram" Width="1.5" PointX="6" PointY="5.25" IsExpanded="true" />
         <EntityTypeShape EntityType="SLE_TrackingModel.Criterion" Width="1.5" PointX="6" PointY="24.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SLE_TrackingModel.Department" Width="1.5" PointX="5.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SLE_TrackingModel.Department" Width="1.5" PointX="6.375" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="SLE_TrackingModel.Enrollment" Width="1.5" PointX="3" PointY="8.625" IsExpanded="true" />
         <EntityTypeShape EntityType="SLE_TrackingModel.EnrollmentStatu" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SLE_TrackingModel.ETL_StatusMapping" Width="1.5" PointX="3" PointY="2.125" IsExpanded="true" />
@@ -60,6 +60,38 @@
         <AssociationConnector Association="SLE_TrackingModel.fk_Section_SemesterID" ManuallyRouted="false" />
         <AssociationConnector Association="SLE_TrackingModel.fk_SectionRubric_SectionID" ManuallyRouted="false" />
         <AssociationConnector Association="SLE_TrackingModel.fk_StudentProgram_SemesterID" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="SLE_TrackingModel.CourseSubject" Width="1.5" PointX="14.25" PointY="24.125" />
+        <EntityTypeShape EntityType="SLE_TrackingModel.CourseSubjectSecurity" Width="1.5" PointX="16.5" PointY="1.5" />
+        <EntityTypeShape EntityType="SLE_TrackingModel.DepartmentSecurity" Width="1.5" PointX="17.5" PointY="10.625" />
+        <EntityTypeShape EntityType="SLE_TrackingModel.ProgramAssessmentMapping" Width="1.5" PointX="12.75" PointY="18.875" />
+        <EntityTypeShape EntityType="SLE_TrackingModel.ProgramSecurity" Width="1.5" PointX="17.5" PointY="6.375" />
+        <EntityTypeShape EntityType="SLE_TrackingModel.School" Width="1.5" PointX="4.25" PointY="0.5" />
+        <EntityTypeShape EntityType="SLE_TrackingModel.SchoolSecurity" Width="1.5" PointX="13.5" PointY="1.25" />
+        <EntityTypeShape EntityType="SLE_TrackingModel.Score" Width="1.5" PointX="7.5" PointY="19.375" />
+        <EntityTypeShape EntityType="SLE_TrackingModel.ScoreSet" Width="1.5" PointX="0.75" PointY="27.875" />
+        <EntityTypeShape EntityType="SLE_TrackingModel.sysdiagram" Width="1.5" PointX="9.875" PointY="18.75" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_ProgramAssessmentMapping_AssessmentLevelCode" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_AssessmentRubric_ScoreSetID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_ProgramAssessmentMapping_RubricID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_Course_PrimaryDepartmentID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_ProgramAssessmentMapping_CourseID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_CourseSubject_PrimaryDepartmentID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_CourseSubjectSecurity_CourseSubject" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_CourseSubjectSecurity_RoleID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_Department_SchoolID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_DepartmentSecurity_DepartmentID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_ProgramDepartment_DepartmentID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_DepartmentSecurity_RoleID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_ProgramAssessmentMapping_ProgramID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_ProgramDepartment_ProgramID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_ProgramSecurity_ProgramID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_ProgramSecurity_RoleID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_SchoolSecurity_RoleID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_UserRole_RoleID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_SchoolSecurity_ProgramID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_Score_ScoreSetID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_StudentScore_ScoreID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_UserRole_PersonID" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

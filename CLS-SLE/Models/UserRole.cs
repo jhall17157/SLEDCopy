@@ -16,6 +16,13 @@ namespace CLS_SLE.Models
     {
         public int UserRoleID { get; set; }
         public int PersonID { get; set; }
-        public byte RoleID { get; set; }
+        public Nullable<short> RoleID { get; set; }
+        public Nullable<System.DateTime> CreatedDateTime { get; set; }
+        public Nullable<int> CreatedByLoginID { get; set; }
+        public Nullable<System.DateTime> ModifiedDateTime { get; set; }
+        public Nullable<int> ModifiedByLoginID { get; set; }
+    
+        public virtual Role Role { get; set; }
+        public virtual User User { get; set; }
     }
 }

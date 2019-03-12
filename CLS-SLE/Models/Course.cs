@@ -19,15 +19,26 @@ namespace CLS_SLE.Models
         {
             this.CoursePrograms = new HashSet<CourseProgram>();
             this.Sections = new HashSet<Section>();
+            this.ProgramAssessmentMappings = new HashSet<ProgramAssessmentMapping>();
         }
     
         public short CourseID { get; set; }
         public string CourseName { get; set; }
         public string Number { get; set; }
+        public Nullable<short> PrimaryDepartmentID { get; set; }
+        public bool IsERPCourse { get; set; }
+        public bool IsActive { get; set; }
+        public Nullable<System.DateTime> CreatedDateTime { get; set; }
+        public Nullable<int> CreatedByLoginID { get; set; }
+        public Nullable<System.DateTime> ModifiedDateTime { get; set; }
+        public Nullable<int> ModifiedByLoginID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CourseProgram> CoursePrograms { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Section> Sections { get; set; }
+        public virtual Department Department { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProgramAssessmentMapping> ProgramAssessmentMappings { get; set; }
     }
 }

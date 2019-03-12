@@ -25,6 +25,10 @@ namespace CLS_SLE.Models
         public int StudentID { get; set; }
         public string EnrollmentStatusCode { get; set; }
         public System.DateTime StatusDate { get; set; }
+        public Nullable<System.DateTime> CreatedDateTime { get; set; }
+        public Nullable<int> CreatedByLoginID { get; set; }
+        public Nullable<System.DateTime> ModifiedDateTime { get; set; }
+        public Nullable<int> ModifiedByLoginID { get; set; }
     
         public virtual EnrollmentStatu EnrollmentStatu { get; set; }
         public virtual Section Section { get; set; }

@@ -27,6 +27,11 @@ namespace CLS_SLE.Models
         public byte SortOrder { get; set; }
         public Nullable<decimal> CriteriaPassRate { get; set; }
         public bool CalculateCriteriaPassRate { get; set; }
+        public bool IsActive { get; set; }
+        public Nullable<System.DateTime> CreatedDateTime { get; set; }
+        public Nullable<int> CreatedByLoginID { get; set; }
+        public Nullable<System.DateTime> ModifiedDateTime { get; set; }
+        public Nullable<int> ModifiedByLoginID { get; set; }
     
         public virtual AssessmentRubric AssessmentRubric { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

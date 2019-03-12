@@ -14,6 +14,12 @@ namespace CLS_SLE.Models
     
     public partial class User
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public User()
+        {
+            this.UserRoles = new HashSet<UserRole>();
+        }
+    
         public int PersonID { get; set; }
         public string Login { get; set; }
         public string Email { get; set; }
@@ -23,7 +29,13 @@ namespace CLS_SLE.Models
         public string TemporaryPasswordHash { get; set; }
         public Nullable<System.DateTime> TemporaryPasswordIssued { get; set; }
         public bool IsActive { get; set; }
+        public Nullable<System.DateTime> CreatedDateTime { get; set; }
+        public Nullable<int> CreatedByLoginID { get; set; }
+        public Nullable<System.DateTime> ModifiedDateTime { get; set; }
+        public Nullable<int> ModifiedByLoginID { get; set; }
     
         public virtual Person Person { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserRole> UserRoles { get; set; }
     }
 }

@@ -20,10 +20,12 @@ namespace CLS_SLE.Models
         public short ScoreTypeID { get; set; }
         public int AssessedByID { get; set; }
         public Nullable<System.DateTime> DateTimeAssessed { get; set; }
+        public Nullable<short> ScoreID { get; set; }
     
         public virtual Criterion Criterion { get; set; }
         public virtual Enrollment Enrollment { get; set; }
         public virtual Person Person { get; set; }
         public virtual ScoreType ScoreType { get; set; }
+        public virtual Score Score { get; set; }
     }
 }

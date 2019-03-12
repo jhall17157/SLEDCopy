@@ -17,7 +17,12 @@ namespace CLS_SLE.Models
         public short CourseProgramID { get; set; }
         public short CourseID { get; set; }
         public short ProgramID { get; set; }
-        public string CatalogYear { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
+        public Nullable<System.DateTime> CreatedDateTime { get; set; }
+        public Nullable<int> CreatedByLoginID { get; set; }
+        public Nullable<System.DateTime> ModifiedDateTime { get; set; }
+        public Nullable<int> ModifiedByLoginID { get; set; }
     
         public virtual Course Course { get; set; }
         public virtual Program Program { get; set; }

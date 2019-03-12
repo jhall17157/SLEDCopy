@@ -17,5 +17,14 @@ namespace CLS_SLE.Models
         public short ProgramDepartmentID { get; set; }
         public short ProgramID { get; set; }
         public short DepartmentID { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
+        public Nullable<System.DateTime> CreatedDateTime { get; set; }
+        public Nullable<int> CreatedByLoginID { get; set; }
+        public Nullable<System.DateTime> ModifiedDateTime { get; set; }
+        public Nullable<int> ModifiedByLoginID { get; set; }
+    
+        public virtual Department Department { get; set; }
+        public virtual Program Program { get; set; }
     }
 }

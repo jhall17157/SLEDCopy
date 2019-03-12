@@ -27,17 +27,15 @@
                 <td style="width: 120px;">@person.PersonID</td>
                 <td>@person.LastName<text>,</text> @person.FirstName</td>
                 <td style="width: 100px; text-align: center">
-                    <span style="right: 0px; top: 0px; width: 60px;" class="badge badge-dark">
+            
                         @foreach (Role role in person.Roles)
                         {
                             @role.Name<text>, </text>
-                        }
-                        
-                    </span>
+                        }                       
+                    
                 </td>
             </tr>
                     x++;
-                
             }
     </tbody>
 </table>

@@ -87,7 +87,9 @@ namespace CLS_SLE.Controllers
                 
                 Session["rubricID"] = instructor.RubricID;
                 Session["sectionID"] = instructor.SectionID;
-                
+
+                var ScoreSet = db.AssessmentRubrics.FirstOrDefault(n => n.RubricID == rubricID);
+
                 var student = db.SectionEnrollments.FirstOrDefault(s => s.sectionID == sectionID && s.EnrollmentID == enrollmentID);
                 Session["enrollmentID"] = student.EnrollmentID;
 
@@ -98,7 +100,7 @@ namespace CLS_SLE.Controllers
 
                 var criteria = db.RubricDetails.Where(c => c.RubricID == instructor.RubricID);
 
-                var numberOfSelectors = db.ScoreTypes.Where(n => n.RubricID == instructor.RubricID);
+                var numberOfSelectors = db.Scores.Where(n => n.ScoreSetID == ScoreSet.ScoreSetID);//db.ScoreTypes.Where(n => n.RubricID == instructor.RubricID);
 
                 var studentScores = db.StudentScores.Where(s => s.EnrollmentID == student.EnrollmentID);
 
@@ -128,12 +130,12 @@ namespace CLS_SLE.Controllers
             for (var t = 1; t < fc.Count - 1; t++)
             {
                 Int16 criteriaID = Convert.ToInt16(outcomeIDs[t]);
-                Int16 scoreTypeID = Convert.ToInt16(fc.GetValue(criteriaID.ToString()).AttemptedValue);
+                Int16 scoreID = Convert.ToInt16(fc.GetValue(criteriaID.ToString()).AttemptedValue);
                 
                 var checkIfExists = db.StudentScores.Where(c => c.EnrollmentID == enrollmentID && c.CriteriaID == criteriaID).FirstOrDefault();
                 if(checkIfExists != null)
                 {
-                    checkIfExists.ScoreTypeID = scoreTypeID;
+                    checkIfExists.ScoreID = scoreID;
                 }
                 else
                 {
@@ -141,7 +143,7 @@ namespace CLS_SLE.Controllers
                     {
                         EnrollmentID = Convert.ToInt32(Session["enrollmentID"]),
                         CriteriaID = criteriaID,
-                        ScoreTypeID = Convert.ToSByte(scoreTypeID),
+                        ScoreID = Convert.ToSByte(scoreID),
                         AssessedByID = Convert.ToInt32(Session["personID"]),
                         DateTimeAssessed = DateTime.Now,
                     };

@@ -1,7 +1,35 @@
-﻿
+﻿@using CLS_SLE.Models;
 @{
     ViewBag.Title = "Assessments";
 }
 
 <h2>Assessments | <a href="~/Admin/AdminDashboard">Admin Dashboard</a></h2>
+
+@foreach (AssessmentCategory category in Model.categories)
+{
+    if (((List<Assessment>)Model.assessments).Where(a => a.Category == category.CategoryCode).Count() != 0)
+    {
+        <h2>@category.Name</h2>
+        <small>@category.Description</small>
+        <ul class="list-group">
+
+
+
+            @foreach (Assessment assessment in Model.assessments)
+            {
+                if (assessment.Category.Equals(category.CategoryCode))
+                {
+
+                 <div>
+                     <div>
+                         @Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })
+                     </div>
+                     <br /><br />
+                 </div>
+                }
+            }
+        </ul>
+        <br />
+    }
+}
 

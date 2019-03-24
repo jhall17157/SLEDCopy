@@ -1,0 +1,60 @@
+﻿@using CLS_SLE.Models
+@model Assessment
+
+    @{
+        ViewBag.Title = "EditAssessment";
+    }
+
+    <h2>Edit Assessment</h2>
+
+    @{
+        using (Html.BeginForm("SaveAssessment", "Admin", FormMethod.Post))
+        {
+            @Html.LabelFor(m => m.AssessmentID, "Assesment ID: ") 
+            
+                @Html.TextBoxFor(m => m.AssessmentID)
+                <div>
+                    @Model.AssessmentID
+                </div>
+                @Html.TextBoxFor(m => m.Name)
+                <div>
+                    @Model.Name
+                </div>
+                @Html.TextBoxFor(m => m.Category)
+                <div>
+                    @Model.Category
+                </div>
+                @Html.TextBoxFor(m => m.Description)
+                <div>
+                    @Model.Description
+                </div>
+                @Html.TextBoxFor(m => m.OutcomePassRate)
+                <div>
+                    @Model.OutcomePassRate
+                </div>
+                @Html.TextBoxFor(m => m.CalculateOutcomePassRate)
+                <div>
+                    @Model.CalculateOutcomePassRate
+                </div>
+                @Html.TextBoxFor(m => m.ProgramID)
+                <div>
+                    @Model.ProgramID
+                </div>
+                @Html.TextBoxFor(m => m.IsActive)
+                <div>
+                    @Model.IsActive
+                </div>
+                @Html.TextBoxFor(m => m.ModifiedDateTime)
+                <div>
+                    @Model.ModifiedDateTime
+                </div>
+                @Html.TextBoxFor(m => m.ModifiedByLoginID)
+                <div>
+                    @Model.ModifiedByLoginID
+                </div>
+
+                <input type="submit" value="Save Assessment"/>
+                <input type="reset" value="Cancel Changes"/>
+            }
+        }
+

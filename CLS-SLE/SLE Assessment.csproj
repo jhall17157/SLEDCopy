@@ -510,6 +510,7 @@
     <Content Include="Views\Admin\AssessmentScheduling.cshtml" />
     <Content Include="Views\Admin\UsersSecurity.cshtml" />
     <Content Include="Views\Admin\ViewAssessment.cshtml" />
+    <Content Include="Views\Admin\EditAssessment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

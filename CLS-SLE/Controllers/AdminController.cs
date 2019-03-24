@@ -63,17 +63,108 @@ namespace CLS_SLE.Controllers
         {
             var assessment = new Assessment();
             var canEdit = false;
-
-            if (assessmentId.HasValue)
+            try
             {
-                assessment = db.Assessments.FirstOrDefault(a => a.AssessmentID == assessmentId.Value);
-                var permission = db.AssessmentRubricSecurities.FirstOrDefault(p => p.AssessmentID == assessmentId.Value);
-                if (permission != null)
+                if (assessmentId.HasValue)
                 {
-                    canEdit = permission.CanEdit == 1 ? true : false;
+                    assessment = db.Assessments.FirstOrDefault(a => a.AssessmentID == assessmentId.Value);
+                    var permission = db.AssessmentRubricSecurities.FirstOrDefault(p => p.AssessmentID == assessmentId.Value);
+                    if (permission != null)
+                    {
+                        canEdit = permission.CanEdit == 1 ? true : false;
+                    }
+                }
+                
+                dynamic model = new ExpandoObject();
+
+                model.assessment = assessment;
+                model.canEdit = canEdit;
+
+                return View(model);
+            }
+            catch
+            {
+                logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
+                return RedirectToAction(actionName: "Signin", controllerName: "User");
+            }
+        }
+
+        public ActionResult EditAssessment(int? assessmentId)
+        {
+            var assessment = new Assessment();
+
+            try
+            {
+                if (assessmentId.HasValue)
+                {
+                    var canEdit = false;
+                    assessment = db.Assessments.FirstOrDefault(a => a.AssessmentID == assessmentId.Value);
+                    var permission = db.AssessmentRubricSecurities.FirstOrDefault(p => p.AssessmentID == assessmentId.Value);
+
+                    if (permission != null)
+                    {
+                        canEdit = permission.CanEdit == 1 ? true : false;
+                    }
+
+                    if (!canEdit)
+                    {
+                        throw new Exception("User cannot edit this assessment");
+                    }
+                }
+                else
+                {
+                    throw new Exception("Assessment not found!");
+                }
+
+                return View(assessment);
+            }
+            catch
+            {
+                logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
+                return RedirectToAction(actionName: "Signin", controllerName: "User");
+            }
+        }
+
+        public ActionResult SaveAssessment(Assessment assessment)
+        {
+            try
+            {
+                if (assessment != null && assessment.AssessmentID > 0)
+                {
+                    var editAssessment = db.Assessments.FirstOrDefault(a => a.AssessmentID == assessment.AssessmentID);
+
+                    if (editAssessment != null)
+                    {
+                        editAssessment.Name = assessment.Name;
+                        editAssessment.Category = assessment.Category;
+                        editAssessment.Description = assessment.Description;
+                        editAssessment.OutcomePassRate = assessment.OutcomePassRate;
+
+                        editAssessment.ModifiedDateTime = DateTime.Now;
+                        editAssessment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                        //TODO add the rest of the properties you want to save
+
+                        db.SaveChanges();
+
+                        return RedirectToAction(actionName: "ViewAssessment", controllerName: "Admin", routeValues: new { assessmentId = editAssessment.AssessmentID });
+                    }
+                    else
+                    {
+                        logger.Error("Failed to save assessment, redirecting to sign in page.");
+                        return RedirectToAction(actionName: "Signin", controllerName: "User");
+                    }
+                }
+                else
+                {
+                    logger.Error("Failed to save assessment, redirecting to sign in page.");
+                    return RedirectToAction(actionName: "Signin", controllerName: "User");
                 }
             }
-            return View();
+            catch
+            {
+                logger.Error("Failed to save assessment, redirecting to sign in page.");
+                return RedirectToAction(actionName: "Signin", controllerName: "User");
+            }
         }
 
         public ActionResult AssessmentScheduling()

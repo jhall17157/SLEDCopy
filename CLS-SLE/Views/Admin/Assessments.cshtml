@@ -20,12 +20,12 @@
                 if (assessment.Category.Equals(category.CategoryCode))
                 {
 
-                 <div>
-                     <div>
-                         @Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })
-                     </div>
-                     <br /><br />
-                 </div>
+                    <div>
+                        <div>
+                            @Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })
+                        </div>
+                        <br /><br />
+                    </div>
                 }
             }
         </ul>

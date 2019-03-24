@@ -5,9 +5,10 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace CLS_SLE.Controllers
-{
+{   [Authorize(Roles = "Administrator")]
     public class AdminController : Controller
     {
 
@@ -51,11 +52,11 @@ namespace CLS_SLE.Controllers
         }
 
         [HttpGet]
-        public ActionResult ManageUserRoles()
+        public ActionResult ManageUsersAndRoles()
         {
             try
             {
-                dynamic MyModel = new ExpandoObject();
+                dynamic Model = new ExpandoObject();
                 if (Request.QueryString["Search"] != null)
                 {
                     try
@@ -71,7 +72,7 @@ namespace CLS_SLE.Controllers
 
                         var FilteredUserSecurities = UserSecurities.Where(p => p.FirstName.ToLower().Contains(QueryString) || p.LastName.ToLower().Contains(QueryString) || p.IDNumber.Contains(QueryString));
 
-                        MyModel.UserSecurityList = FilteredUserSecurities;
+                        Model.UserSecurityList = FilteredUserSecurities;
                     }
                     catch
                     {
@@ -81,21 +82,82 @@ namespace CLS_SLE.Controllers
 
                 else
                 {
-                    MyModel.UserSecurityList = GetUserSecurities();
+                    Model.UserSecurityList = GetUserSecurities();
                 }
-                return View(MyModel);
+                return View(Model);
+         }
+        catch
+        {
+            logger.Error("Error fetching user List");
+            return Exceptions();
+        }
+    }
+
+        [HttpGet]
+        public ActionResult ManageUserRoles(int id)
+        {
+            try
+            {
+                int UserID = id;
+                var Roles = from role in db.Roles
+                            select role;
+                var UserRoles = from userRole in db.UserRoles
+                                where userRole.PersonID == UserID
+                                select userRole;
+                var User = (from user in db.Users
+                            join person in db.People on user.PersonID equals person.PersonID
+                            where user.PersonID == UserID
+                            select new { user.PersonID, user.Login, person.FirstName, person.LastName, person.IdNumber }).FirstOrDefault();
+
+                ManageUserRoles Model = new ManageUserRoles(User.PersonID, User.IdNumber, User.FirstName, User.LastName, Roles.ToList(), UserRoles.ToList());
+
+
+                return View(Model);
             }
             catch
             {
-                logger.Error("Error fetching user List");
                 return Exceptions();
+            }
         }
-            
 
-            
+        [HttpPost]
+        public ActionResult UpdateUserRole(FormCollection form, String submit)
+        {
+            Int32 PersonID = Int32.Parse(form["personID"]);
+            Int16 RoleID = RoleID = Int16.Parse(form["roleID"]);
+            try
+            {
+                switch (submit)
+                {
+                    case "add":
+                        UserRole userRole = new UserRole
+                        {
+                            PersonID = PersonID,
+                            RoleID = RoleID,
+                            CreatedDateTime = DateTime.Now,
+                            CreatedByLoginID = (int?)Session["personID"]
 
+                        };
+                        db.UserRoles.Add(userRole);
 
+                        break;
+                    case "delete":
+                        var deletionEntry = (from UserRole in db.UserRoles
+                                             where UserRole.PersonID == PersonID && UserRole.RoleID == RoleID
+                                             select UserRole).FirstOrDefault();
+                        db.UserRoles.Remove(deletionEntry);
+                        break;
+                    default:
+                        return Exceptions();
+                }
+                db.SaveChanges();
+                return Content("<html><script>window.location.href = '/Admin/ManageUserRoles?id=" + PersonID.ToString() + "';</script></html>");
+            } catch
+            {
+                return Exceptions();
+            }
         }
+
         private ActionResult Exceptions()
         {
             return RedirectToAction(actionName: "AdminDashboard", controllerName: "Admin");

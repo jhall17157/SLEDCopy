@@ -1,12 +1,13 @@
 ﻿@using CLS_SLE.Models;
 @{
-    ViewBag.Title = "ManageUserRoles";
+    ViewBag.Title = "Manage User - " + Model.IDNumber;
 }
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item">@Html.ActionLink("Manage Users & Roles", "ManageUsersAndRoles")</li>
-        <li class="breadcrumb-item active" aria-current="page">User Security</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("User Security", "ViewUsers")</li>
+        <li class="breadcrumb-item active" aria-current="page">Manage User - @Model.IDNumber </li>
     </ol>
 </nav>
 
@@ -23,7 +24,7 @@
     @foreach (Role role in Model.Roles)
     {
 
-        <form class="form-inline @if (!IsFirstRow) { <text>border-top</text>} border-right my-0 @if (i % 2 == 1) { <text>bg-light</text>} " action="~/Admin/UpdateUserRole" method="POST">
+        <form class="form-inline @if (!IsFirstRow) { <text>border-top</text>} border-right my-0 @if (i % 2 == 1) { <text>bg-light</text>} " action="~/Admin/UpdateUser" method="POST">
             @{IsFirstRow = false;
                 bool IsMember = false;
                 i++;
@@ -53,17 +54,14 @@
     }
 
 </div>
-<input type="hidden" id="refreshed" value="no">
+<input type="hidden" id="refresh" value="no">
 @section scripts{
     <script type="text/javascript">
-
-        $(document).ready(function () {
-            function disableBack() { window.history.forward() }
-
-            window.onload = disableBack();
-            window.onpageshow = function (evt) { if (evt.persisted) disableBack() }
-        });
-
+        window.onpageshow = function (event) {
+            if (event.persisted) {
+                location.reload(); //reload page if it has been loaded from cache
+            }
+        };
     </script>
 
 } 

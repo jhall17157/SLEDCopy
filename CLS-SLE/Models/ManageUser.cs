@@ -5,9 +5,9 @@ using System.Web;
 
 namespace CLS_SLE.Models
 {
-    public class ManageUserRoles
+    public class ManageUser
     {
-        public ManageUserRoles(int personID, string iDNumber, string firstName, string lastName, List<Role> roles, List<UserRole> userRoles)
+        public ManageUser(int personID, string iDNumber, string firstName, string lastName, List<Role> roles, List<UserRole> userRoles)
         {
             PersonID = personID;
             IDNumber = iDNumber;

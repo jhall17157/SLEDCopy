@@ -8,7 +8,8 @@ using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace CLS_SLE.Controllers
-{   [Authorize(Roles = "Administrator")]
+{
+    [Authorize(Roles = "Administrator")]
     public class AdminController : Controller
     {
 
@@ -52,11 +53,14 @@ namespace CLS_SLE.Controllers
         }
 
         [HttpGet]
-        public ActionResult ManageUsersAndRoles()
+        public ActionResult ViewUsers(String sort)
         {
             try
             {
                 dynamic Model = new ExpandoObject();
+                var Roles = from Role in db.Roles select Role;
+
+                Model.Roles = Roles;
                 if (Request.QueryString["Search"] != null)
                 {
                     try
@@ -84,17 +88,49 @@ namespace CLS_SLE.Controllers
                 {
                     Model.UserSecurityList = GetUserSecurities();
                 }
+
+                if (!String.IsNullOrEmpty(sort))
+                {
+                    Model.Sort = sort;
+                }
                 return View(Model);
-         }
-        catch
-        {
-            logger.Error("Error fetching user List");
-            return Exceptions();
+            }
+            catch
+            {
+                logger.Error("Error fetching user List");
+                return Exceptions();
+            }
         }
-    }
 
         [HttpGet]
-        public ActionResult ManageUserRoles(int id)
+        public ActionResult ViewRoles()
+        {
+            var Roles = from Role in db.Roles
+                        select Role;
+            dynamic Model = new ExpandoObject();
+            Model.Roles = Roles;
+
+            return View(Model);
+        }
+
+        [HttpGet]
+        public ActionResult ViewRoleMembers(Int16 roleID)
+        {
+            var CurrentRole = (from Role in db.Roles
+                        where Role.RoleID == roleID
+                        select Role).FirstOrDefault();
+            var UserSecurityList = GetUserSecurities().Where(p => p.Roles.Any(r => r.RoleID == roleID));
+            dynamic Model = new ExpandoObject();
+            Model.UserSecurityList = UserSecurityList;
+            Model.CurrentRole = CurrentRole;
+            return View(Model);
+
+        }
+
+
+
+        [HttpGet]
+        public ActionResult ManageUser(int id)
         {
             try
             {
@@ -109,7 +145,7 @@ namespace CLS_SLE.Controllers
                             where user.PersonID == UserID
                             select new { user.PersonID, user.Login, person.FirstName, person.LastName, person.IdNumber }).FirstOrDefault();
 
-                ManageUserRoles Model = new ManageUserRoles(User.PersonID, User.IdNumber, User.FirstName, User.LastName, Roles.ToList(), UserRoles.ToList());
+                ManageUser Model = new ManageUser(User.PersonID, User.IdNumber, User.FirstName, User.LastName, Roles.ToList(), UserRoles.ToList());
 
 
                 return View(Model);
@@ -120,8 +156,10 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        
+
         [HttpPost]
-        public ActionResult UpdateUserRole(FormCollection form, String submit)
+        public ActionResult UpdateUser(FormCollection form, String submit)
         {
             Int32 PersonID = Int32.Parse(form["personID"]);
             Int16 RoleID = RoleID = Int16.Parse(form["roleID"]);
@@ -151,8 +189,9 @@ namespace CLS_SLE.Controllers
                         return Exceptions();
                 }
                 db.SaveChanges();
-                return Content("<html><script>window.location.href = '/Admin/ManageUserRoles?id=" + PersonID.ToString() + "';</script></html>");
-            } catch
+                return Content("<html><script>window.location.href = '/Admin/ManageUser?id=" + PersonID.ToString() + "';</script></html>");
+            }
+            catch
             {
                 return Exceptions();
             }

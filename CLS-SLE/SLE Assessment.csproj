@@ -2110,17 +2110,17 @@
     <Content Include="Views\Admin\Assessments.cshtml" />
     <Content Include="Views\Admin\AssessmentMappings.cshtml" />
     <Content Include="Views\Admin\AssessmentScheduling.cshtml" />
-<<<<<<< HEAD
+
     <Content Include="Views\Admin\UsersSecurity.cshtml" />
     <Content Include="Views\RoleAdmin\Create.cshtml" />
     <Content Include="Views\RoleAdmin\Confirm.cshtml" />
     <Content Include="Views\Admin\Assign.cshtml" />
-=======
+
     <Content Include="Views\Admin\ViewUsers.cshtml" />
     <Content Include="Views\Admin\ManageUser.cshtml" />
     <Content Include="Views\Admin\ViewRoles.cshtml" />
     <Content Include="Views\Admin\ViewRoleMembers.cshtml" />
->>>>>>> 4ef599df14a7262d78438212fcd84b2146519606
+
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

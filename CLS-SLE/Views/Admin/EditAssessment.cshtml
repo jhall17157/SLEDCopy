@@ -1,0 +1,58 @@
+﻿@using CLS_SLE.Models
+@model Assessment
+
+@{
+    ViewBag.Title = "EditAssessment";
+}
+
+<h2>Edit Assessment</h2>
+
+@{
+    using (Html.BeginForm("SaveAssessment", "Admin", FormMethod.Post))
+    {
+        <div>
+            @Html.LabelFor(m => m.AssessmentID, "Assessment ID: ")
+            @Html.TextBoxFor(m => m.AssessmentID)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.Name, "Name: ")
+            @Html.TextBoxFor(m => m.Name)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.Category, "Category: ")
+            @Html.TextBoxFor(m => m.Category)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.Description, "Description: ")
+            @Html.TextAreaFor(m => m.Description)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.OutcomePassRate, "Outcome Pass Rate: ")
+            @Html.TextBoxFor(m => m.OutcomePassRate)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.CalculateOutcomePassRate, "Calculate Outcome Pass Rate: ")
+            @Html.TextBoxFor(m => m.CalculateOutcomePassRate)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.ProgramID, "Program ID: ")
+            @Html.TextBoxFor(m => m.ProgramID)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.IsActive, "Is Active: ")
+            @Html.TextBoxFor(m => m.IsActive)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.ModifiedDateTime, "Modified Date/Time: ")
+            @Html.TextBoxFor(m => m.ModifiedDateTime)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.ModifiedByLoginID, "Modified By (Login ID): ")
+            @Html.TextBoxFor(m => m.ModifiedByLoginID)
+        </div>
+
+        <input type="submit" value="Save Assessment" />
+        <input type="reset" value="Cancel Changes" />
+    }
+}
+

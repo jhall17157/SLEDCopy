@@ -25,7 +25,7 @@ namespace CLS_SLE.Models
         public Nullable<int> ModifiedByLoginID { get; set; }
     
         public virtual Person Person { get; set; }
-        public virtual Program Program { get; set; }
         public virtual Semester Semester { get; set; }
+        public virtual Program Program { get; set; }
     }
 }

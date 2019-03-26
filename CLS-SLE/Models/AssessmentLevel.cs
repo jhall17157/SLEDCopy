@@ -17,8 +17,8 @@ namespace CLS_SLE.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AssessmentLevel()
         {
-            this.SectionRubrics = new HashSet<SectionRubric>();
             this.ProgramAssessmentMappings = new HashSet<ProgramAssessmentMapping>();
+            this.SectionRubrics = new HashSet<SectionRubric>();
         }
     
         public string AssessmentLevelCode { get; set; }
@@ -30,8 +30,8 @@ namespace CLS_SLE.Models
         public Nullable<int> ModifiedByLoginID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SectionRubric> SectionRubrics { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProgramAssessmentMapping> ProgramAssessmentMappings { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SectionRubric> SectionRubrics { get; set; }
     }
 }

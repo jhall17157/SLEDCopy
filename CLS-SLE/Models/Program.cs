@@ -19,10 +19,10 @@ namespace CLS_SLE.Models
         {
             this.Assessments = new HashSet<Assessment>();
             this.CoursePrograms = new HashSet<CourseProgram>();
-            this.StudentPrograms = new HashSet<StudentProgram>();
             this.ProgramAssessmentMappings = new HashSet<ProgramAssessmentMapping>();
             this.ProgramDepartments = new HashSet<ProgramDepartment>();
             this.ProgramSecurities = new HashSet<ProgramSecurity>();
+            this.StudentPrograms = new HashSet<StudentProgram>();
         }
     
         public short ProgramID { get; set; }
@@ -40,12 +40,12 @@ namespace CLS_SLE.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CourseProgram> CoursePrograms { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<StudentProgram> StudentPrograms { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProgramAssessmentMapping> ProgramAssessmentMappings { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProgramDepartment> ProgramDepartments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProgramSecurity> ProgramSecurities { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<StudentProgram> StudentPrograms { get; set; }
     }
 }

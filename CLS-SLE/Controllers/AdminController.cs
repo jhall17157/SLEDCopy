@@ -38,8 +38,6 @@ namespace CLS_SLE.Controllers
             return View();
         }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
         public ActionResult ViewAssessment(int? assessmentId)
         {
             var assessment = new Assessment();
@@ -197,12 +195,9 @@ namespace CLS_SLE.Controllers
             }
         }
 
-=======
->>>>>>> parent of 09c72ad... Merge branch 'master' of https://github.com/BIT-WCTC/CLS-SLE
+
         public ActionResult AssessmentScheduling()
-=======
-        public ActionResult AssessmentsScheduling()
->>>>>>> parent of 19bcf52... Merge branch 'master' of https://github.com/BIT-WCTC/CLS-SLE into AdminDashboard
+
         {
             return View();
         }

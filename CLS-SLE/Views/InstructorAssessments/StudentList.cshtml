@@ -36,34 +36,26 @@
         </tr>
     </thead>
     <tbody id="students">
-        @foreach (SectionEnrollment student in Model.Students)
-        {
-            <tr data-section="@student.sectionID" data-enrollment="@student.EnrollmentID" data-rubricid="@a.RubricID" id="@student.EnrollmentID" class="student-row">
-                <td style="width: 120px;">@student.StudentID</td>
-                <td>@student.LastName, @student.FirstName</td>
-                <td style="width: 100px; text-align: center">
+        @{ foreach (SectionEnrollment student in Model.Students)
+            {
+                <tr data-section="@student.sectionID" data-enrollment="@student.EnrollmentID" data-rubricid="@a.RubricID" id="@student.EnrollmentID" class="student-row">
+                    <td style="width: 120px;">@student.StudentID</td>
+                    <td>@student.LastName, @student.FirstName</td>
+                    <td style="width: 100px; text-align: center">
 
-                    @foreach (StudentScoreCount scoreCount in Model.CompleteScores)
-                    {
-                        if (scoreCount.EnrollmentID == Convert.ToInt32(student.EnrollmentID))
+                        @foreach (StudentScoreCount scoreCount in Model.CompleteScores)
                         {
-                            <span style="right: 0px; top: 0px; width: 60px;" class="badge badge-dark">@scoreCount.CompletedCount / @scoreCount.CriteriaCount</span>
+                            if (scoreCount.EnrollmentID == Convert.ToInt32(student.EnrollmentID))
+                            {
+                                <span style="right: 0px; top: 0px; width: 60px;" class="badge badge-dark">@scoreCount.CompletedCount / @scoreCount.CriteriaCount</span>
+                            }
                         }
-                    }
-                </td>
-            </tr>
-            x++;
+                    </td>
+                </tr>
+                x++;
+            }
         }
     </tbody>
 </table>
 
-@section scripts
-{
-    <script>
-        $(function () {
-            $('#students').on('click', '.student-row', function () {
-                location.href = "/InstructorAssessments/Assessment?sectionID=" + this.dataset.section + "&enrollmentID=" + this.dataset.enrollment + "&rubricID=" + this.dataset.rubricid;
-            });
-        })
-    </script>
-}
+

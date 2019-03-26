@@ -27,6 +27,11 @@ namespace CLS_SLE.Models
         public Nullable<decimal> OutcomePassRate { get; set; }
         public bool CalculateOutcomePassRate { get; set; }
         public Nullable<short> ProgramID { get; set; }
+        public bool IsActive { get; set; }
+        public Nullable<System.DateTime> CreatedDateTime { get; set; }
+        public Nullable<int> CreatedByLoginID { get; set; }
+        public Nullable<System.DateTime> ModifiedDateTime { get; set; }
+        public Nullable<int> ModifiedByLoginID { get; set; }
     
         public virtual AssessmentCategory AssessmentCategory { get; set; }
         public virtual Program Program { get; set; }

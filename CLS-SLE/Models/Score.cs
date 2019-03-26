@@ -12,35 +12,28 @@ namespace CLS_SLE.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Section
+    public partial class Score
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Section()
+        public Score()
         {
-            this.Enrollments = new HashSet<Enrollment>();
-            this.SectionRubrics = new HashSet<SectionRubric>();
+            this.StudentScores = new HashSet<StudentScore>();
         }
     
-        public int SectionID { get; set; }
-        public int CRN { get; set; }
-        public short SemesterID { get; set; }
-        public short CourseID { get; set; }
-        public int LeadInstructorID { get; set; }
-        public string OfferingNumber { get; set; }
-        public bool IsCancelled { get; set; }
-        public Nullable<System.DateTime> BeginDate { get; set; }
-        public Nullable<System.DateTime> EndDate { get; set; }
+        public short ScoreID { get; set; }
+        public byte ScoreSetID { get; set; }
+        public string Description { get; set; }
+        public byte Value { get; set; }
+        public byte SortOrder { get; set; }
+        public bool IsUnassessedScore { get; set; }
         public Nullable<System.DateTime> CreatedDateTime { get; set; }
         public Nullable<int> CreatedByLoginID { get; set; }
         public Nullable<System.DateTime> ModifiedDateTime { get; set; }
         public Nullable<int> ModifiedByLoginID { get; set; }
+        public bool IsActive { get; set; }
     
-        public virtual Course Course { get; set; }
+        public virtual ScoreSet ScoreSet { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Enrollment> Enrollments { get; set; }
-        public virtual Person Person { get; set; }
-        public virtual Semester Semester { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SectionRubric> SectionRubrics { get; set; }
+        public virtual ICollection<StudentScore> StudentScores { get; set; }
     }
 }

@@ -12,35 +12,26 @@ namespace CLS_SLE.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Section
+    public partial class ScoreSet
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Section()
+        public ScoreSet()
         {
-            this.Enrollments = new HashSet<Enrollment>();
-            this.SectionRubrics = new HashSet<SectionRubric>();
+            this.AssessmentRubrics = new HashSet<AssessmentRubric>();
+            this.Scores = new HashSet<Score>();
         }
     
-        public int SectionID { get; set; }
-        public int CRN { get; set; }
-        public short SemesterID { get; set; }
-        public short CourseID { get; set; }
-        public int LeadInstructorID { get; set; }
-        public string OfferingNumber { get; set; }
-        public bool IsCancelled { get; set; }
-        public Nullable<System.DateTime> BeginDate { get; set; }
-        public Nullable<System.DateTime> EndDate { get; set; }
+        public byte ScoreSetID { get; set; }
+        public string Name { get; set; }
         public Nullable<System.DateTime> CreatedDateTime { get; set; }
         public Nullable<int> CreatedByLoginID { get; set; }
         public Nullable<System.DateTime> ModifiedDateTime { get; set; }
         public Nullable<int> ModifiedByLoginID { get; set; }
+        public bool IsActive { get; set; }
     
-        public virtual Course Course { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Enrollment> Enrollments { get; set; }
-        public virtual Person Person { get; set; }
-        public virtual Semester Semester { get; set; }
+        public virtual ICollection<AssessmentRubric> AssessmentRubrics { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SectionRubric> SectionRubrics { get; set; }
+        public virtual ICollection<Score> Scores { get; set; }
     }
 }

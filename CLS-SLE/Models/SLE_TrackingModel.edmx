@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SLE_TrackingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SLE_TrackingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Assessment">
           <Key>
             <PropertyRef Name="AssessmentID" />
@@ -16,6 +16,11 @@
           <Property Name="OutcomePassRate" Type="numeric" Precision="4" Scale="3" />
           <Property Name="CalculateOutcomePassRate" Type="bit" Nullable="false" />
           <Property Name="ProgramID" Type="smallint" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
         <EntityType Name="AssessmentCategory">
           <Key>
@@ -24,6 +29,11 @@
           <Property Name="CategoryCode" Type="varchar" MaxLength="5" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="200" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
         <EntityType Name="AssessmentLevel">
           <Key>
@@ -31,6 +41,11 @@
           </Key>
           <Property Name="AssessmentLevelCode" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
         <EntityType Name="AssessmentRubric">
           <Key>
@@ -40,6 +55,12 @@
           <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Description" Type="varchar(max)" />
           <Property Name="AssessmentID" Type="tinyint" Nullable="false" />
+          <Property Name="ScoreSetID" Type="tinyint" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Course">
           <Key>
@@ -48,6 +69,13 @@
           <Property Name="CourseID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CourseName" Type="varchar" MaxLength="150" Nullable="false" />
           <Property Name="Number" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="PrimaryDepartmentID" Type="smallint" />
+          <Property Name="IsERPCourse" Type="bit" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
         <EntityType Name="CourseProgram">
           <Key>
@@ -56,7 +84,38 @@
           <Property Name="CourseProgramID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CourseID" Type="smallint" Nullable="false" />
           <Property Name="ProgramID" Type="smallint" Nullable="false" />
-          <Property Name="CatalogYear" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
+        </EntityType>
+        <EntityType Name="CourseSubject">
+          <Key>
+            <PropertyRef Name="CourseSubjectID" />
+          </Key>
+          <Property Name="CourseSubjectID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Number" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="PrimaryDepartmentID" Type="smallint" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
+        </EntityType>
+        <EntityType Name="CourseSubjectSecurity">
+          <Key>
+            <PropertyRef Name="CourseSubjectSecurityID" />
+          </Key>
+          <Property Name="CourseSubjectSecurityID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CourseSubjectID" Type="smallint" Nullable="false" />
+          <Property Name="RoleID" Type="smallint" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
         <EntityType Name="Criteria">
           <Key>
@@ -67,6 +126,12 @@
           <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="ExampleText" Type="varchar" MaxLength="200" />
           <Property Name="SortOrder" Type="tinyint" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="InactiveDateTime" Type="datetime" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
         <EntityType Name="Department">
           <Key>
@@ -75,6 +140,25 @@
           <Property Name="DepartmentID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Number" Type="varchar" MaxLength="20" />
           <Property Name="Name" Type="varchar" MaxLength="100" />
+          <Property Name="SchoolID" Type="tinyint" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
+        </EntityType>
+        <EntityType Name="DepartmentSecurity">
+          <Key>
+            <PropertyRef Name="DepartmentSecurityID" />
+          </Key>
+          <Property Name="DepartmentSecurityID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DepartmentID" Type="smallint" Nullable="false" />
+          <Property Name="RoleID" Type="smallint" Nullable="false" />
+          <Property Name="CanEdit" Type="bit" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
         <EntityType Name="Enrollment">
           <Key>
@@ -85,6 +169,10 @@
           <Property Name="StudentID" Type="int" Nullable="false" />
           <Property Name="EnrollmentStatusCode" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="StatusDate" Type="datetime" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
         <EntityType Name="EnrollmentStatus">
           <Key>
@@ -92,6 +180,10 @@
           </Key>
           <Property Name="StatusID" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
         <EntityType Name="ETL_StatusMapping">
           <Key>
@@ -100,6 +192,11 @@
           <Property Name="StatusCode" Type="char" MaxLength="2" Nullable="false" />
           <Property Name="StatusDescription" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="EnrollmentStatusID" Type="char" MaxLength="1" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
         <EntityType Name="Outcome">
           <Key>
@@ -112,6 +209,11 @@
           <Property Name="SortOrder" Type="tinyint" Nullable="false" />
           <Property Name="CriteriaPassRate" Type="numeric" Precision="4" Scale="3" />
           <Property Name="CalculateCriteriaPassRate" Type="bit" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
         <EntityType Name="Person">
           <Key>
@@ -121,6 +223,10 @@
           <Property Name="IdNumber" Type="char" MaxLength="9" Nullable="false" />
           <Property Name="FirstName" Type="varchar" MaxLength="50" />
           <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
         <EntityType Name="Program">
           <Key>
@@ -129,6 +235,28 @@
           <Property Name="ProgramID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Number" Type="varchar" MaxLength="20" />
           <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
+          <Property Name="IsSharedProgram" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProgramAssessmentMapping">
+          <Key>
+            <PropertyRef Name="ProgramAssessmentMappingID" />
+          </Key>
+          <Property Name="ProgramAssessmentMappingID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProgramID" Type="smallint" Nullable="false" />
+          <Property Name="RubricID" Type="smallint" Nullable="false" />
+          <Property Name="CourseID" Type="smallint" Nullable="false" />
+          <Property Name="AssessmentLevelCode" Type="char" MaxLength="1" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
+          <Property Name="BeginDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
         </EntityType>
         <EntityType Name="ProgramDepartment">
           <Key>
@@ -137,13 +265,90 @@
           <Property Name="ProgramDepartmentID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ProgramID" Type="smallint" Nullable="false" />
           <Property Name="DepartmentID" Type="smallint" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
+        </EntityType>
+        <EntityType Name="ProgramSecurity">
+          <Key>
+            <PropertyRef Name="ProgramSecurityID" />
+          </Key>
+          <Property Name="ProgramSecurityID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProgramID" Type="smallint" Nullable="false" />
+          <Property Name="RoleID" Type="smallint" Nullable="false" />
+          <Property Name="CanEdit" Type="bit" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="RoleID" />
           </Key>
-          <Property Name="RoleID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="100" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
+        </EntityType>
+        <EntityType Name="School">
+          <Key>
+            <PropertyRef Name="SchoolID" />
+          </Key>
+          <Property Name="SchoolID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
+        </EntityType>
+        <EntityType Name="SchoolSecurity">
+          <Key>
+            <PropertyRef Name="SchoolSecurityID" />
+          </Key>
+          <Property Name="SchoolSecurityID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SchoolID" Type="tinyint" Nullable="false" />
+          <Property Name="RoleID" Type="smallint" Nullable="false" />
+          <Property Name="CanEdit" Type="bit" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
+        </EntityType>
+        <EntityType Name="Score">
+          <Key>
+            <PropertyRef Name="ScoreID" />
+          </Key>
+          <Property Name="ScoreID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ScoreSetID" Type="tinyint" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Value" Type="tinyint" Nullable="false" />
+          <Property Name="SortOrder" Type="tinyint" Nullable="false" />
+          <Property Name="IsUnassessedScore" Type="bit" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ScoreSet">
+          <Key>
+            <PropertyRef Name="ScoreSetID" />
+          </Key>
+          <Property Name="ScoreSetID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="ScoreType">
           <Key>
@@ -167,6 +372,12 @@
           <Property Name="LeadInstructorID" Type="int" Nullable="false" />
           <Property Name="OfferingNumber" Type="char" MaxLength="3" />
           <Property Name="IsCancelled" Type="bit" Nullable="false" />
+          <Property Name="BeginDate" Type="date" />
+          <Property Name="EndDate" Type="date" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
         <EntityType Name="SectionRubric">
           <Key>
@@ -178,6 +389,10 @@
           <Property Name="StartDate" Type="date" Nullable="false" />
           <Property Name="EndDate" Type="date" Nullable="false" />
           <Property Name="AssessmentLevelCode" Type="char" MaxLength="1" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
         <EntityType Name="Semester">
           <Key>
@@ -186,6 +401,10 @@
           <Property Name="SemesterID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SemesterCode" Type="int" />
           <Property Name="Name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
         <EntityType Name="StudentProgram">
           <Key>
@@ -196,6 +415,10 @@
           <Property Name="ProgramID" Type="smallint" Nullable="false" />
           <Property Name="SemesterID" Type="smallint" Nullable="false" />
           <Property Name="IsPrimary" Type="bit" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
         <EntityType Name="StudentScore">
           <Key>
@@ -207,7 +430,40 @@
           <Property Name="ScoreTypeID" Type="smallint" Nullable="false" />
           <Property Name="AssessedByID" Type="int" Nullable="false" />
           <Property Name="DateTimeAssessed" Type="datetime" />
+          <Property Name="ScoreID" Type="smallint" />
         </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'SLE_Tracking.dbo.tmp_Assessments' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tmp_Assessments">
+          <Property Name="AssessmentName" Type="varchar" MaxLength="255" />
+          <Property Name="Description" Type="varchar(max)" />
+          <Property Name="Category" Type="varchar" MaxLength="255" />
+          <Property Name="OutcomePassRate" Type="decimal" Precision="3" Scale="2" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'SLE_Tracking.dbo.tmp_rubrics' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tmp_rubrics">
+          <Property Name="ID" Type="int" />
+          <Property Name="AssessmentName" Type="varchar" MaxLength="255" />
+          <Property Name="RubricName" Type="varchar" MaxLength="255" />
+          <Property Name="RubricDescription" Type="varchar(max)" />
+          <Property Name="Program" Type="varchar" MaxLength="255" />
+          <Property Name="Outcome" Type="varchar" MaxLength="255" />
+          <Property Name="OutcomeDescription" Type="varchar(max)" />
+          <Property Name="CriteriaPassRate" Type="decimal" Precision="3" Scale="2" />
+          <Property Name="Criteria" Type="varchar" MaxLength="255" />
+          <Property Name="ExampleText" Type="varchar(max)" />
+        </EntityType>-->
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="PersonID" />
@@ -221,6 +477,10 @@
           <Property Name="TemporaryPasswordHash" Type="varchar" MaxLength="60" />
           <Property Name="TemporaryPasswordIssued" Type="datetime" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
         <EntityType Name="UserRole">
           <Key>
@@ -228,7 +488,11 @@
           </Key>
           <Property Name="UserRoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PersonID" Type="int" Nullable="false" />
-          <Property Name="RoleID" Type="tinyint" Nullable="false" />
+          <Property Name="RoleID" Type="smallint" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'SLE_Tracking.dbo.InstructorAssessments' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -258,7 +522,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.InstructorAssessments' does not h
           <Property Name="CategoryName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="RubricID" Type="smallint" Nullable="false" />
           <Property Name="RubricName" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="AssessmentLevel" Type="char" MaxLength="1" />
+          <Property Name="AssessmentLevel" Type="varchar" MaxLength="30" />
           <Property Name="DueDate" Type="date" Nullable="false" />
           <Property Name="StudentCount" Type="int" />
           <Property Name="CompletedCount" Type="int" />
@@ -368,6 +632,30 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_AssessmentRubric_ScoreSetID">
+          <End Role="ScoreSet" Type="Self.ScoreSet" Multiplicity="0..1" />
+          <End Role="AssessmentRubric" Type="Self.AssessmentRubric" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ScoreSet">
+              <PropertyRef Name="ScoreSetID" />
+            </Principal>
+            <Dependent Role="AssessmentRubric">
+              <PropertyRef Name="ScoreSetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Course_PrimaryDepartmentID">
+          <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+          <End Role="Course" Type="Self.Course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentID" />
+            </Principal>
+            <Dependent Role="Course">
+              <PropertyRef Name="PrimaryDepartmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_CourseProgram_CourseID">
           <End Role="Course" Type="Self.Course" Multiplicity="1" />
           <End Role="CourseProgram" Type="Self.CourseProgram" Multiplicity="*" />
@@ -392,6 +680,42 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_CourseSubject_PrimaryDepartmentID">
+          <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+          <End Role="CourseSubject" Type="Self.CourseSubject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentID" />
+            </Principal>
+            <Dependent Role="CourseSubject">
+              <PropertyRef Name="PrimaryDepartmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_CourseSubjectSecurity_CourseSubject">
+          <End Role="CourseSubject" Type="Self.CourseSubject" Multiplicity="1" />
+          <End Role="CourseSubjectSecurity" Type="Self.CourseSubjectSecurity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CourseSubject">
+              <PropertyRef Name="CourseSubjectID" />
+            </Principal>
+            <Dependent Role="CourseSubjectSecurity">
+              <PropertyRef Name="CourseSubjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_CourseSubjectSecurity_RoleID">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="CourseSubjectSecurity" Type="Self.CourseSubjectSecurity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="CourseSubjectSecurity">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_Criteria_Outcome">
           <End Role="Outcome" Type="Self.Outcome" Multiplicity="1" />
           <End Role="Criteria" Type="Self.Criteria" Multiplicity="*" />
@@ -401,6 +725,42 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             </Principal>
             <Dependent Role="Criteria">
               <PropertyRef Name="OutcomeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Department_SchoolID">
+          <End Role="School" Type="Self.School" Multiplicity="0..1" />
+          <End Role="Department" Type="Self.Department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="School">
+              <PropertyRef Name="SchoolID" />
+            </Principal>
+            <Dependent Role="Department">
+              <PropertyRef Name="SchoolID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_DepartmentSecurity_DepartmentID">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="DepartmentSecurity" Type="Self.DepartmentSecurity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentID" />
+            </Principal>
+            <Dependent Role="DepartmentSecurity">
+              <PropertyRef Name="DepartmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_DepartmentSecurity_RoleID">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="DepartmentSecurity" Type="Self.DepartmentSecurity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="DepartmentSecurity">
+              <PropertyRef Name="RoleID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -461,6 +821,138 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             </Principal>
             <Dependent Role="Outcome">
               <PropertyRef Name="RubricID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ProgramAssessmentMapping_AssessmentLevelCode">
+          <End Role="AssessmentLevel" Type="Self.AssessmentLevel" Multiplicity="0..1" />
+          <End Role="ProgramAssessmentMapping" Type="Self.ProgramAssessmentMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssessmentLevel">
+              <PropertyRef Name="AssessmentLevelCode" />
+            </Principal>
+            <Dependent Role="ProgramAssessmentMapping">
+              <PropertyRef Name="AssessmentLevelCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ProgramAssessmentMapping_CourseID">
+          <End Role="Course" Type="Self.Course" Multiplicity="1" />
+          <End Role="ProgramAssessmentMapping" Type="Self.ProgramAssessmentMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseID" />
+            </Principal>
+            <Dependent Role="ProgramAssessmentMapping">
+              <PropertyRef Name="CourseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ProgramAssessmentMapping_ProgramID">
+          <End Role="Program" Type="Self.Program" Multiplicity="1" />
+          <End Role="ProgramAssessmentMapping" Type="Self.ProgramAssessmentMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="ProgramID" />
+            </Principal>
+            <Dependent Role="ProgramAssessmentMapping">
+              <PropertyRef Name="ProgramID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ProgramAssessmentMapping_RubricID">
+          <End Role="AssessmentRubric" Type="Self.AssessmentRubric" Multiplicity="1" />
+          <End Role="ProgramAssessmentMapping" Type="Self.ProgramAssessmentMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssessmentRubric">
+              <PropertyRef Name="RubricID" />
+            </Principal>
+            <Dependent Role="ProgramAssessmentMapping">
+              <PropertyRef Name="RubricID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ProgramDepartment_DepartmentID">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="ProgramDepartment" Type="Self.ProgramDepartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentID" />
+            </Principal>
+            <Dependent Role="ProgramDepartment">
+              <PropertyRef Name="DepartmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ProgramDepartment_ProgramID">
+          <End Role="Program" Type="Self.Program" Multiplicity="1" />
+          <End Role="ProgramDepartment" Type="Self.ProgramDepartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="ProgramID" />
+            </Principal>
+            <Dependent Role="ProgramDepartment">
+              <PropertyRef Name="ProgramID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ProgramSecurity_ProgramID">
+          <End Role="Program" Type="Self.Program" Multiplicity="1" />
+          <End Role="ProgramSecurity" Type="Self.ProgramSecurity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="ProgramID" />
+            </Principal>
+            <Dependent Role="ProgramSecurity">
+              <PropertyRef Name="ProgramID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ProgramSecurity_RoleID">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="ProgramSecurity" Type="Self.ProgramSecurity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="ProgramSecurity">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_SchoolSecurity_ProgramID">
+          <End Role="School" Type="Self.School" Multiplicity="1" />
+          <End Role="SchoolSecurity" Type="Self.SchoolSecurity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="School">
+              <PropertyRef Name="SchoolID" />
+            </Principal>
+            <Dependent Role="SchoolSecurity">
+              <PropertyRef Name="SchoolID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_SchoolSecurity_RoleID">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="SchoolSecurity" Type="Self.SchoolSecurity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="SchoolSecurity">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Score_ScoreSetID">
+          <End Role="ScoreSet" Type="Self.ScoreSet" Multiplicity="1" />
+          <End Role="Score" Type="Self.Score" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ScoreSet">
+              <PropertyRef Name="ScoreSetID" />
+            </Principal>
+            <Dependent Role="Score">
+              <PropertyRef Name="ScoreSetID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -620,6 +1112,18 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_StudentScore_ScoreID">
+          <End Role="Score" Type="Self.Score" Multiplicity="0..1" />
+          <End Role="StudentScore" Type="Self.StudentScore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Score">
+              <PropertyRef Name="ScoreID" />
+            </Principal>
+            <Dependent Role="StudentScore">
+              <PropertyRef Name="ScoreID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_StudentScore_ScoreTypeID">
           <End Role="ScoreType" Type="Self.ScoreType" Multiplicity="1" />
           <End Role="StudentScore" Type="Self.StudentScore" Multiplicity="*" />
@@ -644,6 +1148,119 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_UserRole_PersonID">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserRole" Type="Self.UserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="UserRole">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_UserRole_RoleID">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="UserRole" Type="Self.UserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="UserRole">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="GetCompletedCountBySectionRubric" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SectionRubricID" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="SectionRubricID" Type="int" Nullable="false" />
+                <Property Name="CompletedCount" Type="int" />
+                <Property Name="StudentCount" Type="int" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="GetCourseSubjectSecurityByLogin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Login" Type="varchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="SchoolID" Type="tinyint" Nullable="false" />
+                <Property Name="SchoolName" Type="varchar" MaxLength="100" Nullable="false" />
+                <Property Name="DepartmentID" Type="smallint" Nullable="false" />
+                <Property Name="DepartmentNumber" Type="varchar" MaxLength="20" />
+                <Property Name="DepartmentName" Type="varchar" MaxLength="100" />
+                <Property Name="CourseSubjectID" Type="smallint" Nullable="false" />
+                <Property Name="CourseSubjectNumber" Type="char" MaxLength="3" Nullable="false" />
+                <Property Name="CourseSubjectName" Type="varchar" MaxLength="100" Nullable="false" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="GetSecurityByLogin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Login" Type="varchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="SchoolID" Type="tinyint" Nullable="false" />
+                <Property Name="SchoolName" Type="varchar" MaxLength="100" Nullable="false" />
+                <Property Name="DepartmentID" Type="smallint" Nullable="false" />
+                <Property Name="DepartmentNumber" Type="varchar" MaxLength="20" />
+                <Property Name="DepartmentName" Type="varchar" MaxLength="100" />
+                <Property Name="ProgramID" Type="smallint" Nullable="false" />
+                <Property Name="ProgramNumber" Type="varchar" MaxLength="20" />
+                <Property Name="ProgramName" Type="varchar" MaxLength="100" Nullable="false" />
+                <Property Name="CanEdit" Type="tinyint" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Split" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="String" Type="nvarchar" Mode="In" />
+          <Parameter Name="Delimiter" Type="nchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Id" Type="bigint" />
+                <Property Name="Data" Type="nvarchar" MaxLength="4000" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
         <EntityContainer Name="SLE_TrackingModelStoreContainer">
           <EntitySet Name="Assessment" EntityType="Self.Assessment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AssessmentCategory" EntityType="Self.AssessmentCategory" Schema="dbo" store:Type="Tables" />
@@ -651,22 +1268,32 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySet Name="AssessmentRubric" EntityType="Self.AssessmentRubric" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Course" EntityType="Self.Course" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CourseProgram" EntityType="Self.CourseProgram" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CourseSubject" EntityType="Self.CourseSubject" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CourseSubjectSecurity" EntityType="Self.CourseSubjectSecurity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Criteria" EntityType="Self.Criteria" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DepartmentSecurity" EntityType="Self.DepartmentSecurity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Enrollment" EntityType="Self.Enrollment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EnrollmentStatus" EntityType="Self.EnrollmentStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ETL_StatusMapping" EntityType="Self.ETL_StatusMapping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Outcome" EntityType="Self.Outcome" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Person" EntityType="Self.Person" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Program" EntityType="Self.Program" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProgramAssessmentMapping" EntityType="Self.ProgramAssessmentMapping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProgramDepartment" EntityType="Self.ProgramDepartment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProgramSecurity" EntityType="Self.ProgramSecurity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="School" EntityType="Self.School" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SchoolSecurity" EntityType="Self.SchoolSecurity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Score" EntityType="Self.Score" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ScoreSet" EntityType="Self.ScoreSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScoreType" EntityType="Self.ScoreType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Section" EntityType="Self.Section" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SectionRubric" EntityType="Self.SectionRubric" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Semester" EntityType="Self.Semester" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StudentProgram" EntityType="Self.StudentProgram" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StudentScore" EntityType="Self.StudentScore" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRole" EntityType="Self.UserRole" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InstructorAssessments" EntityType="Self.InstructorAssessments" store:Type="Views" store:Schema="dbo">
@@ -744,6 +1371,14 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             <End Role="Assessment" EntitySet="Assessment" />
             <End Role="AssessmentRubric" EntitySet="AssessmentRubric" />
           </AssociationSet>
+          <AssociationSet Name="fk_AssessmentRubric_ScoreSetID" Association="Self.fk_AssessmentRubric_ScoreSetID">
+            <End Role="ScoreSet" EntitySet="ScoreSet" />
+            <End Role="AssessmentRubric" EntitySet="AssessmentRubric" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Course_PrimaryDepartmentID" Association="Self.fk_Course_PrimaryDepartmentID">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="Course" EntitySet="Course" />
+          </AssociationSet>
           <AssociationSet Name="fk_CourseProgram_CourseID" Association="Self.fk_CourseProgram_CourseID">
             <End Role="Course" EntitySet="Course" />
             <End Role="CourseProgram" EntitySet="CourseProgram" />
@@ -752,9 +1387,33 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             <End Role="Program" EntitySet="Program" />
             <End Role="CourseProgram" EntitySet="CourseProgram" />
           </AssociationSet>
+          <AssociationSet Name="fk_CourseSubject_PrimaryDepartmentID" Association="Self.fk_CourseSubject_PrimaryDepartmentID">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="CourseSubject" EntitySet="CourseSubject" />
+          </AssociationSet>
+          <AssociationSet Name="fk_CourseSubjectSecurity_CourseSubject" Association="Self.fk_CourseSubjectSecurity_CourseSubject">
+            <End Role="CourseSubject" EntitySet="CourseSubject" />
+            <End Role="CourseSubjectSecurity" EntitySet="CourseSubjectSecurity" />
+          </AssociationSet>
+          <AssociationSet Name="fk_CourseSubjectSecurity_RoleID" Association="Self.fk_CourseSubjectSecurity_RoleID">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="CourseSubjectSecurity" EntitySet="CourseSubjectSecurity" />
+          </AssociationSet>
           <AssociationSet Name="fk_Criteria_Outcome" Association="Self.fk_Criteria_Outcome">
             <End Role="Outcome" EntitySet="Outcome" />
             <End Role="Criteria" EntitySet="Criteria" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Department_SchoolID" Association="Self.fk_Department_SchoolID">
+            <End Role="School" EntitySet="School" />
+            <End Role="Department" EntitySet="Department" />
+          </AssociationSet>
+          <AssociationSet Name="fk_DepartmentSecurity_DepartmentID" Association="Self.fk_DepartmentSecurity_DepartmentID">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="DepartmentSecurity" EntitySet="DepartmentSecurity" />
+          </AssociationSet>
+          <AssociationSet Name="fk_DepartmentSecurity_RoleID" Association="Self.fk_DepartmentSecurity_RoleID">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="DepartmentSecurity" EntitySet="DepartmentSecurity" />
           </AssociationSet>
           <AssociationSet Name="fk_Enrollment_EnrollmentStatusCode" Association="Self.fk_Enrollment_EnrollmentStatusCode">
             <End Role="EnrollmentStatus" EntitySet="EnrollmentStatus" />
@@ -775,6 +1434,50 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <AssociationSet Name="fk_Outcome_RubricID" Association="Self.fk_Outcome_RubricID">
             <End Role="AssessmentRubric" EntitySet="AssessmentRubric" />
             <End Role="Outcome" EntitySet="Outcome" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ProgramAssessmentMapping_AssessmentLevelCode" Association="Self.fk_ProgramAssessmentMapping_AssessmentLevelCode">
+            <End Role="AssessmentLevel" EntitySet="AssessmentLevel" />
+            <End Role="ProgramAssessmentMapping" EntitySet="ProgramAssessmentMapping" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ProgramAssessmentMapping_CourseID" Association="Self.fk_ProgramAssessmentMapping_CourseID">
+            <End Role="Course" EntitySet="Course" />
+            <End Role="ProgramAssessmentMapping" EntitySet="ProgramAssessmentMapping" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ProgramAssessmentMapping_ProgramID" Association="Self.fk_ProgramAssessmentMapping_ProgramID">
+            <End Role="Program" EntitySet="Program" />
+            <End Role="ProgramAssessmentMapping" EntitySet="ProgramAssessmentMapping" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ProgramAssessmentMapping_RubricID" Association="Self.fk_ProgramAssessmentMapping_RubricID">
+            <End Role="AssessmentRubric" EntitySet="AssessmentRubric" />
+            <End Role="ProgramAssessmentMapping" EntitySet="ProgramAssessmentMapping" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ProgramDepartment_DepartmentID" Association="Self.fk_ProgramDepartment_DepartmentID">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="ProgramDepartment" EntitySet="ProgramDepartment" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ProgramDepartment_ProgramID" Association="Self.fk_ProgramDepartment_ProgramID">
+            <End Role="Program" EntitySet="Program" />
+            <End Role="ProgramDepartment" EntitySet="ProgramDepartment" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ProgramSecurity_ProgramID" Association="Self.fk_ProgramSecurity_ProgramID">
+            <End Role="Program" EntitySet="Program" />
+            <End Role="ProgramSecurity" EntitySet="ProgramSecurity" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ProgramSecurity_RoleID" Association="Self.fk_ProgramSecurity_RoleID">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="ProgramSecurity" EntitySet="ProgramSecurity" />
+          </AssociationSet>
+          <AssociationSet Name="fk_SchoolSecurity_ProgramID" Association="Self.fk_SchoolSecurity_ProgramID">
+            <End Role="School" EntitySet="School" />
+            <End Role="SchoolSecurity" EntitySet="SchoolSecurity" />
+          </AssociationSet>
+          <AssociationSet Name="fk_SchoolSecurity_RoleID" Association="Self.fk_SchoolSecurity_RoleID">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="SchoolSecurity" EntitySet="SchoolSecurity" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Score_ScoreSetID" Association="Self.fk_Score_ScoreSetID">
+            <End Role="ScoreSet" EntitySet="ScoreSet" />
+            <End Role="Score" EntitySet="Score" />
           </AssociationSet>
           <AssociationSet Name="fk_ScoreType_RubricID" Association="Self.fk_ScoreType_RubricID">
             <End Role="AssessmentRubric" EntitySet="AssessmentRubric" />
@@ -828,6 +1531,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             <End Role="Enrollment" EntitySet="Enrollment" />
             <End Role="StudentScore" EntitySet="StudentScore" />
           </AssociationSet>
+          <AssociationSet Name="fk_StudentScore_ScoreID" Association="Self.fk_StudentScore_ScoreID">
+            <End Role="Score" EntitySet="Score" />
+            <End Role="StudentScore" EntitySet="StudentScore" />
+          </AssociationSet>
           <AssociationSet Name="fk_StudentScore_ScoreTypeID" Association="Self.fk_StudentScore_ScoreTypeID">
             <End Role="ScoreType" EntitySet="ScoreType" />
             <End Role="StudentScore" EntitySet="StudentScore" />
@@ -836,9 +1543,16 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             <End Role="Person" EntitySet="Person" />
             <End Role="User" EntitySet="User" />
           </AssociationSet>
+          <AssociationSet Name="fk_UserRole_PersonID" Association="Self.fk_UserRole_PersonID">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserRole" EntitySet="UserRole" />
+          </AssociationSet>
+          <AssociationSet Name="fk_UserRole_RoleID" Association="Self.fk_UserRole_RoleID">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="UserRole" EntitySet="UserRole" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SLE_TrackingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -856,6 +1570,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <NavigationProperty Name="AssessmentCategory" Relationship="Self.fk_Assessment_Category" FromRole="Assessment" ToRole="AssessmentCategory" />
           <NavigationProperty Name="Program" Relationship="Self.fk_Assessment_ProgramID" FromRole="Assessment" ToRole="Program" />
           <NavigationProperty Name="AssessmentRubrics" Relationship="Self.fk_AssessmentRubric_AssessmentID" FromRole="Assessment" ToRole="AssessmentRubric" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
         </EntityType>
         <EntityType Name="AssessmentCategory">
           <Key>
@@ -865,6 +1584,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Assessments" Relationship="Self.fk_Assessment_Category" FromRole="AssessmentCategory" ToRole="Assessment" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
         </EntityType>
         <EntityType Name="AssessmentLevel">
           <Key>
@@ -873,6 +1597,12 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="AssessmentLevelCode" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="SectionRubrics" Relationship="Self.fk_SectionRubric_AssessmentLevelID" FromRole="AssessmentLevel" ToRole="SectionRubric" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <NavigationProperty Name="ProgramAssessmentMappings" Relationship="SLE_TrackingModel.fk_ProgramAssessmentMapping_AssessmentLevelCode" FromRole="AssessmentLevel" ToRole="ProgramAssessmentMapping" />
         </EntityType>
         <EntityType Name="AssessmentRubric">
           <Key>
@@ -886,6 +1616,14 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <NavigationProperty Name="Outcomes" Relationship="Self.fk_Outcome_RubricID" FromRole="AssessmentRubric" ToRole="Outcome" />
           <NavigationProperty Name="ScoreTypes" Relationship="Self.fk_ScoreType_RubricID" FromRole="AssessmentRubric" ToRole="ScoreType" />
           <NavigationProperty Name="SectionRubrics" Relationship="Self.fk_SectionRubric_RubricID" FromRole="AssessmentRubric" ToRole="SectionRubric" />
+          <Property Name="ScoreSetID" Type="Byte" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ScoreSet" Relationship="SLE_TrackingModel.fk_AssessmentRubric_ScoreSetID" FromRole="AssessmentRubric" ToRole="ScoreSet" />
+          <NavigationProperty Name="ProgramAssessmentMappings" Relationship="SLE_TrackingModel.fk_ProgramAssessmentMapping_RubricID" FromRole="AssessmentRubric" ToRole="ProgramAssessmentMapping" />
         </EntityType>
         <EntityType Name="Course">
           <Key>
@@ -896,6 +1634,15 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="Number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="CoursePrograms" Relationship="Self.fk_CourseProgram_CourseID" FromRole="Course" ToRole="CourseProgram" />
           <NavigationProperty Name="Sections" Relationship="Self.fk_Section_CourseID" FromRole="Course" ToRole="Section" />
+          <Property Name="PrimaryDepartmentID" Type="Int16" />
+          <Property Name="IsERPCourse" Type="Boolean" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <NavigationProperty Name="Department" Relationship="SLE_TrackingModel.fk_Course_PrimaryDepartmentID" FromRole="Course" ToRole="Department" />
+          <NavigationProperty Name="ProgramAssessmentMappings" Relationship="SLE_TrackingModel.fk_ProgramAssessmentMapping_CourseID" FromRole="Course" ToRole="ProgramAssessmentMapping" />
         </EntityType>
         <EntityType Name="CourseProgram">
           <Key>
@@ -904,9 +1651,14 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="CourseProgramID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CourseID" Type="Int16" Nullable="false" />
           <Property Name="ProgramID" Type="Int16" Nullable="false" />
-          <Property Name="CatalogYear" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Course" Relationship="Self.fk_CourseProgram_CourseID" FromRole="CourseProgram" ToRole="Course" />
           <NavigationProperty Name="Program" Relationship="Self.fk_CourseProgram_ProgramID" FromRole="CourseProgram" ToRole="Program" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
         </EntityType>
         <EntityType Name="Criterion">
           <Key>
@@ -919,6 +1671,12 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="SortOrder" Type="Byte" Nullable="false" />
           <NavigationProperty Name="Outcome" Relationship="Self.fk_Criteria_Outcome" FromRole="Criteria" ToRole="Outcome" />
           <NavigationProperty Name="StudentScores" Relationship="Self.fk_StudentScore_Criteria" FromRole="Criteria" ToRole="StudentScore" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="InactiveDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
         </EntityType>
         <EntityType Name="Department">
           <Key>
@@ -927,6 +1685,17 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="DepartmentID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Number" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="SchoolID" Type="Byte" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <NavigationProperty Name="Courses" Relationship="SLE_TrackingModel.fk_Course_PrimaryDepartmentID" FromRole="Department" ToRole="Course" />
+          <NavigationProperty Name="CourseSubjects" Relationship="SLE_TrackingModel.fk_CourseSubject_PrimaryDepartmentID" FromRole="Department" ToRole="CourseSubject" />
+          <NavigationProperty Name="School" Relationship="SLE_TrackingModel.fk_Department_SchoolID" FromRole="Department" ToRole="School" />
+          <NavigationProperty Name="DepartmentSecurities" Relationship="SLE_TrackingModel.fk_DepartmentSecurity_DepartmentID" FromRole="Department" ToRole="DepartmentSecurity" />
+          <NavigationProperty Name="ProgramDepartments" Relationship="SLE_TrackingModel.fk_ProgramDepartment_DepartmentID" FromRole="Department" ToRole="ProgramDepartment" />
         </EntityType>
         <EntityType Name="Enrollment">
           <Key>
@@ -941,6 +1710,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <NavigationProperty Name="Section" Relationship="Self.fk_Enrollment_SectionID" FromRole="Enrollment" ToRole="Section" />
           <NavigationProperty Name="Person" Relationship="Self.fk_Enrollment_StudentID" FromRole="Enrollment" ToRole="Person" />
           <NavigationProperty Name="StudentScores" Relationship="Self.fk_StudentScore_EnrollmentID" FromRole="Enrollment" ToRole="StudentScore" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
         </EntityType>
         <EntityType Name="EnrollmentStatu">
           <Key>
@@ -950,6 +1723,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Enrollments" Relationship="Self.fk_Enrollment_EnrollmentStatusCode" FromRole="EnrollmentStatus" ToRole="Enrollment" />
           <NavigationProperty Name="ETL_StatusMapping" Relationship="Self.fk_ETL_StatusMapping_EnrollmentStatusID" FromRole="EnrollmentStatus" ToRole="ETL_StatusMapping" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
         </EntityType>
         <EntityType Name="ETL_StatusMapping">
           <Key>
@@ -959,6 +1736,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="StatusDescription" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="EnrollmentStatusID" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <NavigationProperty Name="EnrollmentStatu" Relationship="Self.fk_ETL_StatusMapping_EnrollmentStatusID" FromRole="ETL_StatusMapping" ToRole="EnrollmentStatus" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
         </EntityType>
         <EntityType Name="Outcome">
           <Key>
@@ -973,6 +1755,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="CalculateCriteriaPassRate" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AssessmentRubric" Relationship="Self.fk_Outcome_RubricID" FromRole="Outcome" ToRole="AssessmentRubric" />
           <NavigationProperty Name="Criteria" Relationship="Self.fk_Criteria_Outcome" FromRole="Outcome" ToRole="Criteria" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
         </EntityType>
         <EntityType Name="Person">
           <Key>
@@ -987,6 +1774,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <NavigationProperty Name="StudentPrograms" Relationship="Self.fk_StudentProgram_StudentID" FromRole="Person" ToRole="StudentProgram" />
           <NavigationProperty Name="StudentScores" Relationship="Self.fk_StudentScore_AssessedByID" FromRole="Person" ToRole="StudentScore" />
           <NavigationProperty Name="User" Relationship="Self.fk_User_PersonID" FromRole="Person" ToRole="User" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
         </EntityType>
         <EntityType Name="Program">
           <Key>
@@ -998,6 +1789,15 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <NavigationProperty Name="Assessments" Relationship="Self.fk_Assessment_ProgramID" FromRole="Program" ToRole="Assessment" />
           <NavigationProperty Name="CoursePrograms" Relationship="Self.fk_CourseProgram_ProgramID" FromRole="Program" ToRole="CourseProgram" />
           <NavigationProperty Name="StudentPrograms" Relationship="Self.fk_StudentProgram_ProgramID" FromRole="Program" ToRole="StudentProgram" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <Property Name="IsSharedProgram" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ProgramAssessmentMappings" Relationship="SLE_TrackingModel.fk_ProgramAssessmentMapping_ProgramID" FromRole="Program" ToRole="ProgramAssessmentMapping" />
+          <NavigationProperty Name="ProgramDepartments" Relationship="SLE_TrackingModel.fk_ProgramDepartment_ProgramID" FromRole="Program" ToRole="ProgramDepartment" />
+          <NavigationProperty Name="ProgramSecurities" Relationship="SLE_TrackingModel.fk_ProgramSecurity_ProgramID" FromRole="Program" ToRole="ProgramSecurity" />
         </EntityType>
         <EntityType Name="ProgramDepartment">
           <Key>
@@ -1006,13 +1806,31 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="ProgramDepartmentID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ProgramID" Type="Int16" Nullable="false" />
           <Property Name="DepartmentID" Type="Int16" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <NavigationProperty Name="Department" Relationship="SLE_TrackingModel.fk_ProgramDepartment_DepartmentID" FromRole="ProgramDepartment" ToRole="Department" />
+          <NavigationProperty Name="Program" Relationship="SLE_TrackingModel.fk_ProgramDepartment_ProgramID" FromRole="ProgramDepartment" ToRole="Program" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="RoleID" />
           </Key>
-          <Property Name="RoleID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <NavigationProperty Name="CourseSubjectSecurities" Relationship="SLE_TrackingModel.fk_CourseSubjectSecurity_RoleID" FromRole="Role" ToRole="CourseSubjectSecurity" />
+          <NavigationProperty Name="DepartmentSecurities" Relationship="SLE_TrackingModel.fk_DepartmentSecurity_RoleID" FromRole="Role" ToRole="DepartmentSecurity" />
+          <NavigationProperty Name="ProgramSecurities" Relationship="SLE_TrackingModel.fk_ProgramSecurity_RoleID" FromRole="Role" ToRole="ProgramSecurity" />
+          <NavigationProperty Name="SchoolSecurities" Relationship="SLE_TrackingModel.fk_SchoolSecurity_RoleID" FromRole="Role" ToRole="SchoolSecurity" />
+          <NavigationProperty Name="UserRoles" Relationship="SLE_TrackingModel.fk_UserRole_RoleID" FromRole="Role" ToRole="UserRole" />
         </EntityType>
         <EntityType Name="ScoreType">
           <Key>
@@ -1043,6 +1861,12 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <NavigationProperty Name="Person" Relationship="Self.fk_Section_LeadInstructorID" FromRole="Section" ToRole="Person" />
           <NavigationProperty Name="Semester" Relationship="Self.fk_Section_SemesterID" FromRole="Section" ToRole="Semester" />
           <NavigationProperty Name="SectionRubrics" Relationship="Self.fk_SectionRubric_SectionID" FromRole="Section" ToRole="SectionRubric" />
+          <Property Name="BeginDate" Type="DateTime" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Precision="0" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
         </EntityType>
         <EntityType Name="SectionRubric">
           <Key>
@@ -1057,6 +1881,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <NavigationProperty Name="AssessmentLevel" Relationship="Self.fk_SectionRubric_AssessmentLevelID" FromRole="SectionRubric" ToRole="AssessmentLevel" />
           <NavigationProperty Name="AssessmentRubric" Relationship="Self.fk_SectionRubric_RubricID" FromRole="SectionRubric" ToRole="AssessmentRubric" />
           <NavigationProperty Name="Section" Relationship="Self.fk_SectionRubric_SectionID" FromRole="SectionRubric" ToRole="Section" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
         </EntityType>
         <EntityType Name="Semester">
           <Key>
@@ -1067,6 +1895,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Sections" Relationship="Self.fk_Section_SemesterID" FromRole="Semester" ToRole="Section" />
           <NavigationProperty Name="StudentPrograms" Relationship="Self.fk_StudentProgram_SemesterID" FromRole="Semester" ToRole="StudentProgram" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
         </EntityType>
         <EntityType Name="StudentProgram">
           <Key>
@@ -1080,6 +1912,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <NavigationProperty Name="Person" Relationship="Self.fk_StudentProgram_StudentID" FromRole="StudentProgram" ToRole="Person" />
           <NavigationProperty Name="Program" Relationship="Self.fk_StudentProgram_ProgramID" FromRole="StudentProgram" ToRole="Program" />
           <NavigationProperty Name="Semester" Relationship="Self.fk_StudentProgram_SemesterID" FromRole="StudentProgram" ToRole="Semester" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
         </EntityType>
         <EntityType Name="StudentScore">
           <Key>
@@ -1095,6 +1931,8 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <NavigationProperty Name="Enrollment" Relationship="Self.fk_StudentScore_EnrollmentID" FromRole="StudentScore" ToRole="Enrollment" />
           <NavigationProperty Name="Person" Relationship="Self.fk_StudentScore_AssessedByID" FromRole="StudentScore" ToRole="Person" />
           <NavigationProperty Name="ScoreType" Relationship="Self.fk_StudentScore_ScoreTypeID" FromRole="StudentScore" ToRole="ScoreType" />
+          <Property Name="ScoreID" Type="Int16" />
+          <NavigationProperty Name="Score" Relationship="SLE_TrackingModel.fk_StudentScore_ScoreID" FromRole="StudentScore" ToRole="Score" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -1110,6 +1948,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="TemporaryPasswordIssued" Type="DateTime" Precision="3" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Person" Relationship="Self.fk_User_PersonID" FromRole="User" ToRole="Person" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <NavigationProperty Name="UserRoles" Relationship="SLE_TrackingModel.fk_UserRole_PersonID" FromRole="User" ToRole="UserRole" />
         </EntityType>
         <EntityType Name="UserRole">
           <Key>
@@ -1117,7 +1960,13 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           </Key>
           <Property Name="UserRoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PersonID" Type="Int32" Nullable="false" />
-          <Property Name="RoleID" Type="Byte" Nullable="false" />
+          <Property Name="RoleID" Type="Int16" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <NavigationProperty Name="Role" Relationship="SLE_TrackingModel.fk_UserRole_RoleID" FromRole="UserRole" ToRole="Role" />
+          <NavigationProperty Name="User" Relationship="SLE_TrackingModel.fk_UserRole_PersonID" FromRole="UserRole" ToRole="User" />
         </EntityType>
         <EntityType Name="InstructorAssessment">
           <Key>
@@ -1145,7 +1994,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="RubricID" Type="Int16" Nullable="false" />
           <Property Name="RubricName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="AssessmentLevel" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="AssessmentLevel" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="DueDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="StudentCount" Type="Int32" />
           <Property Name="CompletedCount" Type="Int32" />
@@ -1657,7 +2506,603 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             <End Role="Semester" EntitySet="Semesters" />
             <End Role="StudentProgram" EntitySet="StudentPrograms" />
           </AssociationSet>
+          <EntitySet Name="CourseSubjects" EntityType="SLE_TrackingModel.CourseSubject" />
+          <EntitySet Name="CourseSubjectSecurities" EntityType="SLE_TrackingModel.CourseSubjectSecurity" />
+          <EntitySet Name="DepartmentSecurities" EntityType="SLE_TrackingModel.DepartmentSecurity" />
+          <EntitySet Name="ProgramAssessmentMappings" EntityType="SLE_TrackingModel.ProgramAssessmentMapping" />
+          <EntitySet Name="ProgramSecurities" EntityType="SLE_TrackingModel.ProgramSecurity" />
+          <EntitySet Name="Schools" EntityType="SLE_TrackingModel.School" />
+          <EntitySet Name="SchoolSecurities" EntityType="SLE_TrackingModel.SchoolSecurity" />
+          <EntitySet Name="Scores" EntityType="SLE_TrackingModel.Score" />
+          <EntitySet Name="ScoreSets" EntityType="SLE_TrackingModel.ScoreSet" />
+          <EntitySet Name="sysdiagrams" EntityType="SLE_TrackingModel.sysdiagram" />
+          <AssociationSet Name="fk_ProgramAssessmentMapping_AssessmentLevelCode" Association="SLE_TrackingModel.fk_ProgramAssessmentMapping_AssessmentLevelCode">
+            <End Role="AssessmentLevel" EntitySet="AssessmentLevels" />
+            <End Role="ProgramAssessmentMapping" EntitySet="ProgramAssessmentMappings" />
+          </AssociationSet>
+          <AssociationSet Name="fk_AssessmentRubric_ScoreSetID" Association="SLE_TrackingModel.fk_AssessmentRubric_ScoreSetID">
+            <End Role="ScoreSet" EntitySet="ScoreSets" />
+            <End Role="AssessmentRubric" EntitySet="AssessmentRubrics" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ProgramAssessmentMapping_RubricID" Association="SLE_TrackingModel.fk_ProgramAssessmentMapping_RubricID">
+            <End Role="AssessmentRubric" EntitySet="AssessmentRubrics" />
+            <End Role="ProgramAssessmentMapping" EntitySet="ProgramAssessmentMappings" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Course_PrimaryDepartmentID" Association="SLE_TrackingModel.fk_Course_PrimaryDepartmentID">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="Course" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ProgramAssessmentMapping_CourseID" Association="SLE_TrackingModel.fk_ProgramAssessmentMapping_CourseID">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="ProgramAssessmentMapping" EntitySet="ProgramAssessmentMappings" />
+          </AssociationSet>
+          <AssociationSet Name="fk_CourseSubject_PrimaryDepartmentID" Association="SLE_TrackingModel.fk_CourseSubject_PrimaryDepartmentID">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="CourseSubject" EntitySet="CourseSubjects" />
+          </AssociationSet>
+          <AssociationSet Name="fk_CourseSubjectSecurity_CourseSubject" Association="SLE_TrackingModel.fk_CourseSubjectSecurity_CourseSubject">
+            <End Role="CourseSubject" EntitySet="CourseSubjects" />
+            <End Role="CourseSubjectSecurity" EntitySet="CourseSubjectSecurities" />
+          </AssociationSet>
+          <AssociationSet Name="fk_CourseSubjectSecurity_RoleID" Association="SLE_TrackingModel.fk_CourseSubjectSecurity_RoleID">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="CourseSubjectSecurity" EntitySet="CourseSubjectSecurities" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Department_SchoolID" Association="SLE_TrackingModel.fk_Department_SchoolID">
+            <End Role="School" EntitySet="Schools" />
+            <End Role="Department" EntitySet="Departments" />
+          </AssociationSet>
+          <AssociationSet Name="fk_DepartmentSecurity_DepartmentID" Association="SLE_TrackingModel.fk_DepartmentSecurity_DepartmentID">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="DepartmentSecurity" EntitySet="DepartmentSecurities" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ProgramDepartment_DepartmentID" Association="SLE_TrackingModel.fk_ProgramDepartment_DepartmentID">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="ProgramDepartment" EntitySet="ProgramDepartments" />
+          </AssociationSet>
+          <AssociationSet Name="fk_DepartmentSecurity_RoleID" Association="SLE_TrackingModel.fk_DepartmentSecurity_RoleID">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="DepartmentSecurity" EntitySet="DepartmentSecurities" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ProgramAssessmentMapping_ProgramID" Association="SLE_TrackingModel.fk_ProgramAssessmentMapping_ProgramID">
+            <End Role="Program" EntitySet="Programs" />
+            <End Role="ProgramAssessmentMapping" EntitySet="ProgramAssessmentMappings" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ProgramDepartment_ProgramID" Association="SLE_TrackingModel.fk_ProgramDepartment_ProgramID">
+            <End Role="Program" EntitySet="Programs" />
+            <End Role="ProgramDepartment" EntitySet="ProgramDepartments" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ProgramSecurity_ProgramID" Association="SLE_TrackingModel.fk_ProgramSecurity_ProgramID">
+            <End Role="Program" EntitySet="Programs" />
+            <End Role="ProgramSecurity" EntitySet="ProgramSecurities" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ProgramSecurity_RoleID" Association="SLE_TrackingModel.fk_ProgramSecurity_RoleID">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="ProgramSecurity" EntitySet="ProgramSecurities" />
+          </AssociationSet>
+          <AssociationSet Name="fk_SchoolSecurity_RoleID" Association="SLE_TrackingModel.fk_SchoolSecurity_RoleID">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="SchoolSecurity" EntitySet="SchoolSecurities" />
+          </AssociationSet>
+          <AssociationSet Name="fk_UserRole_RoleID" Association="SLE_TrackingModel.fk_UserRole_RoleID">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="UserRole" EntitySet="UserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="fk_SchoolSecurity_ProgramID" Association="SLE_TrackingModel.fk_SchoolSecurity_ProgramID">
+            <End Role="School" EntitySet="Schools" />
+            <End Role="SchoolSecurity" EntitySet="SchoolSecurities" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Score_ScoreSetID" Association="SLE_TrackingModel.fk_Score_ScoreSetID">
+            <End Role="ScoreSet" EntitySet="ScoreSets" />
+            <End Role="Score" EntitySet="Scores" />
+          </AssociationSet>
+          <AssociationSet Name="fk_StudentScore_ScoreID" Association="SLE_TrackingModel.fk_StudentScore_ScoreID">
+            <End Role="Score" EntitySet="Scores" />
+            <End Role="StudentScore" EntitySet="StudentScores" />
+          </AssociationSet>
+          <AssociationSet Name="fk_UserRole_PersonID" Association="SLE_TrackingModel.fk_UserRole_PersonID">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserRole" EntitySet="UserRoles" />
+          </AssociationSet>
+          <FunctionImport Name="GetCompletedCountBySectionRubric" IsComposable="true" ReturnType="Collection(SLE_TrackingModel.GetCompletedCountBySectionRubric_Result)">
+          <Parameter Name="SectionRubricID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetCourseSubjectSecurityByLogin" IsComposable="true" ReturnType="Collection(SLE_TrackingModel.GetCourseSubjectSecurityByLogin_Result)">
+          <Parameter Name="Login" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetSecurityByLogin" IsComposable="true" ReturnType="Collection(SLE_TrackingModel.GetSecurityByLogin_Result)">
+          <Parameter Name="Login" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(SLE_TrackingModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(SLE_TrackingModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Split" IsComposable="true" ReturnType="Collection(SLE_TrackingModel.Split_Result)">
+            <Parameter Name="String" Mode="In" Type="String" />
+            <Parameter Name="Delimiter" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
+        <EntityType Name="CourseSubject">
+          <Key>
+            <PropertyRef Name="CourseSubjectID" />
+          </Key>
+          <Property Name="CourseSubjectID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Number" Type="String" Nullable="false" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PrimaryDepartmentID" Type="Int16" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <NavigationProperty Name="Department" Relationship="SLE_TrackingModel.fk_CourseSubject_PrimaryDepartmentID" FromRole="CourseSubject" ToRole="Department" />
+          <NavigationProperty Name="CourseSubjectSecurities" Relationship="SLE_TrackingModel.fk_CourseSubjectSecurity_CourseSubject" FromRole="CourseSubject" ToRole="CourseSubjectSecurity" />
+        </EntityType>
+        <EntityType Name="CourseSubjectSecurity">
+          <Key>
+            <PropertyRef Name="CourseSubjectSecurityID" />
+          </Key>
+          <Property Name="CourseSubjectSecurityID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CourseSubjectID" Type="Int16" Nullable="false" />
+          <Property Name="RoleID" Type="Int16" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <NavigationProperty Name="CourseSubject" Relationship="SLE_TrackingModel.fk_CourseSubjectSecurity_CourseSubject" FromRole="CourseSubjectSecurity" ToRole="CourseSubject" />
+          <NavigationProperty Name="Role" Relationship="SLE_TrackingModel.fk_CourseSubjectSecurity_RoleID" FromRole="CourseSubjectSecurity" ToRole="Role" />
+        </EntityType>
+        <EntityType Name="DepartmentSecurity">
+          <Key>
+            <PropertyRef Name="DepartmentSecurityID" />
+          </Key>
+          <Property Name="DepartmentSecurityID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DepartmentID" Type="Int16" Nullable="false" />
+          <Property Name="RoleID" Type="Int16" Nullable="false" />
+          <Property Name="CanEdit" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <NavigationProperty Name="Department" Relationship="SLE_TrackingModel.fk_DepartmentSecurity_DepartmentID" FromRole="DepartmentSecurity" ToRole="Department" />
+          <NavigationProperty Name="Role" Relationship="SLE_TrackingModel.fk_DepartmentSecurity_RoleID" FromRole="DepartmentSecurity" ToRole="Role" />
+        </EntityType>
+        <EntityType Name="ProgramAssessmentMapping">
+          <Key>
+            <PropertyRef Name="ProgramAssessmentMappingID" />
+          </Key>
+          <Property Name="ProgramAssessmentMappingID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProgramID" Type="Int16" Nullable="false" />
+          <Property Name="RubricID" Type="Int16" Nullable="false" />
+          <Property Name="CourseID" Type="Int16" Nullable="false" />
+          <Property Name="AssessmentLevelCode" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <Property Name="BeginDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="AssessmentLevel" Relationship="SLE_TrackingModel.fk_ProgramAssessmentMapping_AssessmentLevelCode" FromRole="ProgramAssessmentMapping" ToRole="AssessmentLevel" />
+          <NavigationProperty Name="AssessmentRubric" Relationship="SLE_TrackingModel.fk_ProgramAssessmentMapping_RubricID" FromRole="ProgramAssessmentMapping" ToRole="AssessmentRubric" />
+          <NavigationProperty Name="Course" Relationship="SLE_TrackingModel.fk_ProgramAssessmentMapping_CourseID" FromRole="ProgramAssessmentMapping" ToRole="Course" />
+          <NavigationProperty Name="Program" Relationship="SLE_TrackingModel.fk_ProgramAssessmentMapping_ProgramID" FromRole="ProgramAssessmentMapping" ToRole="Program" />
+        </EntityType>
+        <EntityType Name="ProgramSecurity">
+          <Key>
+            <PropertyRef Name="ProgramSecurityID" />
+          </Key>
+          <Property Name="ProgramSecurityID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProgramID" Type="Int16" Nullable="false" />
+          <Property Name="RoleID" Type="Int16" Nullable="false" />
+          <Property Name="CanEdit" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <NavigationProperty Name="Program" Relationship="SLE_TrackingModel.fk_ProgramSecurity_ProgramID" FromRole="ProgramSecurity" ToRole="Program" />
+          <NavigationProperty Name="Role" Relationship="SLE_TrackingModel.fk_ProgramSecurity_RoleID" FromRole="ProgramSecurity" ToRole="Role" />
+        </EntityType>
+        <EntityType Name="School">
+          <Key>
+            <PropertyRef Name="SchoolID" />
+          </Key>
+          <Property Name="SchoolID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <NavigationProperty Name="Departments" Relationship="SLE_TrackingModel.fk_Department_SchoolID" FromRole="School" ToRole="Department" />
+          <NavigationProperty Name="SchoolSecurities" Relationship="SLE_TrackingModel.fk_SchoolSecurity_ProgramID" FromRole="School" ToRole="SchoolSecurity" />
+        </EntityType>
+        <EntityType Name="SchoolSecurity">
+          <Key>
+            <PropertyRef Name="SchoolSecurityID" />
+          </Key>
+          <Property Name="SchoolSecurityID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SchoolID" Type="Byte" Nullable="false" />
+          <Property Name="RoleID" Type="Int16" Nullable="false" />
+          <Property Name="CanEdit" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <NavigationProperty Name="Role" Relationship="SLE_TrackingModel.fk_SchoolSecurity_RoleID" FromRole="SchoolSecurity" ToRole="Role" />
+          <NavigationProperty Name="School" Relationship="SLE_TrackingModel.fk_SchoolSecurity_ProgramID" FromRole="SchoolSecurity" ToRole="School" />
+        </EntityType>
+        <EntityType Name="Score">
+          <Key>
+            <PropertyRef Name="ScoreID" />
+          </Key>
+          <Property Name="ScoreID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ScoreSetID" Type="Byte" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Value" Type="Byte" Nullable="false" />
+          <Property Name="SortOrder" Type="Byte" Nullable="false" />
+          <Property Name="IsUnassessedScore" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ScoreSet" Relationship="SLE_TrackingModel.fk_Score_ScoreSetID" FromRole="Score" ToRole="ScoreSet" />
+          <NavigationProperty Name="StudentScores" Relationship="SLE_TrackingModel.fk_StudentScore_ScoreID" FromRole="Score" ToRole="StudentScore" />
+        </EntityType>
+        <EntityType Name="ScoreSet">
+          <Key>
+            <PropertyRef Name="ScoreSetID" />
+          </Key>
+          <Property Name="ScoreSetID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AssessmentRubrics" Relationship="SLE_TrackingModel.fk_AssessmentRubric_ScoreSetID" FromRole="ScoreSet" ToRole="AssessmentRubric" />
+          <NavigationProperty Name="Scores" Relationship="SLE_TrackingModel.fk_Score_ScoreSetID" FromRole="ScoreSet" ToRole="Score" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="fk_ProgramAssessmentMapping_AssessmentLevelCode">
+          <End Type="SLE_TrackingModel.AssessmentLevel" Role="AssessmentLevel" Multiplicity="0..1" />
+          <End Type="SLE_TrackingModel.ProgramAssessmentMapping" Role="ProgramAssessmentMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssessmentLevel">
+              <PropertyRef Name="AssessmentLevelCode" />
+            </Principal>
+            <Dependent Role="ProgramAssessmentMapping">
+              <PropertyRef Name="AssessmentLevelCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_AssessmentRubric_ScoreSetID">
+          <End Type="SLE_TrackingModel.ScoreSet" Role="ScoreSet" Multiplicity="0..1" />
+          <End Type="SLE_TrackingModel.AssessmentRubric" Role="AssessmentRubric" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ScoreSet">
+              <PropertyRef Name="ScoreSetID" />
+            </Principal>
+            <Dependent Role="AssessmentRubric">
+              <PropertyRef Name="ScoreSetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ProgramAssessmentMapping_RubricID">
+          <End Type="SLE_TrackingModel.AssessmentRubric" Role="AssessmentRubric" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.ProgramAssessmentMapping" Role="ProgramAssessmentMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssessmentRubric">
+              <PropertyRef Name="RubricID" />
+            </Principal>
+            <Dependent Role="ProgramAssessmentMapping">
+              <PropertyRef Name="RubricID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Course_PrimaryDepartmentID">
+          <End Type="SLE_TrackingModel.Department" Role="Department" Multiplicity="0..1" />
+          <End Type="SLE_TrackingModel.Course" Role="Course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentID" />
+            </Principal>
+            <Dependent Role="Course">
+              <PropertyRef Name="PrimaryDepartmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ProgramAssessmentMapping_CourseID">
+          <End Type="SLE_TrackingModel.Course" Role="Course" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.ProgramAssessmentMapping" Role="ProgramAssessmentMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseID" />
+            </Principal>
+            <Dependent Role="ProgramAssessmentMapping">
+              <PropertyRef Name="CourseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_CourseSubject_PrimaryDepartmentID">
+          <End Type="SLE_TrackingModel.Department" Role="Department" Multiplicity="0..1" />
+          <End Type="SLE_TrackingModel.CourseSubject" Role="CourseSubject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentID" />
+            </Principal>
+            <Dependent Role="CourseSubject">
+              <PropertyRef Name="PrimaryDepartmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_CourseSubjectSecurity_CourseSubject">
+          <End Type="SLE_TrackingModel.CourseSubject" Role="CourseSubject" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.CourseSubjectSecurity" Role="CourseSubjectSecurity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CourseSubject">
+              <PropertyRef Name="CourseSubjectID" />
+            </Principal>
+            <Dependent Role="CourseSubjectSecurity">
+              <PropertyRef Name="CourseSubjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_CourseSubjectSecurity_RoleID">
+          <End Type="SLE_TrackingModel.Role" Role="Role" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.CourseSubjectSecurity" Role="CourseSubjectSecurity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="CourseSubjectSecurity">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Department_SchoolID">
+          <End Type="SLE_TrackingModel.School" Role="School" Multiplicity="0..1" />
+          <End Type="SLE_TrackingModel.Department" Role="Department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="School">
+              <PropertyRef Name="SchoolID" />
+            </Principal>
+            <Dependent Role="Department">
+              <PropertyRef Name="SchoolID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_DepartmentSecurity_DepartmentID">
+          <End Type="SLE_TrackingModel.Department" Role="Department" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.DepartmentSecurity" Role="DepartmentSecurity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentID" />
+            </Principal>
+            <Dependent Role="DepartmentSecurity">
+              <PropertyRef Name="DepartmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ProgramDepartment_DepartmentID">
+          <End Type="SLE_TrackingModel.Department" Role="Department" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.ProgramDepartment" Role="ProgramDepartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentID" />
+            </Principal>
+            <Dependent Role="ProgramDepartment">
+              <PropertyRef Name="DepartmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_DepartmentSecurity_RoleID">
+          <End Type="SLE_TrackingModel.Role" Role="Role" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.DepartmentSecurity" Role="DepartmentSecurity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="DepartmentSecurity">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ProgramAssessmentMapping_ProgramID">
+          <End Type="SLE_TrackingModel.Program" Role="Program" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.ProgramAssessmentMapping" Role="ProgramAssessmentMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="ProgramID" />
+            </Principal>
+            <Dependent Role="ProgramAssessmentMapping">
+              <PropertyRef Name="ProgramID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ProgramDepartment_ProgramID">
+          <End Type="SLE_TrackingModel.Program" Role="Program" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.ProgramDepartment" Role="ProgramDepartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="ProgramID" />
+            </Principal>
+            <Dependent Role="ProgramDepartment">
+              <PropertyRef Name="ProgramID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ProgramSecurity_ProgramID">
+          <End Type="SLE_TrackingModel.Program" Role="Program" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.ProgramSecurity" Role="ProgramSecurity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="ProgramID" />
+            </Principal>
+            <Dependent Role="ProgramSecurity">
+              <PropertyRef Name="ProgramID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ProgramSecurity_RoleID">
+          <End Type="SLE_TrackingModel.Role" Role="Role" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.ProgramSecurity" Role="ProgramSecurity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="ProgramSecurity">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_SchoolSecurity_RoleID">
+          <End Type="SLE_TrackingModel.Role" Role="Role" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.SchoolSecurity" Role="SchoolSecurity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="SchoolSecurity">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_UserRole_RoleID">
+          <End Type="SLE_TrackingModel.Role" Role="Role" Multiplicity="0..1" />
+          <End Type="SLE_TrackingModel.UserRole" Role="UserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="UserRole">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_SchoolSecurity_ProgramID">
+          <End Type="SLE_TrackingModel.School" Role="School" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.SchoolSecurity" Role="SchoolSecurity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="School">
+              <PropertyRef Name="SchoolID" />
+            </Principal>
+            <Dependent Role="SchoolSecurity">
+              <PropertyRef Name="SchoolID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Score_ScoreSetID">
+          <End Type="SLE_TrackingModel.ScoreSet" Role="ScoreSet" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.Score" Role="Score" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ScoreSet">
+              <PropertyRef Name="ScoreSetID" />
+            </Principal>
+            <Dependent Role="Score">
+              <PropertyRef Name="ScoreSetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_StudentScore_ScoreID">
+          <End Type="SLE_TrackingModel.Score" Role="Score" Multiplicity="0..1" />
+          <End Type="SLE_TrackingModel.StudentScore" Role="StudentScore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Score">
+              <PropertyRef Name="ScoreID" />
+            </Principal>
+            <Dependent Role="StudentScore">
+              <PropertyRef Name="ScoreID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_UserRole_PersonID">
+          <End Type="SLE_TrackingModel.User" Role="User" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.UserRole" Role="UserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="UserRole">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="GetCompletedCountBySectionRubric_Result">
+          <Property Type="Int32" Name="SectionRubricID" Nullable="false" />
+          <Property Type="Int32" Name="CompletedCount" Nullable="true" />
+          <Property Type="Int32" Name="StudentCount" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetCourseSubjectSecurityByLogin_Result">
+          <Property Type="Byte" Name="SchoolID" Nullable="false" />
+          <Property Type="String" Name="SchoolName" Nullable="false" MaxLength="100" />
+          <Property Type="Int16" Name="DepartmentID" Nullable="false" />
+          <Property Type="String" Name="DepartmentNumber" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="DepartmentName" Nullable="true" MaxLength="100" />
+          <Property Type="Int16" Name="CourseSubjectID" Nullable="false" />
+          <Property Type="String" Name="CourseSubjectNumber" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="CourseSubjectName" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="GetSecurityByLogin_Result">
+          <Property Type="Byte" Name="SchoolID" Nullable="false" />
+          <Property Type="String" Name="SchoolName" Nullable="false" MaxLength="100" />
+          <Property Type="Int16" Name="DepartmentID" Nullable="false" />
+          <Property Type="String" Name="DepartmentNumber" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="DepartmentName" Nullable="true" MaxLength="100" />
+          <Property Type="Int16" Name="ProgramID" Nullable="false" />
+          <Property Type="String" Name="ProgramNumber" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="ProgramName" Nullable="false" MaxLength="100" />
+          <Property Type="Byte" Name="CanEdit" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="Split_Result">
+          <Property Type="Int64" Name="Id" Nullable="true" />
+          <Property Type="String" Name="Data" Nullable="true" MaxLength="4000" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1667,6 +3112,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="Assessments">
             <EntityTypeMapping TypeName="SLE_TrackingModel.Assessment">
               <MappingFragment StoreEntitySet="Assessment">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="AssessmentID" ColumnName="AssessmentID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Category" ColumnName="Category" />
@@ -1680,6 +3130,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="AssessmentCategories">
             <EntityTypeMapping TypeName="SLE_TrackingModel.AssessmentCategory">
               <MappingFragment StoreEntitySet="AssessmentCategory">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -1689,6 +3144,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="AssessmentLevels">
             <EntityTypeMapping TypeName="SLE_TrackingModel.AssessmentLevel">
               <MappingFragment StoreEntitySet="AssessmentLevel">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="AssessmentLevelCode" ColumnName="AssessmentLevelCode" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
@@ -1697,6 +3157,12 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="AssessmentRubrics">
             <EntityTypeMapping TypeName="SLE_TrackingModel.AssessmentRubric">
               <MappingFragment StoreEntitySet="AssessmentRubric">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="ScoreSetID" ColumnName="ScoreSetID" />
                 <ScalarProperty Name="RubricID" ColumnName="RubricID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -1707,6 +3173,13 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="Courses">
             <EntityTypeMapping TypeName="SLE_TrackingModel.Course">
               <MappingFragment StoreEntitySet="Course">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsERPCourse" ColumnName="IsERPCourse" />
+                <ScalarProperty Name="PrimaryDepartmentID" ColumnName="PrimaryDepartmentID" />
                 <ScalarProperty Name="CourseID" ColumnName="CourseID" />
                 <ScalarProperty Name="CourseName" ColumnName="CourseName" />
                 <ScalarProperty Name="Number" ColumnName="Number" />
@@ -1716,16 +3189,27 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="CoursePrograms">
             <EntityTypeMapping TypeName="SLE_TrackingModel.CourseProgram">
               <MappingFragment StoreEntitySet="CourseProgram">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="CourseProgramID" ColumnName="CourseProgramID" />
                 <ScalarProperty Name="CourseID" ColumnName="CourseID" />
                 <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
-                <ScalarProperty Name="CatalogYear" ColumnName="CatalogYear" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Criteria">
             <EntityTypeMapping TypeName="SLE_TrackingModel.Criterion">
               <MappingFragment StoreEntitySet="Criteria">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="InactiveDateTime" ColumnName="InactiveDateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="CriteriaID" ColumnName="CriteriaID" />
                 <ScalarProperty Name="OutcomeID" ColumnName="OutcomeID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1737,6 +3221,12 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="Departments">
             <EntityTypeMapping TypeName="SLE_TrackingModel.Department">
               <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SchoolID" ColumnName="SchoolID" />
                 <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
                 <ScalarProperty Name="Number" ColumnName="Number" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1746,6 +3236,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="Enrollments">
             <EntityTypeMapping TypeName="SLE_TrackingModel.Enrollment">
               <MappingFragment StoreEntitySet="Enrollment">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
                 <ScalarProperty Name="EnrollmentID" ColumnName="EnrollmentID" />
                 <ScalarProperty Name="SectionID" ColumnName="SectionID" />
                 <ScalarProperty Name="StudentID" ColumnName="StudentID" />
@@ -1757,6 +3251,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="EnrollmentStatus">
             <EntityTypeMapping TypeName="SLE_TrackingModel.EnrollmentStatu">
               <MappingFragment StoreEntitySet="EnrollmentStatus">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
                 <ScalarProperty Name="StatusID" ColumnName="StatusID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
@@ -1765,6 +3263,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="ETL_StatusMapping">
             <EntityTypeMapping TypeName="SLE_TrackingModel.ETL_StatusMapping">
               <MappingFragment StoreEntitySet="ETL_StatusMapping">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="StatusCode" ColumnName="StatusCode" />
                 <ScalarProperty Name="StatusDescription" ColumnName="StatusDescription" />
                 <ScalarProperty Name="EnrollmentStatusID" ColumnName="EnrollmentStatusID" />
@@ -1774,6 +3277,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="Outcomes">
             <EntityTypeMapping TypeName="SLE_TrackingModel.Outcome">
               <MappingFragment StoreEntitySet="Outcome">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="OutcomeID" ColumnName="OutcomeID" />
                 <ScalarProperty Name="RubricID" ColumnName="RubricID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1787,6 +3295,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="People">
             <EntityTypeMapping TypeName="SLE_TrackingModel.Person">
               <MappingFragment StoreEntitySet="Person">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
                 <ScalarProperty Name="PersonID" ColumnName="PersonID" />
                 <ScalarProperty Name="IdNumber" ColumnName="IdNumber" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
@@ -1797,6 +3309,12 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="Programs">
             <EntityTypeMapping TypeName="SLE_TrackingModel.Program">
               <MappingFragment StoreEntitySet="Program">
+                <ScalarProperty Name="IsSharedProgram" ColumnName="IsSharedProgram" />
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
                 <ScalarProperty Name="Number" ColumnName="Number" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1806,6 +3324,12 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="ProgramDepartments">
             <EntityTypeMapping TypeName="SLE_TrackingModel.ProgramDepartment">
               <MappingFragment StoreEntitySet="ProgramDepartment">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="ProgramDepartmentID" ColumnName="ProgramDepartmentID" />
                 <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
                 <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
@@ -1815,6 +3339,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="Roles">
             <EntityTypeMapping TypeName="SLE_TrackingModel.Role">
               <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
@@ -1835,6 +3364,12 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="Sections">
             <EntityTypeMapping TypeName="SLE_TrackingModel.Section">
               <MappingFragment StoreEntitySet="Section">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="BeginDate" ColumnName="BeginDate" />
                 <ScalarProperty Name="SectionID" ColumnName="SectionID" />
                 <ScalarProperty Name="CRN" ColumnName="CRN" />
                 <ScalarProperty Name="SemesterID" ColumnName="SemesterID" />
@@ -1848,6 +3383,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="SectionRubrics">
             <EntityTypeMapping TypeName="SLE_TrackingModel.SectionRubric">
               <MappingFragment StoreEntitySet="SectionRubric">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
                 <ScalarProperty Name="SectionRubricID" ColumnName="SectionRubricID" />
                 <ScalarProperty Name="SectionID" ColumnName="SectionID" />
                 <ScalarProperty Name="RubricID" ColumnName="RubricID" />
@@ -1860,6 +3399,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="Semesters">
             <EntityTypeMapping TypeName="SLE_TrackingModel.Semester">
               <MappingFragment StoreEntitySet="Semester">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
                 <ScalarProperty Name="SemesterID" ColumnName="SemesterID" />
                 <ScalarProperty Name="SemesterCode" ColumnName="SemesterCode" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1869,6 +3412,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="StudentPrograms">
             <EntityTypeMapping TypeName="SLE_TrackingModel.StudentProgram">
               <MappingFragment StoreEntitySet="StudentProgram">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
                 <ScalarProperty Name="StudentProgramID" ColumnName="StudentProgramID" />
                 <ScalarProperty Name="StudentID" ColumnName="StudentID" />
                 <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
@@ -1880,6 +3427,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="StudentScores">
             <EntityTypeMapping TypeName="SLE_TrackingModel.StudentScore">
               <MappingFragment StoreEntitySet="StudentScore">
+                <ScalarProperty Name="ScoreID" ColumnName="ScoreID" />
                 <ScalarProperty Name="StudentScoreID" ColumnName="StudentScoreID" />
                 <ScalarProperty Name="EnrollmentID" ColumnName="EnrollmentID" />
                 <ScalarProperty Name="CriteriaID" ColumnName="CriteriaID" />
@@ -1892,6 +3440,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="SLE_TrackingModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
                 <ScalarProperty Name="PersonID" ColumnName="PersonID" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -1907,6 +3459,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="UserRoles">
             <EntityTypeMapping TypeName="SLE_TrackingModel.UserRole">
               <MappingFragment StoreEntitySet="UserRole">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
                 <ScalarProperty Name="UserRoleID" ColumnName="UserRoleID" />
                 <ScalarProperty Name="PersonID" ColumnName="PersonID" />
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
@@ -1986,6 +3542,216 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="CourseSubjects">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.CourseSubject">
+              <MappingFragment StoreEntitySet="CourseSubject">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="PrimaryDepartmentID" ColumnName="PrimaryDepartmentID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="CourseSubjectID" ColumnName="CourseSubjectID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CourseSubjectSecurities">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.CourseSubjectSecurity">
+              <MappingFragment StoreEntitySet="CourseSubjectSecurity">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="CourseSubjectID" ColumnName="CourseSubjectID" />
+                <ScalarProperty Name="CourseSubjectSecurityID" ColumnName="CourseSubjectSecurityID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DepartmentSecurities">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.DepartmentSecurity">
+              <MappingFragment StoreEntitySet="DepartmentSecurity">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="CanEdit" ColumnName="CanEdit" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="DepartmentSecurityID" ColumnName="DepartmentSecurityID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProgramAssessmentMappings">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.ProgramAssessmentMapping">
+              <MappingFragment StoreEntitySet="ProgramAssessmentMapping">
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="BeginDate" ColumnName="BeginDate" />
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="AssessmentLevelCode" ColumnName="AssessmentLevelCode" />
+                <ScalarProperty Name="CourseID" ColumnName="CourseID" />
+                <ScalarProperty Name="RubricID" ColumnName="RubricID" />
+                <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
+                <ScalarProperty Name="ProgramAssessmentMappingID" ColumnName="ProgramAssessmentMappingID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProgramSecurities">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.ProgramSecurity">
+              <MappingFragment StoreEntitySet="ProgramSecurity">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="CanEdit" ColumnName="CanEdit" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
+                <ScalarProperty Name="ProgramSecurityID" ColumnName="ProgramSecurityID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Schools">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.School">
+              <MappingFragment StoreEntitySet="School">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SchoolID" ColumnName="SchoolID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SchoolSecurities">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.SchoolSecurity">
+              <MappingFragment StoreEntitySet="SchoolSecurity">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="CanEdit" ColumnName="CanEdit" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="SchoolID" ColumnName="SchoolID" />
+                <ScalarProperty Name="SchoolSecurityID" ColumnName="SchoolSecurityID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Scores">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.Score">
+              <MappingFragment StoreEntitySet="Score">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="IsUnassessedScore" ColumnName="IsUnassessedScore" />
+                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ScoreSetID" ColumnName="ScoreSetID" />
+                <ScalarProperty Name="ScoreID" ColumnName="ScoreID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ScoreSets">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.ScoreSet">
+              <MappingFragment StoreEntitySet="ScoreSet">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ScoreSetID" ColumnName="ScoreSetID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetCompletedCountBySectionRubric" FunctionName="SLE_TrackingModel.Store.GetCompletedCountBySectionRubric">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SLE_TrackingModel.GetCompletedCountBySectionRubric_Result">
+                <ScalarProperty Name="SectionRubricID" ColumnName="SectionRubricID" />
+                <ScalarProperty Name="CompletedCount" ColumnName="CompletedCount" />
+                <ScalarProperty Name="StudentCount" ColumnName="StudentCount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetCourseSubjectSecurityByLogin" FunctionName="SLE_TrackingModel.Store.GetCourseSubjectSecurityByLogin">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SLE_TrackingModel.GetCourseSubjectSecurityByLogin_Result">
+                <ScalarProperty Name="SchoolID" ColumnName="SchoolID" />
+                <ScalarProperty Name="SchoolName" ColumnName="SchoolName" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="DepartmentNumber" ColumnName="DepartmentNumber" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="CourseSubjectID" ColumnName="CourseSubjectID" />
+                <ScalarProperty Name="CourseSubjectNumber" ColumnName="CourseSubjectNumber" />
+                <ScalarProperty Name="CourseSubjectName" ColumnName="CourseSubjectName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetSecurityByLogin" FunctionName="SLE_TrackingModel.Store.GetSecurityByLogin">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SLE_TrackingModel.GetSecurityByLogin_Result">
+                <ScalarProperty Name="SchoolID" ColumnName="SchoolID" />
+                <ScalarProperty Name="SchoolName" ColumnName="SchoolName" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="DepartmentNumber" ColumnName="DepartmentNumber" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
+                <ScalarProperty Name="ProgramNumber" ColumnName="ProgramNumber" />
+                <ScalarProperty Name="ProgramName" ColumnName="ProgramName" />
+                <ScalarProperty Name="CanEdit" ColumnName="CanEdit" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="SLE_TrackingModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="SLE_TrackingModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="SLE_TrackingModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="SLE_TrackingModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SLE_TrackingModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="SLE_TrackingModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SLE_TrackingModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="SLE_TrackingModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="Split" FunctionName="SLE_TrackingModel.Store.Split">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SLE_TrackingModel.Split_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

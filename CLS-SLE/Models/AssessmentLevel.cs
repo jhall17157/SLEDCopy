@@ -18,12 +18,20 @@ namespace CLS_SLE.Models
         public AssessmentLevel()
         {
             this.SectionRubrics = new HashSet<SectionRubric>();
+            this.ProgramAssessmentMappings = new HashSet<ProgramAssessmentMapping>();
         }
     
         public string AssessmentLevelCode { get; set; }
         public string Name { get; set; }
+        public bool IsActive { get; set; }
+        public Nullable<System.DateTime> CreatedDateTime { get; set; }
+        public Nullable<int> CreatedByLoginID { get; set; }
+        public Nullable<System.DateTime> ModifiedDateTime { get; set; }
+        public Nullable<int> ModifiedByLoginID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SectionRubric> SectionRubrics { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProgramAssessmentMapping> ProgramAssessmentMappings { get; set; }
     }
 }

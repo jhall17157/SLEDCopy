@@ -12,21 +12,23 @@ namespace CLS_SLE.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SectionRubric
+    public partial class ProgramAssessmentMapping
     {
-        public int SectionRubricID { get; set; }
-        public int SectionID { get; set; }
+        public short ProgramAssessmentMappingID { get; set; }
+        public short ProgramID { get; set; }
         public short RubricID { get; set; }
-        public System.DateTime StartDate { get; set; }
-        public System.DateTime EndDate { get; set; }
+        public short CourseID { get; set; }
         public string AssessmentLevelCode { get; set; }
         public Nullable<System.DateTime> CreatedDateTime { get; set; }
         public Nullable<int> CreatedByLoginID { get; set; }
         public Nullable<System.DateTime> ModifiedDateTime { get; set; }
         public Nullable<int> ModifiedByLoginID { get; set; }
+        public Nullable<System.DateTime> BeginDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
     
         public virtual AssessmentLevel AssessmentLevel { get; set; }
         public virtual AssessmentRubric AssessmentRubric { get; set; }
-        public virtual Section Section { get; set; }
+        public virtual Course Course { get; set; }
+        public virtual Program Program { get; set; }
     }
 }

@@ -1,0 +1,62 @@
+﻿@using CLS_SLE.Models;
+@{
+    ViewBag.Title = "User Security ";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
+        <li class="breadcrumb-item active" aria-current="page">User Security</li>
+    </ol>
+</nav>
+
+<h1>User Permissions</h1>
+<br />
+
+    <h4><a href="/Admin/ViewRoles">Group by Role</a></h4>
+
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th class="col-2">User ID</th>
+                <th class="col-3">Name</th>
+                <th class="col-3">Current Permissions</th>
+                <th class="col-4 justify-content-end">
+                    <form class="form-inline row justify-content-end" target="Admin/SearchUser" method="get" id="UserSearch">
+                        <input class="form-control mr-2" name="Search" type="text" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-primary mr-3" form="UserSearch" type="submit" value="Submit"><i class="fas fa-search"></i></button>
+                    </form>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ foreach (UserSecurity person in Model.UserSecurityList)
+                {
+                    <tr data-userID="person.PersonID">
+                        <td>@person.IDNumber</td>
+                        <td>@person.LastName<text>,</text> @person.FirstName</td>
+                        <td>
+                            @{
+                                int i = 0;
+                                if (person.Roles.Count == 0)
+                                {
+                                    <text>None</text>
+                                }
+                                foreach (Role role in person.Roles)
+                                {
+                                    @role.Name
+                                    i++;
+                                    if (person.Roles.Count > i)
+                                    {
+                                        <text>, </text>
+                                    }
+                                }
+                            }
+                        </td>
+                        <td class="text-right"><a href="~/Admin/ManageUser?id=@person.PersonID"><button type="button" class="btn btn-primary mr-2">Edit</button></a></td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>

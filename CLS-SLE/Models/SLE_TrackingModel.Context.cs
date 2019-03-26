@@ -47,6 +47,10 @@ public partial class SLE_TrackingEntities : DbContext
 
     public virtual DbSet<CourseProgram> CoursePrograms { get; set; }
 
+    public virtual DbSet<CourseSubject> CourseSubjects { get; set; }
+
+    public virtual DbSet<CourseSubjectSecurity> CourseSubjectSecurities { get; set; }
+
     public virtual DbSet<Criterion> Criteria { get; set; }
 
     public virtual DbSet<Department> Departments { get; set; }
@@ -61,6 +65,8 @@ public partial class SLE_TrackingEntities : DbContext
 
     public virtual DbSet<Outcome> Outcomes { get; set; }
 
+    public virtual DbSet<Permission> Permissions { get; set; }
+
     public virtual DbSet<Person> People { get; set; }
 
     public virtual DbSet<Program> Programs { get; set; }
@@ -73,6 +79,8 @@ public partial class SLE_TrackingEntities : DbContext
 
     public virtual DbSet<Role> Roles { get; set; }
 
+    public virtual DbSet<RolePermission> RolePermissions { get; set; }
+
     public virtual DbSet<School> Schools { get; set; }
 
     public virtual DbSet<SchoolSecurity> SchoolSecurities { get; set; }
@@ -80,8 +88,6 @@ public partial class SLE_TrackingEntities : DbContext
     public virtual DbSet<Score> Scores { get; set; }
 
     public virtual DbSet<ScoreSet> ScoreSets { get; set; }
-
-    public virtual DbSet<ScoreType> ScoreTypes { get; set; }
 
     public virtual DbSet<Section> Sections { get; set; }
 
@@ -98,6 +104,8 @@ public partial class SLE_TrackingEntities : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
+
+    public virtual DbSet<AssessmentRubricSecurity> AssessmentRubricSecurities { get; set; }
 
     public virtual DbSet<InstructorAssessment> InstructorAssessments { get; set; }
 
@@ -120,6 +128,32 @@ public partial class SLE_TrackingEntities : DbContext
 
 
         return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetCompletedCountBySectionRubric_Result>("[SLE_TrackingEntities].[GetCompletedCountBySectionRubric](@SectionRubricID)", sectionRubricIDParameter);
+    }
+
+
+    [DbFunction("SLE_TrackingEntities", "GetCourseSubjectSecurityByLogin")]
+    public virtual IQueryable<GetCourseSubjectSecurityByLogin_Result> GetCourseSubjectSecurityByLogin(string login)
+    {
+
+        var loginParameter = login != null ?
+            new ObjectParameter("Login", login) :
+            new ObjectParameter("Login", typeof(string));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetCourseSubjectSecurityByLogin_Result>("[SLE_TrackingEntities].[GetCourseSubjectSecurityByLogin](@Login)", loginParameter);
+    }
+
+
+    [DbFunction("SLE_TrackingEntities", "GetSecurityByLogin")]
+    public virtual IQueryable<GetSecurityByLogin_Result> GetSecurityByLogin(string login)
+    {
+
+        var loginParameter = login != null ?
+            new ObjectParameter("Login", login) :
+            new ObjectParameter("Login", typeof(string));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetSecurityByLogin_Result>("[SLE_TrackingEntities].[GetSecurityByLogin](@Login)", loginParameter);
     }
 
 
@@ -265,6 +299,19 @@ public partial class SLE_TrackingEntities : DbContext
 
 
         return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<Split_Result>("[SLE_TrackingEntities].[Split](@String, @Delimiter)", stringParameter, delimiterParameter);
+    }
+
+
+    [DbFunction("SLE_TrackingEntities", "GetSecurityByUserID")]
+    public virtual IQueryable<GetSecurityByUserID_Result> GetSecurityByUserID(Nullable<int> personID)
+    {
+
+        var personIDParameter = personID.HasValue ?
+            new ObjectParameter("PersonID", personID) :
+            new ObjectParameter("PersonID", typeof(int));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetSecurityByUserID_Result>("[SLE_TrackingEntities].[GetSecurityByUserID](@PersonID)", personIDParameter);
     }
 
 }

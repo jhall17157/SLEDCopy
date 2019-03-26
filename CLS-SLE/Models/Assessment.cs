@@ -39,7 +39,7 @@ public partial class Assessment
 
     public bool CalculateOutcomePassRate { get; set; }
 
-    public Nullable<short> ProgramID { get; set; }
+    public short ProgramID { get; set; }
 
     public bool IsActive { get; set; }
 

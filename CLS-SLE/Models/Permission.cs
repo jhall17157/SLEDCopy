@@ -15,37 +15,29 @@ namespace CLS_SLE.Models
 using System;
     using System.Collections.Generic;
     
-public partial class ScoreType
+public partial class Permission
 {
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-    public ScoreType()
+    public Permission()
     {
 
-        this.StudentScores = new HashSet<StudentScore>();
+        this.RolePermissions = new HashSet<RolePermission>();
 
     }
 
 
-    public short ScoreTypeID { get; set; }
+    public short PermissionID { get; set; }
 
-    public short RubricID { get; set; }
+    public string Name { get; set; }
 
     public string Description { get; set; }
 
-    public byte Value { get; set; }
 
-    public byte SortOrder { get; set; }
-
-    public bool IsUnassessedScore { get; set; }
-
-
-
-    public virtual AssessmentRubric AssessmentRubric { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
-    public virtual ICollection<StudentScore> StudentScores { get; set; }
+    public virtual ICollection<RolePermission> RolePermissions { get; set; }
 
 }
 

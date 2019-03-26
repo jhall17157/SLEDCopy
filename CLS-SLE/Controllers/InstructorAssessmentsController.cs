@@ -10,15 +10,18 @@ using System.Web.Mvc;
 using CLS_SLE.Models;
 using System.Collections.Specialized;
 using NLog;
+using System.Security.Permissions;
 
 namespace CLS_SLE.Controllers
 {
+    [Authorize(Roles = "Faculty")]
     public class InstructorAssessmentsController : Controller
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
         private Logger logger = LogManager.GetCurrentClassLogger();
 
         // GET: InstructorAssessments
+        
         public ActionResult Dashboard()
         {
             try
@@ -43,6 +46,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        
         public ActionResult StudentList(int rubricID, int sectionID)
         {
             try
@@ -72,21 +76,20 @@ namespace CLS_SLE.Controllers
                 return Exceptions();
             }
         }
+
         
-        [Authorize]
         public ActionResult Assessment(int sectionID, int enrollmentID, int rubricID)
         {
             try
             {
                 var personID = Convert.ToInt32(Session["personID"].ToString());
                 var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID && i.PersonID == personID && i.RubricID == rubricID);
-                //var ScoreSet = Convert.ToInt32(Session["ScoreSetID"].ToString());// db.ScoreSets.FirstOrDefault(i => i.ScoreSetID == ScoreSetID);
-
+                
                 Session["rubricID"] = instructor.RubricID;
                 Session["sectionID"] = instructor.SectionID;
 
-                var ScoreSet = db.AssessmentRubrics.FirstOrDefault(n => n.RubricID == rubricID); //need Scoreset.scoreSetID
-                
+                var ScoreSet = db.AssessmentRubrics.FirstOrDefault(n => n.RubricID == rubricID);
+
                 var student = db.SectionEnrollments.FirstOrDefault(s => s.sectionID == sectionID && s.EnrollmentID == enrollmentID);
                 Session["enrollmentID"] = student.EnrollmentID;
 
@@ -97,7 +100,7 @@ namespace CLS_SLE.Controllers
 
                 var criteria = db.RubricDetails.Where(c => c.RubricID == instructor.RubricID);
 
-                var numberOfSelectors = db.Scores.Where(n => n.ScoreSetID == ScoreSet.ScoreSetID); //db.ScoreTypes.Where(n => n.RubricID == instructor.RubricID);
+                var numberOfSelectors = db.Scores.Where(n => n.ScoreSetID == ScoreSet.ScoreSetID);//db.ScoreTypes.Where(n => n.RubricID == instructor.RubricID);
 
                 var studentScores = db.StudentScores.Where(s => s.EnrollmentID == student.EnrollmentID);
 
@@ -128,7 +131,6 @@ namespace CLS_SLE.Controllers
             {
                 Int16 criteriaID = Convert.ToInt16(outcomeIDs[t]);
                 Int16 scoreID = Convert.ToInt16(fc.GetValue(criteriaID.ToString()).AttemptedValue);
-                //Int16 scoreID = Convert.ToInt16(fc.GetValue(db.StudentScores.ToString()).AttemptedValue);
                 
                 var checkIfExists = db.StudentScores.Where(c => c.EnrollmentID == enrollmentID && c.CriteriaID == criteriaID).FirstOrDefault();
                 if(checkIfExists != null)
@@ -141,7 +143,7 @@ namespace CLS_SLE.Controllers
                     {
                         EnrollmentID = Convert.ToInt32(Session["enrollmentID"]),
                         CriteriaID = criteriaID,
-                        ScoreID = scoreID,
+                        ScoreID = Convert.ToSByte(scoreID),
                         AssessedByID = Convert.ToInt32(Session["personID"]),
                         DateTimeAssessed = DateTime.Now,
                     };

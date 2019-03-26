@@ -22,9 +22,13 @@ public partial class Role
     public Role()
     {
 
+        this.CourseSubjectSecurities = new HashSet<CourseSubjectSecurity>();
+
         this.DepartmentSecurities = new HashSet<DepartmentSecurity>();
 
         this.ProgramSecurities = new HashSet<ProgramSecurity>();
+
+        this.RolePermissions = new HashSet<RolePermission>();
 
         this.SchoolSecurities = new HashSet<SchoolSecurity>();
 
@@ -51,11 +55,19 @@ public partial class Role
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
+    public virtual ICollection<CourseSubjectSecurity> CourseSubjectSecurities { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
     public virtual ICollection<DepartmentSecurity> DepartmentSecurities { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<ProgramSecurity> ProgramSecurities { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<RolePermission> RolePermissions { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 

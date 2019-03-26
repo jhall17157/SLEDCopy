@@ -24,7 +24,7 @@ public partial class StudentScore
 
     public short CriteriaID { get; set; }
 
-  //  public short ScoreTypeID { get; set; }
+    public Nullable<short> ScoreTypeID { get; set; }
 
     public int AssessedByID { get; set; }
 
@@ -41,8 +41,6 @@ public partial class StudentScore
     public virtual Person Person { get; set; }
 
     public virtual Score Score { get; set; }
-
-    public virtual ScoreType ScoreType { get; set; }
 
 }
 

@@ -53,6 +53,8 @@ public partial class Program
 
     public Nullable<int> ModifiedByLoginID { get; set; }
 
+    public bool IsSharedProgram { get; set; }
+
 
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

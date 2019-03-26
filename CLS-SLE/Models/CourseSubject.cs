@@ -15,18 +15,27 @@ namespace CLS_SLE.Models
 using System;
     using System.Collections.Generic;
     
-public partial class ProgramDepartment
+public partial class CourseSubject
 {
 
-    public short ProgramDepartmentID { get; set; }
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+    public CourseSubject()
+    {
 
-    public short ProgramID { get; set; }
+        this.CourseSubjectSecurities = new HashSet<CourseSubjectSecurity>();
 
-    public short DepartmentID { get; set; }
+    }
 
-    public Nullable<System.DateTime> StartDate { get; set; }
 
-    public Nullable<System.DateTime> EndDate { get; set; }
+    public short CourseSubjectID { get; set; }
+
+    public string Number { get; set; }
+
+    public string Name { get; set; }
+
+    public Nullable<short> PrimaryDepartmentID { get; set; }
+
+    public bool IsActive { get; set; }
 
     public Nullable<System.DateTime> CreatedDateTime { get; set; }
 
@@ -40,7 +49,9 @@ public partial class ProgramDepartment
 
     public virtual Department Department { get; set; }
 
-    public virtual Program Program { get; set; }
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<CourseSubjectSecurity> CourseSubjectSecurities { get; set; }
 
 }
 

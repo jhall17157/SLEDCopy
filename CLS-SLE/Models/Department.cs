@@ -24,6 +24,8 @@ public partial class Department
 
         this.Courses = new HashSet<Course>();
 
+        this.CourseSubjects = new HashSet<CourseSubject>();
+
         this.DepartmentSecurities = new HashSet<DepartmentSecurity>();
 
         this.ProgramDepartments = new HashSet<ProgramDepartment>();
@@ -54,6 +56,10 @@ public partial class Department
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<Course> Courses { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<CourseSubject> CourseSubjects { get; set; }
 
     public virtual School School { get; set; }
 

@@ -1668,6 +1668,9 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             <Parameter Name="String" Mode="In" Type="String" />
             <Parameter Name="Delimiter" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="GetSecurityByUserID" IsComposable="true" ReturnType="Collection(SLE_TrackingModel.GetSecurityByUserID_Result)">
+          <Parameter Name="PersonID" Mode="In" Type="Int32" />
+          </FunctionImport>
           <EntitySet Name="Assessments" EntityType="SLE_TrackingModel.Assessment" />
           <EntitySet Name="AssessmentCategories" EntityType="SLE_TrackingModel.AssessmentCategory" />
           <EntitySet Name="AssessmentLevels" EntityType="SLE_TrackingModel.AssessmentLevel" />
@@ -1910,9 +1913,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             <End Role="User" EntitySet="Users" />
             <End Role="UserRole" EntitySet="UserRoles" />
           </AssociationSet>
-          <FunctionImport Name="GetSecurityByUserID" IsComposable="true" ReturnType="Collection(SLE_TrackingModel.GetSecurityByUserID_Result)">
-            <Parameter Name="PersonID" Mode="In" Type="Int32" />
-          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="GetCompletedCountBySectionRubric_Result">
           <Property Type="Int32" Name="SectionRubricID" Nullable="false" />
@@ -1954,6 +1954,17 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
         <ComplexType Name="Split_Result">
           <Property Type="Int64" Name="Id" Nullable="true" />
           <Property Type="String" Name="Data" Nullable="true" MaxLength="4000" />
+        </ComplexType>
+        <ComplexType Name="GetSecurityByUserID_Result">
+          <Property Type="Byte" Name="SchoolID" Nullable="false" />
+          <Property Type="String" Name="SchoolName" Nullable="false" MaxLength="100" />
+          <Property Type="Int16" Name="DepartmentID" Nullable="false" />
+          <Property Type="String" Name="DepartmentNumber" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="DepartmentName" Nullable="true" MaxLength="100" />
+          <Property Type="Int16" Name="ProgramID" Nullable="false" />
+          <Property Type="String" Name="ProgramNumber" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="ProgramName" Nullable="false" MaxLength="100" />
+          <Property Type="Byte" Name="CanEdit" Nullable="true" />
         </ComplexType>
         <EntityType Name="Assessment">
           <Key>
@@ -3243,17 +3254,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <ComplexType Name="GetSecurityByUserID_Result">
-          <Property Type="Byte" Name="SchoolID" Nullable="false" />
-          <Property Type="String" Name="SchoolName" Nullable="false" MaxLength="100" />
-          <Property Type="Int16" Name="DepartmentID" Nullable="false" />
-          <Property Type="String" Name="DepartmentNumber" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="DepartmentName" Nullable="true" MaxLength="100" />
-          <Property Type="Int16" Name="ProgramID" Nullable="false" />
-          <Property Type="String" Name="ProgramNumber" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="ProgramName" Nullable="false" MaxLength="100" />
-          <Property Type="Byte" Name="CanEdit" Nullable="true" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3326,6 +3326,21 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
               <ComplexTypeMapping TypeName="SLE_TrackingModel.Split_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Data" ColumnName="Data" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetSecurityByUserID" FunctionName="SLE_TrackingModel.Store.GetSecurityByUserID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SLE_TrackingModel.GetSecurityByUserID_Result">
+                <ScalarProperty Name="SchoolID" ColumnName="SchoolID" />
+                <ScalarProperty Name="SchoolName" ColumnName="SchoolName" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="DepartmentNumber" ColumnName="DepartmentNumber" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
+                <ScalarProperty Name="ProgramNumber" ColumnName="ProgramNumber" />
+                <ScalarProperty Name="ProgramName" ColumnName="ProgramName" />
+                <ScalarProperty Name="CanEdit" ColumnName="CanEdit" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -3933,21 +3948,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="GetSecurityByUserID" FunctionName="SLE_TrackingModel.Store.GetSecurityByUserID">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SLE_TrackingModel.GetSecurityByUserID_Result">
-                <ScalarProperty Name="SchoolID" ColumnName="SchoolID" />
-                <ScalarProperty Name="SchoolName" ColumnName="SchoolName" />
-                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
-                <ScalarProperty Name="DepartmentNumber" ColumnName="DepartmentNumber" />
-                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
-                <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
-                <ScalarProperty Name="ProgramNumber" ColumnName="ProgramNumber" />
-                <ScalarProperty Name="ProgramName" ColumnName="ProgramName" />
-                <ScalarProperty Name="CanEdit" ColumnName="CanEdit" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

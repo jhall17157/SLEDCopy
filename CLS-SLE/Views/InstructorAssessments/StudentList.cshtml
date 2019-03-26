@@ -59,3 +59,13 @@
 </table>
 
 
+@section scripts
+{
+    <script>
+        $(function () {
+            $('#students').on('click', '.student-row', function () {
+                location.href = "/InstructorAssessments/Assessment?sectionID=" + this.dataset.section + "&enrollmentID=" + this.dataset.enrollment + "&rubricID=" + this.dataset.rubricid;
+            });
+        })
+    </script>
+}

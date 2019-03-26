@@ -12,20 +12,15 @@ namespace CLS_SLE.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class StudentProgram
+    public partial class RolePermission
     {
-        public long StudentProgramID { get; set; }
-        public int StudentID { get; set; }
-        public short ProgramID { get; set; }
-        public short SemesterID { get; set; }
-        public bool IsPrimary { get; set; }
+        public short RolePermissionID { get; set; }
+        public short RoleID { get; set; }
+        public short PermissionID { get; set; }
         public Nullable<System.DateTime> CreatedDateTime { get; set; }
         public Nullable<int> CreatedByLoginID { get; set; }
-        public Nullable<System.DateTime> ModifiedDateTime { get; set; }
-        public Nullable<int> ModifiedByLoginID { get; set; }
     
-        public virtual Person Person { get; set; }
-        public virtual Semester Semester { get; set; }
-        public virtual Program Program { get; set; }
+        public virtual Permission Permission { get; set; }
+        public virtual Role Role { get; set; }
     }
 }

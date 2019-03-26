@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿@using CLS_SLE.Models;
 @{
     ViewBag.Title = "Students";
@@ -59,3 +60,70 @@
 </table>
 
 
+=======
+﻿@using CLS_SLE.Models;
+@{
+    ViewBag.Title = "Students";
+    var a = Model.Assessment;
+    var x = 0;
+}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Dashboard", "Dashboard")</li>
+        <li class="breadcrumb-item active" aria-current="page">Student List</li>
+    </ol>
+</nav>
+<h1>@a.AssessmentName</h1>
+<h2>
+    @a.RubricName
+    @{
+        if (@a.AssessmentLevel != null)
+        {
+            <div class="col-md-3 ml-auto">
+                <b>Assessment Level: </b>@a.AssessmentLevel
+            </div>
+        }
+    }
+</h2>
+@a.CourseName <span class="float-right">CRN# @a.CRN</span>
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th>Student ID</th>
+            <th>Name</th>
+            <th style="text-align: center">Progress</th>
+        </tr>
+    </thead>
+    <tbody id="students">
+        @{ foreach (SectionEnrollment student in Model.Students)
+            {
+                Console.WriteLine(student);
+                <tr data-section="@student.sectionID" data-enrollment="@student.EnrollmentID" data-rubricid="@a.RubricID" id="@student.EnrollmentID" class="student-row">
+                    <td style="width: 120px;">@student.StudentID</td>
+                    <td>@student.LastName, @student.FirstName</td>
+                    <td style="width: 100px; text-align: center">
+                        @foreach (StudentScoreCount scoreCount in Model.CompleteScores)
+                        {
+                            if (scoreCount.EnrollmentID == Convert.ToInt32(student.EnrollmentID))
+                            {
+                                <span style="right: 0px; top: 0px; width: 60px;" class="badge badge-dark">@scoreCount.CompletedCount / @scoreCount.CriteriaCount</span>
+                            }
+                        }
+                    </td>
+                </tr>
+                x++;
+            }
+        }
+    </tbody>
+</table>
+@section scripts
+{
+    <script>
+        $(function () {
+            $('#students').on('click', '.student-row', function () {
+                location.href = "/InstructorAssessments/Assessment?sectionID=" + this.dataset.section + "&enrollmentID=" + this.dataset.enrollment + "&rubricID=" + this.dataset.rubricid;
+            });
+        })
+    </script>
+}
+>>>>>>> 4ef599df14a7262d78438212fcd84b2146519606

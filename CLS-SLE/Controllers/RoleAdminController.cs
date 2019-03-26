@@ -3,9 +3,13 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+<<<<<<< HEAD
 using System.Linq;
 using CLS_SLE.Models;
 using System.Data.SqlClient;
+=======
+using CLS_SLE.Models;
+>>>>>>> 4ef599df14a7262d78438212fcd84b2146519606
 
 namespace CLS_SLE.Controllers
 {
@@ -14,6 +18,7 @@ namespace CLS_SLE.Controllers
     {
         SLE_TrackingEntities db = new SLE_TrackingEntities();
         public ActionResult Index() => View(db.Roles);
+<<<<<<< HEAD
 
         public ActionResult Create() => View();
 
@@ -57,5 +62,7 @@ namespace CLS_SLE.Controllers
             return View("Index", db.Roles);
         }
 
+=======
+>>>>>>> 4ef599df14a7262d78438212fcd84b2146519606
     }
 }

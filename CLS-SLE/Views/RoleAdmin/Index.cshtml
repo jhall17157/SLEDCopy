@@ -21,6 +21,7 @@
                 <td>@UserRole.RoleID</td>
                 <td>@UserRole.Name</td>
                 <td>
+<<<<<<< HEAD
                     <form action="~/RoleAdmin/Delete" method="get">
                         @if (UserRole.RoleID > 2)
                         {
@@ -30,12 +31,24 @@
                                 }
                             }
                         </form>
+=======
+                    <form asp-action="Delete" asp-route-id="@UserRole.RoleID" method="post">
+                        <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@UserRole.RoleID">Edit</a>
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                    </form>
+>>>>>>> 4ef599df14a7262d78438212fcd84b2146519606
                 </td>
             </tr>
         }
     }
 </table>
 
+<<<<<<< HEAD
 <a class="btn btn-outline-primary" href="~/RoleAdmin/Create">Create</a>
 <hr />
 <a href="~/Admin/UsersSecurity">User Accounts</a>
+=======
+<a class="btn btn-outline-primary" asp-action="Create">Create</a>
+<hr />
+<a asp-controller="Admin">User Accounts</a>
+>>>>>>> 4ef599df14a7262d78438212fcd84b2146519606

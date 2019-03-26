@@ -209,9 +209,6 @@
     <Compile Include="Models\AssessmentRubric.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\AssessmentRubricSecurity.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Course.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
@@ -251,9 +248,6 @@
     <Compile Include="Models\GetSecurityByLogin_Result.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GetSecurityByUserID_Result.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\InstructorAssessment.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
@@ -262,9 +256,6 @@
     </Compile>
     <Compile Include="Models\PasswordReset.cs" />
     <Compile Include="Models\PasswordResetEdit.cs" />
-    <Compile Include="Models\Permission.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Person.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
@@ -281,9 +272,6 @@
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Role.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\RolePermission.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\RubricDetail.cs">

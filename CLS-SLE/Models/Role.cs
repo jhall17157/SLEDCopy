@@ -22,7 +22,6 @@ namespace CLS_SLE.Models
             this.ProgramSecurities = new HashSet<ProgramSecurity>();
             this.SchoolSecurities = new HashSet<SchoolSecurity>();
             this.UserRoles = new HashSet<UserRole>();
-            this.RolePermissions = new HashSet<RolePermission>();
         }
     
         public short RoleID { get; set; }
@@ -43,7 +42,5 @@ namespace CLS_SLE.Models
         public virtual ICollection<SchoolSecurity> SchoolSecurities { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserRole> UserRoles { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<RolePermission> RolePermissions { get; set; }
     }
 }

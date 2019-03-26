@@ -27,6 +27,7 @@ namespace CLS_SLE.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Assessment> Assessments { get; set; }
         public virtual DbSet<AssessmentCategory> AssessmentCategories { get; set; }
         public virtual DbSet<AssessmentLevel> AssessmentLevels { get; set; }
         public virtual DbSet<AssessmentRubric> AssessmentRubrics { get; set; }
@@ -39,12 +40,15 @@ namespace CLS_SLE.Models
         public virtual DbSet<ETL_StatusMapping> ETL_StatusMapping { get; set; }
         public virtual DbSet<Outcome> Outcomes { get; set; }
         public virtual DbSet<Person> People { get; set; }
+        public virtual DbSet<Program> Programs { get; set; }
         public virtual DbSet<ProgramDepartment> ProgramDepartments { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<ScoreType> ScoreTypes { get; set; }
         public virtual DbSet<Section> Sections { get; set; }
         public virtual DbSet<SectionRubric> SectionRubrics { get; set; }
         public virtual DbSet<Semester> Semesters { get; set; }
         public virtual DbSet<StudentProgram> StudentPrograms { get; set; }
+        public virtual DbSet<StudentScore> StudentScores { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<InstructorAssessment> InstructorAssessments { get; set; }
@@ -62,13 +66,6 @@ namespace CLS_SLE.Models
         public virtual DbSet<Score> Scores { get; set; }
         public virtual DbSet<ScoreSet> ScoreSets { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<AssessmentRubricSecurity> AssessmentRubricSecurities { get; set; }
-        public virtual DbSet<Permission> Permissions { get; set; }
-        public virtual DbSet<RolePermission> RolePermissions { get; set; }
-        public virtual DbSet<Assessment> Assessments { get; set; }
-        public virtual DbSet<Program> Programs { get; set; }
-        public virtual DbSet<ScoreType> ScoreTypes { get; set; }
-        public virtual DbSet<StudentScore> StudentScores { get; set; }
     
         [DbFunction("SLE_TrackingEntities", "GetCompletedCountBySectionRubric")]
         public virtual IQueryable<GetCompletedCountBySectionRubric_Result> GetCompletedCountBySectionRubric(Nullable<int> sectionRubricID)
@@ -210,16 +207,6 @@ namespace CLS_SLE.Models
                 new ObjectParameter("Delimiter", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<Split_Result>("[SLE_TrackingEntities].[Split](@String, @Delimiter)", stringParameter, delimiterParameter);
-        }
-    
-        [DbFunction("SLE_TrackingEntities", "GetSecurityByUserID")]
-        public virtual IQueryable<GetSecurityByUserID_Result> GetSecurityByUserID(Nullable<int> personID)
-        {
-            var personIDParameter = personID.HasValue ?
-                new ObjectParameter("PersonID", personID) :
-                new ObjectParameter("PersonID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetSecurityByUserID_Result>("[SLE_TrackingEntities].[GetSecurityByUserID](@PersonID)", personIDParameter);
         }
     }
 }

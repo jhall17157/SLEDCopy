@@ -35,32 +35,10 @@ namespace CLS_SLE.Controllers
 
         public ActionResult Assessments()
         {
-            try
-            {
-                var personID = Convert.ToInt32(Session["personID"].ToString());
-                var user = db.Users.FirstOrDefault(u => u.PersonID == personID);
-                var adminAssessments = from assessments in db.Assessments
-                                       join permissions in db.AssessmentRubricSecurities on assessments.AssessmentID equals permissions.AssessmentID
-                                       where permissions.PersonID == personID
-                                       select assessments;
-                logger.Info("Dashboard loaded for " + user.Login);
-                var categories = db.AssessmentCategories.ToList();
-
-                dynamic model = new ExpandoObject();
-
-                model.assessments = adminAssessments.Distinct().ToList();
-                model.categories = categories;
-
-                return View(model);
-            }
-            catch
-            {
-                logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
-                return RedirectToAction(actionName: "Signin", controllerName: "User");
-            }
             return View();
         }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         public ActionResult ViewAssessment(int? assessmentId)
         {
@@ -219,6 +197,8 @@ namespace CLS_SLE.Controllers
             }
         }
 
+=======
+>>>>>>> parent of 09c72ad... Merge branch 'master' of https://github.com/BIT-WCTC/CLS-SLE
         public ActionResult AssessmentScheduling()
 =======
         public ActionResult AssessmentsScheduling()

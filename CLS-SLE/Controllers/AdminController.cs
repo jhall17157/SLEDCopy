@@ -63,6 +63,7 @@ namespace CLS_SLE.Controllers
         {
             var assessment = new Assessment();
             var canEdit = false;
+            var canAdd = false;
             try
             {
                 if (assessmentId.HasValue)
@@ -74,11 +75,21 @@ namespace CLS_SLE.Controllers
                         canEdit = permission.CanEdit == 1 ? true : false;
                     }
                 }
+
+                if (assessmentId.HasValue)
+                {
+                    var permission = db.AssessmentRubricSecurities.FirstOrDefault(p => p.AssessmentID == assessmentId.Value);
+                    if (permission != null)
+                    {
+                        canAdd = permission.CanEdit == 1 ? true : false;
+                    }
+                }
                 
                 dynamic model = new ExpandoObject();
 
                 model.assessment = assessment;
                 model.canEdit = canEdit;
+                model.canAdd = canAdd;
 
                 return View(model);
             }
@@ -125,6 +136,43 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        public ActionResult AddAssessment(Assessment assessment)
+        {
+            var addAssessment = new Assessment();
+
+            try
+            {
+                if (addAssessment != null)
+                {
+                    addAssessment.AssessmentID = assessment.AssessmentID;
+                    addAssessment.Name = assessment.Name;
+                    addAssessment.Category = assessment.Category;
+                    addAssessment.Description = assessment.Description;
+                    addAssessment.OutcomePassRate = assessment.OutcomePassRate;
+                    addAssessment.CalculateOutcomePassRate = assessment.CalculateOutcomePassRate;
+                    addAssessment.ProgramID = assessment.ProgramID;
+                    addAssessment.IsActive = assessment.IsActive;
+                    addAssessment.ModifiedDateTime = DateTime.Now;
+                    addAssessment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+
+                    db.SaveChanges();
+
+                    return RedirectToAction(actionName: "ViewAssessment", controllerName: "Admin", routeValues: new { assessmentId = addAssessment.AssessmentID });
+                }
+                else
+                {
+                    logger.Error("Failed to save assessment, redirecting to sign in page.");
+                    return RedirectToAction(actionName: "Signin", controllerName: "User");
+                }
+            }
+            catch
+            {
+                logger.Error("Failed to save assessment, redirecting to sign in page.");
+                return RedirectToAction(actionName: "Signin", controllerName: "User");
+            }
+        }
+        
+
         public ActionResult SaveAssessment(Assessment assessment)
         {
             try
@@ -139,10 +187,11 @@ namespace CLS_SLE.Controllers
                         editAssessment.Category = assessment.Category;
                         editAssessment.Description = assessment.Description;
                         editAssessment.OutcomePassRate = assessment.OutcomePassRate;
-
+                        editAssessment.CalculateOutcomePassRate = assessment.CalculateOutcomePassRate;
+                        editAssessment.ProgramID = assessment.ProgramID;
+                        editAssessment.IsActive = assessment.IsActive;
                         editAssessment.ModifiedDateTime = DateTime.Now;
                         editAssessment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-                        //TODO add the rest of the properties you want to save
 
                         db.SaveChanges();
 

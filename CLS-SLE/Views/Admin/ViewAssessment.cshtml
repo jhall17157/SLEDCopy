@@ -45,6 +45,12 @@
         @{ if (Model.canEdit)
             {
         @Html.ActionLink("Edit Assessment", "EditAssessment", new { Model.assessment.AssessmentID })
-                }
             }
+         }
+        @{ 
+            if (Model.canAdd)
+            {
+                @Html.ActionLink("Add Assessment", "AddAssessment", new { Model.assessment.AssessmentID })
+            }
+        }
     </div>

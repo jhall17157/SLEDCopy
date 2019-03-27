@@ -40,11 +40,12 @@
                 if (o.Name.Equals(rb.OutcomeName))
                 {
                     numCriteria++;
-                    foreach (ScoreType i in Model.Selectors)
+                    //foreach (ScoreType i in Model.Selectors)
+                    foreach (Score i in Model.Selectors)
                     {
                         foreach (StudentScore ss in Model.StudentScores)
                         {
-                            if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
+                            if (ss.CriteriaID == rb.CriteriaID && ss.ScoreID == i.ScoreID)
                             {
                                 filledCriteria++;
                                 break;
@@ -74,22 +75,21 @@
                                     @rb.CriteriaName
                                 </div>
                                 <div class="float-right">
-                                    @foreach (ScoreType i in Model.Selectors)
+                                    <!--foreach (ScoreType i in Model.Selectors)-->
+                                    @foreach (Score i in Model.Selectors)
                                     {
                                         <div class="form-check" id="@o.OutcomeID">
                                             @foreach (StudentScore ss in Model.StudentScores)
                                             {
-<<<<<<< Updated upstream
-                                                exists = false;
-                                                if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
-=======
+
+
                                                 exists = false;
                                                 // if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
                                                 if (ss.CriteriaID == rb.CriteriaID && ss.ScoreID == i.ScoreID)
->>>>>>> Stashed changes
+
                                                 {
                                                     <label class="form-check-label desc">
-                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { Checked = "checked", @class = "form-check-input" })
+                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { Checked = "checked", @class = "form-check-input" })
                                                         @i.Description
                                                     </label>
                                                     exists = true;

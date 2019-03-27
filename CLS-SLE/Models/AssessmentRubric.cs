@@ -18,9 +18,9 @@ namespace CLS_SLE.Models
         public AssessmentRubric()
         {
             this.Outcomes = new HashSet<Outcome>();
-            this.SectionRubrics = new HashSet<SectionRubric>();
             this.ProgramAssessmentMappings = new HashSet<ProgramAssessmentMapping>();
             this.ScoreTypes = new HashSet<ScoreType>();
+            this.SectionRubrics = new HashSet<SectionRubric>();
         }
     
         public short RubricID { get; set; }
@@ -34,15 +34,15 @@ namespace CLS_SLE.Models
         public Nullable<int> ModifiedByLoginID { get; set; }
         public bool IsActive { get; set; }
     
+        public virtual Assessment Assessment { get; set; }
+        public virtual ScoreSet ScoreSet { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Outcome> Outcomes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SectionRubric> SectionRubrics { get; set; }
-        public virtual ScoreSet ScoreSet { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProgramAssessmentMapping> ProgramAssessmentMappings { get; set; }
-        public virtual Assessment Assessment { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ScoreType> ScoreTypes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SectionRubric> SectionRubrics { get; set; }
     }
 }

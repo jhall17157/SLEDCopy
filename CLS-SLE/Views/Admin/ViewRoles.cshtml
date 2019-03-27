@@ -10,41 +10,49 @@
     </ol>
 </nav>
 
+
+
+
 <h1>User Security</h1>
-<br />
+<div class="container">
+    <br />
+    <div class="row px-3">
+        <h5 class="co-2"><a href="/Admin/ViewUsers">Group by Users</a></h5>
+        <h5 class="col-2 ml-auto text-right p-0"><a href="~/RoleAdmin/Index"> Manage Roles </a></h4c>
+    </div>
 
-<h4><a href="/Admin/ViewUsers">Group by Users</a></h4>
 
-<table class="table table-hover">
-    <thead class="thead-dark">
-        <tr>
-            <th class="col-2">Role ID</th>
-            <th class="col-3">Title</th>
-            <th class="col-3">Current Users</th>
-            <th class="col-4 justify-content-end"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @{ foreach (Role role in Model.Roles)
-            {
-                <tr data-userID="person.PersonID">
-                    <td>@role.RoleID</td>
-                    <td>@role.Name</td>
-                    <td>
-                        @{
-                            if (role.UserRoles.Count() == 0)
-                            {
-                                <text>None</text>
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th class="col-2">Role ID</th>
+                <th class="col-3">Title</th>
+                <th class="col-3">Current Users</th>
+                <th class="col-4 justify-content-end"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ foreach (Role role in Model.Roles)
+                {
+                    <tr data-userID="person.PersonID">
+                        <td>@role.RoleID</td>
+                        <td>@role.Name</td>
+                        <td>
+                            @{
+                                if (role.UserRoles.Count() == 0)
+                                {
+                                    <text>None</text>
+                                }
+                                else
+                                {
+                                    <text>@role.UserRoles.Count()</text>
+                                }
                             }
-                            else
-                            {
-                                <text>@role.UserRoles.Count()</text>
-                            }
-                        }
-                    </td>
-                    <td class="text-right"><a href="~/Admin/ViewRoleMembers?roleID=@role.RoleID"><button type="button" class="btn btn-primary mr-2">View</button></a></td>
-                </tr>
+                        </td>
+                        <td class="text-right"><a href="~/Admin/ViewRoleMembers?roleID=@role.RoleID"><button type="button" class="btn btn-primary mr-2">View</button></a></td>
+                    </tr>
+                }
             }
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>

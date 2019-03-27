@@ -63,7 +63,6 @@ namespace CLS_SLE.Controllers
                 logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
                 return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
-            return View();
         }
 
 
@@ -92,7 +91,7 @@ namespace CLS_SLE.Controllers
                         canAdd = permission.CanEdit == 1 ? true : false;
                     }
                 }
-                
+
                 dynamic model = new ExpandoObject();
 
                 model.assessment = assessment;
@@ -179,7 +178,7 @@ namespace CLS_SLE.Controllers
                 return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
         }
-        
+
 
         public ActionResult SaveAssessment(Assessment assessment)
         {
@@ -242,53 +241,49 @@ namespace CLS_SLE.Controllers
         [HttpGet]
         public ActionResult ViewUsers(String sort)
         {
-            
-                dynamic Model = new ExpandoObject();
-                var Roles = from Role in db.Roles select Role;
 
-                Model.Roles = Roles;
-                if (Request.QueryString["Search"] != null)
-                {
-                    try
-                    {
-                        String QueryString = Request.QueryString["Search"].ToLower();
+            dynamic Model = new ExpandoObject();
+            var Roles = from Role in db.Roles select Role;
 
-                        if (QueryString.Equals("") || QueryString == null)
-                        {
-                            throw new Exception("Query is empty or null");
-                        }
-
-                        List<UserSecurity> UserSecurities = GetUserSecurities();
-
-                        var FilteredUserSecurities = UserSecurities.Where(p => p.FirstName.ToLower().Contains(QueryString) || p.LastName.ToLower().Contains(QueryString) || p.IDNumber.Contains(QueryString));
-
-                        Model.UserSecurityList = FilteredUserSecurities;
-                    }
-                    catch
-                    {
-                        throw new Exception("Error fetching user list");
-                    }
-                }
-
-                else
-                {
-                    Model.UserSecurityList = GetUserSecurities();
-                }
-
-                if (!String.IsNullOrEmpty(sort))
-                {
-                    Model.Sort = sort;
-                }
-                return View(Model);
-
-            }
-            catch
+            Model.Roles = Roles;
+            if (Request.QueryString["Search"] != null)
             {
-                logger.Error("Error fetching user List");
-                return Exceptions();
+                try
+                {
+                    String QueryString = Request.QueryString["Search"].ToLower();
+
+                    if (QueryString.Equals("") || QueryString == null)
+                    {
+                        throw new Exception("Query is empty or null");
+                    }
+
+                    List<UserSecurity> UserSecurities = GetUserSecurities();
+
+                    var FilteredUserSecurities = UserSecurities.Where(p => p.FirstName.ToLower().Contains(QueryString) || p.LastName.ToLower().Contains(QueryString) || p.IDNumber.Contains(QueryString));
+
+                    Model.UserSecurityList = FilteredUserSecurities;
+                }
+                catch
+                {
+                    logger.Error("Error fetching user List");
+                    return Exceptions();
+                }
             }
 
+            else
+            {
+                Model.UserSecurityList = GetUserSecurities();
+            }
+
+            if (!String.IsNullOrEmpty(sort))
+            {
+                Model.Sort = sort;
+            }
+            return View(Model);
         }
+
+
+
 
         public ActionResult Assign([Required]int id)
         {
@@ -303,12 +298,12 @@ namespace CLS_SLE.Controllers
         public ActionResult RoleAssign(int person, List<short> roles)
         {
             var results = db.UserRoles.Where(ur => ur.PersonID == person);
-            foreach(UserRole userRole in results)
+            foreach (UserRole userRole in results)
             {
                 db.UserRoles.Remove(userRole);
             }
 
-            foreach(short role in roles)
+            foreach (short role in roles)
             {
                 UserRole user = new UserRole()
                 {
@@ -324,7 +319,7 @@ namespace CLS_SLE.Controllers
             return RedirectToAction(actionName: "AdminDashboard", controllerName: "Admin");
         }
 
-        }
+
 
         [HttpGet]
         public ActionResult ViewRoles()
@@ -341,8 +336,8 @@ namespace CLS_SLE.Controllers
         public ActionResult ViewRoleMembers(Int16 roleID)
         {
             var CurrentRole = (from Role in db.Roles
-                        where Role.RoleID == roleID
-                        select Role).FirstOrDefault();
+                               where Role.RoleID == roleID
+                               select Role).FirstOrDefault();
             var UserSecurityList = GetUserSecurities().Where(p => p.Roles.Any(r => r.RoleID == roleID));
             dynamic Model = new ExpandoObject();
             Model.UserSecurityList = UserSecurityList;
@@ -380,7 +375,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
-        
+
 
         [HttpPost]
         public ActionResult UpdateUser(FormCollection form, String submit)
@@ -462,7 +457,5 @@ namespace CLS_SLE.Controllers
             return UserSecurityList;
 
         }
-
-
     }
 }

@@ -27,48 +27,48 @@ namespace CLS_SLE.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Assessment> Assessments { get; set; }
         public virtual DbSet<AssessmentCategory> AssessmentCategories { get; set; }
         public virtual DbSet<AssessmentLevel> AssessmentLevels { get; set; }
         public virtual DbSet<AssessmentRubric> AssessmentRubrics { get; set; }
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<CourseProgram> CoursePrograms { get; set; }
-        public virtual DbSet<CourseSubject> CourseSubjects { get; set; }
-        public virtual DbSet<CourseSubjectSecurity> CourseSubjectSecurities { get; set; }
         public virtual DbSet<Criterion> Criteria { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
-        public virtual DbSet<DepartmentSecurity> DepartmentSecurities { get; set; }
         public virtual DbSet<Enrollment> Enrollments { get; set; }
         public virtual DbSet<EnrollmentStatu> EnrollmentStatus { get; set; }
         public virtual DbSet<ETL_StatusMapping> ETL_StatusMapping { get; set; }
         public virtual DbSet<Outcome> Outcomes { get; set; }
-        public virtual DbSet<Permission> Permissions { get; set; }
         public virtual DbSet<Person> People { get; set; }
-        public virtual DbSet<Program> Programs { get; set; }
-        public virtual DbSet<ProgramAssessmentMapping> ProgramAssessmentMappings { get; set; }
         public virtual DbSet<ProgramDepartment> ProgramDepartments { get; set; }
-        public virtual DbSet<ProgramSecurity> ProgramSecurities { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
-        public virtual DbSet<RolePermission> RolePermissions { get; set; }
-        public virtual DbSet<School> Schools { get; set; }
-        public virtual DbSet<SchoolSecurity> SchoolSecurities { get; set; }
-        public virtual DbSet<Score> Scores { get; set; }
-        public virtual DbSet<ScoreSet> ScoreSets { get; set; }
-        public virtual DbSet<ScoreType> ScoreTypes { get; set; }
         public virtual DbSet<Section> Sections { get; set; }
         public virtual DbSet<SectionRubric> SectionRubrics { get; set; }
         public virtual DbSet<Semester> Semesters { get; set; }
         public virtual DbSet<StudentProgram> StudentPrograms { get; set; }
-        public virtual DbSet<StudentScore> StudentScores { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
-        public virtual DbSet<AssessmentRubricSecurity> AssessmentRubricSecurities { get; set; }
         public virtual DbSet<InstructorAssessment> InstructorAssessments { get; set; }
         public virtual DbSet<RubricDetail> RubricDetails { get; set; }
         public virtual DbSet<SectionEnrollment> SectionEnrollments { get; set; }
         public virtual DbSet<SemesterDate> SemesterDates { get; set; }
         public virtual DbSet<StudentScoreCount> StudentScoreCounts { get; set; }
+        public virtual DbSet<CourseSubject> CourseSubjects { get; set; }
+        public virtual DbSet<CourseSubjectSecurity> CourseSubjectSecurities { get; set; }
+        public virtual DbSet<DepartmentSecurity> DepartmentSecurities { get; set; }
+        public virtual DbSet<ProgramAssessmentMapping> ProgramAssessmentMappings { get; set; }
+        public virtual DbSet<ProgramSecurity> ProgramSecurities { get; set; }
+        public virtual DbSet<School> Schools { get; set; }
+        public virtual DbSet<SchoolSecurity> SchoolSecurities { get; set; }
+        public virtual DbSet<Score> Scores { get; set; }
+        public virtual DbSet<ScoreSet> ScoreSets { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
+        public virtual DbSet<AssessmentRubricSecurity> AssessmentRubricSecurities { get; set; }
+        public virtual DbSet<Permission> Permissions { get; set; }
+        public virtual DbSet<RolePermission> RolePermissions { get; set; }
+        public virtual DbSet<Assessment> Assessments { get; set; }
+        public virtual DbSet<Program> Programs { get; set; }
+        public virtual DbSet<ScoreType> ScoreTypes { get; set; }
+        public virtual DbSet<StudentScore> StudentScores { get; set; }
     
         [DbFunction("SLE_TrackingEntities", "GetCompletedCountBySectionRubric")]
         public virtual IQueryable<GetCompletedCountBySectionRubric_Result> GetCompletedCountBySectionRubric(Nullable<int> sectionRubricID)

@@ -2,16 +2,14 @@
 using NLog;
 using System;
 using System.Collections.Generic;
-<<<<<<< HEAD
+
 using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-=======
-using System.Dynamic;
-using System.Linq;
->>>>>>> 4ef599df14a7262d78438212fcd84b2146519606
+
+
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -21,11 +19,7 @@ namespace CLS_SLE.Controllers
     public class AdminController : Controller
     {
 
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> 4ef599df14a7262d78438212fcd84b2146519606
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
         private Logger logger = LogManager.GetCurrentClassLogger();
         // GET: Admin
@@ -71,6 +65,7 @@ namespace CLS_SLE.Controllers
             }
             return View();
         }
+
 
         public ActionResult ViewAssessment(int? assessmentId)
         {
@@ -247,41 +242,7 @@ namespace CLS_SLE.Controllers
         [HttpGet]
         public ActionResult ViewUsers(String sort)
         {
-            try
-            {
-<<<<<<< HEAD
-                var People = from user in db.Users
-                             join person in db.People on user.PersonID equals person.PersonID
-                             select new { FirstName = person.FirstName, LastName = person.LastName, PersonID = person.PersonID, IDNumber = person.IdNumber };
-                var UserRoles = from role in db.Roles
-                                join userRole in db.UserRoles on role.RoleID equals userRole.RoleID
-                                join user in db.Users on userRole.PersonID equals user.PersonID
-                                select new { PersonID = user.PersonID, RoleName = role.Name, RoleID = role.RoleID };
-
-                dynamic MyModel = new ExpandoObject();
-                var PersonList = People.ToList();
-                var UserRoleList = UserRoles.ToList();
-                var UserSecurityList = new List<UserSecurity>();
-                foreach(var person in PersonList)
-                {
-                    var personRoles = new List<Role>();
-                    foreach (var userRole in UserRoleList)
-                    {
-                        if (userRole.PersonID.Equals(person.PersonID))
-                        {
-                            Role role = new Role();
-                            role.RoleID = userRole.RoleID;
-                            role.Name = userRole.RoleName;
-                            personRoles.Add(role);
-                        }
-                    }
-                    UserSecurityList.Add(new UserSecurity(person.PersonID, person.IDNumber, person.FirstName, person.LastName, personRoles));
-                }
-
-                MyModel.UserSecurityList = UserSecurityList;
-
-                return View(MyModel);
-=======
+            
                 dynamic Model = new ExpandoObject();
                 var Roles = from Role in db.Roles select Role;
 
@@ -319,14 +280,14 @@ namespace CLS_SLE.Controllers
                     Model.Sort = sort;
                 }
                 return View(Model);
->>>>>>> 4ef599df14a7262d78438212fcd84b2146519606
+
             }
             catch
             {
                 logger.Error("Error fetching user List");
                 return Exceptions();
             }
-<<<<<<< HEAD
+
         }
 
         public ActionResult Assign([Required]int id)
@@ -363,7 +324,6 @@ namespace CLS_SLE.Controllers
             return RedirectToAction(actionName: "AdminDashboard", controllerName: "Admin");
         }
 
-=======
         }
 
         [HttpGet]
@@ -461,14 +421,13 @@ namespace CLS_SLE.Controllers
             }
         }
 
->>>>>>> 4ef599df14a7262d78438212fcd84b2146519606
+
         private ActionResult Exceptions()
         {
             return RedirectToAction(actionName: "AdminDashboard", controllerName: "Admin");
         }
 
-<<<<<<< HEAD
-=======
+
         private List<UserSecurity> GetUserSecurities()
         {
 
@@ -504,8 +463,6 @@ namespace CLS_SLE.Controllers
 
         }
 
-
->>>>>>> 4ef599df14a7262d78438212fcd84b2146519606
 
     }
 }

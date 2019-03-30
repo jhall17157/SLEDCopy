@@ -136,42 +136,52 @@ namespace CLS_SLE.Controllers
             }
         }
 
-        public ActionResult AddAssessment(Assessment assessment)
+        [HttpGet]
+        public ActionResult AddAssessment(String category)
         {
-            var addAssessment = new Assessment();
-
-            try
-            {
-                if (addAssessment != null)
-                {
-                    addAssessment.AssessmentID = assessment.AssessmentID;
-                    addAssessment.Name = assessment.Name;
-                    addAssessment.Category = assessment.Category;
-                    addAssessment.Description = assessment.Description;
-                    addAssessment.OutcomePassRate = assessment.OutcomePassRate;
-                    addAssessment.CalculateOutcomePassRate = assessment.CalculateOutcomePassRate;
-                    addAssessment.ProgramID = assessment.ProgramID;
-                    addAssessment.IsActive = assessment.IsActive;
-                    addAssessment.ModifiedDateTime = DateTime.Now;
-                    addAssessment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-
-                    db.SaveChanges();
-
-                    return RedirectToAction(actionName: "ViewAssessment", controllerName: "Admin", routeValues: new { assessmentId = addAssessment.AssessmentID });
-                }
-                else
-                {
-                    logger.Error("Failed to save assessment, redirecting to sign in page.");
-                    return RedirectToAction(actionName: "Signin", controllerName: "User");
-                }
-            }
-            catch
-            {
-                logger.Error("Failed to save assessment, redirecting to sign in page.");
-                return RedirectToAction(actionName: "Signin", controllerName: "User");
-            }
+            dynamic Model = new ExpandoObject();
+            Model.Programs = (from Program in db.Programs select Program).ToList();
+            Model.Category = category;
+            return View(Model);
         }
-        
+        //{
+
+        //public ActionResult AddAssessment(Assessment assessment)
+        //{
+        //    var addAssessment = new Assessment();
+
+        //    try
+        //    {
+        //        if (addAssessment != null)
+        //        {
+        //            addAssessment.AssessmentID = assessment.AssessmentID;
+        //            addAssessment.Name = assessment.Name;
+        //            addAssessment.Category = assessment.Category;
+        //            addAssessment.Description = assessment.Description;
+        //            addAssessment.OutcomePassRate = assessment.OutcomePassRate;
+        //            addAssessment.CalculateOutcomePassRate = assessment.CalculateOutcomePassRate;
+        //            addAssessment.ProgramID = assessment.ProgramID;
+        //            addAssessment.IsActive = assessment.IsActive;
+        //            addAssessment.ModifiedDateTime = DateTime.Now;
+        //            addAssessment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+
+        //            db.SaveChanges();
+
+        //            return RedirectToAction(actionName: "ViewAssessment", controllerName: "Admin", routeValues: new { assessmentId = addAssessment.AssessmentID });
+        //        }
+        //        else
+        //        {
+        //            logger.Error("Failed to save assessment, redirecting to sign in page.");
+        //            return RedirectToAction(actionName: "Signin", controllerName: "User");
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        logger.Error("Failed to save assessment, redirecting to sign in page.");
+        //        return RedirectToAction(actionName: "Signin", controllerName: "User");
+        //    }
+        //}
+
 
         public ActionResult SaveAssessment(Assessment assessment)
         {

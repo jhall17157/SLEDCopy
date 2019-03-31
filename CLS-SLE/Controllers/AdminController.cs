@@ -13,6 +13,7 @@ namespace CLS_SLE.Controllers
     {
 
         
+        
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
         private Logger logger = LogManager.GetCurrentClassLogger();
         // GET: Admin
@@ -84,9 +85,16 @@ namespace CLS_SLE.Controllers
                         canAdd = permission.CanEdit == 1 ? true : false;
                     }
                 }
-                
-                dynamic model = new ExpandoObject();
 
+                dynamic model = new ExpandoObject();
+                if (assessment.CreatedByLoginID != null) { 
+                     model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == assessment.CreatedByLoginID).FirstOrDefault().Login;
+                }
+                if (assessment.ModifiedByLoginID != null)
+                {
+                    model.ModifierLogin = (String)db.Users.Where(u => u.PersonID == assessment.ModifiedByLoginID).FirstOrDefault().Login;
+                }
+                model.program = db.Programs.Where(p => p.ProgramID == assessment.ProgramID).FirstOrDefault().Name;
                 model.assessment = assessment;
                 model.canEdit = canEdit;
                 model.canAdd = canAdd;
@@ -103,6 +111,9 @@ namespace CLS_SLE.Controllers
         public ActionResult EditAssessment(int? assessmentId)
         {
             var assessment = new Assessment();
+
+            dynamic Model = new ExpandoObject();
+            
 
             try
             {
@@ -126,13 +137,14 @@ namespace CLS_SLE.Controllers
                 {
                     throw new Exception("Assessment not found!");
                 }
-
-                return View(assessment);
+                Model.Programs = (from Program in db.Programs select Program).ToList();
+                Model.Assessment = assessment;
+                return View(Model);
             }
             catch
             {
                 logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
-                return RedirectToAction(actionName: "Signin", controllerName: "User");
+                return Exceptions();
             }
         }
 
@@ -144,9 +156,9 @@ namespace CLS_SLE.Controllers
             Model.Category = category;
             return View(Model);
         }
-        {
-
-        public ActionResult AddAssessment(Assessment assessment)
+        
+        [HttpPost]
+        public ActionResult InsertNewAssessment(FormCollection formCollection)
         {
             var addAssessment = new Assessment();
 
@@ -154,20 +166,18 @@ namespace CLS_SLE.Controllers
             {
                 if (addAssessment != null)
                 {
-                    addAssessment.AssessmentID = default;
-                    addAssessment.Name = assessment.Name;
-                    addAssessment.Category = assessment.Category;
-                    addAssessment.Description = assessment.Description;
-                    addAssessment.OutcomePassRate = assessment.OutcomePassRate;
-                    addAssessment.CalculateOutcomePassRate = assessment.CalculateOutcomePassRate;
-                    addAssessment.ProgramID = assessment.ProgramID;
-                    addAssessment.IsActive = assessment.IsActive;
-                    addAssessment.ModifiedDateTime = DateTime.Now;
-                    addAssessment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-
+                    addAssessment.Name = formCollection["Name"];
+                    addAssessment.Category = formCollection["Category"];
+                    addAssessment.Description = formCollection["Description"];
+                    addAssessment.OutcomePassRate =(Decimal?)(Double.Parse(formCollection["OutcomePassRate"]))/100;
+                    addAssessment.CalculateOutcomePassRate = ((formCollection["CalculateOutcomePassRate"]).Equals("True")? true : false);
+                    addAssessment.ProgramID = db.Programs.Where(p => p.Name.Equals(formCollection["ProgramID"])).FirstOrDefault().ProgramID;
+                    addAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
+                    addAssessment.CreatedDateTime = DateTime.Now;
+                    addAssessment.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());                   
                     db.SaveChanges();
 
-                    return RedirectToAction(actionName: "ViewAssessment", controllerName: "Admin", routeValues: new { assessmentId = addAssessment.AssessmentID });
+                    return RedirectToAction(actionName: "Assessments", controllerName: "Admin");
                 }
                 else
                 {
@@ -182,26 +192,28 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [HttpPost]
 
-        public ActionResult SaveAssessment(Assessment assessment)
+        public ActionResult SaveAssessment(FormCollection formCollection)
         {
             try
             {
-                if (assessment != null && assessment.AssessmentID > 0)
+                if (Int32.Parse(formCollection["AssessmentID"]) > 0)
                 {
-                    var editAssessment = db.Assessments.FirstOrDefault(a => a.AssessmentID == assessment.AssessmentID);
+                    var editAssessment = db.Assessments.FirstOrDefault(a => a.AssessmentID == Int32.Parse(formCollection["AssessmentID"]));
 
                     if (editAssessment != null)
                     {
-                        editAssessment.Name = assessment.Name;
-                        editAssessment.Category = assessment.Category;
-                        editAssessment.Description = assessment.Description;
-                        editAssessment.OutcomePassRate = assessment.OutcomePassRate;
-                        editAssessment.CalculateOutcomePassRate = assessment.CalculateOutcomePassRate;
-                        editAssessment.ProgramID = assessment.ProgramID;
-                        editAssessment.IsActive = assessment.IsActive;
-                        editAssessment.ModifiedDateTime = DateTime.Now;
-                        editAssessment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                        editAssessment.Name = formCollection["Name"];
+                        editAssessment.Category = formCollection["Category"];
+                        editAssessment.Description = formCollection["Description"];
+                        editAssessment.OutcomePassRate = (Decimal?)(Double.Parse(formCollection["OutcomePassRate"])) / 100;
+                        editAssessment.CalculateOutcomePassRate = ((formCollection["CalculateOutcomePassRate"]).Equals("True") ? true : false);
+                        editAssessment.ProgramID = db.Programs.Where(p => p.Name.Equals(formCollection["ProgramID"])).FirstOrDefault().ProgramID;
+                        editAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
+                        editAssessment.CreatedDateTime = DateTime.Now;
+                        editAssessment.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                        db.SaveChanges();
 
                         db.SaveChanges();
 

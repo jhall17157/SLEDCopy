@@ -17,32 +17,34 @@
                 <tr>
                     <th class="col-3">@category.Name</th>
                     <th class="col-7">@category.Description</th>
-                    <th class="col-2">Current Permissions</th>
+                    <th class="col-2"><a href="/Admin/AddAssessment"><button type="button" class="btn btn-primary">Add New</button></a></th>
                     
                 </tr>
             </thead>
-            <h2>@category.Name</h2>
-            <small>@category.Description</small>
-            <ul class="list-group">
+            <tbody>
+                <h2>@category.Name</h2>
+                <small>@category.Description</small>
+                <ul class="list-group">
 
 
 
-                @foreach (Assessment assessment in Model.assessments)
-                {
-                    if (assessment.Category.Equals(category.CategoryCode))
+                    @foreach (Assessment assessment in Model.assessments)
                     {
+                        if (assessment.Category.Equals(category.CategoryCode))
+                        {
 
-                        <div>
                             <div>
-                                @Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })
+                                <div>
+                                    @Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })
+                                </div>
+                                <br /><br />
                             </div>
-                            <br /><br />
-                        </div>
+                        }
                     }
+                </ul>
+                <br />
                 }
-            </ul>
-            <br />
-        }
+            </tbody>
     }
 
 </table>

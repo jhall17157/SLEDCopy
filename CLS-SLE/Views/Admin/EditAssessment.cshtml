@@ -1,58 +1,127 @@
 ﻿@using CLS_SLE.Models
-@model Assessment
-
 @{
     ViewBag.Title = "EditAssessment";
 }
 
 <h2>Edit Assessment</h2>
 
-@{
-    using (Html.BeginForm("SaveAssessment", "Admin", FormMethod.Post))
-    {
-        <div>
-            @Html.LabelFor(m => m.AssessmentID, "Assessment ID: ")
-            @Html.TextBoxFor(m => m.AssessmentID)
-        </div>
-        <div>
-            @Html.LabelFor(m => m.Name, "Name: ")
-            @Html.TextBoxFor(m => m.Name)
-        </div>
-        <div>
-            @Html.LabelFor(m => m.Category, "Category: ")
-            @Html.TextBoxFor(m => m.Category)
-        </div>
-        <div>
-            @Html.LabelFor(m => m.Description, "Description: ")
-            @Html.TextAreaFor(m => m.Description)
-        </div>
-        <div>
-            @Html.LabelFor(m => m.OutcomePassRate, "Outcome Pass Rate: ")
-            @Html.TextBoxFor(m => m.OutcomePassRate)
-        </div>
-        <div>
-            @Html.LabelFor(m => m.CalculateOutcomePassRate, "Calculate Outcome Pass Rate: ")
-            @Html.TextBoxFor(m => m.CalculateOutcomePassRate)
-        </div>
-        <div>
-            @Html.LabelFor(m => m.ProgramID, "Program ID: ")
-            @Html.TextBoxFor(m => m.ProgramID)
-        </div>
-        <div>
-            @Html.LabelFor(m => m.IsActive, "Is Active: ")
-            @Html.TextBoxFor(m => m.IsActive)
-        </div>
-        <div>
-            @Html.LabelFor(m => m.ModifiedDateTime, "Modified Date/Time: ")
-            @Html.TextBoxFor(m => m.ModifiedDateTime)
-        </div>
-        <div>
-            @Html.LabelFor(m => m.ModifiedByLoginID, "Modified By (Login ID): ")
-            @Html.TextBoxFor(m => m.ModifiedByLoginID)
-        </div>
 
-        <input type="submit" value="Save Assessment" />
-        <input type="reset" value="Cancel Changes" />
-    }
-}
+<form method="post" action="/Admin/SaveAssessment">
+    <div class="form-row">
+        <div class="form-group col-9">
+            <label for="Name">Name:</label>
+            <input type="text" name="Name" class="form-control" value="@Model.Assessment.Name" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-9">
+            <label for="Category">Category:</label>
+            <input type="text" name="Category" class="form-control" placeholder="@Model.Assessment.Category" value="@Model.Assesment.Category"  disabled />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-9">
+            <label for="Description">Description:</label>
+            <textarea name="Description" class="form-control" rows="6" value="@Model.Assessment.Description"></textarea>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-9">
+            <label for="PassPercent">Pass Percentage:</label>
+            <input type="text" name="PassPercent" class="form-control"  value="@(Double.Parse(Model.Assessment.OutcomePassRate)*100)"/>
+        </div>
+    </div>
+    <fieldset class="form-group col-9">
+        <div class="row">
+            <legend class="col-form-label col-4 pt-0">Calculate Outcome Pass Rate:</legend>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="CalculateOutcomePassRate" id="CalculateOutcomePassRateTrue" value="True" @(Model.Assessmet.CalculateOutcomePassRate ? " checked=\"checked\"" : "")>
+                <label class="form-check-label" for="CalculateOutcomePassRateTrue">True</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="CalculateOutcomePassRate" id="CalculateOutcomePassRateFalse" value="False" @(!Model.Assessmet.CalculateOutcomePassRate ? " checked=\"checked\"" : "")>
+                <label class="form-check-label" for="CalculateOutcomePassRateFalse">False</label>
+            </div>
+        </div>
+    </fieldset>
+    <div class="form-row">
+        <div class="form-group col-9">
+            <label for="Program">Program</label>
+            <select class="form-control" id="Program" name="Program">
+                @{
+                    foreach (Program p in Model.Programs)
+                    {
+                        <option  @(p.ProgramID == Model.Assessment.ProgramID ? "selected" : "" )>@p.Name</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <fieldset class="form-group col-9">
+        <div class="row">
+            <legend class="col-form-label col-4 pt-0">Is Active:</legend>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="IsActive" id="IsActiveTrue" value="True" @(Model.Assessmet.IsActive ? " checked=\"checked\"" : "")>
+                <label class="form-check-label" for="IsActiveTrue">True</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="IsActive" id="IsActiveFalse" value="False" @(!Model.Assessmet.IsActive ? " checked=\"checked\"" : "")>
+                <label class="form-check-label" for="IsActiveFalse">False</label>
+            </div>
+        </div>
+    </fieldset>
+    <div class="row justify-content-end col-9">
+        <div class="col-2 p-0 mx-1"><button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Update</button></div>
+        <div class="col-2 p-0 mx-1"><a href="/Admin/Assessments"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
+    </div>
+
+</form>
+@*@{
+        using (Html.BeginForm("SaveAssessment", "Admin", FormMethod.Post))
+        {
+            <div>
+                @Html.LabelFor(m => m.AssessmentID, "Assessment ID: ")
+                @Html.TextBoxFor(m => m.AssessmentID)
+            </div>
+            <div>
+                @Html.LabelFor(m => m.Name, "Name: ")
+                @Html.TextBoxFor(m => m.Name)
+            </div>
+            <div>
+                @Html.LabelFor(m => m.Category, "Category: ")
+                @Html.TextBoxFor(m => m.Category)
+            </div>
+            <div>
+                @Html.LabelFor(m => m.Description, "Description: ")
+                @Html.TextAreaFor(m => m.Description)
+            </div>
+            <div>
+                @Html.LabelFor(m => m.OutcomePassRate, "Outcome Pass Rate: ")
+                @Html.TextBoxFor(m => m.OutcomePassRate)
+            </div>
+            <div>
+                @Html.LabelFor(m => m.CalculateOutcomePassRate, "Calculate Outcome Pass Rate: ")
+                @Html.TextBoxFor(m => m.CalculateOutcomePassRate)
+            </div>
+            <div>
+                @Html.LabelFor(m => m.ProgramID, "Program ID: ")
+                @Html.TextBoxFor(m => m.ProgramID)
+            </div>
+            <div>
+                @Html.LabelFor(m => m.IsActive, "Is Active: ")
+                @Html.TextBoxFor(m => m.IsActive)
+            </div>
+            <div>
+                @Html.LabelFor(m => m.ModifiedDateTime, "Modified Date/Time: ")
+                @Html.TextBoxFor(m => m.ModifiedDateTime)
+            </div>
+            <div>
+                @Html.LabelFor(m => m.ModifiedByLoginID, "Modified By (Login ID): ")
+                @Html.TextBoxFor(m => m.ModifiedByLoginID)
+            </div>
+
+            <input type="submit" value="Save Assessment" />
+            <input type="reset" value="Cancel Changes" />
+        }
+    }*@
 

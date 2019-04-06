@@ -101,14 +101,14 @@
                                                 if (i.Description != "Not Assessed")
                                                 {
                                                     <label class="form-check-label desc">
-                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { @class = "form-check-input" })
+                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input" })
                                                         @i.Description
                                                     </label>
                                                 }
                                                 else
                                                 {
                                                     <label class="form-check-label desc">
-                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreTypeID, new { @class = "form-check-input notAssessed" })
+                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input notAssessed" })
                                                         @i.Description
                                                     </label>
                                                 }

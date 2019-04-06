@@ -293,7 +293,7 @@
     <Compile Include="Models\RubricDetail.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\School.cs">
+    <Compile Include="Models\ScoreType.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SchoolSecurity.cs">
@@ -1963,6 +1963,7 @@
     </EntityDeploy>
     <Content Include="Models\SLE_TrackingModel.edmx.diagram">
       <DependentUpon>SLE_TrackingModel.edmx</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />

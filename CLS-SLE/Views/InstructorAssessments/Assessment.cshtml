@@ -81,12 +81,9 @@
                                         <div class="form-check" id="@o.OutcomeID">
                                             @foreach (StudentScore ss in Model.StudentScores)
                                             {
-
-
                                                 exists = false;
                                                 // if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
                                                 if (ss.CriteriaID == rb.CriteriaID && ss.ScoreID == i.ScoreID)
-
                                                 {
                                                     <label class="form-check-label desc">
                                                         @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { Checked = "checked", @class = "form-check-input" })

@@ -3,34 +3,61 @@
 @using CLS_SLE.Models;
 @model IEnumerable<Role>
 
-<div class="bg-primary m-1 p-1 text-white"><h4>Roles</h4></div>
 
-<div class="text-danger" asp-validation-summary="All"></div>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
+        <li class="breadcrumb-item active" aria-current="page">User Security</li>
+    </ol>
+</nav>
 
-<table class="table table-sm table-bordered">
-    <tr><th>Id</th><th>Name</th><th></th></tr>
-    @if (Model.Count() == 0)
-    {
-        <tr><td colspan="3" class="text-center">No Roles</td></tr>
-    }
-    else
-    {
-        foreach (var UserRole in Model)
-        {
+<h1>Roles</h1>
+
+<div class="container">
+    <br />
+    <div class="row px-3">
+        <h5 class="co-2"><a href="/Admin/ViewUsers">Group by Users</a></h5>
+        <h5 class="col-2 ml-auto text-right p-0"><a href="~/RoleAdmin/Index"> Manage Roles </a></h5>
+    </div>
+
+    <div class="text-danger" asp-validation-summary="All"></div>
+
+    <table class="table table-hover table-striped">
+        <thead class="thead-dark">
             <tr>
-                <td>@UserRole.RoleID</td>
-                <td>@UserRole.Name</td>
-                <td>
-                    <form asp-action="Delete" asp-route-id="@UserRole.RoleID" method="post">
-                        <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@UserRole.RoleID">Edit</a>
-                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                    </form>
-                </td>
+                <th class="col-1">ID</th>
+                <th class="col-5">Name</th>
+                <th class="col-5"></th>
+                <th class="col-1 justify-content-end"></th>
             </tr>
+        </thead>
+        @{ if (Model.Count() == 0)
+            {
+                <tr><td colspan="3" class="text-center">No Roles</td></tr>
+            }
+            else
+            {
+                foreach (var UserRole in Model)
+                {
+                    
+                <tr>
+                    
+                        <td>@UserRole.RoleID</td>
+                        <td>@UserRole.Name</td>
+                        <td class="text-right">
+                            <a asp-action="Edit" asp-route-id="@UserRole.RoleID"><button type="button" class="btn btn-primary">Edit</button></a>
+                        </td>
+                        <td class="text-right"><form asp-action="Delete" asp-route-id="@UserRole.RoleID" method="post"><button type="submit" class="btn btn-danger">Delete</button></form></td>
+                    
+                </tr>
+                    
+                }
+            }
         }
-    }
-</table>
+    </table>
 
-<a class="btn btn-outline-primary" asp-action="Create">Create</a>
-<hr />
-<a asp-controller="Admin">User Accounts</a>
+    <a class="btn btn-outline-primary" asp-action="Create">Create</a>
+    <hr />
+    <a asp-controller="Admin">User Accounts</a>
+
+</div>

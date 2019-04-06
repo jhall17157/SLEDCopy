@@ -17,7 +17,8 @@
     <div class="form-row">
         <div class="form-group col-9">
             <label for="Category">Category:</label>
-            <input type="text" name="Category" class="form-control" placeholder="@Model.Category" value="@Model.Assesment.Category" disabled />
+            <input type="text" class="form-control" placeholder="@Model.Category" value="@Model.Category" disabled />
+            <input type="hidden" name="Category" value="@Model.Category" />
         </div>
     </div>
     <div class="form-row">
@@ -77,42 +78,4 @@
     </div>
 
 </form>
-
-@*@{
-    using (Html.BeginForm("SaveAssessment", "Admin", FormMethod.Post))
-    {
-        
-        <div>
-            @Html.LabelFor(m => m.Name, "Name: ")
-            @Html.TextBoxFor(m => m.Name)
-        </div>
-        <div>
-            @Html.LabelFor(m => m.Category, "Category: ")
-            @Html.TextBoxFor(m => m.Category)
-        </div>
-        <div>
-            @Html.LabelFor(m => m.Description, "Description: ")
-            @Html.TextBoxFor(m => m.Description)
-        </div>
-        <div>
-            @Html.LabelFor(m => m.OutcomePassRate, "Outcome Pass Rate: ")
-            @Html.TextBoxFor(m => m.OutcomePassRate)
-        </div>
-        <div>
-            @Html.LabelFor(m => m.CalculateOutcomePassRate, "Calculate Outcome Pass Rate: ")
-            @Html.TextBoxFor(m => m.CalculateOutcomePassRate)
-        </div>
-        <div>
-            @Html.LabelFor(m => m.ProgramID, "Program ID: ")
-            @Html.TextBoxFor(m => m.ProgramID)
-        </div>
-        <div>
-            @Html.LabelFor(m => m.IsActive, "Is Active: ")
-            @Html.TextBoxFor(m => m.IsActive)
-        </div>
-
-        <input type="submit" value="Save Assessment" />
-        <input type="reset" value="Cancel Changes" />
-    }
-}*@
 

@@ -42,32 +42,29 @@ namespace CLS_SLE.Controllers
         {
             try
             {
+                var personID = Convert.ToInt32(Session["personID"].ToString());
+                var user = db.Users.FirstOrDefault(u => u.PersonID == personID);
+                var adminAssessments = from assessments in db.Assessments
+                                       join permissions in db.AssessmentRubricSecurities on assessments.AssessmentID equals permissions.AssessmentID
+                                       where permissions.PersonID == personID
+                                       select assessments;
+                logger.Info("Dashboard loaded for " + user.Login);
+                var categories = db.AssessmentCategories.ToList();
 
-                var Assessments = from assessment in db.Assessments
-                                  select new { assessmentID = assessment.AssessmentID, description = assessment.Description, name = assessment.Name };
-                var AssessmentList = Assessments.ToList();
-                dynamic MyModel = new ExpandoObject();
-                MyModel.AssessmentList = AssessmentList;
-                var assessmentList = new List<Assessment>();
-                foreach (var Assessment in AssessmentList)
-                {
-                    Assessment assessment = new Assessment();
-                    assessment.AssessmentID = Assessment.assessmentID;
-                    assessment.Name = Assessment.name;
-                    assessment.Description = Assessment.description;
-                    assessmentList.Add(assessment);
-                }
-                MyModel.assessmentList = assessmentList;
+                dynamic model = new ExpandoObject();
 
-                return View(MyModel);
+                model.assessments = adminAssessments.Distinct().ToList();
+                model.categories = categories;
+
+                return View(model);
             }
             catch
             {
-                logger.Error("Error fetching user List");
-                return Exceptions();
+                logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
+                return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
+            return View();
         }
-
 
         public ActionResult ViewAssessment(int? assessmentId)
         {
@@ -96,10 +93,9 @@ namespace CLS_SLE.Controllers
                 }
 
                 dynamic model = new ExpandoObject();
-
-                dynamic model = new ExpandoObject();
-                if (assessment.CreatedByLoginID != null) { 
-                     model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == assessment.CreatedByLoginID).FirstOrDefault().Login;
+                if (assessment.CreatedByLoginID != null)
+                {
+                    model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == assessment.CreatedByLoginID).FirstOrDefault().Login;
                 }
                 if (assessment.ModifiedByLoginID != null)
                 {
@@ -124,7 +120,7 @@ namespace CLS_SLE.Controllers
             var assessment = new Assessment();
 
             dynamic Model = new ExpandoObject();
-            
+
 
             try
             {
@@ -167,7 +163,7 @@ namespace CLS_SLE.Controllers
             Model.Category = category;
             return View(Model);
         }
-        
+
         [HttpPost]
         public ActionResult InsertNewAssessment(FormCollection formCollection)
         {
@@ -177,15 +173,19 @@ namespace CLS_SLE.Controllers
             {
                 if (addAssessment != null)
                 {
+                    //addAssessment.AssessmentID = default(Int16);
                     addAssessment.Name = formCollection["Name"];
                     addAssessment.Category = formCollection["Category"];
                     addAssessment.Description = formCollection["Description"];
-                    addAssessment.OutcomePassRate =(Decimal?)(Double.Parse(formCollection["OutcomePassRate"]))/100;
-                    addAssessment.CalculateOutcomePassRate = ((formCollection["CalculateOutcomePassRate"]).Equals("True")? true : false);
-                    addAssessment.ProgramID = db.Programs.Where(p => p.Name.Equals(formCollection["ProgramID"])).FirstOrDefault().ProgramID;
+                    addAssessment.OutcomePassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
+                    addAssessment.CalculateOutcomePassRate = ((formCollection["CalculateOutcomePassRate"]).Equals("True") ? true : false);
+                    var program = (formCollection["Program"]);
+                    addAssessment.ProgramID = db.Programs.Where(p => p.Name == program).FirstOrDefault().ProgramID;
                     addAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
                     addAssessment.CreatedDateTime = DateTime.Now;
-                    addAssessment.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());                   
+                    addAssessment.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+
+                    db.Assessments.Add(addAssessment);
                     db.SaveChanges();
 
                     return RedirectToAction(actionName: "Assessments", controllerName: "Admin");
@@ -203,7 +203,6 @@ namespace CLS_SLE.Controllers
             }
         }
 
-
         [HttpPost]
 
         public ActionResult SaveAssessment(FormCollection formCollection)
@@ -212,21 +211,21 @@ namespace CLS_SLE.Controllers
             {
                 if (Int32.Parse(formCollection["AssessmentID"]) > 0)
                 {
-                    var editAssessment = db.Assessments.FirstOrDefault(a => a.AssessmentID == Int32.Parse(formCollection["AssessmentID"]));
+                    var assessmentid = Int32.Parse(formCollection["AssessmentID"]);
+                    var editAssessment = db.Assessments.FirstOrDefault(a => a.AssessmentID == assessmentid);
 
                     if (editAssessment != null)
                     {
                         editAssessment.Name = formCollection["Name"];
                         editAssessment.Category = formCollection["Category"];
                         editAssessment.Description = formCollection["Description"];
-                        editAssessment.OutcomePassRate = (Decimal?)(Double.Parse(formCollection["OutcomePassRate"])) / 100;
+                        editAssessment.OutcomePassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
                         editAssessment.CalculateOutcomePassRate = ((formCollection["CalculateOutcomePassRate"]).Equals("True") ? true : false);
-                        editAssessment.ProgramID = db.Programs.Where(p => p.Name.Equals(formCollection["ProgramID"])).FirstOrDefault().ProgramID;
+                        var program = (formCollection["Program"]);
+                        editAssessment.ProgramID = db.Programs.Where(p => p.Name == program).FirstOrDefault().ProgramID;
                         editAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
-                        editAssessment.CreatedDateTime = DateTime.Now;
-                        editAssessment.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-                        db.SaveChanges();
-
+                        editAssessment.ModifiedDateTime = DateTime.Now;
+                        editAssessment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
                         db.SaveChanges();
 
                         return RedirectToAction(actionName: "ViewAssessment", controllerName: "Admin", routeValues: new { assessmentId = editAssessment.AssessmentID });

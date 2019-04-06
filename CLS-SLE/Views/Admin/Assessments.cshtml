@@ -1,60 +1,50 @@
 ﻿@using CLS_SLE.Models;
 @{
     ViewBag.Title = "Assessments";
-    var x = 0;
 }
+
 <h2>Assessments | <a href="~/Admin/AdminDashboard">Admin Dashboard</a></h2>
 
-<h1>Assessment List</h1>
 <table class="table table-hover">
-    <thead class="thead-dark">
-        <tr>
-            <th>Assessment ID</th>
-            <th>Assessment Name</th>
-            <th style="text-align: center">Descriptiong</th>
-            <th>Delete</th>
-        </tr>
-    </thead>
-    <tbody id="assessments">
-        @foreach (Assessment assessment in Model.assessmentList)
+
+    @foreach (AssessmentCategory category in Model.categories) // throws error
+    {
+
+        if (((List<Assessment>)Model.assessments).Where(a => a.Category == category.CategoryCode).Count() != 0)
         {
-            <tr data-userID="person.PersonID" class="user-row">
-                <td style="width: 120px;">@assessment.AssessmentID</td>
-                <td>@assessment.Name</td>
-                <td>@assessment.Description</td>
-                <td style="text-align: center"><button type="button" class="btn-danger" id="Delete">Delete</button> <button type="button" class="btn-warning" id="Edit">Edit</button> </td>
-            </tr>
-            x++;
 
+            <thead class="thead-dark">
+                <tr>
+                    <th class="col-3">@category.Name</th>
+                    <th class="col-7">@category.Description</th>
+                    <th class="col-2"><a href="/Admin/AddAssessment?category=@category.Name"><button type="button" class="btn btn-primary">Add New</button></a></th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <h2>@category.Name</h2>
+                <small>@category.Description</small>
+                <ul class="list-group">
+
+
+
+                    @foreach (Assessment assessment in Model.assessments)
+                    {
+                        if (assessment.Category.Equals(category.CategoryCode))
+                        {
+
+                            <div>
+                                <div>
+                                    @Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })
+                                </div>
+                                <br /><br />
+                            </div>
+                        }
+                    }
+                </ul>
+                <br />
+            </tbody>
         }
-    </tbody>
-</table>
+    }
 
-@section scripts
-{
-    <script>
-        $(function () {
-            $('#Delete').on('click', function () {
-                alert('This is the delete function');
-            });
-        });
-    </script>
-    <script>
-        $(function () {
-            $('#Edit').on('click', function () {
-                var editWindow = window.open("", "", "width=1500,height=1500");
-                var properties = [];
-                @foreach(Assessment assessment in Model.assessmentList){
-                    var prop = new Array<String>(String id, String name, String desc);
-                    ArrayList<String> prop = new ArrayList<String>(0);
-                    prop.Add(assessment.AssessmentID);
-                    prop.Add(assessment.Name);
-                    prop.Add(assessment.Description);
-                }
-                for (int i = 0; i < prop.length - 1; i++) {
-                editwindow.document.write(prop[i]);
-                }
-            });
-    </script>
-}
-}
+</table>

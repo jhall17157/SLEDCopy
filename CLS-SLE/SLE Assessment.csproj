@@ -293,7 +293,7 @@
     <Compile Include="Models\RubricDetail.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ScoreType.cs">
+    <Compile Include="Models\School.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SchoolSecurity.cs">

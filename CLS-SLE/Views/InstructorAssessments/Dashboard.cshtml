@@ -3,15 +3,6 @@
     ViewBag.Title = "Dashboard";
 }
 
-@if (HttpContext.Current.User.IsInRole("Administrator"))
-{
-<h2><a href="~/Admin/AdminDashboard">Admin Dashboard</a> | <a href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a></h2>
-} else
-{
-<h2> <a href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a></h2>
-}
-
-
 @if (((List<InstructorAssessment>)Model.assessments).Count() == 0)
 {
     <li class="list-group-item">
@@ -73,4 +64,3 @@
         <br />
     }
 }
-        <a href="/RoleAdmin/Index">Roles</a>

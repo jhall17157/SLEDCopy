@@ -23,7 +23,7 @@ namespace CLS_SLE.Models
         public Nullable<System.DateTime> ModifiedDateTime { get; set; }
         public Nullable<int> ModifiedByLoginID { get; set; }
     
-        public virtual Role Role { get; set; }
         public virtual Program Program { get; set; }
+        public virtual Role Role { get; set; }
     }
 }

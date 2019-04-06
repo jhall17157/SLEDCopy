@@ -51,5 +51,14 @@ namespace CLS_SLE.Properties {
                 return ((string)(this["EmailSubject"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"metadata=res://*/Models.SLE_TrackingModel.csdl|res://*/Models.SLE_TrackingModel.ssdl|res://*/Models.SLE_TrackingModel.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=bitsql.wctc.edu;initial catalog=SLE_Tracking;persist security info=True;user id=SleWebApp;password=P@ssw0rd;MultipleActiveResultSets=True;App=EntityFramework&quot;")]
+        public string ConnectionString {
+            get {
+                return ((string)(this["ConnectionString"]));
+            }
+        }
     }
 }

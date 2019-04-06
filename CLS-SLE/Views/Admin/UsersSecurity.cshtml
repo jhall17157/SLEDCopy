@@ -18,6 +18,7 @@
             <th>User ID</th>
             <th>Name</th>
             <th style="text-align: center">Current Permissions</th>
+            <th style="text-align: center">Edit</th>
         </tr>
     </thead>
     <tbody id="students">
@@ -27,13 +28,18 @@
                 <td style="width: 120px;">@person.PersonID</td>
                 <td>@person.LastName<text>,</text> @person.FirstName</td>
                 <td style="width: 100px; text-align: center">
-                    <span style="right: 0px; top: 0px; width: 60px;" class="badge badge-dark">
+                    @if (person.Roles.Any()) { 
+                    <span style="right: 0px; top: 0px; width: 100%;" class="badge badge-dark">
                         @foreach (Role role in person.Roles)
                         {
                             @role.Name<text>, </text>
                         }
                         
                     </span>
+                    }
+                </td>
+                <td style=" width: 100px; text-align: center">
+                    <a class="btn btn-outline-primary" href="~/Admin/Assign?id=@person.PersonID">Edit</a>
                 </td>
             </tr>
                     x++;

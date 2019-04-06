@@ -12,48 +12,48 @@
 </nav>
 
 <h1>Edit User Permissions </h1>
-<div class="container">
-    <div class="row my-2 justify-content-between bg-dark text-light">
-        <div class="col-3 mt-2"><h2>@Model.Login</h2></div>
-        <div class="col-3 text-right mt-2"><h2>@Model.LastName, @Model.FirstName</h2></div>
-    </div>
 
-    @{bool IsFirstRow = true;
-        var i = 0;
-    }
-    @foreach (Role role in Model.Roles)
-    {
+<div class="row my-2 justify-content-between bg-dark text-light">
+    <div class="col-3 my-2 h3">@Model.Login</div>
+    <div class="col-5 text-right my-2 h3">@Model.LastName, @Model.FirstName</div>
+</div>
 
-        <form class="form-inline @if (!IsFirstRow) { <text>border-top</text>} border-right my-0 @if (i % 2 == 1) { <text>bg-light</text>} " action="~/Admin/UpdateUser" method="POST">
-            @{IsFirstRow = false;
-                bool IsMember = false;
-                i++;
+@{bool IsFirstRow = true;
+    var i = 0;
+}
+@foreach (Role role in Model.Roles)
+{
 
-                foreach (UserRole userRole in Model.UserRoles)
+    <form class="form-inline @if (!IsFirstRow) { <text>border-top</text>} border-right my-0 @if (i % 2 == 1) { <text>bg-light</text>} " action="~/Admin/UpdateUser" method="POST">
+        @{IsFirstRow = false;
+            bool IsMember = false;
+            i++;
+
+            foreach (UserRole userRole in Model.UserRoles)
+            {
+                if (userRole.PersonID == Model.PersonID && userRole.RoleID == role.RoleID)
                 {
-                    if (userRole.PersonID == Model.PersonID && userRole.RoleID == role.RoleID)
-                    {
-                        IsMember = true;
-                    }
+                    IsMember = true;
                 }
             }
-            <div class="col-4 my-1 mr-auto"><h3>@role.Name</h3></div>
-            <div class="col-1 my-2">
-                <button @if (IsMember) { <text> class="btn btn-success col-12" type="button" </text>  } else { <text> class="btn btn-outline-success col-12" type="submit" name="submit" value="add" formmethod="post" </text> }>
-                    <i class="fas fa-check"></i>
-                </button>
-            </div>
-            <div class="col-1 my-2">
-                <button @if (IsMember) { <text> class="btn btn-outline-danger col-12" type="submit" name="submit" value="delete" formmethod="post" </text>  } else { <text> class="btn btn-danger col-12" type="button" </text> }>
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <input type="hidden" name="personID" value="@Model.PersonID" />
-            <input type="hidden" name="roleID" value="@role.RoleID" />
-        </form>
-    }
+        }
+        <div class="col-4 my-1 mr-auto h4">@role.Name</div>
+        <div class="col-1 my-2">
+            <button @if (IsMember) { <text> class="btn btn-success col-12" type="button" </text>  } else { <text> class="btn btn-outline-success col-12" type="submit" name="submit" value="add" formmethod="post" </text> }>
+                <i class="fas fa-check"></i>
+            </button>
+        </div>
+        <div class="col-1 my-2">
+            <button @if (IsMember) { <text> class="btn btn-outline-danger col-12" type="submit" name="submit" value="delete" formmethod="post" </text>  } else { <text> class="btn btn-danger col-12" type="button" </text> }>
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <input type="hidden" name="personID" value="@Model.PersonID" />
+        <input type="hidden" name="roleID" value="@role.RoleID" />
+    </form>
+}
 
-</div>
+
 <input type="hidden" id="refresh" value="no">
 @section scripts{
     <script type="text/javascript">

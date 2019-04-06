@@ -11,58 +11,58 @@
 </nav>
 
 <h1>User Permissions</h1>
-<div class="container">
-    <br />
-    <div class="row px-3">
-        <h5 class="co-2"><a href="/Admin/ViewRoles">Group by Role</a></h5>
-        <h5 class="col-2 ml-auto text-right p-0"><a href="~/RoleAdmin/Index"> Manage Roles </a></h5>
-    </div>
+
+<br />
+<div class="row px-3">
+    <h5 class="co-2"><a href="/Admin/ViewRoles">Group by Role</a></h5>
+    <h5 class="col-2 ml-auto text-right p-0"><a href="~/RoleAdmin/Index"> Manage Roles </a></h5>
+</div>
 
 
 
-    <table class="table table-hover table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th class="col-2">Login</th>
-                <th class="col-2">Name</th>
-                <th class="col-3">Current Roles</th>
-                <th class="col-5 ml-auto justify-content-end">
-                    <form class="form-inline row justify-content-end" target="Admin/SearchUser" method="get" id="UserSearch">
-                        <input class="form-control mr-2" name="Search" type="text" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-primary mr-3" form="UserSearch" type="submit" value="Submit"><i class="fas fa-search"></i></button>
-                    </form>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @{ foreach (UserSecurity person in Model.UserSecurityList)
-                {
-                    <tr data-userID="person.PersonID">
-                        <td>@person.Login</td>
-                        <td>@person.LastName<text>,</text> @person.FirstName</td>
-                        <td>
-                            @{
-                                int i = 0;
-                                if (person.Roles.Count == 0)
+<table class="table table-hover table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th class="col-2">Login</th>
+            <th class="col-2">Name</th>
+            <th class="col-3">Current Roles</th>
+            <th class="col-5 ml-auto justify-content-end">
+                <form class="form-inline row justify-content-end" target="Admin/SearchUser" method="get" id="UserSearch">
+                    <input class="form-control mr-2" name="Search" type="text" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-primary mr-3" form="UserSearch" type="submit" value="Submit"><i class="fas fa-search"></i></button>
+                </form>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ foreach (UserSecurity person in Model.UserSecurityList)
+            {
+                <tr data-userID="person.PersonID">
+                    <td>@person.Login</td>
+                    <td>@person.LastName<text>,</text> @person.FirstName</td>
+                    <td>
+                        @{
+                            int i = 0;
+                            if (person.Roles.Count == 0)
+                            {
+                                <text>None</text>
+                            }
+                            foreach (Role role in person.Roles)
+                            {
+                                @role.Name
+                                i++;
+                                if (person.Roles.Count > i)
                                 {
-                                    <text>None</text>
-                                }
-                                foreach (Role role in person.Roles)
-                                {
-                                    @role.Name
-                                    i++;
-                                    if (person.Roles.Count > i)
-                                    {
-                                        <text>, </text>
-                                    }
+                                    <text>, </text>
                                 }
                             }
-                        </td>
-                        <td class="text-right"><a href="~/Admin/ManageUser?id=@person.PersonID"><button type="button" class="btn btn-primary mr-2">Edit</button></a></td>
-                    </tr>
-                }
+                        }
+                    </td>
+                    <td class="text-right"><a href="~/Admin/ManageUser?id=@person.PersonID"><button type="button" class="btn btn-primary mr-2">Edit</button></a></td>
+                </tr>
             }
+        }
 
-        </tbody>
-    </table>
-</div>
+    </tbody>
+</table>
+

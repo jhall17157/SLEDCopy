@@ -18,10 +18,10 @@
                 @*<img  src="https://www.wctc.edu/_resources/images/waukesha_logo.svg"  >*@
                 <img id="logo" src="~/Images/waukesha_logo.svg" alt="Waukesha County Technical College" width="250" height="54" />
             </a>
-            
+
             <ul class="navbar-nav" id="navLinkOverride">
-                
-                @if(Request.Url.Host.Contains("dev"))
+
+                @if (Request.Url.Host.Contains("dev"))
                 {
                     <li class="nav-item" style="margin-right: 10px;line-height: 40px;">Dev Mode</li>
                 }
@@ -41,29 +41,58 @@
             </ul>
         </nav>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <footer style="margin-bottom:10vh"></footer>
-    </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    @{ 
+        var ControllerName = string.Empty;
+        object Controller;
 
-    <script>
-        window.onscroll = function () { myFunction() };
-        
-        // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
-        function myFunction() {
-            
-            if (window.scrollY >= 100) {
-                $('#logo').css("width",
-                    $('.container').css('margin-left')
-                );
-            } else {
-                $('#logo').css("width", 250);
-            }
+        if (ViewContext.RouteData.Values.TryGetValue("controller", out Controller))
+        {
+            ControllerName = Controller.ToString();
         }
-    </script>
-    @RenderSection("scripts", required: false)
+
+    }
+        
+           @if (((CLS_SLE.Models.User)Session["user"]) != null)
+           {
+            <ul class="nav nav-tabs my-2 mx-5">
+
+                @if (HttpContext.Current.User.IsInRole("Administrator"))
+                {
+                    <li class="nav-item h2"><a class="nav-link @((ControllerName.Equals("Admin") || ControllerName.Equals("RoleAdmin")) ? "active" : "")"  href="~/Admin/AdminDashboard">Admin Dashboard</a></li>
+                }
+                @if (HttpContext.Current.User.IsInRole("Faculty"))
+                {
+                    <li class="nav-item h2"><a class="nav-link  @(ControllerName.Equals("InstructorAssessments")  ? "active" : "")" href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a></li>
+                }
+            </ul>
+            <div style="height:75px;"class="row"></div>
+        
+
+           }
+        <div class="container body-content">
+            @RenderBody()
+            <footer style="margin-bottom:10vh"></footer>
+        </div>
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+
+        <script>
+            window.onscroll = function () { myFunction() };
+
+            // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
+            function myFunction() {
+
+                if (window.scrollY >= 100) {
+                    $('#logo').css("width",
+                        $('.container').css('margin-left')
+                    );
+                } else {
+                    $('#logo').css("width", 250);
+                }
+            }
+        </script>
+        @RenderSection("scripts", required: false)
 </body>
 </html>

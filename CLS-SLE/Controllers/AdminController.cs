@@ -42,26 +42,29 @@ namespace CLS_SLE.Controllers
         {
             try
             {
-                var personID = Convert.ToInt32(Session["personID"].ToString());
-                var user = db.Users.FirstOrDefault(u => u.PersonID == personID);
-                var adminAssessments = from assessments in db.Assessments
-                                       join permissions in db.AssessmentRubricSecurities on assessments.AssessmentID equals permissions.AssessmentID
-                                       where permissions.PersonID == personID
-                                       select assessments;
-                logger.Info("Dashboard loaded for " + user.Login);
-                var categories = db.AssessmentCategories.ToList();
 
-                dynamic model = new ExpandoObject();
+                var Assessments = from assessment in db.Assessments
+                                  select new { assessmentID = assessment.AssessmentID, description = assessment.Description, name = assessment.Name };
+                var AssessmentList = Assessments.ToList();
+                dynamic MyModel = new ExpandoObject();
+                MyModel.AssessmentList = AssessmentList;
+                var assessmentList = new List<Assessment>();
+                foreach (var Assessment in AssessmentList)
+                {
+                    Assessment assessment = new Assessment();
+                    assessment.AssessmentID = Assessment.assessmentID;
+                    assessment.Name = Assessment.name;
+                    assessment.Description = Assessment.description;
+                    assessmentList.Add(assessment);
+                }
+                MyModel.assessmentList = assessmentList;
 
-                model.assessments = adminAssessments.Distinct().ToList();
-                model.categories = categories;
-
-                return View(model);
+                return View(MyModel);
             }
             catch
             {
-                logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
-                return RedirectToAction(actionName: "Signin", controllerName: "User");
+                logger.Error("Error fetching user List");
+                return Exceptions();
             }
         }
 
@@ -324,8 +327,8 @@ namespace CLS_SLE.Controllers
         [HttpGet]
         public ActionResult ViewRoles()
         {
-            var Roles = from Role in db.Roles
-                        select Role;
+            var Roles = (from Role in db.Roles
+                         select Role).OrderBy(r => r.Name);
             dynamic Model = new ExpandoObject();
             Model.Roles = Roles;
 
@@ -354,8 +357,8 @@ namespace CLS_SLE.Controllers
             try
             {
                 int UserID = id;
-                var Roles = from role in db.Roles
-                            select role;
+                var Roles = (from role in db.Roles
+                             select role).OrderBy(r => r.Name);
                 var UserRoles = from userRole in db.UserRoles
                                 where userRole.PersonID == UserID
                                 select userRole;
@@ -364,7 +367,7 @@ namespace CLS_SLE.Controllers
                             where user.PersonID == UserID
                             select new { user.PersonID, user.Login, person.FirstName, person.LastName, person.IdNumber }).FirstOrDefault();
 
-                ManageUser Model = new ManageUser(User.PersonID, User.IdNumber, User.FirstName, User.LastName, Roles.ToList(), UserRoles.ToList());
+                ManageUser Model = new ManageUser(User.PersonID, User.Login, User.IdNumber, User.FirstName, User.LastName, Roles.ToList(), UserRoles.ToList());
 
 
                 return View(Model);
@@ -426,14 +429,14 @@ namespace CLS_SLE.Controllers
         private List<UserSecurity> GetUserSecurities()
         {
 
-            var People = from user in db.Users
-                         join person in db.People on user.PersonID equals person.PersonID
-                         select new { FirstName = person.FirstName, LastName = person.LastName, PersonID = person.PersonID, IDNumber = person.IdNumber };
+            var People = (from user in db.Users
+                          join person in db.People on user.PersonID equals person.PersonID
+                          select new { FirstName = person.FirstName, Login = user.Login, LastName = person.LastName, PersonID = person.PersonID, IDNumber = person.IdNumber }).OrderBy(p => p.Login);
 
-            var UserRoles = from role in db.Roles
-                            join userRole in db.UserRoles on role.RoleID equals userRole.RoleID
-                            join user in db.Users on userRole.PersonID equals user.PersonID
-                            select new { PersonID = user.PersonID, RoleName = role.Name, RoleID = role.RoleID };
+            var UserRoles = (from role in db.Roles
+                             join userRole in db.UserRoles on role.RoleID equals userRole.RoleID
+                             join user in db.Users on userRole.PersonID equals user.PersonID
+                             select new { PersonID = user.PersonID, RoleName = role.Name, RoleID = role.RoleID }); ;
 
             var PersonList = People.ToList();
 
@@ -450,9 +453,10 @@ namespace CLS_SLE.Controllers
                         role.RoleID = userRole.RoleID;
                         role.Name = userRole.RoleName;
                         personRoles.Add(role);
+
                     }
                 }
-                UserSecurityList.Add(new UserSecurity(person.PersonID, person.IDNumber, person.FirstName, person.LastName, personRoles));
+                UserSecurityList.Add(new UserSecurity(person.PersonID, person.Login, person.IDNumber, person.FirstName, person.LastName, personRoles));
             }
             return UserSecurityList;
 

@@ -11,15 +11,15 @@
     </ol>
 </nav>
 
-<h1>@Model.CurrentRole.Name</h1>
+<h1>Members - @Model.CurrentRole.Name</h1>
 <br />
-<table class="table table-hover">
+<table class="table table-hover table-striped">
     <thead class="thead-dark">
         <tr>
-            <th class="col-2">User ID</th>
-            <th class="col-3">Name</th>
-            <th class="col-3">Current Permissions</th>
-            <th class="col-4 justify-content-end">
+            <th class="col-2">Login</th>
+            <th class="col-2">Name</th>
+            <th class="col-3">Current Roles</th>
+            <th class="col-5 ml-auto justify-content-end">
                 <form class="form-inline row justify-content-end" target="Admin/SearchUser" method="get" id="UserSearch">
                     <input class="form-control mr-2" name="Search" type="text" placeholder="Search" aria-label="Search">
                     <button class="btn btn-primary mr-3" form="UserSearch" type="submit" value="Submit"><i class="fas fa-search"></i></button>
@@ -31,7 +31,7 @@
         @{ foreach (UserSecurity person in Model.UserSecurityList)
             {
                 <tr data-userID="person.PersonID">
-                    <td>@person.IDNumber</td>
+                    <td>@person.Login</td>
                     <td>@person.LastName<text>,</text> @person.FirstName</td>
                     <td>
                         @{

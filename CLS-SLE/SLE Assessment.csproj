@@ -287,6 +287,9 @@
     <Compile Include="Models\RolePermission.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\RubricAssessment.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\RubricDetail.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
@@ -300,9 +303,6 @@
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ScoreSet.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ScoreType.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Section.cs">
@@ -1963,6 +1963,7 @@
     </EntityDeploy>
     <Content Include="Models\SLE_TrackingModel.edmx.diagram">
       <DependentUpon>SLE_TrackingModel.edmx</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
@@ -2110,17 +2111,14 @@
     <Content Include="Views\Admin\Assessments.cshtml" />
     <Content Include="Views\Admin\AssessmentMappings.cshtml" />
     <Content Include="Views\Admin\AssessmentScheduling.cshtml" />
-
     <Content Include="Views\Admin\UsersSecurity.cshtml" />
     <Content Include="Views\RoleAdmin\Create.cshtml" />
     <Content Include="Views\RoleAdmin\Confirm.cshtml" />
     <Content Include="Views\Admin\Assign.cshtml" />
-
     <Content Include="Views\Admin\ViewUsers.cshtml" />
     <Content Include="Views\Admin\ManageUser.cshtml" />
     <Content Include="Views\Admin\ViewRoles.cshtml" />
     <Content Include="Views\Admin\ViewRoleMembers.cshtml" />
-
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

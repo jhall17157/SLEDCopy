@@ -37,17 +37,21 @@
             }
             else
             {
-                foreach (var UserRole in Model)
+                foreach (var Role in Model)
                 {
                     
                 <tr>
                     
-                        <td>@UserRole.RoleID</td>
-                        <td>@UserRole.Name</td>
+                        <td>@Role.RoleID</td>
+                        <td>@Role.Name</td>
                         <td class="text-right">
-                            <a asp-action="Edit" asp-route-id="@UserRole.RoleID"><button type="button" class="btn btn-primary">Edit</button></a>
+                            <a href="/RoleAdmin/Edit?ID=@Role.RoleID"><button type="button" class="btn btn-primary">Edit</button></a>
                         </td>
-                        <td class="text-right"><form asp-action="Delete" asp-route-id="@UserRole.RoleID" method="post"><button type="submit" class="btn btn-danger">Delete</button></form></td>
+                        <td class="text-right">
+                            <form asp-action="Delete" asp-route-id="@Role.RoleID" method="post">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
                     
                 </tr>
                     

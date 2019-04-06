@@ -69,16 +69,20 @@ namespace CLS_SLE.Controllers
                                         // User does not need to reset their password, send them straight to the dashboad
 
                                         logger.Info("Successful login for " + user.Login + ", loading dashboard");
-                                        if (System.Web.HttpContext.Current.User.IsInRole("Administrator")) {
-                                            return RedirectToAction(actionName: "AdminDashboard", controllerName: "Admin");
-                                        } else if (System.Web.HttpContext.Current.User.IsInRole("Faculty")) {
+                                        if (System.Web.HttpContext.Current.User.IsInRole("Faculty"))
+                                        {
                                             return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
-                                        } else
+                                        }
+                                        else if (System.Web.HttpContext.Current.User.IsInRole("Administrator"))
+                                        {
+                                            return RedirectToAction(actionName: "AdminDashboard", controllerName: "Admin");
+                                        }
+                                        else
                                         {
                                             return RedirectToAction(actionName: "Error", controllerName: "User");
                                         }
-
                                     }
+
                                     else
                                     {
                                         // Passwords match

@@ -3,11 +3,21 @@
 @{
     ViewBag.Title = "Admin Dashboard";
 }
+@if (HttpContext.Current.User.IsInRole("Faculty"))
+{
+    <ul class="nav nav-tabs">
+        <li class="nav-item"><h3><a class="nav-link active" href="#">Admin Dashboard</a></h3></li>
+        <li class="nav-item"><h3><a class="nav-link" href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a></h3></li>
+    </ul>
+}
+else
+{
+    <ul class="nav nav-tabs">
+        <li class="nav-item"><h3><a class="nav-link active" href="#">Admin Dashboard</a></h3></li>
+    </ul>
 
-<h2><a href="~/Admin/AdminDashboard">Admin Dashboard</a> | <a href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a></h2>
-
-
-    <!-- Nav tabs -->
+}
+<!-- Nav tabs -->
 <ul class="list-group list-group-flush">
     <li class="list-group-item"><a href="~/Admin/ViewUsers">Manage Users & Roles </a></li>
     <li class="list-group-item"><a href="~/Admin/SchoolsDepartments">Schools and Departments</a></li>
@@ -17,5 +27,5 @@
     <li class="list-group-item"><a href="~/Admin/AssessmentScheduling">Assessment Scheduling</a></li>
 </ul>
 
-    
+
 

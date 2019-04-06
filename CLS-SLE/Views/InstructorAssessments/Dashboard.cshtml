@@ -5,10 +5,16 @@
 
 @if (HttpContext.Current.User.IsInRole("Administrator"))
 {
-<h2><a href="~/Admin/AdminDashboard">Admin Dashboard</a> | <a href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a></h2>
+<ul class="nav nav-tabs">
+    <li class="nav-item"><h3><a class="nav-link" href="~/Admin/AdminDashboard">Admin Dashboard</a></h3></li>
+    <li class="nav-item"><h3><a class="nav-link active " href="#">Faculty Dashboard</a></h3></li>
+</ul>
 } else
 {
-<h2> <a href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a></h2>
+<ul class="nav nav-tabs">
+    <li class="nav-item"><h3><a class="nav-link active " href="#">Faculty Dashboard</a></h3></li>
+</ul>
+
 }
 
 

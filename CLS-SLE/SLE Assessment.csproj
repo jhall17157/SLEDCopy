@@ -2120,6 +2120,7 @@
     <Content Include="Views\Admin\ViewRoles.cshtml" />
     <Content Include="Views\Admin\ViewRoleMembers.cshtml" />
     <Content Include="Views\Admin\AddAssessment.cshtml" />
+    <Content Include="Views\Admin\EditAssessment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

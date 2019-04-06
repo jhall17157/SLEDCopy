@@ -3,21 +3,6 @@
     ViewBag.Title = "Dashboard";
 }
 
-@if (HttpContext.Current.User.IsInRole("Administrator"))
-{
-<ul class="nav nav-tabs">
-    <li class="nav-item"><h3><a class="nav-link" href="~/Admin/AdminDashboard">Admin Dashboard</a></h3></li>
-    <li class="nav-item"><h3><a class="nav-link active " href="#">Faculty Dashboard</a></h3></li>
-</ul>
-} else
-{
-<ul class="nav nav-tabs">
-    <li class="nav-item"><h3><a class="nav-link active " href="#">Faculty Dashboard</a></h3></li>
-</ul>
-
-}
-
-
 @if (((List<InstructorAssessment>)Model.assessments).Count() == 0)
 {
     <li class="list-group-item">

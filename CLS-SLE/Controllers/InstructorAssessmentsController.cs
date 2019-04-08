@@ -63,10 +63,13 @@ namespace CLS_SLE.Controllers
                 
                 var assessment = db.InstructorAssessments.Where(a => a.RubricID == rubricID && a.SectionID == instructor.SectionID).FirstOrDefault();
 
+                var level = db.AssessmentLevels.Where(l => l.AssessmentLevelCode == assessment.AssessmentLevel).FirstOrDefault().Name;
+
                 dynamic mymodel = new ExpandoObject();
                 mymodel.Students = students.ToList();
                 mymodel.Assessment = assessment;
                 mymodel.CompleteScores = completedScores.ToList();
+                mymodel.Level = level;
 
                 return View(mymodel);
             }

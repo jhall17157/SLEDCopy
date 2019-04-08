@@ -7,9 +7,10 @@ namespace CLS_SLE.Models
 {
     public class UserSecurity
     {
-        public UserSecurity(int personID, string iDNumber, string firstName, string lastName, List<Role> roles)
+        public UserSecurity(int personID, string login, string iDNumber, string firstName, string lastName, List<Role> roles)
         {
             PersonID = personID;
+            Login = login;
             IDNumber = iDNumber;
             FirstName = firstName;
             LastName = lastName;
@@ -17,6 +18,7 @@ namespace CLS_SLE.Models
         }
 
         public int PersonID { get; set; }
+        public String Login { get; set; }
         public String IDNumber { get; set; }
         public String FirstName { get; set; }
         public String LastName { get; set; }

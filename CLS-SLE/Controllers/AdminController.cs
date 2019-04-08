@@ -63,8 +63,8 @@ namespace CLS_SLE.Controllers
                 logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
                 return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
+            return View();
         }
-
 
         public ActionResult ViewAssessment(int? assessmentId)
         {
@@ -93,7 +93,15 @@ namespace CLS_SLE.Controllers
                 }
 
                 dynamic model = new ExpandoObject();
-
+                if (assessment.CreatedByLoginID != null)
+                {
+                    model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == assessment.CreatedByLoginID).FirstOrDefault().Login;
+                }
+                if (assessment.ModifiedByLoginID != null)
+                {
+                    model.ModifierLogin = (String)db.Users.Where(u => u.PersonID == assessment.ModifiedByLoginID).FirstOrDefault().Login;
+                }
+                model.program = db.Programs.Where(p => p.ProgramID == assessment.ProgramID).FirstOrDefault().Name;
                 model.assessment = assessment;
                 model.canEdit = canEdit;
                 model.canAdd = canAdd;
@@ -110,6 +118,9 @@ namespace CLS_SLE.Controllers
         public ActionResult EditAssessment(int? assessmentId)
         {
             var assessment = new Assessment();
+
+            dynamic Model = new ExpandoObject();
+
 
             try
             {
@@ -133,17 +144,28 @@ namespace CLS_SLE.Controllers
                 {
                     throw new Exception("Assessment not found!");
                 }
-
-                return View(assessment);
+                Model.Programs = (from Program in db.Programs select Program).ToList();
+                Model.Assessment = assessment;
+                return View(Model);
             }
             catch
             {
                 logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
-                return RedirectToAction(actionName: "Signin", controllerName: "User");
+                return Exceptions();
             }
         }
 
-        public ActionResult AddAssessment(Assessment assessment)
+        [HttpGet]
+        public ActionResult AddAssessment(String category)
+        {
+            dynamic Model = new ExpandoObject();
+            Model.Programs = (from Program in db.Programs select Program).ToList();
+            Model.Category = category;
+            return View(Model);
+        }
+
+        [HttpPost]
+        public ActionResult InsertNewAssessment(FormCollection formCollection)
         {
             var addAssessment = new Assessment();
 
@@ -151,20 +173,22 @@ namespace CLS_SLE.Controllers
             {
                 if (addAssessment != null)
                 {
-                    addAssessment.AssessmentID = assessment.AssessmentID;
-                    addAssessment.Name = assessment.Name;
-                    addAssessment.Category = assessment.Category;
-                    addAssessment.Description = assessment.Description;
-                    addAssessment.OutcomePassRate = assessment.OutcomePassRate;
-                    addAssessment.CalculateOutcomePassRate = assessment.CalculateOutcomePassRate;
-                    addAssessment.ProgramID = assessment.ProgramID;
-                    addAssessment.IsActive = assessment.IsActive;
-                    addAssessment.ModifiedDateTime = DateTime.Now;
-                    addAssessment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                    //addAssessment.AssessmentID = default(Int16);
+                    addAssessment.Name = formCollection["Name"];
+                    addAssessment.Category = formCollection["Category"];
+                    addAssessment.Description = formCollection["Description"];
+                    addAssessment.OutcomePassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
+                    addAssessment.CalculateOutcomePassRate = ((formCollection["CalculateOutcomePassRate"]).Equals("True") ? true : false);
+                    var program = (formCollection["Program"]);
+                    addAssessment.ProgramID = db.Programs.Where(p => p.Name == program).FirstOrDefault().ProgramID;
+                    addAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
+                    addAssessment.CreatedDateTime = DateTime.Now;
+                    addAssessment.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
 
+                    db.Assessments.Add(addAssessment);
                     db.SaveChanges();
 
-                    return RedirectToAction(actionName: "ViewAssessment", controllerName: "Admin", routeValues: new { assessmentId = addAssessment.AssessmentID });
+                    return RedirectToAction(actionName: "Assessments", controllerName: "Admin");
                 }
                 else
                 {
@@ -179,27 +203,29 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [HttpPost]
 
-        public ActionResult SaveAssessment(Assessment assessment)
+        public ActionResult SaveAssessment(FormCollection formCollection)
         {
             try
             {
-                if (assessment != null && assessment.AssessmentID > 0)
+                if (Int32.Parse(formCollection["AssessmentID"]) > 0)
                 {
-                    var editAssessment = db.Assessments.FirstOrDefault(a => a.AssessmentID == assessment.AssessmentID);
+                    var assessmentid = Int32.Parse(formCollection["AssessmentID"]);
+                    var editAssessment = db.Assessments.FirstOrDefault(a => a.AssessmentID == assessmentid);
 
                     if (editAssessment != null)
                     {
-                        editAssessment.Name = assessment.Name;
-                        editAssessment.Category = assessment.Category;
-                        editAssessment.Description = assessment.Description;
-                        editAssessment.OutcomePassRate = assessment.OutcomePassRate;
-                        editAssessment.CalculateOutcomePassRate = assessment.CalculateOutcomePassRate;
-                        editAssessment.ProgramID = assessment.ProgramID;
-                        editAssessment.IsActive = assessment.IsActive;
+                        editAssessment.Name = formCollection["Name"];
+                        editAssessment.Category = formCollection["Category"];
+                        editAssessment.Description = formCollection["Description"];
+                        editAssessment.OutcomePassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
+                        editAssessment.CalculateOutcomePassRate = ((formCollection["CalculateOutcomePassRate"]).Equals("True") ? true : false);
+                        var program = (formCollection["Program"]);
+                        editAssessment.ProgramID = db.Programs.Where(p => p.Name == program).FirstOrDefault().ProgramID;
+                        editAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
                         editAssessment.ModifiedDateTime = DateTime.Now;
                         editAssessment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-
                         db.SaveChanges();
 
                         return RedirectToAction(actionName: "ViewAssessment", controllerName: "Admin", routeValues: new { assessmentId = editAssessment.AssessmentID });
@@ -324,8 +350,8 @@ namespace CLS_SLE.Controllers
         [HttpGet]
         public ActionResult ViewRoles()
         {
-            var Roles = from Role in db.Roles
-                        select Role;
+            var Roles = (from Role in db.Roles
+                         select Role).OrderBy(r => r.Name);
             dynamic Model = new ExpandoObject();
             Model.Roles = Roles;
 
@@ -354,8 +380,8 @@ namespace CLS_SLE.Controllers
             try
             {
                 int UserID = id;
-                var Roles = from role in db.Roles
-                            select role;
+                var Roles = (from role in db.Roles
+                             select role).OrderBy(r => r.Name);
                 var UserRoles = from userRole in db.UserRoles
                                 where userRole.PersonID == UserID
                                 select userRole;
@@ -364,7 +390,7 @@ namespace CLS_SLE.Controllers
                             where user.PersonID == UserID
                             select new { user.PersonID, user.Login, person.FirstName, person.LastName, person.IdNumber }).FirstOrDefault();
 
-                ManageUser Model = new ManageUser(User.PersonID, User.IdNumber, User.FirstName, User.LastName, Roles.ToList(), UserRoles.ToList());
+                ManageUser Model = new ManageUser(User.PersonID, User.Login, User.IdNumber, User.FirstName, User.LastName, Roles.ToList(), UserRoles.ToList());
 
 
                 return View(Model);
@@ -426,14 +452,14 @@ namespace CLS_SLE.Controllers
         private List<UserSecurity> GetUserSecurities()
         {
 
-            var People = from user in db.Users
-                         join person in db.People on user.PersonID equals person.PersonID
-                         select new { FirstName = person.FirstName, LastName = person.LastName, PersonID = person.PersonID, IDNumber = person.IdNumber };
+            var People = (from user in db.Users
+                          join person in db.People on user.PersonID equals person.PersonID
+                          select new { FirstName = person.FirstName, Login = user.Login, LastName = person.LastName, PersonID = person.PersonID, IDNumber = person.IdNumber }).OrderBy(p => p.Login);
 
-            var UserRoles = from role in db.Roles
-                            join userRole in db.UserRoles on role.RoleID equals userRole.RoleID
-                            join user in db.Users on userRole.PersonID equals user.PersonID
-                            select new { PersonID = user.PersonID, RoleName = role.Name, RoleID = role.RoleID };
+            var UserRoles = (from role in db.Roles
+                             join userRole in db.UserRoles on role.RoleID equals userRole.RoleID
+                             join user in db.Users on userRole.PersonID equals user.PersonID
+                             select new { PersonID = user.PersonID, RoleName = role.Name, RoleID = role.RoleID }); ;
 
             var PersonList = People.ToList();
 
@@ -450,9 +476,10 @@ namespace CLS_SLE.Controllers
                         role.RoleID = userRole.RoleID;
                         role.Name = userRole.RoleName;
                         personRoles.Add(role);
+
                     }
                 }
-                UserSecurityList.Add(new UserSecurity(person.PersonID, person.IDNumber, person.FirstName, person.LastName, personRoles));
+                UserSecurityList.Add(new UserSecurity(person.PersonID, person.Login, person.IDNumber, person.FirstName, person.LastName, personRoles));
             }
             return UserSecurityList;
 

@@ -17,10 +17,10 @@ namespace CLS_SLE.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Assessment()
         {
-            this.AssessmentRubrics = new HashSet<AssessmentRubric>();
+            this.RubricAssessments = new HashSet<RubricAssessment>();
         }
     
-        public byte AssessmentID { get; set; }
+        public short AssessmentID { get; set; }
         public string Name { get; set; }
         public string Category { get; set; }
         public string Description { get; set; }
@@ -36,6 +36,6 @@ namespace CLS_SLE.Models
         public virtual AssessmentCategory AssessmentCategory { get; set; }
         public virtual Program Program { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AssessmentRubric> AssessmentRubrics { get; set; }
+        public virtual ICollection<RubricAssessment> RubricAssessments { get; set; }
     }
 }

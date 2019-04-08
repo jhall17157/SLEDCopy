@@ -15,7 +15,7 @@ namespace CLS_SLE.Models
     public partial class AssessmentRubricSecurity
     {
         public int PersonID { get; set; }
-        public byte AssessmentID { get; set; }
+        public short AssessmentID { get; set; }
         public short RubricID { get; set; }
         public Nullable<byte> CanEdit { get; set; }
     }

@@ -50,11 +50,11 @@ namespace CLS_SLE.Models
         public virtual DbSet<ProgramSecurity> ProgramSecurities { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<RolePermission> RolePermissions { get; set; }
+        public virtual DbSet<RubricAssessment> RubricAssessments { get; set; }
         public virtual DbSet<School> Schools { get; set; }
         public virtual DbSet<SchoolSecurity> SchoolSecurities { get; set; }
         public virtual DbSet<Score> Scores { get; set; }
         public virtual DbSet<ScoreSet> ScoreSets { get; set; }
-        public virtual DbSet<ScoreType> ScoreTypes { get; set; }
         public virtual DbSet<Section> Sections { get; set; }
         public virtual DbSet<SectionRubric> SectionRubrics { get; set; }
         public virtual DbSet<Semester> Semesters { get; set; }

@@ -9,7 +9,7 @@
           <Key>
             <PropertyRef Name="AssessmentID" />
           </Key>
-          <Property Name="AssessmentID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AssessmentID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Category" Type="varchar" MaxLength="5" Nullable="false" />
           <Property Name="Description" Type="varchar(max)" />
@@ -54,7 +54,7 @@
           <Property Name="RubricID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Description" Type="varchar(max)" />
-          <Property Name="AssessmentID" Type="tinyint" Nullable="false" />
+          <Property Name="AssessmentID" Type="smallint" />
           <Property Name="ScoreSetID" Type="tinyint" />
           <Property Name="CreatedDateTime" Type="datetime" />
           <Property Name="CreatedByLoginID" Type="int" />
@@ -123,7 +123,7 @@
           </Key>
           <Property Name="CriteriaID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OutcomeID" Type="smallint" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="300" Nullable="false" />
           <Property Name="ExampleText" Type="varchar" MaxLength="200" />
           <Property Name="SortOrder" Type="tinyint" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
@@ -315,6 +315,20 @@
           <Property Name="CreatedDateTime" Type="datetime" />
           <Property Name="CreatedByLoginID" Type="int" />
         </EntityType>
+        <EntityType Name="RubricAssessments">
+          <Key>
+            <PropertyRef Name="RubricAssessmentID" />
+          </Key>
+          <Property Name="RubricAssessmentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RubricID" Type="smallint" Nullable="false" />
+          <Property Name="AssessmentID" Type="smallint" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
+        </EntityType>
         <EntityType Name="School">
           <Key>
             <PropertyRef Name="SchoolID" />
@@ -367,17 +381,6 @@
           <Property Name="ModifiedDateTime" Type="datetime" />
           <Property Name="ModifiedByLoginID" Type="int" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
-        </EntityType>
-        <EntityType Name="ScoreType">
-          <Key>
-            <PropertyRef Name="ScoreTypeID" />
-          </Key>
-          <Property Name="ScoreTypeID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="RubricID" Type="smallint" Nullable="false" />
-          <Property Name="Description" Type="varchar(max)" />
-          <Property Name="Value" Type="tinyint" Nullable="false" />
-          <Property Name="SortOrder" Type="tinyint" Nullable="false" />
-          <Property Name="IsUnassessedScore" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Section">
           <Key>
@@ -445,10 +448,9 @@
           <Property Name="StudentScoreID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EnrollmentID" Type="bigint" Nullable="false" />
           <Property Name="CriteriaID" Type="smallint" Nullable="false" />
-          <Property Name="ScoreTypeID" Type="smallint" />
           <Property Name="AssessedByID" Type="int" Nullable="false" />
           <Property Name="DateTimeAssessed" Type="datetime" />
-          <Property Name="ScoreID" Type="smallint" />
+          <Property Name="ScoreID" Type="smallint" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -499,7 +501,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.AssessmentRubricSecurity' does no
             <PropertyRef Name="RubricID" />
           </Key>
           <Property Name="PersonID" Type="int" Nullable="false" />
-          <Property Name="AssessmentID" Type="tinyint" Nullable="false" />
+          <Property Name="AssessmentID" Type="smallint" Nullable="false" />
           <Property Name="RubricID" Type="smallint" Nullable="false" />
           <Property Name="CanEdit" Type="tinyint" />
         </EntityType>
@@ -531,7 +533,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.InstructorAssessments' does not h
           <Property Name="CategoryName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="RubricID" Type="smallint" Nullable="false" />
           <Property Name="RubricName" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="AssessmentLevel" Type="varchar" MaxLength="30" />
+          <Property Name="AssessmentLevel" Type="char" MaxLength="1" />
           <Property Name="DueDate" Type="date" Nullable="false" />
           <Property Name="StudentCount" Type="int" />
           <Property Name="CompletedCount" Type="int" />
@@ -540,7 +542,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.InstructorAssessments' does not h
 warning 6002: The table/view 'SLE_Tracking.dbo.RubricDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="RubricDetails">
           <Key>
-            <PropertyRef Name="AssessmentName" />
             <PropertyRef Name="RubricID" />
             <PropertyRef Name="RubricName" />
             <PropertyRef Name="OutcomeName" />
@@ -549,14 +550,14 @@ warning 6002: The table/view 'SLE_Tracking.dbo.RubricDetails' does not have a pr
             <PropertyRef Name="CriteriaName" />
             <PropertyRef Name="CriteriaSortOrder" />
           </Key>
-          <Property Name="AssessmentName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="AssessmentName" Type="nvarchar(max)" />
           <Property Name="RubricID" Type="smallint" Nullable="false" />
           <Property Name="RubricName" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Description" Type="varchar(max)" />
           <Property Name="OutcomeName" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="OutcomeSortOrder" Type="tinyint" Nullable="false" />
           <Property Name="CriteriaID" Type="smallint" Nullable="false" />
-          <Property Name="CriteriaName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="CriteriaName" Type="varchar" MaxLength="300" Nullable="false" />
           <Property Name="ExampleText" Type="varchar" MaxLength="200" />
           <Property Name="CriteriaSortOrder" Type="tinyint" Nullable="false" />
         </EntityType>
@@ -626,18 +627,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             </Principal>
             <Dependent Role="Assessment">
               <PropertyRef Name="ProgramID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_AssessmentRubric_AssessmentID">
-          <End Role="Assessment" Type="Self.Assessment" Multiplicity="1" />
-          <End Role="AssessmentRubric" Type="Self.AssessmentRubric" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Assessment">
-              <PropertyRef Name="AssessmentID" />
-            </Principal>
-            <Dependent Role="AssessmentRubric">
-              <PropertyRef Name="AssessmentID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -953,6 +942,30 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_RubricAssessments_AssessmentID">
+          <End Role="Assessment" Type="Self.Assessment" Multiplicity="1" />
+          <End Role="RubricAssessments" Type="Self.RubricAssessments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assessment">
+              <PropertyRef Name="AssessmentID" />
+            </Principal>
+            <Dependent Role="RubricAssessments">
+              <PropertyRef Name="AssessmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_RubricAssessments_RubricID">
+          <End Role="AssessmentRubric" Type="Self.AssessmentRubric" Multiplicity="1" />
+          <End Role="RubricAssessments" Type="Self.RubricAssessments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssessmentRubric">
+              <PropertyRef Name="RubricID" />
+            </Principal>
+            <Dependent Role="RubricAssessments">
+              <PropertyRef Name="RubricID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_SchoolSecurity_ProgramID">
           <End Role="School" Type="Self.School" Multiplicity="1" />
           <End Role="SchoolSecurity" Type="Self.SchoolSecurity" Multiplicity="*" />
@@ -986,18 +999,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             </Principal>
             <Dependent Role="Score">
               <PropertyRef Name="ScoreSetID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_ScoreType_RubricID">
-          <End Role="AssessmentRubric" Type="Self.AssessmentRubric" Multiplicity="1" />
-          <End Role="ScoreType" Type="Self.ScoreType" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AssessmentRubric">
-              <PropertyRef Name="RubricID" />
-            </Principal>
-            <Dependent Role="ScoreType">
-              <PropertyRef Name="RubricID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1146,7 +1147,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           </ReferentialConstraint>
         </Association>
         <Association Name="fk_StudentScore_ScoreID">
-          <End Role="Score" Type="Self.Score" Multiplicity="0..1" />
+          <End Role="Score" Type="Self.Score" Multiplicity="1" />
           <End Role="StudentScore" Type="Self.StudentScore" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Score">
@@ -1154,18 +1155,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             </Principal>
             <Dependent Role="StudentScore">
               <PropertyRef Name="ScoreID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_StudentScore_ScoreTypeID">
-          <End Role="ScoreType" Type="Self.ScoreType" Multiplicity="0..1" />
-          <End Role="StudentScore" Type="Self.StudentScore" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ScoreType">
-              <PropertyRef Name="ScoreTypeID" />
-            </Principal>
-            <Dependent Role="StudentScore">
-              <PropertyRef Name="ScoreTypeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1336,11 +1325,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySet Name="ProgramSecurity" EntityType="Self.ProgramSecurity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RolePermission" EntityType="Self.RolePermission" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RubricAssessments" EntityType="Self.RubricAssessments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="School" EntityType="Self.School" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SchoolSecurity" EntityType="Self.SchoolSecurity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Score" EntityType="Self.Score" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScoreSet" EntityType="Self.ScoreSet" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ScoreType" EntityType="Self.ScoreType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Section" EntityType="Self.Section" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SectionRubric" EntityType="Self.SectionRubric" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Semester" EntityType="Self.Semester" Schema="dbo" store:Type="Tables" />
@@ -1427,10 +1416,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <AssociationSet Name="fk_Assessment_ProgramID" Association="Self.fk_Assessment_ProgramID">
             <End Role="Program" EntitySet="Program" />
             <End Role="Assessment" EntitySet="Assessment" />
-          </AssociationSet>
-          <AssociationSet Name="fk_AssessmentRubric_AssessmentID" Association="Self.fk_AssessmentRubric_AssessmentID">
-            <End Role="Assessment" EntitySet="Assessment" />
-            <End Role="AssessmentRubric" EntitySet="AssessmentRubric" />
           </AssociationSet>
           <AssociationSet Name="fk_AssessmentRubric_ScoreSetID" Association="Self.fk_AssessmentRubric_ScoreSetID">
             <End Role="ScoreSet" EntitySet="ScoreSet" />
@@ -1536,6 +1521,14 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             <End Role="Permission" EntitySet="Permission" />
             <End Role="RolePermission" EntitySet="RolePermission" />
           </AssociationSet>
+          <AssociationSet Name="fk_RubricAssessments_AssessmentID" Association="Self.fk_RubricAssessments_AssessmentID">
+            <End Role="Assessment" EntitySet="Assessment" />
+            <End Role="RubricAssessments" EntitySet="RubricAssessments" />
+          </AssociationSet>
+          <AssociationSet Name="fk_RubricAssessments_RubricID" Association="Self.fk_RubricAssessments_RubricID">
+            <End Role="AssessmentRubric" EntitySet="AssessmentRubric" />
+            <End Role="RubricAssessments" EntitySet="RubricAssessments" />
+          </AssociationSet>
           <AssociationSet Name="fk_SchoolSecurity_ProgramID" Association="Self.fk_SchoolSecurity_ProgramID">
             <End Role="School" EntitySet="School" />
             <End Role="SchoolSecurity" EntitySet="SchoolSecurity" />
@@ -1547,10 +1540,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <AssociationSet Name="fk_Score_ScoreSetID" Association="Self.fk_Score_ScoreSetID">
             <End Role="ScoreSet" EntitySet="ScoreSet" />
             <End Role="Score" EntitySet="Score" />
-          </AssociationSet>
-          <AssociationSet Name="fk_ScoreType_RubricID" Association="Self.fk_ScoreType_RubricID">
-            <End Role="AssessmentRubric" EntitySet="AssessmentRubric" />
-            <End Role="ScoreType" EntitySet="ScoreType" />
           </AssociationSet>
           <AssociationSet Name="fk_Section_CourseID" Association="Self.fk_Section_CourseID">
             <End Role="Course" EntitySet="Course" />
@@ -1602,10 +1591,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           </AssociationSet>
           <AssociationSet Name="fk_StudentScore_ScoreID" Association="Self.fk_StudentScore_ScoreID">
             <End Role="Score" EntitySet="Score" />
-            <End Role="StudentScore" EntitySet="StudentScore" />
-          </AssociationSet>
-          <AssociationSet Name="fk_StudentScore_ScoreTypeID" Association="Self.fk_StudentScore_ScoreTypeID">
-            <End Role="ScoreType" EntitySet="ScoreType" />
             <End Role="StudentScore" EntitySet="StudentScore" />
           </AssociationSet>
           <AssociationSet Name="fk_User_PersonID" Association="Self.fk_User_PersonID">
@@ -1694,11 +1679,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySet Name="ProgramSecurities" EntityType="SLE_TrackingModel.ProgramSecurity" />
           <EntitySet Name="Roles" EntityType="SLE_TrackingModel.Role" />
           <EntitySet Name="RolePermissions" EntityType="SLE_TrackingModel.RolePermission" />
+          <EntitySet Name="RubricAssessments" EntityType="SLE_TrackingModel.RubricAssessment" />
           <EntitySet Name="Schools" EntityType="SLE_TrackingModel.School" />
           <EntitySet Name="SchoolSecurities" EntityType="SLE_TrackingModel.SchoolSecurity" />
           <EntitySet Name="Scores" EntityType="SLE_TrackingModel.Score" />
           <EntitySet Name="ScoreSets" EntityType="SLE_TrackingModel.ScoreSet" />
-          <EntitySet Name="ScoreTypes" EntityType="SLE_TrackingModel.ScoreType" />
           <EntitySet Name="Sections" EntityType="SLE_TrackingModel.Section" />
           <EntitySet Name="SectionRubrics" EntityType="SLE_TrackingModel.SectionRubric" />
           <EntitySet Name="Semesters" EntityType="SLE_TrackingModel.Semester" />
@@ -1721,9 +1706,9 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             <End Role="Program" EntitySet="Programs" />
             <End Role="Assessment" EntitySet="Assessments" />
           </AssociationSet>
-          <AssociationSet Name="fk_AssessmentRubric_AssessmentID" Association="SLE_TrackingModel.fk_AssessmentRubric_AssessmentID">
+          <AssociationSet Name="fk_RubricAssessments_AssessmentID" Association="SLE_TrackingModel.fk_RubricAssessments_AssessmentID">
             <End Role="Assessment" EntitySet="Assessments" />
-            <End Role="AssessmentRubric" EntitySet="AssessmentRubrics" />
+            <End Role="RubricAssessment" EntitySet="RubricAssessments" />
           </AssociationSet>
           <AssociationSet Name="fk_ProgramAssessmentMapping_AssessmentLevelCode" Association="SLE_TrackingModel.fk_ProgramAssessmentMapping_AssessmentLevelCode">
             <End Role="AssessmentLevel" EntitySet="AssessmentLevels" />
@@ -1745,9 +1730,9 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             <End Role="AssessmentRubric" EntitySet="AssessmentRubrics" />
             <End Role="ProgramAssessmentMapping" EntitySet="ProgramAssessmentMappings" />
           </AssociationSet>
-          <AssociationSet Name="fk_ScoreType_RubricID" Association="SLE_TrackingModel.fk_ScoreType_RubricID">
+          <AssociationSet Name="fk_RubricAssessments_RubricID" Association="SLE_TrackingModel.fk_RubricAssessments_RubricID">
             <End Role="AssessmentRubric" EntitySet="AssessmentRubrics" />
-            <End Role="ScoreType" EntitySet="ScoreTypes" />
+            <End Role="RubricAssessment" EntitySet="RubricAssessments" />
           </AssociationSet>
           <AssociationSet Name="fk_SectionRubric_RubricID" Association="SLE_TrackingModel.fk_SectionRubric_RubricID">
             <End Role="AssessmentRubric" EntitySet="AssessmentRubrics" />
@@ -1893,10 +1878,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             <End Role="Score" EntitySet="Scores" />
             <End Role="StudentScore" EntitySet="StudentScores" />
           </AssociationSet>
-          <AssociationSet Name="fk_StudentScore_ScoreTypeID" Association="SLE_TrackingModel.fk_StudentScore_ScoreTypeID">
-            <End Role="ScoreType" EntitySet="ScoreTypes" />
-            <End Role="StudentScore" EntitySet="StudentScores" />
-          </AssociationSet>
           <AssociationSet Name="fk_Section_SemesterID" Association="SLE_TrackingModel.fk_Section_SemesterID">
             <End Role="Semester" EntitySet="Semesters" />
             <End Role="Section" EntitySet="Sections" />
@@ -1970,7 +1951,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Key>
             <PropertyRef Name="AssessmentID" />
           </Key>
-          <Property Name="AssessmentID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AssessmentID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Category" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -1984,7 +1965,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="ModifiedByLoginID" Type="Int32" />
           <NavigationProperty Name="AssessmentCategory" Relationship="SLE_TrackingModel.fk_Assessment_Category" FromRole="Assessment" ToRole="AssessmentCategory" />
           <NavigationProperty Name="Program" Relationship="SLE_TrackingModel.fk_Assessment_ProgramID" FromRole="Assessment" ToRole="Program" />
-          <NavigationProperty Name="AssessmentRubrics" Relationship="SLE_TrackingModel.fk_AssessmentRubric_AssessmentID" FromRole="Assessment" ToRole="AssessmentRubric" />
+          <NavigationProperty Name="RubricAssessments" Relationship="SLE_TrackingModel.fk_RubricAssessments_AssessmentID" FromRole="Assessment" ToRole="RubricAssessment" />
         </EntityType>
         <EntityType Name="AssessmentCategory">
           <Key>
@@ -2021,18 +2002,17 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="RubricID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="AssessmentID" Type="Byte" Nullable="false" />
+          <Property Name="AssessmentID" Type="Int16" />
           <Property Name="ScoreSetID" Type="Byte" />
           <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
           <Property Name="CreatedByLoginID" Type="Int32" />
           <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
           <Property Name="ModifiedByLoginID" Type="Int32" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Assessment" Relationship="SLE_TrackingModel.fk_AssessmentRubric_AssessmentID" FromRole="AssessmentRubric" ToRole="Assessment" />
           <NavigationProperty Name="ScoreSet" Relationship="SLE_TrackingModel.fk_AssessmentRubric_ScoreSetID" FromRole="AssessmentRubric" ToRole="ScoreSet" />
           <NavigationProperty Name="Outcomes" Relationship="SLE_TrackingModel.fk_Outcome_RubricID" FromRole="AssessmentRubric" ToRole="Outcome" />
           <NavigationProperty Name="ProgramAssessmentMappings" Relationship="SLE_TrackingModel.fk_ProgramAssessmentMapping_RubricID" FromRole="AssessmentRubric" ToRole="ProgramAssessmentMapping" />
-          <NavigationProperty Name="ScoreTypes" Relationship="SLE_TrackingModel.fk_ScoreType_RubricID" FromRole="AssessmentRubric" ToRole="ScoreType" />
+          <NavigationProperty Name="RubricAssessments" Relationship="SLE_TrackingModel.fk_RubricAssessments_RubricID" FromRole="AssessmentRubric" ToRole="RubricAssessment" />
           <NavigationProperty Name="SectionRubrics" Relationship="SLE_TrackingModel.fk_SectionRubric_RubricID" FromRole="AssessmentRubric" ToRole="SectionRubric" />
         </EntityType>
         <EntityType Name="Course">
@@ -2106,7 +2086,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           </Key>
           <Property Name="CriteriaID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="OutcomeID" Type="Int16" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="ExampleText" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="SortOrder" Type="Byte" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
@@ -2344,6 +2324,22 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <NavigationProperty Name="Permission" Relationship="SLE_TrackingModel.fk_RolePermissions_PermissionID" FromRole="RolePermission" ToRole="Permission" />
           <NavigationProperty Name="Role" Relationship="SLE_TrackingModel.fk_RolePermission_RoleID" FromRole="RolePermission" ToRole="Role" />
         </EntityType>
+        <EntityType Name="RubricAssessment">
+          <Key>
+            <PropertyRef Name="RubricAssessmentID" />
+          </Key>
+          <Property Name="RubricAssessmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RubricID" Type="Int16" Nullable="false" />
+          <Property Name="AssessmentID" Type="Int16" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <NavigationProperty Name="Assessment" Relationship="SLE_TrackingModel.fk_RubricAssessments_AssessmentID" FromRole="RubricAssessment" ToRole="Assessment" />
+          <NavigationProperty Name="AssessmentRubric" Relationship="SLE_TrackingModel.fk_RubricAssessments_RubricID" FromRole="RubricAssessment" ToRole="AssessmentRubric" />
+        </EntityType>
         <EntityType Name="School">
           <Key>
             <PropertyRef Name="SchoolID" />
@@ -2404,19 +2400,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AssessmentRubrics" Relationship="SLE_TrackingModel.fk_AssessmentRubric_ScoreSetID" FromRole="ScoreSet" ToRole="AssessmentRubric" />
           <NavigationProperty Name="Scores" Relationship="SLE_TrackingModel.fk_Score_ScoreSetID" FromRole="ScoreSet" ToRole="Score" />
-        </EntityType>
-        <EntityType Name="ScoreType">
-          <Key>
-            <PropertyRef Name="ScoreTypeID" />
-          </Key>
-          <Property Name="ScoreTypeID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="RubricID" Type="Int16" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Value" Type="Byte" Nullable="false" />
-          <Property Name="SortOrder" Type="Byte" Nullable="false" />
-          <Property Name="IsUnassessedScore" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="AssessmentRubric" Relationship="SLE_TrackingModel.fk_ScoreType_RubricID" FromRole="ScoreType" ToRole="AssessmentRubric" />
-          <NavigationProperty Name="StudentScores" Relationship="SLE_TrackingModel.fk_StudentScore_ScoreTypeID" FromRole="ScoreType" ToRole="StudentScore" />
         </EntityType>
         <EntityType Name="Section">
           <Key>
@@ -2497,15 +2480,13 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="StudentScoreID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="EnrollmentID" Type="Int64" Nullable="false" />
           <Property Name="CriteriaID" Type="Int16" Nullable="false" />
-          <Property Name="ScoreTypeID" Type="Int16" />
           <Property Name="AssessedByID" Type="Int32" Nullable="false" />
           <Property Name="DateTimeAssessed" Type="DateTime" Precision="3" />
-          <Property Name="ScoreID" Type="Int16" />
+          <Property Name="ScoreID" Type="Int16" Nullable="false" />
           <NavigationProperty Name="Criterion" Relationship="SLE_TrackingModel.fk_StudentScore_Criteria" FromRole="StudentScore" ToRole="Criterion" />
           <NavigationProperty Name="Enrollment" Relationship="SLE_TrackingModel.fk_StudentScore_EnrollmentID" FromRole="StudentScore" ToRole="Enrollment" />
           <NavigationProperty Name="Person" Relationship="SLE_TrackingModel.fk_StudentScore_AssessedByID" FromRole="StudentScore" ToRole="Person" />
           <NavigationProperty Name="Score" Relationship="SLE_TrackingModel.fk_StudentScore_ScoreID" FromRole="StudentScore" ToRole="Score" />
-          <NavigationProperty Name="ScoreType" Relationship="SLE_TrackingModel.fk_StudentScore_ScoreTypeID" FromRole="StudentScore" ToRole="ScoreType" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -2558,7 +2539,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             <PropertyRef Name="RubricID" />
           </Key>
           <Property Name="PersonID" Type="Int32" Nullable="false" />
-          <Property Name="AssessmentID" Type="Byte" Nullable="false" />
+          <Property Name="AssessmentID" Type="Int16" Nullable="false" />
           <Property Name="RubricID" Type="Int16" Nullable="false" />
           <Property Name="CanEdit" Type="Byte" />
         </EntityType>
@@ -2588,14 +2569,13 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="CategoryName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="RubricID" Type="Int16" Nullable="false" />
           <Property Name="RubricName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="AssessmentLevel" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="AssessmentLevel" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="DueDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="StudentCount" Type="Int32" />
           <Property Name="CompletedCount" Type="Int32" />
         </EntityType>
         <EntityType Name="RubricDetail">
           <Key>
-            <PropertyRef Name="AssessmentName" />
             <PropertyRef Name="RubricID" />
             <PropertyRef Name="RubricName" />
             <PropertyRef Name="OutcomeName" />
@@ -2604,14 +2584,14 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             <PropertyRef Name="CriteriaName" />
             <PropertyRef Name="CriteriaSortOrder" />
           </Key>
-          <Property Name="AssessmentName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="AssessmentName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="RubricID" Type="Int16" Nullable="false" />
           <Property Name="RubricName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="OutcomeName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="OutcomeSortOrder" Type="Byte" Nullable="false" />
           <Property Name="CriteriaID" Type="Int16" Nullable="false" />
-          <Property Name="CriteriaName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CriteriaName" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="ExampleText" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="CriteriaSortOrder" Type="Byte" Nullable="false" />
         </EntityType>
@@ -2678,14 +2658,14 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_AssessmentRubric_AssessmentID">
+        <Association Name="fk_RubricAssessments_AssessmentID">
           <End Type="SLE_TrackingModel.Assessment" Role="Assessment" Multiplicity="1" />
-          <End Type="SLE_TrackingModel.AssessmentRubric" Role="AssessmentRubric" Multiplicity="*" />
+          <End Type="SLE_TrackingModel.RubricAssessment" Role="RubricAssessment" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Assessment">
               <PropertyRef Name="AssessmentID" />
             </Principal>
-            <Dependent Role="AssessmentRubric">
+            <Dependent Role="RubricAssessment">
               <PropertyRef Name="AssessmentID" />
             </Dependent>
           </ReferentialConstraint>
@@ -2750,14 +2730,14 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_ScoreType_RubricID">
+        <Association Name="fk_RubricAssessments_RubricID">
           <End Type="SLE_TrackingModel.AssessmentRubric" Role="AssessmentRubric" Multiplicity="1" />
-          <End Type="SLE_TrackingModel.ScoreType" Role="ScoreType" Multiplicity="*" />
+          <End Type="SLE_TrackingModel.RubricAssessment" Role="RubricAssessment" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AssessmentRubric">
               <PropertyRef Name="RubricID" />
             </Principal>
-            <Dependent Role="ScoreType">
+            <Dependent Role="RubricAssessment">
               <PropertyRef Name="RubricID" />
             </Dependent>
           </ReferentialConstraint>
@@ -3183,7 +3163,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           </ReferentialConstraint>
         </Association>
         <Association Name="fk_StudentScore_ScoreID">
-          <End Type="SLE_TrackingModel.Score" Role="Score" Multiplicity="0..1" />
+          <End Type="SLE_TrackingModel.Score" Role="Score" Multiplicity="1" />
           <End Type="SLE_TrackingModel.StudentScore" Role="StudentScore" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Score">
@@ -3191,18 +3171,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             </Principal>
             <Dependent Role="StudentScore">
               <PropertyRef Name="ScoreID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_StudentScore_ScoreTypeID">
-          <End Type="SLE_TrackingModel.ScoreType" Role="ScoreType" Multiplicity="0..1" />
-          <End Type="SLE_TrackingModel.StudentScore" Role="StudentScore" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ScoreType">
-              <PropertyRef Name="ScoreTypeID" />
-            </Principal>
-            <Dependent Role="StudentScore">
-              <PropertyRef Name="ScoreTypeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3677,6 +3645,21 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="RubricAssessments">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.RubricAssessment">
+              <MappingFragment StoreEntitySet="RubricAssessments">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="AssessmentID" ColumnName="AssessmentID" />
+                <ScalarProperty Name="RubricID" ColumnName="RubricID" />
+                <ScalarProperty Name="RubricAssessmentID" ColumnName="RubricAssessmentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Schools">
             <EntityTypeMapping TypeName="SLE_TrackingModel.School">
               <MappingFragment StoreEntitySet="School">
@@ -3731,18 +3714,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
                 <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ScoreSetID" ColumnName="ScoreSetID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ScoreTypes">
-            <EntityTypeMapping TypeName="SLE_TrackingModel.ScoreType">
-              <MappingFragment StoreEntitySet="ScoreType">
-                <ScalarProperty Name="IsUnassessedScore" ColumnName="IsUnassessedScore" />
-                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
-                <ScalarProperty Name="Value" ColumnName="Value" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="RubricID" ColumnName="RubricID" />
-                <ScalarProperty Name="ScoreTypeID" ColumnName="ScoreTypeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3815,7 +3786,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
                 <ScalarProperty Name="ScoreID" ColumnName="ScoreID" />
                 <ScalarProperty Name="DateTimeAssessed" ColumnName="DateTimeAssessed" />
                 <ScalarProperty Name="AssessedByID" ColumnName="AssessedByID" />
-                <ScalarProperty Name="ScoreTypeID" ColumnName="ScoreTypeID" />
                 <ScalarProperty Name="CriteriaID" ColumnName="CriteriaID" />
                 <ScalarProperty Name="EnrollmentID" ColumnName="EnrollmentID" />
                 <ScalarProperty Name="StudentScoreID" ColumnName="StudentScoreID" />

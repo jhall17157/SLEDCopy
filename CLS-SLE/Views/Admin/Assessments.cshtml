@@ -1,50 +1,57 @@
 ﻿@using CLS_SLE.Models;
 @{
+    /**/
+
     ViewBag.Title = "Assessments";
 }
 
 <h2>Assessments | <a href="~/Admin/AdminDashboard">Admin Dashboard</a></h2>
 
-<table class="table table-hover">
 
-    @foreach (AssessmentCategory category in Model.categories) // throws error
+
+@foreach (AssessmentCategory category in Model.categories) // throws error
+{
+
+    if (((List<Assessment>)Model.assessments).Where(a => a.Category == category.CategoryCode).Count() != 0)
     {
 
-        if (((List<Assessment>)Model.assessments).Where(a => a.Category == category.CategoryCode).Count() != 0)
-        {
+        <table class="table table-hover">
 
             <thead class="thead-dark">
                 <tr>
-                    <th class="col-3">@category.Name</th>
+                    <th class="col-3 h3">@category.Name</th>
                     <th class="col-7">@category.Description</th>
-                    <th class="col-2"><a href="/Admin/AddAssessment?category=@category.Name"><button type="button" class="btn btn-primary">Add New</button></a></th>
+                    <th class="col-2 text-right"><a href="/Admin/AddAssessment?category=@category.Name"><button type="button" class="btn btn-primary">Add New</button></a></th>
 
                 </tr>
             </thead>
             <tbody>
-                <h2>@category.Name</h2>
-                <small>@category.Description</small>
-                <ul class="list-group">
+
+                @*<h2>@category.Name</h2>
+                    <small>@category.Description</small>
+                    <ul class="list-group">*@
 
 
 
-                    @foreach (Assessment assessment in Model.assessments)
+                @foreach (Assessment assessment in Model.assessments)
+                {
+                    if (assessment.Category.Equals(category.CategoryCode))
                     {
-                        if (assessment.Category.Equals(category.CategoryCode))
-                        {
 
-                            <div>
-                                <div>
-                                    @Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })
-                                </div>
-                                <br /><br />
-                            </div>
-                        }
+                        <tr>
+                            
+                            <td colspan="2">@assessment.Name</td>
+                            <td class="text-right">
+                                <a href="ViewAssessment?assessmentId=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
+                                @*@Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })*@
+                            </td>
+
+                        </tr>
                     }
-                </ul>
-                <br />
-            </tbody>
-        }
-    }
+                }
 
-</table>
+            </tbody>
+        </table>
+    }
+}
+

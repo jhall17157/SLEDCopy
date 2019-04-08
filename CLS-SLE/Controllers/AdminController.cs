@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -45,8 +46,8 @@ namespace CLS_SLE.Controllers
                 var personID = Convert.ToInt32(Session["personID"].ToString());
                 var user = db.Users.FirstOrDefault(u => u.PersonID == personID);
                 var adminAssessments = from assessments in db.Assessments
-                                       join permissions in db.AssessmentRubricSecurities on assessments.AssessmentID equals permissions.AssessmentID
-                                       where permissions.PersonID == personID
+                                       //join permissions in db.AssessmentRubricSecurities on assessments.AssessmentID equals permissions.AssessmentID
+                                       //where permissions.PersonID == personID
                                        select assessments;
                 logger.Info("Dashboard loaded for " + user.Login);
                 var categories = db.AssessmentCategories.ToList();
@@ -167,34 +168,35 @@ namespace CLS_SLE.Controllers
         [HttpPost]
         public ActionResult InsertNewAssessment(FormCollection formCollection)
         {
-            var addAssessment = new Assessment();
-
             try
             {
-                if (addAssessment != null)
-                {
-                    //addAssessment.AssessmentID = default(Int16);
-                    addAssessment.Name = formCollection["Name"];
-                    addAssessment.Category = formCollection["Category"];
-                    addAssessment.Description = formCollection["Description"];
-                    addAssessment.OutcomePassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
-                    addAssessment.CalculateOutcomePassRate = ((formCollection["CalculateOutcomePassRate"]).Equals("True") ? true : false);
-                    var program = (formCollection["Program"]);
-                    addAssessment.ProgramID = db.Programs.Where(p => p.Name == program).FirstOrDefault().ProgramID;
-                    addAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
-                    addAssessment.CreatedDateTime = DateTime.Now;
-                    addAssessment.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                db.Assessments.Load();
+                string Category = formCollection["Category"];
+                var CategoryCode = db.AssessmentCategories.Where(c => c.Name == Category).FirstOrDefault().CategoryCode;
+                var program = (formCollection["Program"]);
+                Assessment addAssessment = db.Assessments.Create();
 
-                    db.Assessments.Add(addAssessment);
-                    db.SaveChanges();
 
-                    return RedirectToAction(actionName: "Assessments", controllerName: "Admin");
-                }
-                else
-                {
-                    logger.Error("Failed to save assessment, redirecting to sign in page.");
-                    return RedirectToAction(actionName: "Signin", controllerName: "User");
-                }
+                addAssessment.Name = formCollection["Name"];
+                addAssessment.Category = CategoryCode;
+                addAssessment.Description = formCollection["Description"];
+                addAssessment.OutcomePassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
+                addAssessment.CalculateOutcomePassRate = ((formCollection["CalculateOutcomePassRate"]).Equals("True") ? true : false);
+                addAssessment.ProgramID = db.Programs.Where(p => p.Name == program).FirstOrDefault().ProgramID;
+                addAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
+                addAssessment.CreatedDateTime = DateTime.Now;
+                addAssessment.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                
+
+
+
+
+                    db.Entry(addAssessment).State = EntityState.Added;
+                db.SaveChanges();
+
+
+                return RedirectToAction(actionName: "Assessments", controllerName: "Admin");
+
             }
             catch
             {

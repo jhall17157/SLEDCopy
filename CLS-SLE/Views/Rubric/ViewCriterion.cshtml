@@ -1,0 +1,35 @@
+﻿@using CLS_SLE.Models;
+@{
+    ViewBag.Title = "ViewCriterion";
+}
+
+<h2>ViewCriterion</h2>
+
+<div class="py-1">
+    <h3>@Model.Criterion.Name</h3>
+</div>
+<div class="py-1">
+    Example Text: @Model.Criterion.ExampleText
+</div>
+<div class="py-1">
+    Is Active: @Model.Criterion.IsActive
+</div>
+@*@if (Model.ModifierLogin != null)
+    {
+        <div class="py-1">
+            Last Modefied:  @Model.assessment.ModifiedDateTime
+        </div>
+        <div class="py-1">
+            By: @Model.ModifierLogin
+        </div>
+    }
+    else if (Model.CreatorLogin != null)
+    {
+        <div class="py-1">
+            Created: @Model.assessment.CreatedDateTime
+        </div>
+        <div class="py-1">
+            By: @Model.CreatorLogin
+        </div>
+    }*@
+

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Dynamic;
 using System.Linq;
 using System.Web;
@@ -14,6 +15,8 @@ namespace CLS_SLE.Controllers
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
         // GET: Rubric
+
+
         public ActionResult Index()
         {
             dynamic Model = new ExpandoObject();
@@ -23,6 +26,8 @@ namespace CLS_SLE.Controllers
             Model.Rubrics = Rubrics;
             return View(Model);
         }
+
+
         public ActionResult ViewRubric(int? rubricID)
         {
             dynamic Model = new ExpandoObject();
@@ -34,10 +39,38 @@ namespace CLS_SLE.Controllers
         {
             return View();
         }
+        public ActionResult InsertNewRubric(FormCollection formCollection)
+        {
+            try
+            {
+                db.AssessmentRubrics.Load();
+                AssessmentRubric addRubric = db.AssessmentRubrics.Create();
+
+                addRubric.AssessmentID = 1; //default to 1 until we know how to handle properly
+                addRubric.Name = formCollection["Name"];
+                addRubric.Description = formCollection["Description"];
+                addRubric.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
+                addRubric.CreatedDateTime = DateTime.Now;
+                addRubric.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+
+                db.Entry(addRubric).State = EntityState.Added;
+                db.SaveChanges();
+
+                return RedirectToAction(actionName: "Index", controllerName: "Rubric");
+
+            }
+            catch
+            {
+                //logger.Error("Failed to save assessment, redirecting to sign in page.");
+                return RedirectToAction(actionName: "Signin", controllerName: "User");
+            }
+        }
         public ActionResult EditRubric(int? rubricID)
         {
             return View();
         }
+
+
         public ActionResult ViewOutcome(int? outcomeID)
         {
             dynamic Model = new ExpandoObject();
@@ -45,14 +78,50 @@ namespace CLS_SLE.Controllers
             Model.Criteria = db.Criteria.Where(c => c.OutcomeID == outcomeID).ToList();
             return View(Model);
         }
-        public ActionResult AddOutcome(int? rubricID)
+        public ActionResult AddOutcome(int? id)
         {
-            return View();
+            dynamic Model = new ExpandoObject();
+            Model.ID = id;
+            return View(Model);
+        }
+        public ActionResult InsertNewOutcome(FormCollection formCollection)
+        {
+            try
+            {
+                Int16 RubricId = Int16.Parse(formCollection["RubricId"]);
+                Byte SortOrder = Byte.Parse(formCollection["SortOrder"]);
+
+                db.Outcomes.Load();
+                Outcome addOutcome = db.Outcomes.Create();
+
+                addOutcome.RubricID = RubricId; //default to 1 until we know how to handle properly
+                addOutcome.Name = formCollection["Name"];
+                addOutcome.Description = formCollection["Description"];
+                addOutcome.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
+                addOutcome.SortOrder = SortOrder;
+                addOutcome.CriteriaPassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
+                addOutcome.CalculateCriteriaPassRate = ((formCollection["CalculateCriteriaPassRate"]).Equals("True") ? true : false);
+                addOutcome.CreatedDateTime = DateTime.Now;
+                addOutcome.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+
+                db.Entry(addOutcome).State = EntityState.Added;
+                db.SaveChanges();
+
+                return RedirectToAction(actionName: "Index", controllerName: "Rubric");
+
+            }
+            catch
+            {
+                //logger.Error("Failed to save assessment, redirecting to sign in page.");
+                return RedirectToAction(actionName: "Signin", controllerName: "User");
+            }
         }
         public ActionResult EditOutcome(int? outcomeID)
         {
             return View();
         }
+
+
         public ActionResult ViewCriterion(int? criterionID)
         {
             dynamic Model = new ExpandoObject();

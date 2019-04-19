@@ -9,7 +9,7 @@
 
 
 
-@foreach (AssessmentCategory category in Model.categories) // throws error
+@foreach (AssessmentCategory category in Model.categories)
 {
 
     if (((List<Assessment>)Model.assessments).Where(a => a.Category == category.CategoryCode).Count() != 0)

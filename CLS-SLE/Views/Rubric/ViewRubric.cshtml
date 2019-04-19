@@ -14,6 +14,7 @@
 <div class="py-1">
     Is Active: @Model.Rubric.IsActive
 </div>
+
 @*@if (Model.ModifierLogin != null)
 {
     <div class="py-1">
@@ -56,7 +57,7 @@ else if (Model.CreatorLogin != null)
         <tr>
             <th class="col-3 h3">Name</th>
             <th class="col-7">Description</th>
-            <th class="col-2 text-right"><a href="/Rubric/AddOutcome"><button type="button" class="btn btn-primary">Add New</button></a></th>
+            <th class="col-2 text-right"><a href="/Rubric/AddOutcome?id=@Model.Rubric.RubricID"><button type="button" class="btn btn-primary">Add New</button></a></th>
 
         </tr>
     </thead>

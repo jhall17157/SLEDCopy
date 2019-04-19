@@ -62,7 +62,7 @@
                      aria-controls="group_@o.OutcomeID">
                     <i class="material-icons" style="@(@filledCriteria == @numCriteria ? "" : "transform: rotate(180deg); border-spacing: 180px;")">expand_more </i>
                     @o.Name
-                    <span style="position: absolute; right: 5px; top: 5px; width: 60px;" class="float-right badge badge-dark"><span id="filled_@o.OutcomeID">@filledCriteria</span> / @numCriteria</span>
+                    <span style="position: absolute; right: 5px; top: 5px; width: 60px;" class="float-right badge badge-dark"><span class="assessedCount" id="filled_@o.OutcomeID">@filledCriteria</span> / <span id="total_@o.OutcomeID">@numCriteria</span></span>
                 </div>
 
                 <ul class="list-group list-group-flush collapse  @(@filledCriteria == @numCriteria ? "" : "show") " id="group_@o.OutcomeID">
@@ -237,6 +237,8 @@
 
             $('#modalNotAssessed').on('click', function (e) {
                 $(".notAssessed").prop('checked', 'true');
+                //document.querySelectorAll('.assessedCount').forEach();
+            //};
 
             });
 

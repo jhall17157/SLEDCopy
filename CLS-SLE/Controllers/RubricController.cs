@@ -37,23 +37,45 @@ namespace CLS_SLE.Controllers
         }
         public ActionResult AddRubric(int? assessmentID)
         {
-            return View();
+            dynamic model = new ExpandoObject();
+            model.assessmentID = null;
+
+            if (assessmentID != null)
+            {
+                model.assessmentID = assessmentID;
+            }
+            return View(model);
         }
         public ActionResult InsertNewRubric(FormCollection formCollection)
         {
             try
             {
                 db.AssessmentRubrics.Load();
+                db.RubricAssessments.Load();
                 AssessmentRubric addRubric = db.AssessmentRubrics.Create();
-
-                addRubric.AssessmentID = 1; //default to 1 until we know how to handle properly
+                if (formCollection["assessmentID"].Equals("0") || formCollection["assessmentID"] == null)
+                {
+                    addRubric.AssessmentID = null;
+                } else
+                {
+                    addRubric.AssessmentID = Int16.Parse(formCollection["assessmentID"]);
+                }
                 addRubric.Name = formCollection["Name"];
                 addRubric.Description = formCollection["Description"];
                 addRubric.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
                 addRubric.CreatedDateTime = DateTime.Now;
                 addRubric.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-
                 db.Entry(addRubric).State = EntityState.Added;
+                db.SaveChanges();
+
+                RubricAssessment rubricAssessment = db.RubricAssessments.Create();
+                rubricAssessment.AssessmentID = (Int16)addRubric.AssessmentID;
+                rubricAssessment.RubricID = addRubric.RubricID;
+                rubricAssessment.CreatedDateTime = addRubric.CreatedDateTime;
+                rubricAssessment.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                rubricAssessment.StartDate = DateTime.Parse(formCollection["startDate"]);
+                rubricAssessment.EndDate = DateTime.Parse(formCollection["endDate"]);
+                db.Entry(rubricAssessment).State = EntityState.Added;
                 db.SaveChanges();
 
                 return RedirectToAction(actionName: "Index", controllerName: "Rubric");

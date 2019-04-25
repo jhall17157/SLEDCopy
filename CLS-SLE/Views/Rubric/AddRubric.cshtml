@@ -6,6 +6,13 @@
 <h2>Add Rubric</h2>
 
 <form method="post" action="/Rubric/InsertNewRubric">
+    <input type="hidden" name="assessmentID" value="@{
+        if (Model.assessmentID == null)
+        {
+            <text>0</text>;
+        } else {
+            @Model.assessmentID; 
+        } } " />
     <div class="form-row">
         <div class="form-group col-9">
             <label for="Name">Name:</label>
@@ -31,6 +38,16 @@
             </div>
         </div>
     </fieldset>
+    <div class="row">
+        <div class="form-group col-4">
+            <label for="startDate">Start Date: </label>
+            <input type="date" name="startDate" />
+        </div>
+        <div class="form-group col-4">
+            <label for="endDate">End Date: </label>
+            <input type="date" name="endDate" />
+        </div>
+    </div>
     <div class="row justify-content-end col-9">
         <div class="col-2 p-0 mx-1"><button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Submit</button></div>
         <div class="col-2 p-0 mx-1"><a href="/Rubric/Index"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>

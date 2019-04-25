@@ -189,8 +189,6 @@ namespace CLS_SLE.Controllers
                 addAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
                 addAssessment.CreatedDateTime = DateTime.Now;
                 addAssessment.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-                
-
 
 
 

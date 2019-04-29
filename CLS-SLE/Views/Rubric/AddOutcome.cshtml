@@ -7,7 +7,7 @@
 
 <form method="post" action="/Rubric/InsertNewOutcome">
     <div hidden>
-        <input type="hidden" name="RubricID" value="@Model.ID" />
+        <input type="hidden" name="RubricID" value="@Model.OutcomeID" />
     </div>
     <div class="form-row">
         <div class="form-group col-9">
@@ -34,12 +34,12 @@
             </div>
         </div>
     </fieldset>
-    <div class="form-row">
+    @*<div class="form-row">
         <div class="form-group col-9">
             <label for="SortOrder">Sort Order:</label>
             <input type="text" name="SortOrder" class="form-control" />
         </div>
-    </div>
+    </div>*@
     <div class="form-row">
         <div class="form-group col-9">
             <label for="PassPercent">Pass Percentage:</label>

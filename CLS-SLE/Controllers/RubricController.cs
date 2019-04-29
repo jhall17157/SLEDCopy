@@ -107,8 +107,8 @@ namespace CLS_SLE.Controllers
                 editRubric.Name = formCollection["Name"];
                 editRubric.Description = formCollection["Description"];
                 editRubric.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
-                editRubric.CreatedDateTime = DateTime.Now;
-                editRubric.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                editRubric.ModifiedDateTime = DateTime.Now;
+                editRubric.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
                 db.Entry(editRubric).State = EntityState.Modified;
                 db.SaveChanges();
 
@@ -130,10 +130,10 @@ namespace CLS_SLE.Controllers
             Model.Criteria = db.Criteria.Where(c => c.OutcomeID == outcomeID).ToList();
             return View(Model);
         }
-        public ActionResult AddOutcome(int? id)
+        public ActionResult AddOutcome(int? outcomeID)
         {
             dynamic Model = new ExpandoObject();
-            Model.ID = id;
+            Model.OutcomeID = outcomeID;
             return View(Model);
         }
         public ActionResult InsertNewOutcome(FormCollection formCollection)
@@ -141,7 +141,7 @@ namespace CLS_SLE.Controllers
             try
             {
                 Int16 RubricId = Int16.Parse(formCollection["RubricId"]);
-                Byte SortOrder = Byte.Parse(formCollection["SortOrder"]);
+                //Byte SortOrder = Byte.Parse(formCollection["SortOrder"]);\
 
                 db.Outcomes.Load();
                 Outcome addOutcome = db.Outcomes.Create();
@@ -150,7 +150,8 @@ namespace CLS_SLE.Controllers
                 addOutcome.Name = formCollection["Name"];
                 addOutcome.Description = formCollection["Description"];
                 addOutcome.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
-                addOutcome.SortOrder = SortOrder;
+                //addOutcome.SortOrder = SortOrder;
+                addOutcome.SortOrder = 1;
                 addOutcome.CriteriaPassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
                 addOutcome.CalculateCriteriaPassRate = ((formCollection["CalculateCriteriaPassRate"]).Equals("True") ? true : false);
                 addOutcome.CreatedDateTime = DateTime.Now;
@@ -181,7 +182,7 @@ namespace CLS_SLE.Controllers
             try
             {
                 Int16 RubricId = Int16.Parse(formCollection["RubricId"]);
-                Byte SortOrder = Byte.Parse(formCollection["SortOrder"]);
+                //Byte SortOrder = Byte.Parse(formCollection["SortOrder"]);
 
                 db.Outcomes.Load();
                 Outcome editOutcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
@@ -190,11 +191,11 @@ namespace CLS_SLE.Controllers
                 editOutcome.Name = formCollection["Name"];
                 editOutcome.Description = formCollection["Description"];
                 editOutcome.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
-                editOutcome.SortOrder = SortOrder;
+                //editOutcome.SortOrder = SortOrder;
                 editOutcome.CriteriaPassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
                 editOutcome.CalculateCriteriaPassRate = ((formCollection["CalculateCriteriaPassRate"]).Equals("True") ? true : false);
-                editOutcome.CreatedDateTime = DateTime.Now;
-                editOutcome.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                editOutcome.ModifiedDateTime = DateTime.Now;
+                editOutcome.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
 
                 db.Entry(editOutcome).State = EntityState.Modified;
                 db.SaveChanges();
@@ -215,13 +216,80 @@ namespace CLS_SLE.Controllers
             Model.Criterion = db.Criteria.Where(c => c.CriteriaID == criterionID).FirstOrDefault();
             return View(Model);
         }
-        public ActionResult AddCriterion(int? outcomeID)
+        public ActionResult AddCriterion(int? id)
         {
-            return View();
+            dynamic Model = new ExpandoObject();
+            Model.ID = id;
+            return View(Model);
+        }
+
+        public ActionResult InsertNewCriterion(int? criterionID, FormCollection formCollection)
+        {
+            try
+            {
+                Int16 CriteriaId = Int16.Parse(formCollection["CriteriaId"]);
+                //Byte SortOrder = Byte.Parse(formCollection["SortOrder"]);
+
+                db.Criteria.Load();
+                Criterion addCriteria = db.Criteria.Create();
+
+                addCriteria.CriteriaID = (Int16)criterionID;
+                addCriteria.Name = formCollection["Name"];
+                addCriteria.ExampleText = formCollection["ExampleText"];
+                addCriteria.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
+                //addCriteria.SortOrder = SortOrder;
+                addCriteria.SortOrder = 1;
+                addCriteria.CreatedDateTime = DateTime.Now;
+                addCriteria.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+
+                db.Entry(addCriteria).State = EntityState.Added;
+                db.SaveChanges();
+
+                return RedirectToAction("ViewCriterion", new RouteValueDictionary(new { controller = "Rubric", action = "ViewCriterion", criterionID = addCriteria.CriteriaID }));
+
+            }
+            catch
+            {
+                //logger.Error("Failed to save assessment, redirecting to sign in page.");
+                return RedirectToAction(actionName: "Signin", controllerName: "User");
+            }
         }
         public ActionResult EditCriterion(int? criterionID)
         {
-            return View();
+            dynamic Model = new ExpandoObject();
+            Model.Criterion = db.Criteria.Where(c => c.CriteriaID == criterionID).FirstOrDefault();
+
+            return View(Model);
+        }
+        public ActionResult SaveCriterion(int? criterionID, FormCollection formCollection)
+        {
+            try
+            {
+                Int16 CriteriaId = Int16.Parse(formCollection["CriteriaId"]);
+                //Byte SortOrder = Byte.Parse(formCollection["SortOrder"]);
+
+                db.Criteria.Load();
+                Criterion editCriteria = db.Criteria.Where(c => c.CriteriaID == criterionID).FirstOrDefault();
+
+                editCriteria.CriteriaID = (Int16)criterionID; //default to 1 until we know how to handle properly
+                editCriteria.Name = formCollection["Name"];
+                editCriteria.ExampleText = formCollection["ExampleText"];
+                editCriteria.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
+                //editCriteria.SortOrder = SortOrder;
+                editCriteria.CreatedDateTime = DateTime.Now;
+                editCriteria.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+
+                db.Entry(editCriteria).State = EntityState.Modified;
+                db.SaveChanges();
+
+                return RedirectToAction("ViewCriterion", new RouteValueDictionary(new { controller = "Rubric", action = "ViewCriterion", criterionID = editCriteria.CriteriaID }));
+
+            }
+            catch
+            {
+                //logger.Error("Failed to save assessment, redirecting to sign in page.");
+                return RedirectToAction(actionName: "Signin", controllerName: "User");
+            }
         }
     }
 }

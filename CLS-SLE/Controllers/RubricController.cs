@@ -112,6 +112,13 @@ namespace CLS_SLE.Controllers
                 db.Entry(editRubric).State = EntityState.Modified;
                 db.SaveChanges();
 
+                //if (!editRubric.IsActive)
+                //{
+                //    db.Criteria.Load();
+                //    db.Outcomes.Load();
+                //    var Outcomes = db.Outcomes.Where(o => o.RubricID == rubricID);
+                //    var Criteria = db.Criteria.Where(c => c.OutcomeID.Equa )
+                //}
                 //return RedirectToAction(actionName: "Rubric", controllerName: "Rubric", routeValues: "rubricID" = rubricID);
                 return RedirectToAction("ViewRubric", new RouteValueDictionary(new { controller = "Rubric", action = "ViewRubric", rubricID }));
             }

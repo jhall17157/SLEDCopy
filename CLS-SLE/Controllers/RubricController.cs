@@ -5,6 +5,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using CLS_SLE.Models;
 
 namespace CLS_SLE.Controllers
@@ -78,7 +79,7 @@ namespace CLS_SLE.Controllers
                 db.Entry(rubricAssessment).State = EntityState.Added;
                 db.SaveChanges();
 
-                return RedirectToAction(actionName: "Index", controllerName: "Rubric");
+                return RedirectToAction("ViewRubric", new RouteValueDictionary(new { controller = "Rubric", action = "ViewRubric", addRubric.RubricID}));
 
             }
             catch
@@ -89,7 +90,36 @@ namespace CLS_SLE.Controllers
         }
         public ActionResult EditRubric(int? rubricID)
         {
-            return View();
+            dynamic Model = new ExpandoObject();
+            Model.Rubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
+
+            return View(Model);
+        }
+
+        public ActionResult SaveRubric(int? rubricID, FormCollection formCollection)
+        {
+            try
+            {
+                db.AssessmentRubrics.Load();
+                db.RubricAssessments.Load();
+                AssessmentRubric editRubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
+                
+                editRubric.Name = formCollection["Name"];
+                editRubric.Description = formCollection["Description"];
+                editRubric.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
+                editRubric.CreatedDateTime = DateTime.Now;
+                editRubric.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                db.Entry(editRubric).State = EntityState.Modified;
+                db.SaveChanges();
+
+                //return RedirectToAction(actionName: "Rubric", controllerName: "Rubric", routeValues: "rubricID" = rubricID);
+                return RedirectToAction("ViewRubric", new RouteValueDictionary(new { controller = "Rubric", action = "ViewRubric", rubricID }));
+            }
+            catch
+            {
+                //logger.Error("Failed to save assessment, redirecting to sign in page.");
+                return RedirectToAction(actionName: "Signin", controllerName: "User");
+            }
         }
 
 
@@ -129,7 +159,7 @@ namespace CLS_SLE.Controllers
                 db.Entry(addOutcome).State = EntityState.Added;
                 db.SaveChanges();
 
-                return RedirectToAction(actionName: "Index", controllerName: "Rubric");
+                return RedirectToAction("ViewOutcome", new RouteValueDictionary(new { controller = "Rubric", action = "ViewOutcome", addOutcome.OutcomeID }));
 
             }
             catch
@@ -140,9 +170,44 @@ namespace CLS_SLE.Controllers
         }
         public ActionResult EditOutcome(int? outcomeID)
         {
-            return View();
+            dynamic Model = new ExpandoObject();
+            Model.Outcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
+
+            return View(Model);
         }
 
+        public ActionResult SaveOutcome(int? outcomeID, FormCollection formCollection)
+        {
+            try
+            {
+                Int16 RubricId = Int16.Parse(formCollection["RubricId"]);
+                Byte SortOrder = Byte.Parse(formCollection["SortOrder"]);
+
+                db.Outcomes.Load();
+                Outcome editOutcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
+
+                editOutcome.RubricID = RubricId;
+                editOutcome.Name = formCollection["Name"];
+                editOutcome.Description = formCollection["Description"];
+                editOutcome.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
+                editOutcome.SortOrder = SortOrder;
+                editOutcome.CriteriaPassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
+                editOutcome.CalculateCriteriaPassRate = ((formCollection["CalculateCriteriaPassRate"]).Equals("True") ? true : false);
+                editOutcome.CreatedDateTime = DateTime.Now;
+                editOutcome.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+
+                db.Entry(editOutcome).State = EntityState.Modified;
+                db.SaveChanges();
+
+                return RedirectToAction("ViewOutcome", new RouteValueDictionary(new { controller = "Rubric", action = "ViewOutcome", outcomeID }));
+
+            }
+            catch
+            {
+                //logger.Error("Failed to save assessment, redirecting to sign in page.");
+                return RedirectToAction(actionName: "Signin", controllerName: "User");
+            }
+        }
 
         public ActionResult ViewCriterion(int? criterionID)
         {

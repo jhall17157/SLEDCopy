@@ -14,6 +14,11 @@
 <div class="py-1">
     Is Active: @Model.Outcome.IsActive
 </div>
+
+<div>
+    <a href="/Rubric/EditOutcome?outcomeID=@Model.Outcome.OutcomeID">Edit Outcome</a>
+</div>
+
 @*@if (Model.ModifierLogin != null)
     {
         <div class="py-1">
@@ -36,44 +41,44 @@
 
 
 @*<div>
-    @{ if (Model.canEdit)
-        {
-            @Html.ActionLink("Edit Assessment", "EditAssessment", new { Model.assessment.AssessmentID })
-        }
-    }
-
-    @{
-            if (Model.canAdd)
+        @{ if (Model.canEdit)
             {
-@Html.ActionLink("Add Assessment", "AddAssessment", new { Model.assessment.AssessmentID })
+                @Html.ActionLink("Edit Assessment", "EditAssessment", new { Model.assessment.AssessmentID })
             }
         }
-        </div>*@
 
-        <table class="table table-hover">
-
-            <thead class="thead-dark">
-                <tr>
-                    <th class="col-3 h3">Name</th>
-                    <th class="col-7">Description</th>
-                    <th class="col-2 text-right"><a href="/Rubric/AddCriterion"><button type="button" class="btn btn-primary">Add New</button></a></th>
-
-                </tr>
-            </thead>
-            <tbody>
-
-                @foreach (Criterion criterion in Model.Criteria)
+        @{
+                if (Model.canAdd)
                 {
-                    <tr>
-
-                        <td colspan="2">@criterion.Name</td>
-                        <td class="text-right">
-                            <a href="ViewCriterion?criterionID=@criterion.CriteriaID"><button type="button" class="btn btn-primary">View</button></a>
-                        </td>
-
-                    </tr>
+    @Html.ActionLink("Add Assessment", "AddAssessment", new { Model.assessment.AssessmentID })
                 }
+            }
+            </div>*@
 
-            </tbody>
-        </table>
+<table class="table table-hover">
+
+    <thead class="thead-dark">
+        <tr>
+            <th class="col-3 h3">Name</th>
+            <th class="col-7">Description</th>
+            <th class="col-2 text-right"><a href="/Rubric/AddCriterion"><button type="button" class="btn btn-primary">Add New</button></a></th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (Criterion criterion in Model.Criteria)
+        {
+            <tr>
+
+                <td colspan="2">@criterion.Name</td>
+                <td class="text-right">
+                    <a href="ViewCriterion?criterionID=@criterion.CriteriaID"><button type="button" class="btn btn-primary">View</button></a>
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+</table>
 

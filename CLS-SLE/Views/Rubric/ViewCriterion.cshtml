@@ -14,6 +14,10 @@
 <div class="py-1">
     Is Active: @Model.Criterion.IsActive
 </div>
+
+<div>
+    <a href="/Rubric/EditCriterion?criterionID=@Model.Criterion.CriterionID">Edit Criterion</a>
+</div>
 @*@if (Model.ModifierLogin != null)
     {
         <div class="py-1">

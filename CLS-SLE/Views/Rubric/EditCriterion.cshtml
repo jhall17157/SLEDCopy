@@ -5,28 +5,28 @@
 
 <h2>Edit Criterion</h2>
 
-<form method="post" action="/Rubric/SaveCriterion">
+<form method="post" action="/Rubric/SaveCriterion?criterionID=@Model.Criterion.CriterionID">
     <div class="form-row">
         <div class="form-group col-9">
             <label for="Name">Name:</label>
-            <input type="text" name="Name" class="form-control" value="@Model.Name" />
+            <input type="text" name="Name" class="form-control" value="@Model.Criterion.Name" />
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-9">
             <label for="ExampleText">Example Text:</label>
-            <textarea name="ExampleText" class="form-control" rows="6" value="@Model.ExampleText"></textarea>
+            <textarea name="ExampleText" class="form-control" rows="6" value="@Model.Criterion.ExampleText"></textarea>
         </div>
     </div>
     <fieldset class="form-group col-9">
         <div class="row">
             <legend class="col-form-label col-4 pt-0">Is Active:</legend>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="IsActive" id="IsActiveTrue" value="True" @(Model.IsActive ? " checked=\"checked\"" : "")>
+                <input class="form-check-input" type="radio" name="IsActive" id="IsActiveTrue" value="True" @(Model.Criterion.IsActive ? " checked=\"checked\"" : "")>
                 <label class="form-check-label" for="IsActiveTrue">True</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="IsActive" id="IsActiveFalse" value="False" @(!Model.IsActive ? " checked=\"checked\"" : "")>
+                <input class="form-check-input" type="radio" name="IsActive" id="IsActiveFalse" value="False" @(!Model.Criterion.IsActive ? " checked=\"checked\"" : "")>
                 <label class="form-check-label" for="IsActiveFalse">False</label>
             </div>
         </div>
@@ -40,10 +40,10 @@
     @*TODO InactiveDateTime*@
     <div class="row justify-content-end col-9">
         <div class="col-2 p-0 mx-1"><button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Update</button></div>
-        <div class="col-2 p-0 mx-1"><a href="/Rubric/ViewCriterion"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
+        <div class="col-2 p-0 mx-1"><a href="/Rubric/ViewCriterion?criterionID=@Model.Criterion.CriterionID"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
     </div>
 
     <div hidden>
-        <input name="assessmentID" value="@Model.AssessmentID" type="hidden" />
+        <input name="outcomeID" value="@Model.OutcomeID" type="hidden" />
     </div>
 </form>

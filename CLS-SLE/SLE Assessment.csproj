@@ -258,6 +258,7 @@
     <Compile Include="Models\InstructorAssessment.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ManageRole.cs" />
     <Compile Include="Models\ManageUser.cs" />
     <Compile Include="Models\Outcome.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
@@ -2126,6 +2127,7 @@
     <Content Include="Views\AdminUser\Index.cshtml" />
     <Content Include="Views\AdminUser\Create.cshtml" />
     <Content Include="Views\AdminUser\Edit.cshtml" />
+    <Content Include="Views\RoleAdmin\ManageRole.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

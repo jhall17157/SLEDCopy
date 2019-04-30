@@ -6,7 +6,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Linq;
 using CLS_SLE.Models;
 using System.Data.SqlClient;
-
+using System.Collections.Generic;
 
 namespace CLS_SLE.Controllers
 {
@@ -55,6 +55,48 @@ namespace CLS_SLE.Controllers
             db.Roles.Remove(role);
             db.SaveChanges();
             return RedirectToAction(actionName: "Index", controllerName: "RoleAdmin");
+        }
+
+        [HttpGet]
+        public ActionResult ManageRole(int id)
+        {
+
+                int RoleID = id;
+                var Permissions = (from permission in db.Permissions
+                             select permission).OrderBy(r => r.Name);
+                var RolePermissions = from rolePermissions in db.RolePermissions
+                                where rolePermissions.RoleID == RoleID
+                                select rolePermissions;
+                var Role = (from role in db.Roles where role.RoleID == RoleID select role).FirstOrDefault();
+
+                ManageRole Model = new ManageRole(Role.RoleID, Role.Name, Permissions.ToList(), RolePermissions.ToList());
+
+
+                return View(Model);
+        }
+
+        public ActionResult RoleAssign(int role, List<short> permissions)
+        {
+            var results = db.RolePermissions.Where(rp => rp.RoleID == role);
+            foreach (RolePermission rolePermission in results)
+            {
+                db.RolePermissions.Remove(rolePermission);
+            }
+
+            foreach (short permission in permissions)
+            {
+                RolePermission rolePermission = new RolePermission()
+                {
+                    RoleID = (short)role,
+                    PermissionID = permission
+                };
+
+                db.RolePermissions.Add(rolePermission);
+            }
+
+            db.SaveChanges();
+
+            return RedirectToAction(actionName: "AdminDashboard", controllerName: "Admin");
         }
     }
 }

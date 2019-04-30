@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create User</h2>
+
+<form action="CreateUser" method="post">
+    <div class="form-group">
+        <label for="fName">First Name:</label><br />
+        <input type="text" id="fName" name="fName" required />
+        <br />
+        <label for="lName">Last Name:</label><br />
+        <input type="text" id="lName" name="lName" required />
+        <br />
+        <label for="id">ID:</label><br />
+        <input type="text" id="id" name="id" required />
+        <br />
+        <label for="email">Email:</label><br />
+        <input type="email" id="email" name="email" required />
+        <br /><br />
+        <input type="submit" class="btn btn-primary" value="Submit" />
+    </div>
+</form>

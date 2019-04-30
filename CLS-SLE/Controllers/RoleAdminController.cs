@@ -47,16 +47,14 @@ namespace CLS_SLE.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Delete([Required]short id)
+        public ActionResult Delete(FormCollection form)
         {
-            if (ModelState.IsValid)
-            {
-                    var role = db.Roles.Where(r => id == r.RoleID).SingleOrDefault();
-                    db.Roles.Remove(role);
-                    db.SaveChanges();
-
-            }
-            return View("Index", db.Roles);
+            short id = short.Parse(form["id"]);
+            var role = new Role();
+            role = db.Roles.Where(r => r.RoleID == id).FirstOrDefault();
+            db.Roles.Remove(role);
+            db.SaveChanges();
+            return RedirectToAction(actionName: "Index", controllerName: "RoleAdmin");
         }
     }
 }

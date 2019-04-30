@@ -190,6 +190,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AdminUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstructorAssessmentsController.cs" />
     <Compile Include="Controllers\RoleAdminController.cs" />
@@ -2133,6 +2134,9 @@
     <Content Include="Views\Rubric\EditOutcome.cshtml" />
     <Content Include="Views\Rubric\AddCriterion.cshtml" />
     <Content Include="Views\Rubric\EditCriterion.cshtml" />
+    <Content Include="Views\AdminUser\Index.cshtml" />
+    <Content Include="Views\AdminUser\Create.cshtml" />
+    <Content Include="Views\AdminUser\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

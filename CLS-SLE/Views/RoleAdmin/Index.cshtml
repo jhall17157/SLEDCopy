@@ -24,10 +24,10 @@
     <table class="table table-hover table-striped">
         <thead class="thead-dark">
             <tr>
-                <th class="col-1">ID</th>
-                <th class="col-5">Name</th>
-                <th class="col-5"></th>
-                <th class="col-1 justify-content-end"></th>
+                <th class="col">ID</th>
+                <th class="col">Name</th>
+                <th class="col"></th>
+                <th class="col justify-content-end"></th>
             </tr>
         </thead>
         @{ if (Model.Count() == 0)
@@ -44,11 +44,18 @@
                         <td>@Role.RoleID</td>
                         <td>@Role.Name</td>
                         <td class="text-right">
+                            @if (Role.RoleID > 2)
+                            {
                             <a href="/RoleAdmin/Edit?ID=@Role.RoleID"><button type="button" class="btn btn-primary">Edit</button></a>
+                            }
                         </td>
                         <td class="text-right">
-                            <form asp-action="Delete" asp-route-id="@Role.RoleID" method="post">
+                            <form action="~/RoleAdmin/Delete" method="post">
+                                @if (Role.RoleID > 2 && Role.UserRoles.Count() == 0)
+                                {
+                                <input type="hidden" name="id" value="@Role.RoleID"/>
                                 <button type="submit" class="btn btn-danger">Delete</button>
+                                }
                             </form>
                         </td>
                     
@@ -61,6 +68,6 @@
 
     <a href="/RoleAdmin/Create"><button type="button" class="btn btn-success">Create</button></a>
     <hr />
-    <a asp-controller="Admin">User Accounts</a>
+    <a href="~/AdminUser/Index">User Accounts</a>
 
 </div>

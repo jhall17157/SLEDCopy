@@ -16,7 +16,7 @@
 </div>
 
 <div>
-    <a href="/Rubric/EditRubric?rubricID=@Model.Rubric.RubricID">Edit Rubric</a>
+    <a href="/Rubric/EditRubric?rubricID=@Model.Rubric.RubricID"><b>Edit Rubric</b><br /></a>
 </div>
 @*@if (Model.ModifierLogin != null)
 {
@@ -58,7 +58,7 @@ else if (Model.CreatorLogin != null)
 
     <thead class="thead-dark">
         <tr>
-            <th class="col-3 h3">Name</th>
+            <th class="col-3 h3">Outcome</th>
             <th class="col-7">Description</th>
             <th class="col-2 text-right"><a href="/Rubric/AddOutcome?id=@Model.Rubric.RubricID"><button type="button" class="btn btn-primary">Add New</button></a></th>
 

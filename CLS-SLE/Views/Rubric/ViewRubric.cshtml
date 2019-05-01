@@ -1,0 +1,82 @@
+﻿@using CLS_SLE.Models;
+@{
+    ViewBag.Title = "View Rubric";
+}
+
+<h2>View Rubric</h2>
+
+<div class="py-1">
+    <h3>@Model.Rubric.Name</h3>
+</div>
+<div class="py-1">
+    Description: @Model.Rubric.Description
+</div>
+<div class="py-1">
+    Is Active: @Model.Rubric.IsActive
+</div>
+
+<div>
+    <a href="/Rubric/EditRubric?rubricID=@Model.Rubric.RubricID"><b>Edit Rubric</b><br /></a>
+</div>
+@*@if (Model.ModifierLogin != null)
+{
+    <div class="py-1">
+        Last Modified:  @Model.assessment.ModifiedDateTime
+    </div>
+    <div class="py-1">
+        By: @Model.ModifierLogin
+    </div>
+}
+else if (Model.CreatorLogin != null)
+{
+    <div class="py-1">
+        Created: @Model.assessment.CreatedDateTime
+    </div>
+    <div class="py-1">
+        By: @Model.CreatorLogin
+    </div>
+}*@
+
+
+
+@*<div>
+    @{ if (Model.canEdit)
+        {
+            @Html.ActionLink("Edit Assessment", "EditAssessment", new { Model.assessment.AssessmentID })
+        }
+    }
+
+    @{
+            if (Model.canAdd)
+            {
+                @Html.ActionLink("Add Assessment", "AddAssessment", new { Model.assessment.AssessmentID })
+            }
+        }
+</div>*@
+
+<table class="table table-hover">
+
+    <thead class="thead-dark">
+        <tr>
+            <th class="col-3 h3">Outcome</th>
+            <th class="col-7">Description</th>
+            <th class="col-2 text-right"><a href="/Rubric/AddOutcome?id=@Model.Rubric.RubricID"><button type="button" class="btn btn-primary">Add New</button></a></th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (Outcome outcome in Model.Outcomes)
+        {
+            <tr>
+
+                <td colspan="2">@outcome.Name</td>
+                <td class="text-right">
+                    <a href="ViewOutcome?outcomeID=@outcome.OutcomeID"><button type="button" class="btn btn-primary">View</button></a>
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+</table>

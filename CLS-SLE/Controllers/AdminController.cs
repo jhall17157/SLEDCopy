@@ -54,7 +54,7 @@ namespace CLS_SLE.Controllers
 
                 dynamic model = new ExpandoObject();
 
-                model.assessments = adminAssessments.Distinct().ToList();
+                model.assessments = adminAssessments.Distinct().OrderByDescending(a => a.IsActive).ThenBy(a => a.Name).ToList();
                 model.categories = categories;
 
                 return View(model);
@@ -94,6 +94,9 @@ namespace CLS_SLE.Controllers
                 }
 
                 dynamic model = new ExpandoObject();
+                model.CreatorLogin = null;
+                model.ModifierLogin = null;
+
                 if (assessment.CreatedByLoginID != null)
                 {
                     model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == assessment.CreatedByLoginID).FirstOrDefault().Login;
@@ -127,19 +130,19 @@ namespace CLS_SLE.Controllers
             {
                 if (assessmentId.HasValue)
                 {
-                    var canEdit = false;
+                    //var canEdit = false;
                     assessment = db.Assessments.FirstOrDefault(a => a.AssessmentID == assessmentId.Value);
-                    var permission = db.AssessmentRubricSecurities.FirstOrDefault(p => p.AssessmentID == assessmentId.Value);
+                    //var permission = db.AssessmentRubricSecurities.FirstOrDefault(p => p.AssessmentID == assessmentId.Value);
 
-                    if (permission != null)
-                    {
-                        canEdit = permission.CanEdit == 1 ? true : false;
-                    }
+                    //if (permission != null)
+                    //{
+                    //    canEdit = permission.CanEdit == 1 ? true : false;
+                    //}
 
-                    if (!canEdit)
-                    {
-                        throw new Exception("User cannot edit this assessment");
-                    }
+                    //if (!canEdit)
+                    //{
+                    //    throw new Exception("User cannot edit this assessment");
+                    //}
                 }
                 else
                 {
@@ -186,8 +189,6 @@ namespace CLS_SLE.Controllers
                 addAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
                 addAssessment.CreatedDateTime = DateTime.Now;
                 addAssessment.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-                
-
 
 
 

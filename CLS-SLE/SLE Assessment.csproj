@@ -109,7 +109,7 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.6.2\lib\net45\NLog.dll</HintPath>
@@ -194,6 +194,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstructorAssessmentsController.cs" />
     <Compile Include="Controllers\RoleAdminController.cs" />
+    <Compile Include="Controllers\RubricController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -2124,6 +2125,16 @@
     <Content Include="Views\Admin\AddAssessment.cshtml" />
     <Content Include="Views\Admin\EditAssessment.cshtml" />
     <Content Include="Views\Admin\ViewAssessment.cshtml" />
+    <Content Include="Views\Rubric\Index.cshtml" />
+    <Content Include="Views\Rubric\ViewRubric.cshtml" />
+    <Content Include="Views\Rubric\ViewOutcome.cshtml" />
+    <Content Include="Views\Rubric\ViewCriterion.cshtml" />
+    <Content Include="Views\Rubric\AddRubric.cshtml" />
+    <Content Include="Views\Rubric\EditRubric.cshtml" />
+    <Content Include="Views\Rubric\AddOutcome.cshtml" />
+    <Content Include="Views\Rubric\EditOutcome.cshtml" />
+    <Content Include="Views\Rubric\AddCriterion.cshtml" />
+    <Content Include="Views\Rubric\EditCriterion.cshtml" />
     <Content Include="Views\AdminUser\Index.cshtml" />
     <Content Include="Views\AdminUser\Create.cshtml" />
     <Content Include="Views\AdminUser\Edit.cshtml" />

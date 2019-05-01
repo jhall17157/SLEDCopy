@@ -1,0 +1,33 @@
+﻿@using CLS_SLE.Models;
+@{
+    ViewBag.Title = "Rubric Assessment";
+}
+
+<h2>Rubric Assessment Page</h2>
+
+<table class="table table-hover">
+
+    <thead class="thead-dark">
+        <tr>
+            <th class="col-3 h3">Name</th>
+            <th class="col-7">Description</th>
+            <th class="col-2 text-right"><a href="/Rubric/AddRubric"><button type="button" class="btn btn-primary">Add New</button></a></th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (AssessmentRubric rubric in Model.Rubrics)
+        {
+            <tr>
+
+                <td colspan="2">@rubric.Name</td>
+                <td class="text-right">
+                    <a href="/Rubric/ViewRubric?rubricID=@rubric.RubricID"><button type="button" class="btn btn-primary">View</button></a>
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+</table>

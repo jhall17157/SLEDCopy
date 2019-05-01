@@ -18,14 +18,22 @@ namespace CLS_SLE.Controllers
 
         public ActionResult Create() => View();
 
-        public ActionResult Edit() => View();
+        public ActionResult Edit(short id) {
+            User user = db.Users.Where(u => u.PersonID == id).FirstOrDefault();
+            Person person = db.People.Where(p => p.PersonID == id).FirstOrDefault();
+            ViewBag.Id = user.PersonID;
+            ViewBag.First = person.FirstName;
+            ViewBag.Last = person.LastName;
+            ViewBag.Email = user.Email;
+            ViewBag.Login = user.Login;
+            return View();
+        }
 
         public ActionResult CreateUser(FormCollection form)
         {
             string fName = form["fName"];
             string lName = form["lName"];
-            string login = fName.Substring(0, 1) + lName;
-            login = login.ToLower();
+            string login = form["login"];
             string id = form["id"];
             string email = form["email"];
             DateTime created = DateTime.Now;
@@ -51,6 +59,25 @@ namespace CLS_SLE.Controllers
             db.Users.Add(user);
             db.SaveChanges();
 
+            return RedirectToAction("Index", "AdminUser");
+        }
+
+        public ActionResult UpdateUser(FormCollection form)
+        {
+            short id = Int16.Parse(form["id"]);
+            string fName = form["fName"];
+            string lName = form["lName"];
+            string email = form["email"];
+
+            User updateU = db.Users.Where(u => u.PersonID == id).FirstOrDefault();
+            Person updateP = db.People.Where(p => p.PersonID == id).FirstOrDefault();
+
+            updateU.Email = email;
+            updateP.FirstName = fName;
+            updateP.LastName = lName;
+
+            db.SaveChanges();
+            
             return RedirectToAction("Index", "AdminUser");
         }
 

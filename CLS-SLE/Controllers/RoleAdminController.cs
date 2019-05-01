@@ -7,6 +7,7 @@ using System.Linq;
 using CLS_SLE.Models;
 using System.Data.SqlClient;
 using System.Collections.Generic;
+using System;
 
 namespace CLS_SLE.Controllers
 {
@@ -75,7 +76,37 @@ namespace CLS_SLE.Controllers
                 return View(Model);
         }
 
-        public ActionResult RoleAssign(int role, List<short> permissions)
+        [HttpPost]
+        public ActionResult UpdateRole(FormCollection form, String submit)
+        {
+            Int16 RoleID = RoleID = Int16.Parse(form["roleID"]);
+            Int16 PermissionID = PermissionID = Int16.Parse(form["permissionID"]);
+                switch (submit)
+                {
+                    case "add":
+                        RolePermission rolePermission = new RolePermission
+                        {
+                            RoleID = RoleID,
+                            PermissionID = PermissionID,
+                            CreatedDateTime = DateTime.Now,
+                            CreatedByLoginID = (int?)Session["personID"]
+
+                        };
+                        db.RolePermissions.Add(rolePermission);
+
+                        break;
+                    case "delete":
+                        var deletionEntry = (from RolePermission in db.RolePermissions
+                                             where RolePermission.RoleID == RoleID && RolePermission.PermissionID == PermissionID
+                                             select RolePermission).FirstOrDefault();
+                        db.RolePermissions.Remove(deletionEntry);
+                        break;
+                }
+                db.SaveChanges();
+                return Content("<html><script>window.location.href = '/RoleAdmin/ManageRole?id=" + RoleID.ToString() + "';</script></html>");
+        }
+
+        public ActionResult RoleAssign(int role, List<Permission> permissions)
         {
             var results = db.RolePermissions.Where(rp => rp.RoleID == role);
             foreach (RolePermission rolePermission in results)
@@ -83,12 +114,12 @@ namespace CLS_SLE.Controllers
                 db.RolePermissions.Remove(rolePermission);
             }
 
-            foreach (short permission in permissions)
+            foreach (Permission permission in permissions)
             {
                 RolePermission rolePermission = new RolePermission()
                 {
                     RoleID = (short)role,
-                    PermissionID = permission
+                    PermissionID = permission.PermissionID
                 };
 
                 db.RolePermissions.Add(rolePermission);

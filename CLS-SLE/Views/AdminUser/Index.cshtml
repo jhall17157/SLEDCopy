@@ -5,7 +5,7 @@
 @using CLS_SLE.Models;
 @model IEnumerable<User>
 
-<h1>Roles</h1>
+<h1>Users</h1>
 
 <div class="container">
     <br />
@@ -18,7 +18,7 @@
     <table class="table table-hover table-striped">
         <thead class="thead-dark">
             <tr>
-                <th class="col">ID</th>
+                <th class="col">Login</th>
                 <th class="col">Name</th>
                 <th class="col"></th>
                 <th class="col justify-content-end"></th>
@@ -35,10 +35,10 @@
 
                     <tr>
 
-                        <td>@User.PersonID</td>
                         <td>@User.Login</td>
+                        <td>@User.Person.LastName, @User.Person.FirstName</td>
                         <td class="text-right">
-                                <a href="/RoleAdmin/Edit?ID=@User.PersonID"><button type="button" class="btn btn-primary">Edit</button></a>
+                                <a href="/AdminUser/Edit?ID=@User.PersonID"><button type="button" class="btn btn-primary">Edit</button></a>
                         </td>
                         <td class="text-right">
                             <form action="~/AdminUser/Activate" method="post">

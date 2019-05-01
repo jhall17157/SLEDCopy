@@ -40,13 +40,11 @@
                 {
                     
                 <tr>
-                    
-                        <td>@Role.RoleID</td>
                         <td>@Role.Name</td>
                         <td class="text-right">
                             @if (Role.RoleID > 2)
                             {
-                            <a href="/RoleAdmin/Assign?ID=@Role.RoleID"><button type="button" class="btn btn-primary">Edit</button></a>
+                            <a href="/RoleAdmin/ManageRole?ID=@Role.RoleID"><button type="button" class="btn btn-primary">Edit</button></a>
                             }
                         </td>
                         <td class="text-right">

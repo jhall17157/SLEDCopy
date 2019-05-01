@@ -1,20 +1,26 @@
 ﻿
 @{
     ViewBag.Title = "Edit";
+    
 }
 
 <h2>Edit User</h2>
 
-<form action="CreateUser" method="post">
+<form action="UpdateUser" method="post">
     <div class="form-group">
+        <input type="hidden" name="id" id="id" value="@ViewBag.Id" />
         <label for="fName">First Name:</label><br />
-        <input type="text" id="fName" name="fName" />
+        <input type="text" id="fName" name="fName" value="@ViewBag.First" required />
         <br />
         <label for="lName">Last Name:</label><br />
-        <input type="text" id="lName" name="lName" />
+        <input type="text" id="lName" name="lName" value="@ViewBag.Last" required />
+        <br />
+        <label for="login">Login:</label><br />
+        <input type="text" id="login" name="login" value="@ViewBag.Login" required />
         <br />
         <label for="email">Email:</label><br />
-        <input type="email" id="email" name="email" />
+        <input type="email" id="email" name="email" value="@ViewBag.Email" required />
+
         <br /><br />
         <input type="submit" class="btn btn-primary" value="Submit" />
     </div>

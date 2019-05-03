@@ -103,7 +103,7 @@ namespace CLS_SLE.Controllers
                 logger.Info("Assessment loaded for student " + student.FirstName + " by " + instructor.Login + " in assesssment with rubricID " + rubricID);
                 var rubric = db.InstructorAssessments.FirstOrDefault(n => n.RubricID == instructor.RubricID && n.SectionID == instructor.SectionID);
 
-                var outcomes = db.Outcomes.Where(c => c.RubricID == instructor.RubricID);
+                var outcomes = db.Outcomes.Where(c => c.RubricID == instructor.RubricID && c.IsActive == true);
 
                 var criteria = db.RubricDetails.Where(c => c.RubricID == instructor.RubricID);
 

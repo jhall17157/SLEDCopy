@@ -6,7 +6,7 @@
 <h2>View Assessment</h2>
 
 <div class="py-1">
-    <h3>@Model.assessment.Name</h3>
+    <h3>@Model.assessment.Name @*- <a style="font-size: 85%;" href="/Admin/EditAssessment?assessmentID=@Model.Assessment.AssessmentID"><b>Edit Assessment</b></a>*@</h3>
 </div>
 <div class="py-1">
     <b>Category:</b> @Model.assessment.Category

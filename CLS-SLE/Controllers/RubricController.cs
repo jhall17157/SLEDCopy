@@ -235,7 +235,8 @@ namespace CLS_SLE.Controllers
             try
             {
                 Int16 CriteriaId = Int16.Parse(formCollection["CriteriaId"]);
-                //Byte SortOrder = Byte.Parse(formCollection["SortOrder"]);
+                Byte SortOrder = db.Criteria.Max(r => r.SortOrder);
+                SortOrder++;
 
                 db.Criteria.Load();
                 Criterion addCriteria = db.Criteria.Create();
@@ -244,8 +245,7 @@ namespace CLS_SLE.Controllers
                 addCriteria.Name = formCollection["Name"];
                 addCriteria.ExampleText = formCollection["ExampleText"];
                 addCriteria.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
-                //addCriteria.SortOrder = SortOrder;
-                addCriteria.SortOrder = 1;
+                addCriteria.SortOrder = SortOrder;
                 addCriteria.CreatedDateTime = DateTime.Now;
                 addCriteria.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
 

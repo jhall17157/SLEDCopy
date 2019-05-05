@@ -19,42 +19,42 @@
         <ul class="list-group">
 
 
-
-            @foreach (InstructorAssessment assessment in Model.assessments)
+            pairs
+            @foreach (AssessmentLevelPair assessmentLevelPair in Model.assessmentLevelPairs)
             {
-                if (assessment.Category.Equals(category.CategoryCode))
+                if (assessmentLevelPair.Assessment.Category.Equals(category.CategoryCode))
                 {
 
                     <li class="list-group-item">
                         <small class="progress-head" style="position: absolute; right: 5px; top: -20px; width: 60px; text-align:center">Progress</small>
-                        <span style="position: absolute; right: 5px; top: 5px; width: 60px;" class="float-right badge badge-dark">@assessment.CompletedCount / @assessment.StudentCount</span>
+                        <span style="position: absolute; right: 5px; top: 5px; width: 60px;" class="float-right badge badge-dark">@assessmentLevelPair.Assessment.CompletedCount / @assessmentLevelPair.Assessment.StudentCount</span>
                         <div class="">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <b style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"> @Html.ActionLink(assessment.RubricName, "StudentList", new { rubricID = assessment.RubricID, sectionID = assessment.SectionID }) </b>
+                                    <b style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"> @Html.ActionLink(assessmentLevelPair.Assessment.RubricName, "StudentList", new { rubricID = assessmentLevelPair.Assessment.RubricID, sectionID = assessmentLevelPair.Assessment.SectionID }) </b>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-9">
-                                    <b>Course name: </b>@assessment.CourseName
+                                    <b>Course name: </b>@assessmentLevelPair.Assessment.CourseName
                                 </div>
                                 <div class="col-md-3 ml-auto">
-                                    <b>CRN: </b>@assessment.CRN
+                                    <b>CRN: </b>@assessmentLevelPair.Assessment.CRN
                                 </div>
                                 @{
-                                    if (@assessment.AssessmentLevel != null)
+                                    if (assessmentLevelPair.Assessment.AssessmentLevel != null)
                                     {
                                         <div class="col-md-3 ml-auto">
-                                            <b>Assessment Level: </b>@assessment.AssessmentLevel
+                                            <b>Assessment Level: </b>@assessmentLevelPair.AssessmentLevel
                                         </div>
                                     }
                                 }
                             </div>
                             <div class="row">
                                 <div class="col-md-9">
-                                    <b>Due: </b>@assessment.DueDate.ToShortDateString()
+                                    <b>Due: </b>@assessmentLevelPair.Assessment.DueDate.ToShortDateString()
                                 </div>
-                                <div class="col-md-3 ml-auto">@Html.ActionLink("Assess", "StudentList", new { rubricID = assessment.RubricID, sectionID = assessment.SectionID })</div>
+                                <div class="col-md-3 ml-auto">@Html.ActionLink("Assess", "StudentList", new { rubricID = assessmentLevelPair.Assessment.RubricID, sectionID = assessmentLevelPair.Assessment.SectionID })</div>
                             </div>
                         </div>
                     </li>

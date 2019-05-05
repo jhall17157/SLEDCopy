@@ -98,7 +98,7 @@ namespace CLS_SLE.Controllers
                 db.SaveChanges();
             }
 
-            return RedirectToAction("Index", "AdminUser");
+            return RedirectToAction("ViewUsers", "Admin");
         }
     }
 }

@@ -37,6 +37,24 @@ namespace CLS_SLE.Controllers
                 model.assessments = instructorAssessments.ToList();
                 model.categories = categories;
 
+                List<AssessmentLevelPair> assessmentLevelPairs = new List<AssessmentLevelPair>();
+
+
+                foreach(InstructorAssessment assessment in instructorAssessments)
+                {
+                    if (assessment.AssessmentLevel != null)
+                    {
+                        assessmentLevelPairs.Add(new AssessmentLevelPair(assessment, db.AssessmentLevels.Where(l => l.AssessmentLevelCode == assessment.AssessmentLevel).FirstOrDefault().Name));
+                    }
+                    else
+                    {
+                        assessmentLevelPairs.Add(new AssessmentLevelPair(assessment, null));
+                    }
+                }
+                model.assessmentLevelPairs = assessmentLevelPairs;
+                    
+                
+
                 return View(model);
             }
             catch

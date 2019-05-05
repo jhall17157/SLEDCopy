@@ -455,34 +455,34 @@ namespace CLS_SLE.Controllers
         private List<UserSecurity> GetUserSecurities()
         {
 
-            var People = (from user in db.Users
+            var Users = (from user in db.Users
                           join person in db.People on user.PersonID equals person.PersonID
-                          select new { FirstName = person.FirstName, Login = user.Login, LastName = person.LastName, PersonID = person.PersonID, IDNumber = person.IdNumber }).OrderBy(p => p.Login);
+                          select new { FirstName = person.FirstName, Login = user.Login, LastName = person.LastName, PersonID = person.PersonID, IDNumber = person.IdNumber, User = user }).OrderBy(p => p.Login);
 
             var UserRoles = (from role in db.Roles
                              join userRole in db.UserRoles on role.RoleID equals userRole.RoleID
                              join user in db.Users on userRole.PersonID equals user.PersonID
                              select new { PersonID = user.PersonID, RoleName = role.Name, RoleID = role.RoleID }); ;
 
-            var PersonList = People.ToList();
+            var UserList = Users.ToList();
 
             var UserRoleList = UserRoles.ToList();
             var UserSecurityList = new List<UserSecurity>();
-            foreach (var person in PersonList)
+            foreach (var user in UserList)
             {
-                var personRoles = new List<Role>();
+                var userRoles = new List<Role>();
                 foreach (var userRole in UserRoleList)
                 {
-                    if (userRole.PersonID.Equals(person.PersonID))
+                    if (userRole.PersonID.Equals(user.PersonID))
                     {
                         Role role = new Role();
                         role.RoleID = userRole.RoleID;
                         role.Name = userRole.RoleName;
-                        personRoles.Add(role);
+                        userRoles.Add(role);
 
                     }
                 }
-                UserSecurityList.Add(new UserSecurity(person.PersonID, person.Login, person.IDNumber, person.FirstName, person.LastName, personRoles));
+                UserSecurityList.Add(new UserSecurity(user.PersonID, user.Login, user.IDNumber, user.FirstName, user.LastName, userRoles, user.User));
             }
             return UserSecurityList;
 

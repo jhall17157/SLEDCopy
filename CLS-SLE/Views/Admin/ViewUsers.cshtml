@@ -23,13 +23,17 @@
 <table class="table table-hover table-striped">
     <thead class="thead-dark">
         <tr>
-            <th class="col-2">Login</th>
-            <th class="col-4">Name</th>
-            <th class="col-2">Current Roles</th>
-            <th class="col-4 text-right">
-                <form class="form-inline text-right" target="Admin/SearchUser" method="get" id="UserSearch">
-                    <input class="form-control mr-2" name="Search" type="text" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-primary mr-3" form="UserSearch" type="submit" value="Submit"><i class="fas fa-search"></i></button>
+            <th class="col">Login</th>
+            <th class="col">Name</th>
+            <th class="col">Current Roles</th>
+            <th class="col"></th>
+            <th class="col"></th>
+            <th class="col">
+                <form class="form form-inline text-right" target="Admin/SearchUser" method="get" id="UserSearch">
+                    <div class="form-group">
+                        <input class="form-control" name="Search" type="text" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-primary ml-1 form-control" form="UserSearch" type="submit" value="Submit"><i class="fas fa-search"></i></button>
+                    </div>
                 </form>
             </th>
         </tr>
@@ -58,7 +62,23 @@
                             }
                         }
                     </td>
-                    <td class="text-right"><a href="~/Admin/ManageUser?id=@person.PersonID"><button type="button" class="btn btn-primary mr-2">Edit</button></a></td>
+                    <td class="text-right"><a href="~/Admin/ManageUser?id=@person.PersonID"><button type="button" class="btn btn-primary mr-2">Edit Roles</button></a></td>
+                    <td class="text-right"><a href="~/AdminUser/Edit?id=@person.PersonID"><button type="button" class="btn btn-primary mr-2">Edit User</button></a></td>
+                    <td>
+                        <form action="~/AdminUser/Activate" method="post" class="form form-inline text-right">
+                            <input type="hidden" name="id" value="@person.User.PersonID" />
+                            <div class="form-group mx-1">
+                                <button @if (person.User.IsActive) { <text> class="btn btn-success col-12" type="button" </text>  } else { <text> class="btn btn-outline-success col-12" type="submit" name="submit" formmethod="post" </text> }>
+                                    Active
+                                </button>
+                            </div>
+                            <div class="form-group mx-1">
+                                <button @if (person.User.IsActive) { <text> class="btn btn-outline-danger col-12" type="submit" name="submit" formmethod="post" </text>  } else { <text> class="btn btn-danger col-12" type="button" </text> }>
+                                    Inactive
+                                </button>
+                            </div>
+                        </form>
+                    </td>
                 </tr>
             }
         }

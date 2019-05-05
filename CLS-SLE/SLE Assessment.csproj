@@ -208,6 +208,7 @@
     <Compile Include="Models\AssessmentLevel.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AssessmentLevelPair.cs" />
     <Compile Include="Models\AssessmentRubric.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>

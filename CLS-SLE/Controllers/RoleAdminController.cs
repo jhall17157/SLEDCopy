@@ -53,6 +53,11 @@ namespace CLS_SLE.Controllers
             short id = short.Parse(form["id"]);
             var role = new Role();
             role = db.Roles.Where(r => r.RoleID == id).FirstOrDefault();
+            var rolePermissions = db.RolePermissions.Where(rp => rp.RoleID == id);
+            foreach (RolePermission rolePermission in rolePermissions)
+            {
+                db.RolePermissions.Remove(rolePermission);
+            }
             db.Roles.Remove(role);
             db.SaveChanges();
             return RedirectToAction(actionName: "Index", controllerName: "RoleAdmin");

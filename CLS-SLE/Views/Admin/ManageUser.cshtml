@@ -7,15 +7,15 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
         <li class="breadcrumb-item">@Html.ActionLink("User Security", "ViewUsers")</li>
-        <li class="breadcrumb-item active" aria-current="page">Manage User - @Model.IDNumber </li>
+        <li class="breadcrumb-item active" aria-current="page">Manage User - @Model.Login </li>
     </ol>
 </nav>
 
 <h1>Edit User Permissions </h1>
 
-<div class="row my-2 justify-content-between bg-dark text-light">
-    <div class="col-3 my-2 h3">@Model.Login</div>
-    <div class="col-5 text-right my-2 h3">@Model.LastName, @Model.FirstName</div>
+<div class="row py-1 px-2 m-0 justify-content-between bg-dark text-light">
+    <div class="h3 col-4">@Model.Login - @Model.IDNumber</div>
+    <div class="col-4 text-right h3">@Model.LastName, @Model.FirstName</div>
 </div>
 
 @{bool IsFirstRow = true;

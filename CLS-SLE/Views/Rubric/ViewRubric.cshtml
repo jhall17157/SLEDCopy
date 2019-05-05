@@ -3,21 +3,17 @@
     ViewBag.Title = "View Rubric";
 }
 
-<h2>View Rubric</h2>
 
-<div class="py-1">
-    <h3>@Model.Rubric.Name</h3>
+<div class="py-1 h1">
+    @Model.Rubric.Name  - <a style="font-size: 85%;"href="/Rubric/EditRubric?rubricID=@Model.Rubric.RubricID"><b>Edit</b></a>
 </div>
-<div class="py-1">
-    Description: @Model.Rubric.Description
+<div class="py-2">
+    <b>Description:</b> @Model.Rubric.Description
 </div>
-<div class="py-1">
-    Is Active: @Model.Rubric.IsActive
+<div class="py-2">
+    <b>Is Active:</b> @Model.Rubric.IsActive
 </div>
 
-<div>
-    <a href="/Rubric/EditRubric?rubricID=@Model.Rubric.RubricID"><b>Edit Rubric</b><br /></a>
-</div>
 @*@if (Model.ModifierLogin != null)
 {
     <div class="py-1">
@@ -53,14 +49,13 @@ else if (Model.CreatorLogin != null)
             }
         }
 </div>*@
-
-<table class="table table-hover">
+<br />
+<table class="table">
 
     <thead class="thead-dark">
         <tr>
-            <th class="col-3 h3">Outcome</th>
-            <th class="col-7">Description</th>
-            <th class="col-2 text-right"><a href="/Rubric/AddOutcome?id=@Model.Rubric.RubricID"><button type="button" class="btn btn-primary">Add New</button></a></th>
+            <th scope="col" class="h2">Outcomes</th>
+            <th scope="col"><a class="float-right" href="/Rubric/AddOutcome?id=@Model.Rubric.RubricID"><button type="button" class="btn btn-primary">Add New</button></a></th>
 
         </tr>
     </thead>
@@ -70,12 +65,20 @@ else if (Model.CreatorLogin != null)
         {
             <tr>
 
-                <td colspan="2">@outcome.Name</td>
+                <td class="h3 align-middle py-2">@outcome.Name</td>
                 <td class="text-right">
                     <a href="ViewOutcome?outcomeID=@outcome.OutcomeID"><button type="button" class="btn btn-primary">View</button></a>
                 </td>
 
+
             </tr>
+            foreach (Criterion criterion in outcome.Criteria)
+            {
+                <tr class="bg-light">
+                    <td class="pl-4 py-1">@criterion.Name</td>
+                    <td></td>
+                </tr>
+            }
         }
 
     </tbody>

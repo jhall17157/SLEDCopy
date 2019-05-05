@@ -59,7 +59,7 @@ namespace CLS_SLE.Controllers
             db.Users.Add(user);
             db.SaveChanges();
 
-            return RedirectToAction("Index", "AdminUser");
+            return RedirectToAction("ViewUsers", "Admin");
         }
 
         public ActionResult UpdateUser(FormCollection form)
@@ -78,7 +78,7 @@ namespace CLS_SLE.Controllers
 
             db.SaveChanges();
             
-            return RedirectToAction("Index", "AdminUser");
+            return RedirectToAction("ViewUsers", "Admin");
         }
 
         public ActionResult Activate(FormCollection form)

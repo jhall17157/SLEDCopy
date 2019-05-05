@@ -19,9 +19,9 @@
 
             <thead class="thead-dark">
                 <tr>
-                    <th class="col-3 h3">@category.Name</th>
-                    <th class="col-7">@category.Description</th>
-                    <th class="col-2 text-right"><a href="/Admin/AddAssessment?category=@category.Name"><button type="button" class="btn btn-primary">Add New</button></a></th>
+                    <th scope="col" class="h3">@category.Name</th>
+                    <th scope="col" class="text-right">@category.Description</th>
+                    <th scope="col" width="10%"><a class="float-right" href="/Admin/AddAssessment?category=@category.Name"><button type="button" class="btn btn-primary">Add New</button></a></th>
 
                 </tr>
             </thead>
@@ -47,7 +47,6 @@
                                     <a href="ViewAssessment?assessmentId=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
                                     @*@Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })*@
                                 </td>
-
                             </tr>
                         }
                         else
@@ -59,7 +58,6 @@
                                     <a href="ViewAssessment?assessmentId=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
                                     @*@Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })*@
                                 </td>
-
                             </tr>
                         }
 

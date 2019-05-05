@@ -2134,7 +2134,6 @@
     <Content Include="Views\Rubric\EditOutcome.cshtml" />
     <Content Include="Views\Rubric\AddCriterion.cshtml" />
     <Content Include="Views\Rubric\EditCriterion.cshtml" />
-    <Content Include="Views\AdminUser\Index.cshtml" />
     <Content Include="Views\AdminUser\Create.cshtml" />
     <Content Include="Views\AdminUser\Edit.cshtml" />
     <Content Include="Views\RoleAdmin\ManageRole.cshtml" />

@@ -1,12 +1,15 @@
 ﻿@using Microsoft.AspNet.Identity
 @using Microsoft.AspNet.Identity.EntityFramework;
 @using CLS_SLE.Models;
+@{
+    ViewBag.Title = "Manage Roles";
+}
 @model IEnumerable<Role>
 
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "Dashboard", "Admin")</li>
         <li class="breadcrumb-item active" aria-current="page">User Security</li>
     </ol>
 </nav>
@@ -24,10 +27,10 @@
     <table class="table table-hover table-striped">
         <thead class="thead-dark">
             <tr>
-                <th class="col">ID</th>
-                <th class="col">Name</th>
-                <th class="col"></th>
-                <th class="col justify-content-end"></th>
+                
+                <th scope="col">Name</th>
+                <th scope="col"></th>
+                <th scope="auto" class="justify-content-end" width="10%"></th>
             </tr>
         </thead>
         @{ if (Model.Count() == 0)
@@ -65,7 +68,4 @@
     </table>
 
     <a href="/RoleAdmin/Create"><button type="button" class="btn btn-success">Create</button></a>
-    <hr />
-    <a href="~/AdminUser/Index">User Accounts</a>
-
 </div>

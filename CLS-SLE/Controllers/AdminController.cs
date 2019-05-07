@@ -32,6 +32,7 @@ namespace CLS_SLE.Controllers
         public ActionResult AdminDashboard()
         {
             return View();
+            
         }
 
         public ActionResult AssessmentMappings()

@@ -2,7 +2,13 @@
 @{
     ViewBag.Title = "Add Rubric";
 }
-
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
+        <li class="breadcrumb-item active" aria-current="page">New Rubric</li>
+    </ol>
+</nav>
 <h2>Add Rubric</h2>
 
 <form method="post" action="/Rubric/InsertNewRubric">

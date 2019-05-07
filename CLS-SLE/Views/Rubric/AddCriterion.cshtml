@@ -3,11 +3,20 @@
     ViewBag.Title = "Add Criterion";
 }
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Outcome.AssessmentRubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.Outcome.AssessmentRubric.RubricID }, null)</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Outcome.Name, "ViewOutcome", "Rubric", new { rubricID = Model.Outcome.OutcomeID }, null)</li>
+        <li class="breadcrumb-item active" aria-current="page">New Criteria</li>
+    </ol>
+</nav>
 <h2>Add Criterion</h2>
 
 <form method="post" action="/Rubric/InsertNewCriterion">
     <div hidden>
-        <input type="hidden" name="OutcomeID" value="@Model.OutcomeID" />
+        <input type="hidden" name="OutcomeID" value="@Model.Outcome.OutcomeID" />
     </div>
     <div class="form-row">
         <div class="form-group col-9">

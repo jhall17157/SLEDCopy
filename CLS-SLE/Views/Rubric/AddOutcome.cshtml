@@ -3,11 +3,19 @@
     ViewBag.Title = "Add Outcome";
 }
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)((AssessmentRubric)Model.Rubric).RubricAssessments.FirstOrDefault().Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = ((AssessmentRubric)Model.Rubric.AssessmentID }, null))</li>
+        <li class="breadcrumb-item active" aria-current="page">New Outcome</li>
+    </ol>
+</nav>
 <h2>Add Outcome</h2>
 
 <form method="post" action="/Rubric/InsertNewOutcome">
     <div hidden>
-        <input type="hidden" name="RubricID" value="@Model.RubricID" />
+        <input type="hidden" name="RubricID" value="@Model.Rubric.RubricID" />
     </div>
     <div class="form-row">
         <div class="form-group col-9">

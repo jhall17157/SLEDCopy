@@ -24,7 +24,7 @@ namespace CLS_SLE
            
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.min.css",
+                      "~/Content/bootstrap.css",
                       "~/Content/fontawesome/css/all.min.css",
                       "~/Content/site.css"));
         }

@@ -140,7 +140,7 @@ namespace CLS_SLE.Controllers
         public ActionResult AddOutcome(int? rubricID)
         {
             dynamic Model = new ExpandoObject();
-            Model.RubricID = rubricID;
+            Model.Rubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID);
             return View(Model);
         }
         public ActionResult InsertNewOutcome(FormCollection formCollection)
@@ -225,7 +225,7 @@ namespace CLS_SLE.Controllers
         public ActionResult AddCriterion(int? outcomeID)
         {
             dynamic Model = new ExpandoObject();
-            Model.OutcomeID = outcomeID;
+            Model.Outcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
             return View(Model);
         }
 

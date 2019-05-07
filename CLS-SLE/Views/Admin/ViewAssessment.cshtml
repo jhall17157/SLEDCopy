@@ -7,36 +7,36 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments")</li>
-        <li class="breadcrumb-item active" aria-current="page">View Assesmment - @Model.assessment.Name </li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.assessment.Name </li>
     </ol>
 </nav>
-<h1> @Model.assessment.Name </h1>
+<h1> @Model.assessment.Name  - <a style="font-size: 85%;" href="/Admin/EditAssessment?AssessmentID=@Model.assessment.AssessmentID"><b>Edit</b></a> </h1>
 <br />
 <div class="py-1">
     <b>Category:</b> @Model.assessment.Category
 </div>
 <div class="py-1">
-    Description: @Model.assessment.Description
+    <b>Description:</b> @Model.assessment.Description
 </div>
 <div class="py-1">
-    Pass Rate: @(Model.assessment.OutcomePassRate * 100)%
+    <b>Pass Rate:</b> @(Model.assessment.OutcomePassRate * 100)%
 </div>
 <div>
-    Calculate Pass Rate: @Model.assessment.CalculateOutcomePassRate
+    <b>Calculate Pass Rate:</b> @Model.assessment.CalculateOutcomePassRate
 </div>
 <div class="py-1">
-    Program: @Model.program
+    <b>Program:</b> @Model.program
 </div>
 <div class="py-1">
-    Is Active: @Model.assessment.IsActive
+    <b>Is Active:</b> @Model.assessment.IsActive
 </div>
 @if (Model.ModifierLogin != null)
 {
     <div class="py-1">
-        Last Modified:  @Model.assessment.ModifiedDateTime
+        <b>Last Modified:</b>  @Model.assessment.ModifiedDateTime
     </div>
     <div class="py-1">
-        By: @Model.ModifierLogin
+        <b>By User:</b> @Model.ModifierLogin
     </div>
 }
 else if (Model.CreatorLogin != null)
@@ -50,31 +50,13 @@ else if (Model.CreatorLogin != null)
 }
 
 
-
-<div>
-    @*@{ if (Model.canEdit)
-            {
-                @Html.ActionLink("Edit Assessment", "EditAssessment", new { Model.assessment.AssessmentID })
-                }
-        }*@
-
-    @Html.ActionLink("Edit Assessment", "EditAssessment", new { Model.assessment.AssessmentID })
-
-    @*@{
-            if (Model.canAdd)
-            {
-                @Html.ActionLink("Add Assessment", "AddAssessment", new { Model.assessment.AssessmentID })
-            }
-        }*@
-</div>
-
 <div>
     <table class="table table-hover table-striped">
         <thead class="thead-dark">
             <tr>
-                <th class="col">Rubric</th>
+                <th class="h3">Rubric</th>
                 
-                <th class="col"><a href="~/Rubric/AddRubric?assessmentID=@Model.assessment.AssessmentID"><button type="button" class="btn btn-primary mr-2">Add New</button></a></th>
+                <th><a href="~/Rubric/AddRubric?assessmentID=@Model.assessment.AssessmentID" class="float-right"><button type="button" class="btn btn-primary mr-2">Add New</button></a></th>
             </tr>
         </thead>
         <tbody>

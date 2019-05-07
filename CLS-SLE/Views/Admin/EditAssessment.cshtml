@@ -7,7 +7,8 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments")</li>
-        <li class="breadcrumb-item active" aria-current="page">Edit Assessmment - @Model.Assessment.Name</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Assessment.Name, "ViewAssessment", (int)Model.Assessment.AssessmentID)</li>
+        <li class="breadcrumb-item active" aria-current="page">Edit</li>
     </ol>
 </nav>
 <h1>Edit Assessment</h1>
@@ -30,7 +31,7 @@
     <div class="form-row">
         <div class="form-group col-9">
             <label for="Description">Description:</label>
-            <textarea name="Description" class="form-control" rows="6" value="@Model.Assessment.Description"></textarea>
+            <textarea name="Description" class="form-control" rows="6">@Model.Assessment.Description </textarea>
         </div>
     </div>
     <div class="form-row">

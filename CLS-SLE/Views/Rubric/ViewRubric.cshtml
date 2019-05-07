@@ -3,10 +3,17 @@
     ViewBag.Title = "View Rubric";
 }
 
-
-<div class="py-1 h1">
-    @Model.Rubric.Name  - <a style="font-size: 85%;"href="/Rubric/EditRubric?rubricID=@Model.Rubric.RubricID"><b>Edit</b></a>
-</div>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)((AssessmentRubric)Model.Rubric).RubricAssessments.FirstOrDefault().Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = ((AssessmentRubric)Model.Rubric).AssessmentID }, null)</li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.Rubric.Name </li>
+    </ol>
+</nav>
+<h1>
+    @Model.Rubric.Name  - <a style="font-size: 85%;" href="/Rubric/EditRubric?rubricID=@Model.Rubric.RubricID"><b>Edit</b></a>
+</h1>
 <div class="py-2">
     <b>Description:</b> @Model.Rubric.Description
 </div>
@@ -15,40 +22,39 @@
 </div>
 
 @*@if (Model.ModifierLogin != null)
-{
-    <div class="py-1">
-        Last Modified:  @Model.assessment.ModifiedDateTime
-    </div>
-    <div class="py-1">
-        By: @Model.ModifierLogin
-    </div>
-}
-else if (Model.CreatorLogin != null)
-{
-    <div class="py-1">
-        Created: @Model.assessment.CreatedDateTime
-    </div>
-    <div class="py-1">
-        By: @Model.CreatorLogin
-    </div>
-}*@
+    {
+        <div class="py-1">
+            Last Modified:  @Model.assessment.ModifiedDateTime
+        </div>
+        <div class="py-1">
+            By: @Model.ModifierLogin
+        </div>
+    }
+    else if (Model.CreatorLogin != null)
+    {
+        <div class="py-1">
+            Created: @Model.assessment.CreatedDateTime
+        </div>
+        <div class="py-1">
+            By: @Model.CreatorLogin
+        </div>
+    }*@
 
 
 
 @*<div>
-    @{ if (Model.canEdit)
-        {
-            @Html.ActionLink("Edit Assessment", "EditAssessment", new { Model.assessment.AssessmentID })
-        }
-    }
-
-    @{
-            if (Model.canAdd)
+        @{ if (Model.canEdit)
             {
-                @Html.ActionLink("Add Assessment", "AddAssessment", new { Model.assessment.AssessmentID })
+                @Html.ActionLink("Edit Assessment", "EditAssessment", new { Model.assessment.AssessmentID })
             }
         }
-</div>*@
+
+        @{
+                if (Model.canAdd)
+                {
+                    @Html.ActionLink("Add Assessment", "AddAssessment", new { Model.assessment.AssessmentID })
+                }
+    </div>*@
 <br />
 <table class="table">
 
@@ -63,6 +69,7 @@ else if (Model.CreatorLogin != null)
 
         @foreach (Outcome outcome in Model.Outcomes)
         {
+
             <tr>
 
                 <td class="h3 align-middle py-2">@outcome.Name</td>

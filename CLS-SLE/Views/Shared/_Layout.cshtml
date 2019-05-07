@@ -13,7 +13,7 @@
 
 </head>
 <body>
-    <div class="container-fluid">
+    <div class="container-fluid" style="border-bottom: 3px solid #003e7a;">
         <nav class="navbar navbar-expand-lg navbar-light">
             <a class="navbar-brand my-0 mr-md-auto" href="/">
                 @*<img  src="https://www.wctc.edu/_resources/images/waukesha_logo.svg"  >*@
@@ -53,10 +53,10 @@
         }
 
     }
-
+    <div style="height:20px;" class="row"></div>
     @if (((CLS_SLE.Models.User)Session["user"]) != null)
     {
-        <div style="height:75px;" class="row"></div>
+        
         <div class="row justify-content-center">
             <ul class="nav nav-tabs my-2 mx-5 col-9">
 
@@ -70,7 +70,7 @@
                 }
             </ul>
         </div>
-        <div style="height:75px;" class="row"></div>
+        <div style="height:20px;" class="row"></div>
 
 
     }

@@ -31,6 +31,7 @@ namespace CLS_SLE.Controllers
 
         public ActionResult AdminDashboard()
         {
+           
             return View();
             
         }
@@ -65,7 +66,6 @@ namespace CLS_SLE.Controllers
                 logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
                 return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
-            return View();
         }
 
         public ActionResult ViewAssessment(int? assessmentId)
@@ -310,43 +310,6 @@ namespace CLS_SLE.Controllers
                 Model.Sort = sort;
             }
             return View(Model);
-        }
-
-
-
-
-        public ActionResult Assign([Required]int id)
-        {
-            var person = db.People.Where(p => id == p.PersonID).SingleOrDefault();
-            ViewBag.PersonID = person.PersonID;
-            ViewBag.Id = id;
-            ViewBag.Name = person.FirstName + " " + person.LastName;
-
-            return View(db.Roles);
-        }
-
-        public ActionResult RoleAssign(int person, List<short> roles)
-        {
-            var results = db.UserRoles.Where(ur => ur.PersonID == person);
-            foreach (UserRole userRole in results)
-            {
-                db.UserRoles.Remove(userRole);
-            }
-
-            foreach (short role in roles)
-            {
-                UserRole user = new UserRole()
-                {
-                    PersonID = person,
-                    RoleID = role
-                };
-
-                db.UserRoles.Add(user);
-            }
-
-            db.SaveChanges();
-
-            return RedirectToAction(actionName: "AdminDashboard", controllerName: "Admin");
         }
 
 

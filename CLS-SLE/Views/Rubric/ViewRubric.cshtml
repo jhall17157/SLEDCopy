@@ -7,13 +7,14 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink((String)((AssessmentRubric)Model.Rubric).RubricAssessments.FirstOrDefault().Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = ((AssessmentRubric)Model.Rubric).AssessmentID }, null)</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = ((AssessmentRubric)Model.Rubric).AssessmentID }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">@Model.Rubric.Name </li>
     </ol>
 </nav>
 <h1>
     @Model.Rubric.Name  - <a style="font-size: 85%;" href="/Rubric/EditRubric?rubricID=@Model.Rubric.RubricID"><b>Edit</b></a>
 </h1>
+<br />
 <div class="py-2">
     <b>Description:</b> @Model.Rubric.Description
 </div>

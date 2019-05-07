@@ -140,7 +140,7 @@ namespace CLS_SLE.Controllers
         public ActionResult AddOutcome(int? rubricID)
         {
             dynamic Model = new ExpandoObject();
-            Model.Rubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID);
+            Model.Rubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
             return View(Model);
         }
         public ActionResult InsertNewOutcome(FormCollection formCollection)

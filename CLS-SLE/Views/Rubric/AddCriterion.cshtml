@@ -7,6 +7,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)((AssessmentRubric)Model.Outcome.AssessmentRubric).RubricAssessments.FirstOrDefault().Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = ((AssessmentRubric)Model.Outcome.AssessmentRubric).AssessmentID }, null)</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)Model.Outcome.AssessmentRubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.Outcome.AssessmentRubric.RubricID }, null)</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)Model.Outcome.Name, "ViewOutcome", "Rubric", new { rubricID = Model.Outcome.OutcomeID }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">New Criteria</li>

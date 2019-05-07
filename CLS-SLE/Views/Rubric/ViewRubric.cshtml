@@ -7,7 +7,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = ((AssessmentRubric)Model.Rubric).AssessmentID }, null)</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)((AssessmentRubric)Model.Rubric).RubricAssessments.FirstOrDefault().Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = ((AssessmentRubric)Model.Rubric).AssessmentID }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">@Model.Rubric.Name </li>
     </ol>
 </nav>
@@ -61,8 +61,8 @@
 
     <thead class="thead-dark">
         <tr>
-            <th scope="col" class="h2">Outcomes</th>
-            <th scope="col"><a class="float-right" href="/Rubric/AddOutcome?rubricID=@Model.Rubric.RubricID"><button type="button" class="btn btn-primary">Add New</button></a></th>
+            <th scope="col" class="h3">Outcomes</th>
+            <th scope="col"><a class="float-right" href="/Rubric/AddOutcome?rubricID=@Model.Rubric.RubricID"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Outcome</button></a></th>
 
         </tr>
     </thead>

@@ -48,15 +48,14 @@ else if (Model.CreatorLogin != null)
         By: @Model.CreatorLogin
     </div>
 }
-
+<br />
 
 <div>
     <table class="table table-hover table-striped">
         <thead class="thead-dark">
             <tr>
-                <th class="h3">Rubric</th>
-                
-                <th><a href="~/Rubric/AddRubric?assessmentID=@Model.assessment.AssessmentID" class="float-right"><button type="button" class="btn btn-primary mr-2">Add New</button></a></th>
+                <th class="h3">Rubrics</th>
+                <th><a href="~/Rubric/AddRubric?assessmentID=@Model.assessment.AssessmentID" class="float-right"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i>Add New</button></a></th>
             </tr>
         </thead>
         <tbody>

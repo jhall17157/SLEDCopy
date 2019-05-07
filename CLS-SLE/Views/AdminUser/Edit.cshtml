@@ -4,7 +4,15 @@
     
 }
 
-<h2>Edit User</h2>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Manage Users", "ViewUsers", "Admin")</li>
+        <li class="breadcrumb-item active" aria-current="page">Edit User - @ViewBag.Login</li>
+    </ol>
+</nav>
+<h1>Edit User - @ViewBag.Login</h1>
+<br />
 
 <form action="UpdateUser" method="post">
     <div class="form-group">

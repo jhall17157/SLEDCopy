@@ -3,11 +3,15 @@
     ViewBag.Title = "View Assessment";
 }
 
-<h2>View Assessment</h2>
-
-<div class="py-1">
-    <h3>@Model.assessment.Name</h3>
-</div>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments")</li>
+        <li class="breadcrumb-item active" aria-current="page">View Assesmment - @Model.assessment.Name </li>
+    </ol>
+</nav>
+<h1> @Model.assessment.Name </h1>
+<br />
 <div class="py-1">
     <b>Category:</b> @Model.assessment.Category
 </div>
@@ -69,7 +73,7 @@ else if (Model.CreatorLogin != null)
         <thead class="thead-dark">
             <tr>
                 <th class="col">Rubric</th>
-                <th class="col">Description</th>
+                
                 <th class="col"><a href="~/Rubric/AddRubric?assessmentID=@Model.assessment.AssessmentID"><button type="button" class="btn btn-primary mr-2">Add New</button></a></th>
             </tr>
         </thead>
@@ -80,8 +84,8 @@ else if (Model.CreatorLogin != null)
 
                     <tr data-userID="person.PersonID">
                         <td>@assessmentRubric.Name</td>
-                        <td>@assessmentRubric.Description</td>
-                        <td class="text-right"><a href="~/Rubric/ViewRubric?rubricID=@assessmentRubric.RubricID"><button type="button" class="btn btn-primary mr-2">View Rubric</button></a></td>
+                        
+                        <td class="text-right"><a href="~/Rubric/ViewRubric?rubricID=@assessmentRubric.RubricID"><button type="button" class="btn btn-primary mr-2">View</button></a></td>
                     </tr>
                 }
             }

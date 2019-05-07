@@ -3,9 +3,15 @@
 @{
         ViewBag.Title = "AddAssessment";
 }
-
-<h2>Add Assessment</h2>
-
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Assessnents", "Assessments")</li>
+        <li class="breadcrumb-item active" aria-current="page">New Assessment</li>
+    </ol>
+</nav>
+<h1>Add Assessment</h1>
+<br />
 
 <form method="post" action="/Admin/InsertNewAssessment">
     <div class="form-row">

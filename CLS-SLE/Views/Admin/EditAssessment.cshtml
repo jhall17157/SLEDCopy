@@ -3,7 +3,15 @@
     ViewBag.Title = "EditAssessment";
 }
 
-<h2>Edit Assessment</h2>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments")</li>
+        <li class="breadcrumb-item active" aria-current="page">Edit Assessmment - @Model.Assessment.Name</li>
+    </ol>
+</nav>
+<h1>Edit Assessment</h1>
+<br />
 
 <form method="post" action="/Admin/SaveAssessment">
     <div class="form-row">

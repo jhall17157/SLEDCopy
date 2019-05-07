@@ -55,7 +55,7 @@ else if (Model.CreatorLogin != null)
     <thead class="thead-dark">
         <tr>
             <th scope="col" class="h2">Outcomes</th>
-            <th scope="col"><a class="float-right" href="/Rubric/AddOutcome?id=@Model.Rubric.RubricID"><button type="button" class="btn btn-primary">Add New</button></a></th>
+            <th scope="col"><a class="float-right" href="/Rubric/AddOutcome?rubricID=@Model.Rubric.RubricID"><button type="button" class="btn btn-primary">Add New</button></a></th>
 
         </tr>
     </thead>
@@ -67,7 +67,7 @@ else if (Model.CreatorLogin != null)
 
                 <td class="h3 align-middle py-2">@outcome.Name</td>
                 <td class="text-right">
-                    <a href="ViewOutcome?outcomeID=@outcome.OutcomeID"><button type="button" class="btn btn-primary">View</button></a>
+                    <a href="ViewOutcome?outcomeID=@(outcome.OutcomeID)"><button type="button" class="btn btn-primary">View</button></a>
                 </td>
 
 

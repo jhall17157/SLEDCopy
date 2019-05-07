@@ -6,13 +6,12 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("User Security", "ViewUsers")</li>
-        <li class="breadcrumb-item active" aria-current="page">Manage User - @Model.Login </li>
+        <li class="breadcrumb-item">@Html.ActionLink("Manage Users", "ViewUsers")</li>
+        <li class="breadcrumb-item active" aria-current="page">Manage Roles - @Model.Login </li>
     </ol>
 </nav>
-
-<h1>Edit User Permissions </h1>
-
+<h1>Manage Roles</h1>
+<br />
 <div class="row py-1 px-2 m-0 justify-content-between bg-dark text-light">
     <div class="h3 col-4">@Model.Login - @Model.IDNumber</div>
     <div class="col-4 text-right h3">@Model.LastName, @Model.FirstName</div>

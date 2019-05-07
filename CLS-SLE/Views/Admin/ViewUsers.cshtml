@@ -1,20 +1,18 @@
 ﻿@using CLS_SLE.Models;
 @{
-    ViewBag.Title = "User Security ";
+    ViewBag.Title = "Manage Users ";
 }
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
-        <li class="breadcrumb-item active" aria-current="page">User Security</li>
+        <li class="breadcrumb-item active" aria-current="page">Manage Users</li>
     </ol>
 </nav>
-
 <h1>Manage Users</h1>
-
 <br />
 <div class="row px-3">
-    <h5 class="co-2"><a href="/Admin/ViewRoles">Group by Role</a></h5>
+    <h5 class="co-2"><a href="/Admin/ViewRoles">Filter by Role</a></h5>
     <h5 class="col-2 ml-auto text-right p-0"><a href="~/RoleAdmin/Index"> Manage Roles </a></h5>
 </div>
 
@@ -83,5 +81,15 @@
         }
 
     </tbody>
-</table>
 
+    
+</table>
+<div class="row justify-content-end">
+    <div class="col-2">
+        <a href="/AdminUser/Create">
+            <button class="btn btn-success col-12" type="submit" name="submit" formmethod="post">
+                <i class="fa fa-plus"></i> Add New User
+            </button>
+        </a>
+    </div>
+</div>

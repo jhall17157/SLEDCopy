@@ -6,11 +6,10 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("User Security", "ViewRoles")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Manage Users", "ViewUsers")</li>
         <li class="breadcrumb-item active" aria-current="page">Members - @Model.CurrentRole.Name </li>
     </ol>
 </nav>
-
 <h1>Members - @Model.CurrentRole.Name</h1>
 <br />
 <table class="table table-hover table-striped">

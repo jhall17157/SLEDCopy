@@ -137,10 +137,10 @@ namespace CLS_SLE.Controllers
             Model.Criteria = db.Criteria.Where(c => c.OutcomeID == outcomeID).ToList();
             return View(Model);
         }
-        public ActionResult AddOutcome(int? outcomeID)
+        public ActionResult AddOutcome(int? rubricID)
         {
             dynamic Model = new ExpandoObject();
-            Model.OutcomeID = outcomeID;
+            Model.RubricID = rubricID;
             return View(Model);
         }
         public ActionResult InsertNewOutcome(FormCollection formCollection)
@@ -153,7 +153,7 @@ namespace CLS_SLE.Controllers
                 db.Outcomes.Load();
                 Outcome addOutcome = db.Outcomes.Create();
 
-                addOutcome.RubricID = RubricId; //default to 1 until we know how to handle properly
+                addOutcome.RubricID = RubricId; 
                 addOutcome.Name = formCollection["Name"];
                 addOutcome.Description = formCollection["Description"];
                 addOutcome.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
@@ -176,11 +176,10 @@ namespace CLS_SLE.Controllers
                 return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
         }
-        public ActionResult EditOutcome(int? outcomeID)
+        public ActionResult EditOutcome(int? outcomeID, int? rubricID)
         {
             dynamic Model = new ExpandoObject();
             Model.Outcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
-
             return View(Model);
         }
 
@@ -223,29 +222,33 @@ namespace CLS_SLE.Controllers
             Model.Criterion = db.Criteria.Where(c => c.CriteriaID == criterionID).FirstOrDefault();
             return View(Model);
         }
-        public ActionResult AddCriterion(int? id)
+        public ActionResult AddCriterion(int? outcomeID)
         {
             dynamic Model = new ExpandoObject();
-            Model.ID = id;
+            Model.OutcomeID = outcomeID;
             return View(Model);
         }
 
-        public ActionResult InsertNewCriterion(int? criterionID, FormCollection formCollection)
+        public ActionResult InsertNewCriterion(FormCollection formCollection)
         {
             try
             {
-                Int16 CriteriaId = Int16.Parse(formCollection["CriteriaId"]);
-                Byte SortOrder = db.Criteria.Max(r => r.SortOrder);
-                SortOrder++;
+                Int16 OutcomeID = Int16.Parse(formCollection["OutcomeID"]);
+                Byte maxSortOrder = 0;
+                if (db.Criteria.Where(c => c.OutcomeID == OutcomeID).Any())
+                {
+                    maxSortOrder = db.Criteria.Where(c => c.OutcomeID == OutcomeID).OrderByDescending(r => r.SortOrder).FirstOrDefault().SortOrder;
+                }
+                maxSortOrder++;
 
                 db.Criteria.Load();
                 Criterion addCriteria = db.Criteria.Create();
 
-                addCriteria.CriteriaID = (Int16)criterionID;
+                addCriteria.OutcomeID = OutcomeID;
                 addCriteria.Name = formCollection["Name"];
                 addCriteria.ExampleText = formCollection["ExampleText"];
                 addCriteria.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
-                addCriteria.SortOrder = SortOrder;
+                addCriteria.SortOrder = maxSortOrder;
                 addCriteria.CreatedDateTime = DateTime.Now;
                 addCriteria.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
 
@@ -272,19 +275,16 @@ namespace CLS_SLE.Controllers
         {
             try
             {
-                Int16 CriteriaId = Int16.Parse(formCollection["CriteriaId"]);
-                //Byte SortOrder = Byte.Parse(formCollection["SortOrder"]);
+                Int16 CriteriaId = Int16.Parse(formCollection["CriteriaId"]);              
 
                 db.Criteria.Load();
                 Criterion editCriteria = db.Criteria.Where(c => c.CriteriaID == criterionID).FirstOrDefault();
-
-                editCriteria.CriteriaID = (Int16)criterionID; //default to 1 until we know how to handle properly
                 editCriteria.Name = formCollection["Name"];
                 editCriteria.ExampleText = formCollection["ExampleText"];
                 editCriteria.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
-                //editCriteria.SortOrder = SortOrder;
-                editCriteria.CreatedDateTime = DateTime.Now;
-                editCriteria.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                
+                editCriteria.ModifiedDateTime = DateTime.Now;
+                editCriteria.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
 
                 db.Entry(editCriteria).State = EntityState.Modified;
                 db.SaveChanges();

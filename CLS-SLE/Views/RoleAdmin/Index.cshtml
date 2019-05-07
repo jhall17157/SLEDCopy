@@ -9,63 +9,70 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "Dashboard", "Admin")</li>
-        <li class="breadcrumb-item active" aria-current="page">User Security</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item active" aria-current="page">Manage Roles</li>
     </ol>
 </nav>
+<h2>Roles</h2>
+<div class="row px-3">
+    <h5 class="col-2 ml-auto text-right p-0"><a href="~/Admin/ViewUsers"> Manage Users</a></h5>
+</div>
 
-<h1>Roles</h1>
+<div class="text-danger" asp-validation-summary="All"></div>
 
-<div class="container">
-    <br />
-    <div class="row px-3">
-        <h5 class="col-2 ml-auto text-right p-0"><a href="~/Admin/ViewUsers"> Manage Users</a></h5>
-    </div>
+<table class="table table-hover table-striped">
+    <thead class="thead-dark">
+        <tr>
 
-    <div class="text-danger" asp-validation-summary="All"></div>
-
-    <table class="table table-hover table-striped">
-        <thead class="thead-dark">
-            <tr>
-                
-                <th scope="col">Name</th>
-                <th scope="col"></th>
-                <th scope="auto" class="justify-content-end" width="10%"></th>
-            </tr>
-        </thead>
-        @{ if (Model.Count() == 0)
+            <th scope="col">Name</th>
+            <th scope="col"></th>
+            <th scope="auto" class="justify-content-end" width="10%"></th>
+        </tr>
+    </thead>
+    @{ if (Model.Count() == 0)
+        {
+            <tr><td colspan="3" class="text-center">No Roles</td></tr>
+        }
+        else
+        {
+            foreach (var Role in Model)
             {
-                <tr><td colspan="3" class="text-center">No Roles</td></tr>
-            }
-            else
-            {
-                foreach (var Role in Model)
-                {
-                    
+
                 <tr>
-                        <td>@Role.Name</td>
-                        <td class="text-right">
-                            @if (Role.RoleID > 2)
-                            {
+                    <td>@Role.Name</td>
+                    <td class="text-right">
+                        @if (Role.RoleID > 2)
+                        {
                             <a href="/RoleAdmin/ManageRole?ID=@Role.RoleID"><button type="button" class="btn btn-primary">Edit</button></a>
-                            }
-                        </td>
-                        <td class="text-right">
-                            <form action="~/RoleAdmin/Delete" method="post">
-                                @if (Role.RoleID > 2 && Role.UserRoles.Count() == 0)
-                                {
-                                <input type="hidden" name="id" value="@Role.RoleID"/>
+                        }
+                    </td>
+                    <td class="text-right">
+                        <form action="~/RoleAdmin/Delete" method="post">
+                            @if (Role.RoleID > 2 && Role.UserRoles.Count() == 0)
+                            {
+                                <input type="hidden" name="id" value="@Role.RoleID" />
                                 <button type="submit" class="btn btn-danger">Delete</button>
-                                }
-                            </form>
-                        </td>
-                    
+                            } else if(Role.RoleID > 2){
+                                <button type="button" class="btn btn-outline-secondary" disabled>Delete</button>
+                            }
+
+                        </form>
+                    </td>
+
                 </tr>
-                    
-                }
+
             }
         }
-    </table>
-
-    <a href="/RoleAdmin/Create"><button type="button" class="btn btn-success">Create</button></a>
+    }
+</table>
+<div class="row justify-content-end">
+    <div class="col-2">
+        <a href="/RoleAdmin/Create">
+            <button type="button" class="btn btn-success">
+                <i class="fa fa-plus"></i> Add New Role
+            </button>
+        </a>
+    </div>
 </div>
+
+

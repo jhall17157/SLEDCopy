@@ -3,7 +3,16 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Create User</h2>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard","Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Manage Users", "ViewUsers","Admin")</li>
+        <li class="breadcrumb-item active" aria-current="page">New User</li>
+    </ol>
+</nav>
+
+<h1>Create User</h1>
+<br />
 
 <form action="CreateUser" method="post">
     <div class="form-group">

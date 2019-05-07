@@ -7,12 +7,12 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink((String)((AssessmentRubric)Model.Rubric).RubricAssessments.FirstOrDefault().Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = ((AssessmentRubric)Model.Rubric).AssessmentID }, null)</li>
-        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Name, "ViewRubric", "Rubric")</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Name, "ViewAssessment", "Admin", new { assessmentID = ((AssessmentRubric)Model.Rubric).AssessmentID }, null)</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.Rubric.RubricID }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">Edit</li>
     </ol>
 </nav>
-<h2>Edit Rubric</h2>
+<h1>Edit Rubric</h1>
 <br />
 
 <form method="post" action="/Rubric/SaveRubric?rubricID=@Model.Rubric.RubricID">

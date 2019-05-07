@@ -9,20 +9,19 @@
         <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)((AssessmentRubric)Model.Criterion.Outcome.AssessmentRubric).RubricAssessments.FirstOrDefault().Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = ((AssessmentRubric)Model.Criterion.Outcome.AssessmentRubric).AssessmentID }, null)</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)Model.Criterion.Outcome.AssessmentRubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.Criterion.Outcome.AssessmentRubric.RubricID }, null)</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Criterion.Outcome.Name, "ViewOutcome", new { outcomeID = Model.Criterion.Outcome.OutcomeID }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">@Model.Criterion.Name</li>
     </ol>
 </nav>
 
-<h2>View Criterion</h2>
+<h1>@Model.Criterion.Name - <a style="font-size: 85%;" href="/Rubric/EditCriterion?criterionID=@Model.Criterion.CriteriaID"><b>Edit</b></a></h1>
+<br />
 
-<div class="py-1 h2">
-    @Model.Criterion.Name - <a style="font-size: 85%;" href="/Rubric/EditCriterion?criterionID=@Model.Criterion.CriteriaID"><b>Edit Criterion</b></a>
+<div class="py-1">
+    <b>Example Text:</b> @Model.Criterion.ExampleText
 </div>
 <div class="py-1">
-    Example Text: @Model.Criterion.ExampleText
-</div>
-<div class="py-1">
-    Is Active: @Model.Criterion.IsActive
+    <b>Is Active:</b> @Model.Criterion.IsActive
 </div>
 
 @*@if (Model.ModifierLogin != null)

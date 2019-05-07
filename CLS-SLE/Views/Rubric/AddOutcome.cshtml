@@ -7,11 +7,12 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink((String)((AssessmentRubric)Model.Rubric).RubricAssessments.FirstOrDefault().Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = ((AssessmentRubric)Model.Rubric.AssessmentID }, null))</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Name, "ViewAssessment", "Admin", new { assessmentID = Model.Rubric.AssessmentID }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">New Outcome</li>
     </ol>
 </nav>
-<h2>Add Outcome</h2>
+<h1>Add Outcome</h1>
+<br />
 
 <form method="post" action="/Rubric/InsertNewOutcome">
     <div hidden>

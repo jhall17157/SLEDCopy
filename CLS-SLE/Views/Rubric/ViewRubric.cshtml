@@ -14,6 +14,7 @@
 <h1>
     @Model.Rubric.Name  - <a style="font-size: 85%;" href="/Rubric/EditRubric?rubricID=@Model.Rubric.RubricID"><b>Edit</b></a>
 </h1>
+<br />
 <div class="py-2">
     <b>Description:</b> @Model.Rubric.Description
 </div>
@@ -60,8 +61,8 @@
 
     <thead class="thead-dark">
         <tr>
-            <th scope="col" class="h2">Outcomes</th>
-            <th scope="col"><a class="float-right" href="/Rubric/AddOutcome?rubricID=@Model.Rubric.RubricID"><button type="button" class="btn btn-primary">Add New</button></a></th>
+            <th scope="col" class="h3">Outcomes</th>
+            <th scope="col"><a class="float-right" href="/Rubric/AddOutcome?rubricID=@Model.Rubric.RubricID"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Outcome</button></a></th>
 
         </tr>
     </thead>

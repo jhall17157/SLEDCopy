@@ -13,7 +13,7 @@
 
 </head>
 <body>
-    <div class="container-fluid" style="border-bottom: 3px solid #003e7a;">
+    <div class="container-fluid bg-white mb-5" style="border-bottom: 3px solid #003e7a;">
         <nav class="navbar navbar-expand-lg navbar-light">
             <a class="navbar-brand my-0 mr-md-auto" href="/">
                 @*<img  src="https://www.wctc.edu/_resources/images/waukesha_logo.svg"  >*@
@@ -53,31 +53,34 @@
         }
 
     }
-    <div style="height:20px;" class="row"></div>
-    @if (((CLS_SLE.Models.User)Session["user"]) != null)
-    {
-        
-        <div class="row justify-content-center">
-            <ul class="nav nav-tabs my-2 mx-5 col-9">
-                @*Needs to be manually updated for each new controller*@
-                @if (HttpContext.Current.User.IsInRole("Administrator"))
-                {
-                    <li class="nav-item h2"><a class="nav-link @((ControllerName.Equals("Admin") || ControllerName.Equals("RoleAdmin") || ControllerName.Equals("AdminUser") || ControllerName.Equals("Rubric")) ? "active" : "")" href="~/Admin/AdminDashboard">Admin Dashboard</a></li>
-                }
-                @if (HttpContext.Current.User.IsInRole("Faculty"))
-                {
-                    <li class="nav-item h2"><a class="nav-link  @(ControllerName.Equals("InstructorAssessments")  ? "active" : "")" href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a></li>
-                }
-            </ul>
+        <div class="container">
+            @if (((CLS_SLE.Models.User)Session["user"]) != null)
+            {
+                <div class="row justify-content-center">
+                    <ul class="nav nav-tabs col-12 pt-0">
+                        @*Needs to be manually updated for each new controller*@
+                        @if (HttpContext.Current.User.IsInRole("Administrator"))
+                        {
+                            <li class="nav-item h2">
+                                <a class="nav-link align-bottom @((ControllerName.Equals("Admin") || ControllerName.Equals("RoleAdmin") || ControllerName.Equals("AdminUser") || ControllerName.Equals("Rubric")) ? "active bg-white pb-4" : "bg-light mt-3")" href="~/Admin/AdminDashboard">Admin Dashboard</a></li>
+                        }
+                        @if (HttpContext.Current.User.IsInRole("Faculty"))
+                        {
+                            <li class="nav-item h2">
+                                <a class="nav-link align-bottom @(ControllerName.Equals("InstructorAssessments")  ? "active bg-white pb-4" : "bg-light mt-3")" href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                
+
+
+            }
+                <div class="bg-white" id="MainBody">
+                    @RenderBody()
+                </div>
+            <footer style="margin-bottom:4vh"></footer>
         </div>
-        <div style="height:20px;" class="row"></div>
-
-
-    }
-    <div class="container body-content">
-        @RenderBody()
-        <footer style="margin-bottom:10vh"></footer>
-    </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

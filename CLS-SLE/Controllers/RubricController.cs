@@ -32,8 +32,20 @@ namespace CLS_SLE.Controllers
         public ActionResult ViewRubric(int? rubricID)
         {
             dynamic Model = new ExpandoObject();
-            Model.Rubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
+            var Rubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
             Model.Outcomes = db.Outcomes.Where(o => o.RubricID == rubricID).ToList();
+            Model.Rubric = Rubric;
+            Model.CreatorLogin = null;
+            Model.ModifierLogin = null;
+
+            if (Rubric.CreatedByLoginID != null)
+            {
+                Model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == Rubric.CreatedByLoginID).FirstOrDefault().Login;
+            }
+            if (Rubric.ModifiedByLoginID != null)
+            {
+                Model.ModifierLogin = (String)db.Users.Where(u => u.PersonID == Rubric.ModifiedByLoginID).FirstOrDefault().Login;
+            }
             return View(Model);
         }
         public ActionResult AddRubric(int? assessmentID)
@@ -133,8 +145,21 @@ namespace CLS_SLE.Controllers
         public ActionResult ViewOutcome(int? outcomeID)
         {
             dynamic Model = new ExpandoObject();
-            Model.Outcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
-            Model.Criteria = db.Criteria.Where(c => c.OutcomeID == outcomeID).ToList();
+            var Outcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
+            var Criteria = db.Criteria.Where(c => c.OutcomeID == outcomeID).ToList();
+            Model.Outcome = Outcome;
+            Model.Criteria = Criteria;
+            Model.CreatorLogin = null;
+            Model.ModifierLogin = null;
+
+            if (Outcome.CreatedByLoginID != null)
+            {
+                Model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == Outcome.CreatedByLoginID).FirstOrDefault().Login;
+            }
+            if (Outcome.ModifiedByLoginID != null)
+            {
+                Model.ModifierLogin = (String)db.Users.Where(u => u.PersonID == Outcome.ModifiedByLoginID).FirstOrDefault().Login;
+            }
             return View(Model);
         }
         public ActionResult AddOutcome(int? rubricID)
@@ -219,7 +244,19 @@ namespace CLS_SLE.Controllers
         public ActionResult ViewCriterion(int? criterionID)
         {
             dynamic Model = new ExpandoObject();
-            Model.Criterion = db.Criteria.Where(c => c.CriteriaID == criterionID).FirstOrDefault();
+            var Criterion = db.Criteria.Where(c => c.CriteriaID == criterionID).FirstOrDefault();
+            Model.Criterion = Criterion;
+            Model.CreatorLogin = null;
+            Model.ModifierLogin = null;
+
+            if (Criterion.CreatedByLoginID != null)
+            {
+                Model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == Criterion.CreatedByLoginID).FirstOrDefault().Login;
+            }
+            if (Criterion.ModifiedByLoginID != null)
+            {
+                Model.ModifierLogin = (String)db.Users.Where(u => u.PersonID == Criterion.ModifiedByLoginID).FirstOrDefault().Login;
+            }
             return View(Model);
         }
         public ActionResult AddCriterion(int? outcomeID)

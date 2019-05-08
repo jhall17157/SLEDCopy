@@ -59,7 +59,7 @@
         
         <div class="row justify-content-center">
             <ul class="nav nav-tabs my-2 mx-5 col-9">
-
+                @*Needs to be manually updated for each new controller*@
                 @if (HttpContext.Current.User.IsInRole("Administrator"))
                 {
                     <li class="nav-item h2"><a class="nav-link @((ControllerName.Equals("Admin") || ControllerName.Equals("RoleAdmin") || ControllerName.Equals("AdminUser") || ControllerName.Equals("Rubric")) ? "active" : "")" href="~/Admin/AdminDashboard">Admin Dashboard</a></li>
@@ -85,7 +85,7 @@
     <script>
         window.onscroll = function () { myFunction() };
 
-        // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
+        @* Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position *@
         function myFunction() {
 
             if (window.scrollY >= 100) {

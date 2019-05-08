@@ -6,7 +6,13 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink((String)((AssessmentRubric)Model.Criterion.Outcome.AssessmentRubric).RubricAssessments.FirstOrDefault().Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = ((AssessmentRubric)Model.Criterion.Outcome.AssessmentRubric).AssessmentID }, null)</li>
+        @*
+        This is the only page in the solution where the following line pulls from the database from a column that should still exist.
+        If you intend to keep the breadcrumbs as is you should adapt from this line to the rest of the views in this controller, 
+        however you may instead want to pass the assessment that the user has navigated from down the chain, as rubrics will need 
+        to pertain to multiple assessments as per specification.
+        *@
+        <li class="breadcrumb-item">@Html.ActionLink((String)((AssessmentRubric)Model.Criterion.Outcome.AssessmentRubric).RubricAssessments.FirstOrDefault().Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = ((AssessmentRubric)Model.Criterion.Outcome.AssessmentRubric).RubricAssessments.FirstOrDefault().AssessmentID }, null)</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)Model.Criterion.Outcome.AssessmentRubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.Criterion.Outcome.AssessmentRubric.RubricID }, null)</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)Model.Criterion.Outcome.Name, "ViewOutcome", "Rubric", new { outcomeID = Model.Criterion.Outcome.OutcomeID }, null)</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)Model.Criterion.Name, "ViewCriterion", "Rubric", new { criterionID = Model.Criterion.CriteriaID }, null)</li>

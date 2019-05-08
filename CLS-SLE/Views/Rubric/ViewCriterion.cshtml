@@ -23,23 +23,22 @@
 <div class="py-1">
     <b>Is Active:</b> @Model.Criterion.IsActive
 </div>
-
-@*@if (Model.ModifierLogin != null)
-    {
-        <div class="py-1">
-            Last Modified:  @Model.assessment.ModifiedDateTime
-        </div>
-        <div class="py-1">
-            By: @Model.ModifierLogin
-        </div>
-    }
-    else if (Model.CreatorLogin != null)
-    {
-        <div class="py-1">
-            Created: @Model.assessment.CreatedDateTime
-        </div>
-        <div class="py-1">
-            By: @Model.CreatorLogin
-        </div>
-}*@
+@if (Model.ModifierLogin != null)
+{
+    <div class="py-1">
+        <b>Last Modified:</b>  @Model.Criterion.ModifiedDateTime
+    </div>
+    <div class="py-1">
+        <b>By User:</b> @Model.ModifierLogin
+    </div>
+}
+else if (Model.CreatorLogin != null)
+{
+    <div class="py-1">
+        <b>Created:</b> @Model.Criterion.CreatedDateTime
+    </div>
+    <div class="py-1">
+        <b>By User:</b> @Model.CreatorLogin
+    </div>
+}
 

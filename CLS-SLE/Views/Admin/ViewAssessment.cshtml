@@ -42,10 +42,10 @@
 else if (Model.CreatorLogin != null)
 {
     <div class="py-1">
-        Created: @Model.assessment.CreatedDateTime
+        <b>Created:</b> @Model.assessment.CreatedDateTime
     </div>
     <div class="py-1">
-        By: @Model.CreatorLogin
+        <b>By User:</b> @Model.CreatorLogin
     </div>
 }
 <br />
@@ -55,7 +55,7 @@ else if (Model.CreatorLogin != null)
         <thead class="thead-dark">
             <tr>
                 <th class="h3">Rubrics</th>
-                <th><a href="~/Rubric/AddRubric?assessmentID=@Model.assessment.AssessmentID" class="float-right"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i>Add New</button></a></th>
+                <th><a href="~/Rubric/AddRubric?assessmentID=@Model.assessment.AssessmentID" class="float-right"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Rubric </button></a></th>
             </tr>
         </thead>
         <tbody>

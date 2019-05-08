@@ -289,7 +289,7 @@ namespace CLS_SLE.Controllers
 
                     List<UserSecurity> UserSecurities = GetUserSecurities();
 
-                    var FilteredUserSecurities = UserSecurities.Where(p => p.FirstName.ToLower().Contains(QueryString) || p.LastName.ToLower().Contains(QueryString) || p.IDNumber.Contains(QueryString));
+                    var FilteredUserSecurities = UserSecurities.Where(p => p.FirstName.ToLower().Contains(QueryString.ToLower()) || p.LastName.ToLower().Contains(QueryString.ToLower()) || p.IDNumber.Contains(QueryString.ToLower()) || p.Login.Contains(QueryString.ToLower()));
 
                     Model.UserSecurityList = FilteredUserSecurities;
                 }

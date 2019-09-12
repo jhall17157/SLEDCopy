@@ -27,6 +27,11 @@ namespace CLS_SLE
                       "~/Content/bootstrap.css",
                       "~/Content/fontawesome/css/all.min.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new StyleBundle("~/Content/images").Include(
+                     "~/Content/images/tasks-solid.png",
+                     "~/Content/images/users-solid.png"
+                     ));
         }
     }
 }

@@ -189,6 +189,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AdminAssessmentsController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AdminUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -2143,6 +2144,14 @@
     <Content Include="Views\AdminUser\Create.cshtml" />
     <Content Include="Views\AdminUser\Edit.cshtml" />
     <Content Include="Views\RoleAdmin\ManageRole.cshtml" />
+    <Content Include="Views\AdminAssessments\AddAssessment.cshtml" />
+    <Content Include="Views\AdminAssessments\AssessmentMappings.cshtml" />
+    <Content Include="Views\AdminAssessments\Assessments.cshtml" />
+    <Content Include="Views\AdminAssessments\AssessmentScheduling.cshtml" />
+    <Content Include="Views\AdminAssessments\EditAssessment.cshtml" />
+    <Content Include="Views\AdminAssessments\ProgramsCourses.cshtml" />
+    <Content Include="Views\AdminAssessments\SchoolsDepartments.cshtml" />
+    <Content Include="Views\AdminAssessments\ViewAssessment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

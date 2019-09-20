@@ -5,16 +5,15 @@
 }
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        @*<li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>*@
-        <li class="breadcrumb-item"><a href=@Url.Action("AdminDashboard", "Admin")>Admin Dashboard</a></li>
-        <li class="breadcrumb-item">@Html.ActionLink("Assessnents", "Assessments")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Assessnents", "Assessments", "AdminAssessments")</li>
         <li class="breadcrumb-item active" aria-current="page">New Assessment</li>
     </ol>
 </nav>
 <h1>Add Assessment</h1>
 <br />
 
-<form method="post" action="/Admin/InsertNewAssessment">
+<form method="post" action="/AdminAssessments/InsertNewAssessment">
     <div class="form-row">
         <div class="form-group col-9">
             <label for="Name">Name:</label>
@@ -81,7 +80,7 @@
     </fieldset>
     <div class="row justify-content-end col-9">
         <div class="col-2 p-0 mx-1"><button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Submit</button></div>
-        <div class="col-2 p-0 mx-1"><a href="/Admin/Assessments"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
+        <div class="col-2 p-0 mx-1"><a href="/AdminAssessments/Assessments"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
     </div>
 
 </form>

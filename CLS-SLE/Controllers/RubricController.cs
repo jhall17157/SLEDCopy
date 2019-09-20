@@ -152,9 +152,6 @@ namespace CLS_SLE.Controllers
             Model.CreatorLogin = null;
             Model.ModifierLogin = null;
 
-            //var CreatedByLoginID = db.People.Where(p => p.PersonID > 0).FirstOrDefault();
-
-            //if (CreatedByLoginID != null)
             //if (Outcome.CreatedByLoginID != null)
             //{
             //    Model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == Outcome.CreatedByLoginID).FirstOrDefault().Login;

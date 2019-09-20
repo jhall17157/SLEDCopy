@@ -6,9 +6,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        @*<li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>*@
-        <li class="breadcrumb-item"><a href=@Url.Action("Assessments", "AdminAssessments")>Assessments</a></li>
-        @*<li class="breadcrumb-item">@Html.ActionLink((String)((AssessmentRubric)Model.Criterion.Outcome.AssessmentRubric).RubricAssessments.FirstOrDefault().Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = ((AssessmentRubric)Model.Criterion.Outcome.AssessmentRubric).AssessmentID }, null)</li>*@
+        <li class="breadcrumb-item">@Html.ActionLink("Assessnents", "Assessments", "AdminAssessments")</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)((AssessmentRubric)Model.Criterion.Outcome.AssessmentRubric).RubricAssessments.FirstOrDefault().Assessment.Name, "ViewAssessment", "AdminAssessments", new { assessmentID = ((AssessmentRubric)Model.Criterion.Outcome.AssessmentRubric).AssessmentID }, null)</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)Model.Criterion.Outcome.AssessmentRubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.Criterion.Outcome.AssessmentRubric.RubricID }, null)</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)Model.Criterion.Outcome.Name, "ViewOutcome", new { outcomeID = Model.Criterion.Outcome.OutcomeID }, null)</li>

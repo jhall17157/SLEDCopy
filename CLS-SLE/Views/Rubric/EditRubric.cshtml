@@ -6,8 +6,8 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Name, "ViewAssessment", "Admin", new { assessmentID = ((AssessmentRubric)Model.Rubric).AssessmentID }, null)</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "AdminAssessments")</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Name, "ViewAssessment", "AdminAssessments", new { assessmentID = ((AssessmentRubric)Model.Rubric).AssessmentID }, null)</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.Rubric.RubricID }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">Edit</li>
     </ol>

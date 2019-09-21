@@ -37,33 +37,6 @@ namespace CLS_SLE.Controllers
         [HttpPost]
         public ActionResult CreateUser(AddUserViewModel userVM)
         {
-            /*string fName = form["fName"];
-            string lName = form["lName"];
-            string login = form["login"];
-            string id = form["id"];
-            string email = form["email"];
-            //DateTime created = DateTime.Now;
-            //string hash = BCrypt.Net.BCrypt.HashString(id);
-
-            Person person = new Person()
-            {
-                FirstName = fName,
-                LastName = lName,
-                IdNumber = id,
-                CreatedDateTime = created
-            };
-            db.People.Add(person);
-            User user = new User()
-            {
-                PersonID = person.PersonID,
-                Login = login,
-                Email = email,
-                MustResetPassword = true,
-                CreatedDateTime = created,
-                Hash = hash
-            };
-            db.Users.Add(user);
-            db.SaveChanges();*/
 
             if(ModelState.IsValid)
             {

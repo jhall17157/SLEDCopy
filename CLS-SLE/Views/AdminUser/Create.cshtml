@@ -16,44 +16,41 @@
 
 @using (Html.BeginForm("CreateUser", "AdminUser", FormMethod.Post))
 {
-
-<div class="form-group">
-    @Html.Label("First Name:")
-    @Html.EditorFor(Model => Model.Person.FirstName)
-    <br />
-    @Html.Label("Login:")
-    @Html.EditorFor(Model => Model.User.Login)
-    <br />
-    @Html.Label("Last Name:")
-    @Html.EditorFor(Model => Model.Person.LastName)
-    <br />
-    @Html.Label("ID:")
-    @Html.EditorFor(Model => Model.Person.IdNumber)
-    <br />
-    @Html.Label("Email:")
-    @Html.EditorFor(Model => Model.User.Email)
-    <br />
-    <input type="submit" class="btn btn-primary" value="Submit" />
-</div>
-}
-
-<!--<form action="CreateUser" method="post">
     <div class="form-group">
-        <label for="fName">First Name:</label>
-        <input type="text" id="fName" name="fName" required />
-        <br />
-        <label for="login">Login:</label><br />
-        <input type="text" id="login" name="login" required />
-        <br />
-        <label for="lName">Last Name:</label><br />
-        <input type="text" id="lName" name="lName" required />
-        <br />
-        <label for="id">ID:</label><br />
-        <input type="text" id="id" name="id" required maxlength="9" />
-        <br />
-        <label for="email">Email:</label><br />
-        <input type="email" id="email" name="email" required />
-        <br /><br />
+        @Html.Label("First Name:")
+        @Html.EditorFor(Model => Model.Person.FirstName,
+       new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Person.FirstName)
+    </div>
+    <div class="form-group">
+        @Html.Label("Last Name:")
+        @Html.EditorFor(Model => Model.Person.LastName,
+       new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Person.LastName)
+    </div>
+    <div class="form-group">
+        @Html.Label("Login:")
+        @Html.EditorFor(Model => Model.User.Login,
+       new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.User.Login)
+    </div>
+    <div class="form-group">
+        @Html.Label("ID:")
+        @Html.EditorFor(Model => Model.Person.IdNumber,
+       new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Person.IdNumber)
+    </div>
+    <div class="form-group">
+        @Html.Label("Email:")
+        @Html.EditorFor(Model => Model.User.Email,
+       new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.User.Email)
+    </div>
+    <div class="form-group">
         <input type="submit" class="btn btn-primary" value="Submit" />
-    </div>-->
-</form>
+    </div>
+
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

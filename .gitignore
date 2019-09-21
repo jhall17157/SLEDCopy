@@ -8,7 +8,7 @@
 *.user
 *.userosscache
 *.sln.docstates
-CLS_SLE\CLS-SLE\bin\CLS-SLE.dll
+CLS-SLE\bin\CLS-SLE.dll
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

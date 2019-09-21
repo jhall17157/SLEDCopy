@@ -7,7 +7,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Assessnents", "Assessments", "AdminAssessments")</li>
-        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Assessment.Name, "ViewAssessment", (int)Model.Assessment.AssessmentID)</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Assessment.Name, "ViewAssessment", "AdminAssessments", new { assessmentID = Model.Assessment.AssessmentID }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">Edit</li>
     </ol>
 </nav>

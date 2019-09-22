@@ -1933,6 +1933,7 @@
     <Content Include="Content\fontawesome\webfonts\fa-brands-400.svg" />
     <Content Include="Content\fontawesome\webfonts\fa-regular-400.svg" />
     <Content Include="Content\fontawesome\webfonts\fa-solid-900.svg" />
+    <Content Include="Content\images\calendar-solid.png" />
     <Content Include="Content\images\tasks-solid.png" />
     <Content Include="Content\images\tasks-solid.svg" />
     <Content Include="Content\images\users-solid.png" />

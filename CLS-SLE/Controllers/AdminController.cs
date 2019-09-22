@@ -255,7 +255,36 @@ namespace CLS_SLE.Controllers
 
         public ActionResult AssessmentScheduling()
         {
-            return View();
+            try
+            {
+                var personID = Convert.ToInt32(Session["personID"].ToString());
+                var user = db.Users.FirstOrDefault(u => u.PersonID == personID);
+                var adminAssessments = from assessments in db.Assessments
+                                           //join permissions in db.AssessmentRubricSecurities on assessments.AssessmentID equals permissions.AssessmentID
+                                           //where permissions.PersonID == personID
+                                       select assessments;
+                logger.Info("Dashboard loaded for " + user.Login);
+
+                var course = db.Courses.ToList();
+                var courseProgram = db.CoursePrograms.ToList();
+                var categories = db.AssessmentCategories.ToList();
+                var department = db.Departments.ToList();
+
+                dynamic model = new ExpandoObject();
+
+                model.course = course;
+                model.courseProgram = courseProgram;
+                model.department = department;
+                model.assessments = adminAssessments.Distinct().OrderByDescending(a => a.IsActive).ThenBy(a => a.Name).ToList();
+                model.categories = categories;
+
+                return View(model);
+            }
+            catch
+            {
+                logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
+                return RedirectToAction(actionName: "Signin", controllerName: "User");
+            }
         }
 
         public ActionResult ProgramsCourses()

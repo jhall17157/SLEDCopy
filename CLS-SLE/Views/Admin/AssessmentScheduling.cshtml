@@ -1,7 +1,65 @@
-﻿
+﻿@using CLS_SLE.Models;
 @{
     ViewBag.Title = "AssessmentScheduling";
 }
 
-<h2>Assessment Scheduling | <a href="~/Admin/AdminDashboard">Admin Dashboard</a></h2>
 
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
+        <li class="breadcrumb-item active" aria-current="page">Assessments</li>
+    </ol>
+</nav>
+<h1>Assessment Scheduling</h1>
+<br />
+
+@foreach (CourseProgram courseProgram in Model.courseProgram)
+{
+    <h2>@courseProgram.Course</h2>
+
+    foreach (Course course in Model.course)
+    {
+        if (course.CourseID.Equals(courseProgram.CourseID))
+        {
+            <table class="table table-hover">
+
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col" class="h3">@course.CourseName</th>
+                        <th scope="col" class="text-right">@course.</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            foreach (Assessment assessment in Model.assessments)
+            {
+
+                if (assessment.ProgramID.Equals(courseProgram.ProgramID))
+                {
+                    if (assessment.IsActive.Equals(false))
+                    {
+                        <tr>
+                            <td colspan="2">@assessment.Name <span class="text-danger">(Not Active)</span></td>
+                            <td class="text-right">
+                                <a href="ViewAssessment?assessmentId=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
+                                @*@Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })*@
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2">@assessment.Name</td>
+                            <td class="text-right">
+                                <a href="ViewAssessment?assessmentId=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
+                                @*@Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })*@
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        }
+    }
+}

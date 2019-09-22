@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using CLS_SLE.Models;
 using BCrypt;
+using CLS_SLE.ViewModels;
 
 namespace CLS_SLE.Controllers
 {
@@ -29,35 +30,33 @@ namespace CLS_SLE.Controllers
             return View();
         }
 
-        public ActionResult CreateUser(FormCollection form)
+        /**
+         * Lucas Nolting
+         * This is a method I will be converting to use Model binding
+         */
+        [HttpPost]
+        public ActionResult CreateUser(AddUserViewModel userVM)
         {
-            string fName = form["fName"];
-            string lName = form["lName"];
-            string login = form["login"];
-            string id = form["id"];
-            string email = form["email"];
-            DateTime created = DateTime.Now;
-            string hash = BCrypt.Net.BCrypt.HashString(id);
 
-            Person person = new Person()
+            if(ModelState.IsValid)
             {
-                FirstName = fName,
-                LastName = lName,
-                IdNumber = id,
-                CreatedDateTime = created
-            };
-            db.People.Add(person);
-            User user = new User()
+                //person
+                userVM.Person.CreatedDateTime = DateTime.Now;
+                db.People.Add(userVM.Person);
+                
+                //user
+                userVM.User.CreatedDateTime = DateTime.Now;
+                //hash pass on submission
+                userVM.HashStudentID(userVM.Person.IdNumber);
+                db.Users.Add(userVM.User);
+                db.SaveChanges();
+              
+            }
+
+            else
             {
-                PersonID = person.PersonID,
-                Login = login,
-                Email = email,
-                MustResetPassword = true,
-                CreatedDateTime = created,
-                Hash = hash
-            };
-            db.Users.Add(user);
-            db.SaveChanges();
+                return RedirectToAction("Create", "AdminUser");
+            }
 
             return RedirectToAction("ViewUsers", "Admin");
         }

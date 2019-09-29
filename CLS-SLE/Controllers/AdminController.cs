@@ -265,18 +265,18 @@ namespace CLS_SLE.Controllers
                                        select assessments;
                 logger.Info("Dashboard loaded for " + user.Login);
 
-                var course = db.Courses.ToList();
-                var courseProgram = db.CoursePrograms.ToList();
-                var categories = db.AssessmentCategories.ToList();
                 var department = db.Departments.ToList();
+                var program = db.Programs.ToList();
+                var course = db.Courses.ToList();
+                var categories = db.AssessmentCategories.ToList();
 
                 dynamic model = new ExpandoObject();
 
-                model.course = course;
-                model.courseProgram = courseProgram;
                 model.department = department;
-                model.assessments = adminAssessments.Distinct().OrderByDescending(a => a.IsActive).ThenBy(a => a.Name).ToList();
+                model.program = program;
+                model.course = course;
                 model.categories = categories;
+                model.assessments = adminAssessments.Distinct().OrderByDescending(a => a.IsActive).ThenBy(a => a.Name).ToList();
 
                 return View(model);
             }

@@ -14,52 +14,66 @@
 <h1>Assessment Scheduling</h1>
 <br />
 
-@foreach (CourseProgram courseProgram in Model.courseProgram)
+@foreach (Program program in Model.program)
 {
-    <h2>@courseProgram.Course</h2>
+    <table class="table table-hover">
 
-    foreach (Course course in Model.course)
-    {
-        if (course.CourseID.Equals(courseProgram.CourseID))
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col" class="h3">@program.Name</th>
+            </tr>
+        </thead>
+        @foreach (Course course in Model.course)
         {
-            <table class="table table-hover">
+            <tbody>
+                <tr>
+                    <td colspan="2">@course.CourseName</td>
+                    <td colspan="2">@course.Number</td>
+                    <td colspan="2"><button type="button" class="btn btn-primary">Edit</button></td>
+                </tr>
+            </tbody>
 
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col" class="h3">@course.CourseName</th>
-                        <th scope="col" class="text-right">@course.</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-
-            foreach (Assessment assessment in Model.assessments)
+            /*if (course.CourseID.Equals(courseProgram.CourseID))
             {
+                <table class="table table-hover">
 
-                if (assessment.ProgramID.Equals(courseProgram.ProgramID))
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col" class="h3">@course.CourseName</th>
+                            <th scope="col" class="text-right">@course.</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+                foreach (Assessment assessment in Model.assessments)
                 {
-                    if (assessment.IsActive.Equals(false))
+
+                    if (assessment.ProgramID.Equals(courseProgram.ProgramID))
                     {
-                        <tr>
-                            <td colspan="2">@assessment.Name <span class="text-danger">(Not Active)</span></td>
-                            <td class="text-right">
-                                <a href="ViewAssessment?assessmentId=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
-                                @*@Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })*@
-                            </td>
-                        </tr>
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="2">@assessment.Name</td>
-                            <td class="text-right">
-                                <a href="ViewAssessment?assessmentId=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
-                                @*@Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })*@
-                            </td>
-                        </tr>
+                        if (assessment.IsActive.Equals(false))
+                        {
+                            <tr>
+                                <td colspan="2">@assessment.Name <span class="text-danger">(Not Active)</span></td>
+                                <td class="text-right">
+                                    <a href="ViewAssessment?assessmentId=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
+                                    @*@Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })*@
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="2">@assessment.Name</td>
+                                <td class="text-right">
+                                    <a href="ViewAssessment?assessmentId=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
+                                    @*@Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })*@
+                                </td>
+                            </tr>
+                        }
                     }
                 }
-            }
+            }*/
         }
-    }
+    </table>
 }

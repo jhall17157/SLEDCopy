@@ -46,10 +46,9 @@
 
 <!-- Assessments Tables -->
 @{
-    Course course = new Course();
-    CourseProgram courseProgram = new CourseProgram();
+    var course = new Course();
+    var courseProgram = new CourseProgram();
 }
-
 
 @if (course.CourseID.Equals(courseProgram.CourseID))
 {
@@ -61,44 +60,37 @@
             </th>
         </tr>
     </thead>
-
-        <tbody>
-            <tr>
-                <td scope="col" class="h3"><b>Assessment Name</b></td>
-                <td scope="col" class="h3 right"><b>Assessment ID</b></td>
-            </tr>
-
-                @foreach (Assessment assessment in Model.assessments)
+    <tbody>
+        <tr>
+            <td scope="col" class="h3"><b>Assessment Name</b></td>
+            <td scope="col" class="h3 right"><b>Assessment ID</b></td>
+        </tr>
+        @foreach (Assessment assessment in Model.assessments)
+        {
+            if (assessment.ProgramID.Equals(courseProgram.ProgramID))
+            {
+                if (assessment.IsActive.Equals(true))
                 {
-                    if (assessment.ProgramID.Equals(courseProgram.ProgramID))
-                    {
-                        if (assessment.IsActive.Equals(true))
-                        {
-                            <tr>
-                                <td>
-                                    <span class="mt-2">
-                                        @Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })
-                                    </span>
-                                 <!--   <button type="button" class="btn btn-primary right">Enter</button> -->
-                                    <span class="right mr-3 mt-2">
-                                        @assessment.AssessmentID
-                                    </span>
+                    <tr>
+                        <td>
+                            <span class="mt-2">
+                                @Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })
+                            </span>
+                         <!--   <button type="button" class="btn btn-primary right">Enter</button> -->
+                            <span class="right mr-3 mt-2">
+                                @assessment.AssessmentID
+                            </span>
 
-                                </td>
-                            </tr>
-                        }
-                    }
-                 }
-
-        </tbody>
+                        </td>
+                    </tr>
+                }
+            }
+         }
+    </tbody>
 </table>
 }
 
-
-
-
 @*
-
         @if (course.CourseID.Equals(courseProgram.CourseID ))
         {
             <table class="table table-hover">

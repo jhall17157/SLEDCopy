@@ -253,32 +253,28 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        /*
+         * SLE-CLS Group - Fall 2019
+         * Last Updated: Matt Petermann 10/7/19
+         */
         public ActionResult AssessmentScheduling()
         {
             try
             {
-                var personID = Convert.ToInt32(Session["personID"].ToString());
-                var user = db.Users.FirstOrDefault(u => u.PersonID == personID);
-                var adminAssessments = from assessments in db.Assessments
-                                           //join permissions in db.AssessmentRubricSecurities on assessments.AssessmentID equals permissions.AssessmentID
-                                           //where permissions.PersonID == personID
-                                       select assessments;
-                logger.Info("Dashboard loaded for " + user.Login);
+                var personId = Convert.ToInt32(Session["personID"].ToString());
+                var user = db.Users.FirstOrDefault(u => u.PersonID == personId);
+                var adminAssessments = db.Assessments.ToList();
+                logger.Info("Dashboard loaded for " + user?.Login);
 
-                var department = db.Departments.ToList();
-                var program = db.Programs.ToList();
-                var course = db.Courses.ToList();
-                var categories = db.AssessmentCategories.ToList();
-
-                dynamic model = new ExpandoObject();
-
-                model.department = department;
-                model.program = program;
-                model.course = course;
-                model.categories = categories;
-                model.assessments = adminAssessments.Distinct().OrderByDescending(a => a.IsActive).ThenBy(a => a.Name).ToList();
-
-                return View(model);
+                return View(new AssessmentSchedulingViewModel
+                {
+                    Departments = db.Departments.ToList(),
+                    Programs = db.Programs.ToList(),
+                    Courses = db.Courses.ToList(),
+                    Categories = db.AssessmentCategories.ToList(),
+                    Assessments = adminAssessments.Distinct().OrderByDescending(a => a.IsActive)
+                        .ThenBy(a => a.Name).ToList()
+                });
             }
             catch
             {

@@ -1,4 +1,4 @@
-﻿@using CLS_SLE.Models;
+﻿@model CLS_SLE.Models.AssessmentSchedulingViewModel
 @{
     ViewBag.Title = "AssessmentScheduling";
 }
@@ -12,7 +12,7 @@
 <h1>Assessment Scheduling</h1>
 <br />
 
-@foreach (Program program in Model.program)
+@foreach (var program in Model.Programs)
 {
     <table class="table table-hover">
         <thead class="thead-dark">
@@ -25,12 +25,10 @@
                 <th>
                     <span class="mt-2 h3"><b>Course Name</b></span>
                     <span class="right h3"><b>Course Number</b></span>
-
                 </th>
             </tr>
-            <!-- Changed Course couse to Course c. -->
-            <!--Not the best name by any means but it needed to change to get the code below 49 to work (AFAIK)-->
-            @foreach (Course c in Model.course)
+
+            @foreach (var c in Model.Courses)
             {
                 <tr>
                     <td>
@@ -44,14 +42,7 @@
     </table>
 }
 
-<!-- Assessments Tables -->
-@{
-    var course = new Course();
-    var courseProgram = new CourseProgram();
-}
-
-@if (course.CourseID.Equals(courseProgram.CourseID))
-{
+@*TODO: Talk about db entries to group assessments*@
 <table class="table table-hover">
     <thead class="thead-dark">
         <tr>
@@ -65,32 +56,28 @@
             <td scope="col" class="h3"><b>Assessment Name</b></td>
             <td scope="col" class="h3 right"><b>Assessment ID</b></td>
         </tr>
-        @foreach (Assessment assessment in Model.assessments)
+        @foreach (var assessment in Model.Assessments)
         {
-            if (assessment.ProgramID.Equals(courseProgram.ProgramID))
+            if (assessment.IsActive)
             {
-                if (assessment.IsActive.Equals(true))
-                {
-                    <tr>
-                        <td>
-                            <span class="mt-2">
-                                @Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })
-                            </span>
-                         <!--   <button type="button" class="btn btn-primary right">Enter</button> -->
-                            <span class="right mr-3 mt-2">
-                                @assessment.AssessmentID
-                            </span>
-
-                        </td>
-                    </tr>
-                }
+                <tr>
+                    <td>
+                        <span class="mt-2">
+                            @Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })
+                        </span>
+                        <span class="right mr-3 mt-2">
+                            @assessment.AssessmentID
+                        </span>
+                    </td>
+                </tr>
             }
-         }
+        }
     </tbody>
 </table>
-}
 
 @*
+    TODO: Discuss if we need this
+
         @if (course.CourseID.Equals(courseProgram.CourseID ))
         {
             <table class="table table-hover">

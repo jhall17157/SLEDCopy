@@ -153,7 +153,9 @@ namespace CLS_SLE.Controllers
         public ActionResult AddAssessment(String category)
         {
             dynamic Model = new ExpandoObject();
-            Model.Programs = (from Program in db.Programs select Program).ToList();
+            Model.Programs = (from programs in db.Programs
+                              orderby programs.Name
+                              select programs).ToList();
             Model.Category = category;
             return View(Model);
         }

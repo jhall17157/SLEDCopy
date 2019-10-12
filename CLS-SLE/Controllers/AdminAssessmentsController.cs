@@ -141,6 +141,7 @@ namespace CLS_SLE.Controllers
                 Model.Programs = (from Program in db.Programs
                                   orderby Program.Name
                                   select Program).ToList();
+
                 Model.Assessment = assessment;
                 return View(Model);
             }
@@ -158,6 +159,11 @@ namespace CLS_SLE.Controllers
             Model.Programs = (from programs in db.Programs
                               orderby programs.Name
                               select programs).ToList();
+
+            Model.AssessmentCategories = (from Categories in db.AssessmentCategories
+                                          orderby Categories.Name
+                                          select Categories).ToList();
+
             Model.Category = category;
             return View(Model);
         }

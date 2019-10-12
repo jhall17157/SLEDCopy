@@ -30,3 +30,11 @@ WCTC is required to report student learning evidence to the state, board, and ot
 16. **IMPORTANT** If your local repository version is behind the version committed to GitHub you will need Pull before Pushing
 17. To pull changes repeat step 11
 18. After the changes have been pulled, right click on master and select Push
+
+##Model Binding and View Models
+Instead of using form controls you should bind a ViewModel to your controller method. Think of the view models as a shell of all the data you will need in the given View. I have put together a slideshow with a short explanation here:
+- https://docs.google.com/presentation/d/1tBl486R-VpDw_TXrjX3NKXrhzyHfa3xBlQVnSn9wfOE/edit?usp=sharing
+
+For more information on implementing this correctly research "model binding in .Net." and refer to the files mentioned in the presentation in the actual repository. 
+
+**IMPORTANT** NOTE: These files may not be in the "master" branch check the "Admin_Group_branch."

@@ -138,7 +138,9 @@ namespace CLS_SLE.Controllers
                 {
                     throw new Exception("Assessment not found!");
                 }
-                Model.Programs = (from Program in db.Programs select Program).ToList();
+                Model.Programs = (from Program in db.Programs
+                                  orderby Program.Name
+                                  select Program).ToList();
                 Model.Assessment = assessment;
                 return View(Model);
             }

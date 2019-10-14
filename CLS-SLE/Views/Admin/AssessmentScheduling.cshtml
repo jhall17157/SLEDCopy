@@ -31,105 +31,102 @@
             {
                 <tr>
                     <td>
-                        <span class="mt-2">@c.CourseName</span>
-                        <button type="button" class="btn btn-primary right">Edit</button>
+                        <span class="mt-2 pr-lg-3">@c.CourseName</span>
+                        @*If ruberic is assigned show ruberic name else show following button to assign*@
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#assignRubric">Assign</button>
+                        <button type="button" class="btn btn-primary right" data-toggle="modal" data-target="#scheduleRubric">Schedule</button>
                         <span class="right mr-3 mt-2">@c.Number</span>
+
+                        <!--Assign Modal-->
+                        <div class="modal fade" id="assignRubric" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Assign Rubric</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        @*TODO: Talk about db entries to group assessments*@
+                                        <table class="table table-hover">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th scope="col" class="h3">
+                                                        @c.CourseName - @c.CourseID
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td scope="col" class="h3"><b>Assessment Name</b></td>
+                                                    @* Modal width needs to be increase to include this if necessary
+
+                                                    <td scope="col" class="h3 right"><b>ID</b></td>*@
+                                                </tr>
+                                               
+                                                @foreach (var assessment in Model.Assessments)
+                                                {
+                                                    if (assessment.IsActive)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <span class="mt-2">
+                                                                    @Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })
+                                                                </span>
+                                                                <span class="right mr-3 mt-2">
+                                                                    @assessment.AssessmentID
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Schedule Modal-->
+                        <div class="modal fade" id="scheduleRubric" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Schedule</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table>
+                                            <thead>
+                                                @c.CourseName - @c.CourseID
+                                            </thead>
+                                            <tr>
+                                                <td>
+                                                    <input type="date" value="Start Date" />
+                                                </td>
+                                                <td>
+                                                    <input type="date" value="End Date" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 }
-
-@*TODO: Talk about db entries to group assessments*@
-<table class="table table-hover">
-    <thead class="thead-dark">
-        <tr>
-            <th scope="col" class="h3">
-                Assessments
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td scope="col" class="h3"><b>Assessment Name</b></td>
-            <td scope="col" class="h3 right"><b>Assessment ID</b></td>
-        </tr>
-        @foreach (var assessment in Model.Assessments)
-        {
-            if (assessment.IsActive)
-            {
-                <tr>
-                    <td>
-                        <span class="mt-2">
-                            @Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })
-                        </span>
-                        <span class="right mr-3 mt-2">
-                            @assessment.AssessmentID
-                        </span>
-                    </td>
-                </tr>
-            }
-        }
-    </tbody>
-</table>
-
-@*
-    TODO: Discuss if we need this
-
-        @if (course.CourseID.Equals(courseProgram.CourseID ))
-        {
-            <table class="table table-hover">
-
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col" class="h3">@course.CourseName</th>
-                        <th scope="col" class="text-right">@course.CourseID</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-
-            foreach (Assessment assessment in Model.assessments)
-            {
-
-                if (assessment.ProgramID.Equals(courseProgram.ProgramID))
-                {
-                    if (assessment.IsActive.Equals(true))
-                    {
-        <tr>
-
-            <td>
-                <span class="mt-2">@assessment.Name</span>
-                <a href="ViewAssessment?assessmentId=@assessment.AssessmentID">
-                    <button type="button" class="btn btn-primary right">Edit</button>
-                </a>
-                @Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })
-            </td>
-
-
-            <!--@*
-             <td colspan="2">assessment.Name <span class="text-danger">(Not Active)</span></td>
-             td class="text-right">
-                <a href="ViewAssessment?assessmentId=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
-                @Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })
-            </td>
-
-    </tr>
-                }
-                else
-                {
-    <tr>
-
-        <td colspan="2">@assessment.Name</td>
-        <td class="text-right">
-            <a href="ViewAssessment?assessmentId=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
-            @Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })
-        </td>
-    </tr>
-                }
-            }
-        }
-    }
-
-    *@

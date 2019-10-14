@@ -61,22 +61,22 @@ namespace CLS_SLE.Controllers
             return RedirectToAction("ViewUsers", "Admin");
         }
 
-        public ActionResult UpdateUser(FormCollection form)
+        /**
+         * TODO Document this and all other model bound method
+         */
+         [HttpPost]
+        public ActionResult UpdateUser(UpdateUserViewModel updateUserViewModel, short id)
         {
-            short id = Int16.Parse(form["id"]);
-            string fName = form["fName"];
-            string lName = form["lName"];
-            string email = form["email"];
+                User editUser = db.Users.Where(u => u.PersonID == id).FirstOrDefault();
+                Person editPerson = db.People.Where(u => u.PersonID == id).FirstOrDefault();
 
-            User updateU = db.Users.Where(u => u.PersonID == id).FirstOrDefault();
-            Person updateP = db.People.Where(p => p.PersonID == id).FirstOrDefault();
+                editPerson.FirstName = updateUserViewModel.Person.FirstName;
+                editPerson.LastName = updateUserViewModel.Person.LastName;
+                editUser.Login = updateUserViewModel.User.Login;
+                editUser.Email = updateUserViewModel.User.Email;
 
-            updateU.Email = email;
-            updateP.FirstName = fName;
-            updateP.LastName = lName;
-
-            db.SaveChanges();
-            
+                db.SaveChanges();
+           
             return RedirectToAction("ViewUsers", "Admin");
         }
 

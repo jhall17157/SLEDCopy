@@ -7,6 +7,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Text.RegularExpressions;
 
 namespace CLS_SLE.Controllers
 {
@@ -173,9 +174,9 @@ namespace CLS_SLE.Controllers
 
                 addAssessment.Name = formCollection["Name"];
                 addAssessment.Category = CategoryCode;
-                addAssessment.Description = formCollection["Description"];
-                addAssessment.OutcomePassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
-                addAssessment.CalculateOutcomePassRate = ((formCollection["CalculateOutcomePassRate"]).Equals("True") ? true : false);
+                addAssessment.Description = formCollection["Description"] != null ? formCollection["Description"] : "";
+                addAssessment.OutcomePassRate = (Decimal?)(Double.Parse(Regex.Replace(formCollection["PassPercent"], "[^0-9.]", ""))) / 100;
+			 addAssessment.CalculateOutcomePassRate = ((formCollection["CalculateOutcomePassRate"]).Equals("True") ? true : false);
                 addAssessment.ProgramID = db.Programs.Where(p => p.Name == program).FirstOrDefault().ProgramID;
                 addAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
                 addAssessment.CreatedDateTime = DateTime.Now;
@@ -187,12 +188,14 @@ namespace CLS_SLE.Controllers
                 db.SaveChanges();
 
 
-                return RedirectToAction(actionName: "Assessments", controllerName: "Admin");
+                return RedirectToAction(actionName: "Assessments", controllerName: "AdminAssessments");
 
             }
-            catch
+            catch (Exception e)
             {
                 logger.Error("Failed to save assessment, redirecting to sign in page.");
+                logger.Error(e.Message);
+                logger.Error(e.StackTrace);
                 return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
         }
@@ -222,7 +225,7 @@ namespace CLS_SLE.Controllers
                         editAssessment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
                         db.SaveChanges();
 
-                        return RedirectToAction(actionName: "ViewAssessment", controllerName: "Admin", routeValues: new { assessmentId = editAssessment.AssessmentID });
+                        return RedirectToAction(actionName: "ViewAssessment", controllerName: "AdminAssessments", routeValues: new { assessmentId = editAssessment.AssessmentID });
                     }
                     else
                     {

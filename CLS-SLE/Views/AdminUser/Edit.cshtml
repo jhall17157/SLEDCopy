@@ -1,7 +1,7 @@
-﻿
+﻿@model CLS_SLE.ViewModels.UpdateUserViewModel
 @{
     ViewBag.Title = "Edit";
-    
+
 }
 
 <nav aria-label="breadcrumb">
@@ -14,22 +14,38 @@
 <h1>Edit User - @ViewBag.Login</h1>
 <br />
 
-<form action="UpdateUser" method="post">
+@using (Html.BeginForm("UpdateUser", "AdminUser", FormMethod.Post))
+{
+    <input type="hidden" name="id" id="id" value="@ViewBag.Id" />
     <div class="form-group">
-        <input type="hidden" name="id" id="id" value="@ViewBag.Id" />
-        <label for="fName">First Name:</label><br />
-        <input type="text" id="fName" name="fName" value="@ViewBag.First" required />
-        <br />
-        <label for="lName">Last Name:</label><br />
-        <input type="text" id="lName" name="lName" value="@ViewBag.Last" required />
-        <br />
-        <label for="login">Login:</label><br />
-        <input type="text" id="login" name="login" value="@ViewBag.Login" required />
-        <br />
-        <label for="email">Email:</label><br />
-        <input type="email" id="email" name="email" value="@ViewBag.Email" required />
-
-        <br /><br />
-        <input type="submit" class="btn btn-primary" value="Submit" />
+        @Html.Label("First Name:")
+        @Html.EditorFor(Model => Model.Person.FirstName,
+        new {htmlAttributes = new { @class = "form-control", @Value = ViewBag.First} })
+        @Html.ValidationMessageFor(Model => Model.Person.FirstName)
     </div>
-</form>
+    <div class="form-group">
+        @Html.Label("Last Name:")
+        @Html.EditorFor(Model => Model.Person.LastName,
+        new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.Last} })
+        @Html.ValidationMessageFor(Model => Model.Person.LastName)
+    </div>
+    <div class="form-group">
+        @Html.Label("Login:")
+        @Html.EditorFor(Model => Model.User.Login,
+        new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.Login } })
+        @Html.ValidationMessageFor(Model => Model.User.Login)
+    </div>
+    <div class="form-group">
+        @Html.Label("Email:")
+        @Html.EditorFor(Model => Model.User.Email,
+        new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.Email } } )
+        @Html.ValidationMessageFor(Model => Model.User.Email)
+    </div>
+    <div class="form-group">
+        <input type="submit" class="btn-block btn-primary" value="Submit" />
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")    
+}

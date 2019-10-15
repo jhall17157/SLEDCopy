@@ -55,6 +55,7 @@ namespace CLS_SLE.Controllers
 
             if (assessmentID != null)
             {
+                //this should be passed to the RubricAssessmentts table instead of adding this field in the AssessmentRubric
                 model.assessmentID = assessmentID;
             }
             return View(model);
@@ -152,14 +153,14 @@ namespace CLS_SLE.Controllers
             Model.CreatorLogin = null;
             Model.ModifierLogin = null;
 
-            if (Outcome.CreatedByLoginID != null)
-            {
-                Model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == Outcome.CreatedByLoginID).FirstOrDefault().Login;
-            }
-            if (Outcome.ModifiedByLoginID != null)
-            {
-                Model.ModifierLogin = (String)db.Users.Where(u => u.PersonID == Outcome.ModifiedByLoginID).FirstOrDefault().Login;
-            }
+            //if (Outcome.CreatedByLoginID != null)
+            //{
+            //    Model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == Outcome.CreatedByLoginID).FirstOrDefault().Login;
+            //}
+            //if (Outcome.ModifiedByLoginID != null)
+            //{
+            //    Model.ModifierLogin = (String)db.Users.Where(u => u.PersonID == Outcome.ModifiedByLoginID).FirstOrDefault().Login;
+            //}
             return View(Model);
         }
         public ActionResult AddOutcome(int? rubricID)

@@ -5,8 +5,8 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink((String)((AssessmentRubric)Model.Outcome.AssessmentRubric).RubricAssessments.FirstOrDefault().Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = ((AssessmentRubric)Model.Outcome.AssessmentRubric).AssessmentID }, null)</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "AdminAssessments")</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)((AssessmentRubric)Model.Outcome.AssessmentRubric).RubricAssessments.FirstOrDefault().Assessment.Name, "ViewAssessment", "AdminAssessments", new { assessmentID = ((AssessmentRubric)Model.Outcome.AssessmentRubric).AssessmentID }, null)</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)Model.Outcome.AssessmentRubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.Outcome.AssessmentRubric.RubricID }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">@Model.Outcome.Name</li>
     </ol>

@@ -165,19 +165,19 @@ namespace CLS_SLE.Controllers
                                           orderby Categories.Name
                                           select Categories).ToList();
 
-            Model.Category = category;
+            
             return View(Model);
         }
 
         //no view was associated with this method below
         [HttpPost]
-        public ActionResult InsertNewAssessment(FormCollection formCollection)
+        public ActionResult InsertNewAssessment(FormCollection formCollection, string category)
         {
             try
             {
                 db.Assessments.Load();
-                string Category = formCollection["Category"];
-                var CategoryCode = db.AssessmentCategories.Where(c => c.Name == Category).FirstOrDefault().CategoryCode;
+                //string Category = formCollection["Category"];
+                var CategoryCode = db.AssessmentCategories.Where(c => c.Name == category).FirstOrDefault().CategoryCode;
                 var program = (formCollection["Program"]);
                 Assessment addAssessment = db.Assessments.Create();
 
@@ -186,7 +186,7 @@ namespace CLS_SLE.Controllers
                 addAssessment.Category = CategoryCode;
                 addAssessment.Description = formCollection["Description"] != null ? formCollection["Description"] : "";
                 addAssessment.OutcomePassRate = (Decimal?)(Double.Parse(Regex.Replace(formCollection["PassPercent"], "[^0-9.]", ""))) / 100;
-			 addAssessment.CalculateOutcomePassRate = ((formCollection["CalculateOutcomePassRate"]).Equals("True") ? true : false);
+			    addAssessment.CalculateOutcomePassRate = ((formCollection["CalculateOutcomePassRate"]).Equals("True") ? true : false);
                 addAssessment.ProgramID = db.Programs.Where(p => p.Name == program).FirstOrDefault().ProgramID;
                 addAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
                 addAssessment.CreatedDateTime = DateTime.Now;

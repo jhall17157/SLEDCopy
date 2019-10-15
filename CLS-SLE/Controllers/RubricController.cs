@@ -55,6 +55,7 @@ namespace CLS_SLE.Controllers
 
             if (assessmentID != null)
             {
+                //this should be passed to the RubricAssessmentts table instead of adding this field in the AssessmentRubric
                 model.assessmentID = assessmentID;
             }
             return View(model);

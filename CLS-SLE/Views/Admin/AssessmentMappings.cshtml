@@ -1,7 +1,48 @@
-﻿
+﻿@model CLS_SLE.Models.AssessmentMappingsViewModel
+
+@{  ViewBag.Title = "AssessmentMappings"; }
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
+            <li class="breadcrumb-item active" aria-current="page">Scheduling</li>
+        </ol>
+    </nav>
+
 @{
-    ViewBag.Title = "AssessmentMappings";
+    ViewBag.Title = "AssessmentMapping";
 }
 
-<h2>Assessment Mappings | <a href="~/Admin/AdminDashboard">Admin Dashboard</a></h2>
+<h2> Assessment Mapping </h2>
 
+<table class="table table-hover">
+    @foreach (var program in Model.Programs)
+    {
+        <thead>
+            <tr>
+                <th scope="col" class="h3">@program.Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rubric in Model.AssessmentRubrics )
+            {
+                <tr>
+                    <td>
+                        <p> @rubric.Name </p>
+                        <div class="row">
+
+
+                            @foreach (var course in Model.Courses)
+                            {
+                                <ul class="list-group-horizontal">
+                                    <li>@course.CourseName</li>
+                                </ul>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    }
+</table>

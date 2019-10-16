@@ -55,36 +55,36 @@
                                         @*TODO: Talk about db entries to group assessments*@
                                         <table class="table table-hover">
                                             <thead class="thead-dark">
-                                            <tr>
-                                                <th scope="col" class="h3">
-                                                    @c.CourseName - @c.CourseID
-                                                </th>
-                                            </tr>
+                                                <tr>
+                                                    <th scope="col" class="h3">
+                                                        @c.CourseName - @c.CourseID
+                                                    </th>
+                                                </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td scope="col" class="h3"><b>Assessment Name</b></td>
-                                                @* Modal width needs to be increase to include this if necessary
+                                                <tr>
+                                                    <td scope="col" class="h3"><b>Assessment Name</b></td>
+                                                    @* Modal width needs to be increase to include this if necessary
 
-                                    <td scope="col" class="h3 right"><b>ID</b></td>*@
-                                            </tr>
+                                                        <td scope="col" class="h3 right"><b>ID</b></td>*@
+                                                </tr>
 
-                                            @foreach (var assessment in Model.Assessments)
-                                            {
-                                                if (assessment.IsActive)
+                                                @foreach (var assessment in Model.Assessments)
                                                 {
-                                                    <tr>
-                                                        <td>
-                                                            <span class="mt-2">
-                                                                @Html.ActionLink(assessment.Name, "ViewAssessment", new {assessment.AssessmentID})
-                                                            </span>
-                                                            <span class="right mr-3 mt-2">
-                                                                @assessment.AssessmentID
-                                                            </span>
-                                                        </td>
-                                                    </tr>
+                                                    if (assessment.IsActive)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <span class="mt-2">
+                                                                    @Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })
+                                                                </span>
+                                                                <span class="right mr-3 mt-2">
+                                                                    @assessment.AssessmentID
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    }
                                                 }
-                                            }
                                             </tbody>
                                         </table>
                                     </div>
@@ -109,14 +109,14 @@
                                     <div class="modal-body">
                                         <table>
                                             <thead>
-                                            @c.CourseName - @c.CourseID
+                                                @c.CourseName - @c.CourseID
                                             </thead>
                                             <tr>
                                                 <td>
-                                                    <input class="form-control" type="date" value="Start Date"/>
+                                                    <input class="form-control" type="date" value="Start Date" />
                                                 </td>
                                                 <td>
-                                                    <input class="form-control" type="date" value="End Date"/>
+                                                    <input class="form-control" type="date" value="End Date" />
                                                 </td>
                                             </tr>
                                         </table>
@@ -133,4 +133,9 @@
             }
         </tbody>
     </table>
+
+
+
+
 }
+

@@ -38,7 +38,30 @@ namespace CLS_SLE.Controllers
 
         public ActionResult AssessmentMappings()
         {
-            return View();
+            try
+            {
+                var personId = Convert.ToInt32(Session["personID"].ToString());
+                var user = db.Users.FirstOrDefault(u => u.PersonID == personId);
+                var adminAssessments = db.Assessments.ToList();
+                logger.Info("Dashboard loaded for " + user?.Login);
+
+                return View(new AssessmentMappingsViewModel
+                {
+                    Departments = db.Departments.ToList(),
+                    Programs = db.Programs.ToList(),
+                    Courses = db.Courses.ToList(),
+                    Categories = db.AssessmentCategories.ToList(),
+                    Assessments = adminAssessments.Distinct().OrderByDescending(a => a.IsActive).ThenBy(a => a.Name).ToList(),
+                    RubricAssessments = db.RubricAssessments.ToList(),
+                    AssessmentRubrics = db.AssessmentRubrics.ToList()
+                });
+            }
+            catch
+            {
+                logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
+                return RedirectToAction(actionName: "Signin", controllerName: "User");
+            }
+ 
         }
 
         public ActionResult Assessments()

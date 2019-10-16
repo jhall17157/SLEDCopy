@@ -216,6 +216,7 @@
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AssessmentSchedulingViewModel.cs" />
+    <Compile Include="Models\AssessmentMappingsViewModel.cs" />
     <Compile Include="Models\Course.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>

@@ -17,13 +17,15 @@
     <div class="form-row">
         <div class="form-group col-9">
             <label for="Name">Name:</label>
-            <input type="text" name="Name" class="form-control" required/>
+            <input type="text" name="Name" class="form-control" required />
+            @*<input type="hidden" name="Category" id="Category" value="@Model.Category" />*@
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-9">
-            <label for="Program">Category: </label>
-            <select class="form-control" id="Program" name="Program">
+            <label for="Category">Category: </label>
+            <select class="form-control" id="Category" name="Category">
+                <option>Select a Category</option>
                 @{
                     foreach (AssessmentCategory ac in Model.AssessmentCategories)
                     {
@@ -36,10 +38,10 @@
     </div>
 
     @*add another category*@
-    <button name="add">Add Category</button>
+    @*<button name="add">Add Category</button>
     <div id="addItem">
 
-    </div>
+    </div>*@
 
     <div class="form-row">
         <div class="form-group col-9">
@@ -70,6 +72,7 @@
         <div class="form-group col-9">
             <label for="Program">Program</label>
             <select class="form-control" id="Program" name="Program">
+                <option>Select a Program</option>
                 @{
                     foreach (Program p in Model.Programs)
                     {
@@ -99,7 +102,7 @@
 
 </form>
 
-<script>
+@*<script>
    $("button[name='add']").click(function() {
        var domElement = $('<div class="form-group col-9"> ' +
            '<input type="text" class="form-control" placeholder="@Model.Category" value="@Model.Category" disabled/>' +
@@ -107,4 +110,4 @@
            '</div > ');
         $(this).after(domElement);
     });
-</script>
+</script>*@

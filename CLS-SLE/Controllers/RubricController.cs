@@ -67,6 +67,12 @@ namespace CLS_SLE.Controllers
                 db.AssessmentRubrics.Load();
                 db.RubricAssessments.Load();
                 AssessmentRubric addRubric = db.AssessmentRubrics.Create();
+
+                //var assessment = (from rubric in db.AssessmentRubrics
+                //                  join aRubric in db.RubricAssessments on rubric.AssessmentID equals aRubric.AssessmentID
+                //                  where rubric.AssessmentID == aRubric.AssessmentID
+                //                  select rubric);
+
                 if (formCollection["assessmentID"].Equals("0") || formCollection["assessmentID"] == null)
                 {
                     addRubric.AssessmentID = null;
@@ -85,6 +91,11 @@ namespace CLS_SLE.Controllers
                 RubricAssessment rubricAssessment = db.RubricAssessments.Create();
                 rubricAssessment.AssessmentID = (Int16)addRubric.AssessmentID;
                 rubricAssessment.RubricID = addRubric.RubricID;
+
+                //var id = (from rubric in db.RubricAssessments
+                //          select rubric.AssessmentID);
+                //rubricAssessment.AssessmentID = (Int16)id.FirstOrDefault();
+
                 rubricAssessment.CreatedDateTime = addRubric.CreatedDateTime;
                 rubricAssessment.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
                 rubricAssessment.StartDate = DateTime.Parse(formCollection["startDate"]);

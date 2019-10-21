@@ -9,7 +9,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-
+using CLS_SLE.ViewModels;
 
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -37,13 +37,13 @@ namespace CLS_SLE.Controllers
         }
 
         [HttpGet]
-        public ActionResult ViewUsers(String sort)
+        public ActionResult ViewUsers(ViewUserViewModel viewUserViewModel)
         {
 
-            dynamic Model = new ExpandoObject();
+            //dynamic Model = new ExpandoObject();
             var Roles = from Role in db.Roles select Role;
 
-            Model.Roles = Roles;
+            viewUserViewModel.Roles = from Role in db.Roles select Role;
             if (Request.QueryString["Search"] != null)
             {
                 try
@@ -55,11 +55,11 @@ namespace CLS_SLE.Controllers
                         throw new Exception("Query is empty or null");
                     }
 
-                    List<UserSecurity> UserSecurities = GetUserSecurities();
+                    viewUserViewModel.UserSecurities = GetUserSecurities();
 
-                    var FilteredUserSecurities = UserSecurities.Where(p => p.FirstName.ToLower().Contains(QueryString.ToLower()) || p.LastName.ToLower().Contains(QueryString.ToLower()) || p.IDNumber.Contains(QueryString.ToLower()) || p.Login.Contains(QueryString.ToLower()));
+                    var FilteredUserSecurities = viewUserViewModel.UserSecurities.Where(p => p.FirstName.ToLower().Contains(QueryString.ToLower()) || p.LastName.ToLower().Contains(QueryString.ToLower()) || p.IDNumber.Contains(QueryString.ToLower()) || p.Login.Contains(QueryString.ToLower()));
 
-                    Model.UserSecurityList = FilteredUserSecurities;
+                    viewUserViewModel.UserSecurities = (List<UserSecurity>) FilteredUserSecurities;
                 }
                 catch
                 {
@@ -70,14 +70,14 @@ namespace CLS_SLE.Controllers
 
             else
             {
-                Model.UserSecurityList = GetUserSecurities();
+                viewUserViewModel.UserSecurities = GetUserSecurities();
             }
 
-            if (!String.IsNullOrEmpty(sort))
+            /*if (!String.IsNullOrEmpty(sort))
             {
-                Model.Sort = sort;
-            }
-            return View(Model);
+                //Model.Sort = sort;
+            }*/
+            return View(viewUserViewModel);
         }
 
 

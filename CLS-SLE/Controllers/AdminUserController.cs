@@ -80,22 +80,25 @@ namespace CLS_SLE.Controllers
             return RedirectToAction("ViewUsers", "Admin");
         }
 
-        public ActionResult Activate(FormCollection form)
+        public ActionResult Activate(ViewUserViewModel viewUserViewModel, short id)
         {
-            int id = Int32.Parse(form["id"]);
 
-            User user = db.Users.Where(u => u.PersonID == id).SingleOrDefault();
 
-            if (user.IsActive)
-            {
-                user.IsActive = false;
-                db.SaveChanges();
-            }
-            else
-            {
-                user.IsActive = true;
-                db.SaveChanges();
-            }
+            
+                //int id = Int32.Parse(form["id"]);
+                viewUserViewModel.User = db.Users.Where(u => u.PersonID == id).SingleOrDefault();
+
+                if (viewUserViewModel.User.IsActive)
+                {
+                    viewUserViewModel.User.IsActive = false;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    viewUserViewModel.User.IsActive = true;
+                    db.SaveChanges();
+                }
+           
 
             return RedirectToAction("ViewUsers", "Admin");
         }

@@ -49,20 +49,12 @@ namespace CLS_SLE.Controllers
             }
             return View(Model);
         }
-        public ActionResult AddRubric(short? assessmentID)
+        public ActionResult AddRubric(short assessmentID)
         {
-            //dynamic model = new ExpandoObject();
-            //model.assessmentID = null;
-
             AssessmentRubric rubricAssessment = db.AssessmentRubrics.Where(r => r.AssessmentID == assessmentID).FirstOrDefault();
-            assessmentID = rubricAssessment.AssessmentID;
+            //assessmentID = rubricAssessment.AssessmentID;
 
-            //if (assessmentID != null)
-            //{
-            //    //this should be passed to the RubricAssessmentts table instead of adding this field in the AssessmentRubric
-            //    model.assessmentID = assessmentID;
-            //}
-            return View(/*model*/);
+            return View();
         }
 
         [HttpPost]
@@ -84,7 +76,6 @@ namespace CLS_SLE.Controllers
 
                 var id = (from rubric in db.RubricAssessments
                           select rubric.AssessmentID);
-                //
 
                 assessmentRubric.Name = ViewBag.Name;
                 assessmentRubric.Description = ViewBag.Description;

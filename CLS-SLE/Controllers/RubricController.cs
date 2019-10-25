@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using CLS_SLE.Models;
+using CLS_SLE.ViewModels;
 
 namespace CLS_SLE.Controllers
 {
@@ -48,62 +49,73 @@ namespace CLS_SLE.Controllers
             }
             return View(Model);
         }
-        public ActionResult AddRubric(int? assessmentID)
+        public ActionResult AddRubric(short assessmentID)
         {
-            dynamic model = new ExpandoObject();
-            model.assessmentID = null;
-
-            if (assessmentID != null)
-            {
-                //this should be passed to the RubricAssessmentts table instead of adding this field in the AssessmentRubric
-                model.assessmentID = assessmentID;
-            }
-            return View(model);
+            
+           RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.AssessmentID == assessmentID).FirstOrDefault();
+            rubricAssessment.AssessmentID = assessmentID;
+            //assessmentID = Convert.ToInt16(rubricAssessment.AssessmentID);
+            
+            return View();
         }
-        public ActionResult InsertNewRubric(FormCollection formCollection)
+
+        [HttpPost]
+        public ActionResult InsertNewRubric(RubricViewModel rubricViewModel)
         {
             try
             {
+                //KEEP
                 db.AssessmentRubrics.Load();
                 db.RubricAssessments.Load();
-                AssessmentRubric addRubric = db.AssessmentRubrics.Create();
+                short assessmentID = Convert.ToInt16(rubricViewModel.AssessmentID);
+                RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.AssessmentID == assessmentID).FirstOrDefault();
+                AssessmentRubric assessmentRubric = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID).FirstOrDefault();
+                //Person person = db.People.Where(u => u.PersonID == id).FirstOrDefault();
 
-                //var assessment = (from rubric in db.AssessmentRubrics
-                //                  join aRubric in db.RubricAssessments on rubric.AssessmentID equals aRubric.AssessmentID
-                //                  where rubric.AssessmentID == aRubric.AssessmentID
-                //                  select rubric);
+                var assessment = (from rubric in db.AssessmentRubrics
+                                  join aRubric in db.RubricAssessments on rubric.AssessmentID equals aRubric.AssessmentID
+                                  select rubric);
 
-                if (formCollection["assessmentID"].Equals("0") || formCollection["assessmentID"] == null)
-                {
-                    addRubric.AssessmentID = null;
-                } else
-                {
-                    addRubric.AssessmentID = Int16.Parse(formCollection["assessmentID"]);
-                }
-                addRubric.Name = formCollection["Name"];
-                addRubric.Description = formCollection["Description"];
-                addRubric.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
-                addRubric.CreatedDateTime = DateTime.Now;
-                addRubric.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-                db.Entry(addRubric).State = EntityState.Added;
+                var id = (from rubric in db.RubricAssessments
+                          select rubric.AssessmentID);
+
+                assessmentRubric.Name = ViewBag.Name;
+                assessmentRubric.Description = ViewBag.Description;
+                //assessmentRubric.IsActive = true;
+                assessmentRubric.CreatedDateTime = DateTime.Now;
+                assessmentRubric.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+
+                //old
+                //addRubric.Name = formCollection["Name"];
+                //addRubric.Description = formCollection["Description"];
+                //addRubric.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
+                //addRubric.CreatedDateTime = DateTime.Now;
+                //addRubric.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                //db.Entry(addRubric).State = EntityState.Added;
+                db.Entry(assessmentRubric).State = EntityState.Added;
                 db.SaveChanges();
 
-                RubricAssessment rubricAssessment = db.RubricAssessments.Create();
-                rubricAssessment.AssessmentID = (Int16)addRubric.AssessmentID;
-                rubricAssessment.RubricID = addRubric.RubricID;
+                rubricAssessment.AssessmentID = assessmentID;
+                rubricAssessment.RubricID = assessmentRubric.RubricID;
+                rubricAssessment.CreatedDateTime = DateTime.Now;
+                //rubricAssessment.CreatedByLoginID = 0;
+                rubricAssessment.StartDate = ViewBag.StartDate;
+                rubricAssessment.EndDate = ViewBag.EndDate;
 
-                //var id = (from rubric in db.RubricAssessments
-                //          select rubric.AssessmentID);
+                //old
+
+                //RubricAssessment rubricAssessment = db.RubricAssessments.Create();
+                //rubricAssessment.AssessmentID = (Int16)addRubric.AssessmentID;
+                //rubricAssessment.RubricID = addRubric.RubricID;
                 //rubricAssessment.AssessmentID = (Int16)id.FirstOrDefault();
-
-                rubricAssessment.CreatedDateTime = addRubric.CreatedDateTime;
+                //rubricAssessment.CreatedDateTime = addRubric.CreatedDateTime;
                 rubricAssessment.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-                rubricAssessment.StartDate = DateTime.Parse(formCollection["startDate"]);
-                rubricAssessment.EndDate = DateTime.Parse(formCollection["endDate"]);
+                //rubricAssessment.StartDate = DateTime.Parse(formCollection["startDate"]);
+                //rubricAssessment.EndDate = DateTime.Parse(formCollection["endDate"]);
                 db.Entry(rubricAssessment).State = EntityState.Added;
                 db.SaveChanges();
 
-                return RedirectToAction("ViewRubric", new RouteValueDictionary(new { controller = "Rubric", action = "ViewRubric", addRubric.RubricID}));
+                return RedirectToAction("ViewRubric", new RouteValueDictionary(new { controller = "Rubric", action = "ViewRubric", rubricAssessment.RubricID}));
 
             }
             catch

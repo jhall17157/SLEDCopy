@@ -377,6 +377,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\RubricViewModel.cs" />
     <Compile Include="ViewModels\ViewUserViewModel.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\UpdateUserViewModel.cs" />
@@ -388,10 +389,6 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\images\tasks-solid.png" />
-    <Content Include="Content\images\tasks-solid.svg" />
-    <Content Include="Content\images\users-solid.png" />
-    <Content Include="Content\images\users-solid.svg" />
     <Content Include="favicon.ico" />
     <Content Include="fontawesome\css\all.css" />
     <Content Include="fontawesome\css\all.min.css" />

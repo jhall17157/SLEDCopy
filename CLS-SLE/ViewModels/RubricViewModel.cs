@@ -10,5 +10,7 @@ namespace CLS_SLE.ViewModels
     {
         public AssessmentRubric AssessmentRubric { get; set; }
         public RubricAssessment RubricAssesssment { get; set; }
+
+        public int AssessmentID { get; set; }
     }
 }

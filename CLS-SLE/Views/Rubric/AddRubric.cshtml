@@ -12,7 +12,7 @@
 </nav>
 <h1>Add Rubric</h1>
 <br />
-
+@Html.HiddenFor(model => model.AssessmentID);
 @using (Html.BeginForm("InsertNewRubric", "Rubric", FormMethod.Post))
 {
     <div class="form-group">

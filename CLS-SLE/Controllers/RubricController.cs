@@ -51,21 +51,23 @@ namespace CLS_SLE.Controllers
         }
         public ActionResult AddRubric(short assessmentID)
         {
-            AssessmentRubric rubricAssessment = db.AssessmentRubrics.Where(r => r.AssessmentID == assessmentID).FirstOrDefault();
-            //assessmentID = rubricAssessment.AssessmentID;
-
+            
+           RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.AssessmentID == assessmentID).FirstOrDefault();
+            rubricAssessment.AssessmentID = assessmentID;
+            //assessmentID = Convert.ToInt16(rubricAssessment.AssessmentID);
+            
             return View();
         }
 
         [HttpPost]
-        public ActionResult InsertNewRubric(RubricViewModel rubricViewModel, short assessmentID)
+        public ActionResult InsertNewRubric(RubricViewModel rubricViewModel)
         {
             try
             {
                 //KEEP
                 db.AssessmentRubrics.Load();
                 db.RubricAssessments.Load();
-
+                short assessmentID = Convert.ToInt16(rubricViewModel.AssessmentID);
                 RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.AssessmentID == assessmentID).FirstOrDefault();
                 AssessmentRubric assessmentRubric = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID).FirstOrDefault();
                 //Person person = db.People.Where(u => u.PersonID == id).FirstOrDefault();

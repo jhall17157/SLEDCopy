@@ -21,15 +21,17 @@
         <div class="form-group col-9">
             @Html.Label("Rubric Name:")
             @Html.EditorFor(Model => Model.AssessmentRubric.Name,
-           new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.Name } })
+           new { htmlAttributes = new { @class = "form-control"} })
             @*@Html.ValidationMessageFor(model => model.AssessmentRubric.Name)*@
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-9">
-            @Html.Label("Rubric Description:")
-            @Html.EditorFor(Model => Model.AssessmentRubric.Description,
-           new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.Description } })
+        @Html.Label("Rubric Description:")
+            <div class="form-group col-9">
+                @Html.TextAreaFor(Model => Model.AssessmentRubric.Description,
+               new { htmlAttributes = new { @class = "form-control" } })
+            </div>
         </div>
     </div>
     <fieldset class="form-group col-9">
@@ -49,12 +51,12 @@
         <div class="form-group col-4">
             @Html.Label("Start Date:")
             @Html.TextBoxFor(model => model.RubricAssesssment.StartDate,
-           new { @type = "date", @Value = ViewBag.StartDate })
+           new { @type = "date"})
         </div>
         <div class="form-group col-4">
             @Html.Label("End Date:")
             @Html.TextBoxFor(model => model.RubricAssesssment.EndDate,
-           new { @type = "date", @Value = ViewBag.EndDate })
+           new { @type = "date"})
         </div>
     </div>
     <div class="row justify-content-end col-9">

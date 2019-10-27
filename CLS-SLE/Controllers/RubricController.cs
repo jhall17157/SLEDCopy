@@ -89,10 +89,10 @@ namespace CLS_SLE.Controllers
             }
         }
 
-        [HttpGet]
-        public ActionResult EditRubric(UpdateRubric updateRubric, short rubricID)
+
+        public ActionResult EditRubric(short rubricID)
         {
-            RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.RubricID == rubricID).FirstOrDefault();
+           RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.RubricID == rubricID).FirstOrDefault();
             AssessmentRubric assessmentRubric = db.AssessmentRubrics.Where(a => a.RubricID == rubricID).FirstOrDefault();
 
             ViewBag.Id = rubricAssessment.RubricID;
@@ -100,11 +100,7 @@ namespace CLS_SLE.Controllers
             ViewBag.Description = assessmentRubric.Description;
             ViewBag.StartDate = rubricAssessment.StartDate;
             ViewBag.EndDate = rubricAssessment.EndDate;
-            //assessmentRubric.ModifiedDateTime = DateTime.Now;
-            //assessmentRubric.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-            //rubricAssessment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-            //rubricAssessment.ModifiedDateTime = DateTime.Now;
-            
+
             return View();
         }
 

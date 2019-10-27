@@ -378,6 +378,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\RubricViewModel.cs" />
+    <Compile Include="ViewModels\UpdateRubric.cs" />
     <Compile Include="ViewModels\ViewUserViewModel.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\UpdateUserViewModel.cs" />

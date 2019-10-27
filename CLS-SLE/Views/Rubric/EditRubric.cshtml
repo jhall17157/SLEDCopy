@@ -48,12 +48,12 @@
         <div class="form-group col-4">
             @Html.Label("Start Date:")
             @Html.TextBoxFor(model => model.RubricAssessment.StartDate,
-           new { @type = "date", @value = ViewBag.StartDate })
+           new { @Value = ViewBag.StartDate})
         </div>
         <div class="form-group col-4">
             @Html.Label("End Date:")
             @Html.TextBoxFor(model => model.RubricAssessment.EndDate,
-           new { @type = "date", @value = ViewBag.EndDate })
+           new { @Value = (ViewBag.EndDate).ToString("MM/dd/yyyy") })
         </div>
     </div>
     <div class="row justify-content-end col-9">

@@ -98,8 +98,8 @@ namespace CLS_SLE.Controllers
             ViewBag.Id = rubricAssessment.RubricID;
             ViewBag.Name = assessmentRubric.Name;
             ViewBag.Description = assessmentRubric.Description;
-            ViewBag.StartDate = rubricAssessment.StartDate;
-            ViewBag.EndDate = rubricAssessment.EndDate;
+            ViewBag.StartDate = (rubricAssessment.StartDate).ToString("MM/dd/yyyy");
+            ViewBag.EndDate = (rubricAssessment.EndDate);
 
             return View();
         }

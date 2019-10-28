@@ -89,21 +89,28 @@ namespace CLS_SLE.Controllers
             }
         }
 
-
+        [HttpGet]
         public ActionResult EditRubric(short rubricID)
         {
            RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.RubricID == rubricID).FirstOrDefault();
             AssessmentRubric assessmentRubric = db.AssessmentRubrics.Where(a => a.RubricID == rubricID).FirstOrDefault();
-
+            
             ViewBag.Id = rubricAssessment.RubricID;
             ViewBag.Name = assessmentRubric.Name;
             ViewBag.Description = assessmentRubric.Description;
             ViewBag.StartDate = (rubricAssessment.StartDate).ToString("MM/dd/yyyy");
             ViewBag.EndDate = (rubricAssessment.EndDate);
+            ViewBag.IsActive = assessmentRubric.IsActive;
+
+            rubricAssessment.ModifiedDateTime = DateTime.Now;
+            rubricAssessment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+            assessmentRubric.ModifiedDateTime = DateTime.Now;
+            assessmentRubric.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
 
             return View();
         }
 
+        [HttpPost]
         public ActionResult SaveRubric(UpdateRubric updateRubric, short rubricID)
         {
             try

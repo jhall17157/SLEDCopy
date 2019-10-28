@@ -139,10 +139,10 @@ namespace CLS_SLE.Controllers
 
 
         [HttpPost]
-        public ActionResult UpdateUser(FormCollection form, String submit)
+        public ActionResult UpdateUser(FormCollection form, String submit, short personID, short roleID)
         {
-            Int32 PersonID = Int32.Parse(form["personID"]);
-            Int16 RoleID = RoleID = Int16.Parse(form["roleID"]);
+            // Int32 PersonID = Int32.Parse(form["personID"]);
+            // Int16 RoleID = RoleID = Int16.Parse(form["roleID"]);
             try
             {
                 switch (submit)
@@ -150,8 +150,8 @@ namespace CLS_SLE.Controllers
                     case "add":
                         UserRole userRole = new UserRole
                         {
-                            PersonID = PersonID,
-                            RoleID = RoleID,
+                            PersonID = personID,
+                            RoleID = roleID,
                             CreatedDateTime = DateTime.Now,
                             CreatedByLoginID = (int?)Session["personID"]
 
@@ -161,7 +161,7 @@ namespace CLS_SLE.Controllers
                         break;
                     case "delete":
                         var deletionEntry = (from UserRole in db.UserRoles
-                                             where UserRole.PersonID == PersonID && UserRole.RoleID == RoleID
+                                             where UserRole.PersonID == personID && UserRole.RoleID == roleID
                                              select UserRole).FirstOrDefault();
                         db.UserRoles.Remove(deletionEntry);
                         break;
@@ -169,7 +169,8 @@ namespace CLS_SLE.Controllers
                         return Exceptions();
                 }
                 db.SaveChanges();
-                return Content("<html><script>window.location.href = '/Admin/ManageUser?id=" + PersonID.ToString() + "';</script></html>");
+			 return RedirectToAction("ManageUser", "Admin", new { id = personID });
+                // return Content("<html><script>window.location.href = '/Admin/ManageUser?id=" + PersonID.ToString() + "';</script></html>");
             }
             catch
             {

@@ -48,9 +48,9 @@ namespace CLS_SLE.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(FormCollection form)
+        public ActionResult Delete(FormCollection form, short id)
         {
-            short id = short.Parse(form["id"]);
+            // short id = short.Parse(form["id"]);
             var role = new Role();
             role = db.Roles.Where(r => r.RoleID == id).FirstOrDefault();
             var rolePermissions = db.RolePermissions.Where(rp => rp.RoleID == id);
@@ -82,17 +82,17 @@ namespace CLS_SLE.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateRole(FormCollection form, String submit)
+        public ActionResult UpdateRole(FormCollection form, String submit, short roleID, short permissionID)
         {
-            Int16 RoleID = RoleID = Int16.Parse(form["roleID"]);
-            Int16 PermissionID = PermissionID = Int16.Parse(form["permissionID"]);
+            // Int16 RoleID = RoleID = Int16.Parse(form["roleID"]);
+            // Int16 PermissionID = PermissionID = Int16.Parse(form["permissionID"]);
                 switch (submit)
                 {
                     case "add":
                         RolePermission rolePermission = new RolePermission
                         {
-                            RoleID = RoleID,
-                            PermissionID = PermissionID,
+                            RoleID = roleID,
+                            PermissionID = permissionID,
                             CreatedDateTime = DateTime.Now,
                             CreatedByLoginID = (int?)Session["personID"]
 
@@ -102,13 +102,14 @@ namespace CLS_SLE.Controllers
                         break;
                     case "delete":
                         var deletionEntry = (from RolePermission in db.RolePermissions
-                                             where RolePermission.RoleID == RoleID && RolePermission.PermissionID == PermissionID
+                                             where RolePermission.RoleID == roleID && RolePermission.PermissionID == permissionID
                                              select RolePermission).FirstOrDefault();
                         db.RolePermissions.Remove(deletionEntry);
                         break;
                 }
-                db.SaveChanges();
-                return Content("<html><script>window.location.href = '/RoleAdmin/ManageRole?id=" + RoleID.ToString() + "';</script></html>");
+			 db.SaveChanges();
+			 return RedirectToAction("ManageRole", "RoleAdmin", new { id = roleID });
+                // return Content("<html><script>window.location.href = '/RoleAdmin/ManageRole?id=" + RoleID.ToString() + "';</script></html>");
         }
 
         public ActionResult RoleAssign(int role, List<Permission> permissions)

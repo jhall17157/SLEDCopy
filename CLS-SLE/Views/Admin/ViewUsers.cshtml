@@ -1,4 +1,5 @@
 ﻿@using CLS_SLE.Models;
+@model CLS_SLE.ViewModels.ViewUserViewModel
 @{
     ViewBag.Title = "Manage Users ";
 }
@@ -36,7 +37,7 @@
         </tr>
     </thead>
     <tbody>
-        @{ foreach (UserSecurity person in Model.UserSecurityList)
+        @{ foreach (UserSecurity person in Model.UserSecurities)
             {
                 <tr data-userID="person.PersonID">
                     <td>@person.Login</td>
@@ -59,10 +60,26 @@
                             }
                         }
                     </td>
-                    <td class="text-right"><a href="~/Admin/ManageUser?id=@person.PersonID"><button type="button" class="btn btn-primary mr-2">Edit Roles</button></a></td>
-                    <td class="text-right"><a href="~/AdminUser/Edit?id=@person.PersonID"><button type="button" class="btn btn-primary mr-2">Edit User</button></a></td>
+                    <td class="text-right"><a href="~/Admin/ManageUser?id=@person.PersonID" class="btn btn-primary mr-2">Edit Roles</a></td>
+                    <td class="text-right"><a href="~/AdminUser/Edit?id=@person.PersonID" class="btn btn-primary mr-2">Edit User</a></td>
                     <td>
-                        <form action="~/AdminUser/Activate" method="post" class="form form-inline float-right">
+
+                        @using (Html.BeginForm("Activate", "AdminUser", new { id = person.User.PersonID }, FormMethod.Post,
+					   new { htmlAttributes = new { @class = "form form-inline float-right" } }))
+				    {
+                            <!--<input type="hidden" name="id" value="@person.User.PersonID" />-->
+                            <div class="form-group mx-1">
+                                <button @if (person.User.IsActive) { <text> class="btn btn-success col-12" type="button" </text>  } else { <text> class="btn btn-outline-success col-12" type="submit" name="submit" formmethod="post" </text> }>
+                                    Active
+                                </button>
+                            </div>
+                            <div class="form-group mx-1">
+                                <button @if (person.User.IsActive) { <text> class="btn btn-outline-danger col-12" type="submit" name="submit" formmethod="post" </text>  } else { <text> class="btn btn-danger col-12" type="button" </text> }>
+                                    Inactive
+                                </button>
+                            </div>
+                        }
+                        <!--<form action="~/AdminUser/Activate" method="post" class="form form-inline float-right">
                             <input type="hidden" name="id" value="@person.User.PersonID" />
                             <div class="form-group mx-1">
                                 <button @if (person.User.IsActive) { <text> class="btn btn-success col-12" type="button" </text>  } else { <text> class="btn btn-outline-success col-12" type="submit" name="submit" formmethod="post" </text> }>
@@ -74,7 +91,7 @@
                                     Inactive
                                 </button>
                             </div>
-                        </form>
+                        </form>-->
                     </td>
                 </tr>
             }

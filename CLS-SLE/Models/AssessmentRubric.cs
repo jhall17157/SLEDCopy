@@ -9,6 +9,7 @@
 
 namespace CLS_SLE.Models
 {
+    using System.ComponentModel.DataAnnotations;
     using System;
     using System.Collections.Generic;
     
@@ -24,7 +25,11 @@ namespace CLS_SLE.Models
         }
     
         public short RubricID { get; set; }
+        [Required]
+        [RegularExpression(@"^[^<>%$*]*$", ErrorMessage = "Your username cannot contain any of the following characters: ^<>%$*")]
         public string Name { get; set; }
+        [Required]
+        [RegularExpression(@"^[^<>%$*]*$", ErrorMessage = "Your username cannot contain any of the following characters: ^<>%$*")]
         public string Description { get; set; }
         public Nullable<short> AssessmentID { get; set; }
         public Nullable<byte> ScoreSetID { get; set; }
@@ -32,6 +37,7 @@ namespace CLS_SLE.Models
         public Nullable<int> CreatedByLoginID { get; set; }
         public Nullable<System.DateTime> ModifiedDateTime { get; set; }
         public Nullable<int> ModifiedByLoginID { get; set; }
+        [Required]
         public bool IsActive { get; set; }
     
         public virtual ScoreSet ScoreSet { get; set; }

@@ -35,11 +35,11 @@
             <legend class="col-form-label col-2 pt-0">Is Active:</legend>
             <div class="form-check form-check-inline">
                 <label class="form-check-input" id="IsActive" for="IsActiveTrue">True</label>
-                @Html.RadioButtonFor(Model => Model.AssessmentRubric.IsActive, "True")
+                @Html.RadioButtonFor(Model => Model.AssessmentRubric.IsActive, "True", ViewBag.IsActive ? new { Checked = "checked" } : null)
             </div>
             <div class="form-check form-check-inline">
                 <label class="form-check-input" id="IsActiveFalse" for="IsActiveFalse">False</label>
-                @Html.RadioButtonFor(Model => Model.AssessmentRubric.IsActive, "False")
+                @Html.RadioButtonFor(Model => Model.AssessmentRubric.IsActive, "False", ViewBag.IsActive ? null : new { Checked = "checked" })
             </div>
         </div>
     </fieldset>

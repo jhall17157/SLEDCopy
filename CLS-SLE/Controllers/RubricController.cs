@@ -120,9 +120,9 @@ namespace CLS_SLE.Controllers
                 AssessmentRubric editRubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
                 RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.RubricID == rubricID).FirstOrDefault();
 
-                editRubric.Name = ViewBag.Name;
-                editRubric.Description = ViewBag.Description;
-                editRubric.IsActive = ViewBag.IsActive;
+                editRubric.Name = updateRubric.AssessmentRubric.Name;
+                editRubric.Description = updateRubric.AssessmentRubric.Description;
+                editRubric.IsActive = updateRubric.AssessmentRubric.IsActive;
                 editRubric.ModifiedDateTime = DateTime.Now;
                 editRubric.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
                 //db.Entry(editRubric).State = EntityState.Modified;

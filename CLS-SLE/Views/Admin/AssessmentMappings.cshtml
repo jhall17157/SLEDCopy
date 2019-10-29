@@ -1,5 +1,5 @@
 ﻿@model CLS_SLE.Models.AssessmentMappingsViewModel
-
+  
 @{
     ViewBag.Title = "AssessmentMapping";
 }
@@ -14,6 +14,8 @@
 <h2> Assessment Mapping </h2>
 
 
+
+
 @foreach (var program in Model.Programs)
 {
     <table class="table table-hover">
@@ -22,83 +24,32 @@
                 <th scope="col" class="h3">@program.Name <button type="button" class="btn btn-primary right" data-toggle="modal" data-target="#assignRubric">Assign</button></th>
             </tr>
         </thead>
-
-        <!--Assign Modal-->
-        <div class="modal fade" id="assignRubric" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Assign Rubric</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        @*TODO: Talk about db entries to group assessments*@
-                        <table class="table table-hover">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col" class="h3">
-                                        @program.Name
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td scope="col" class="h3"><b>Assessment Name</b></td>
-                                    @* Modal width needs to be increase to include this if necessary
-
-                                        <td scope="col" class="h3 right"><b>ID</b></td>*@
-                                </tr>
-
-                                @foreach (var assessment in Model.Assessments)
-                                {
-                                    if (assessment.IsActive)
-                                    {
-                                        <tr>
-                                            <td>
-                                                <span class="mt-2">
-                                                    @Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })
-                                                </span>
-                                                <span class="right mr-3 mt-2">
-                                                    @assessment.AssessmentID
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        
         <tbody>
             @foreach (var rubric in Model.AssessmentRubrics)
-                                {
+            {
                 <tr>
                     <td>
                         <p> @rubric.Name </p>
                         <div class="row">
 
-
                             @foreach (var course in Model.Courses)
+                            {
+                                foreach (var pam in Model.ProgramAssessmentMappings)
                                 {
-                                <ul class="list-group-horizontal">
-                                    <li>@course.CourseName</li>
-                                </ul>
-                                }
-                        </div>
+                                    if (pam.CourseID == course.CourseID && pam.RubricID == rubric.RubricID)
+                                    {
+                                        <ul class="">
+                                            <li class="list-unstyled"><b>@course.CourseName</b></li>
+                                        </ul>
+                                    }
+                                    }}
+                            </div>
                     </td>
                 </tr>
-                                }
+            }
         </tbody>
 
-        }
+
     </table>
 }

@@ -36,6 +36,28 @@ namespace CLS_SLE.Controllers
             
         }
 
+        public ActionResult MappingRubricCourses()
+        {
+            var rubricCourse = from pam in db.ProgramAssessmentMappings
+                               join ar in db.AssessmentRubrics on pam.RubricID equals ar.RubricID
+                               join c in db.Courses on pam.CourseID equals c.CourseID
+                               select new
+                               {
+                                   RubricID = pam.RubricID,
+                                   CourseID = c.CourseID,
+                                   RubricName = ar.Name,
+                                   CourseName = c.CourseName
+                               };
+            foreach(var rc in rubricCourse)
+            {               
+                Console.WriteLine(rc);
+            }
+
+
+            return View("AssessmentMappings", rubricCourse);
+        }
+
+
         public ActionResult AssessmentMappings()
         {
             try
@@ -45,16 +67,44 @@ namespace CLS_SLE.Controllers
                 var adminAssessments = db.Assessments.ToList();
                 logger.Info("Dashboard loaded for " + user?.Login);
 
-                return View(new AssessmentMappingsViewModel
+                /* select AR.RubricID, AR.Name,
+                 C.CourseID, C.CourseName
+
+                 From ProgramAssessmentMapping PAM
+                 Join AssessmentRubric AR on AR.RubricID = PAM.RubricID
+                 Join Course C on C.CourseID = PAM.CourseID 
+                */
+                var rubricCourse = from pam in db.ProgramAssessmentMappings
+                                   join ar in db.AssessmentRubrics on pam.RubricID equals ar.RubricID
+                                   join c in db.Courses on pam.CourseID equals c.CourseID
+                                   select new
+                                   {
+                                       RubricID = pam.RubricID,
+                                       CourseID = c.CourseID,
+                                       RubricName = ar.Name,
+                                       CourseName = c.CourseName
+                                   };
+               
+                foreach (var rc in rubricCourse)
                 {
-                    Departments = db.Departments.ToList(),
-                    Programs = db.Programs.ToList(),
-                    Courses = db.Courses.ToList(),
-                    Categories = db.AssessmentCategories.ToList(),
-                    Assessments = adminAssessments.Distinct().OrderByDescending(a => a.IsActive).ThenBy(a => a.Name).ToList(),
-                    RubricAssessments = db.RubricAssessments.ToList(),
-                    AssessmentRubrics = db.AssessmentRubrics.ToList()
-                });
+                    Console.WriteLine(rc);
+                }
+
+
+
+                return View(new AssessmentMappingsViewModel
+                    {
+                        Departments = db.Departments.ToList(),
+                        Programs = db.Programs.ToList(),
+                        Courses = db.Courses.ToList(),
+                        Categories = db.AssessmentCategories.ToList(),
+                        Assessments = adminAssessments.Distinct().OrderByDescending(a => a.IsActive).ThenBy(a => a.Name).ToList(),
+                        RubricAssessments = db.RubricAssessments.ToList(),
+                        AssessmentRubrics = db.AssessmentRubrics.ToList(),
+                        ProgramAssessmentMappings = db.ProgramAssessmentMappings.ToList()
+                    });
+                
+
             }
             catch
             {

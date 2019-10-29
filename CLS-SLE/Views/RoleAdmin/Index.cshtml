@@ -48,10 +48,12 @@
                         }
                     </td>
                     <td class="text-right">
-                        <form action="~/RoleAdmin/Delete" method="post">
-                            @if (Role.RoleID > 2 && Role.UserRoles.Count() == 0)
-                            {
-                                <input type="hidden" name="id" value="@Role.RoleID" />
+                        <form action="@Url.Action("Delete", "RoleAdmin", new { id = Role.RoleID })" method="post">
+
+					   @if (Role.RoleID > 2 && Role.UserRoles.Count() == 0)
+
+					   {
+                                <!--<input type="hidden" name="id" value="@Role.RoleID" />-->
                                 <button type="submit" class="btn btn-danger">Delete</button>
                             } else if(Role.RoleID > 2){
                                 <button type="button" class="btn btn-outline-secondary" disabled>Delete</button>

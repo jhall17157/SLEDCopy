@@ -16,51 +16,49 @@
 @using (Html.BeginForm("InsertNewRubric", "Rubric", FormMethod.Post))
 {
     @Html.HiddenFor(model => model.AssessmentID)
-    <div class="form-row">
+    
 
         <div class="form-group col-9">
             @Html.Label("Rubric Name:")
             @Html.EditorFor(Model => Model.AssessmentRubric.Name,
-           new { htmlAttributes = new { @class = "form-control"} })
-            @*@Html.ValidationMessageFor(model => model.AssessmentRubric.Name)*@
+           new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.Name } })
+            @Html.ValidationMessageFor(model => model.AssessmentRubric.Name)
         </div>
-    </div>
-    <div class="form-row">
         <div class="form-group col-9">
-        @Html.Label("Rubric Description:")
-            <div class="form-group col-9">
-                @Html.TextAreaFor(Model => Model.AssessmentRubric.Description,
-               new { htmlAttributes = new { @class = "form-control" } })
+            @Html.Label("Rubric Description:")
+            @Html.TextAreaFor(Model => Model.AssessmentRubric.Description,
+           new { @class = "form-control", @Value = ViewBag.Description, rows = "6"})
+            @Html.ValidationMessageFor(model => model.AssessmentRubric.Description)
+        </div>
+        <fieldset class="form-group col-9">
+            <div class="row">
+                <legend class="col-form-label col-2 pt-0">Is Active:</legend>
+                <div class="form-check form-check-inline">
+                    <label class="form-check-input" id="IsActive" for="IsActiveTrue">True</label>
+                    @Html.RadioButtonFor(Model => Model.AssessmentRubric.IsActive, "True")
+                </div>
+                <div class="form-check form-check-inline">
+                    <label class="form-check-input" id="IsActiveFalse" for="IsActiveFalse">False</label>
+                    @Html.RadioButtonFor(Model => Model.AssessmentRubric.IsActive, "False")
+                </div>
+            </div>
+        </fieldset>
+        <div class="form-group col-9">
+            <div class="row">
+                @Html.Label("Start Date:")
+                @Html.TextBoxFor(model => model.RubricAssesssment.StartDate,
+                new { @class="form-control", @type = "date", @Value = ViewBag.StartDate })
+                    
+                @Html.Label("End Date:")
+                @Html.TextBoxFor(model => model.RubricAssesssment.EndDate,
+                new {@class="form-control", @type = "date", @Value = ViewBag.EndDate })
             </div>
         </div>
-    </div>
-    <fieldset class="form-group col-9">
-        <div class="row">
-            <legend class="col-form-label col-2 pt-0">Is Active:</legend>
-            <div class="form-check form-check-inline">
-                <label class="form-check-input" id="IsActive" for="IsActiveTrue">True</label>
-                @Html.RadioButtonFor(Model => Model.AssessmentRubric.IsActive, "True")
-            </div>
-            <div class="form-check form-check-inline">
-                <label class="form-check-input" id="IsActiveFalse" for="IsActiveFalse">False</label>
-                @Html.RadioButtonFor(Model => Model.AssessmentRubric.IsActive, "False")
-            </div>
-        </div>
-    </fieldset>
-    <div class="row">
-        <div class="form-group col-4">
-            @Html.Label("Start Date:")
-            @Html.TextBoxFor(model => model.RubricAssesssment.StartDate,
-           new { @type = "date"})
-        </div>
-        <div class="form-group col-4">
-            @Html.Label("End Date:")
-            @Html.TextBoxFor(model => model.RubricAssesssment.EndDate,
-           new { @type = "date"})
-        </div>
-    </div>
     <div class="row justify-content-end col-9">
         <div class="col-2 p-0 mx-1"><button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Submit</button></div>
         <div class="col-2 p-0 mx-1"><a href="/AdminAssessments/ViewAssessment?assessmentID=@ViewBag.assessmentID"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
     </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
 }

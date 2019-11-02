@@ -17,54 +17,58 @@
 {
     var rubrics = Model.AssessmentRubrics.Select(r => r.ProgramAssessmentMappings.Where(m => m.ProgramID == program.ProgramID));
 
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col" class="h3">@program.Name <button type="button" class="btn btn-primary right" data-toggle="modal" data-target="#modal@(program.Number)">Assign</button></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var grouping in rubrics)
-        {
-            @*
-                <tr>
-                    <td>
-                        <p> @rubric.Name </p>
-                        <div class="row">
-                            @foreach (var course in Model.Courses)
-                            {
-                                foreach (var pam in Model.ProgramAssessmentMappings)
-                                {
-                                    if (pam.CourseID == course.CourseID && pam.RubricID == rubric.RubricID)
-                                    {
-                                        <ul class="">
-                                            <li class="list-unstyled"><b>@course.CourseName</b></li>
-                                        </ul>
-                                    }
-                                }
-                            }
-                            </div>
-                    </td>
-                </tr>
-            *@
-
-            @*
-                Should be here, but does not work as is
-                <tr>
-                    <td><h5>@rubrics.AssessmentRubric.Name</h5></td>
-                </tr>
-            *@
-
-            foreach (var rubric in grouping)
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col" class="h3">@program.Name <button type="button" class="btn btn-primary right" data-toggle="modal" data-target="#modal@(program.Number)">Assign</button></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var grouping in rubrics)
             {
-            <tr>
-                <td><h5>@rubric.AssessmentRubric.Name</h5></td>
-            </tr>
-            <tr>
-                <td>@rubric.Course.CourseName</td>
-            </tr>
-        }
-    }
+                foreach (var assessment in grouping)
+                {
+                    <tr>
+                        <td><h5>@assessment.AssessmentRubric.Name</h5></td>
+                    </tr>
+                    @*
+                        <tr>
+                            <td>
+                                <p> @rubric.Name </p>
+                                <div class="row">
+                                    @foreach (var course in Model.Courses)
+                                    {
+                                        foreach (var pam in Model.ProgramAssessmentMappings)
+                                        {
+                                            if (pam.CourseID == course.CourseID && pam.RubricID == rubric.RubricID)
+                                            {
+                                                <ul class="">
+                                                    <li class="list-unstyled"><b>@course.CourseName</b></li>
+                                                </ul>
+                                            }
+                                        }
+                                    }
+                                    </div>
+                            </td>
+                        </tr>
+                    *@
+
+                    @*
+                        Should be here, but does not work as is
+                        <tr>
+                            <td><h5>@rubrics.AssessmentRubric.Name</h5></td>
+                        </tr>
+                    *@
+
+                    foreach (var rubric in grouping)
+                    {
+
+                        <tr>
+                            <td>@rubric.Course.CourseName</td>
+                        </tr>
+                    }
+                }
+            }
         </tbody>
     </table>
 
@@ -90,7 +94,7 @@
                                 foreach (var rubric in grouping)
                                 {
                                     <tr>
-                                        <td><input type="radio">@rubric.Course.CourseName</td>
+                                        <td><input type="radio" name="assessmentSelect" id="@rubric.AssessmentRubric.RubricID.">@rubric.AssessmentRubric.Name</td>
                                     </tr>
                                 }
 
@@ -105,5 +109,10 @@
             </div>
         </div>
     }
-}
 
+    <script>
+    if(document.getElementById('').checked) {
+        //Show the courses that are associated with assessments
+    }
+    </script>
+}

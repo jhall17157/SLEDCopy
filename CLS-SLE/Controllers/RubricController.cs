@@ -52,11 +52,13 @@ namespace CLS_SLE.Controllers
         [HttpGet]
         public ActionResult AddRubric(short assessmentID)
         {
-            
-           RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.AssessmentID == assessmentID).FirstOrDefault();
+            //RubricViewModel rubricViewModel = new RubricViewModel();
+            RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.AssessmentID == assessmentID).FirstOrDefault();
             rubricAssessment.AssessmentID = assessmentID;
-            //assessmentID = Convert.ToInt16(rubricAssessment.AssessmentID);
-            
+            //rubricViewModel.AssessmentList = (from Assessment in db.Assessments
+            //                                  orderby Assessment.Name
+            //                                  select Assessment.Name).ToList();
+
             return View();
         }
 
@@ -65,7 +67,6 @@ namespace CLS_SLE.Controllers
         {
             try
             {
-                //KEEP
                 db.AssessmentRubrics.Load();
                 db.RubricAssessments.Load();
                 short assessmentID = Convert.ToInt16(rubricViewModel.AssessmentID);
@@ -125,17 +126,8 @@ namespace CLS_SLE.Controllers
                 editRubric.IsActive = updateRubric.AssessmentRubric.IsActive;
                 editRubric.ModifiedDateTime = DateTime.Now;
                 editRubric.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-                //db.Entry(editRubric).State = EntityState.Modified;
                 db.SaveChanges();
 
-                //if (!editRubric.IsActive)
-                //{
-                //    db.Criteria.Load();
-                //    db.Outcomes.Load();
-                //    var Outcomes = db.Outcomes.Where(o => o.RubricID == rubricID);
-                //    var Criteria = db.Criteria.Where(c => c.OutcomeID.Equa )
-                //}
-                //return RedirectToAction(actionName: "Rubric", controllerName: "Rubric", routeValues: "rubricID" = rubricID);
                 return RedirectToAction("ViewRubric", new RouteValueDictionary(new { controller = "Rubric", action = "ViewRubric", rubricID }));
             }
             catch(Exception e)
@@ -156,14 +148,6 @@ namespace CLS_SLE.Controllers
             Model.CreatorLogin = null;
             Model.ModifierLogin = null;
 
-            //if (Outcome.CreatedByLoginID != null)
-            //{
-            //    Model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == Outcome.CreatedByLoginID).FirstOrDefault().Login;
-            //}
-            //if (Outcome.ModifiedByLoginID != null)
-            //{
-            //    Model.ModifierLogin = (String)db.Users.Where(u => u.PersonID == Outcome.ModifiedByLoginID).FirstOrDefault().Login;
-            //}
             return View(Model);
         }
         public ActionResult AddOutcome(int? rubricID)
@@ -217,7 +201,6 @@ namespace CLS_SLE.Controllers
             try
             {
                 Int16 RubricId = Int16.Parse(formCollection["RubricId"]);
-                //Byte SortOrder = Byte.Parse(formCollection["SortOrder"]);
 
                 db.Outcomes.Load();
                 Outcome editOutcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
@@ -226,7 +209,6 @@ namespace CLS_SLE.Controllers
                 editOutcome.Name = formCollection["Name"];
                 editOutcome.Description = formCollection["Description"];
                 editOutcome.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
-                //editOutcome.SortOrder = SortOrder;
                 editOutcome.CriteriaPassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
                 editOutcome.CalculateCriteriaPassRate = ((formCollection["CalculateCriteriaPassRate"]).Equals("True") ? true : false);
                 editOutcome.ModifiedDateTime = DateTime.Now;

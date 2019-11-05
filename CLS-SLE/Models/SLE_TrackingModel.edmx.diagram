@@ -96,6 +96,9 @@
         <AssociationConnector Association="SLE_TrackingModel.fk_SectionRubric_SectionID" />
         <AssociationConnector Association="SLE_TrackingModel.fk_StudentProgram_SemesterID" />
         <AssociationConnector Association="SLE_TrackingModel.fk_UserRole_PersonID" />
+        <EntityTypeShape EntityType="SLE_TrackingModel.ProgramMap" Width="3.625" PointX="15.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SLE_TrackingModel.ProgramSecurityByUser" Width="3.625" PointX="15.75" PointY="13.75" />
+        <EntityTypeShape EntityType="SLE_TrackingModel.RubricsByProgram" Width="3.625" PointX="0.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

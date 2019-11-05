@@ -26,19 +26,23 @@
         <tbody>
             @foreach (var grouping in rubrics)
             {
-                foreach (var assessment in grouping)
-                {
-                    <tr>
-                        <td><h5>@assessment.AssessmentRubric.Name</h5></td>
-                    </tr>
+                var rubricName = grouping.FirstOrDefault()?.AssessmentRubric.Name;
 
-                    foreach (var rubric in grouping)
+                if(rubricName != null)
+                {
+                <tr>
+                    <td><h5>@rubricName</h5></td>
+                </tr>
+                    foreach (var assessment in grouping)
                     {
-                        if (assessment.CourseID == rubric.CourseID)
+                        foreach (var rubric in grouping)
                         {
+                            if (assessment.CourseID == rubric.CourseID)
+                            {
                             <tr>
                                 <td>@rubric.Course.CourseName</td>
                             </tr>
+                            }
                         }
                     }
                 }

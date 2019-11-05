@@ -88,6 +88,7 @@ namespace CLS_SLE.Controllers
                 foreach (var rc in rubricCourse)
                 {
                     Console.WriteLine(rc);
+                    Console.WriteLine("------------------------------");
                 }
 
 

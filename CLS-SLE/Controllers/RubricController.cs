@@ -192,13 +192,59 @@ namespace CLS_SLE.Controllers
 			//}
 			return View(Model);
 		}
-		public ActionResult AddOutcome(int? rubricID)
+
+        /*
+        [HttpGet]
+        public ActionResult AddOutcome(int rubricID)
+       {
+           Rubric rubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault;
+           rubric.RubricID = rubricID;
+           return View();
+       }
+        */
+        public ActionResult AddOutcome(int? rubricID)
 		{
 			dynamic Model = new ExpandoObject();
 			Model.Rubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
 			return View(Model);
 		}
-		public ActionResult InsertNewOutcome(FormCollection formCollection, short rubricID)
+
+        /*
+       [HttpPost]
+       public ActionResult InsertNewOutcome(OutcomeViewModel outcomeViewModel)
+       {
+           try
+           {
+               db.Outcomes.Load();
+               db.AssessmentRubrics.Load();
+               db.RubricAssessments.Load();
+
+               short rubricID = Convert.ToInt16(outcomeViewModel.RubricID);
+               outcomeViewModel.Outcome.CreatedDateTime = DateTime.Now;
+               outcomeViewModel.Outcome.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+               db.RubricAssessments.Add(rubricViewModel.RubricAssesssment);
+               db.AssessmentRubrics.Add(rubricViewModel.AssessmentRubric);
+
+           //mode to save?
+           addOutcome.CriteriaPassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
+           addOutcome.CalculateCriteriaPassRate = ((formCollection["CalculateCriteriaPassRate"]).Equals("True") ? true : false);
+           addOutcome.Name = formCollection["Name"];
+           addOutcome.Description = formCollection["Description"];
+           addOutcome.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
+           addOutcome.SortOrder = 1;
+
+               db.SaveChanges();
+
+               return RedirectToAction("ViewOutcome", new RouteValueDictionary(new { controller = "Rubric", action = "ViewOutcome", outcomeViewmodel.Outcome.OutcomeID}));
+           }
+           catch
+           {
+               //logger.Error("Failed to save assessment, redirecting to sign in page.");
+               return RedirectToAction(actionName: "Signin", controllerName: "User");
+           }
+       }
+           */
+        public ActionResult InsertNewOutcome(FormCollection formCollection, short rubricID)
 		{
 			try
 			{
@@ -231,14 +277,68 @@ namespace CLS_SLE.Controllers
 				return RedirectToAction(actionName: "Signin", controllerName: "User");
 			}
 		}
-		public ActionResult EditOutcome(int? outcomeID, int? rubricID)
+
+        /*
+        [HttpGet]
+        public ActionResult EditOutcome(int outcomeID, int rubricID)
+   {
+       RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.RubricID == rubricID).FirstOrDefault();
+       AssessmentRubric assessmentRubric = db.AssessmentRubrics.Where(a => a.RubricID == rubricID).FirstOrDefault();
+       Outcome outcome = db.Outcome.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
+
+       ViewBag.OutcomeId = outcome.OutcomeID;
+       ViewBag.RubricId = outcome.RubricID;
+       ViewBag.Name = outcome.Name;
+       ViewBag.CriteriaPassRate = outcome.CriteriaPassRate;
+       ViewBag.IsActive = assessmentRubric.IsActive;
+
+       return View();
+   }
+        */
+
+        public ActionResult EditOutcome(int? outcomeID, int? rubricID)
 		{
 			dynamic Model = new ExpandoObject();
 			Model.Outcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
 			return View(Model);
 		}
 
-		public ActionResult SaveOutcome(FormCollection formCollection, short outcomeID, short rubricID)
+        /*
+         [HttpPost]
+         public ActionResult SaveOutcome(int outcomeID, rubricID, UpdateOutcome updateOutcome)
+        {
+            try
+            {
+                db.Outcomes.Load();
+                Outcome editOutcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
+                AssessmentRubric editRubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
+                RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.RubricID == rubricID).FirstOrDefault();
+
+                editOutcome.RubricID = rubricID;
+                editOutcome.Name = updateOutcome.Outcome.Name;
+                editOutcome.Description = updateOutcome.Outcome.Description
+                editOutcome.IsActive = updateOutcome.Outcome.IsActive;
+                editOutcome.CriteriaPassRate = updateOutcome.Outcome.Criteria.PassRate;
+                editOutcome.CalculateCriteriaPassRate = updateOutcome.Outcome.CalculateCriteriaPassRate;
+                editOutcome.ModifiedDateTime = DateTime.Now;
+                editOutcome.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+
+                //editOutcome.SortOrder = 1;
+
+                db.SaveChanges();
+
+                return RedirectToAction("ViewOutcome", new RouteValueDictionary(new { controller = "Rubric", action = "ViewOutcome", outcomeID }));
+
+            }
+            catch
+            {
+                //logger.Error("Failed to save assessment, redirecting to sign in page.");
+                return RedirectToAction(actionName: "Signin", controllerName: "User");
+            }
+        }
+        */
+
+        public ActionResult SaveOutcome(FormCollection formCollection, short outcomeID, short rubricID)
 		{
 			try
 			{

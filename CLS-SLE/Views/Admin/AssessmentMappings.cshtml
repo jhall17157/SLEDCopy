@@ -26,47 +26,23 @@
         <tbody>
             @foreach (var grouping in rubrics)
             {
-                foreach (var assessment in grouping)
+                var rubricName = grouping.FirstOrDefault()?.AssessmentRubric.Name;
+
+                if(rubricName != null)
                 {
-                    <tr>
-                        <td><h5>@assessment.AssessmentRubric.Name</h5></td>
-                    </tr>
-                    @*
-                        <tr>
-                            <td>
-                                <p> @rubric.Name </p>
-                                <div class="row">
-                                    @foreach (var course in Model.Courses)
-                                    {
-                                        foreach (var pam in Model.ProgramAssessmentMappings)
-                                        {
-                                            if (pam.CourseID == course.CourseID && pam.RubricID == rubric.RubricID)
-                                            {
-                                                <ul class="">
-                                                    <li class="list-unstyled"><b>@course.CourseName</b></li>
-                                                </ul>
-                                            }
-                                        }
-                                    }
-                                    </div>
-                            </td>
-                        </tr>
-                    *@
-
-                    @*
-                        Should be here, but does not work as is
-                        <tr>
-                            <td><h5>@rubrics.AssessmentRubric.Name</h5></td>
-                        </tr>
-                    *@
-
-                    foreach (var rubric in grouping)
+                <tr>
+                    <td><h5>@rubricName</h5></td>
+                </tr>
+                    foreach (var assessment in grouping)
                     {
-                        if (assessment.CourseID == rubric.CourseID)
+                        foreach (var rubric in grouping)
                         {
+                            if (assessment.CourseID == rubric.CourseID)
+                            {
                             <tr>
-                                <td>@rubric.Course.CourseName</td>
+                                <td><i class="fa fa-caret-right"></i> @rubric.Course.CourseName</td>
                             </tr>
+                            }
                         }
                     }
                 }

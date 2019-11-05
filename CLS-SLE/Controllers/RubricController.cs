@@ -152,8 +152,6 @@ namespace CLS_SLE.Controllers
 		{
 			try
 			{
-				//db.AssessmentRubrics.Load();
-				//db.RubricAssessments.Load();
 				AssessmentRubric editRubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
 				RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.RubricID == rubricID).FirstOrDefault();
 
@@ -162,17 +160,8 @@ namespace CLS_SLE.Controllers
 				editRubric.IsActive = updateRubric.AssessmentRubric.IsActive;
 				editRubric.ModifiedDateTime = DateTime.Now;
 				editRubric.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-				//db.Entry(editRubric).State = EntityState.Modified;
 				db.SaveChanges();
 
-				//if (!editRubric.IsActive)
-				//{
-				//    db.Criteria.Load();
-				//    db.Outcomes.Load();
-				//    var Outcomes = db.Outcomes.Where(o => o.RubricID == rubricID);
-				//    var Criteria = db.Criteria.Where(c => c.OutcomeID.Equa )
-				//}
-				//return RedirectToAction(actionName: "Rubric", controllerName: "Rubric", routeValues: "rubricID" = rubricID);
 				return RedirectToAction("ViewRubric", new RouteValueDictionary(new { controller = "Rubric", action = "ViewRubric", rubricID }));
 			}
 			catch (Exception e)

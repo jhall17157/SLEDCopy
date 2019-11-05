@@ -14,15 +14,15 @@
         *@
         <li class="breadcrumb-item">@Html.ActionLink((String)((AssessmentRubric)Model.Criterion.Outcome.AssessmentRubric).RubricAssessments.FirstOrDefault().Assessment.Name, "ViewAssessment", "AdminAssessments", new { assessmentID = ((AssessmentRubric)Model.Criterion.Outcome.AssessmentRubric).RubricAssessments.FirstOrDefault().AssessmentID }, null)</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)Model.Criterion.Outcome.AssessmentRubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.Criterion.Outcome.AssessmentRubric.RubricID }, null)</li>
-        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Criterion.Outcome.Name, "ViewOutcome", "Rubric", new { outcomeID = Model.Criterion.Outcome.OutcomeID }, null)</li>
-        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Criterion.Name, "ViewCriterion", "Rubric", new { criterionID = Model.Criterion.CriteriaID }, null)</li>
+        @*<li class="breadcrumb-item">@Html.ActionLink((String)Model.Criterion.Outcome.Name, "ViewOutcome", "Rubric", new { outcomeID = Model.Criterion.Outcome.OutcomeID }, null)</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Criterion.Name, "ViewCriterion", "Rubric", new { criterionID = Model.Criterion.CriteriaID }, null)</li>*@
         <li class="breadcrumb-item active" aria-current="page">Edit</li>
     </ol>
 </nav>
 <h1>Edit Criterion</h1>
 <br />
 
-<form method="post" action="/Rubric/SaveCriterion?criterionID=@Model.Criterion.CriteriaID">
+<form method="post" action="@Url.Action("SaveCriterion", "Rubric", new { criterionID = Model.Criterion.CriteriaID, rubricID = Model.RubricID })">
     <div class="form-row">
         <div class="form-group col-9">
             <label for="Name">Name:</label>
@@ -32,7 +32,7 @@
     <div class="form-row">
         <div class="form-group col-9">
             <label for="ExampleText">Example Text:</label>
-            <textarea name="ExampleText" class="form-control" rows="6" maxlength="200" value="@Model.Criterion.ExampleText"></textarea>
+		  <textarea name="ExampleText" class="form-control" rows="6" maxlength="200">@Model.Criterion.ExampleText</textarea>
         </div>
     </div>
     <fieldset class="form-group col-9">
@@ -57,10 +57,10 @@
     @*TODO InactiveDateTime*@
     <div class="row justify-content-end col-9">
         <div class="col-2 p-0 mx-1"><button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Update</button></div>
-        <div class="col-2 p-0 mx-1"><a href="/Rubric/ViewCriterion?criterionID=@Model.Criterion.CriteriaID"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
+        <div class="col-2 p-0 mx-1"><a href="@Url.Action("ViewRubric", "Rubric", new { rubricID = Model.RubricID })" class="btn btn-danger col-12 mx-1">Cancel</a></div>
     </div>
 
-    <div hidden>
+    @*<div hidden>
         <input name="CriteriaID" value="@Model.Criterion.CriteriaID" type="hidden" />
-    </div>
+    </div>*@
 </form>

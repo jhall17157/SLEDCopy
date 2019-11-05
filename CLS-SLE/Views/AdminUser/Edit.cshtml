@@ -14,9 +14,9 @@
 <h1>Edit User - @ViewBag.Login</h1>
 <br />
 
-@using (Html.BeginForm("UpdateUser", "AdminUser", FormMethod.Post))
+@using (Html.BeginForm("UpdateUser", "AdminUser", new { id = ViewBag.Id }, FormMethod.Post))
 {
-    <input type="hidden" name="id" id="id" value="@ViewBag.Id" />
+    <!--<input type="hidden" name="id" id="id" value="@ViewBag.Id" />-->
     <div class="form-group">
         @Html.Label("First Name:")
         @Html.EditorFor(Model => Model.Person.FirstName,

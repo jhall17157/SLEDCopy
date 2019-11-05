@@ -16,7 +16,7 @@
 @using (Html.BeginForm("InsertNewRubric", "Rubric", FormMethod.Post))
 {
     @Html.HiddenFor(model => model.AssessmentID)
-    
+    @*@Html.DropDownList("Assessments", new SelectList(Model.AssessmentList, "Name"));*@
 
         <div class="form-group col-9">
             @Html.Label("Rubric Name:")

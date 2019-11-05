@@ -14,77 +14,91 @@
 <h1>Edit Assessment</h1>
 <br />
 
-<form method="post" action="/Admin/SaveAssessment">
-    <div class="form-row">
-        <div class="form-group col-9">
-            <label for="Name">Name:</label>
-            <input type="text" name="Name" class="form-control" value="@Model.Assessment.Name" />
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-9">
-            <label for="Category">Category:</label>
-            <input type="text" class="form-control" placeholder="@Model.Assessment.Category" value="@Model.Assessment.Category" disabled />
-            <input type="hidden" name="Category" value="@Model.Assessment.Category" />
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-9">
-            <label for="Description">Description:</label>
-            <textarea name="Description" class="form-control" rows="6">@Model.Assessment.Description </textarea>
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-9">
-            <label for="PassPercent">Pass Percentage:</label>
-            <input type="text" name="PassPercent" class="form-control"  value="@((Model.Assessment.OutcomePassRate)*100)"/>
-        </div>
-    </div>
-    <fieldset class="form-group col-9">
-        <div class="row">
-            <legend class="col-form-label col-4 pt-0">Calculate Outcome Pass Rate:</legend>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="CalculateOutcomePassRate" id="CalculateOutcomePassRateTrue" value="True" @(Model.Assessment.CalculateOutcomePassRate ? " checked=\"checked\"" : "")>
-                <label class="form-check-label" for="CalculateOutcomePassRateTrue">True</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="CalculateOutcomePassRate" id="CalculateOutcomePassRateFalse" value="False" @(!Model.Assessment.CalculateOutcomePassRate ? " checked=\"checked\"" : "")>
-                <label class="form-check-label" for="CalculateOutcomePassRateFalse">False</label>
-            </div>
-        </div>
-    </fieldset>
-    <div class="form-row">
-        <div class="form-group col-9">
-            <label for="Program">Program</label>
-            <select class="form-control" id="Program" name="Program">
-                @{
-                    foreach (Program p in Model.Programs)
-                    {
-                        <option  @(p.ProgramID == Model.Assessment.ProgramID ? "selected" : "" )>@p.Name</option>
-                    }
-                }
-            </select>
-        </div>
-    </div>
-    <fieldset class="form-group col-9">
-        <div class="row">
-            <legend class="col-form-label col-4 pt-0">Is Active:</legend>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="IsActive" id="IsActiveTrue" value="True" @(Model.Assessment.IsActive ? " checked=\"checked\"" : "")>
-                <label class="form-check-label" for="IsActiveTrue">True</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="IsActive" id="IsActiveFalse" value="False" @(!Model.Assessment.IsActive ? " checked=\"checked\"" : "")>
-                <label class="form-check-label" for="IsActiveFalse">False</label>
-            </div>
-        </div>
-    </fieldset>
-    <div class="row justify-content-end col-9">
-        <div class="col-2 p-0 mx-1"><button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Update</button></div>
-        <div class="col-2 p-0 mx-1"><a href="/AdminAssessments/ViewAssessment?assessmentID=@Model.Assessment.AssessmentID"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
-    </div>
+<form method="post" action="@Url.Action("SaveAssessment", "AdminAssessments", new { assessmentID = Model.Assessment.AssessmentID })">
+	<div class="form-row">
+		<div class="form-group col-9">
+			<label for="Name">Name:</label>
+			<input type="text" name="Name" class="form-control" value="@Model.Assessment.Name" required />
+		</div>
+	</div>
+	<div class="form-row">
+		<div class="form-group col-9">
+			<label for="Category">Category: </label>
+			<select class="form-control" id="Category" name="Category">
+				<option>Select a Category</option>
+				@{
+					foreach (AssessmentCategory ac in Model.AssessmentCategories)
+					{
+						<option @if (@ac.CategoryCode == Model.Assessment.Category) {<text> selected </text>}>@ac.Name</option>
+					}
+				}
+			</select>
+		</div>
+	</div>
+	<!--<div class="form-row">
+		<div class="form-group col-9">
+			<label for="Category">Category:</label>
+			<input type="text" class="form-control" placeholder="@Model.Assessment.Category" value="@Model.Assessment.Category" disabled />
+			<input type="hidden" name="Category" value="@Model.Assessment.Category" />
+		</div>
+	</div>-->
+	<div class="form-row">
+		<div class="form-group col-9">
+			<label for="Description">Description:</label>
+			<textarea name="Description" class="form-control" rows="6">@Model.Assessment.Description </textarea>
+		</div>
+	</div>
+	<div class="form-row">
+		<div class="form-group col-9">
+			<label for="PassPercent">Pass Percentage:</label>
+			<input type="text" name="PassPercent" class="form-control" value="@((Model.Assessment.OutcomePassRate)*100)" required />
+		</div>
+	</div>
+	<fieldset class="form-group col-9">
+		<div class="row">
+			<legend class="col-form-label col-4 pt-0">Calculate Outcome Pass Rate:</legend>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="CalculateOutcomePassRate" id="CalculateOutcomePassRateTrue" value="True" @(Model.Assessment.CalculateOutcomePassRate ? " checked=\"checked\"" : "")>
+				<label class="form-check-label" for="CalculateOutcomePassRateTrue">True</label>
+			</div>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="CalculateOutcomePassRate" id="CalculateOutcomePassRateFalse" value="False" @(!Model.Assessment.CalculateOutcomePassRate ? " checked=\"checked\"" : "")>
+				<label class="form-check-label" for="CalculateOutcomePassRateFalse">False</label>
+			</div>
+		</div>
+	</fieldset>
+	<div class="form-row">
+		<div class="form-group col-9">
+			<label for="Program">Program</label>
+			<select class="form-control" id="Program" name="Program">
+				@{
+					foreach (Program p in Model.Programs)
+					{
+						<option @(p.ProgramID == Model.Assessment.ProgramID ? "selected" : "" )>@p.Name</option>
+					}
+				}
+			</select>
+		</div>
+	</div>
+	<fieldset class="form-group col-9">
+		<div class="row">
+			<legend class="col-form-label col-4 pt-0">Is Active:</legend>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="IsActive" id="IsActiveTrue" value="True" @(Model.Assessment.IsActive ? " checked=\"checked\"" : "")>
+				<label class="form-check-label" for="IsActiveTrue">True</label>
+			</div>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="IsActive" id="IsActiveFalse" value="False" @(!Model.Assessment.IsActive ? " checked=\"checked\"" : "")>
+				<label class="form-check-label" for="IsActiveFalse">False</label>
+			</div>
+		</div>
+	</fieldset>
+	<div class="row justify-content-end col-9">
+		<div class="col-2 p-0 mx-1"><button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Update</button></div>
+		<div class="col-2 p-0 mx-1"><a href="/AdminAssessments/ViewAssessment?assessmentID=@Model.Assessment.AssessmentID" class="btn btn-danger col-12 mx-1">Cancel</a></div>
+	</div>
 
-    <div hidden>
-        <input name="assessmentID" value="@Model.Assessment.AssessmentID" type="hidden" />
-    </div>
+	<!--<div hidden>
+	    <input name="assessmentID" value="@Model.Assessment.AssessmentID" type="hidden" />
+	</div>-->
 </form>

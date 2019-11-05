@@ -51,6 +51,7 @@ namespace CLS_SLE.Controllers
         [HttpGet]
         public ActionResult AddRubric(short assessmentID)
         {
+
             //RubricViewModel rubricViewModel = new RubricViewModel();
             RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.AssessmentID == assessmentID).FirstOrDefault();
             rubricAssessment.AssessmentID = assessmentID;

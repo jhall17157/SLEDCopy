@@ -8,6 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Text.RegularExpressions;
+using CLS_SLE.ViewModels;
 
 namespace CLS_SLE.Controllers
 {
@@ -171,21 +172,24 @@ namespace CLS_SLE.Controllers
 
         //no view was associated with this method below
         [HttpPost]
-        public ActionResult InsertNewAssessment(FormCollection formCollection, string category)
+        public ActionResult InsertNewAssessment(
+            InsertNewAssesmentViewModel insertNewAssesmentViewModel,
+            string category)
         {
             try
             {
                 db.Assessments.Load();
                 //string Category = formCollection["Category"];
                 var CategoryCode = db.AssessmentCategories.Where(c => c.Name == category).FirstOrDefault().CategoryCode;
-                var program = (formCollection["Program"]);
+                var program = insertNewAssesmentViewModel.Assessment.Program;
                 Assessment addAssessment = db.Assessments.Create();
 
 
-                addAssessment.Name = formCollection["Name"];
+                addAssessment.Name = insertNewAssesmentViewModel.Assessment.Name;
                 addAssessment.Category = CategoryCode;
-                addAssessment.Description = formCollection["Description"] != null ? formCollection["Description"] : "";
-                addAssessment.OutcomePassRate = (Decimal?)(Double.Parse(Regex.Replace(formCollection["PassPercent"], "[^0-9.]", ""))) / 100;
+                addAssessment.Description = insertNewAssesmentViewModel.Assessment.Description != null ? 
+                    insertNewAssesmentViewModel.Assessment.Description : "";
+                addAssessment.OutcomePassRate = (Decimal?)(Double.Parse(Regex.Replace(insertNewAssesmentViewModel.Assessment.OutcomePassRate, "[^0-9.]", ""));
 			    addAssessment.CalculateOutcomePassRate = ((formCollection["CalculateOutcomePassRate"]).Equals("True") ? true : false);
                 addAssessment.ProgramID = db.Programs.Where(p => p.Name == program).FirstOrDefault().ProgramID;
                 addAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);

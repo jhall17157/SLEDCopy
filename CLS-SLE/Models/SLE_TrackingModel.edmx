@@ -464,14 +464,6 @@
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'SLE_Tracking.dbo.tmp_instructor' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tmp_instructor">
-          <Property Name="INSTRUCTOR_ID" Type="varchar" MaxLength="50" />
-          <Property Name="FIRST_NAME" Type="varchar" MaxLength="50" />
-          <Property Name="LAST_NAME" Type="varchar" MaxLength="50" />
-          <Property Name="EMAIL" Type="varchar" MaxLength="50" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
 warning 6002: The table/view 'SLE_Tracking.dbo.tmp_offering' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="tmp_offering">
           <Key>
@@ -488,14 +480,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.tmp_offering' does not have a pri
           <Property Name="OFFERING_TITLE" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="INSTRUCTOR_ID" Type="char" MaxLength="9" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'SLE_Tracking.dbo.tmp_student' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tmp_student">
-          <Property Name="STD_ID" Type="char" MaxLength="9" />
-          <Property Name="FIRST_NAME" Type="varchar" MaxLength="50" />
-          <Property Name="LAST_NAME" Type="varchar" MaxLength="50" />
-          <Property Name="PROGRAMS" Type="varchar(max)" />
-        </EntityType>-->
         <!--Errors Found During Generation:
 warning 6002: The table/view 'SLE_Tracking.dbo.tmp_studentroster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="tmp_studentroster">
@@ -2130,15 +2114,14 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Type="String" Name="CourseSubjectName" Nullable="false" MaxLength="100" />
         </ComplexType>
         <ComplexType Name="GetSecurityByLogin_Result">
-          <Property Type="Byte" Name="SchoolID" Nullable="false" />
-          <Property Type="String" Name="SchoolName" Nullable="false" MaxLength="100" />
-          <Property Type="Int16" Name="DepartmentID" Nullable="false" />
+          <Property Type="Byte" Name="SchoolID" Nullable="true" />
+          <Property Type="Int16" Name="DepartmentID" Nullable="true" />
           <Property Type="String" Name="DepartmentNumber" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="DepartmentName" Nullable="true" MaxLength="100" />
-          <Property Type="Int16" Name="ProgramID" Nullable="false" />
+          <Property Type="Int16" Name="ProgramID" Nullable="true" />
           <Property Type="String" Name="ProgramNumber" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="ProgramName" Nullable="false" MaxLength="100" />
-          <Property Type="Byte" Name="CanEdit" Nullable="true" />
+          <Property Type="String" Name="ProgramName" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="CanEdit" Nullable="true" />
         </ComplexType>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -3585,7 +3568,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             <ResultMapping>
               <ComplexTypeMapping TypeName="SLE_TrackingModel.GetSecurityByLogin_Result">
                 <ScalarProperty Name="SchoolID" ColumnName="SchoolID" />
-                <ScalarProperty Name="SchoolName" ColumnName="SchoolName" />
                 <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
                 <ScalarProperty Name="DepartmentNumber" ColumnName="DepartmentNumber" />
                 <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />

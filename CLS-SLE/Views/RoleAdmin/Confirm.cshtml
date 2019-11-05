@@ -1,6 +1,6 @@
 ﻿<h3>Confirm deletion of role @ViewBag.Name</h3>
-<form asp-action="Delete" method="post">
-    <input type="hidden" name="id" value="@ViewBag.Id"/>
+<form action="@Url.Action("Delete", "RoleAdmin", new { id = ViewBag.Id })" method="post">
+    <!--<input type="hidden" name="id" value="@ViewBag.Id"/>-->
     <button type="submit" class="btn btn-outline-danger">Delete</button>
     <a href="~/RoleAdmin/Index" class="btn btn-outline-secondary">Cancel</a>
 </form>

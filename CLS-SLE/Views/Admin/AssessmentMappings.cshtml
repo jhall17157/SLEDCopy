@@ -18,7 +18,7 @@
     var rubrics = Model.AssessmentRubrics.Select(r => r.ProgramAssessmentMappings.Where(m => m.ProgramID == program.ProgramID));
 
     <table class="table table-hover">
-        <thead>
+        <thead class="thead-dark">
             <tr>
                 <th scope="col" class="h3">@program.Name <button type="button" class="btn btn-primary right" data-toggle="modal" data-target="#modal@(program.Number)">Assign</button></th>
             </tr>

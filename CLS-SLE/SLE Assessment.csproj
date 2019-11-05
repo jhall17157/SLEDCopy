@@ -247,6 +247,9 @@
     <Compile Include="Models\ETL_StatusMapping.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FactTSA.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GetCompletedCountBySectionRubric_Result.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
@@ -284,7 +287,13 @@
     <Compile Include="Models\ProgramDepartment.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ProgramMap.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ProgramSecurity.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProgramSecurityByUser.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Role.cs">
@@ -297,6 +306,9 @@
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\RubricDetail.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RubricsByProgram.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\School.cs">
@@ -360,6 +372,12 @@
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sysdiagram.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tmp_offering.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tmp_studentroster.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">

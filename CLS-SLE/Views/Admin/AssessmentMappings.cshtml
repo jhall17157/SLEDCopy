@@ -69,13 +69,26 @@
 
                             @foreach (var grouping in rubrics)
                             {
-                                foreach (var rubric in grouping)
+                                var rubricName = grouping.FirstOrDefault()?.AssessmentRubric.Name;
+
+                                if (rubricName != null)
                                 {
                                     <tr>
-                                        <td><input type="checkbox" name="assessmentSelect" id="@rubric.AssessmentRubric.RubricID."> @rubric.AssessmentRubric.Name</td>
+                                        <td><h5><input type="radio" name="assessmentSelect">@rubricName</h5></td>
                                     </tr>
+                                    foreach (var assessment in grouping)
+                                    {
+                                        foreach (var rubric in grouping)
+                                        {
+                                            if (assessment.CourseID == rubric.CourseID)
+                                            {
+                                                <tr>
+                                                    <td><i class="fa fa-caret-right"></i>@rubric.Course.CourseName</td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
                                 }
-
                             }
                         </table>
                     </div>

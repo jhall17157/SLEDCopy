@@ -13,14 +13,13 @@ namespace CLS_SLE.Models
     
     public partial class GetSecurityByLogin_Result
     {
-        public byte SchoolID { get; set; }
-        public string SchoolName { get; set; }
-        public short DepartmentID { get; set; }
+        public Nullable<byte> SchoolID { get; set; }
+        public Nullable<short> DepartmentID { get; set; }
         public string DepartmentNumber { get; set; }
         public string DepartmentName { get; set; }
-        public short ProgramID { get; set; }
+        public Nullable<short> ProgramID { get; set; }
         public string ProgramNumber { get; set; }
         public string ProgramName { get; set; }
-        public Nullable<byte> CanEdit { get; set; }
+        public Nullable<bool> CanEdit { get; set; }
     }
 }

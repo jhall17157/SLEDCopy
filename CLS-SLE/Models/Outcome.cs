@@ -32,6 +32,7 @@ namespace CLS_SLE.Models
         public Nullable<int> CreatedByLoginID { get; set; }
         public Nullable<System.DateTime> ModifiedDateTime { get; set; }
         public Nullable<int> ModifiedByLoginID { get; set; }
+        public Nullable<System.DateTime> InactiveDateTime { get; set; }
     
         public virtual AssessmentRubric AssessmentRubric { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

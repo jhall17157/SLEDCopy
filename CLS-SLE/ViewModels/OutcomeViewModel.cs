@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using CLS_SLE.Models;
 
 namespace CLS_SLE.ViewModels
 {
     public class OutcomeViewModel
     {
-        public OutcomeViewModel outcomeViewModel { get; set; }
+        public Outcome OutcomeVM { get; set; }
+        public int RubricID { get; set; }
+        public RubricAssessment Rubric { get; set; }
     }
 }

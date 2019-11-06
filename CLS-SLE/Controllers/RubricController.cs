@@ -30,63 +30,63 @@ namespace CLS_SLE.Controllers
 		}
 
 
-		public ActionResult ViewRubric(int? rubricID)
-		{
-			dynamic Model = new ExpandoObject();
-			var Rubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
-			Dictionary<string, Dictionary<string, Dictionary<string, string>>> Logins = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
-			Logins.Add("Outcome", new Dictionary<string, Dictionary<string, string>>());
-			Logins.Add("Criterion", new Dictionary<string, Dictionary<string, string>>());
-			Model.Outcomes = db.Outcomes.Where(o => o.RubricID == rubricID).ToList();
-			foreach (Outcome outcome in Model.Outcomes)
-			{
-				string outcomeID = outcome.OutcomeID.ToString();
+        public ActionResult ViewRubric(int? rubricID)
+        {
+            dynamic Model = new ExpandoObject();
+            var Rubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
+            Dictionary<string, Dictionary<string, Dictionary<string, string>>> Logins = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
+            Logins.Add("Outcome", new Dictionary<string, Dictionary<string, string>>());
+            Logins.Add("Criterion", new Dictionary<string, Dictionary<string, string>>());
+            Model.Outcomes = db.Outcomes.Where(o => o.RubricID == rubricID).ToList();
+            foreach (Outcome outcome in Model.Outcomes)
+            {
+                string outcomeID = outcome.OutcomeID.ToString();
 
-				Logins["Outcome"].Add(outcomeID, new Dictionary<string, string>());
+                Logins["Outcome"].Add(outcomeID, new Dictionary<string, string>());
 
-				if (outcome.ModifiedByLoginID != null)
-				{
-					Logins["Outcome"][outcomeID].Add("ModifierLogin", db.Users.Where(u => u.PersonID == outcome.ModifiedByLoginID).FirstOrDefault().Login.ToString());
-				}
+                if (outcome.ModifiedByLoginID != null)
+                {
+                    Logins["Outcome"][outcomeID].Add("ModifierLogin", db.Users.Where(u => u.PersonID == outcome.ModifiedByLoginID).FirstOrDefault().Login.ToString());
+                }
 
-				if (outcome.CreatedByLoginID != null)
-				{
-					Logins["Outcome"][outcomeID].Add("CreatorLogin", db.Users.Where(u => u.PersonID == outcome.CreatedByLoginID).FirstOrDefault().Login.ToString());
-				}
+                if (outcome.CreatedByLoginID != null)
+                {
+                    Logins["Outcome"][outcomeID].Add("CreatorLogin", db.Users.Where(u => u.PersonID == outcome.CreatedByLoginID).FirstOrDefault().Login.ToString());
+                }
 
-				foreach (Criterion criterion in outcome.Criteria)
-				{
-					string criteriaID = criterion.CriteriaID.ToString();
+                foreach (Criterion criterion in outcome.Criteria)
+                {
+                    string criteriaID = criterion.CriteriaID.ToString();
 
-					Logins["Criterion"].Add(criteriaID, new Dictionary<string, string>());
+                    Logins["Criterion"].Add(criteriaID, new Dictionary<string, string>());
 
-					if (criterion.ModifiedByLoginID != null)
-					{
-						Logins["Criterion"][criteriaID].Add("ModifierLogin", db.Users.Where(u => u.PersonID == criterion.ModifiedByLoginID).FirstOrDefault().Login.ToString());
-					}
+                    if (criterion.ModifiedByLoginID != null)
+                    {
+                        Logins["Criterion"][criteriaID].Add("ModifierLogin", db.Users.Where(u => u.PersonID == criterion.ModifiedByLoginID).FirstOrDefault().Login.ToString());
+                    }
 
-					if (criterion.CreatedByLoginID != null)
-					{
-						Logins["Criterion"][criteriaID].Add("CreatorLogin", db.Users.Where(u => u.PersonID == criterion.CreatedByLoginID).FirstOrDefault().Login.ToString());
-					}
-				}
-			}
-			Model.Logins = Logins;
-			Model.Rubric = Rubric;
-			Model.CreatorLogin = null;
-			Model.ModifierLogin = null;
+                    if (criterion.CreatedByLoginID != null)
+                    {
+                        Logins["Criterion"][criteriaID].Add("CreatorLogin", db.Users.Where(u => u.PersonID == criterion.CreatedByLoginID).FirstOrDefault().Login.ToString());
+                    }
+                }
+            }
+            Model.Logins = Logins;
+            Model.Rubric = Rubric;
+            Model.CreatorLogin = null;
+            Model.ModifierLogin = null;
 
-			if (Rubric.CreatedByLoginID != null)
-			{
-				Model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == Rubric.CreatedByLoginID).FirstOrDefault().Login;
-			}
-			if (Rubric.ModifiedByLoginID != null)
-			{
-				Model.ModifierLogin = (String)db.Users.Where(u => u.PersonID == Rubric.ModifiedByLoginID).FirstOrDefault().Login;
-			}
-			return View(Model);
-		}
-		[HttpGet]
+            //if (Rubric.CreatedByLoginID != null)
+            //{
+            //	Model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == Rubric.CreatedByLoginID).FirstOrDefault().Login;
+            //}
+            //if (Rubric.ModifiedByLoginID != null)
+            //{
+            //	Model.ModifierLogin = (String)db.Users.Where(u => u.PersonID == Rubric.ModifiedByLoginID).FirstOrDefault().Login;
+            //}
+            return View(Model);
+        }
+        [HttpGet]
 		public ActionResult AddRubric(short assessmentID)
 		{
 
@@ -97,6 +97,7 @@ namespace CLS_SLE.Controllers
 			return View();
 		}
 
+        //post for submitting a new Rubric
 		[HttpPost]
 		public ActionResult InsertNewRubric(RubricViewModel rubricViewModel)
 		{
@@ -147,6 +148,7 @@ namespace CLS_SLE.Controllers
 			return View();
 		}
 
+        //Post for saving an edited rubric
 		[HttpPost]
 		public ActionResult SaveRubric(UpdateRubric updateRubric, short rubricID)
 		{
@@ -171,45 +173,14 @@ namespace CLS_SLE.Controllers
 			}
 		}
 
-
-		public ActionResult ViewOutcome(int? outcomeID)
-		{
-			dynamic Model = new ExpandoObject();
-			var Outcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
-			var Criteria = db.Criteria.Where(c => c.OutcomeID == outcomeID).ToList();
-			Model.Outcome = Outcome;
-			Model.Criteria = Criteria;
-			Model.CreatorLogin = null;
-			Model.ModifierLogin = null;
-
-			//if (Outcome.CreatedByLoginID != null)
-			//{
-			//    Model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == Outcome.CreatedByLoginID).FirstOrDefault().Login;
-			//}
-			//if (Outcome.ModifiedByLoginID != null)
-			//{
-			//    Model.ModifierLogin = (String)db.Users.Where(u => u.PersonID == Outcome.ModifiedByLoginID).FirstOrDefault().Login;
-			//}
-			return View(Model);
-		}
-
-        /*
         [HttpGet]
-        public ActionResult AddOutcome(int rubricID)
+        public ActionResult AddOutcome(short rubricID)
        {
-           Rubric rubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault;
+           AssessmentRubric rubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
            rubric.RubricID = rubricID;
            return View();
        }
-        */
-        public ActionResult AddOutcome(int? rubricID)
-		{
-			dynamic Model = new ExpandoObject();
-			Model.Rubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
-			return View(Model);
-		}
 
-        /*
        [HttpPost]
        public ActionResult InsertNewOutcome(OutcomeViewModel outcomeViewModel)
        {
@@ -220,30 +191,30 @@ namespace CLS_SLE.Controllers
                db.RubricAssessments.Load();
 
                short rubricID = Convert.ToInt16(outcomeViewModel.RubricID);
-               outcomeViewModel.Outcome.CreatedDateTime = DateTime.Now;
-               outcomeViewModel.Outcome.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-               db.RubricAssessments.Add(rubricViewModel.RubricAssesssment);
-               db.AssessmentRubrics.Add(rubricViewModel.AssessmentRubric);
-
+               outcomeViewModel.OutcomeVM.CreatedDateTime = DateTime.Now;
+               outcomeViewModel.OutcomeVM.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+               //db.RubricAssessments.Add(rubricViewModel.RubricAssesssment);
+               
            //mode to save?
-           addOutcome.CriteriaPassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
-           addOutcome.CalculateCriteriaPassRate = ((formCollection["CalculateCriteriaPassRate"]).Equals("True") ? true : false);
-           addOutcome.Name = formCollection["Name"];
-           addOutcome.Description = formCollection["Description"];
-           addOutcome.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
-           addOutcome.SortOrder = 1;
+           //addOutcome.CriteriaPassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
+           //addOutcome.CalculateCriteriaPassRate = ((formCollection["CalculateCriteriaPassRate"]).Equals("True") ? true : false);
+           //addOutcome.Name = formCollection["Name"];
+           //addOutcome.Description = formCollection["Description"];
+           //addOutcome.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
+           //addOutcome.SortOrder = 1;
 
                db.SaveChanges();
 
-               return RedirectToAction("ViewOutcome", new RouteValueDictionary(new { controller = "Rubric", action = "ViewOutcome", outcomeViewmodel.Outcome.OutcomeID}));
-           }
+                //return RedirectToAction("ViewOutcome", new RouteValueDictionary(new { controller = "Rubric", action = "ViewOutcome", outcomeViewModel.OutcomeVM.OutcomeID}));
+                return RedirectToAction("ViewRubric", new RouteValueDictionary(new { controller = "Rubric", action = "ViewRubric", rubricID }));
+            }
            catch
            {
                //logger.Error("Failed to save assessment, redirecting to sign in page.");
                return RedirectToAction(actionName: "Signin", controllerName: "User");
            }
        }
-           */
+           /*
         public ActionResult InsertNewOutcome(FormCollection formCollection, short rubricID)
 		{
 			try
@@ -277,6 +248,7 @@ namespace CLS_SLE.Controllers
 				return RedirectToAction(actionName: "Signin", controllerName: "User");
 			}
 		}
+        */
 
         /*
         [HttpGet]

@@ -186,21 +186,14 @@ namespace CLS_SLE.Controllers
        {
             try
             {
+                short rubricID = Convert.ToInt16(outcomeViewModel.RubricID);
                 Byte maxSortOrder = 0;
-                if (db.Outcomes.Where(c => c.OutcomeID == outcomeViewModel.OutcomeVM.OutcomeID).Any())
+                if (db.Outcomes.Where(c => c.RubricID == rubricID).Any())
                 {
-                    maxSortOrder = db.Outcomes.Where(c => c.OutcomeID == outcomeViewModel.OutcomeVM.OutcomeID).OrderByDescending(r => r.SortOrder).FirstOrDefault().SortOrder;
+                    maxSortOrder = db.Outcomes.Where(c => c.RubricID == rubricID).OrderByDescending(r => r.SortOrder).FirstOrDefault().SortOrder;
                 }
                 maxSortOrder++;
-                /*
-                 *if (db.Criteria.Where(c => c.OutcomeID == outcomeID).Any())
-				{
-					maxSortOrder = db.Criteria.Where(c => c.OutcomeID == outcomeID).OrderByDescending(r => r.SortOrder).FirstOrDefault().SortOrder;
-				}
-				maxSortOrder++;
-                 */
-
-                short rubricID = Convert.ToInt16(outcomeViewModel.RubricID);
+                
                 short outcomeID = Convert.ToInt16(outcomeViewModel.OutcomeVM.OutcomeID);
                 db.Outcomes.Load();
                 AssessmentRubric rubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();

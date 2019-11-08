@@ -184,71 +184,28 @@ namespace CLS_SLE.Controllers
        [HttpPost]
        public ActionResult InsertNewOutcome(OutcomeViewModel outcomeViewModel)
        {
-           try
-           {
-               db.Outcomes.Load();
-               db.AssessmentRubrics.Load();
-               db.RubricAssessments.Load();
+            try
+            {
+                short rubricID = Convert.ToInt16(outcomeViewModel.RubricID);
+                short outcomeID = Convert.ToInt16(outcomeViewModel.OutcomeVM.OutcomeID);
+                db.Outcomes.Load();
+                AssessmentRubric rubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
 
-               short rubricID = Convert.ToInt16(outcomeViewModel.RubricID);
-               outcomeViewModel.OutcomeVM.CreatedDateTime = DateTime.Now;
-               outcomeViewModel.OutcomeVM.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-               //db.RubricAssessments.Add(rubricViewModel.RubricAssesssment);
-               
-           //mode to save?
-           //addOutcome.CriteriaPassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
-           //addOutcome.CalculateCriteriaPassRate = ((formCollection["CalculateCriteriaPassRate"]).Equals("True") ? true : false);
-           //addOutcome.Name = formCollection["Name"];
-           //addOutcome.Description = formCollection["Description"];
-           //addOutcome.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
-           //addOutcome.SortOrder = 1;
-
-               db.SaveChanges();
+                outcomeViewModel.OutcomeVM.CreatedDateTime = DateTime.Now;
+                outcomeViewModel.OutcomeVM.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                rubric.Outcomes.Add(outcomeViewModel.OutcomeVM);
+                db.Outcomes.Add(outcomeViewModel.OutcomeVM);
+                db.SaveChanges();
 
                 //return RedirectToAction("ViewOutcome", new RouteValueDictionary(new { controller = "Rubric", action = "ViewOutcome", outcomeViewModel.OutcomeVM.OutcomeID}));
                 return RedirectToAction("ViewRubric", new RouteValueDictionary(new { controller = "Rubric", action = "ViewRubric", rubricID }));
             }
-           catch
-           {
-               //logger.Error("Failed to save assessment, redirecting to sign in page.");
-               return RedirectToAction(actionName: "Signin", controllerName: "User");
-           }
+            catch (Exception e)
+            {
+                //logger.Error("Failed to save assessment, redirecting to sign in page.");
+                return RedirectToAction(actionName: "Signin", controllerName: "User");
+            }
        }
-           /*
-        public ActionResult InsertNewOutcome(FormCollection formCollection, short rubricID)
-		{
-			try
-			{
-				// Int16 RubricId = Int16.Parse(formCollection["RubricId"]);
-				// Byte SortOrder = Byte.Parse(formCollection["SortOrder"]);\
-
-				db.Outcomes.Load();
-				Outcome addOutcome = db.Outcomes.Create();
-
-				addOutcome.RubricID = rubricID;
-				addOutcome.Name = formCollection["Name"];
-				addOutcome.Description = formCollection["Description"];
-				addOutcome.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
-				//addOutcome.SortOrder = SortOrder;
-				addOutcome.SortOrder = 1;
-				addOutcome.CriteriaPassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
-				addOutcome.CalculateCriteriaPassRate = ((formCollection["CalculateCriteriaPassRate"]).Equals("True") ? true : false);
-				addOutcome.CreatedDateTime = DateTime.Now;
-				addOutcome.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-
-				db.Entry(addOutcome).State = EntityState.Added;
-				db.SaveChanges();
-
-				return RedirectToAction("ViewRubric", "Rubric", new { rubricID });
-				// return RedirectToAction("ViewOutcome", new RouteValueDictionary(new { controller = "Rubric", action = "ViewOutcome", addOutcome.OutcomeID }));
-			}
-			catch
-			{
-				//logger.Error("Failed to save assessment, redirecting to sign in page.");
-				return RedirectToAction(actionName: "Signin", controllerName: "User");
-			}
-		}
-        */
 
         /*
         [HttpGet]

@@ -186,18 +186,31 @@ namespace CLS_SLE.Controllers
        {
             try
             {
+                Byte maxSortOrder = 0;
+                if (db.Outcomes.Where(c => c.OutcomeID == outcomeViewModel.OutcomeVM.OutcomeID).Any())
+                {
+                    maxSortOrder = db.Outcomes.Where(c => c.OutcomeID == outcomeViewModel.OutcomeVM.OutcomeID).OrderByDescending(r => r.SortOrder).FirstOrDefault().SortOrder;
+                }
+                maxSortOrder++;
+                /*
+                 *if (db.Criteria.Where(c => c.OutcomeID == outcomeID).Any())
+				{
+					maxSortOrder = db.Criteria.Where(c => c.OutcomeID == outcomeID).OrderByDescending(r => r.SortOrder).FirstOrDefault().SortOrder;
+				}
+				maxSortOrder++;
+                 */
+
                 short rubricID = Convert.ToInt16(outcomeViewModel.RubricID);
                 short outcomeID = Convert.ToInt16(outcomeViewModel.OutcomeVM.OutcomeID);
                 db.Outcomes.Load();
                 AssessmentRubric rubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
-
+                outcomeViewModel.OutcomeVM.SortOrder = maxSortOrder;
                 outcomeViewModel.OutcomeVM.CreatedDateTime = DateTime.Now;
                 outcomeViewModel.OutcomeVM.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
                 rubric.Outcomes.Add(outcomeViewModel.OutcomeVM);
                 db.Outcomes.Add(outcomeViewModel.OutcomeVM);
                 db.SaveChanges();
 
-                //return RedirectToAction("ViewOutcome", new RouteValueDictionary(new { controller = "Rubric", action = "ViewOutcome", outcomeViewModel.OutcomeVM.OutcomeID}));
                 return RedirectToAction("ViewRubric", new RouteValueDictionary(new { controller = "Rubric", action = "ViewRubric", rubricID }));
             }
             catch (Exception e)

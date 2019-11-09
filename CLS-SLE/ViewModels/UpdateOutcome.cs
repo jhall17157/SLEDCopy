@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using CLS_SLE.Models;
 
 namespace CLS_SLE.ViewModels
 {
     public class UpdateOutcome
     {
-        public UpdateOutcome updateOutcome { get; set; }
+        public Outcome updateOutcome { get; set; }
     }
 }

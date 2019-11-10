@@ -101,8 +101,9 @@ namespace CLS_SLE.Controllers
                         Assessments = adminAssessments.Distinct().OrderByDescending(a => a.IsActive).ThenBy(a => a.Name).ToList(),
                         RubricAssessments = db.RubricAssessments.ToList(),
                         AssessmentRubrics = db.AssessmentRubrics.ToList(),
-                        ProgramAssessmentMappings = db.ProgramAssessmentMappings.ToList()
-                    });
+                        ProgramAssessmentMappings = db.ProgramAssessmentMappings.ToList(),
+                        //RubricsByProgram = db.RubricsByProgram.ToList()
+                });
                 
 
             }

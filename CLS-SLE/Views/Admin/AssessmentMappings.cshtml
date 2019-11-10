@@ -15,6 +15,7 @@
 
 @foreach (var program in Model.Programs)
 {
+    //var rubrics = Model.AssessmentRubrics.Select(r => r.ProgramAssessmentMappings.Where(m => m.ProgramID == program.ProgramID));
     var rubrics = Model.AssessmentRubrics.Select(r => r.ProgramAssessmentMappings.Where(m => m.ProgramID == program.ProgramID));
 
     <table class="table table-hover">
@@ -28,20 +29,20 @@
             {
                 var rubricName = grouping.FirstOrDefault()?.AssessmentRubric.Name;
 
-                if(rubricName != null)
+                if (rubricName != null)
                 {
-                <tr>
-                    <td><h5>@rubricName</h5></td>
-                </tr>
+                    <tr>
+                        <td><h5>@rubricName</h5></td>
+                    </tr>
                     foreach (var assessment in grouping)
                     {
                         foreach (var rubric in grouping)
                         {
                             if (assessment.CourseID == rubric.CourseID)
                             {
-                            <tr>
-                                <td><i class="fa fa-caret-right"></i> @rubric.Course.CourseName</td>
-                            </tr>
+                                <tr>
+                                    <td><i class="fa fa-caret-right"></i> @rubric.Course.CourseName</td>
+                                </tr>
                             }
                         }
                     }
@@ -53,10 +54,10 @@
     <!--Assign Modal-->
     {
         <div class="modal fade" id="modal@(program.Number)" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalHeader@(program.Number)">@program.Name</h5>
+                        <h5 class="modal-title" id="modalHeader@(program.Number)">Mapping for @program.Name</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -67,43 +68,133 @@
 
                             </thead>
 
-                            @foreach (var grouping in rubrics)
-                            {
-                                var rubricName = grouping.FirstOrDefault()?.AssessmentRubric.Name;
 
-                                if (rubricName != null)
-                                {
-                                    <tr>
-                                        <td><h5><input type="radio" name="assessmentSelect">@rubricName</h5></td>
-                                    </tr>
-                                    foreach (var assessment in grouping)
-                                    {
-                                        foreach (var rubric in grouping)
+
+                        </table>
+
+                        <div class="row">
+                            <div class="table-responsive col-md-6">
+                                <table class="table table-hover leftSide">
+                                    <thead>
+                                        <tr>
+                                            <th>Rubric</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var grouping in rubrics)
                                         {
-                                            if (assessment.CourseID == rubric.CourseID)
+                                            var rubricName = grouping.FirstOrDefault()?.AssessmentRubric.Name;
+
+                                            if (rubricName != null)
                                             {
                                                 <tr>
-                                                    <td><i class="fa fa-caret-right"></i>@rubric.Course.CourseName</td>
+                                                    <td><h5><input type="radio" name="assessmentSelect" class="programRadio"> @rubricName</h5></td>
+                                                    <td><a><i class="fas fa-times"></i></a></td>
                                                 </tr>
                                             }
                                         }
-                                    }
-                                }
-                            }
-                        </table>
+                                        <tr>
+                                            <td>
+                                                <div class="rubricDropdown">
+                                                    <select class="selectpicker" data-show-subtext="true" data-live-search="true">
+                                                        @foreach (var rubric in Model.AssessmentRubrics)
+                                                        {
+                                                            <option id="@rubric.RubricID">@rubric.Name</option>
+                                                        }
+                                                    </select>
+                                                    <button type="button" class="btn btn-outline-success right addRubricToProgram">Add</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <button type="button" class="btn btn-outline-success right addRubricShow">+</button>
+                            </div>
+
+                            <div class="table-responsive col-md-6">
+                                <table class="table table-hover rightSide">
+                                    <thead>
+                                        <tr>
+                                            <th>Class</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var grouping in rubrics)
+                                        {
+                                            var rubricName = grouping.FirstOrDefault()?.AssessmentRubric.Name;
+
+                                            if (rubricName != null)
+                                            {
+                                                foreach (var assessment in grouping)
+                                                {
+                                                    foreach (var rubric in grouping)
+                                                    {
+                                                        if (assessment.CourseID == rubric.CourseID)
+                                                        {
+                                                            <div class="courseFor@(rubric.ProgramID)">
+                                                                <tr>
+                                                                    <td>@rubric.Course.CourseName</td>
+                                                                    <td align="center"><a><i class="fas fa-times"></i></a></td>
+                                                                </tr>
+                                                            </div>
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        <tr>
+                                            <td>
+                                                <div class="classDropdown">
+                                                    <select class="selectpicker" data-show-subtext="true" data-live-search="true">
+                                                        @foreach (var course in Model.Courses)
+                                                        {
+                                                            <option id="@course.CourseID">@course.CourseName</option>
+                                                        }
+                                                    </select>
+                                                    <button type="button" class="btn btn-outline-success right addClassToRubric">Add</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <button type="button" class="btn btn-outline-success right addClassShow">+</button>
+                            </div>
+
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
                     </div>
                 </div>
             </div>
         </div>
     }
+}
 
+@section scripts
+    {
     <script>
-    if(document.getElementById('').checked) {
-        //Show the courses that are associated with assessments
-    }
+        $(function () {
+            $('.rubricDropdown').hide();
+            $('.classDropdown').hide();
+
+            $('.addRubricToProgram').click(function () {
+                $('.addRubricShow').show();
+                $('.rubricDropdown').hide();
+            });
+            $('.addClassToRubric').click(function () {
+                $('.addClassShow').show();
+                $('.classDropdown').hide();
+            });
+
+            $('.addRubricShow').click(function () {
+                $('.addRubricShow').hide();
+                $('.rubricDropdown').show();
+            });
+            $('.addClassShow').click(function () {
+                $('.addClassShow').hide();
+                $('.classDropdown').show();
+            });
+        });
     </script>
 }

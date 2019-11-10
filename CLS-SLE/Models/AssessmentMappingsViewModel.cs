@@ -15,6 +15,7 @@ namespace CLS_SLE.Models
         public IEnumerable<RubricAssessment>   RubricAssessments {get; set;}
         public IEnumerable<AssessmentRubric>   AssessmentRubrics { get; set; }
         public IEnumerable<ProgramAssessmentMapping> ProgramAssessmentMappings { get; set;}
+        public IEnumerable<RubricsByProgram> RubricsByProgram { get; set; }
         public IEnumerable<AssessmentRubric> AssesmentRubrics { get; set; }
 
        /*

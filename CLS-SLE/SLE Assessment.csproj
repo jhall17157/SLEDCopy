@@ -377,6 +377,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\InsertNewAssesmentViewModel.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\RubricViewModel.cs" />
     <Compile Include="ViewModels\UpdateOutcome.cs" />
@@ -2138,7 +2139,6 @@
     <Content Include="Views\Admin\ViewAssessment.cshtml" />
     <Content Include="Views\Rubric\Index.cshtml" />
     <Content Include="Views\Rubric\ViewRubric.cshtml" />
-    <Content Include="Views\Rubric\ViewOutcome.cshtml" />
     <Content Include="Views\Rubric\ViewCriterion.cshtml" />
     <Content Include="Views\Rubric\AddRubric.cshtml" />
     <Content Include="Views\Rubric\EditRubric.cshtml" />

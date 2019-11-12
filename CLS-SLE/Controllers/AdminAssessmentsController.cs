@@ -193,10 +193,10 @@ namespace CLS_SLE.Controllers
                 addAssessment.Category = CategoryCode;
                 addAssessment.Description = insertNewAssesmentViewModel.Assessment.Description != null ? 
                     insertNewAssesmentViewModel.Assessment.Description : "";
-                addAssessment.OutcomePassRate = (Decimal?)(Double.Parse(Regex.Replace(insertNewAssesmentViewModel.Assessment.OutcomePassRate, "[^0-9.]", ""));
-			    addAssessment.CalculateOutcomePassRate = ((formCollection["CalculateOutcomePassRate"]).Equals("True") ? true : false);
-                addAssessment.ProgramID = db.Programs.Where(p => p.Name == program).FirstOrDefault().ProgramID;
-                addAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
+                addAssessment.OutcomePassRate = insertNewAssesmentViewModel.Assessment.OutcomePassRate;
+			    addAssessment.CalculateOutcomePassRate = insertNewAssesmentViewModel.Assessment.CalculateOutcomePassRate;
+                addAssessment.ProgramID = db.Programs.Where(p => p.Name == program.Name).FirstOrDefault().ProgramID;
+                addAssessment.IsActive = insertNewAssesmentViewModel.Assessment.IsActive;
                 addAssessment.CreatedDateTime = DateTime.Now;
                 addAssessment.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
 

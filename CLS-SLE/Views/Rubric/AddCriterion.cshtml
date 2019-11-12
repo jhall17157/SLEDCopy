@@ -11,17 +11,17 @@
         <li class="breadcrumb-item">@Html.ActionLink((String)Model.Outcome.AssessmentRubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.Outcome.AssessmentRubric.RubricID }, null)</li>
 
         @*this link does not work*@
-        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Outcome.Name, "ViewOutcome", "Rubric", new { outcomeID = Model.Outcome.OutcomeID }, null)</li>
+        @*<li class="breadcrumb-item">@Html.ActionLink((String)Model.Outcome.Name, "ViewOutcome", "Rubric", new { outcomeID = Model.Outcome.OutcomeID }, null)</li>*@
         <li class="breadcrumb-item active" aria-current="page">New Criteria</li>
     </ol>
 </nav>
 <h1>Add Criterion</h1>
 <br />
 
-<form method="post" action="/Rubric/InsertNewCriterion">
-    <div hidden>
+<form method="post" action="@Url.Action("InsertNewCriterion", "Rubric", new { outcomeID = Model.Outcome.OutcomeID, rubricID = Model.Outcome.RubricID })">
+    @*<div hidden>
         <input type="hidden" name="OutcomeID" value="@Model.Outcome.OutcomeID" />
-    </div>
+    </div>*@
     <div class="form-row">
         <div class="form-group col-9">
             <label for="Name">Name:</label>
@@ -56,7 +56,7 @@
     @*TODO InactiveDateTime*@
     <div class="row justify-content-end col-9">
         <div class="col-2 p-0 mx-1"><button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Submit</button></div>
-        <div class="col-2 p-0 mx-1"><a href="/Rubric/ViewOutcome?outcomeID=@Model.Outcome.OutcomeID"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
+        <div class="col-2 p-0 mx-1"><a href="@Url.Action("ViewRubric", "Rubric", new { rubricID = Model.Outcome.RubricID })" class="btn btn-danger col-12 mx-1">Cancel</a></div>
     </div>
 
 </form>

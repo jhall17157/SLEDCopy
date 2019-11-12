@@ -11,7 +11,7 @@ namespace CLS_SLE.Controllers
     [Authorize(Roles = "Administrator")]
     public class AdminUserController : Controller
     {
-        SLE_TrackingEntities db = new SLE_TrackingEntities();
+        private SLE_TrackingEntities db = new SLE_TrackingEntities();
         
 
         public ActionResult Index() => View(db.Users.OrderBy(u => u.Login));

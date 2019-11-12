@@ -710,6 +710,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SemesterDates' does not have a pr
           <Property Name="SemesterDescription" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="YearCode" Type="varchar" MaxLength="4" />
           <Property Name="TermCode" Type="varchar" MaxLength="2" />
+          <Property Name="AcademicYear" Type="varchar" MaxLength="9" />
           <Property Name="StartDate" Type="date" />
           <Property Name="EndDate" Type="date" />
         </EntityType>
@@ -930,6 +931,30 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             </Principal>
             <Dependent Role="ETL_StatusMapping">
               <PropertyRef Name="EnrollmentStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_FactTSA_ProgramID">
+          <End Role="Program" Type="Self.Program" Multiplicity="1" />
+          <End Role="FactTSA" Type="Self.FactTSA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="ProgramID" />
+            </Principal>
+            <Dependent Role="FactTSA">
+              <PropertyRef Name="ProgramID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_FactTSA_StudentID">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="FactTSA" Type="Self.FactTSA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="FactTSA">
+              <PropertyRef Name="StudentID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1592,6 +1617,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
     [SemesterDates].[SemesterDescription] AS [SemesterDescription], 
     [SemesterDates].[YearCode] AS [YearCode], 
     [SemesterDates].[TermCode] AS [TermCode], 
+    [SemesterDates].[AcademicYear] AS [AcademicYear], 
     [SemesterDates].[StartDate] AS [StartDate], 
     [SemesterDates].[EndDate] AS [EndDate]
     FROM [dbo].[SemesterDates] AS [SemesterDates]</DefiningQuery>
@@ -1673,6 +1699,14 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <AssociationSet Name="fk_ETL_StatusMapping_EnrollmentStatusID" Association="Self.fk_ETL_StatusMapping_EnrollmentStatusID">
             <End Role="EnrollmentStatus" EntitySet="EnrollmentStatus" />
             <End Role="ETL_StatusMapping" EntitySet="ETL_StatusMapping" />
+          </AssociationSet>
+          <AssociationSet Name="fk_FactTSA_ProgramID" Association="Self.fk_FactTSA_ProgramID">
+            <End Role="Program" EntitySet="Program" />
+            <End Role="FactTSA" EntitySet="FactTSA" />
+          </AssociationSet>
+          <AssociationSet Name="fk_FactTSA_StudentID" Association="Self.fk_FactTSA_StudentID">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="FactTSA" EntitySet="FactTSA" />
           </AssociationSet>
           <AssociationSet Name="fk_Outcome_RubricID" Association="Self.fk_Outcome_RubricID">
             <End Role="AssessmentRubric" EntitySet="AssessmentRubric" />
@@ -2097,6 +2131,14 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySet Name="tmp_offering" EntityType="SLE_TrackingModel.tmp_offering" />
           <EntitySet Name="tmp_studentroster" EntityType="SLE_TrackingModel.tmp_studentroster" />
           <EntitySet Name="FactTSAs" EntityType="SLE_TrackingModel.FactTSA" />
+          <AssociationSet Name="fk_FactTSA_StudentID" Association="SLE_TrackingModel.fk_FactTSA_StudentID">
+            <End Role="Person" EntitySet="People" />
+            <End Role="FactTSA" EntitySet="FactTSAs" />
+          </AssociationSet>
+          <AssociationSet Name="fk_FactTSA_ProgramID" Association="SLE_TrackingModel.fk_FactTSA_ProgramID">
+            <End Role="Program" EntitySet="Programs" />
+            <End Role="FactTSA" EntitySet="FactTSAs" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="GetCompletedCountBySectionRubric_Result">
           <Property Type="Int32" Name="SectionRubricID" Nullable="false" />
@@ -2425,6 +2467,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <NavigationProperty Name="StudentPrograms" Relationship="SLE_TrackingModel.fk_StudentProgram_StudentID" FromRole="Person" ToRole="StudentProgram" />
           <NavigationProperty Name="StudentScores" Relationship="SLE_TrackingModel.fk_StudentScore_AssessedByID" FromRole="Person" ToRole="StudentScore" />
           <NavigationProperty Name="User" Relationship="SLE_TrackingModel.fk_User_PersonID" FromRole="Person" ToRole="User" />
+          <NavigationProperty Name="FactTSAs" Relationship="SLE_TrackingModel.fk_FactTSA_StudentID" FromRole="Person" ToRole="FactTSA" />
         </EntityType>
         <EntityType Name="Program">
           <Key>
@@ -2445,6 +2488,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <NavigationProperty Name="ProgramDepartments" Relationship="SLE_TrackingModel.fk_ProgramDepartment_ProgramID" FromRole="Program" ToRole="ProgramDepartment" />
           <NavigationProperty Name="ProgramSecurities" Relationship="SLE_TrackingModel.fk_ProgramSecurity_ProgramID" FromRole="Program" ToRole="ProgramSecurity" />
           <NavigationProperty Name="StudentPrograms" Relationship="SLE_TrackingModel.fk_StudentProgram_ProgramID" FromRole="Program" ToRole="StudentProgram" />
+          <NavigationProperty Name="FactTSAs" Relationship="SLE_TrackingModel.fk_FactTSA_ProgramID" FromRole="Program" ToRole="FactTSA" />
         </EntityType>
         <EntityType Name="ProgramAssessmentMapping">
           <Key>
@@ -2822,6 +2866,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="TermCode" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Name="StartDate" Type="DateTime" Precision="0" />
           <Property Name="EndDate" Type="DateTime" Precision="0" />
+          <Property Name="AcademicYear" Type="String" MaxLength="9" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="StudentScoreCount">
           <Key>
@@ -3534,7 +3579,33 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="DateTSACompleted" Type="DateTime" Precision="3" />
           <Property Name="TSAPassed" Type="Boolean" Nullable="false" />
           <Property Name="LastUpdate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Person" Relationship="SLE_TrackingModel.fk_FactTSA_StudentID" FromRole="FactTSA" ToRole="Person" />
+          <NavigationProperty Name="Program" Relationship="SLE_TrackingModel.fk_FactTSA_ProgramID" FromRole="FactTSA" ToRole="Program" />
         </EntityType>
+        <Association Name="fk_FactTSA_StudentID">
+          <End Type="SLE_TrackingModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.FactTSA" Role="FactTSA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="FactTSA">
+              <PropertyRef Name="StudentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_FactTSA_ProgramID">
+          <End Type="SLE_TrackingModel.Program" Role="Program" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.FactTSA" Role="FactTSA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="ProgramID" />
+            </Principal>
+            <Dependent Role="FactTSA">
+              <PropertyRef Name="ProgramID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4209,6 +4280,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="SemesterDates">
             <EntityTypeMapping TypeName="SLE_TrackingModel.SemesterDate">
               <MappingFragment StoreEntitySet="SemesterDates">
+                <ScalarProperty Name="AcademicYear" ColumnName="AcademicYear" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="TermCode" ColumnName="TermCode" />

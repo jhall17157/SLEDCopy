@@ -27,5 +27,8 @@ namespace CLS_SLE.Models
         public Nullable<System.DateTime> DateTSACompleted { get; set; }
         public bool TSAPassed { get; set; }
         public System.DateTime LastUpdate { get; set; }
+    
+        public virtual Person Person { get; set; }
+        public virtual Program Program { get; set; }
     }
 }

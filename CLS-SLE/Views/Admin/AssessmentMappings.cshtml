@@ -4,6 +4,7 @@
     ViewBag.Title = "AssessmentMapping";
 }
 
+
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
@@ -54,7 +55,7 @@
     <!--Assign Modal-->
     {
         <div class="modal fade" id="modal@(program.Number)" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="modalHeader@(program.Number)">Mapping for @program.Name</h5>
@@ -65,13 +66,8 @@
                     <div class="modal-body">
                         <table>
                             <thead>
-
                             </thead>
-
-
-
                         </table>
-
                         <div class="row">
                             <div class="table-responsive col-md-6">
                                 <table class="table table-hover leftSide">
@@ -94,7 +90,7 @@
                                             }
                                         }
                                         <tr>
-                                            <td>
+                                            <td class="">
                                                 <div class="rubricDropdown">
                                                     <select class="selectpicker" data-show-subtext="true" data-live-search="true">
                                                         @foreach (var rubric in Model.AssessmentRubrics)
@@ -102,7 +98,7 @@
                                                             <option id="@rubric.RubricID">@rubric.Name</option>
                                                         }
                                                     </select>
-                                                    <button type="button" class="btn btn-outline-success right addRubricToProgram">Add</button>
+                                                    <button type="button" class="btn btn-outline-success float-left addRubricToProgram">Add</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -119,7 +115,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var grouping in rubrics)
+                                    @foreach (var grouping in rubrics)
                                         {
                                             var rubricName = grouping.FirstOrDefault()?.AssessmentRubric.Name;
 
@@ -151,7 +147,7 @@
                                                             <option id="@course.CourseID">@course.CourseName</option>
                                                         }
                                                     </select>
-                                                    <button type="button" class="btn btn-outline-success right addClassToRubric">Add</button>
+                                                    <button type="button" class="btn btn-outline-success leftSide addClassToRubric">Add</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -184,6 +180,7 @@
             });
             $('.addClassToRubric').click(function () {
                 $('.addClassShow').show();
+             
                 $('.classDropdown').hide();
             });
 

@@ -21,6 +21,7 @@ namespace CLS_SLE.Models
             this.Sections = new HashSet<Section>();
             this.StudentPrograms = new HashSet<StudentProgram>();
             this.StudentScores = new HashSet<StudentScore>();
+            this.FactTSAs = new HashSet<FactTSA>();
         }
     
         public int PersonID { get; set; }
@@ -41,5 +42,7 @@ namespace CLS_SLE.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StudentScore> StudentScores { get; set; }
         public virtual User User { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FactTSA> FactTSAs { get; set; }
     }
 }

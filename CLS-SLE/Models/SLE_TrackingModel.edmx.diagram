@@ -102,6 +102,8 @@
         <EntityTypeShape EntityType="SLE_TrackingModel.tmp_offering" Width="1.5" PointX="16.375" PointY="4.75" />
         <EntityTypeShape EntityType="SLE_TrackingModel.tmp_studentroster" Width="1.5" PointX="16.375" PointY="7.75" />
         <EntityTypeShape EntityType="SLE_TrackingModel.FactTSA" Width="1.5" PointX="15.375" PointY="17.75" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_FactTSA_StudentID" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_FactTSA_ProgramID" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

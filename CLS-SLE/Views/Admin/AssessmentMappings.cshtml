@@ -92,7 +92,7 @@
                                         <tr>
                                             <td class="">
                                                 <div class="rubricDropdown">
-                                                    <select class="selectpicker" data-show-subtext="true" data-live-search="true">
+                                                    <select class="btn btn-secondary dropdown-toggle selectpicker" data-show-subtext="true" data-live-search="true">
                                                         @foreach (var rubric in Model.AssessmentRubrics)
                                                         {
                                                             <option id="@rubric.RubricID">@rubric.Name</option>
@@ -141,7 +141,7 @@
                                         <tr>
                                             <td>
                                                 <div class="classDropdown">
-                                                    <select class="selectpicker" data-show-subtext="true" data-live-search="true">
+                                                    <select class="btn btn-secondary dropdown-toggle selectpicker" data-show-subtext="true" data-live-search="true">
                                                         @foreach (var course in Model.Courses)
                                                         {
                                                             <option id="@course.CourseID">@course.CourseName</option>
@@ -180,7 +180,6 @@
             });
             $('.addClassToRubric').click(function () {
                 $('.addClassShow').show();
-             
                 $('.classDropdown').hide();
             });
 

@@ -215,22 +215,13 @@ namespace CLS_SLE.Controllers
 
 
         [HttpGet]
-        public ActionResult EditOutcome(short outcomeID)
+        public ActionResult EditOutcome(UpdateOutcome updateOutcome, short outcomeID)
         {
             db.Outcomes.Load();
             //AssessmentRubric assessmentRubric = db.AssessmentRubrics.Where(a => a.RubricID == rubricID).FirstOrDefault();
-            Outcome outcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
+            updateOutcome.updateOutcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
 
-            ViewBag.OutcomeId = outcome.OutcomeID;
-            ViewBag.RubricId = outcome.RubricID;
-            ViewBag.Name = outcome.Name;
-            ViewBag.Description = outcome.Description;
-            ViewBag.CriteriaPassRate = outcome.CriteriaPassRate;
-            ViewBag.IsActive = outcome.IsActive;
-            ViewBag.CalculateCriteriaPassRate = outcome.CalculateCriteriaPassRate;
-            ViewBag.CriteriaPassRate = outcome.CriteriaPassRate * 100;
-
-            return View();
+            return View(updateOutcome);
         }
         /*
 

@@ -34,11 +34,11 @@
             <legend class="col-form-label col-2 pt-0">Outcome Is Active:</legend>
             <div class="form-check form-check-inline">
                 <label class="form-check-input" id="IsActive" for="IsActiveTrue">True</label>
-                @Html.RadioButtonFor(Model => Model.updateOutcome.IsActive, "True", ViewBag.IsActive ? new { Checked = "checked" } : null)
+                @Html.RadioButtonFor(Model => Model.updateOutcome.IsActive, "True")
             </div>
             <div class="form-check form-check-inline">
                 <label class="form-check-input" id="IsActiveFalse" for="IsActiveFalse">False</label>
-                @Html.RadioButtonFor(Model => Model.updateOutcome.IsActive, "False", ViewBag.IsActive ? null : new { Checked = "checked" })
+                @Html.RadioButtonFor(Model => Model.updateOutcome.IsActive, "False")
             </div>
         </div>
     </fieldset>
@@ -53,11 +53,11 @@
             <legend class="col-form-label col-2 pt-0">Calculate Criteria Pass Rate:</legend>
             <div class="form-check form-check-inline">
                 <label class="form-check-input" id="CalculatePassRateTrue" for="CalculatePassRateTrue">True</label>
-                @Html.RadioButtonFor(Model => Model.updateOutcome.CalculateCriteriaPassRate, "True", ViewBag.CalculateCriteriaPassRate ? new { Checked = "checked" } : null)
+                @Html.RadioButtonFor(Model => Model.updateOutcome.CalculateCriteriaPassRate, "True")
             </div>
             <div class="form-check form-check-inline">
                 <label class="form-check-input" id="CalculatePassRateFalse" for="CalculatePassFalse">False</label>
-                @Html.RadioButtonFor(Model => Model.updateOutcome.CalculateCriteriaPassRate, "False", ViewBag.CalculateCriteriaPassRate ? null : new { Checked = "checked" })
+                @Html.RadioButtonFor(Model => Model.updateOutcome.CalculateCriteriaPassRate, "False")
             </div>
         </div>
     </fieldset>

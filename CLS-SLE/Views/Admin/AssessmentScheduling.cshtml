@@ -1,4 +1,5 @@
 ﻿@model CLS_SLE.Models.AssessmentSchedulingViewModel
+
 @{
     ViewBag.Title = "AssessmentScheduling";
 }
@@ -13,6 +14,7 @@
 
 @foreach (var program in Model.Programs)
 {
+
     <table class="table table-hover">
         <thead class="thead-dark">
             <tr>
@@ -27,19 +29,21 @@
                 </th>
             </tr>
 
-            @foreach (var c in Model.Courses)
+            @foreach (var course in Model.Courses)
             {
                 <tr>
                     <td>
                         <div class="row">
-                            <span class="col-2">@c.Number</span>
-                            <span class="col-6">@c.CourseName</span>
-                            @*If rubric is assigned show rubric name else show following button to assign*@
-                            <div class="col-4">
-                                <button type="button" class="btn btn-primary right mr-2" data-toggle="modal" data-target="#scheduleRubric">Schedule</button>
+                                <span class="col-2">@course.Number</span>
+                                <span class="col-6">@course.CourseName</span>
+                                @*If rubric is assigned show rubric name else show following button to assign*@
+                                <div class="col-4">
+                                    <button type="button" class="btn btn-primary right mr-2" data-toggle="modal" data-target="#scheduleRubric">
+                                        Schedule
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-
+                       
                         <!--Assign Modal-->
                         <div class="modal fade" id="assignRubric" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -56,7 +60,7 @@
                                             <thead class="thead-dark">
                                                 <tr>
                                                     <th scope="col" class="h3">
-                                                        @c.CourseName - @c.CourseID
+                                                        @course.CourseName - @course.CourseID
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -108,7 +112,7 @@
                                     <div class="modal-body">
                                         <table>
                                             <thead>
-                                                @c.CourseName - @c.CourseID
+                                                @course.CourseName - @course.CourseID
                                             </thead>
                                             <tr>
                                                 <td>

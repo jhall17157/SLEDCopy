@@ -77,10 +77,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+               
                                         @foreach (var grouping in rubrics)
                                         {
                                             var rubricName = grouping.FirstOrDefault()?.AssessmentRubric.Name;
-
+                                            
                                             if (rubricName != null)
                                             {
                                                 <tr>
@@ -170,17 +171,20 @@
 @section scripts
     {
     <script>
+
         $(function () {
             $('.rubricDropdown').hide();
             $('.classDropdown').hide();
 
             $('.addRubricToProgram').click(function () {
                 $('.addRubricShow').show();
+                var rubricID = $('.selectpicker :selected').attr('id');
+                alert(rubricID);
                 $('.rubricDropdown').hide();
             });
+
             $('.addClassToRubric').click(function () {
                 $('.addClassShow').show();
-             
                 $('.classDropdown').hide();
             });
 
@@ -188,6 +192,7 @@
                 $('.addRubricShow').hide();
                 $('.rubricDropdown').show();
             });
+
             $('.addClassShow').click(function () {
                 $('.addClassShow').hide();
                 $('.classDropdown').show();

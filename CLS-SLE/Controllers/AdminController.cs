@@ -31,9 +31,7 @@ namespace CLS_SLE.Controllers
 
         public ActionResult AdminDashboard()
         {
-           
-            return View();
-            
+            return View();  
         }
 
         public ActionResult MappingRubricCourses()
@@ -347,8 +345,10 @@ namespace CLS_SLE.Controllers
                     Programs = db.Programs.ToList(),
                     Courses = db.Courses.ToList(),
                     Categories = db.AssessmentCategories.ToList(),
-                    Assessments = adminAssessments.Distinct().OrderByDescending(a => a.IsActive)
-                        .ThenBy(a => a.Name).ToList()
+                    Assessments = adminAssessments.Distinct().OrderByDescending(a => a.IsActive).ThenBy(a => a.Name).ToList(),
+                    RubricAssessments = db.RubricAssessments.ToList(),
+                    AssessmentRubrics = db.AssessmentRubrics.ToList(),
+                    ProgramAssessmentMappings = db.ProgramAssessmentMappings.ToList(),
                 });
             }
             catch

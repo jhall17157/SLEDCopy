@@ -1,11 +1,8 @@
 ﻿@model CLS_SLE.Models.AssessmentMappingsViewModel
-@using System;
-@using System.Data;
 @using System.Data.SqlClient;
 @{
 
 }
-
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -18,8 +15,7 @@
 
 @foreach (var program in Model.Programs)
 {
-    //var rubrics = Model.AssessmentRubrics.Select(r => r.ProgramAssessmentMappings.Where(m => m.ProgramID == program.ProgramID));
-    var rubrics = Model.AssessmentRubrics.Select(r => r.ProgramAssessmentMappings.Where(m => m.ProgramID == program.ProgramID));
+    var rubrics = Model.AssessmentRubrics.Select(r => r.ProgramAssessmentMappings.Where(m => m.ProgramID == program.ProgramID)).ToList();
 
 
     <table class="table table-hover">
@@ -87,7 +83,7 @@
                                     }
                                 }
                                 <tr>
-                                    <td class="">
+                                    <td>
                                         <div class="rubricDropdown">
                                             <select class="btn btn-secondary dropdown-toggle selectpicker" data-show-subtext="true" data-live-search="true">
                                                 @foreach (var rubric in Model.AssessmentRubrics)
@@ -98,6 +94,7 @@
                                             <button type="button" class="btn btn-outline-success float-left addRubricToProgram">Add</button>
                                         </div>
                                     </td>
+                                    <td></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -123,7 +120,7 @@
                                                 {
                                                     <div class="courseFor@(rubric.ProgramID)">
                                                         <tr>
-                                                            <td>@rubric.Course.CourseName</td>
+                                                            <td><h5>@rubric.Course.CourseName</h5></td>
                                                             <td align="center"><a><i class="fas fa-times"></i></a></td>
                                                         </tr>
                                                     </div>
@@ -144,6 +141,7 @@
                                             <button type="button" class="btn btn-outline-success leftSide addClassToRubric">Add</button>
                                         </div>
                                     </td>
+                                    <td></td>
                                 </tr>
                             </tbody>
                         </table>

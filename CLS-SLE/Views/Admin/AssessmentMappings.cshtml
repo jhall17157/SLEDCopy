@@ -63,7 +63,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <table class="table table-hover col-6">
+                        <table class="table col-6">
                             <thead>
                                 <tr>
                                     <th class="border-0">Rubric</th>
@@ -78,7 +78,7 @@
                                     {
                                         <tr>
                                             <td><h5><input type="radio" name="assessmentSelect" class="programRadio"> @rubricName</h5></td>
-                                            <td><a><i class="fas fa-times"></i></a></td>
+                                            <td><button class="btn btn-danger float-right mr-2"><i class="fas fa-times"></i></button></td>
                                         </tr>
                                     }
                                 }
@@ -94,12 +94,13 @@
                                             <button type="button" class="btn btn-outline-success float-left addRubricToProgram">Add</button>
                                         </div>
                                     </td>
-                                    <td></td>
+                                    <td>
+                                        <button type="button" class="btn btn-success float-right mr-2 addRubricShow"><i class="fa fa-plus"></i></button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <!--button type="button" class="btn btn-outline-success right addRubricShow">+</button-->
-                        <table class="table table-hover col-6">
+                        <table class="table col-6">
                             <thead>
                                 <tr>
                                     <th class="border-0">Class</th>
@@ -121,7 +122,7 @@
                                                     <div class="courseFor@(rubric.ProgramID)">
                                                         <tr>
                                                             <td><h5>@rubric.Course.CourseName</h5></td>
-                                                            <td align="center"><a><i class="fas fa-times"></i></a></td>
+                                                            <td><button class="btn btn-danger float-right mr-2"><i class="fas fa-times"></i></button></td>
                                                         </tr>
                                                     </div>
                                                 }
@@ -138,14 +139,15 @@
                                                     <option id="@course.CourseID">@course.CourseName</option>
                                                 }
                                             </select>
-                                            <button type="button" class="btn btn-outline-success leftSide addClassToRubric">Add</button>
+                                            <button type="button" class="btn btn-outline-success addClassToRubric">Add</button>
                                         </div>
                                     </td>
-                                    <td></td>
+                                    <td>
+                                        <button type="button" class="btn btn-success float-right mr-2 addClassShow"><i class="fa fa-plus"></i></button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <!--button type="button" class="btn btn-outline-success right addClassShow">+</button-->
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -1,4 +1,4 @@
-﻿@model CLS_SLE.ViewModels.UpdateOutcome
+﻿@model CLS_SLE.ViewModels.OutcomeViewModel
 @{
     ViewBag.Title = "Edit Outcome";
 }
@@ -7,62 +7,63 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "AdminAssessments")</li>
-        @*<li class="breadcrumb-item">@Html.ActionLink((String)((AssessmentRubric)Model.Outcome.AssessmentRubric).RubricAssessments.FirstOrDefault().Assessment.Name, "ViewAssessment", "AdminAssessments", new { assessmentID = ((AssessmentRubric)Model.Outcome.AssessmentRubric).AssessmentID }, null)</li>
-            <li class="breadcrumb-item">@Html.ActionLink((String)Model.Outcome.AssessmentRubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.Outcome.AssessmentRubric.RubricID }, null)</li>*@
+        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Assessment.Name, "ViewAssessment", "AdminAssessments", new { assessmentID = Model.Rubric.AssessmentID })</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.AssessmentRubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.Rubric.RubricID, assessmentID = Model.Rubric.AssessmentID })</li>
+        <li class="breadcrumb-item">@((String)Model.OutcomeVM.Name)</li>
         <li class="breadcrumb-item active" aria-current="page">Edit</li>
     </ol>
 </nav>
 <h1>Edit Outcome</h1>
 <br />
 
-@using (Html.BeginForm("SaveOutcome", "Rubric", new { outcomeID = ViewBag.OutcomeId, rubricID = ViewBag.RubricId }, FormMethod.Post))
+@using (Html.BeginForm("SaveOutcome", "Rubric", FormMethod.Post))
 {
     <div class="form-group">
         @Html.Label("Outcome Name:")
-        @Html.EditorFor(Model => Model.updateOutcome.Name,
-        new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.Name } })
-        @*@Html.ValidationMessageFor(Model => Model.AssessmentRubric.Name)*@
+        @Html.EditorFor(Model => Model.OutcomeVM.Name,
+        new { htmlAttributes = new { @class = "form-control", @Value = Model.OutcomeVM.Name } })
+        @Html.ValidationMessageFor(Model => Model.OutcomeVM.Name)
     </div>
     <div class="form-group">
         @Html.Label("Description:")
-        @Html.EditorFor(Model => Model.updateOutcome.Description,
-        new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.Description } })
-        @*@Html.ValidationMessageFor(Model => Model.AssessmentRubric.Description)*@
+        @Html.EditorFor(Model => Model.OutcomeVM.Description,
+        new { htmlAttributes = new { @class = "form-control", @rows = 6, @Value = Model.OutcomeVM.Description } })
+        @Html.ValidationMessageFor(Model => Model.OutcomeVM.Description)
     </div>
     <fieldset class="form-group col-9">
         <div class="row">
             <legend class="col-form-label col-2 pt-0">Outcome Is Active:</legend>
             <div class="form-check form-check-inline">
                 <label class="form-check-input" id="IsActive" for="IsActiveTrue">True</label>
-                @Html.RadioButtonFor(Model => Model.updateOutcome.IsActive, "True", ViewBag.IsActive ? new { Checked = "checked" } : null)
+                @Html.RadioButtonFor(Model => Model.OutcomeVM.IsActive, "True", Model.OutcomeVM.IsActive ? new { Checked = "checked" } : null)
             </div>
             <div class="form-check form-check-inline">
                 <label class="form-check-input" id="IsActiveFalse" for="IsActiveFalse">False</label>
-                @Html.RadioButtonFor(Model => Model.updateOutcome.IsActive, "False", ViewBag.IsActive ? null : new { Checked = "checked" })
+                @Html.RadioButtonFor(Model => Model.OutcomeVM.IsActive, "False", Model.OutcomeVM.IsActive ? null : new { Checked = "checked" })
             </div>
         </div>
     </fieldset>
     <div class="form-group">
         @Html.Label("Pass Percentage:")
-        @Html.EditorFor(Model => Model.updateOutcome.CriteriaPassRate,
-        new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.CriteriaPassRate } })
-        @*@Html.ValidationMessageFor(Model => Model.AssessmentRubric.Name)*@
+        @Html.EditorFor(Model => Model.OutcomeVM.CriteriaPassRate,
+        new { htmlAttributes = new { @class = "form-control", @Value = Model.OutcomeVM.CriteriaPassRate * 100 } })
+        @Html.ValidationMessageFor(Model => Model.OutcomeVM.CriteriaPassRate)
     </div>
     <fieldset class="form-group col-9">
         <div class="row">
             <legend class="col-form-label col-2 pt-0">Calculate Criteria Pass Rate:</legend>
             <div class="form-check form-check-inline">
                 <label class="form-check-input" id="CalculatePassRateTrue" for="CalculatePassRateTrue">True</label>
-                @Html.RadioButtonFor(Model => Model.updateOutcome.CalculateCriteriaPassRate, "True", ViewBag.CalculateCriteriaPassRate ? new { Checked = "checked" } : null)
+                @Html.RadioButtonFor(Model => Model.OutcomeVM.CalculateCriteriaPassRate, "True", Model.OutcomeVM.CalculateCriteriaPassRate ? new { Checked = "checked" } : null)
             </div>
             <div class="form-check form-check-inline">
                 <label class="form-check-input" id="CalculatePassRateFalse" for="CalculatePassFalse">False</label>
-                @Html.RadioButtonFor(Model => Model.updateOutcome.CalculateCriteriaPassRate, "False", ViewBag.CalculateCriteriaPassRate ? null : new { Checked = "checked" })
+                @Html.RadioButtonFor(Model => Model.OutcomeVM.CalculateCriteriaPassRate, "False", Model.OutcomeVM.CalculateCriteriaPassRate ? null : new { Checked = "checked" })
             </div>
         </div>
     </fieldset>
     <div class="row justify-content-end col-9">
         <div class="col-2 p-0 mx-1"><button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Update</button></div>
-        <div class="col-2 p-0 mx-1"><a href="@Url.Action("ViewOutcome", "Rubric", new { rubricID = Model.updateOutcome.OutcomeID })" class="btn btn-danger col-12 mx-1">Cancel</a></div>
+        <div class="col-2 p-0 mx-1"><a href="@Url.Action("ViewRubric", "Rubric", new { rubricID = Model.Rubric.RubricID, assessmentID = Model.Rubric.AssessmentID })" class="btn btn-danger col-12 mx-1">Cancel</a></div>
     </div>
 }

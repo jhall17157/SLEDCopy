@@ -7,30 +7,30 @@
 	<ol class="breadcrumb">
 		<li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
 		<li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "AdminAssessments")</li>
-		<li class="breadcrumb-item">@Html.ActionLink((String)((AssessmentRubric)Model.Rubric).RubricAssessments.FirstOrDefault().Assessment.Name, "ViewAssessment", "AdminAssessments", new { assessmentID = ((AssessmentRubric)Model.Rubric).AssessmentID }, null)</li>
-		<li class="breadcrumb-item active" aria-current="page">@Model.Rubric.Name </li>
+		<li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Assessment.Name, "ViewAssessment", "AdminAssessments", new { assessmentID = Model.Rubric.AssessmentID })</li>
+		<li class="breadcrumb-item active" aria-current="page">@Model.Rubric.AssessmentRubric.Name </li>
 	</ol>
 </nav>
 <h1>
-	@Model.Rubric.Name  - <a style="font-size: 85%;" href="/Rubric/EditRubric?rubricID=@Model.Rubric.RubricID"><b>Edit</b></a>
+	@Model.Rubric.AssessmentRubric.Name  - <a style="font-size: 85%;" href="@Url.Action("EditRubric", "Rubric", new { rubricID = Model.Rubric.RubricID, assessmentID = Model.Rubric.AssessmentID })"><b>Edit</b></a>
 </h1>
 <br />
 <div class="py-1">
-	<b>Description:</b> @Model.Rubric.Description
+	<b>Description:</b> @Model.Rubric.AssessmentRubric.Description
 </div>
 <div class="py-1">
-	<b>Is Active:</b> @Model.Rubric.IsActive
+	<b>Is Active:</b> @Model.Rubric.AssessmentRubric.IsActive
 </div>
 
 @if (Model.ModifierLogin != null)
-{
+			{
 	<div class="py-1">
 		<b>Last Modified:</b>  @Model.Rubric.ModifiedDateTime
 	</div>
 	<div class="py-1">
 		<b>By User:</b> @Model.ModifierLogin
 	</div>
-}
+		}
 else if (Model.CreatorLogin != null)
 {
 	<div class="py-1">
@@ -39,7 +39,7 @@ else if (Model.CreatorLogin != null)
 	<div class="py-1">
 		<b>By User:</b> @Model.CreatorLogin
 	</div>
-}
+	}
 
 
 <br />
@@ -48,19 +48,22 @@ else if (Model.CreatorLogin != null)
     <thead class="thead-dark">
         <tr>
             <th scope="col" class="h3">Outcomes</th>
-            <th scope="col"><a class="float-right btn btn-success" href="/Rubric/AddOutcome?rubricID=@Model.Rubric.RubricID"><i class="fa fa-plus"></i> Add New Outcome</a></th>
+            <th scope="col"><a class="float-right btn btn-success" href="@Url.Action("AddOutcome", "Rubric", new { rubricID = Model.Rubric.RubricID, assessmentID = Model.Rubric.AssessmentID })"><i class="fa fa-plus"></i> Add New Outcome</a></th>
         </tr>
     </thead>
 
     @foreach (Outcome outcome in Model.Outcomes)
-    {
-        <tbody id="outcome@(outcome.OutcomeID)">
-            <tr>
-                <td class="h3 align-middle py-2"><a href=".collapse@(outcome.OutcomeID)" data-toggle="collapse"><i class="fa fa-chevron-down" style="padding: 1em"></i></a>@outcome.Name</td>
+	{
+
+	   <tbody id="outcome@(outcome.OutcomeID)">
+
+		  <tr>
+
+			 <td class="h3 align-middle py-2"><a href=".collapse@(outcome.OutcomeID)" data-toggle="collapse"><i class="fa fa-chevron-down" style="padding: 1em"></i></a>@outcome.Name</td>
                 <td class="text-right">
                     <a class="btn btn-block" role="button" href=".collapse@(outcome.OutcomeID)" data-toggle="collapse">Test</a>
                     <button type="button" class="btn btn-primary outcomeDetailsButton">Details</button>
-                    <a href="@Url.Action("EditOutcome", "Rubric", new { outcomeID = outcome.OutcomeID })" class="btn btn-primary">Edit</a>
+                    <a href="@Url.Action("EditOutcome", "Rubric", new { outcomeID = outcome.OutcomeID, assessmentID = Model.Rubric.AssessmentID })" class="btn btn-primary">Edit</a>
                     @*<a href="ViewOutcome?outcomeID=@(outcome.OutcomeID)"><button type="button" class="btn btn-primary">View</button></a>*@
                 </td>
             </tr>
@@ -106,7 +109,7 @@ else if (Model.CreatorLogin != null)
                     <td class="text-right">
                         
                         
-                        <a href="@Url.Action("EditCriterion", "Rubric", new { criterionID = criterion.CriteriaID })" class="btn btn-primary">Edit</a>
+                        <a href="@Url.Action("EditCriterion", "Rubric", new { criterionID = criterion.CriteriaID, assessmentID = Model.Rubric.AssessmentID })" class="btn btn-primary">Edit</a>
                     </td>
                 </tr>
             </tbody>
@@ -147,7 +150,7 @@ else if (Model.CreatorLogin != null)
             <tr class="bg-light">
                 <td class="pl-4 py-1"></td>
                 <td class="text-right">
-                    <a href="@Url.Action("AddCriterion", "Rubric", new { outcomeID = outcome.OutcomeID })" class="btn btn-success"><i class="fa fa-plus"></i> Add New Criterion</a>
+                    <a href="@Url.Action("AddCriterion", "Rubric", new { outcomeID = outcome.OutcomeID, assessmentID = Model.Rubric.AssessmentID })" class="btn btn-success"><i class="fa fa-plus"></i> Add New Criterion</a>
                 </td>
             </tr>
         </tbody>

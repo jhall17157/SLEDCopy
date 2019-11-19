@@ -55,7 +55,7 @@ else if (Model.CreatorLogin != null)
         <thead class="thead-dark">
             <tr>
                 <th class="h3">Rubrics</th>
-                <th><a href="~/Rubric/AddRubric?assessmentID=@Model.assessment.AssessmentID" class="float-right"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Rubric </button></a></th>
+                <th><a href="~/Rubric/AddRubric?assessmentID=@Model.assessment.AssessmentID" class="float-right btn btn-success"><i class="fa fa-plus"></i> Add New Rubric </a></th>
             </tr>
         </thead>
         <tbody>
@@ -66,7 +66,7 @@ else if (Model.CreatorLogin != null)
                     <tr data-userID="person.PersonID">
                         <td>@assessmentRubric.Name</td>
                         
-                        <td class="text-right"><a href="~/Rubric/ViewRubric?rubricID=@assessmentRubric.RubricID"><button type="button" class="btn btn-primary mr-2">View</button></a></td>
+                        <td class="text-right"><a href="@Url.Action("ViewRubric", "Rubric", new { rubricID = rubricAssessment.RubricID, assessmentID = Model.assessment.AssessmentID })" class="btn btn-primary mr-2">View</a></td>
                     </tr>
                 }
             }

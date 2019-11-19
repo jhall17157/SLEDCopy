@@ -6,8 +6,9 @@ using CLS_SLE.Models;
 
 namespace CLS_SLE.ViewModels
 {
-    public class UpdateOutcome
-    {
-        public Outcome updateOutcome { get; set; }
-    }
+	public class CriterionViewModel
+	{
+		public Criterion Criterion { get; set; }
+		public RubricAssessment Rubric { get; set; }
+	}
 }

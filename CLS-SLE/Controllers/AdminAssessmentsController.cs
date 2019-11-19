@@ -7,8 +7,6 @@ using System.Dynamic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Text.RegularExpressions;
-using CLS_SLE.ViewModels;
 
 namespace CLS_SLE.Controllers
 {
@@ -140,14 +138,7 @@ namespace CLS_SLE.Controllers
                 {
                     throw new Exception("Assessment not found!");
                 }
-                Model.Programs = (from Program in db.Programs
-                                  orderby Program.Name
-                                  select Program).ToList();
-
-			 Model.AssessmentCategories = (from Categories in db.AssessmentCategories
-									 orderby Categories.Name
-									 select Categories).ToList();
-
+                Model.Programs = (from Program in db.Programs select Program).ToList();
                 Model.Assessment = assessment;
                 return View(Model);
             }
@@ -170,33 +161,30 @@ namespace CLS_SLE.Controllers
                                           orderby Categories.Name
                                           select Categories).ToList();
 
-            
+
             return View(Model);
         }
 
         //no view was associated with this method below
         [HttpPost]
-        public ActionResult InsertNewAssessment(
-            InsertNewAssesmentViewModel insertNewAssesmentViewModel,
-            string category)
+        public ActionResult InsertNewAssessment(FormCollection formCollection)
         {
             try
             {
                 db.Assessments.Load();
-                //string Category = formCollection["Category"];
-                var CategoryCode = db.AssessmentCategories.Where(c => c.Name == category).FirstOrDefault().CategoryCode;
-                var program = insertNewAssesmentViewModel.Assessment.Program;
+                string Category = formCollection["Category"];
+                var CategoryCode = db.AssessmentCategories.Where(c => c.Name == Category).FirstOrDefault().CategoryCode;
+                var program = (formCollection["Program"]);
                 Assessment addAssessment = db.Assessments.Create();
 
 
-                addAssessment.Name = insertNewAssesmentViewModel.Assessment.Name;
+                addAssessment.Name = formCollection["Name"];
                 addAssessment.Category = CategoryCode;
-                addAssessment.Description = insertNewAssesmentViewModel.Assessment.Description != null ? 
-                    insertNewAssesmentViewModel.Assessment.Description : "";
-                addAssessment.OutcomePassRate = insertNewAssesmentViewModel.Assessment.OutcomePassRate;
-			    addAssessment.CalculateOutcomePassRate = insertNewAssesmentViewModel.Assessment.CalculateOutcomePassRate;
-                addAssessment.ProgramID = db.Programs.Where(p => p.Name == program.Name).FirstOrDefault().ProgramID;
-                addAssessment.IsActive = insertNewAssesmentViewModel.Assessment.IsActive;
+                addAssessment.Description = formCollection["Description"];
+                addAssessment.OutcomePassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
+                addAssessment.CalculateOutcomePassRate = ((formCollection["CalculateOutcomePassRate"]).Equals("True") ? true : false);
+                addAssessment.ProgramID = db.Programs.Where(p => p.Name == program).FirstOrDefault().ProgramID;
+                addAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
                 addAssessment.CreatedDateTime = DateTime.Now;
                 addAssessment.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
 
@@ -206,36 +194,33 @@ namespace CLS_SLE.Controllers
                 db.SaveChanges();
 
 
-                return RedirectToAction(actionName: "Assessments", controllerName: "AdminAssessments");
+                return RedirectToAction(actionName: "Assessments", controllerName: "Admin");
 
             }
-            catch (Exception e)
+            catch
             {
                 logger.Error("Failed to save assessment, redirecting to sign in page.");
-                logger.Error(e.Message);
-                logger.Error(e.StackTrace);
                 return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
         }
 
         //no method was associated with this method below
         [HttpPost]
-        public ActionResult SaveAssessment(FormCollection formCollection, short assessmentID)
+        public ActionResult SaveAssessment(FormCollection formCollection)
         {
             try
             {
-                // if (Int32.Parse(formCollection["AssessmentID"]) > 0)
-			 if (assessmentID > 0)
+                if (Int32.Parse(formCollection["AssessmentID"]) > 0)
                 {
-                    // var assessmentid = Int32.Parse(formCollection["AssessmentID"]);
-                    var editAssessment = db.Assessments.FirstOrDefault(a => a.AssessmentID == assessmentID);
+                    var assessmentid = Int32.Parse(formCollection["AssessmentID"]);
+                    var editAssessment = db.Assessments.FirstOrDefault(a => a.AssessmentID == assessmentid);
 
                     if (editAssessment != null)
                     {
                         editAssessment.Name = formCollection["Name"];
                         editAssessment.Category = formCollection["Category"];
-                        editAssessment.Description = formCollection["Description"] != null ? formCollection["Description"] : "";
-                        editAssessment.OutcomePassRate = (Decimal?)(Double.Parse(Regex.Replace(formCollection["PassPercent"], "[^0-9.]", ""))) / 100;
+                        editAssessment.Description = formCollection["Description"];
+                        editAssessment.OutcomePassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
                         editAssessment.CalculateOutcomePassRate = ((formCollection["CalculateOutcomePassRate"]).Equals("True") ? true : false);
                         var program = (formCollection["Program"]);
                         editAssessment.ProgramID = db.Programs.Where(p => p.Name == program).FirstOrDefault().ProgramID;
@@ -244,25 +229,24 @@ namespace CLS_SLE.Controllers
                         editAssessment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
                         db.SaveChanges();
 
-                        return RedirectToAction(actionName: "ViewAssessment", controllerName: "AdminAssessments", routeValues: new { assessmentId = editAssessment.AssessmentID });
+                        return RedirectToAction(actionName: "ViewAssessment", controllerName: "Admin", routeValues: new { assessmentId = editAssessment.AssessmentID });
                     }
                     else
                     {
                         logger.Error("Failed to save assessment, redirecting to sign in page.");
-				    return RedirectToAction(actionName: "Signin", controllerName: "User");
+                        return RedirectToAction(actionName: "Signin", controllerName: "User");
                     }
                 }
                 else
                 {
                     logger.Error("Failed to save assessment, redirecting to sign in page.");
-				return RedirectToAction(actionName: "Signin", controllerName: "User");
+                    return RedirectToAction(actionName: "Signin", controllerName: "User");
                 }
             }
-            catch (Exception e)
+            catch
             {
                 logger.Error("Failed to save assessment, redirecting to sign in page.");
-			 return Content("<html>" + e.Message + "<br>" + e.InnerException + "</html>");
-			 // return RedirectToAction(actionName: "Signin", controllerName: "User");
+                return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
         }
 

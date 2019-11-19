@@ -2,6 +2,7 @@
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
@@ -19,8 +20,6 @@ namespace CLS_SLE.Controllers
     [Authorize(Roles = "Administrator")]
     public class AdminController : Controller
     {
-
-
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
         private Logger logger = LogManager.GetCurrentClassLogger();
         // GET: Admin
@@ -28,7 +27,7 @@ namespace CLS_SLE.Controllers
         {
             return View();
         }
-
+      
         public ActionResult AdminDashboard()
         {
            
@@ -235,6 +234,18 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        public ActionResult AddRubricToCourse(int? rubricI)
+        {
+            try
+            {
+                
+            }
+            catch
+            {
+                return View("AssessmentMappings");
+            }
+            return View("AssessmentMappings");
+        }
         [HttpGet]
         public ActionResult AddAssessment(String category)
         {

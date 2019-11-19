@@ -18,6 +18,9 @@
 
 @using (Html.BeginForm("SaveOutcome", "Rubric", FormMethod.Post))
 {
+    @Html.HiddenFor(Model => Model.Rubric.RubricID)
+    @Html.HiddenFor(Model => Model.Rubric.AssessmentID)
+    @Html.HiddenFor(Model => Model.OutcomeVM.OutcomeID)
     <div class="form-group">
         @Html.Label("Outcome Name:")
         @Html.EditorFor(Model => Model.OutcomeVM.Name,

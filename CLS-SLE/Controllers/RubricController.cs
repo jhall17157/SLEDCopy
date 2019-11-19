@@ -258,7 +258,7 @@ namespace CLS_SLE.Controllers
         public ActionResult AddOutcome(short rubricID, short assessmentID)
        {
            RubricAssessment rubric = db.RubricAssessments.Where(r => r.RubricID == rubricID && r.AssessmentID == assessmentID).FirstOrDefault();
-           var model = new OutcomeViewModel() { OutcomeVM = new Outcome() { RubricID = rubricID }, Rubric = rubric };
+           OutcomeViewModel model = new OutcomeViewModel() { OutcomeVM = new Outcome() { RubricID = rubricID }, Rubric = rubric };
            
            return View(model);
        }
@@ -276,10 +276,11 @@ namespace CLS_SLE.Controllers
                 }
                 maxSortOrder++;
                 
-                AssessmentRubric rubric = outcomeViewModel.Rubric.AssessmentRubric;
+                AssessmentRubric rubric = db.AssessmentRubrics.Where(a => a.RubricID == rubricID).FirstOrDefault();
                 outcomeViewModel.OutcomeVM.SortOrder = maxSortOrder;
                 outcomeViewModel.OutcomeVM.CreatedDateTime = DateTime.Now;
                 outcomeViewModel.OutcomeVM.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                rubric.Outcomes.Add(outcomeViewModel.OutcomeVM);
                 db.Outcomes.Add(outcomeViewModel.OutcomeVM);
                 db.SaveChanges();
                 
@@ -347,18 +348,22 @@ namespace CLS_SLE.Controllers
 		{
 			try
 			{
-				Outcome editOutcome = outcomeViewModel.OutcomeVM;
+				Outcome editOutcome = db.Outcomes.Where(o => o.OutcomeID == outcomeViewModel.OutcomeVM.OutcomeID).FirstOrDefault();
 
-				editOutcome.CriteriaPassRate = editOutcome.CriteriaPassRate / 100;
+				editOutcome.Name = outcomeViewModel.OutcomeVM.Name;
+				editOutcome.Description = outcomeViewModel.OutcomeVM.Description;
+				editOutcome.IsActive = outcomeViewModel.OutcomeVM.IsActive;
+				editOutcome.CriteriaPassRate = outcomeViewModel.OutcomeVM.CriteriaPassRate / 100;
+				editOutcome.CalculateCriteriaPassRate = outcomeViewModel.OutcomeVM.CalculateCriteriaPassRate;
 				editOutcome.ModifiedDateTime = DateTime.Now;
 				editOutcome.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
 
-				// db.Entry(editOutcome).State = EntityState.Modified;
+				//db.Entry(editOutcome).State = EntityState.Modified;
 				db.SaveChanges();
 
 				return RedirectToAction("ViewRubric", "Rubric", new { rubricID = outcomeViewModel.Rubric.RubricID, assessmentID = outcomeViewModel.Rubric.AssessmentID });
 			}
-			catch
+			catch (Exception e)
 			{
 				//logger.Error("Failed to save assessment, redirecting to sign in page.");
 				return RedirectToAction(actionName: "Signin", controllerName: "User");

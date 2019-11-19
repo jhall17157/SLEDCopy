@@ -167,42 +167,11 @@
 
             $('.addRubricToProgram').click(function () {
                 $('.addRubricShow').show();
-
-                 /*var rubricID = $('.selectpicker :selected').attr('id');*/
-                 alert(rubricID);
-                 @{
-
-                SqlConnection conn = new SqlConnection();
-                conn.ConnectionString =
-                    "Data Source=bitsql.wctc.edu;Initial Catalog=SLE_Tracking;" +
-                    "Persist Security Info=True;" +
-                    "User ID=SleWebApp;" +
-                    "Password=P@ssw0rd;" +
-                    "MultipleActiveResultSets=True;" +
-                    "Application Name=EntityFramework";
-
-
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("", conn);
-
-                    /* using (SqlDataReader rdr = cmd.ExecuteReader())
-                     {
-                         while (rdr.Read())
-                         {
-                            
-                         }
-                         conn.Close();
-                     }
-                     */
-                    }
-              alert("Result" + myString);
                  $('.rubricDropdown').hide();
-
-});
+                });
 
             $('.addClassToRubric').click(function () {
                 $('.addClassShow').show();
-
                 $('.classDropdown').hide();
                      });
 

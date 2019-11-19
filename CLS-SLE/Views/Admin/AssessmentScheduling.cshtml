@@ -1,5 +1,4 @@
 ﻿@model CLS_SLE.Models.AssessmentSchedulingViewModel
-
 @{
     ViewBag.Title = "AssessmentScheduling";
 }
@@ -12,129 +11,172 @@
 </nav>
 <h1>Assessment Scheduling</h1>
 
-@foreach (var program in Model.Programs)
+<table>
+    <tr>
+        <td>
+            <span class="col-8">
+                <select class="btn btn-secondary dropdown-toggle" data-show-subtext="true" data-live-search="true">
+                    @foreach (var semester in Model.Semesters)
+                    {
+                        <option id="@semester.SemesterID">@semester.Name</option>
+                    }
+                </select>
+            </span>
+
+            <span class="col-2">
+                <button type="button" class="btn btn-primary right mr-2" data-toggle="modal" data-target="#manualAdd">Manual Add</button>
+            </span>
+
+            <!--Manual Add Modal-->
+            <div class="modal fade" id="manualAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Manual Add</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h5><input type="radio" name="defaultSchedule" class="scheduleRadio" />Default Start/End</h5>
+                            <h5><input type="radio" name="defaultSchedule" class="scheduleRadio" />Schedule <input type="number" class="col-sm-2" min="0" />days before and <input type="number" class="col-sm-2" min="0" /> days after.</h5>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <span class="col-2">
+                <button type="button" class="btn btn-primary right mr-2" data-toggle="modal" data-target="#scheduleByProgram">Schedule by Program</button>
+            </span>
+
+            <!--Schedule by Program Modal-->
+            <div class="modal fade" id="scheduleByProgram" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Schedule by Program</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h5><input type="radio" name="defaultSchedule" class="scheduleRadio" />Default Start/End</h5>
+                            <h5><input type="radio" name="defaultSchedule" class="scheduleRadio" />Schedule <input type="number" class="col-sm-2" min="0" />days before and <input type="number" class="col-sm-2" min="0" /> days after.</h5>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+@foreach (var semester in Model.Semesters)
 {
 
+    var courses = Model.Courses.Select(c => c.Sections.Where(s => s.SemesterID == semester.SemesterID));
+
     <table class="table table-hover">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col" class="h3">@program.Name</th>
-            </tr>
-        </thead>
-        <tbody>
+        <thead>
             <tr>
                 <th class="row">
-                    <span class="mt-2 h3 col-2"><b>Number</b></span>
-                    <span class="mt-2 ml-3 h3"><b>Name</b></span>
+                    <span class="mt-2 h3 col-2"><b>Course #</b></span>
+                    <span class="mt-2  h3 col-2"><b>Name</b></span>
+                    <span class="mt-2 h3 col-2"><b>CRN</b></span>
+                    <span class="mt-2 ml-3 h3"><b>Assessment Name</b></span>
                 </th>
             </tr>
+        </thead>
 
-            @foreach (var course in Model.Courses)
+        @foreach (var grouping in courses)
+        {
+
+            foreach (var c in grouping)
             {
-                <tr>
-                    <td>
-                        <div class="row">
-                                <span class="col-2">@course.Number</span>
-                                <span class="col-6">@course.CourseName</span>
+                var rubrics = Model.AssessmentRubrics.Select(r => r.ProgramAssessmentMappings.Where(m => m.CourseID == c.CourseID));
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="row">
+                                <span class="col-2">@c.CourseID</span>
+                                <span class="col-2">@c.Course.CourseName</span>
+                                <span class="col-2">@c.Course.Number</span>
+
+                                @foreach (var rubric in rubrics)
+                                {
+                                    foreach (var r in rubric)
+                                    {
+                                        <span class="col-2">@r.AssessmentRubric.Name</span>
+                                    }
+                                }
+
                                 @*If rubric is assigned show rubric name else show following button to assign*@
                                 <div class="col-4">
-                                    <button type="button" class="btn btn-primary right mr-2" data-toggle="modal" data-target="#scheduleRubric">
-                                        Schedule
-                                    </button>
+                                    <button type="button" class="btn btn-primary right mr-2" data-toggle="modal" data-target="#edit">Edit</button>
                                 </div>
                             </div>
-                       
-                        <!--Assign Modal-->
-                        <div class="modal fade" id="assignRubric" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLongTitle">Assign Rubric</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        @*TODO: Talk about db entries to group assessments*@
-                                        <table class="table table-hover">
-                                            <thead class="thead-dark">
+
+                            <!--Edit Modal-->
+                            <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Schedule</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <table>
+                                                <thead>
+                                                    @c.Course.CourseName - @c.Course.CourseID
+                                                </thead>
                                                 <tr>
-                                                    <th scope="col" class="h3">
-                                                        @course.CourseName - @course.CourseID
-                                                    </th>
+                                                    <td>
+                                                        <input class="form-control" type="date" value="Start Date" />
+                                                    </td>
+                                                    <td>
+                                                        <input class="form-control" type="date" value="End Date" />
+                                                    </td>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td scope="col" class="h3"><b>Assessment Name</b></td>
-                                                    @* Modal width needs to be increase to include this if necessary
-
-                                    <td scope="col" class="h3 right"><b>ID</b></td>*@
-                                                </tr>
-
-                                                @foreach (var assessment in Model.Assessments)
-                                                {
-                                                    if (assessment.IsActive)
-                                                    {
-                                                        <tr>
-                                                            <td>
-                                                                <span class="mt-2">
-                                                                    @Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })
-                                                                </span>
-                                                                <span class="right mr-3 mt-2">
-                                                                    @assessment.AssessmentID
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                    }
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </td>
+                    </tr>
 
-                        <!--Schedule Modal-->
-                        <div class="modal fade" id="scheduleRubric" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLongTitle">Schedule</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <table>
-                                            <thead>
-                                                @course.CourseName - @course.CourseID
-                                            </thead>
-                                            <tr>
-                                                <td>
-                                                    <input class="form-control" type="date" value="Start Date" />
-                                                </td>
-                                                <td>
-                                                    <input class="form-control" type="date" value="End Date" />
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
+                </tbody>
             }
-        </tbody>
+        }
     </table>
 }
 
+@section scripts{
+    <script>
+        $(function () {
+
+            $(".dropdown-menu li a").click(function () {
+
+                $(this).parents(".btn-group").find('.selection').text($(this).text());
+                $(this).parents(".btn-group").find('.selection').val($(this).text());
+
+
+            });
+
+
+        });
+    </script>
+}

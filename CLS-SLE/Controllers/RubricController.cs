@@ -373,8 +373,9 @@ namespace CLS_SLE.Controllers
 		public ActionResult AddCriterion(short outcomeID, short assessmentID)
 		{
 			Criterion criterion = new Criterion { OutcomeID = outcomeID };
-			RubricAssessment rubric = db.RubricAssessments.Where(r => r.RubricID == criterion.Outcome.RubricID && r.AssessmentID == assessmentID).FirstOrDefault();
-			var model = new CriterionViewModel() { Criterion = criterion, Rubric = rubric };
+			Outcome outcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
+			RubricAssessment rubric = db.RubricAssessments.Where(r => r.RubricID == outcome.RubricID && r.AssessmentID == assessmentID).FirstOrDefault();
+			var model = new CriterionViewModel() { Criterion = criterion, Outcome = outcome, Rubric = rubric };
 
 			return View(model);
 		}
@@ -383,8 +384,8 @@ namespace CLS_SLE.Controllers
 		{
 			try
 			{
-				Outcome outcome = criterionViewModel.Criterion.Outcome;
 				Criterion criterion = criterionViewModel.Criterion;
+				Outcome outcome = db.Outcomes.Where(o => o.OutcomeID == criterion.OutcomeID).FirstOrDefault();
 				Byte maxSortOrder = 0;
 
 				if (db.Criteria.Where(c => c.OutcomeID == outcome.OutcomeID).Any())
@@ -397,6 +398,7 @@ namespace CLS_SLE.Controllers
 				criterion.SortOrder = maxSortOrder;
 				criterion.CreatedDateTime = DateTime.Now;
 				criterion.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+				outcome.Criteria.Add(criterion);
 				db.Criteria.Add(criterion);
 
 				//db.Entry(addCriteria).State = EntityState.Added;
@@ -424,9 +426,12 @@ namespace CLS_SLE.Controllers
 		{
 			try
 			{
-				Criterion criterion = criterionViewModel.Criterion;
+				Criterion criterion = db.Criteria.Where(c => c.CriteriaID == criterionViewModel.Criterion.CriteriaID).FirstOrDefault();
 
 				//db.Criteria.Load();
+				criterion.Name = criterionViewModel.Criterion.Name;
+				criterion.ExampleText = criterionViewModel.Criterion.ExampleText;
+				criterion.IsActive = criterionViewModel.Criterion.IsActive;
 				criterion.ModifiedDateTime = DateTime.Now;
 				criterion.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
 

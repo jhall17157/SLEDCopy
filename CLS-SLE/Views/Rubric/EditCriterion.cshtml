@@ -6,8 +6,8 @@
 	<ol class="breadcrumb">
 		<li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
 		<li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "AdminAssessments")</li>
-		<li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Assessment.Name, "ViewAssessment", "AdminAssessments", new { assessmentID = Model.Rubric.AssessmentID })</li>
-		<li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.AssessmentRubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.Rubric.RubricID, assessmentID = Model.Rubric.AssessmentID })</li>
+		<li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Assessment.Name, "ViewAssessment", "AdminAssessments", new { assessmentID = Model.Rubric.AssessmentID }, null)</li>
+		<li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.AssessmentRubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.Rubric.RubricID, assessmentID = Model.Rubric.AssessmentID }, null)</li>
 		<li class="breadcrumb-item">@Model.Criterion.Outcome.Name</li>
 		<li class="breadcrumb-item">@Model.Criterion.Name</li>
 		<li class="breadcrumb-item active" aria-current="page">Edit</li>
@@ -17,6 +17,9 @@
 <br />
 @using (Html.BeginForm("SaveCriterion", "Rubric", FormMethod.Post))
 {
+	@Html.HiddenFor(Model => Model.Rubric.RubricID)
+	@Html.HiddenFor(Model => Model.Rubric.AssessmentID)
+	@Html.HiddenFor(Model => Model.Criterion.CriteriaID)
 	<div class="form-group col-9">
 		@Html.Label("Name:")
 		@Html.EditorFor(Model => Model.Criterion.Name,

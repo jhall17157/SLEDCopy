@@ -61,7 +61,7 @@ else if (Model.CreatorLogin != null)
 
 			 <td class="h3 align-middle py-2"><a href=".collapse@(outcome.OutcomeID)" data-toggle="collapse"><i class="fa fa-chevron-down" style="padding: 1em"></i></a>@outcome.Name</td>
                 <td class="text-right">
-                    <a class="btn btn-block" role="button" href=".collapse@(outcome.OutcomeID)" data-toggle="collapse">Test</a>
+                    @*<a class="btn btn-block" role="button" href=".collapse@(outcome.OutcomeID)" data-toggle="collapse">Test</a>*@
                     <button type="button" class="btn btn-primary outcomeDetailsButton">Details</button>
                     <a href="@Url.Action("EditOutcome", "Rubric", new { outcomeID = outcome.OutcomeID, assessmentID = Model.Rubric.AssessmentID })" class="btn btn-primary">Edit</a>
                     @*<a href="ViewOutcome?outcomeID=@(outcome.OutcomeID)"><button type="button" class="btn btn-primary">View</button></a>*@

@@ -28,7 +28,7 @@
         @Html.ValidationMessageFor(Model => Model.OutcomeVM.Name)
     </div>
     <div class="form-group col-9">
-        @Html.Label("Rubric Description:")
+        @Html.Label("Outcome Description:")
         @Html.TextAreaFor(Model => Model.OutcomeVM.Description,
         new { @class = "form-control", @Value = ViewBag.Description, rows = "6" })
         @Html.ValidationMessageFor(model => model.OutcomeVM.Description)

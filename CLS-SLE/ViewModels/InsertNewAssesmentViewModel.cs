@@ -13,7 +13,7 @@ namespace CLS_SLE.ViewModels
         public List<Program> Programs { get; set; }
         private readonly SLE_TrackingEntities DB = new SLE_TrackingEntities();
 
-        InsertNewAssesmentViewModel()
+        public InsertNewAssesmentViewModel()
         {
             Programs = (from programs in DB.Programs
                         orderby programs.Name

@@ -170,33 +170,30 @@ namespace CLS_SLE.Controllers
                                           orderby Categories.Name
                                           select Categories).ToList();
 
-            
+
             return View(Model);
         }
 
         //no view was associated with this method below
         [HttpPost]
-        public ActionResult InsertNewAssessment(
-            InsertNewAssesmentViewModel insertNewAssesmentViewModel,
-            string category)
+        public ActionResult InsertNewAssessment(FormCollection formCollection, string category)
         {
             try
             {
                 db.Assessments.Load();
                 //string Category = formCollection["Category"];
                 var CategoryCode = db.AssessmentCategories.Where(c => c.Name == category).FirstOrDefault().CategoryCode;
-                var program = insertNewAssesmentViewModel.Assessment.Program;
+                var program = (formCollection["Program"]);
                 Assessment addAssessment = db.Assessments.Create();
 
 
-                addAssessment.Name = insertNewAssesmentViewModel.Assessment.Name;
+                addAssessment.Name = formCollection["Name"];
                 addAssessment.Category = CategoryCode;
-                addAssessment.Description = insertNewAssesmentViewModel.Assessment.Description != null ? 
-                    insertNewAssesmentViewModel.Assessment.Description : "";
-                addAssessment.OutcomePassRate = insertNewAssesmentViewModel.Assessment.OutcomePassRate;
-			    addAssessment.CalculateOutcomePassRate = insertNewAssesmentViewModel.Assessment.CalculateOutcomePassRate;
-                addAssessment.ProgramID = db.Programs.Where(p => p.Name == program.Name).FirstOrDefault().ProgramID;
-                addAssessment.IsActive = insertNewAssesmentViewModel.Assessment.IsActive;
+                addAssessment.Description = formCollection["Description"] != null ? formCollection["Description"] : "";
+                addAssessment.OutcomePassRate = (Decimal?)(Double.Parse(Regex.Replace(formCollection["PassPercent"], "[^0-9.]", ""))) / 100;
+                addAssessment.CalculateOutcomePassRate = ((formCollection["CalculateOutcomePassRate"]).Equals("True") ? true : false);
+                addAssessment.ProgramID = db.Programs.Where(p => p.Name == program).FirstOrDefault().ProgramID;
+                addAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
                 addAssessment.CreatedDateTime = DateTime.Now;
                 addAssessment.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
 

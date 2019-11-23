@@ -1,8 +1,7 @@
 ﻿@using CLS_SLE.Models;
-@model CLS_SLE.ViewModels.InsertNewAssesmentViewModel
 
 @{
-        ViewBag.Title = "AddAssessment";
+    ViewBag.Title = "AddAssessment";
 }
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -13,34 +12,6 @@
 </nav>
 <h1>Add Assessment</h1>
 <br />
-
-
-
-@using (Html.BeginForm("InsertNewAssessment", "AdminAssesments", FormMethod.Post))
-{
-    <div class="form-row">
-        <div class="form-group col-9">
-            @Html.Label("Name:");
-            @Html.EditorFor(Model => Model.Assessment.Name,
-           new { htmlAttributes = new { @class = "form-control" } })
-            @*@Html.ValidationMessageFor(model => model.Assessment.Name)*@
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-9">
-            @Html.Label("Category:")
-            <select class="form-control" id="Category" name="Category">
-                <option>Select a Category</option>
-                @{
-                    foreach (AssessmentCategory ac in Model.AssessmentCategories)
-                    {
-                        <option>@ac.Name</option>
-                    }
-                }
-        </div>
-    </div>
-}
-
 
 <form method="post" action="/AdminAssessments/InsertNewAssessment">
     <div class="form-row">
@@ -66,12 +37,6 @@
         </div>
     </div>
 
-    @*add another category*@
-    @*<button name="add">Add Category</button>
-    <div id="addItem">
-
-    </div>*@
-
     <div class="form-row">
         <div class="form-group col-9">
             <label for="Description">Description:</label>
@@ -81,7 +46,7 @@
     <div class="form-row">
         <div class="form-group col-9">
             <label for="PassPercent">Pass Percentage:</label>
-            <input type="text" name="PassPercent" class="form-control" required/>
+            <input type="text" name="PassPercent" class="form-control" required />
         </div>
     </div>
     <fieldset class="form-group col-9">
@@ -130,13 +95,3 @@
     </div>
 
 </form>
-
-@*<script>
-   $("button[name='add']").click(function() {
-       var domElement = $('<div class="form-group col-9"> ' +
-           '<input type="text" class="form-control" placeholder="@Model.Category" value="@Model.Category" disabled/>' +
-           '< input type = "hidden" name = "Category" value = "@Model.Category" />' +
-           '</div > ');
-        $(this).after(domElement);
-    });
-</script>*@

@@ -20,7 +20,7 @@
     <table class="table table-hover">
         <thead class="thead-dark">
             <tr>
-                <th scope="col" class="h3">@program.Name <button type="button" class="btn btn-primary right" data-toggle="modal" data-target="#modal@(program.Number)">Add Mapping</button></th>
+                <th scope="col" class="h3">@program.Name <button type="button" class="btn btn-primary right" data-toggle="modal" data-target="#modal@(program.ProgramID)">Assign</button></th>
             </tr>
         </thead>
         <tbody>
@@ -51,12 +51,12 @@
     </table>
 
     <!--Assign Modal-->
-    <div class="modal fade" id="modal@(program.Number)" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="modal@(program.ProgramID)" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalHeader@(program.Number)">Mapping for @program.Name</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title" id="modalHeader@(program.ProgramID)">Mapping for @program.Name</h5>
+                    <button type="button" class="close modalClose" id="@program.ProgramID" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -69,34 +69,40 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @{
-                                var theseRubrics = rubrics.Select(grouping => grouping.FirstOrDefault()?.AssessmentRubric.Name).Where(rubricName => rubricName != null);
-                            }
-                            
-                            @foreach (var rubricName in theseRubrics)
-                            {
+                                @{
+                                    var theseRubrics = rubrics.Select(grouping => grouping.FirstOrDefault()?.AssessmentRubric.Name).Where(rubricName => rubricName != null);
+                                }
+
+                                @foreach (var rubricName in theseRubrics)
+                                {
+                                    <tr>
+                                        <td>
+                                            <h5>
+                                                <input type="radio" name="assessmentSelect_@(program.ProgramID)" id="@program.ProgramID" class="programRadio"
+                                                       @(theseRubrics.ToList().IndexOf(rubricName) == 0 ? "checked" : "")> @rubricName
+                                                </h5>
+                                            </td>
+                                            <td><button class="btn btn-danger float-right mr-2"><i class="fas fa-times"></i></button></td>
+                                        </tr>
+                                    }
                                 <tr>
-                                    <td><h5><input type="radio" name="assessmentSelect_@(program.ProgramID)" class="programRadio"
-                                                   @(theseRubrics.ToList().IndexOf(rubricName) == 0 ? "checked" : "")> @rubricName</h5></td>
-                                    <td><button class="btn btn-danger float-right mr-2"><i class="fas fa-times"></i></button></td>
+                                    <td>
+                                        <div id="rubricDropdown@(program.ProgramID)" class="rubricDropdown">
+                                            <select class="btn btn-secondary dropdown-toggle selectpicker" data-show-subtext="true" data-live-search="true">
+                                                @foreach (var rubric in Model.AssessmentRubrics)
+                                                {
+                                                    <option id="@rubric.RubricID">@rubric.Name</option>
+                                                }
+                                            </select>
+                                            <button type="button" class="btn btn-outline-success float-left addRubricToProgram" id="@program.ProgramID">Add</button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="addRubricShow@(program.ProgramID)">
+                                            <button type="button" class="btn btn-success float-right mr-2 addRubricShow" id="@program.ProgramID"><i class="fa fa-plus"></i></button>
+                                        </div>
+                                    </td>
                                 </tr>
-                            }
-                            <tr>
-                                <td>
-                                    <div class="rubricDropdown">
-                                        <select class="btn btn-secondary dropdown-toggle selectpicker" data-show-subtext="true" data-live-search="true">
-                                            @foreach (var rubric in Model.AssessmentRubrics)
-                                            {
-                                                <option id="@rubric.RubricID">@rubric.Name</option>
-                                            }
-                                        </select>
-                                        <button type="button" class="btn btn-outline-success float-left addRubricToProgram">Add</button>
-                                    </div>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-success float-right mr-2 addRubricShow"><i class="fa fa-plus"></i></button>
-                                </td>
-                            </tr>
                             </tbody>
                         </table>
                         <table class="table col-6">
@@ -116,33 +122,37 @@
                                         {
                                             foreach (var rubric in grouping)
                                             {
-                                                if (assessment.CourseID == rubric.CourseID)
-                                                {
-                                                    <div class="courseFor@(rubric.ProgramID)">
-                                                        <tr>
-                                                            <td><h5>@rubric.Course.CourseName</h5></td>
-                                                            <td><button class="btn btn-danger float-right mr-2"><i class="fas fa-times"></i></button></td>
-                                                        </tr>
-                                                    </div>
-                                                }
+                                                <div id="programCourses">
+                                                    @if (assessment.CourseID == rubric.CourseID)
+                                                    {
+                                                        <div class="coursesFor@(rubric.ProgramID)">
+                                                            <tr>
+                                                                <td><h5>@rubric.Course.CourseName</h5></td>
+                                                                <td><button class="btn btn-danger float-right mr-2"><i class="fas fa-times"></i></button></td>
+                                                            </tr>
+                                                        </div>
+                                                    }
+                                                </div>
                                             }
                                         }
                                     }
                                 }
                                 <tr>
                                     <td>
-                                        <div class="classDropdown">
+                                        <div id="classDropdown@(program.ProgramID)" class="classDropdown">
                                             <select class="btn btn-secondary dropdown-toggle selectpicker" data-show-subtext="true" data-live-search="true">
                                                 @foreach (var course in Model.Courses)
                                                 {
                                                     <option id="@course.CourseID">@course.CourseName</option>
                                                 }
                                             </select>
-                                            <button type="button" class="btn btn-outline-success addClassToRubric">Add</button>
+                                            <button type="button" class="btn btn-outline-success addClassToRubric" id="@program.ProgramID">Add</button>
                                         </div>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-success float-right mr-2 addClassShow"><i class="fa fa-plus"></i></button>
+                                        <div id="addClassShow@(program.ProgramID)">
+                                            <button type="button" class="btn btn-success float-right mr-2 addClassShow" id="@program.ProgramID"><i class="fa fa-plus"></i></button>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -150,15 +160,14 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary modalClose" id="@program.ProgramID" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
 }
 
-@section scripts
-    {
+@section scripts{
     <script>
 
         $(function () {
@@ -166,24 +175,84 @@
             $('.classDropdown').hide();
 
             $('.addRubricToProgram').click(function () {
-                $('.addRubricShow').show();
-                 $('.rubricDropdown').hide();
-                });
+                var id = $(this).attr("id");
+                $('#addRubricShow'+id).show();
+                $('#rubricDropdown'+id).hide();
+
+                 /*var rubricID = $('.selectpicker :selected').attr('id');*/
+                 //alert(rubricID);
+                 @{
+
+                SqlConnection conn = new SqlConnection();
+                conn.ConnectionString =
+                "Data Source=bitsql.wctc.edu;Initial Catalog=SLE_Tracking;" +
+                "Persist Security Info=True;" +
+                "User ID=SleWebApp;" +
+                "Password=P@ssw0rd;" +
+                "MultipleActiveResultSets=True;" +
+                "Application Name=EntityFramework";
+
+
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(" ", conn);
+
+                     using (SqlDataReader rdr = cmd.ExecuteReader())
+                     {
+                         while (rdr.Read())
+                         {
+
+                         }
+                         conn.Close();
+                     }
+                    }
+                     alert("Result" + myString);
+
+});
 
             $('.addClassToRubric').click(function () {
-                $('.addClassShow').show();
-                $('.classDropdown').hide();
-                     });
+                var id = $(this).attr("id");
+                $('#addClassShow'+id).show();
+                $('#classDropdown'+id).hide();
+            });
 
             $('.addRubricShow').click(function () {
-                $('.addRubricShow').hide();
-                $('.rubricDropdown').show();
-                     });
+                var id = $(this).attr("id");
+                $('#addRubricShow'+id).hide();
+                $('#rubricDropdown'+id).show();
+            });
 
             $('.addClassShow').click(function () {
-                $('.addClassShow').hide();
-                $('.classDropdown').show();
-                     });
-                     });
+                var id = $(this).attr("id");
+                $('#addClassShow'+id).hide();
+                $('#classDropdown'+id).show();
+            });
+
+            coursesInSemesterHideShow();
+            $(".programRadio").change(function () {
+                coursesInSemesterHideShow();
+            });
+
+            function coursesInSemesterHideShow() {
+                var id = $(".programRadio:checked").attr("id");
+                //alert(id);
+                $(".programCourses").children().each(function () {
+                    if (id == $(this).attr('id')) {
+                        //alert(id);
+                        //$('#coursesFor' + id).show();
+                        $('#coursesFor' + $(this).attr('id')).hide();
+                    } else {
+                        $('#coursesFor' + $(this).attr('id')).hide();
+                    }
+                });
+            }
+
+            $('.modalClose').click(function () {
+                var id = $(this).attr("id");
+                $('#addClassShow'+id).show();
+                $('#classDropdown' + id).hide();
+                $('#addRubricShow'+id).show();
+                $('#rubricDropdown'+id).hide();
+            });
+        });
     </script>
 }

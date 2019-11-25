@@ -16,7 +16,7 @@
     <tr>
         <td>
             <span class="col-8">
-                <select class="btn btn-secondary dropdown-toggle " data-show-subtext="true" data-live-search="true">
+                <select class="btn btn-secondary dropdown-toggle semester" data-show-subtext="true" data-live-search="true">
                     @foreach (var semester in Model.Semesters)
                     {
                         <option id="@semester.SemesterID">@semester.Name</option>
@@ -39,8 +39,22 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <h5><input type="radio" name="defaultSchedule" class="scheduleRadio" />Default Start/End</h5>
-                            <h5><input type="radio" name="defaultSchedule" class="scheduleRadio" />Schedule <input type="number" class="col-sm-2" min="0" />days before and <input type="number" class="col-sm-2" min="0" /> days after.</h5>
+                            @foreach (var semester in Model.Semesters)
+                            {
+                                var courses = Model.Courses.Select(c => c.Sections.Where(s => s.SemesterID == semester.SemesterID));
+                                <select class="btn btn-secondary dropdown-toggle" id="scheduleModal@(semester.SemesterID)" data-show-subtext="true" data-live-search="true">
+                                    @foreach (var grouping in courses)
+                                    {
+
+                                        foreach (var c in grouping)
+                                        {
+
+                                            <option id="courseDropDownBySemester@(semester.SemesterID)">@c.Course.CourseName</option>
+                                        }
+                                    }
+                                </select>
+                            }
+                            <h2 id="selectedCourseCRN"></h2>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -83,7 +97,7 @@
 {
     var courses = Model.Courses.Select(c => c.Sections.Where(s => s.SemesterID == semester.SemesterID));
 
-    <table class="table table-hover">
+    <table class="table table-hover" id="semester@(semester.SemesterID)">
         <thead>
             <tr>
                 <th class="row">
@@ -100,32 +114,35 @@
 
                 foreach (var c in grouping)
                 {
-                    var rubrics = Model.AssessmentRubrics.Select(r => r.ProgramAssessmentMappings.Where(m => m.CourseID == c.CourseID));
+                    var rubrics = Model.AssessmentRubrics.Select(r => r.ProgramAssessmentMappings.Where(m => m.CourseID == c.CourseID)).Select(n => n.Select(m => m.AssessmentRubric.Name));
 
-                    <tr>
+                    <tr class="courseRow" id="courseRow@(c.CourseID)">
                         <td>
                             <div class="row">
-                                <span class="col-2">@c.CourseID</span>
-                                <span class="col-2">@c.Course.CourseName</span>
                                 <span class="col-2">@c.Course.Number</span>
+                                <span class="col-2">@c.Course.CourseName</span>
+                                <span class="col-2">@c.CRN</span>
 
                                 @foreach (var rubric in rubrics)
                                 {
+
                                     foreach (var r in rubric)
                                     {
-                                        <span class="col-2">@r.AssessmentRubric.Name</span>
+                                        <div class="rubricForClass">
+                                            <span id="@(c.CourseID)" class="col-2">@r</span>
+                                        </div>
                                     }
-                                 
+
                                 }
 
                                 @*If rubric is assigned show rubric name else show following button to assign*@
                                 <div class="col-4">
-                                    <button type="button" class="btn btn-primary float-right mr-2" data-toggle="modal" data-target="#edit">Edit</button>
+                                    <button type="button" class="btn btn-primary float-right mr-2" data-toggle="modal" data-target="#edit@(c.Course.CourseID)">Edit</button>
                                 </div>
                             </div>
 
                             <!--Edit Modal-->
-                            <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal fade" id="edit@(c.Course.CourseID)" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -158,8 +175,6 @@
                             </div>
                         </td>
                     </tr>
-
-
                 }
 
             }
@@ -170,16 +185,32 @@
 @section scripts{
     <script>
         $(function () {
+            $('.courseRow').hide();
 
-            $(".dropdown-menu li a").click(function () {
-
-                $(this).parents(".btn-group").find('.selection').text($(this).text());
-                $(this).parents(".btn-group").find('.selection').val($(this).text());
-
-
+            $('.rubricForClass').children().each(function () {
+                alert($(this).attr('id'));
+                $('#courseRow'+$(this).attr('id')).show();
             });
 
+            semesterHideShow();
+            $(".semester").change(function () {
+                semesterHideShow();
+            });
 
+            function semesterHideShow() {
+                var id = $(".semester").children(":selected").attr("id");
+                $(".semester").children().each(function () {
+                    if (id == $(this).attr('id')) {
+                        $('#semester' + id).show();
+                        $('courseDropDownBySemester' + id).show();
+                        $('#scheduleModal' + $(this).attr('id')).show();
+                    } else {
+                        $('#semester' + $(this).attr('id')).hide();
+                        $('#courseDropDownBySemester' + id).hide();
+                        $('#scheduleModal' + $(this).attr('id')).hide();
+                    }
+                });
+            }
         });
     </script>
 }

@@ -81,7 +81,6 @@
 
 @foreach (var semester in Model.Semesters)
 {
-
     var courses = Model.Courses.Select(c => c.Sections.Where(s => s.SemesterID == semester.SemesterID));
 
     <table class="table table-hover">
@@ -89,8 +88,8 @@
             <tr>
                 <th class="row">
                     <span class="mt-2 h3 col-2"><b>Course #</b></span>
-                    <span class="mt-2  h3 col-2"><b>Name</b></span>
-                    <span class="mt-2 h3 col-2"><b>CRN</b></span>
+                    <span class="mt-2  h3 col-2"><b>Name   </b></span>
+                    <span class="mt-2 h3 col-2"><b>CRN     </b></span>
                     <span class="mt-2 ml-3 h3"><b>Assessment Name</b></span>
                 </th>
             </tr>

@@ -27,12 +27,12 @@ namespace CLS_SLE.Controllers
         {
             return View();
         }
-      
+
         public ActionResult AdminDashboard()
         {
-           
+
             return View();
-            
+
         }
 
         public ActionResult MappingRubricCourses()
@@ -47,8 +47,8 @@ namespace CLS_SLE.Controllers
                                    RubricName = ar.Name,
                                    CourseName = c.CourseName
                                };
-            foreach(var rc in rubricCourse)
-            {               
+            foreach (var rc in rubricCourse)
+            {
                 Console.WriteLine(rc);
             }
 
@@ -83,7 +83,7 @@ namespace CLS_SLE.Controllers
                                        RubricName = ar.Name,
                                        CourseName = c.CourseName
                                    };
-               
+
                 foreach (var rc in rubricCourse)
                 {
                     Console.WriteLine(rc);
@@ -93,18 +93,18 @@ namespace CLS_SLE.Controllers
 
 
                 return View(new AssessmentMappingsViewModel
-                    {
-                        Departments = db.Departments.ToList(),
-                        Programs = db.Programs.ToList(),
-                        Courses = db.Courses.ToList(),
-                        Categories = db.AssessmentCategories.ToList(),
-                        Assessments = adminAssessments.Distinct().OrderByDescending(a => a.IsActive).ThenBy(a => a.Name).ToList(),
-                        RubricAssessments = db.RubricAssessments.ToList(),
-                        AssessmentRubrics = db.AssessmentRubrics.ToList(),
-                        ProgramAssessmentMappings = db.ProgramAssessmentMappings.ToList(),
-                        //RubricsByProgram = db.RubricsByProgram.ToList()
+                {
+                    Departments = db.Departments.ToList(),
+                    Programs = db.Programs.ToList(),
+                    Courses = db.Courses.ToList(),
+                    Categories = db.AssessmentCategories.ToList(),
+                    Assessments = adminAssessments.Distinct().OrderByDescending(a => a.IsActive).ThenBy(a => a.Name).ToList(),
+                    RubricAssessments = db.RubricAssessments.ToList(),
+                    AssessmentRubrics = db.AssessmentRubrics.ToList(),
+                    ProgramAssessmentMappings = db.ProgramAssessmentMappings.ToList(),
+                    //RubricsByProgram = db.RubricsByProgram.ToList()
                 });
-                
+
 
             }
             catch
@@ -112,8 +112,9 @@ namespace CLS_SLE.Controllers
                 logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
                 return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
- 
+
         }
+
 
         public ActionResult Assessments()
         {
@@ -122,8 +123,8 @@ namespace CLS_SLE.Controllers
                 var personID = Convert.ToInt32(Session["personID"].ToString());
                 var user = db.Users.FirstOrDefault(u => u.PersonID == personID);
                 var adminAssessments = from assessments in db.Assessments
-                                       //join permissions in db.AssessmentRubricSecurities on assessments.AssessmentID equals permissions.AssessmentID
-                                       //where permissions.PersonID == personID
+                                           //join permissions in db.AssessmentRubricSecurities on assessments.AssessmentID equals permissions.AssessmentID
+                                           //where permissions.PersonID == personID
                                        select assessments;
                 logger.Info("Dashboard loaded for " + user.Login);
                 var categories = db.AssessmentCategories.ToList();
@@ -238,7 +239,7 @@ namespace CLS_SLE.Controllers
         {
             try
             {
-                
+
             }
             catch
             {
@@ -279,7 +280,7 @@ namespace CLS_SLE.Controllers
 
 
 
-                    db.Entry(addAssessment).State = EntityState.Added;
+                db.Entry(addAssessment).State = EntityState.Added;
                 db.SaveChanges();
 
 
@@ -535,8 +536,8 @@ namespace CLS_SLE.Controllers
         {
 
             var Users = (from user in db.Users
-                          join person in db.People on user.PersonID equals person.PersonID
-                          select new { FirstName = person.FirstName, Login = user.Login, LastName = person.LastName, PersonID = person.PersonID, IDNumber = person.IdNumber, User = user }).OrderBy(p => p.Login);
+                         join person in db.People on user.PersonID equals person.PersonID
+                         select new { FirstName = person.FirstName, Login = user.Login, LastName = person.LastName, PersonID = person.PersonID, IDNumber = person.IdNumber, User = user }).OrderBy(p => p.Login);
 
             var UserRoles = (from role in db.Roles
                              join userRole in db.UserRoles on role.RoleID equals userRole.RoleID

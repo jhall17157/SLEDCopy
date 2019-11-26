@@ -30,10 +30,10 @@ namespace CLS_SLE.Controllers
 		}
 
 
-        public ActionResult ViewRubric(int? rubricID)
+        public ActionResult ViewRubric(int? rubricID, short? assessmentID)
         {
             dynamic Model = new ExpandoObject();
-            var Rubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
+            var Rubric = db.RubricAssessments.Where(r => r.RubricID == rubricID && r.AssessmentID == assessmentID).FirstOrDefault();
             Dictionary<string, Dictionary<string, Dictionary<string, string>>> Logins = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
             Logins.Add("Outcome", new Dictionary<string, Dictionary<string, string>>());
             Logins.Add("Criterion", new Dictionary<string, Dictionary<string, string>>());
@@ -87,38 +87,63 @@ namespace CLS_SLE.Controllers
             return View(Model);
         }
         [HttpGet]
-		public ActionResult AddRubric(short assessmentID)
+		public ActionResult AddRubric(short? assessmentID)
 		{
-
 			RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.AssessmentID == assessmentID).FirstOrDefault();
-			rubricAssessment.AssessmentID = assessmentID;
+			// rubricAssessment.AssessmentID = assessmentID;
 			//assessmentID = Convert.ToInt16(rubricAssessment.AssessmentID);
+
+			ViewBag.Assessments = db.Assessments.Select(a => a.Name).ToList();
+			ViewBag.InitialAssessment = db.Assessments.Where(a => a.AssessmentID == assessmentID).FirstOrDefault().Name;
+			ViewBag.AssessmentID = assessmentID;
 
 			return View();
 		}
 
-        //post for submitting a new Rubric
+		//post for submitting a new Rubric
 		[HttpPost]
-		public ActionResult InsertNewRubric(RubricViewModel rubricViewModel)
+		public ActionResult InsertNewRubric(RubricViewModel rubricViewModel, FormCollection formCollection)
 		{
 			try
 			{
-				//KEEP
+				// RubricAssessment rubricAssessment = rubricViewModel.RubricAssesssment;
+				// AssessmentRubric assessmentRubric = rubricViewModel.AssessmentRubric;
+				int personID = Convert.ToInt32(Session["personID"].ToString());
+				List<Assessment> assessments = new List<Assessment>();
+
+				foreach (var key in formCollection.AllKeys)
+					if (key.Contains("relatedAssessment"))
+					{
+						string name = formCollection[key];
+						assessments.Add(db.Assessments.Where(a => a.Name == name).FirstOrDefault());
+					}
+
 				db.AssessmentRubrics.Load();
-				db.RubricAssessments.Load();
-				short assessmentID = Convert.ToInt16(rubricViewModel.AssessmentID);
-				rubricViewModel.RubricAssesssment.AssessmentID = assessmentID;
+
 				rubricViewModel.AssessmentRubric.CreatedDateTime = DateTime.Now;
-				rubricViewModel.AssessmentRubric.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-				rubricViewModel.RubricAssesssment.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-				rubricViewModel.RubricAssesssment.CreatedDateTime = DateTime.Now;
-				db.RubricAssessments.Add(rubricViewModel.RubricAssesssment);
+				rubricViewModel.AssessmentRubric.CreatedByLoginID = personID;
+
 				db.AssessmentRubrics.Add(rubricViewModel.AssessmentRubric);
+
+				db.RubricAssessments.Load();
+
+				foreach (Assessment assessment in assessments)
+				{
+					RubricAssessment rubricAssessment = new RubricAssessment();
+
+					rubricAssessment.AssessmentID = assessment.AssessmentID;
+					rubricAssessment.RubricID = rubricViewModel.RubricAssesssment.RubricID;
+					rubricAssessment.StartDate = rubricViewModel.RubricAssesssment.StartDate;
+					rubricAssessment.EndDate = rubricViewModel.RubricAssesssment.EndDate;
+					rubricAssessment.CreatedDateTime = DateTime.Now;
+					rubricAssessment.CreatedByLoginID = personID;
+
+					db.RubricAssessments.Add(rubricAssessment);
+				}
 
 				db.SaveChanges();
 
-				return RedirectToAction("ViewRubric", new RouteValueDictionary(new { controller = "Rubric", action = "ViewRubric", rubricViewModel.RubricAssesssment.RubricID }));
-
+				return RedirectToAction("ViewRubric", "Rubric", new { rubricID = rubricViewModel.AssessmentRubric.RubricID, assessmentID = rubricViewModel.AssessmentID });
 			}
 			catch (Exception e)
 			{
@@ -128,43 +153,99 @@ namespace CLS_SLE.Controllers
 		}
 
 		[HttpGet]
-		public ActionResult EditRubric(short rubricID)
+		public ActionResult EditRubric(short rubricID, short assessmentID)
 		{
-			RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.RubricID == rubricID).FirstOrDefault();
+			RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.RubricID == rubricID && r.AssessmentID == assessmentID).FirstOrDefault();
 			AssessmentRubric assessmentRubric = db.AssessmentRubrics.Where(a => a.RubricID == rubricID).FirstOrDefault();
+			List<short> relatedAssessmentIDs = db.RubricAssessments.Where(r => r.RubricID == rubricID).Select(r => r.AssessmentID).ToList();
+			List<string> relatedAssessments = new List<string>();
 
-			ViewBag.Id = rubricAssessment.RubricID;
-			ViewBag.Name = assessmentRubric.Name;
-			ViewBag.Description = assessmentRubric.Description;
-			ViewBag.StartDate = (rubricAssessment.StartDate).ToString("MM/dd/yyyy");
-			ViewBag.EndDate = (rubricAssessment.EndDate);
-			ViewBag.IsActive = assessmentRubric.IsActive;
+			foreach (short relatedAssessmentID in relatedAssessmentIDs)
+				relatedAssessments.Add(db.Assessments.Where(a => a.AssessmentID == relatedAssessmentID).FirstOrDefault().Name);
+			
+			ViewBag.RelatedAssessments = relatedAssessments;
+			ViewBag.Assessments = db.Assessments.Select(a => a.Name).ToList();
 
-			rubricAssessment.ModifiedDateTime = DateTime.Now;
-			rubricAssessment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-			assessmentRubric.ModifiedDateTime = DateTime.Now;
-			assessmentRubric.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+			var model = new UpdateRubric() { RubricAssessment = rubricAssessment, AssessmentRubric = assessmentRubric };
 
-			return View();
+			// rubricAssessment.ModifiedDateTime = DateTime.Now;
+			// rubricAssessment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+			// assessmentRubric.ModifiedDateTime = DateTime.Now;
+			// assessmentRubric.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+
+			return View(model);
 		}
 
-        //Post for saving an edited rubric
+		//Post for saving an edited rubric
 		[HttpPost]
-		public ActionResult SaveRubric(UpdateRubric updateRubric, short rubricID)
+		public ActionResult SaveRubric(UpdateRubric updateRubric, short rubricID, FormCollection formCollection, short assessmentID)
 		{
 			try
 			{
 				AssessmentRubric editRubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
-				RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.RubricID == rubricID).FirstOrDefault();
+				// RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.RubricID == rubricID).FirstOrDefault();
+				int personID = Convert.ToInt32(Session["personID"].ToString());
+				List<string> assessments = new List<string>();
+				List<short> relatedAssessmentIDs = db.RubricAssessments.Where(r => r.RubricID == rubricID).Select(r => r.AssessmentID).ToList();
+				List<string> relatedAssessments = new List<string>();
+
+				foreach (var key in formCollection.AllKeys)
+					if (key.Contains("relatedAssessment"))
+					{
+						string name = formCollection[key];
+						assessments.Add(name);
+					}
+
+				foreach (short relatedAssessmentID in relatedAssessmentIDs)
+					relatedAssessments.Add(db.Assessments.Where(a => a.AssessmentID == relatedAssessmentID).FirstOrDefault().Name);
+
+				db.RubricAssessments.Load();
+
+				foreach (string assessment in relatedAssessments)
+					if (!assessments.Contains(assessment))
+					{
+						short AssessmentID = db.Assessments.Where(a => a.Name == assessment).FirstOrDefault().AssessmentID;
+
+						db.RubricAssessments.Remove(db.RubricAssessments.Where(r => r.AssessmentID == AssessmentID && r.RubricID == rubricID).FirstOrDefault());
+					}
+
+				foreach (string assessment in assessments)
+				{
+					short AssessmentID = db.Assessments.Where(a => a.Name == assessment).FirstOrDefault().AssessmentID;
+
+					if (db.RubricAssessments.Where(r => r.AssessmentID == AssessmentID && r.RubricID == rubricID).Any())
+					{
+						RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.AssessmentID == AssessmentID && r.RubricID == rubricID).FirstOrDefault();
+
+						rubricAssessment.StartDate = updateRubric.RubricAssessment.StartDate;
+						rubricAssessment.EndDate = updateRubric.RubricAssessment.EndDate;
+						rubricAssessment.ModifiedDateTime = DateTime.Now;
+						rubricAssessment.ModifiedByLoginID = personID;
+					}
+					else
+					{
+						RubricAssessment rubricAssessment = new RubricAssessment();
+
+						rubricAssessment.AssessmentID = AssessmentID;
+						rubricAssessment.RubricID = rubricID;
+						rubricAssessment.StartDate = updateRubric.RubricAssessment.StartDate;
+						rubricAssessment.EndDate = updateRubric.RubricAssessment.EndDate;
+						rubricAssessment.CreatedDateTime = DateTime.Now;
+						rubricAssessment.CreatedByLoginID = personID;
+
+						db.RubricAssessments.Add(rubricAssessment);
+					}
+				}
 
 				editRubric.Name = updateRubric.AssessmentRubric.Name;
 				editRubric.Description = updateRubric.AssessmentRubric.Description;
 				editRubric.IsActive = updateRubric.AssessmentRubric.IsActive;
 				editRubric.ModifiedDateTime = DateTime.Now;
-				editRubric.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+				editRubric.ModifiedByLoginID = personID;
+
 				db.SaveChanges();
 
-				return RedirectToAction("ViewRubric", new RouteValueDictionary(new { controller = "Rubric", action = "ViewRubric", rubricID }));
+				return RedirectToAction("ViewRubric", "Rubric", new { rubricID, assessmentID = relatedAssessmentIDs.Contains(assessmentID) ? assessmentID : relatedAssessmentIDs[0] });
 			}
 			catch (Exception e)
 			{
@@ -173,12 +254,13 @@ namespace CLS_SLE.Controllers
 			}
 		}
 
-        [HttpGet]
-        public ActionResult AddOutcome(short rubricID)
+		[HttpGet]
+        public ActionResult AddOutcome(short rubricID, short assessmentID)
        {
-           AssessmentRubric rubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
-           rubric.RubricID = rubricID;
-           return View();
+           RubricAssessment rubric = db.RubricAssessments.Where(r => r.RubricID == rubricID && r.AssessmentID == assessmentID).FirstOrDefault();
+           OutcomeViewModel model = new OutcomeViewModel() { OutcomeVM = new Outcome() { RubricID = rubricID }, Rubric = rubric };
+           
+           return View(model);
        }
 
        [HttpPost]
@@ -186,7 +268,7 @@ namespace CLS_SLE.Controllers
        {
             try
             {
-                short rubricID = Convert.ToInt16(outcomeViewModel.RubricID);
+                short rubricID = outcomeViewModel.Rubric.RubricID;
                 Byte maxSortOrder = 0;
                 if (db.Outcomes.Where(c => c.RubricID == rubricID).Any())
                 {
@@ -194,43 +276,33 @@ namespace CLS_SLE.Controllers
                 }
                 maxSortOrder++;
                 
-                short outcomeID = Convert.ToInt16(outcomeViewModel.OutcomeVM.OutcomeID);
-                db.Outcomes.Load();
-                AssessmentRubric rubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
+                AssessmentRubric rubric = db.AssessmentRubrics.Where(a => a.RubricID == rubricID).FirstOrDefault();
                 outcomeViewModel.OutcomeVM.SortOrder = maxSortOrder;
                 outcomeViewModel.OutcomeVM.CreatedDateTime = DateTime.Now;
                 outcomeViewModel.OutcomeVM.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
                 rubric.Outcomes.Add(outcomeViewModel.OutcomeVM);
                 db.Outcomes.Add(outcomeViewModel.OutcomeVM);
                 db.SaveChanges();
-
-                return RedirectToAction("ViewRubric", new RouteValueDictionary(new { controller = "Rubric", action = "ViewRubric", rubricID }));
+                
+                return RedirectToAction("ViewRubric", "Rubric", new { rubricID = outcomeViewModel.Rubric.RubricID, assessmentID = outcomeViewModel.Rubric.AssessmentID });
             }
             catch (Exception e)
             {
                 //logger.Error("Failed to save assessment, redirecting to sign in page.");
+			 return Content("<html><b>Message:</b><br>" + e.Message + "<br><b>Inner Exception:</b><br>" + e.InnerException + "<br><b>Stack Trace:</b><br>" + e.StackTrace + "</html>");
                 return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
        }
 
 
         [HttpGet]
-        public ActionResult EditOutcome(short outcomeID)
+        public ActionResult EditOutcome(short outcomeID, short assessmentID)
         {
-            db.Outcomes.Load();
-            //AssessmentRubric assessmentRubric = db.AssessmentRubrics.Where(a => a.RubricID == rubricID).FirstOrDefault();
             Outcome outcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
+            RubricAssessment rubric = db.RubricAssessments.Where(r => r.RubricID == outcome.RubricID && r.AssessmentID == assessmentID).FirstOrDefault();
+            var model = new OutcomeViewModel() { OutcomeVM = outcome, Rubric = rubric };
 
-            ViewBag.OutcomeId = outcome.OutcomeID;
-            ViewBag.RubricId = outcome.RubricID;
-            ViewBag.Name = outcome.Name;
-            ViewBag.Description = outcome.Description;
-            ViewBag.CriteriaPassRate = outcome.CriteriaPassRate;
-            ViewBag.IsActive = outcome.IsActive;
-            ViewBag.CalculateCriteriaPassRate = outcome.CalculateCriteriaPassRate;
-            ViewBag.CriteriaPassRate = outcome.CriteriaPassRate * 100;
-
-            return View();
+            return View(model);
         }
         /*
 
@@ -272,92 +344,67 @@ namespace CLS_SLE.Controllers
         }
         */
 
-        public ActionResult SaveOutcome(FormCollection formCollection, short outcomeID, short rubricID)
+        public ActionResult SaveOutcome(OutcomeViewModel outcomeViewModel)
 		{
 			try
 			{
-				// Int16 RubricId = Int16.Parse(formCollection["RubricId"]);
-				// Byte SortOrder = Byte.Parse(formCollection["SortOrder"]);
+				Outcome editOutcome = db.Outcomes.Where(o => o.OutcomeID == outcomeViewModel.OutcomeVM.OutcomeID).FirstOrDefault();
 
-				db.Outcomes.Load();
-				Outcome editOutcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
-
-				editOutcome.RubricID = rubricID;
-				editOutcome.Name = formCollection["Name"];
-				editOutcome.Description = formCollection["Description"];
-				editOutcome.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
-				//editOutcome.SortOrder = SortOrder;
-				editOutcome.CriteriaPassRate = (Decimal?)(Double.Parse(formCollection["PassPercent"])) / 100;
-				editOutcome.CalculateCriteriaPassRate = ((formCollection["CalculateCriteriaPassRate"]).Equals("True") ? true : false);
+				editOutcome.Name = outcomeViewModel.OutcomeVM.Name;
+				editOutcome.Description = outcomeViewModel.OutcomeVM.Description;
+				editOutcome.IsActive = outcomeViewModel.OutcomeVM.IsActive;
+				editOutcome.CriteriaPassRate = outcomeViewModel.OutcomeVM.CriteriaPassRate / 100;
+				editOutcome.CalculateCriteriaPassRate = outcomeViewModel.OutcomeVM.CalculateCriteriaPassRate;
 				editOutcome.ModifiedDateTime = DateTime.Now;
 				editOutcome.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
 
-				db.Entry(editOutcome).State = EntityState.Modified;
+				//db.Entry(editOutcome).State = EntityState.Modified;
 				db.SaveChanges();
 
-				return RedirectToAction("ViewRubric", "Rubric", new { rubricID });
-				// return RedirectToAction("ViewOutcome", new RouteValueDictionary(new { controller = "Rubric", action = "ViewOutcome", outcomeID }));
-
+				return RedirectToAction("ViewRubric", "Rubric", new { rubricID = outcomeViewModel.Rubric.RubricID, assessmentID = outcomeViewModel.Rubric.AssessmentID });
 			}
-			catch
+			catch (Exception e)
 			{
 				//logger.Error("Failed to save assessment, redirecting to sign in page.");
 				return RedirectToAction(actionName: "Signin", controllerName: "User");
 			}
 		}
 
-		public ActionResult ViewCriterion(int? criterionID)
+		public ActionResult AddCriterion(short outcomeID, short assessmentID)
 		{
-			dynamic Model = new ExpandoObject();
-			var Criterion = db.Criteria.Where(c => c.CriteriaID == criterionID).FirstOrDefault();
-			Model.Criterion = Criterion;
-			Model.CreatorLogin = null;
-			Model.ModifierLogin = null;
+			Criterion criterion = new Criterion { OutcomeID = outcomeID };
+			Outcome outcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
+			RubricAssessment rubric = db.RubricAssessments.Where(r => r.RubricID == outcome.RubricID && r.AssessmentID == assessmentID).FirstOrDefault();
+			var model = new CriterionViewModel() { Criterion = criterion, Outcome = outcome, Rubric = rubric };
 
-			if (Criterion.CreatedByLoginID != null)
-			{
-				Model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == Criterion.CreatedByLoginID).FirstOrDefault().Login;
-			}
-			if (Criterion.ModifiedByLoginID != null)
-			{
-				Model.ModifierLogin = (String)db.Users.Where(u => u.PersonID == Criterion.ModifiedByLoginID).FirstOrDefault().Login;
-			}
-			return View(Model);
-		}
-		public ActionResult AddCriterion(int? outcomeID)
-		{
-			dynamic Model = new ExpandoObject();
-			Model.Outcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
-			return View(Model);
+			return View(model);
 		}
 
-		public ActionResult InsertNewCriterion(FormCollection formCollection, short outcomeID, short rubricID)
+		public ActionResult InsertNewCriterion(CriterionViewModel criterionViewModel)
 		{
 			try
 			{
-				// Int16 OutcomeID = Int16.Parse(formCollection["OutcomeID"]);
+				Criterion criterion = criterionViewModel.Criterion;
+				Outcome outcome = db.Outcomes.Where(o => o.OutcomeID == criterion.OutcomeID).FirstOrDefault();
 				Byte maxSortOrder = 0;
-				if (db.Criteria.Where(c => c.OutcomeID == outcomeID).Any())
+
+				if (db.Criteria.Where(c => c.OutcomeID == outcome.OutcomeID).Any())
 				{
-					maxSortOrder = db.Criteria.Where(c => c.OutcomeID == outcomeID).OrderByDescending(r => r.SortOrder).FirstOrDefault().SortOrder;
+					maxSortOrder = db.Criteria.Where(c => c.OutcomeID == outcome.OutcomeID).OrderByDescending(r => r.SortOrder).FirstOrDefault().SortOrder;
 				}
 				maxSortOrder++;
 
-				db.Criteria.Load();
-				Criterion addCriteria = db.Criteria.Create();
+				//db.Criteria.Load();
+				criterion.SortOrder = maxSortOrder;
+				criterion.CreatedDateTime = DateTime.Now;
+				criterion.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+				outcome.Criteria.Add(criterion);
+				db.Criteria.Add(criterion);
 
-				addCriteria.OutcomeID = outcomeID;
-				addCriteria.Name = formCollection["Name"];
-				addCriteria.ExampleText = formCollection["ExampleText"];
-				addCriteria.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
-				addCriteria.SortOrder = maxSortOrder;
-				addCriteria.CreatedDateTime = DateTime.Now;
-				addCriteria.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-
-				db.Entry(addCriteria).State = EntityState.Added;
+				//db.Entry(addCriteria).State = EntityState.Added;
 				db.SaveChanges();
 
-				return RedirectToAction("ViewRubric", "Rubric", new { rubricID });
+				return RedirectToAction("ViewRubric", "Rubric", new { rubricID = criterionViewModel.Rubric.RubricID, assessmentID = criterionViewModel.Rubric.AssessmentID });
 				// return RedirectToAction("ViewCriterion", new RouteValueDictionary(new { controller = "Rubric", action = "ViewCriterion", criterionID = addCriteria.CriteriaID }));
 
 			}
@@ -367,39 +414,31 @@ namespace CLS_SLE.Controllers
 				return RedirectToAction(actionName: "Signin", controllerName: "User");
 			}
 		}
-		public ActionResult EditCriterion(int? criterionID)
+		public ActionResult EditCriterion(short criterionID, short assessmentID)
 		{
-			dynamic Model = new ExpandoObject();
+			Criterion criterion = db.Criteria.Where(c => c.CriteriaID == criterionID).FirstOrDefault();
+			RubricAssessment rubric = db.RubricAssessments.Where(r => r.RubricID == criterion.Outcome.RubricID && r.AssessmentID == assessmentID).FirstOrDefault();
+			var model = new CriterionViewModel() { Criterion = criterion, Rubric = rubric };
 
-			var Criterion = db.Criteria.Where(c => c.CriteriaID == criterionID).FirstOrDefault();
-			var Outcome = db.Outcomes.Where(o => o.OutcomeID == Criterion.OutcomeID).FirstOrDefault();
-
-			Model.Criterion = Criterion;
-			Model.RubricID = Outcome.RubricID;
-
-			return View(Model);
+			return View(model);
 		}
-		public ActionResult SaveCriterion(FormCollection formCollection, int? criterionID, int? rubricID)
+		public ActionResult SaveCriterion(CriterionViewModel criterionViewModel)
 		{
 			try
 			{
-				// Int16 CriteriaId = Int16.Parse(formCollection["CriteriaId"]);
+				Criterion criterion = db.Criteria.Where(c => c.CriteriaID == criterionViewModel.Criterion.CriteriaID).FirstOrDefault();
 
-				db.Criteria.Load();
-				Criterion editCriteria = db.Criteria.Where(c => c.CriteriaID == criterionID).FirstOrDefault();
-				editCriteria.Name = formCollection["Name"];
-				editCriteria.ExampleText = formCollection["ExampleText"];
-				editCriteria.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
+				//db.Criteria.Load();
+				criterion.Name = criterionViewModel.Criterion.Name;
+				criterion.ExampleText = criterionViewModel.Criterion.ExampleText;
+				criterion.IsActive = criterionViewModel.Criterion.IsActive;
+				criterion.ModifiedDateTime = DateTime.Now;
+				criterion.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
 
-				editCriteria.ModifiedDateTime = DateTime.Now;
-				editCriteria.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-
-				db.Entry(editCriteria).State = EntityState.Modified;
+				//db.Entry(editCriteria).State = EntityState.Modified;
 				db.SaveChanges();
 
-				return RedirectToAction("ViewRubric", "Rubric", new { rubricID });
-				// return RedirectToAction("ViewCriterion", new RouteValueDictionary(new { controller = "Rubric", action = "ViewCriterion", criterionID = editCriteria.CriteriaID }));
-
+				return RedirectToAction("ViewRubric", "Rubric", new { rubricID = criterionViewModel.Rubric.RubricID, assessmentID = criterionViewModel.Rubric.AssessmentID });
 			}
 			catch
 			{

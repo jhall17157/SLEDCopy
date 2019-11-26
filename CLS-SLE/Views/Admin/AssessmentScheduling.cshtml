@@ -38,20 +38,20 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body">
-                            @foreach (var semester in Model.Semesters)
+                <div class="modal-body">
+                    @foreach (var semester in Model.Semesters)
+                    {
+                        var courses = Model.Courses.Select(c => c.Sections.Where(s => s.SemesterID == semester.SemesterID));
+                        <select class="btn btn-secondary dropdown-toggle" id="scheduleModal@(semester.SemesterID)" data-show-subtext="true" data-live-search="true">
+                            @foreach (var grouping in courses)
                             {
-                                var courses = Model.Courses.Select(c => c.Sections.Where(s => s.SemesterID == semester.SemesterID));
-                                <select class="btn btn-secondary dropdown-toggle" id="scheduleModal@(semester.SemesterID)" data-show-subtext="true" data-live-search="true">
-                                    @foreach (var grouping in courses)
-                                    {
 
-                                        foreach (var c in grouping)
-                                        {
+                                foreach (var c in grouping)
+                                {
 
-                                            <option id="courseDropDownBySemester@(semester.SemesterID)">@c.Course.CourseName</option>
-                                        }
-                                    }
+                                    <option id="courseDropDownBySemester@(semester.SemesterID)">@c.Course.CourseName</option>
+                                }
+                            }
                                 </select>
                             }
                             <h2 id="selectedCourseCRN"></h2>

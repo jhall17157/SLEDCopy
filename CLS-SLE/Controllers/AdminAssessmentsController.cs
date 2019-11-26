@@ -226,11 +226,14 @@ namespace CLS_SLE.Controllers
                 {
                     // var assessmentid = Int32.Parse(formCollection["AssessmentID"]);
                     var editAssessment = db.Assessments.FirstOrDefault(a => a.AssessmentID == assessmentID);
+					string categoryName = formCollection["Category"];
+					AssessmentCategory category = db.AssessmentCategories.Where(a => a.Name == categoryName).FirstOrDefault();
 
-                    if (editAssessment != null)
+
+				if (editAssessment != null)
                     {
                         editAssessment.Name = formCollection["Name"];
-                        editAssessment.Category = formCollection["Category"];
+                        editAssessment.Category = category.CategoryCode;
                         editAssessment.Description = formCollection["Description"] != null ? formCollection["Description"] : "";
                         editAssessment.OutcomePassRate = (Decimal?)(Double.Parse(Regex.Replace(formCollection["PassPercent"], "[^0-9.]", ""))) / 100;
                         editAssessment.CalculateOutcomePassRate = ((formCollection["CalculateOutcomePassRate"]).Equals("True") ? true : false);
@@ -258,7 +261,7 @@ namespace CLS_SLE.Controllers
             catch (Exception e)
             {
                 logger.Error("Failed to save assessment, redirecting to sign in page.");
-			 return Content("<html>" + e.Message + "<br>" + e.InnerException + "</html>");
+			 return Content("<html><b>Message:</b><br>" + e.Message + "<br><b>Inner Exception:</b><br>" + e.InnerException + "<br><b>Stack Trace:</b><br>" + e.StackTrace + "</html>");
 			 // return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
         }

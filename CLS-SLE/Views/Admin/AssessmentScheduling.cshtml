@@ -48,7 +48,6 @@
 
                                         foreach (var c in grouping)
                                         {
-
                                             <option id="courseDropDownBySemester@(semester.SemesterID)">@c.Course.CourseName</option>
                                         }
                                     }
@@ -189,7 +188,6 @@
             $('.courseRow').hide();
 
             $('.rubricForClass').children().each(function () {
-                alert($(this).attr('id'));
                 $('#courseRow'+$(this).attr('id')).show();
             });
 

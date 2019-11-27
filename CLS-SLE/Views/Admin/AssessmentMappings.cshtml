@@ -73,18 +73,8 @@
                                     var theseRubrics = rubrics.Select(grouping => grouping.FirstOrDefault()?.AssessmentRubric.Name).Where(rubricName => rubricName != null);
                                 }
 
-                                @foreach (var rubricName in theseRubrics)
-                                {
-                                    <tr>
-                                        <td>
-                                            <h5>
-                                                <input type="radio" name="assessmentSelect_@(program.ProgramID)" id="@program.ProgramID" class="programRadio"
-                                                       @(theseRubrics.ToList().IndexOf(rubricName) == 0 ? "checked" : "")> @rubricName
-                                                </h5>
-                                            </td>
-                                            <td><button class="btn btn-danger float-right mr-2"><i class="fas fa-times"></i></button></td>
+                                    <tr id="assessmentInModal@(program.ProgramID)">
                                         </tr>
-                                    }
                                 <tr>
                                     <td>
                                         <div id="rubricDropdown@(program.ProgramID)" class="rubricDropdown">
@@ -177,37 +167,8 @@
             $('.addRubricToProgram').click(function () {
                 var id = $(this).attr("id");
                 $('#addRubricShow'+id).show();
-                $('#rubricDropdown'+id).hide();
-
-                 /*var rubricID = $('.selectpicker :selected').attr('id');*/
-                 //alert(rubricID);
-                 @{
-
-                SqlConnection conn = new SqlConnection();
-                conn.ConnectionString =
-                "Data Source=bitsql.wctc.edu;Initial Catalog=SLE_Tracking;" +
-                "Persist Security Info=True;" +
-                "User ID=SleWebApp;" +
-                "Password=P@ssw0rd;" +
-                "MultipleActiveResultSets=True;" +
-                "Application Name=EntityFramework";
-
-
-                conn.Open();
-                SqlCommand cmd = new SqlCommand(" ", conn);
-
-                     using (SqlDataReader rdr = cmd.ExecuteReader())
-                     {
-                         while (rdr.Read())
-                         {
-
-                         }
-                         conn.Close();
-                     }
-                    }
-                     alert("Result" + myString);
-
-});
+                $('#rubricDropdown' + id).hide();
+            });
 
             $('.addClassToRubric').click(function () {
                 var id = $(this).attr("id");
@@ -253,6 +214,41 @@
                 $('#addRubricShow'+id).show();
                 $('#rubricDropdown'+id).hide();
             });
+
+            var URL = "@Url.Content("~")Admin/getRubricsForMapping";
+
+                $.getJSON(URL)
+                    .always(function (data, textStatus, statusObject) {
+                        if (statusObject.status == 200) {
+                            // 200 OK
+
+                            $('.assessmentInModal').html('');
+                            for (i = 0; i < data.length; i++) {
+                                var str = '';
+
+                                str = jsonStringbuilder(data, i);
+                                $('#assessmentInModal'+data[i].ProgramId).append(str);
+                            }
+                        } else {
+                            // Error
+                            console.log("Http response code: " + data.status);
+                            console.log("Http response: " + data.statusText);
+                        }
+                    });
+            function jsonStringbuilder(data, i) {
+                var format = "";
+
+                var str = "<tr>";
+                str += "<td>";
+                str += "<h5>"
+                str += "<input type='radio' name='assessmentSelect_" + data[i].ProgramId + "' id='" + data[i].ProgramId + "' class='programRadio'>" + data[i].RubricName;
+                str += "</h5>";
+                str += "</td>";
+                str += "<td><button class='btn btn-danger float-right mr-2'><i class='fas fa-times'></i></button></td>";
+                str += "</tr>";
+
+                return str;
+            }
         });
     </script>
 }

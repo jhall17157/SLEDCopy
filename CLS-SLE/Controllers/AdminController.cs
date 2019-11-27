@@ -115,6 +115,22 @@ namespace CLS_SLE.Controllers
 
         }
 
+        public JsonResult getRubricsForMapping()
+        {
+            var rubricCourse = from pam in db.ProgramAssessmentMappings
+                               join ar in db.AssessmentRubrics on pam.RubricID equals ar.RubricID
+                               join c in db.Courses on pam.CourseID equals c.CourseID
+                               select new
+                               {
+                                   RubricID = pam.RubricID,
+                                   CourseID = c.CourseID,
+                                   RubricName = ar.Name,
+                                   CourseName = c.CourseName,
+                                   ProgramId = pam.ProgramID
+                               };
+
+            return Json(rubricCourse, JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult Assessments()
         {

@@ -42,16 +42,35 @@
                             @foreach (var semester in Model.Semesters)
                             {
                                 var courses = Model.Courses.Select(c => c.Sections.Where(s => s.SemesterID == semester.SemesterID));
-                                <select class="btn btn-secondary dropdown-toggle" id="scheduleModal@(semester.SemesterID)" data-show-subtext="true" data-live-search="true">
+
+                                <select class="btn btn-secondary dropdown-toggle course" id="scheduleModal@(semester.SemesterID)"
+                                        data-show-subtext="true" data-live-search="true">
                                     @foreach (var grouping in courses)
                                     {
-
                                         foreach (var c in grouping)
                                         {
-                                            <option id="courseDropDownBySemester@(semester.SemesterID)">@c.Course.CourseName</option>
+
+                                            <option class="course@(c.CourseID)" id="courseDropDownBySemester@(semester.SemesterID)">
+                                                @c.Course.CourseName | @c.CourseID
+                                            </option>
+
                                         }
                                     }
                                 </select>
+
+                                <select class="btn btn-secondary dropdown-toggle section"id="section@(semester.SemesterID)" 
+                                        data-show-subtext="true" data-live-search="true">
+                                    @foreach (var grouping in courses)
+                                    {
+                                        foreach (var c in grouping)
+                                        {
+                                            <option class="section@(c.CourseID)" id="courseDropDownBySemester@(semester.SemesterID)">
+                                                @c.CRN
+                                            </option>
+                                        }
+                                    }
+                                </select>
+
                             }
                             <h2 id="selectedCourseCRN"></h2>
                         </div>
@@ -195,21 +214,50 @@
             $(".semester").change(function () {
                 semesterHideShow();
             });
-
+          
             function semesterHideShow() {
                 var id = $(".semester").children(":selected").attr("id");
                 $(".semester").children().each(function () {
                     if (id == $(this).attr('id')) {
-                        $('#semester' + id).show();
-                        $('courseDropDownBySemester' + id).show();
-                        $('#scheduleModal' + $(this).attr('id')).show();
+                    $('#semester' + id).show();
+                    $('courseDropDownBySemester' + id).show();
+                    $('#scheduleModal' + $(this).attr('id')).show();
+                    $('#section' + $(this).attr('id')).show();
                     } else {
-                        $('#semester' + $(this).attr('id')).hide();
-                        $('#courseDropDownBySemester' + id).hide();
-                        $('#scheduleModal' + $(this).attr('id')).hide();
+                    $('#semester' + $(this).attr('id')).hide();
+                    $('#courseDropDownBySemester' + id).hide();
+                    $('#scheduleModal' + $(this).attr('id')).hide();
+                    $('#section' + $(this).attr('id')).hide();
                     }
                 });
             }
+
+           
+             $(".course").change(function () {
+                 courseHideShow();
+             });
+
+            function courseHideShow() {
+                var courseID = $(".course").children(":selected").attr("class");
+                var id = $(".semester").children(":selected").attr("id");
+                alert("TEST Course ID: " + courseID);
+
+                $(".section").children().each(function () {
+
+                    if (courseID == $(this).attr('id')) {
+                       
+                        $('courseDropDownBySemester' + id).show(); 
+
+                      } else {
+                     
+                        $('#courseDropDownBySemester' + id).hide();
+
+                    }
+
+                });
+
+            }
+           
         });
     </script>
 }

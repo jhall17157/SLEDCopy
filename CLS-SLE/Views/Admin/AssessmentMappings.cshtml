@@ -34,11 +34,11 @@
                         <td><h5>@rubricName</h5></td>
                     </tr>
                     foreach (var assessment in grouping)
+                    { }
+                    foreach (var rubric in grouping)
                     {
-                        foreach (var rubric in grouping)
+                        if (assessment.CourseID == rubric.CourseID)
                         {
-                            if (assessment.CourseID == rubric.CourseID)
-                            {
                                 <tr>
                                     <td><i class="fa fa-caret-right"></i> @rubric.Course.CourseName</td>
                                 </tr>

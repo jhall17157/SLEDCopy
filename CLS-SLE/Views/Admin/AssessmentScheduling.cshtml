@@ -64,9 +64,9 @@
                                     {
                                         foreach (var c in grouping)
                                         {
-                                            <option class="section@(c.CourseID)" id="courseDropDownBySemester@(semester.SemesterID)">
-                                                @c.CRN
-                                            </option>
+                                    <option class="section" id="sectionDropDownByCourse@(c.CourseID)">
+                                        @c.CRN | @c.CourseID
+                                    </option>
                                         }
                                     }
                                 </select>
@@ -217,41 +217,45 @@
           
             function semesterHideShow() {
                 var id = $(".semester").children(":selected").attr("id");
+
                 $(".semester").children().each(function () {
+
                     if (id == $(this).attr('id')) {
-                    $('#semester' + id).show();
-                    $('courseDropDownBySemester' + id).show();
-                    $('#scheduleModal' + $(this).attr('id')).show();
-                    $('#section' + $(this).attr('id')).show();
+                        $('#semester' + id).show();
+                        $('courseDropDownBySemester' + id).show();
+                        $('#scheduleModal' + $(this).attr('id')).show();
+                        $('#section' + $(this).attr('id')).show();
                     } else {
-                    $('#semester' + $(this).attr('id')).hide();
-                    $('#courseDropDownBySemester' + id).hide();
-                    $('#scheduleModal' + $(this).attr('id')).hide();
-                    $('#section' + $(this).attr('id')).hide();
+                        $('#semester' + $(this).attr('id')).hide();
+                        $('#courseDropDownBySemester' + id).hide();
+                        $('#scheduleModal' + $(this).attr('id')).hide();
+                        $('#section' + $(this).attr('id')).hide();
                     }
                 });
             }
 
-           
-             $(".course").change(function () {
-                 courseHideShow();
+            sectionHideShow();
+            $(".course").change(function () {
+                sectionHideShow();
              });
 
-            function courseHideShow() {
-                var courseID = $(".course").children(":selected").attr("class");
-                var id = $(".semester").children(":selected").attr("id");
-                alert("TEST Course ID: " + courseID);
+            function sectionHideShow() {
+                
+                var semesterID = $(".course").children(":selected").attr("id");
+                var courseID   = $(".course").children(":selected").attr("class");
 
-                $(".section").children().each(function () {
+               
 
-                    if (courseID == $(this).attr('id')) {
-                       
-                        $('courseDropDownBySemester' + id).show(); 
+                $(".course").children().each(function () {
 
-                      } else {
-                     
-                        $('#courseDropDownBySemester' + id).hide();
+                    if (semesterID == $(this).attr('id')) {
+                        
+                    
+                            
+                    } else {
 
+
+                        
                     }
 
                 });

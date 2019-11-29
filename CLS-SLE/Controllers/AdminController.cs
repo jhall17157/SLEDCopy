@@ -14,6 +14,7 @@ using System.Web;
 
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Xml.Linq;
 
 namespace CLS_SLE.Controllers
 {
@@ -120,7 +121,7 @@ namespace CLS_SLE.Controllers
             var rubricCourse = from pam in db.ProgramAssessmentMappings
                                join ar in db.AssessmentRubrics on pam.RubricID equals ar.RubricID
                                join c in db.Courses on pam.CourseID equals c.CourseID
-                               select new 
+                               select new
                                {
                                    RubricID = pam.RubricID,
                                    RubricName = ar.Name,
@@ -128,6 +129,51 @@ namespace CLS_SLE.Controllers
                                };
 
             return Json(rubricCourse.Distinct(), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetCoursesForMapping()
+        {
+            var course = from pam in db.ProgramAssessmentMappings
+                         join ar in db.AssessmentRubrics on pam.RubricID equals ar.RubricID
+                         join c in db.Courses on pam.CourseID equals c.CourseID
+                         select new
+                         {
+                             CourseName = c.CourseName,
+                             ProgramId = pam.ProgramID
+                         };
+
+            return Json(course.Distinct(), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult PostRubricToMapping(String programID, String rubricID)
+        {
+            ProgramAssessmentMapping pam = new ProgramAssessmentMapping
+            {
+                ProgramID = short.Parse(programID),
+                RubricID = short.Parse(rubricID),
+                CourseID = 110
+            };
+            db.ProgramAssessmentMappings.Add(pam);
+            db.SaveChanges();
+            return Json(pam, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteRubricFromMapping(String programID, String rubricID)
+        {
+            short ProgramID = short.Parse(programID);
+            short RubricID = short.Parse(rubricID);
+            var pams = db.ProgramAssessmentMappings;
+            if (programID != null && rubricID != null)
+            {
+                var pam = pams.Where(p => p.ProgramID == ProgramID && p.RubricID == RubricID);
+                foreach (var p in pam)
+                {
+                    db.ProgramAssessmentMappings.Remove(p);
+                }
+                db.SaveChanges();
+            }
+            return Json(JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Assessments()

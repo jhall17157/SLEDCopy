@@ -34,11 +34,11 @@
                         <td><h5>@rubricName</h5></td>
                     </tr>
                     foreach (var assessment in grouping)
-                    { }
-                    foreach (var rubric in grouping)
                     {
-                        if (assessment.CourseID == rubric.CourseID)
+                        foreach (var rubric in grouping)
                         {
+                            if (assessment.CourseID == rubric.CourseID)
+                            {
                                 <tr>
                                     <td><i class="fa fa-caret-right"></i> @rubric.Course.CourseName</td>
                                 </tr>
@@ -68,17 +68,13 @@
                                     <th class="border-0">Rubric</th>
                                 </tr>
                             </thead>
+                            <tbody id="assessmentInModal@(program.ProgramID)" class="assessmentInModal">
+                            </tbody>
                             <tbody>
-                                @{
-                                    var theseRubrics = rubrics.Select(grouping => grouping.FirstOrDefault()?.AssessmentRubric.Name).Where(rubricName => rubricName != null);
-                                }
-
-                                    <tr id="assessmentInModal@(program.ProgramID)">
-                                        </tr>
                                 <tr>
                                     <td>
                                         <div id="rubricDropdown@(program.ProgramID)" class="rubricDropdown">
-                                            <select class="btn btn-secondary dropdown-toggle selectpicker" data-show-subtext="true" data-live-search="true">
+                                            <select class="btn btn-secondary dropdown-toggle selectpicker rubricDropdownSelect@(program.ProgramID)" data-show-subtext="true" data-live-search="true">
                                                 @foreach (var rubric in Model.AssessmentRubrics)
                                                 {
                                                     <option id="@rubric.RubricID">@rubric.Name</option>
@@ -101,32 +97,26 @@
                                     <th class="border-0">Class</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach (var grouping in rubrics)
-                                {
-                                    var rubricName = grouping.FirstOrDefault()?.AssessmentRubric.Name;
+                            @foreach (var grouping in rubrics)
+                            {
+                                var rubricName = grouping.FirstOrDefault()?.AssessmentRubric.Name;
 
-                                    if (rubricName != null)
+                                if (rubricName != null)
+                                {
+                                    foreach (var assessment in grouping)
                                     {
-                                        foreach (var assessment in grouping)
+                                        foreach (var rubric in grouping)
                                         {
-                                            foreach (var rubric in grouping)
+                                            if (assessment.CourseID == rubric.CourseID)
                                             {
-                                                <div id="programCourses">
-                                                    @if (assessment.CourseID == rubric.CourseID)
-                                                    {
-                                                        <div class="coursesFor@(rubric.ProgramID)">
-                                                            <tr>
-                                                                <td><h5>@rubric.Course.CourseName</h5></td>
-                                                                <td><button class="btn btn-danger float-right mr-2"><i class="fas fa-times"></i></button></td>
-                                                            </tr>
-                                                        </div>
-                                                    }
-                                                </div>
+                                                <tbody id="courseInModal@(rubric.ProgramID)" class="courseInModal">
+                                                </tbody>
                                             }
                                         }
                                     }
                                 }
+                            }
+                            <tbody>
                                 <tr>
                                     <td>
                                         <div id="classDropdown@(program.ProgramID)" class="classDropdown">
@@ -163,6 +153,8 @@
         $(function () {
             $('.rubricDropdown').hide();
             $('.classDropdown').hide();
+            getRubricsForMappingAjax();
+            getCoursesForMappingAjax();
 
             $('.addRubricToProgram').click(function () {
                 var id = $(this).attr("id");
@@ -215,7 +207,46 @@
                 $('#rubricDropdown'+id).hide();
             });
 
-            var URL = "@Url.Content("~")Admin/getRubricsForMapping";
+                $('.addRubricToProgram').click(function () {
+                    var programId = $(this).attr("id");
+                    var rubricId = $(".rubricDropdownSelect" + programId).children(":selected").attr("id");
+                    var URL = "@Url.Content("~")Admin/PostRubricToMapping";
+                $.post(URL, {programId, rubricId})
+                    .always(function (data, textStatus, statusObject) {
+
+                        if (statusObject.status == 200) {
+
+                            getRubricsForMappingAjax()
+                            getCoursesForMappingAjax()
+
+                        } else {
+
+                            console.log("Http response code: " + data.status);
+                            console.log("Http response: " + data.statusText);
+                        }
+                    });
+                });
+
+            $(document).on('click', '.deleteAssessment',function () {
+                var rubricId = $(this).attr("id");
+                var programId = $(this).parent().attr("id");
+                    var URL = "@Url.Content("~")Admin/DeleteRubricFromMapping";
+                $.post(URL, {programId, rubricId})
+                    .always(function (data, textStatus, statusObject) {
+
+                        if (statusObject.status == 200) {
+                            getRubricsForMappingAjax()
+                            getCoursesForMappingAjax()
+                        } else {
+
+                            console.log("Http response code: " + data.status);
+                            console.log("Http response: " + data.statusText);
+                        }
+                    });
+            });
+
+            function getRubricsForMappingAjax() {
+                var URL = "@Url.Content("~")Admin/GetRubricsForMapping";
 
                 $.getJSON(URL)
                     .always(function (data, textStatus, statusObject) {
@@ -227,7 +258,7 @@
                                 var str = '';
 
                                 str = jsonStringbuilder(data, i);
-                                $('#assessmentInModal'+data[i].ProgramId).append(str);
+                                $('#assessmentInModal' + data[i].ProgramId).append(str);
                             }
                         } else {
                             // Error
@@ -235,19 +266,55 @@
                             console.log("Http response: " + data.statusText);
                         }
                     });
-            function jsonStringbuilder(data, i) {
-                var format = "";
 
-                var str = "<tr>";
-                str += "<td>";
-                str += "<h5>"
-                str += "<input type='radio' name='assessmentSelect_" + data[i].ProgramId + "' id='" + data[i].ProgramId + "' class='programRadio'>" + data[i].RubricName;
-                str += "</h5>";
-                str += "</td>";
-                str += "<td><button class='btn btn-danger float-right mr-2'><i class='fas fa-times'></i></button></td>";
-                str += "</tr>";
+                function jsonStringbuilder(data, i) {
+                    var format = "";
 
-                return str;
+                    var str = "<tr>";
+                    str += "<td>";
+                    str += "<h5>"
+                    str += "<input type='radio' name='assessmentSelect_" + data[i].ProgramId + "' id='" + data[i].ProgramId + "' class='programRadio'>" + data[i].RubricName;
+                    str += "</h5>";
+                    str += "</td>";
+                    str += "<td  id='" + data[i].ProgramId + "'><button type='button' class='btn btn-danger float-right mr-2 deleteAssessment' id='" + data[i].RubricID + "'><i class='fas fa-times'></i></button></td>";
+                    str += "</tr>";
+
+                    return str;
+                }
+            }
+
+            function getCoursesForMappingAjax() {
+                var URL = "@Url.Content("~")Admin/getCoursesForMapping";
+
+                $.getJSON(URL)
+                    .always(function (data, textStatus, statusObject) {
+                        if (statusObject.status == 200) {
+                            // 200 OK
+
+                            $('.courseInModal').html('');
+                            for (i = 0; i < data.length; i++) {
+                                var str = '';
+
+                                str = jsonStringbuilder(data, i);
+                                $('#courseInModal' + data[i].ProgramId).append(str);
+                            }
+                        } else {
+                            // Error
+                            console.log("Http response code: " + data.status);
+                            console.log("Http response: " + data.statusText);
+                        }
+                    });
+
+                function jsonStringbuilder(data, i) {
+                    var format = "";
+
+                    var str = "<tr>";
+                    str += "<td><h5>" + data[i].CourseName + "</h5></td>";
+                    str += "<td><button class='btn btn-danger float-right mr-2'><i class='fas fa-times'></i></button></td>";
+                    str += "</tr>";
+
+                    return str;
+                }
             }
         });
     </script>

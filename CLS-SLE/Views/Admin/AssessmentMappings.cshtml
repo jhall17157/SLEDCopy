@@ -20,7 +20,7 @@
     <table class="table table-hover">
         <thead class="thead-dark">
             <tr>
-                <th scope="col" class="h3">@program.Name <button type="button" class="btn btn-primary right" data-toggle="modal" data-target="#modal@(program.ProgramID)">Assign</button></th>
+                <th scope="col" class="h3">@program.Name <button type="button" class="btn btn-primary right assign" id="@program.ProgramID" data-toggle="modal" data-target="#modal@(program.ProgramID)">Assign</button></th>
             </tr>
         </thead>
         <tbody>
@@ -120,13 +120,13 @@
                                 <tr>
                                     <td>
                                         <div id="classDropdown@(program.ProgramID)" class="classDropdown">
-                                            <select class="btn btn-secondary dropdown-toggle selectpicker" data-show-subtext="true" data-live-search="true">
+                                            <select class="btn btn-secondary dropdown-toggle selectpicker classDropdownSelect@(program.ProgramID)" data-show-subtext="true" data-live-search="true">
                                                 @foreach (var course in Model.Courses)
                                                 {
                                                     <option id="@course.CourseID">@course.CourseName</option>
                                                 }
                                             </select>
-                                            <button type="button" class="btn btn-outline-success addClassToRubric" id="@program.ProgramID">Add</button>
+                                            <button type="button" class="btn btn-outline-success addCourseToRubric" id="@program.ProgramID">Add</button>
                                         </div>
                                     </td>
                                     <td>
@@ -151,6 +151,29 @@
     <script>
 
         $(function () {
+            var programModal = "";
+            $('.assign').click(function () {
+                var id = $(this).attr("id");
+                programModal = ".programRadioForProgram" + id;
+                $(".programRadioForProgram" + id).first().attr('checked', true);
+                hideShowCourses();
+            });
+
+            $(document).on('change', programModal, function () {
+                hideShowCourses();
+            });
+
+            function hideShowCourses() {
+                var id = $(programModal + ":checked").attr("id");
+                $(programModal).each(function () {
+                    if (id == $(this).attr('id')) {
+                        $('.courseForRubric' + id).show();
+                    } else {
+                        $('.courseForRubric' + $(this).attr('id')).hide();
+                    }
+                });
+            }
+
             $('.rubricDropdown').hide();
             $('.classDropdown').hide();
             getRubricsForMappingAjax();
@@ -162,7 +185,7 @@
                 $('#rubricDropdown' + id).hide();
             });
 
-            $('.addClassToRubric').click(function () {
+            $(document).on('click','.addClassToRubric',function () {
                 var id = $(this).attr("id");
                 $('#addClassShow'+id).show();
                 $('#classDropdown'+id).hide();
@@ -215,10 +238,84 @@
                     .always(function (data, textStatus, statusObject) {
 
                         if (statusObject.status == 200) {
-
                             getRubricsForMappingAjax()
                             getCoursesForMappingAjax()
+                        } else {
 
+                            console.log("Http response code: " + data.status);
+                            console.log("Http response: " + data.statusText);
+                        }
+                    });
+                });
+
+            $(document).on('click', '.deleteAssessment',function () {
+                var rubricId = $(this).attr("id");
+                var programId = $(this).parent().attr("id");
+                    var URL = "@Url.Content("~")Admin/DeleteRubricFromMapping";
+                $.post(URL, {programId, rubricId})
+                    .always(function (data, textStatus, statusObject) {
+                        if (statusObject.status == 200) {
+                            getRubricsForMappingAjax()
+                            getCoursesForMappingAjax()
+                        } else {
+
+                            console.log("Http response code: " + data.status);
+                            console.log("Http response: " + data.statusText);
+                        }
+                    });
+            });
+
+            function getRubricsForMappingAjax() {
+                var URL = "@Url.Content("~")Admin/GetRubricsForMapping";
+                var rubric;
+
+                $.getJSON(URL)
+                    .always(function (data, textStatus, statusObject) {
+                        if (statusObject.status == 200) {
+                            // 200 OK
+
+                            $('.assessmentInModal').html('');
+                            for (i = 0; i < data.length; i++) {
+                                var str = '';
+
+                                str = jsonStringbuilder(data, i);
+                                $('#assessmentInModal' + data[i].ProgramID).append(str);
+                                rubric = data[i].ProgramID;
+                            }
+                        } else {
+                            // Error
+                            console.log("Http response code: " + data.status);
+                            console.log("Http response: " + data.statusText);
+                        }
+                        $(programModal).first().attr('checked', true);
+                    });
+
+                function jsonStringbuilder(data, i) {
+                    var format = "";
+
+                    var str = "<tr>";
+                    str += "<td>";
+                    str += "<h5>"
+                    str += "<input type='radio' name='assessmentSelect_" + data[i].ProgramID + "' id='" + data[i].RubricID + "' class='programRadio programRadioForProgram" + data[i].ProgramID + " programRadioForRubric" + data[i].RubricID + "'>" + data[i].RubricName;
+                    str += "</h5>";
+                    str += "</td>";
+                    str += "<td  id='" + data[i].ProgramID + "'><button type='button' class='btn btn-danger float-right mr-2 deleteAssessment' id='" + data[i].RubricID + "'><i class='fas fa-times'></i></button></td>";
+                    str += "</tr>";
+
+                    return str;
+                }
+            }
+
+            $('.addCourseToRubric').click(function () {
+                var programId = $(this).attr("id");
+                var rubricId = $(".programRadioForProgram" + programId + ":checked").attr("id");
+                var courseId = $(".classDropdownSelect" + programId).children(":selected").attr("id");
+                var URL = "@Url.Content("~")Admin/PostCourseToMapping";
+                $.post(URL, {programId, rubricId, courseId})
+                    .always(function (data, textStatus, statusObject) {
+
+                        if (statusObject.status == 200) {
+                            getCoursesForMappingAjax();
                         } else {
 
                             console.log("Http response code: " + data.status);
@@ -235,53 +332,16 @@
                     .always(function (data, textStatus, statusObject) {
 
                         if (statusObject.status == 200) {
-                            getRubricsForMappingAjax()
-                            getCoursesForMappingAjax()
+                            getRubricsForMappingAjax();
+                            getCoursesForMappingAjax();
                         } else {
 
                             console.log("Http response code: " + data.status);
                             console.log("Http response: " + data.statusText);
                         }
                     });
+                $(programModal).first().attr('checked', true);
             });
-
-            function getRubricsForMappingAjax() {
-                var URL = "@Url.Content("~")Admin/GetRubricsForMapping";
-
-                $.getJSON(URL)
-                    .always(function (data, textStatus, statusObject) {
-                        if (statusObject.status == 200) {
-                            // 200 OK
-
-                            $('.assessmentInModal').html('');
-                            for (i = 0; i < data.length; i++) {
-                                var str = '';
-
-                                str = jsonStringbuilder(data, i);
-                                $('#assessmentInModal' + data[i].ProgramId).append(str);
-                            }
-                        } else {
-                            // Error
-                            console.log("Http response code: " + data.status);
-                            console.log("Http response: " + data.statusText);
-                        }
-                    });
-
-                function jsonStringbuilder(data, i) {
-                    var format = "";
-
-                    var str = "<tr>";
-                    str += "<td>";
-                    str += "<h5>"
-                    str += "<input type='radio' name='assessmentSelect_" + data[i].ProgramId + "' id='" + data[i].ProgramId + "' class='programRadio'>" + data[i].RubricName;
-                    str += "</h5>";
-                    str += "</td>";
-                    str += "<td  id='" + data[i].ProgramId + "'><button type='button' class='btn btn-danger float-right mr-2 deleteAssessment' id='" + data[i].RubricID + "'><i class='fas fa-times'></i></button></td>";
-                    str += "</tr>";
-
-                    return str;
-                }
-            }
 
             function getCoursesForMappingAjax() {
                 var URL = "@Url.Content("~")Admin/getCoursesForMapping";
@@ -296,19 +356,20 @@
                                 var str = '';
 
                                 str = jsonStringbuilder(data, i);
-                                $('#courseInModal' + data[i].ProgramId).append(str);
+                                $('#courseInModal' + data[i].ProgramID).append(str);
                             }
                         } else {
                             // Error
                             console.log("Http response code: " + data.status);
                             console.log("Http response: " + data.statusText);
                         }
+                        hideShowCourses();
                     });
 
                 function jsonStringbuilder(data, i) {
                     var format = "";
 
-                    var str = "<tr>";
+                    var str = "<tr class='courseForRubric" + data[i].RubricID + "'>";
                     str += "<td><h5>" + data[i].CourseName + "</h5></td>";
                     str += "<td><button class='btn btn-danger float-right mr-2'><i class='fas fa-times'></i></button></td>";
                     str += "</tr>";

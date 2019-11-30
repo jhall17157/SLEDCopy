@@ -125,7 +125,7 @@ namespace CLS_SLE.Controllers
                                {
                                    RubricID = pam.RubricID,
                                    RubricName = ar.Name,
-                                   ProgramId = pam.ProgramID
+                                   ProgramID = pam.ProgramID
                                };
 
             return Json(rubricCourse.Distinct(), JsonRequestBehavior.AllowGet);
@@ -139,7 +139,8 @@ namespace CLS_SLE.Controllers
                          select new
                          {
                              CourseName = c.CourseName,
-                             ProgramId = pam.ProgramID
+                             ProgramID = pam.ProgramID,
+                             RubricID = pam.RubricID
                          };
 
             return Json(course.Distinct(), JsonRequestBehavior.AllowGet);
@@ -157,6 +158,37 @@ namespace CLS_SLE.Controllers
             db.ProgramAssessmentMappings.Add(pam);
             db.SaveChanges();
             return Json(pam, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult PostCourseToMapping(String programID, String rubricID, String courseID)
+        {
+            short ProgramID = short.Parse(programID);
+            short RubricID = short.Parse(rubricID);
+            short CourseID = short.Parse(courseID);
+
+            var pam = db.ProgramAssessmentMappings.SingleOrDefault(p => p.ProgramID == ProgramID && p.RubricID == RubricID);
+
+            if (programID != null && rubricID != null && courseID != null)
+            {
+                if (pam.CourseID == 110)
+                {
+                    pam.CourseID = CourseID;
+                }
+                else
+                {
+                    ProgramAssessmentMapping p = new ProgramAssessmentMapping
+                    {
+                        ProgramID = ProgramID,
+                        RubricID = RubricID,
+                        CourseID = CourseID
+                    };
+                    db.ProgramAssessmentMappings.Add(p);
+                }
+                db.SaveChanges();
+            }
+
+            return Json(JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult DeleteRubricFromMapping(String programID, String rubricID)

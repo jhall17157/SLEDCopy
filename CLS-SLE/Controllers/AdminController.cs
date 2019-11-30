@@ -139,6 +139,7 @@ namespace CLS_SLE.Controllers
                          select new
                          {
                              CourseName = c.CourseName,
+                             CourseID = c.CourseID,
                              ProgramID = pam.ProgramID,
                              RubricID = pam.RubricID
                          };
@@ -167,10 +168,10 @@ namespace CLS_SLE.Controllers
             short RubricID = short.Parse(rubricID);
             short CourseID = short.Parse(courseID);
 
-            var pam = db.ProgramAssessmentMappings.SingleOrDefault(p => p.ProgramID == ProgramID && p.RubricID == RubricID);
-
             if (programID != null && rubricID != null && courseID != null)
             {
+                var pam = db.ProgramAssessmentMappings.FirstOrDefault(p => p.ProgramID == ProgramID && p.RubricID == RubricID);
+
                 if (pam.CourseID == 110)
                 {
                     pam.CourseID = CourseID;
@@ -185,9 +186,8 @@ namespace CLS_SLE.Controllers
                     };
                     db.ProgramAssessmentMappings.Add(p);
                 }
-                db.SaveChanges();
             }
-
+            db.SaveChanges();
             return Json(JsonRequestBehavior.AllowGet);
         }
 
@@ -199,6 +199,25 @@ namespace CLS_SLE.Controllers
             if (programID != null && rubricID != null)
             {
                 var pam = pams.Where(p => p.ProgramID == ProgramID && p.RubricID == RubricID);
+                foreach (var p in pam)
+                {
+                    db.ProgramAssessmentMappings.Remove(p);
+                }
+                db.SaveChanges();
+            }
+            return Json(JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteCourseFromRubric(String programID, String rubricID, String courseID)
+        {
+            short ProgramID = short.Parse(programID);
+            short RubricID = short.Parse(rubricID);
+            short CourseID = short.Parse(courseID);
+
+            var pams = db.ProgramAssessmentMappings;
+            if (programID != null && rubricID != null)
+            {
+                var pam = pams.Where(p => p.ProgramID == ProgramID && p.RubricID == RubricID && p.CourseID == CourseID);
                 foreach (var p in pam)
                 {
                     db.ProgramAssessmentMappings.Remove(p);

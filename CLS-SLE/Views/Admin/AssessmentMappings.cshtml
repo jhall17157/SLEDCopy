@@ -40,7 +40,7 @@
                             if (assessment.CourseID == rubric.CourseID)
                             {
                                 <tr>
-                                    <td><i class="fa fa-caret-right"></i>@rubric.Course.CourseName</td>
+                                    <td><i class="fa fa-caret-right"></i> @rubric.Course.CourseName</td>
                                 </tr>
                             }
                         }
@@ -185,7 +185,7 @@
                 $('#rubricDropdown' + id).hide();
             });
 
-            $(document).on('click','.addClassToRubric',function () {
+            $('.addCourseToRubric').click(function () {
                 var id = $(this).attr("id");
                 $('#addClassShow'+id).show();
                 $('#classDropdown'+id).hide();
@@ -251,7 +251,7 @@
             $(document).on('click', '.deleteAssessment',function () {
                 var rubricId = $(this).attr("id");
                 var programId = $(this).parent().attr("id");
-                    var URL = "@Url.Content("~")Admin/DeleteRubricFromMapping";
+                var URL = "@Url.Content("~")Admin/DeleteRubricFromMapping";
                 $.post(URL, {programId, rubricId})
                     .always(function (data, textStatus, statusObject) {
                         if (statusObject.status == 200) {
@@ -324,23 +324,21 @@
                     });
                 });
 
-            $(document).on('click', '.deleteAssessment',function () {
-                var rubricId = $(this).attr("id");
+            $(document).on('click','.deleteCourse',function () {
                 var programId = $(this).parent().attr("id");
-                    var URL = "@Url.Content("~")Admin/DeleteRubricFromMapping";
-                $.post(URL, {programId, rubricId})
-                    .always(function (data, textStatus, statusObject) {
+                var rubricId = $(".programRadioForProgram" + programId + ":checked").attr("id");
+                var courseId = $(this).attr("id");
 
+                var URL = "@Url.Content("~")Admin/DeleteCourseFromRubric";
+                $.post(URL, { programId, rubricId, courseId })
+                    .always(function (data, textStatus, statusObject) {
                         if (statusObject.status == 200) {
-                            getRubricsForMappingAjax();
                             getCoursesForMappingAjax();
                         } else {
-
                             console.log("Http response code: " + data.status);
                             console.log("Http response: " + data.statusText);
                         }
                     });
-                $(programModal).first().attr('checked', true);
             });
 
             function getCoursesForMappingAjax() {
@@ -371,7 +369,7 @@
 
                     var str = "<tr class='courseForRubric" + data[i].RubricID + "'>";
                     str += "<td><h5>" + data[i].CourseName + "</h5></td>";
-                    str += "<td><button class='btn btn-danger float-right mr-2'><i class='fas fa-times'></i></button></td>";
+                    str += "<td id='" + data[i].ProgramID + "'><button class='btn btn-danger float-right mr-2 deleteCourse' id=" + data[i].CourseID + "><i class='fas fa-times'></i></button></td>";
                     str += "</tr>";
 
                     return str;

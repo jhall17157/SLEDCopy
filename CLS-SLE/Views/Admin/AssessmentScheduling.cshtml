@@ -43,28 +43,29 @@
                             {
                                 var courses = Model.Courses.Select(c => c.Sections.Where(s => s.SemesterID == semester.SemesterID));
 
-                                <select class="btn btn-secondary dropdown-toggle course" id="scheduleModal@(semester.SemesterID)"
-                                        data-show-subtext="true" data-live-search="true">
-                                    @foreach (var grouping in courses)
+                            <select class="btn btn-secondary dropdown-toggle course" id="scheduleModal@(semester.SemesterID)"
+                                    data-show-subtext="true" data-live-search="true">
+                                @foreach (var grouping in courses)
+                                {
+                                    foreach (var c in grouping)
                                     {
-                                        foreach (var c in grouping)
-                                        {
 
-                                            <option class="course@(c.CourseID)" id="courseDropDownBySemester@(semester.SemesterID)">
-                                                @c.Course.CourseName | @c.CourseID
-                                            </option>
-
+                                <option class="course@(c.CourseID)" id="courseDropDownBySemester@(semester.SemesterID)">
+                                    @c.Course.CourseName | @c.CRN
+                                </option>
                                         }
-                                    }
-                                </select>
+                                }
+                            </select>
 
-                                <select class="btn btn-secondary dropdown-toggle section"id="section@(semester.SemesterID)" 
+                                <select 
+                                       
+                                        class="btn btn-secondary dropdown-toggle section" id="@(semester.SemesterID)" 
                                         data-show-subtext="true" data-live-search="true">
                                     @foreach (var grouping in courses)
                                     {
                                         foreach (var c in grouping)
                                         {
-                                    <option class="section" id="sectionDropDownByCourse@(c.CourseID)">
+                                    <option class="" id="sectionDropDownByCourse@(c.CourseID)">
                                         @c.CRN | @c.CourseID
                                     </option>
                                         }
@@ -225,6 +226,7 @@
                         $('courseDropDownBySemester' + id).show();
                         $('#scheduleModal' + $(this).attr('id')).show();
                         $('#section' + $(this).attr('id')).show();
+
                     } else {
                         $('#semester' + $(this).attr('id')).hide();
                         $('#courseDropDownBySemester' + id).hide();
@@ -242,17 +244,16 @@
             function sectionHideShow() {
                 
                 var semesterID = $(".course").children(":selected").attr("id");
-                var courseID   = $(".course").children(":selected").attr("class");
-
-               
+                var courseID = $("").children(":selected").attr("id");
+                alert("Course ID: " + courseID);
 
                 $(".course").children().each(function () {
 
-                    if (semesterID == $(this).attr('id')) {
-                                                    
-                                                    
+                    if (courseID == $(this).attr('id')) {                             
+                        $('#sectionDropDownByCourse' + courseID).show();     
+                        alert("Course ID: " + courseID);
                     } else {
-   
+                        $('#sectionDropDownByCourse' + courseID).hide();             
                     }
 
                 });

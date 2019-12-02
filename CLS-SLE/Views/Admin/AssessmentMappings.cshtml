@@ -101,52 +101,52 @@
                                 {
                                     var rubricName = grouping.FirstOrDefault()?.AssessmentRubric.Name;
 
-                                    if (rubricName != null)
+                                if (rubricName != null)
+                                {
+                                    foreach (var assessment in grouping)
                                     {
-                                        foreach (var assessment in grouping)
+                                        foreach (var rubric in grouping)
                                         {
-                                            foreach (var rubric in grouping)
+                                            if (assessment.CourseID == rubric.CourseID)
                                             {
-                                                if (assessment.CourseID == rubric.CourseID)
-                                                {
-                                                    <tbody id="courseInModal@(rubric.ProgramID)" class="courseInModal">
-                                                    </tbody>
-                                                }
+                                                <tbody id="courseInModal@(rubric.ProgramID)" class="courseInModal">
+                                                </tbody>
                                             }
                                         }
                                     }
                                 }
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <div id="classDropdown@(program.ProgramID)" class="classDropdown">
-                                                <select class="btn btn-secondary dropdown-toggle selectpicker classDropdownSelect@(program.ProgramID)" data-show-subtext="true" data-live-search="true">
-                                                    @foreach (var course in Model.Courses)
-                                                    {
-                                                        <option id="@course.CourseID">@course.CourseName</option>
-                                                    }
-                                                </select>
-                                                <button type="button" class="btn btn-outline-success addCourseToRubric" id="@program.ProgramID">Add</button>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div id="addClassShow@(program.ProgramID)">
-                                                <button type="button" class="btn btn-success float-right mr-2 addClassShow" id="@program.ProgramID"><i class="fa fa-plus"></i></button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                            }
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div id="classDropdown@(program.ProgramID)" class="classDropdown">
+                                            <select class="btn btn-secondary dropdown-toggle selectpicker classDropdownSelect@(program.ProgramID)" data-show-subtext="true" data-live-search="true">
+                                                @foreach (var course in Model.Courses)
+                                                {
+                                                    <option id="@course.CourseID">@course.CourseName</option>
+                                                }
+                                            </select>
+                                            <button type="button" class="btn btn-outline-success addCourseToRubric" id="@program.ProgramID">Add</button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="addClassShow@(program.ProgramID)">
+                                            <button type="button" class="btn btn-success float-right mr-2 addClassShow" id="@program.ProgramID"><i class="fa fa-plus"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary modalClose" id="@program.ProgramID" data-dismiss="modal">Close</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-success modalClose" id="@program.ProgramID" data-dismiss="modal">Save & Close</button>
                 </div>
             </div>
         </div>
-    }
-</div>
+    </div>
+}
+
 @section scripts{
     <script>
 
@@ -298,8 +298,8 @@
 
                     var str = "<tr>";
                     str += "<td>";
-                    str += "<h5>"
-                    str += "<input type='radio' name='assessmentSelect_" + data[i].ProgramID + "' id='" + data[i].RubricID + "' class='programRadio programRadioForProgram" + data[i].ProgramID + " programRadioForRubric" + data[i].RubricID + "'>" + data[i].RubricName;
+                    str += "<h5>";
+                    str += "<input type='radio' name='assessmentSelect_" + data[i].ProgramID + "' id='" + data[i].RubricID + "' class='programRadio programRadioForProgram" + data[i].ProgramID + " programRadioForRubric" + data[i].RubricID + "'> " + data[i].RubricName;
                     str += "</h5>";
                     str += "</td>";
                     str += "<td  id='" + data[i].ProgramID + "'><button type='button' class='btn btn-danger float-right mr-2 deleteAssessment' id='" + data[i].RubricID + "'><i class='fas fa-times'></i></button></td>";

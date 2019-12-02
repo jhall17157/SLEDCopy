@@ -12,101 +12,100 @@
 </nav>
 <h1>Assessment Scheduling</h1>
 
-<table class="m-2">
-    <tr>
-        <td>
-            <span class="col-8">
-                <select class="btn btn-secondary dropdown-toggle semester" data-show-subtext="true" data-live-search="true">
-                    @foreach (var semester in Model.Semesters)
-                    {
-                        <option id="@semester.SemesterID">@semester.Name</option>
-                    }
-                </select>
-            </span>
-
-            <span class="col-2">
-                <button type="button" class="btn btn-primary float-right mr-2" data-toggle="modal" data-target="#manualAdd">Manual Add</button>
-            </span>
-
-            <!--Manual Add Modal-->
-            <div class="modal fade" id="manualAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Manual Add</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
+<table class="m-2 d-block w-100">
+    <tbody class="d-block w-100">
+        <tr class="d-block w-100">
+            <td class="d-block w-100">
+                <div class="row d-block w-100">
+                    <span>
+                        <select class="btn btn-secondary dropdown-toggle semester" data-show-subtext="true" data-live-search="true">
                             @foreach (var semester in Model.Semesters)
                             {
-                                var courses = Model.Courses.Select(c => c.Sections.Where(s => s.SemesterID == semester.SemesterID));
-
-                                <select class="btn btn-secondary dropdown-toggle course" id="scheduleModal@(semester.SemesterID)"
-                                        data-show-subtext="true" data-live-search="true">
-                                    @foreach (var grouping in courses)
-                                    {
-                                        
-                                        foreach (var c in grouping)
-                                        {
-                                            <option class="course@(c.CourseID)" id="courseDropDownBySemester@(semester.SemesterID)">
-                                                @c.Course.CourseName
-                                            </option>
-                                        }
-                                    }
-                                </select>
-
-                                <select class="btn btn-secondary dropdown-toggle course" id="section@(semester.SemesterID)"
-                                        data-show-subtext="true" data-live-search="true">
-                                    @foreach (var grouping in courses)
-                                    {
-                                        foreach (var c in grouping)
-                                        {
-                                            <option class="course@(c.CourseID)" id="courseDropDownBySemester@(semester.SemesterID)">
-                                               @c.CRN
-                                            </option>
-                                        }
-                                    }
-                                </select>
+                                <option id="@semester.SemesterID">@semester.Name</option>
                             }
-                            <h2 id="selectedCourseCRN"></h2>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </select>
+                    </span>
+
+                    <button type="button" class="btn btn-primary mr-2 float-right" data-toggle="modal" data-target="#manualAdd">Manual Add</button>
+                    <button type="button" class="btn btn-primary mr-2 float-right" data-toggle="modal" data-target="#scheduleByProgram">Schedule by Program</button>
+                </div>
+
+                <!--Manual Add Modal-->
+                <div class="modal fade" id="manualAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Manual Add</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                @foreach (var semester in Model.Semesters)
+                                {
+                                    var courses = Model.Courses.Select(c => c.Sections.Where(s => s.SemesterID == semester.SemesterID));
+
+                                    <select class="btn btn-secondary dropdown-toggle course" id="scheduleModal@(semester.SemesterID)"
+                                            data-show-subtext="true" data-live-search="true">
+                                        @foreach (var grouping in courses)
+                                        {
+
+                                            foreach (var c in grouping)
+                                            {
+                                                <option class="course@(c.CourseID)" id="courseDropDownBySemester@(semester.SemesterID)">
+                                                    @c.Course.CourseName
+                                                </option>
+                                            }
+                                        }
+                                    </select>
+
+                                    <select class="btn btn-secondary dropdown-toggle course" id="section@(semester.SemesterID)"
+                                            data-show-subtext="true" data-live-search="true">
+                                        @foreach (var grouping in courses)
+                                        {
+                                            foreach (var c in grouping)
+                                            {
+                                                <option class="course@(c.CourseID)" id="courseDropDownBySemester@(semester.SemesterID)">
+                                                    @c.CRN
+                                                </option>
+                                            }
+                                        }
+                                    </select>
+                                }
+                                <h2 id="selectedCourseCRN"></h2>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <span class="col-2">
-                <button type="button" class="btn btn-primary right mr-2" data-toggle="modal" data-target="#scheduleByProgram">Schedule by Program</button>
-            </span>
-
-            <!--Schedule by Program Modal-->
-            <div class="modal fade" id="scheduleByProgram" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Schedule by Program</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <h5><input type="radio" name="defaultSchedule" class="scheduleRadio" />Default Start/End</h5>
-                            <h5><input type="radio" name="defaultSchedule" class="scheduleRadio" />Schedule <input type="number" class="col-sm-2" min="0" />days before and <input type="number" class="col-sm-2" min="0" /> days after.</h5>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                <!--Schedule by Program Modal-->
+                <div class="modal fade" id="scheduleByProgram" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Schedule by Program</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <h5><input type="radio" name="defaultSchedule" class="scheduleRadio" />Default Start/End</h5>
+                                <h5><input type="radio" name="defaultSchedule" class="scheduleRadio" />Schedule <input type="number" class="col-sm-2" min="0" />days before and <input type="number" class="col-sm-2" min="0" /> days after.</h5>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </td>
-    </tr>
+            </td>
+        </tr>
+    </tbody>
 </table>
 
 @foreach (var semester in Model.Semesters)

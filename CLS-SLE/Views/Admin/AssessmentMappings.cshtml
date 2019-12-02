@@ -140,7 +140,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary modalClose" id="@program.ProgramID" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-success modalClose" id="@program.ProgramID" data-dismiss="modal">Save & Close</button>
                 </div>
             </div>
         </div>
@@ -295,8 +295,8 @@
 
                     var str = "<tr>";
                     str += "<td>";
-                    str += "<h5>"
-                    str += "<input type='radio' name='assessmentSelect_" + data[i].ProgramID + "' id='" + data[i].RubricID + "' class='programRadio programRadioForProgram" + data[i].ProgramID + " programRadioForRubric" + data[i].RubricID + "'>" + data[i].RubricName;
+                    str += "<h5>";
+                    str += "<input type='radio' name='assessmentSelect_" + data[i].ProgramID + "' id='" + data[i].RubricID + "' class='programRadio programRadioForProgram" + data[i].ProgramID + " programRadioForRubric" + data[i].RubricID + "'> " + data[i].RubricName;
                     str += "</h5>";
                     str += "</td>";
                     str += "<td  id='" + data[i].ProgramID + "'><button type='button' class='btn btn-danger float-right mr-2 deleteAssessment' id='" + data[i].RubricID + "'><i class='fas fa-times'></i></button></td>";

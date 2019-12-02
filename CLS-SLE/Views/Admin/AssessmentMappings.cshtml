@@ -12,44 +12,44 @@
 </nav>
 
 <h2> Assessment Mapping </h2>
-<div id="mydiv">
+
     @foreach (var program in Model.Programs)
     {
         var rubrics = Model.AssessmentRubrics.Select(r => r.ProgramAssessmentMappings.Where(m => m.ProgramID == program.ProgramID)).ToList();
+<div id="mydiv">
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col" class="h3">@program.Name <button type="button" class="btn btn-primary right assign" id="@program.ProgramID" data-toggle="modal" data-target="#modal@(program.ProgramID)">Assign</button></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var grouping in rubrics)
+            {
+                var rubricName = grouping.FirstOrDefault()?.AssessmentRubric.Name;
 
-        <table class="table table-hover">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col" class="h3">@program.Name <button type="button" class="btn btn-primary right assign" id="@program.ProgramID" data-toggle="modal" data-target="#modal@(program.ProgramID)">Assign</button></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var grouping in rubrics)
+                if (rubricName != null)
                 {
-                    var rubricName = grouping.FirstOrDefault()?.AssessmentRubric.Name;
-
-                    if (rubricName != null)
+                    <tr>
+                        <th class="thead-light"><h5><b>@rubricName</b></h5></th>
+                    </tr>
+                    foreach (var assessment in grouping)
                     {
-                        <tr>
-                            <th class="thead-light"><h5><b>@rubricName</b></h5></th>
-                        </tr>
-                        foreach (var assessment in grouping)
+                        foreach (var rubric in grouping)
                         {
-                            foreach (var rubric in grouping)
+                            if (assessment.CourseID == rubric.CourseID)
                             {
-                                if (assessment.CourseID == rubric.CourseID)
-                                {
-                                    <tr>
-                                        <td><i class=""></i> @rubric.Course.CourseName</td>
-                                    </tr>
-                                }
+                                <tr>
+                                    <td><i class=""></i> @rubric.Course.CourseName</td>
+                                </tr>
                             }
                         }
                     }
                 }
-            </tbody>
-        </table>
-
+            }
+        </tbody>
+    </table>
+</div>
         <!--Assign Modal-->
         <div class="modal fade" id="modal@(program.ProgramID)" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
@@ -247,7 +247,7 @@
                             console.log("Http response: " + data.statusText);
                         }
                     });
-                    $("#mydiv").load(" #mydiv > *");
+                  
                 });
 
             $(document).on('click', '.deleteAssessment',function () {
@@ -265,7 +265,7 @@
                             console.log("Http response: " + data.statusText);
                         }
                     });
-                $("#mydiv").load(" #mydiv > *");
+             
             });
 
             function getRubricsForMappingAjax() {
@@ -325,7 +325,7 @@
                             console.log("Http response: " + data.statusText);
                         }
                     });
-                $("#mydiv").load(" #mydiv > *");
+             
                 });
 
             $(document).on('click','.deleteCourse',function () {
@@ -343,7 +343,7 @@
                             console.log("Http response: " + data.statusText);
                         }
                     });
-                 $("#mydiv").load(" #mydiv > *");
+                
             });
 
             function getCoursesForMappingAjax() {

@@ -21,7 +21,6 @@ namespace CLS_SLE.Controllers
         private Logger logger = LogManager.GetCurrentClassLogger();
 
         // GET: InstructorAssessments
-        
         public ActionResult Dashboard()
         {
             try

@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Dynamic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -206,6 +207,20 @@ namespace CLS_SLE.Controllers
                 db.SaveChanges();
             }
             return Json(JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void UpdateDateRange(string startDateTime, string endDateTime, string courseId)
+        {
+            var id = short.Parse(courseId);
+            var course = db.Courses.First(c => c.CourseID == id);
+            foreach (var courseSection in course.Sections)
+            {
+                courseSection.BeginDate = DateTime.ParseExact(startDateTime, "yyyy-mm-dd", CultureInfo.InvariantCulture);
+                courseSection.EndDate = DateTime.ParseExact(endDateTime, "yyyy-mm-dd", CultureInfo.InvariantCulture);
+            }
+
+            db.SaveChanges();
         }
 
         public JsonResult DeleteCourseFromRubric(String programID, String rubricID, String courseID)

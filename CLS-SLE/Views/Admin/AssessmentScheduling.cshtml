@@ -178,7 +178,7 @@
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-outline-success"
-                                                                            data-action='save-date'>
+                                                                            data-action='save-date' data-course-id="@c.CourseID">
                                                                         Save & Close
                                                                     </button>
                                                                 </div>
@@ -251,8 +251,13 @@
             }
 
             $("[data-action='save-date']").on("click", function () {
-                var startDate = $(this).closest(".modal-content").find("[data-endpoint='start']").val();
-                var endDate = $(this).closest(".modal-content").find("[data-endpoint='end']").val();
+                var startDateTime = $(this).closest(".modal-content").find("[data-endpoint='start']").val();
+                var endDateTime = $(this).closest(".modal-content").find("[data-endpoint='end']").val();
+                var courseId = $(this).data("course-id");
+
+                $.post("@Url.Content("~")Admin/UpdateDateRange", {
+                    startDateTime, endDateTime, courseId
+                });
 
                 $(this).closest(".modal").modal("hide");
             });

@@ -167,10 +167,10 @@
                                                                         <tbody>
                                                                             <tr>
                                                                                 <td>
-                                                                                    <span>Start: </span><input class="form-control" type="date" value="@c.BeginDate" data-endpoint="start" />
+                                                                                    <span>Start: </span><input class="form-control" type="date" value="@(c.BeginDate?.Year + "-" + c.BeginDate?.Month + "-" + (c.BeginDate?.Day < 10 ? "0" : "") + c.BeginDate?.Day)" data-endpoint="start" />
                                                                                 </td>
                                                                                 <td>
-                                                                                    <span>End: </span><input class="form-control" type="date" value="@c.EndDate" data-endpoint="end" />
+                                                                                    <span>End: </span><input class="form-control" type="date" value="@(c.EndDate?.Year + "-" + c.EndDate?.Month + "-" + (c.EndDate?.Day < 10 ? "0" : "") + c.EndDate?.Day)" data-endpoint="end" />
                                                                                 </td>
                                                                             </tr>
                                                                         </tbody>

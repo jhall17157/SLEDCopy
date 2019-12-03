@@ -176,17 +176,18 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>
-                                                            <span>Start: </span><input class="form-control" type="date" value="@c.BeginDate" />
+                                                            <span>Start: </span><input class="form-control" type="date" value="@c.BeginDate" data-endpoint="start" />
                                                         </td>
                                                         <td>
-                                                            <span>End: </span><input class="form-control" type="date" value="@c.EndDate" />
+                                                            <span>End: </span><input class="form-control" type="date" value="@c.EndDate" data-endpoint="end" />
                                                         </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-success">Save and Close</button>
+                                            <button type="button" class="btn btn-outline-success" 
+                                                    data-action='save-date'>Save & Close</button>
                                         </div>
                                     </div>
                                 </div>
@@ -258,7 +259,12 @@
                 });
 
             }
-           
+
+            $("[data-action='save-date']").on("click", function() {
+                alert("save " + $(this).closest(".modal-content").find("[data-endpoint='start']").val() + " - " +
+                    $(this).closest(".modal-content").find("[data-endpoint='end']").val());
+            });
+
         });
     </script>
 }

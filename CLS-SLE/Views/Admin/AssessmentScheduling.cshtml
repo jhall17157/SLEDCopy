@@ -93,12 +93,11 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <h5><input type="radio" name="defaultSchedule" class="scheduleRadio" />Default Start/End</h5>
-                                <h5><input type="radio" name="defaultSchedule" class="scheduleRadio" />Schedule <input type="number" class="col-sm-2" min="0" />days before and <input type="number" class="col-sm-2" min="0" /> days after.</h5>
+                                <h5><input type="radio" name="defaultSchedule" class="scheduleRadio" /> Default Start/End</h5>
+                                <h5><input type="radio" name="defaultSchedule" class="scheduleRadio" /> Schedule <input type="number" class="col-sm-2" min="0" /> days before and <input type="number" class="col-sm-2" min="0" /> days after.</h5>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                <button type="button" class="btn btn-outline-success">Save and Close</button>
                             </div>
                         </div>
                     </div>
@@ -172,21 +171,22 @@
                                         <div class="modal-body">
                                             <table>
                                                 <thead>
-                                                    @c.Course.CourseName - @c.Course.CourseID
+                                                    <span class="font-weight-bold">@c.Course.CourseName - @c.Course.CourseID</span>
                                                 </thead>
-                                                <tr>
-                                                    <td>
-                                                        <input class="form-control" type="date" value="Start Date" />
-                                                    </td>
-                                                    <td>
-                                                        <input class="form-control" type="date" value="End Date" />
-                                                    </td>
-                                                </tr>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <span>Start: </span><input class="form-control" type="date" value="@c.BeginDate" />
+                                                        </td>
+                                                        <td>
+                                                            <span>End: </span><input class="form-control" type="date" value="@c.EndDate" />
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
                                             </table>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                            <button type="button" class="btn btn-outline-success">Save and Close</button>
                                         </div>
                                     </div>
                                 </div>

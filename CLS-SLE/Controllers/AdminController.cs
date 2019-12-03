@@ -216,8 +216,8 @@ namespace CLS_SLE.Controllers
             var course = db.Courses.First(c => c.CourseID == id);
             foreach (var courseSection in course.Sections)
             {
-                courseSection.BeginDate = DateTime.ParseExact(startDateTime, "yyyy-mm-dd", CultureInfo.InvariantCulture);
-                courseSection.EndDate = DateTime.ParseExact(endDateTime, "yyyy-mm-dd", CultureInfo.InvariantCulture);
+                courseSection.BeginDate = DateTime.ParseExact(startDateTime, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                courseSection.EndDate = DateTime.ParseExact(endDateTime, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             }
 
             db.SaveChanges();

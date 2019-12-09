@@ -213,12 +213,19 @@ namespace CLS_SLE.Controllers
         public void UpdateDateRange(string startDateTime, string endDateTime, string assessmentRubricId)
         {
             var id = short.Parse(assessmentRubricId);
-            var assessmentRubric = db.AssessmentRubrics.FirstOrDefault(r => r.AssessmentID == id);
+            var assessmentRubric = db.RubricAssessments.FirstOrDefault(r => r.RubricAssessmentID == id);
 
-            if (assessmentRubric != null && assessmentRubric.RubricAssessments.Any())
+            if (assessmentRubric != null)
             {
-                assessmentRubric.RubricAssessments.First().StartDate = DateTime.Parse(startDateTime);
-                assessmentRubric.RubricAssessments.First().EndDate = DateTime.Parse(endDateTime);
+                if(startDateTime != "") 
+                { 
+                    assessmentRubric.StartDate = DateTime.Parse(startDateTime);
+                }
+
+                if (endDateTime != "")
+                {
+                    assessmentRubric.EndDate = DateTime.Parse(endDateTime);
+                }
             }
 
             db.SaveChanges();

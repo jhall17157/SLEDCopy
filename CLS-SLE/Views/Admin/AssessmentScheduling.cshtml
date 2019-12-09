@@ -25,8 +25,10 @@
                         </select>
                     </span>
 
+                    @*
                     <button type="button" class="btn btn-primary mr-2 float-right" data-toggle="modal" data-target="#manualAdd">Manual Add</button>
                     <button type="button" class="btn btn-primary mr-2 float-right" data-toggle="modal" data-target="#scheduleByProgram">Schedule by Program</button>
+                    *@
                 </div>
 
                 <!--Manual Add Modal-->
@@ -139,66 +141,70 @@
                                     {
                                         foreach (var r in rubric)
                                         {
-                                            var uniqueIdentifier = Guid.NewGuid();
+                                            foreach (var rubricAssessment in r.RubricAssessments)
+                                            {
+                                                var uniqueIdentifier = Guid.NewGuid();
 
-                                            <tr class="rubricForClass">
-                                                <td id="@(c.CourseID)" class="col-6">
-                                                    @r.Name<br />
-                                                    <i>
-                                                        @{ var startDate = r.RubricAssessments.FirstOrDefault()?.StartDate; }
-                                                        @{ var endDate = r.RubricAssessments.FirstOrDefault()?.EndDate; }
-                                                        <span data-time="start">
-                                                            @(startDate?.Year + "-" + (startDate?.Month < 10 ? "0" : "") + startDate?.Month + "-" + (startDate?.Day < 10 ? "0" : "") + startDate?.Day)
-                                                        </span> until
-                                                        <span data-time="end">
-                                                            @(endDate?.Year + "-" + (endDate?.Month < 10 ? "0" : "") + endDate?.Month + "-" + (endDate?.Day < 10 ? "0" : "") + endDate?.Day)
-                                                        </span>
-                                                    </i>
-                                                </td>
-                                                <td class="col-4">
-                                                    <button type="button" class="btn btn-primary float-right mr-2"
-                                                            data-toggle="modal" data-target="#edit_@uniqueIdentifier">
-                                                        Edit
-                                                    </button>
+                                                <tr class="rubricForClass">
+                                                    <td id="@(c.CourseID)" class="col-6">
+                                                        @r.Name<br />
+                                                        <i>
+                                                            @{ var startDate = rubricAssessment.StartDate; }
+                                                            @{ var endDate = rubricAssessment.EndDate; }
+                                                            <span data-time="start">
+                                                                @(startDate.Year + "-" + (startDate.Month < 10 ? "0" : "") + startDate.Month + "-" + (startDate.Day < 10 ? "0" : "") + startDate.Day)
+                                                            </span> until
+                                                            <span data-time="end">
+                                                                @(endDate?.Year + "-" + (endDate?.Month < 10 ? "0" : "") + endDate?.Month + "-" + (endDate?.Day < 10 ? "0" : "") + endDate?.Day)
+                                                            </span>
+                                                        </i>
+                                                    </td>
+                                                    <td class="col-4">
+                                                        <button type="button" class="btn btn-primary float-right mr-2"
+                                                                data-toggle="modal" data-target="#edit_@uniqueIdentifier">
+                                                            Edit
+                                                        </button>
 
-                                                    <!--Edit Modal-->
-                                                    <div class="modal fade" id="edit_@uniqueIdentifier" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="exampleModalLongTitle">Schedule</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <table>
-                                                                        <thead>
-                                                                            <span class="font-weight-bold">@c.Course.CourseName - @c.Course.CourseID</span>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <span>Start: </span><input class="form-control" type="date" value="@(startDate?.Year + "-" + (startDate?.Month < 10 ? "0" : "") + startDate?.Month + "-" + (startDate?.Day < 10 ? "0" : "") + startDate?.Day)" data-endpoint="start" />
-                                                                                </td>
-                                                                                <td>
-                                                                                    <span>End: </span><input class="form-control" type="date" value="@(endDate?.Year + "-" + (endDate?.Month < 10 ? "0" : "") + endDate?.Month + "-" + (endDate?.Day < 10 ? "0" : "") + endDate?.Day)" data-endpoint="end" />
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-outline-success"
-                                                                            data-action='save-date' data-course-id="@c.CourseID">
-                                                                        Save & Close
-                                                                    </button>
+                                                        <!--Edit Modal-->
+                                                        <div class="modal fade" id="edit_@uniqueIdentifier" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="exampleModalLongTitle">Schedule</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <table>
+                                                                            <thead>
+                                                                                <span class="font-weight-bold">@c.Course.CourseName - @c.Course.CourseID</span>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <span>Start: </span><input class="form-control" type="date" value="@(startDate.Year + "-" + (startDate.Month < 10 ? "0" : "") + startDate.Month + "-" + (startDate.Day < 10 ? "0" : "") + startDate.Day)" data-endpoint="start" />
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <span>End: </span><input class="form-control" type="date" value="@(endDate?.Year + "-" + (endDate?.Month < 10 ? "0" : "") + endDate?.Month + "-" + (endDate?.Day < 10 ? "0" : "") + endDate?.Day)" data-endpoint="end" />
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-outline-success"
+                                                                                data-action='save-date' data-course-id="@rubricAssessment.RubricAssessmentID">
+                                                                            Save & Close
+                                                                        </button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                                    </td>
+                                                </tr>
+
+                                            }
                                         }
                                     }
                                 </table>

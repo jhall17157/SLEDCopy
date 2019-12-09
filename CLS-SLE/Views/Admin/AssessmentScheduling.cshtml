@@ -191,10 +191,11 @@
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
+                                                                        <div class="alert alert-danger" data-show="alert" style="display: none;"><i class="fa fa-warning"></i>End time cannot be before start time.</div>
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <button type="button" class="btn btn-outline-success"
-                                                                                data-action='save-date' data-course-id="@rubricAssessment.RubricAssessmentID">
+                                                                                data-action='save-date' data-rubric-assessment-id="@rubricAssessment.RubricAssessmentID">
                                                                             Save & Close
                                                                         </button>
                                                                     </div>
@@ -203,7 +204,6 @@
                                                         </div>
                                                     </td>
                                                 </tr>
-
                                             }
                                         }
                                     }
@@ -219,22 +219,22 @@
 
 @section scripts{
     <script>
-        $(function () {
+        $(function() {
             $('.courseRow').hide();
 
-            $('.rubricForClass').children().each(function () {
-                $('#courseRow'+$(this).attr('id')).show();
+            $('.rubricForClass').children().each(function() {
+                $('#courseRow' + $(this).attr('id')).show();
             });
 
             semesterHideShow();
-            $(".semester").change(function () {
+            $(".semester").change(function() {
                 semesterHideShow();
             });
-          
+
             function semesterHideShow() {
                 var id = $(".semester").children(":selected").attr("id");
 
-                $(".semester").children().each(function () {
+                $(".semester").children().each(function() {
                     if (id === $(this).attr('id')) {
                         $('#semester' + id).show();
                         $('courseDropDownBySemester' + id).show();
@@ -250,37 +250,46 @@
             }
 
             sectionHideShow();
-            $(".course").change(function () {
+            $(".course").change(function() {
                 sectionHideShow();
-             });
+            });
 
             function sectionHideShow() {
                 var semesterID = $(".course").children(":selected").attr("id");
                 var courseID = $("").children(":selected").attr("id");
-              
-                $(".course").children().each(function () {
-                    if (courseID == $(this).attr('id')) {                             
-                        $('#sectionDropDownByCourse' + courseID).show();     
-                        
+
+                $(".course").children().each(function() {
+                    if (courseID == $(this).attr('id')) {
+                        $('#sectionDropDownByCourse' + courseID).show();
+
                     } else {
-                        $('#sectionDropDownByCourse' + courseID).hide();             
+                        $('#sectionDropDownByCourse' + courseID).hide();
                     }
                 });
             }
 
-            $("[data-action='save-date']").on("click", function () {
-                var startDateTime = $(this).closest(".modal-content").find("[data-endpoint='start']").val();
-                var endDateTime = $(this).closest(".modal-content").find("[data-endpoint='end']").val();
-                var assessmentRubricId = $(this).data("course-id");
+            $("[data-action='save-date']").on("click",
+                function() {
+                    var startDateTime = $(this).closest(".modal-content").find("[data-endpoint='start']").val();
+                    var endDateTime = $(this).closest(".modal-content").find("[data-endpoint='end']").val();
+                    var assessmentRubricId = $(this).data("rubric-assessment-id");
 
-                $.post("@Url.Content("~")Admin/UpdateDateRange", {
-                    startDateTime, endDateTime, assessmentRubricId
+                    if (endDateTime > startDateTime) {
+                        $.post("@Url.Content("~")Admin/UpdateDateRange",
+                            {
+                                startDateTime,
+                                endDateTime,
+                                assessmentRubricId
+                            });
+
+                        $(this).closest(".rubricForClass").find("[data-time='start']").html(startDateTime);
+                        $(this).closest(".rubricForClass").find("[data-time='end']").html(endDateTime);
+                        $(this).closest(".modal").find("[data-show='alert']").hide();
+                        $(this).closest(".modal").modal("hide");
+                    } else {
+                        $(this).closest(".modal").find("[data-show='alert']").show();
+                    }
                 });
-
-                $(this).closest(".rubricForClass").find("[data-time='start']").html(startDateTime);
-                $(this).closest(".rubricForClass").find("[data-time='end']").html(endDateTime);
-                $(this).closest(".modal").modal("hide");
-            });
         });
     </script>
 }

@@ -210,14 +210,15 @@ namespace CLS_SLE.Controllers
         }
 
         [HttpPost]
-        public void UpdateDateRange(string startDateTime, string endDateTime, string courseId)
+        public void UpdateDateRange(string startDateTime, string endDateTime, string assessmentRubricId)
         {
-            var id = short.Parse(courseId);
-            var course = db.Courses.First(c => c.CourseID == id);
-            foreach (var courseSection in course.Sections)
+            var id = short.Parse(assessmentRubricId);
+            var assessmentRubric = db.AssessmentRubrics.FirstOrDefault(r => r.AssessmentID == id);
+
+            if (assessmentRubric != null && assessmentRubric.RubricAssessments.Any())
             {
-                courseSection.BeginDate = DateTime.ParseExact(startDateTime, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-                courseSection.EndDate = DateTime.ParseExact(endDateTime, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                assessmentRubric.RubricAssessments.First().StartDate = DateTime.Parse(startDateTime);
+                assessmentRubric.RubricAssessments.First().EndDate = DateTime.Parse(endDateTime);
             }
 
             db.SaveChanges();

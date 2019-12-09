@@ -126,7 +126,7 @@
             {
                 foreach (var c in grouping)
                 {
-                    var rubrics = Model.AssessmentRubrics.Select(r => r.ProgramAssessmentMappings.Where(m => m.CourseID == c.CourseID)).Select(n => n.Select(m => m.AssessmentRubric.Name));
+                    var rubrics = Model.AssessmentRubrics.Select(r => r.ProgramAssessmentMappings.Where(m => m.CourseID == c.CourseID)).Select(n => n.Select(m => m.AssessmentRubric));
 
                     <tr class="courseRow" id="courseRow@(c.CourseID)">
                         <td>
@@ -142,7 +142,19 @@
                                             var uniqueIdentifier = Guid.NewGuid();
 
                                             <tr class="rubricForClass">
-                                                <td id="@(c.CourseID)" class="col-6">@r</td>
+                                                <td id="@(c.CourseID)" class="col-6">
+                                                    @r.Name<br />
+                                                    <i>
+                                                        @{ var startDate = r.RubricAssessments.FirstOrDefault()?.StartDate; }
+                                                        @{ var endDate = r.RubricAssessments.FirstOrDefault()?.EndDate; }
+                                                        <span data-time="start">
+                                                            @(startDate?.Year + "-" + (startDate?.Month < 10 ? "0" : "") + startDate?.Month + "-" + (startDate?.Day < 10 ? "0" : "") + startDate?.Day)
+                                                        </span> until
+                                                        <span data-time="end">
+                                                            @(endDate?.Year + "-" + (endDate?.Month < 10 ? "0" : "") + endDate?.Month + "-" + (endDate?.Day < 10 ? "0" : "") + endDate?.Day)
+                                                        </span>
+                                                    </i>
+                                                </td>
                                                 <td class="col-4">
                                                     <button type="button" class="btn btn-primary float-right mr-2"
                                                             data-toggle="modal" data-target="#edit_@uniqueIdentifier">
@@ -167,10 +179,10 @@
                                                                         <tbody>
                                                                             <tr>
                                                                                 <td>
-                                                                                    <span>Start: </span><input class="form-control" type="date" value="@(c.BeginDate?.Year + "-" + c.BeginDate?.Month + "-" + (c.BeginDate?.Day < 10 ? "0" : "") + c.BeginDate?.Day)" data-endpoint="start" />
+                                                                                    <span>Start: </span><input class="form-control" type="date" value="@(startDate?.Year + "-" + (startDate?.Month < 10 ? "0" : "") + startDate?.Month + "-" + (startDate?.Day < 10 ? "0" : "") + startDate?.Day)" data-endpoint="start" />
                                                                                 </td>
                                                                                 <td>
-                                                                                    <span>End: </span><input class="form-control" type="date" value="@(c.EndDate?.Year + "-" + c.EndDate?.Month + "-" + (c.EndDate?.Day < 10 ? "0" : "") + c.EndDate?.Day)" data-endpoint="end" />
+                                                                                    <span>End: </span><input class="form-control" type="date" value="@(endDate?.Year + "-" + (endDate?.Month < 10 ? "0" : "") + endDate?.Month + "-" + (endDate?.Day < 10 ? "0" : "") + endDate?.Day)" data-endpoint="end" />
                                                                                 </td>
                                                                             </tr>
                                                                         </tbody>
@@ -253,12 +265,14 @@
             $("[data-action='save-date']").on("click", function () {
                 var startDateTime = $(this).closest(".modal-content").find("[data-endpoint='start']").val();
                 var endDateTime = $(this).closest(".modal-content").find("[data-endpoint='end']").val();
-                var courseId = $(this).data("course-id");
+                var assessmentRubricId = $(this).data("course-id");
 
                 $.post("@Url.Content("~")Admin/UpdateDateRange", {
-                    startDateTime, endDateTime, courseId
+                    startDateTime, endDateTime, assessmentRubricId
                 });
 
+                $(this).closest(".rubricForClass").find("[data-time='start']").html(startDateTime);
+                $(this).closest(".rubricForClass").find("[data-time='end']").html(endDateTime);
                 $(this).closest(".modal").modal("hide");
             });
         });

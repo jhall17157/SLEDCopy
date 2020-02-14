@@ -11,7 +11,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-
+using CLS_SLE.ViewModels;
 
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -382,13 +382,8 @@ namespace CLS_SLE.Controllers
             return View("AssessmentMappings");
         }
         [HttpGet]
-        public ActionResult AddAssessment(String category)
+        public ActionResult ViewUsers(ViewUserViewModel viewUserViewModel)
         {
-            dynamic Model = new ExpandoObject();
-            Model.Programs = (from Program in db.Programs select Program).ToList();
-            Model.Category = category;
-            return View(Model);
-        }
 
         [HttpPost]
         public ActionResult InsertNewAssessment(FormCollection formCollection)
@@ -525,7 +520,7 @@ namespace CLS_SLE.Controllers
             dynamic Model = new ExpandoObject();
             var Roles = from Role in db.Roles select Role;
 
-            Model.Roles = Roles;
+            viewUserViewModel.Roles = from Role in db.Roles select Role;
             if (Request.QueryString["Search"] != null)
             {
                 try
@@ -537,11 +532,11 @@ namespace CLS_SLE.Controllers
                         throw new Exception("Query is empty or null");
                     }
 
-                    List<UserSecurity> UserSecurities = GetUserSecurities();
+                    viewUserViewModel.UserSecurities = GetUserSecurities();
 
-                    var FilteredUserSecurities = UserSecurities.Where(p => p.FirstName.ToLower().Contains(QueryString.ToLower()) || p.LastName.ToLower().Contains(QueryString.ToLower()) || p.IDNumber.Contains(QueryString.ToLower()) || p.Login.Contains(QueryString.ToLower()));
+                    var FilteredUserSecurities = viewUserViewModel.UserSecurities.Where(p => p.FirstName.ToLower().Contains(QueryString.ToLower()) || p.LastName.ToLower().Contains(QueryString.ToLower()) || p.IDNumber.Contains(QueryString.ToLower()) || p.Login.Contains(QueryString.ToLower()));
 
-                    Model.UserSecurityList = FilteredUserSecurities;
+                    viewUserViewModel.UserSecurities = (List<UserSecurity>) FilteredUserSecurities;
                 }
                 catch
                 {
@@ -552,14 +547,14 @@ namespace CLS_SLE.Controllers
 
             else
             {
-                Model.UserSecurityList = GetUserSecurities();
+                viewUserViewModel.UserSecurities = GetUserSecurities();
             }
 
-            if (!String.IsNullOrEmpty(sort))
+            /*if (!String.IsNullOrEmpty(sort))
             {
-                Model.Sort = sort;
-            }
-            return View(Model);
+                //Model.Sort = sort;
+            }*/
+            return View(viewUserViewModel);
         }
 
 
@@ -621,10 +616,10 @@ namespace CLS_SLE.Controllers
 
 
         [HttpPost]
-        public ActionResult UpdateUser(FormCollection form, String submit)
+        public ActionResult UpdateUser(FormCollection form, String submit, short personID, short roleID)
         {
-            Int32 PersonID = Int32.Parse(form["personID"]);
-            Int16 RoleID = RoleID = Int16.Parse(form["roleID"]);
+            // Int32 PersonID = Int32.Parse(form["personID"]);
+            // Int16 RoleID = RoleID = Int16.Parse(form["roleID"]);
             try
             {
                 switch (submit)
@@ -632,8 +627,8 @@ namespace CLS_SLE.Controllers
                     case "add":
                         UserRole userRole = new UserRole
                         {
-                            PersonID = PersonID,
-                            RoleID = RoleID,
+                            PersonID = personID,
+                            RoleID = roleID,
                             CreatedDateTime = DateTime.Now,
                             CreatedByLoginID = (int?)Session["personID"]
 
@@ -643,7 +638,7 @@ namespace CLS_SLE.Controllers
                         break;
                     case "delete":
                         var deletionEntry = (from UserRole in db.UserRoles
-                                             where UserRole.PersonID == PersonID && UserRole.RoleID == RoleID
+                                             where UserRole.PersonID == personID && UserRole.RoleID == roleID
                                              select UserRole).FirstOrDefault();
                         db.UserRoles.Remove(deletionEntry);
                         break;
@@ -651,7 +646,8 @@ namespace CLS_SLE.Controllers
                         return Exceptions();
                 }
                 db.SaveChanges();
-                return Content("<html><script>window.location.href = '/Admin/ManageUser?id=" + PersonID.ToString() + "';</script></html>");
+			 return RedirectToAction("ManageUser", "Admin", new { id = personID });
+                // return Content("<html><script>window.location.href = '/Admin/ManageUser?id=" + PersonID.ToString() + "';</script></html>");
             }
             catch
             {

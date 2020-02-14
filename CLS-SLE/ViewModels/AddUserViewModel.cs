@@ -13,7 +13,7 @@ namespace CLS_SLE.ViewModels
 
         public void HashStudentID(string unHashedId)
         {
-             this.User.Hash = BCrypt.Net.BCrypt.HashString(unHashedId);
+            this.User.Hash = BCrypt.Net.BCrypt.HashString(unHashedId);
         }
     }
 }

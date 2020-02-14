@@ -1,51 +1,104 @@
-﻿@using CLS_SLE.Models;
+﻿@model CLS_SLE.ViewModels.UpdateRubric
 @{
-    ViewBag.Title = "Edit Rubric";
+	ViewBag.Title = "Edit Rubric";
 }
 
 <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Name, "ViewAssessment", "Admin", new { assessmentID = ((AssessmentRubric)Model.Rubric).AssessmentID }, null)</li>
-        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.Rubric.RubricID }, null)</li>
-        <li class="breadcrumb-item active" aria-current="page">Edit</li>
-    </ol>
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+		<li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "AdminAssessments")</li>
+		<li class="breadcrumb-item">@Html.ActionLink((String)Model.RubricAssessment.Assessment.Name, "ViewAssessment", "AdminAssessments", new { assessmentID = Model.RubricAssessment.AssessmentID }, null)</li>
+		<li class="breadcrumb-item">@Html.ActionLink((String)Model.RubricAssessment.AssessmentRubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.RubricAssessment.RubricID, assessmentID = Model.RubricAssessment.AssessmentID }, null)</li>
+		<li class="breadcrumb-item active" aria-current="page">Edit</li>
+	</ol>
 </nav>
 <h1>Edit Rubric</h1>
 <br />
 
-<form method="post" action="/Rubric/SaveRubric?rubricID=@Model.Rubric.RubricID">
-    <div class="form-row">
-        <div class="form-group col-9">
-            <label for="Name">Name:</label>
-            <input type="text" name="Name" class="form-control" value="@Model.Rubric.Name" />
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-9">
-            <label for="Description">Description:</label>
-            <textarea type="text" name="Description" class="form-control" rows="6">@Model.Rubric.Description</textarea>
-        </div>
-    <fieldset class="form-group col-9">
-        <div class="row">
-            <legend class="col-form-label col-4 pt-0">Is Active:</legend>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="IsActive" id="IsActiveTrue" value="True" @(Model.Rubric.IsActive ? " checked=\"checked\"" : "")>
-                <label class="form-check-label" for="IsActiveTrue">True</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="IsActive" id="IsActiveFalse" value="False" @(!Model.Rubric.IsActive ? " checked=\"checked\"" : "")>
-                <label class="form-check-label" for="IsActiveFalse">False</label>
-            </div>
-        </div>
-    </fieldset>
-    <div class="row justify-content-end col-9">
-        <div class="col-2 p-0 mx-1"><button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Update</button></div>
-        <div class="col-2 p-0 mx-1"><a href="/Rubric/ViewRubric?rubricID=@Model.Rubric.RubricID"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
-    </div>
 
-    @*<div hidden>
-        <input name="assessmentID" value="@Model.AssessmentID" type="hidden" />
-    </div>*@
-</form>
+@using (Html.BeginForm("SaveRubric", "Rubric", new { Model.RubricAssessment.RubricID, assessmentID = Model.RubricAssessment.AssessmentID }, FormMethod.Post))
+{
+	<div class="form-group">
+		@Html.Label("Rubric Name:")
+		@Html.EditorFor(Model => Model.AssessmentRubric.Name,
+	new { htmlAttributes = new { @class = "form-control", @Value = Model.AssessmentRubric.Name } })
+		@*@Html.ValidationMessageFor(Model => Model.AssessmentRubric.Name)*@
+	</div>
+	<div class="form-group">
+		@Html.Label("Description:")
+		@Html.EditorFor(Model => Model.AssessmentRubric.Description,
+	new { htmlAttributes = new { @class = "form-control", @Value = Model.AssessmentRubric.Description } })
+		@*@Html.ValidationMessageFor(Model => Model.AssessmentRubric.Description)*@
+	</div>
+	<fieldset class="form-group col-9">
+		<label>Related Assessments</label><br>
+		<div id="relatedAssessments" class="input-append">
+			@{
+				byte id = 1;
+
+				if (ViewBag.RelatedAssessments.Count > 1)
+				{
+					foreach (string relatedAssessment in ViewBag.RelatedAssessments)
+					{
+						<text>
+							<div class="input-group relatedAssessment">
+								<input list="assessments" name="relatedAssessment@(id)" class="form-control" value="@relatedAssessment">
+								<div class="input-group-append">
+									<button type="button" class="btn btn-danger deleteRelatedAssessment">Delete</button>
+								</div>
+							</div>
+						</text>
+						id++;
+					}
+				}
+				else
+				{
+					<text>
+						<div class="input-group relatedAssessment">
+							<input list="assessments" name="relatedAssessment@(id)" class="form-control" value="@ViewBag.RelatedAssessments[0]">
+						</div>
+					</text>
+				}
+			}
+		</div>
+		<datalist id="assessments">
+			@foreach (string assessment in ViewBag.Assessments)
+			{
+				<option value="@assessment" />
+			}
+		</datalist><br>
+		<button type="button" class="btn btn-primary" id="addRelatedAssessment">Add Related Assessment</button>
+	</fieldset>
+	<fieldset class="form-group col-9">
+		<div class="row">
+			<legend class="col-form-label col-2 pt-0">Is Active:</legend>
+			<div class="form-check form-check-inline">
+				<label class="form-check-input" id="IsActive" for="IsActiveTrue">True</label>
+				@Html.RadioButtonFor(Model => Model.AssessmentRubric.IsActive, "True", Model.AssessmentRubric.IsActive ? new { Checked = "checked" } : null)
+			</div>
+			<div class="form-check form-check-inline">
+				<label class="form-check-input" id="IsActiveFalse" for="IsActiveFalse">False</label>
+				@Html.RadioButtonFor(Model => Model.AssessmentRubric.IsActive, "False", Model.AssessmentRubric.IsActive ? null : new { Checked = "checked" })
+			</div>
+		</div>
+	</fieldset>
+	<div class="row">
+		<div class="form-group col-4">
+			@Html.Label("Start Date:")
+			@Html.TextBoxFor(model => model.RubricAssessment.StartDate,
+		    new { @Value = Model.RubricAssessment.StartDate.ToString("MM/dd/yyyy") })
+		</div>
+		<div class="form-group col-4">
+			@Html.Label("End Date:")
+			@Html.TextBoxFor(model => model.RubricAssessment.EndDate,
+		    new { @Value = Model.RubricAssessment.EndDate != null ? Model.RubricAssessment.EndDate?.ToString("MM/dd/yyyy") : null })
+		</div>
+	</div>
+	<div class="row justify-content-end col-9">
+		<div class="col-2 p-0 mx-1"><button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Submit</button></div>
+		<div class="col-2 p-0 mx-1"><a href="@Url.Action("ViewRubric", "Rubric", new { rubricID = Model.RubricAssessment.RubricID, assessmentID = Model.RubricAssessment.AssessmentID })" class="btn btn-danger col-12 mx-1">Cancel</a></div>
+	</div>
+}
+@section Scripts {
+	@Scripts.Render("~/Scripts/relatedAssessments.js")
+}

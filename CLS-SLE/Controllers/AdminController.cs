@@ -381,9 +381,9 @@ namespace CLS_SLE.Controllers
             }
             return View("AssessmentMappings");
         }
-        [HttpGet]
-        public ActionResult ViewUsers(ViewUserViewModel viewUserViewModel)
-        {
+        //[HttpGet]
+        //public ActionResult ViewUsers(ViewUserViewModel viewUserViewModel)
+        //{
 
         [HttpPost]
         public ActionResult InsertNewAssessment(FormCollection formCollection)
@@ -424,7 +424,6 @@ namespace CLS_SLE.Controllers
         }
 
         [HttpPost]
-
         public ActionResult SaveAssessment(FormCollection formCollection)
         {
             try
@@ -514,7 +513,7 @@ namespace CLS_SLE.Controllers
         }
 
         [HttpGet]
-        public ActionResult ViewUsers(String sort)
+        public ActionResult ViewUsers(ViewUserViewModel viewUserViewModel)
         {
 
             dynamic Model = new ExpandoObject();

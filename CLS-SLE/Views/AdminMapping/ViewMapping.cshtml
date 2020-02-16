@@ -1,0 +1,44 @@
+﻿@using CLS_SLE.Models;
+@model CLS_SLE.ViewModels.MappingViewModel
+@{
+    ViewBag.Title = "ViewMapping";
+}
+
+<h2>ViewMapping</h2>
+
+
+
+
+
+
+
+
+        <h1> @Model.Program.Name</h1>
+
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Assessment Name</th>
+                    <th scope="col">Assessment ID</th>
+                    <th scope="col">Program Name</th>
+                    <th scope="col">Program Number</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @{ foreach (Assessment assessment in Model.Assessments)
+                    {
+                        <tr>
+                            <td>@assessment.Name</td>
+                            <td>@assessment.AssessmentID</td>
+                            <td>@assessment.Program.Name</td>
+                            <td>@assessment.Program.Number</td>
+
+                        </tr>
+
+                    }
+                }
+            </tbody>
+        </table>
+
+

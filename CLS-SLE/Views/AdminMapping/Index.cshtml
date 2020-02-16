@@ -1,0 +1,57 @@
+﻿@using CLS_SLE.Models
+@model CLS_SLE.ViewModels.MappingViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@*Populates a list of Programs*@
+<div class="form-group">
+    @Html.Label("Select Program")
+    @Html.DropDownListFor(x => x.SelectedProgram, Model.AvailablePrograms)
+    @Html.ValidationMessageFor(model => model.SelectedProgram)
+
+</div>
+
+@if (Model.SelectedProgram != null)
+{
+    <h1> @Model.Program.Name</h1>
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Assessment Name</th>
+                <th scope="col">Assessment ID</th>
+                <th scope="col">Program Name</th>
+                <th scope="col">Program Number</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{ foreach (Assessment assessment in Model.Assessments)
+                {
+                    <tr>
+                        <td>@assessment.Name</td>
+                        <td>@assessment.AssessmentID</td>
+                        <td>@assessment.Program.Name</td>
+                        <td>@assessment.Program.Number</td>
+
+                    </tr>
+
+                }
+            }
+        </tbody>
+    </table>
+}
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        var url = '@Url.Action("GetMappings", "AdminMapping")';
+    </script>
+}

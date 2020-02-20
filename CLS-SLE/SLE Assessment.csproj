@@ -2157,6 +2157,25 @@
     <Content Include="Views\AdminAssessments\ProgramsCourses.cshtml" />
     <Content Include="Views\AdminAssessments\SchoolsDepartments.cshtml" />
     <Content Include="Views\AdminAssessments\ViewAssessment.cshtml" />
+    <Content Include="Views\AdminSchools\Schools.cshtml" />
+    <Content Include="Views\AdminSchools\AddSchool.cshtml" />
+    <Content Include="Views\AdminSchools\ViewSchool.cshtml" />
+    <Content Include="Views\AdminCourses\Courses.cshtml" />
+    <Content Include="Views\AdminCourses\AddCourse.cshtml" />
+    <Content Include="Views\AdminCourses\ViewCourse.cshtml" />
+    <Content Include="Views\AdminDepartments\Departments.cshtml" />
+    <Content Include="Views\AdminDepartments\AddDepartment.cshtml" />
+    <Content Include="Views\AdminDepartments\ViewDepartment.cshtml" />
+    <Content Include="Views\AdminPrograms\Programs.cshtml" />
+    <Content Include="Views\AdminPrograms\AddProgram.cshtml" />
+    <Content Include="Views\AdminPrograms\ViewProgram.cshtml" />
+    <Content Include="Views\AdminSections\AddSection.cshtml" />
+    <Content Include="Views\AdminSections\ViewSection.cshtml" />
+    <Content Include="Views\AdminCourses\EditCourse.cshtml" />
+    <Content Include="Views\AdminDepartments\EditDepartment.cshtml" />
+    <Content Include="Views\AdminPrograms\EditProgram.cshtml" />
+    <Content Include="Views\AdminSchools\EditSchool.cshtml" />
+    <Content Include="Views\AdminSections\EditSection.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

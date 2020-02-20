@@ -1,0 +1,38 @@
+﻿@using CLS_SLE.Models;
+@{
+    /**/
+
+    ViewBag.Title = "Courses";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item active" aria-current="page">Courses</li>
+    </ol>
+</nav>
+<h1>Courses</h1>
+<br />
+
+@if (((List<Course>)Model.courses).Where(c => c.IsERPCourse).Count() != 0)
+{
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col" class="h3">ERP Course</th>
+                <th scope="col" class="text-right">Description</th>
+                @*<th scope="col" width="10%"><a class="float-right" href="/Admin/AddAssessment?category=@category.Name"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Assessment</button></a></th>*@
+                <th scope="col" width="10%"><a class="float-right" href="/AdminCourse/AddCourse"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Assessment</button></a></th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Course course in Model.courses)
+            {
+
+            }
+        </tbody>
+    </table>
+}
+
+

@@ -1,0 +1,50 @@
+﻿@using CLS_SLE.Models;
+@{
+    ViewBag.Title = "View Department";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Departments", "Departments", "AdminDepartments")</li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.department.Name </li>
+    </ol>
+</nav>
+<h1> @Model.department.Name  - <a style="font-size: 85%;" href="/AdminDepartments/EditDepartment?DepartmentID=@Model.department.DepartmentID"><b>Edit</b></a> </h1>
+<br />
+<div class="py-1">
+    <b>Number:</b> @Model.department.Number
+</div>
+<div class="py-1">
+    <b>School:</b> @Model.department.School
+</div>
+<div class="py-1">
+    <b>Is Active:</b> @Model.department.IsActive
+</div>
+@if (Model.ModifierLogin != null)
+{
+    <div class="py-1">
+        <b>Last Modified:</b>  @Model.department.ModifiedDateTime
+    </div>
+    <div class="py-1">
+        <b>By User:</b> @Model.ModifierLogin
+    </div>
+}
+else if (Model.CreatorLogin != null)
+{
+    <div class="py-1">
+        <b>Created:</b> @Model.department.CreatedDateTime
+    </div>
+    <div class="py-1">
+        <b>By User:</b> @Model.CreatorLogin
+    </div>
+}
+<br />
+<div>
+    <table class="table table-hover table-striped">
+        <thead class="thead-dark">
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>

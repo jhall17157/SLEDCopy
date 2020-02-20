@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using CLS_SLE.Models;
-using BCrypt;
+﻿using CLS_SLE.Models;
 using CLS_SLE.ViewModels;
+using System;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
@@ -13,13 +10,14 @@ namespace CLS_SLE.Controllers
     public class AdminUserController : Controller
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
-        
+
 
         public ActionResult Index() => View(db.Users.OrderBy(u => u.Login));
 
         public ActionResult Create() => View();
 
-        public ActionResult Edit(short id) {
+        public ActionResult Edit(short id)
+        {
             User user = db.Users.Where(u => u.PersonID == id).FirstOrDefault();
             Person person = db.People.Where(p => p.PersonID == id).FirstOrDefault();
             ViewBag.Id = user.PersonID;
@@ -38,19 +36,19 @@ namespace CLS_SLE.Controllers
         public ActionResult CreateUser(AddUserViewModel userVM)
         {
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 //person
                 userVM.Person.CreatedDateTime = DateTime.Now;
                 db.People.Add(userVM.Person);
-                
+
                 //user
                 userVM.User.CreatedDateTime = DateTime.Now;
                 //hash pass on submission
                 userVM.HashStudentID(userVM.Person.IdNumber);
                 db.Users.Add(userVM.User);
                 db.SaveChanges();
-              
+
             }
 
             else
@@ -64,19 +62,19 @@ namespace CLS_SLE.Controllers
         /**
          * TODO Document this and all other model bound method
          */
-         [HttpPost]
+        [HttpPost]
         public ActionResult UpdateUser(UpdateUserViewModel updateUserViewModel, short id)
         {
-                User editUser = db.Users.Where(u => u.PersonID == id).FirstOrDefault();
-                Person editPerson = db.People.Where(u => u.PersonID == id).FirstOrDefault();
+            User editUser = db.Users.Where(u => u.PersonID == id).FirstOrDefault();
+            Person editPerson = db.People.Where(u => u.PersonID == id).FirstOrDefault();
 
-                editPerson.FirstName = updateUserViewModel.Person.FirstName;
-                editPerson.LastName = updateUserViewModel.Person.LastName;
-                editUser.Login = updateUserViewModel.User.Login;
-                editUser.Email = updateUserViewModel.User.Email;
+            editPerson.FirstName = updateUserViewModel.Person.FirstName;
+            editPerson.LastName = updateUserViewModel.Person.LastName;
+            editUser.Login = updateUserViewModel.User.Login;
+            editUser.Email = updateUserViewModel.User.Email;
 
-                db.SaveChanges();
-           
+            db.SaveChanges();
+
             return RedirectToAction("ViewUsers", "Admin");
         }
 
@@ -84,21 +82,21 @@ namespace CLS_SLE.Controllers
         {
 
 
-            
-                //int id = Int32.Parse(form["id"]);
-                viewUserViewModel.User = db.Users.Where(u => u.PersonID == id).SingleOrDefault();
 
-                if (viewUserViewModel.User.IsActive)
-                {
-                    viewUserViewModel.User.IsActive = false;
-                    db.SaveChanges();
-                }
-                else
-                {
-                    viewUserViewModel.User.IsActive = true;
-                    db.SaveChanges();
-                }
-           
+            //int id = Int32.Parse(form["id"]);
+            viewUserViewModel.User = db.Users.Where(u => u.PersonID == id).SingleOrDefault();
+
+            if (viewUserViewModel.User.IsActive)
+            {
+                viewUserViewModel.User.IsActive = false;
+                db.SaveChanges();
+            }
+            else
+            {
+                viewUserViewModel.User.IsActive = true;
+                db.SaveChanges();
+            }
+
 
             return RedirectToAction("ViewUsers", "Admin");
         }

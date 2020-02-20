@@ -1,21 +1,12 @@
 ﻿using CLS_SLE.Models;
+using CLS_SLE.ViewModels;
 using NLog;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-
-using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Dynamic;
-using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using CLS_SLE.ViewModels;
-
 using System.Web.Mvc;
-using System.Web.Routing;
-using System.Xml.Linq;
 
 namespace CLS_SLE.Controllers
 {
@@ -217,8 +208,8 @@ namespace CLS_SLE.Controllers
 
             if (assessmentRubric != null)
             {
-                if(startDateTime != "") 
-                { 
+                if (startDateTime != "")
+                {
                     assessmentRubric.StartDate = DateTime.Parse(startDateTime);
                 }
 
@@ -535,7 +526,7 @@ namespace CLS_SLE.Controllers
 
                     var FilteredUserSecurities = viewUserViewModel.UserSecurities.Where(p => p.FirstName.ToLower().Contains(QueryString.ToLower()) || p.LastName.ToLower().Contains(QueryString.ToLower()) || p.IDNumber.Contains(QueryString.ToLower()) || p.Login.Contains(QueryString.ToLower()));
 
-                    viewUserViewModel.UserSecurities = (List<UserSecurity>) FilteredUserSecurities;
+                    viewUserViewModel.UserSecurities = (List<UserSecurity>)FilteredUserSecurities;
                 }
                 catch
                 {
@@ -645,7 +636,7 @@ namespace CLS_SLE.Controllers
                         return Exceptions();
                 }
                 db.SaveChanges();
-			 return RedirectToAction("ManageUser", "Admin", new { id = personID });
+                return RedirectToAction("ManageUser", "Admin", new { id = personID });
                 // return Content("<html><script>window.location.href = '/Admin/ManageUser?id=" + PersonID.ToString() + "';</script></html>");
             }
             catch

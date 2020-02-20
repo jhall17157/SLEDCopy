@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using CLS_SLE.Models;
+﻿using System.Web.Mvc;
 using System.Web.Security;
-using System.Net.Mail;
 
 namespace CLS_SLE.Controllers
 {
@@ -24,7 +18,7 @@ namespace CLS_SLE.Controllers
             Session.Abandon();
             return RedirectToAction(actionName: "SignIn", controllerName: "User");
         }
-        
+
         //GET: Home/CheckEmail
         public ActionResult CheckEmail()
         {

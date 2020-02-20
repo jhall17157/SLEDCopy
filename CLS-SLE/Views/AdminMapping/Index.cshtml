@@ -21,13 +21,6 @@
 }
 
 
-@*<select id="programSelect">
-    @{foreach(Program program in Model.Programs)
-           <option value="@Model.Program.ProgramID">@Model.Program.Name</option>
-    }
-</select>*@
-
-
 
 @if (Model.SelectedProgram != null)
 {
@@ -46,8 +39,6 @@
         <tbody id="assessmentData">
             @{
 
-//foreach (Program program in Model.Programs)
-//{
                     <tr>
                         <td colspan="3">@Model.Program.Name</td>
                     </tr>
@@ -82,68 +73,10 @@
                     }
 
 
-                @*}*@
-
-
-
-
-                @*foreach (ProgramAssessmentMapping mapping in Model.ProgramAssessmentMappings)
-                {
-                    <tr>
-                        <td colspan="3">@mapping.Program.Name</td>
-                    </tr>
-
-                    foreach (Assessment assessment in Model.Assessments)
-                    {
-                        <tr>
-                            <td></td>
-                            <td>@assessment.Name</td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        foreach (RubricAssessment ra in assessment.RubricAssessments)
-                        {
-
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td>@ra.AssessmentRubric.Name</td>
-                                <td></td>
-                            </tr>
-                            //foreach(Course course in mapping.Course.)
-                            {
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>@course.CourseName</td>
-
-                                </tr>
-                            }
-                        }
-                    }
-
-
-
-
-
-
-                }*@
+              
             }
 
-            @*@{ foreach (Assessment assessment in Model.Assessments)
-            {
-                <tr>
-                    @assessment.
-                    <td>@assessment.Name</td>
-                    <td>@assessment.AssessmentID</td>
-                    <td>@assessment.Program.Name</td>
-                    <td>@assessment.Program.Number</td>
-
-                </tr>
-
-            }
-        }*@
+            
         </tbody>
     </table>
 }

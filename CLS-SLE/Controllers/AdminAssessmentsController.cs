@@ -1,14 +1,11 @@
 ﻿using CLS_SLE.Models;
 using NLog;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Dynamic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 using System.Text.RegularExpressions;
-using CLS_SLE.ViewModels;
+using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
@@ -144,9 +141,9 @@ namespace CLS_SLE.Controllers
                                   orderby Program.Name
                                   select Program).ToList();
 
-			 Model.AssessmentCategories = (from Categories in db.AssessmentCategories
-									 orderby Categories.Name
-									 select Categories).ToList();
+                Model.AssessmentCategories = (from Categories in db.AssessmentCategories
+                                              orderby Categories.Name
+                                              select Categories).ToList();
 
                 Model.Assessment = assessment;
                 return View(Model);
@@ -222,15 +219,15 @@ namespace CLS_SLE.Controllers
             try
             {
                 // if (Int32.Parse(formCollection["AssessmentID"]) > 0)
-			 if (assessmentID > 0)
+                if (assessmentID > 0)
                 {
                     // var assessmentid = Int32.Parse(formCollection["AssessmentID"]);
                     var editAssessment = db.Assessments.FirstOrDefault(a => a.AssessmentID == assessmentID);
-					string categoryName = formCollection["Category"];
-					AssessmentCategory category = db.AssessmentCategories.Where(a => a.Name == categoryName).FirstOrDefault();
+                    string categoryName = formCollection["Category"];
+                    AssessmentCategory category = db.AssessmentCategories.Where(a => a.Name == categoryName).FirstOrDefault();
 
 
-				if (editAssessment != null)
+                    if (editAssessment != null)
                     {
                         editAssessment.Name = formCollection["Name"];
                         editAssessment.Category = category.CategoryCode;
@@ -249,20 +246,20 @@ namespace CLS_SLE.Controllers
                     else
                     {
                         logger.Error("Failed to save assessment, redirecting to sign in page.");
-				    return RedirectToAction(actionName: "Signin", controllerName: "User");
+                        return RedirectToAction(actionName: "Signin", controllerName: "User");
                     }
                 }
                 else
                 {
                     logger.Error("Failed to save assessment, redirecting to sign in page.");
-				return RedirectToAction(actionName: "Signin", controllerName: "User");
+                    return RedirectToAction(actionName: "Signin", controllerName: "User");
                 }
             }
             catch (Exception e)
             {
                 logger.Error("Failed to save assessment, redirecting to sign in page.");
-			 return Content("<html><b>Message:</b><br>" + e.Message + "<br><b>Inner Exception:</b><br>" + e.InnerException + "<br><b>Stack Trace:</b><br>" + e.StackTrace + "</html>");
-			 // return RedirectToAction(actionName: "Signin", controllerName: "User");
+                return Content("<html><b>Message:</b><br>" + e.Message + "<br><b>Inner Exception:</b><br>" + e.InnerException + "<br><b>Stack Trace:</b><br>" + e.StackTrace + "</html>");
+                // return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
         }
 

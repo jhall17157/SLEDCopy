@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Net;
-using System.Web.Mvc;
-using CLS_SLE.Models;
-using System.Web.Security;
-using System.Net.Mail;
-using BCrypt.Net;
+﻿using CLS_SLE.Models;
 using NLog;
+using System;
+using System.Linq;
+using System.Net.Mail;
 using System.Security.Principal;
-using System.Threading;
-using Microsoft.AspNet.Identity.EntityFramework;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Security;
 
 namespace CLS_SLE.Controllers
 {
@@ -30,7 +25,7 @@ namespace CLS_SLE.Controllers
                 Session.Abandon();
                 return View();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return View();
             }
@@ -114,7 +109,8 @@ namespace CLS_SLE.Controllers
                     }
                     logger.Error("Login failed");
                     return RedirectToAction(actionName: "Error", controllerName: "User");
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     FormsAuthentication.SignOut();
                     Session.Abandon();
@@ -159,7 +155,7 @@ namespace CLS_SLE.Controllers
                         SmtpClient client = new SmtpClient();
                         try
                         {
-                            var url = Request.Url.AbsoluteUri+"Form";
+                            var url = Request.Url.AbsoluteUri + "Form";
 
                             msg.From = new MailAddress(CLS_SLE.Properties.Settings.Default.EmailFrom);
                             msg.Subject = (CLS_SLE.Properties.Settings.Default.EmailSubject);
@@ -281,7 +277,7 @@ namespace CLS_SLE.Controllers
                         ModelState.AddModelError("Login", "User not found");
                         return View();
                     }
-                    
+
                 }
                 return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments"); ;
             }
@@ -299,13 +295,13 @@ namespace CLS_SLE.Controllers
 
             var user = Context.User;
 
-                String[] RolesArray = (from Role in db.Roles
-                                       join UserRole in db.UserRoles
-                                       on Role.RoleID equals UserRole.RoleID
-                                       join User in db.Users
-                                       on UserRole.PersonID equals User.PersonID
-                                       where User.Login == login
-                                       select Role.Name).ToArray();
+            String[] RolesArray = (from Role in db.Roles
+                                   join UserRole in db.UserRoles
+                                   on Role.RoleID equals UserRole.RoleID
+                                   join User in db.Users
+                                   on UserRole.PersonID equals User.PersonID
+                                   where User.Login == login
+                                   select Role.Name).ToArray();
             var UserIdentity = user.Identity;
             Context.User = new GenericPrincipal(UserIdentity, RolesArray);
 

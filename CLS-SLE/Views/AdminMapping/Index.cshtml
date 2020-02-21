@@ -4,28 +4,57 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
+            <li class="breadcrumb-item active" aria-current="page">Assessment Mapping</li>
+        </ol>
+    </nav>
 
+<h1>Assessment Mapping</h1>
 
-@using (Html.BeginForm("Index", "AdminMapping", FormMethod.Post))
+<!-- Drop Down Menu-->
+@*using (Html.BeginForm("Index", "AdminMapping", FormMethod.Post))
 {
-    //Populates a list of programs to choose from 
+    //Populates a list of programs to choose from
     <div class="form-group">
         @Html.Label("Select Program")
         @Html.DropDownListFor(x => x.SelectedProgram, Model.AvailablePrograms)
         @Html.ValidationMessageFor(model => model.SelectedProgram)
     </div>
     <div class="form-group">
-        <input type="submit" class="btn btn-primary" value="submit" />
+        <input type="submit" class="btn btn-primary" value="Submit" />
     </div>
+}*@
+
+<!-- Search Functionality -->
+@using (Html.BeginForm("Index", "AdminMapping", FormMethod.Post))
+{
+    //Populates a list of programs to choose from
+<div class="form-inline mt-3 mb-4">
+    <div class="form-group col-7">
+        <input type="text" class="form-control mr-2 col-10" placeholder="Search For Programs..." />
+        <input type="submit" class="btn btn-primary" value="Search" />
+    </div>
+    <div class="form-group col-5">
+        @Html.DropDownListFor(x => x.SelectedProgram, Model.AvailablePrograms)
+        @Html.ValidationMessageFor(model => model.SelectedProgram)
+        <input type="submit" class="btn btn-primary ml-2" value="Submit" />
+    </div>
+</div>
 }
+
+
 
 
 
 @if (Model.SelectedProgram != null)
 {
-
-    <h1> @Model.Program.Name</h1>
+    <hr />
+    <div class="mt-4 mb-4">
+        <h6 class="mb-1">Showing Results For</h6>
+        <h4>@Model.Program.Name</h4>
+    </div>
 
     <table class="table table-striped">
         <thead class="thead-dark">
@@ -39,44 +68,44 @@
         <tbody id="assessmentData">
             @{
 
+                <tr>
+                    <td colspan="3">@Model.Program.Name</td>
+                </tr>
+                foreach (Assessment assessment in Model.Program.Assessments)
+                {
+
                     <tr>
-                        <td colspan="3">@Model.Program.Name</td>
+                        <td></td>
+                        <td>@assessment.Name</td>
+                        <td></td>
+                        <td></td>
                     </tr>
-                    foreach (Assessment assessment in Model.Program.Assessments)
+                    foreach (RubricAssessment ra in assessment.RubricAssessments.ToList())
                     {
-                        
                         <tr>
                             <td></td>
-                            <td>@assessment.Name</td>
                             <td></td>
+                            <td>@ra.AssessmentRubric.Name</td>
                             <td></td>
                         </tr>
-                        foreach (RubricAssessment ra in assessment.RubricAssessments.ToList())
+                        foreach (ProgramAssessmentMapping pam in ra.AssessmentRubric.ProgramAssessmentMappings)
                         {
                             <tr>
                                 <td></td>
                                 <td></td>
-                                <td>@ra.AssessmentRubric.Name</td>
                                 <td></td>
-                            </tr>
-                            foreach (ProgramAssessmentMapping pam in ra.AssessmentRubric.ProgramAssessmentMappings)
-                            {
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>@pam.Course.CourseName</td>
+                                <td>@pam.Course.CourseName</td>
 
-                                </tr>
-                            }
+                            </tr>
                         }
                     }
+                }
 
 
-              
+
             }
 
-            
+
         </tbody>
     </table>
 }

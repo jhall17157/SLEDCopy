@@ -58,52 +58,52 @@
 
     <table class="table table-striped">
         <thead class="thead-dark">
-            <tr>
-                <th scope="col">Program Name</th>
-                <th scope="col">Assessment Name</th>
-                <th scope="col">Rubric Name</th>
-                <th scope="col">Course Name</th>
-            </tr>
+        <tr>
+            <th scope="col">Program Name</th>
+            <th scope="col">Assessment Name</th>
+            <th scope="col">Rubric Name</th>
+            <th scope="col">Course Name</th>
+        </tr>
         </thead>
         <tbody id="assessmentData">
-            @{
+        @{
+
+            <tr>
+                <td colspan="3">@Model.Program.Name</td>
+            </tr>
+            foreach (Assessment assessment in Model.Program.Assessments)
+            {
 
                 <tr>
-                    <td colspan="3">@Model.Program.Name</td>
+                    <td></td>
+                    <td>@assessment.Name</td>
+                    <td></td>
+                    <td></td>
                 </tr>
-                foreach (Assessment assessment in Model.Program.Assessments)
+                foreach (RubricAssessment ra in assessment.RubricAssessments.ToList())
                 {
-
                     <tr>
                         <td></td>
-                        <td>@assessment.Name</td>
                         <td></td>
+                        <td>@ra.AssessmentRubric.Name</td>
                         <td></td>
                     </tr>
-                    foreach (RubricAssessment ra in assessment.RubricAssessments.ToList())
+                    foreach (ProgramAssessmentMapping pam in ra.AssessmentRubric.ProgramAssessmentMappings)
                     {
                         <tr>
                             <td></td>
                             <td></td>
-                            <td>@ra.AssessmentRubric.Name</td>
                             <td></td>
-                        </tr>
-                        foreach (ProgramAssessmentMapping pam in ra.AssessmentRubric.ProgramAssessmentMappings)
-                        {
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>@pam.Course.CourseName</td>
+                            <td>@pam.Course.CourseName</td>
 
-                            </tr>
-                        }
+                        </tr>
                     }
                 }
-
-
-
             }
+
+
+
+        }
 
 
         </tbody>

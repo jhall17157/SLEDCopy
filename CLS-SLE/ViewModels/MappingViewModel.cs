@@ -12,13 +12,11 @@ namespace CLS_SLE.ViewModels
         public int? SelectedProgram { get; set; }
         public IEnumerable<Program> Programs { get; set; }
         public Program Program { get; set; }
-        public IEnumerable<Assessment> Assessments { get; set; }
-        //public IEnumerable<Course> Courses { get; set; }
-        //rubrics
-        //public IEnumerable<AssessmentRubric> Rubrics { get; set; }
+        
+        public IEnumerable<Course> Courses { get; set; }
+       
+        public ProgramAssessmentMapping Mapping { get; set; }
 
-
-
-
+        
     }
 }

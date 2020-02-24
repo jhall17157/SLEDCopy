@@ -32,14 +32,16 @@
 {
     //Populates a list of programs to choose from
 <div class="form-inline mt-3 mb-4">
-    <div class="form-group col-7">
-        <input type="text" class="form-control mr-2 col-10" placeholder="Search For Programs..." />
-        <input type="submit" class="btn btn-primary" value="Search" />
-    </div>
-    <div class="form-group col-5">
-        @Html.DropDownListFor(x => x.SelectedProgram, Model.AvailablePrograms)
-        @Html.ValidationMessageFor(model => model.SelectedProgram)
-        <input type="submit" class="btn btn-primary ml-2" value="Submit" />
+    <div class="row">
+        <div class="form-group col-7">
+            <input type="text" class="form-control mr-2 col-10" placeholder="Search For Programs..." />
+            <input type="submit" class="btn btn-primary mt-2" value="Search" />
+        </div>
+        <div class="form-group col-5">
+            @Html.DropDownListFor(x => x.SelectedProgram, Model.AvailablePrograms)
+            @Html.ValidationMessageFor(model => model.SelectedProgram)
+            <input type="submit" class="btn btn-primary mt-2" value="Submit" />
+        </div>
     </div>
 </div>
 }

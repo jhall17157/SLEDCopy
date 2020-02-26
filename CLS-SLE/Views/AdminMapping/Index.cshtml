@@ -4,116 +4,70 @@
     ViewBag.Title = "Index";
 }
 
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", new { @class = "form-control"})</li>
-            <li class="breadcrumb-item active" aria-current="page">Assessment Mapping</li>
-        </ol>
-    </nav>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
+        <li class="breadcrumb-item active" aria-current="page">Assessment Mapping</li>
+    </ol>
+</nav>
 
 <h1>Assessment Mapping</h1>
-
-<!-- Drop Down Menu-->
-@*using (Html.BeginForm("Index", "AdminMapping", FormMethod.Post))
-{
-    //Populates a list of programs to choose from
-    <div class="form-group">
-        @Html.Label("Select Program")
-        @Html.DropDownListFor(x => x.SelectedProgram, Model.AvailablePrograms)
-        @Html.ValidationMessageFor(model => model.SelectedProgram)
-    </div>
-    <div class="form-group">
-        <input type="submit" class="btn btn-primary" value="Submit" />
-    </div>
-}*@
 
 <!-- Search Functionality -->
 @using (Html.BeginForm("Index", "AdminMapping", FormMethod.Post))
 {
     //Populates a list of programs to choose from
-<div class="form-inline mt-3 mb-4">
-    <div class="row">
-        <div class="form-group col-7">
-            <input type="text" class="form-control mr-2 col-10" placeholder="Search For Programs..." />
-            <input type="submit" class="btn btn-primary mt-2" value="Search" />
-        </div>
-        <div class="form-group col-5">
-            @Html.DropDownListFor(x => x.SelectedProgram, Model.AvailablePrograms)
-            @Html.ValidationMessageFor(model => model.SelectedProgram)
-            <input type="submit" class="btn btn-primary mt-2" value="Submit" />
+    <div class="form-inline mt-3 mb-4">
+        <div class="row">
+            <div class="form-group col-7">
+                <input type="text" class="form-control mr-2 col-10" placeholder="Search For Programs..." />
+                <input type="submit" class="btn btn-primary mt-2" value="Search" />
+            </div>
+            <div class="form-group col-5">
+                @Html.DropDownListFor(x => x.SelectedProgram, Model.AvailablePrograms, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SelectedProgram)
+                <input type="submit" class="btn btn-primary mt-2" value="Submit" />
+            </div>
         </div>
     </div>
-</div>
 }
-
-
-
 
 
 @if (Model.SelectedProgram != null)
-{
-    <hr />
-    <div class="mt-4 mb-4">
-        <h6 class="mb-1">Showing Results For</h6>
-        <h4>@Model.Program.Name</h4>
-    </div>
+    {
+        <hr />
+        <div class="mt-4 mb-4">
+            <h6 class="mb-1">Showing Results For</h6>
+            <h5>@Model.Program.Name</h5>
+        </div>
 
-    <table class="table table-striped">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col">Program Name</th>
-            <th scope="col">Assessment Name</th>
-            <th scope="col">Rubric Name</th>
-            <th scope="col">Course Name</th>
-        </tr>
-        </thead>
-        <tbody id="assessmentData">
-        @{
+        <table class="table table-hover">
 
-            <tr>
-                <td colspan="3">@Model.Program.Name</td>
-            </tr>
-            foreach (Assessment assessment in Model.Program.Assessments)
-            {
-
-                <tr>
-                    <td></td>
-                    <td>@assessment.Name</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                foreach (RubricAssessment ra in assessment.RubricAssessments.ToList())
+            <tbody id="assessmentData">
+            @{
+                foreach (Assessment assessment in Model.Program.Assessments)
                 {
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td>@ra.AssessmentRubric.Name</td>
-                        <td></td>
+                        <td class="bg-dark text-white"><h3>@assessment.Name</h3><h5 class="float-left">(@Model.Program.Name)</h5></td>
                     </tr>
-                    foreach (ProgramAssessmentMapping pam in ra.AssessmentRubric.ProgramAssessmentMappings)
+                    foreach (RubricAssessment ra in assessment.RubricAssessments.ToList())
                     {
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>@pam.Course.CourseName</td>
-
+                            <td class="bg-light" valign="bottom"><h5 class="d-inline">@ra.AssessmentRubric.Name</h5> <button type="button" class="btn btn-primary float-right"><i class="fa fa-plus" aria-hidden="true"></i> Add Course</button></td>
                         </tr>
+                        foreach (ProgramAssessmentMapping pam in ra.AssessmentRubric.ProgramAssessmentMappings)
+                        {
+                            <tr>
+                                <td class="align-text-bottom" valign="bottom"><span class="d-none d-md-noe d-lg-inline">&emsp;</span>@pam.Course.CourseName<button type="button" class="btn btn-danger d-inline float-right"><i class="fa fa-trash" aria-hidden="true"></i> Delete Course</button></td>
+                            </tr>
+                        }
                     }
                 }
             }
-
-
-
-        }
-
-
-        </tbody>
-    </table>
-}
-
-
-
+            </tbody>
+        </table>
+        
+    }
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

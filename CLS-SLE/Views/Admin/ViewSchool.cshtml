@@ -1,0 +1,60 @@
+﻿@using CLS_SLE.Models
+@{
+    ViewBag.Title = "School Detail - " + Model.SchoolID;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Schools", "Schools")</li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.school.Name </li>
+    </ol>
+</nav>
+<h1> @Model.school.Name  - <a style="font-size: 85%;" href="/AdminSchool/Edit?id=@Model.school.SchoolID"><b>Edit</b></a> </h1>
+<br />
+<div class="py-1">
+    <b>Name:</b> @Model.school.Name
+</div>
+<div class="py-1">
+    <b>Is Active:</b> @Model.school.IsActive
+</div>
+@if (Model.ModifierLogin != null)
+{
+    <div class="py-1">
+        <b>Last Modified:</b>  @Model.school.ModifiedDateTime
+    </div>
+    <div class="py-1">
+        <b>By User:</b> @Model.ModifierLogin
+    </div>
+}
+else if (Model.CreatorLogin != null)
+{
+    <div class="py-1">
+        <b>Created:</b> @Model.school.CreatedDateTime
+    </div>
+    <div class="py-1">
+        <b>By User:</b> @Model.CreatorLogin
+    </div>
+}
+<br />
+<div>
+    <table class="table table-hover table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th class="h3">Departments</th>
+                <th><a href="~/AdminDepartments/AddDepartment?schoolID=@Model.school.SchoolID" class="float-right"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Department </button></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ foreach (Department department in Model.school.Departments)
+                {
+                    <tr data-userID="person.PersonID">
+                        <td>@department.Name</td>
+
+                        <td class="text-right"><a href="~/AdminDepartment/ViewDepartment?id=@department.DepartmentID"><button type="button" class="btn btn-primary mr-2">View</button></a></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

@@ -19,8 +19,9 @@ namespace CLS_SLE.Controllers
         public ActionResult Index()
         {
             MappingViewModel mappingViewModel = new MappingViewModel();
-            var availablePrograms = db.Programs;
-            mappingViewModel.AvailablePrograms = new SelectList(availablePrograms, "ProgramID", "Name");
+            mappingViewModel.Programs = (from p in db.Programs
+                                         select new SelectListItem { Text = p.Number + " " + p.Name, Value = p.ProgramID.ToString() }).Distinct().ToList();
+            
             return View(mappingViewModel);
         }
 
@@ -28,13 +29,14 @@ namespace CLS_SLE.Controllers
         [HttpPost]
         public ActionResult Index(MappingViewModel mappingVM)
         {
-            int programID = mappingVM.SelectedProgram.GetValueOrDefault();
+            
             MappingViewModel mappingViewModel = new MappingViewModel();
-            mappingViewModel.Programs = db.Programs;
+            mappingViewModel.Programs = (from p in db.Programs
+                                         select new SelectListItem { Text = p.Number + " " + p.Name, Value = p.ProgramID.ToString() }).Distinct().ToList();
+           
             mappingViewModel.Courses = db.Courses;
-            mappingViewModel.Program = mappingViewModel.Programs.Where(p => p.ProgramID == programID).FirstOrDefault();
-            mappingViewModel.SelectedProgram = programID;
-            mappingViewModel.AvailablePrograms = new SelectList(mappingViewModel.Programs, "ProgramID", "Name");
+            mappingViewModel.Program = db.Programs.FirstOrDefault(p => p.ProgramID == mappingVM.ProgramID);
+            
             return View(mappingViewModel);
         }
 

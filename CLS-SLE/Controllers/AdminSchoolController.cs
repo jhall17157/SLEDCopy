@@ -96,6 +96,29 @@ namespace CLS_SLE.Controllers
 
             return RedirectToAction("ViewSchools", "Admin");
         }
+    }
+}
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Dynamic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
+using System.Text.RegularExpressions;
+using CLS_SLE.Models;
+using System.Collections;
+using CLS_SLE.ViewModels;
+using NLog;
+
+namespace CLS_SLE.Controllers
+{
+    [Authorize(Roles = "Administrator")]
+    public class AdminSchoolController : Controller
+    {
+        private SLE_TrackingEntities db = new SLE_TrackingEntities();
+        private Logger logger = LogManager.GetCurrentClassLogger();
 
         // GET: AdminSchool
         /// <summary>
@@ -113,7 +136,7 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view that contains a submission form for adding a new school
         /// </returns>
-        public ActionResult AddSchool() { return View(); }
+        public ActionResult AddSchool(){return View();}
 
         // POST: AdminSchool/CreateSchool
         /// <summary>
@@ -149,6 +172,50 @@ namespace CLS_SLE.Controllers
             //redirects user to the list of schools if successfully added new school
             return RedirectToAction("Schools", "AdminSchool");
         }
+
+        //// POST: AdminSchool/Create
+        //[HttpPost]
+        //public ActionResult AddSchool(AddSchoolViewModel addSchoolViewModel, FormCollection collection)
+        //{
+        //    try
+        //    {
+        //        // TODO: Add insert logic here
+        //        if (ModelState.IsValid)
+        //        {
+        //            var addSchool = new School(); 
+        //            //School addSchool = db.Schools.Create();
+        //            {
+
+        //                addSchool.Name = "Name";
+        //            ////check if the school name exist before adding it
+        //            //if (School.ConvertAll(s => s.name.ToLower()).Contains(name.ToLower()))
+        //            //{
+        //            //    logger.Info("Duplicate school name ");
+                        
+        //            //}
+        //                addSchool.IsActive = (("IsActive").Equals("True") ? true : false);
+        //                addSchool.CreatedDateTime = DateTime.Now;
+        //                addSchool.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+        //                addSchool.ModifiedDateTime = DateTime.Now;
+        //                addSchool.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+        //            };
+                    
+                    
+
+        //            db.Schools.Add(addSchool);
+        //            db.SaveChanges();
+        //            logger.Info("School id {Id} added", addSchool.SchoolID);//trying to get a message to confirm school is added
+        //        }
+        //        //return View("Index", db.Schools);
+        //        return RedirectToAction(actionName: "Index", controllerName: "AdminSchool");
+        //    }
+        //    catch
+        //    {
+        //        logger.Error("Action not completed !!!, redirecting to sign in page.");
+        //        return RedirectToAction(actionName: "AddSchool", controllerName: "AdminSchool");
+        //    }
+        //}
+
+     
     }
 }
-

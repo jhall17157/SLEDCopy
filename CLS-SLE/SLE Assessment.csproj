@@ -191,6 +191,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminAssessmentsController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AdminDepartmentController.cs" />
+    <Compile Include="Controllers\AdminSchoolController.cs" />
     <Compile Include="Controllers\AdminUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstructorAssessmentsController.cs" />
@@ -200,6 +202,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\AddDepartmentViewModel.cs" />
     <Compile Include="Models\Assessment.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
@@ -377,11 +380,14 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\AddSchoolViewModel.cs" />
     <Compile Include="ViewModels\CriterionViewModel.cs" />
+    <Compile Include="ViewModels\EditDepartmentViewModel.cs" />
     <Compile Include="ViewModels\InsertNewAssesmentViewModel.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\RubricViewModel.cs" />
     <Compile Include="ViewModels\UpdateRubric.cs" />
+    <Compile Include="ViewModels\ViewDepartmentViewModel.cs" />
     <Compile Include="ViewModels\ViewUserViewModel.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\UpdateUserViewModel.cs" />
@@ -2157,24 +2163,24 @@
     <Content Include="Views\AdminAssessments\ProgramsCourses.cshtml" />
     <Content Include="Views\AdminAssessments\SchoolsDepartments.cshtml" />
     <Content Include="Views\AdminAssessments\ViewAssessment.cshtml" />
-    <Content Include="Views\AdminSchools\Schools.cshtml" />
-    <Content Include="Views\AdminSchools\AddSchool.cshtml" />
-    <Content Include="Views\AdminSchools\ViewSchool.cshtml" />
-    <Content Include="Views\AdminCourses\Courses.cshtml" />
-    <Content Include="Views\AdminCourses\AddCourse.cshtml" />
-    <Content Include="Views\AdminCourses\ViewCourse.cshtml" />
-    <Content Include="Views\AdminDepartments\Departments.cshtml" />
-    <Content Include="Views\AdminDepartments\AddDepartment.cshtml" />
-    <Content Include="Views\AdminDepartments\ViewDepartment.cshtml" />
-    <Content Include="Views\AdminPrograms\Programs.cshtml" />
-    <Content Include="Views\AdminPrograms\AddProgram.cshtml" />
-    <Content Include="Views\AdminPrograms\ViewProgram.cshtml" />
+    <Content Include="Views\AdminSchool\Schools.cshtml" />
+    <Content Include="Views\AdminSchool\AddSchool.cshtml" />
+    <Content Include="Views\AdminSchool\ViewSchool.cshtml" />
+    <Content Include="Views\AdminCourse\Courses.cshtml" />
+    <Content Include="Views\AdminCourse\AddCourse.cshtml" />
+    <Content Include="Views\AdminCourse\ViewCourse.cshtml" />
+    <Content Include="Views\AdminDepartment\Departments.cshtml" />
+    <Content Include="Views\AdminDepartment\AddDepartment.cshtml" />
+    <Content Include="Views\AdminDepartment\ViewDepartment.cshtml" />
+    <Content Include="Views\AdminProgram\Programs.cshtml" />
+    <Content Include="Views\AdminProgram\AddProgram.cshtml" />
+    <Content Include="Views\AdminProgram\ViewProgram.cshtml" />
     <Content Include="Views\AdminSections\AddSection.cshtml" />
     <Content Include="Views\AdminSections\ViewSection.cshtml" />
-    <Content Include="Views\AdminCourses\EditCourse.cshtml" />
-    <Content Include="Views\AdminDepartments\EditDepartment.cshtml" />
-    <Content Include="Views\AdminPrograms\EditProgram.cshtml" />
-    <Content Include="Views\AdminSchools\EditSchool.cshtml" />
+    <Content Include="Views\AdminCourse\EditCourse.cshtml" />
+    <Content Include="Views\AdminDepartment\EditDepartment.cshtml" />
+    <Content Include="Views\AdminProgram\EditProgram.cshtml" />
+    <Content Include="Views\AdminSchool\EditSchool.cshtml" />
     <Content Include="Views\AdminSections\EditSection.cshtml" />
   </ItemGroup>
   <ItemGroup>

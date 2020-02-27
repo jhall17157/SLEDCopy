@@ -18,11 +18,11 @@
         <tr>
             <th scope="col" class="h3">Schools</th>
             <th scope="col" class="text-right">Description</th>
-            <th scope="col" width="10%"><a class="float-right" href="/AdminSchools/AddSchool"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New School</button></a></th>
+            <th scope="col" width="10%"><a class="float-right" href="/AdminSchool/AddSchool"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New School</button></a></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (School school in Model.schools)
+        @foreach (School school in Model)
         {
             if (school.IsActive.Equals(false))
             {

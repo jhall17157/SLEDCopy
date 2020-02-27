@@ -18,18 +18,18 @@
         <tr>
             <th scope="col" class="h3">Departments</th>
             <th scope="col" class="text-right">Description</th>
-            <th scope="col" width="10%"><a class="float-right" href="/AdminDepartments/AddDepartment"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Department</button></a></th>
+            <th scope="col" width="10%"><a class="float-right" href="/AdminDepartment/AddDepartment"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Department</button></a></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (Department department in Model.departments)
+        @foreach (Department department in Model)
         {
             if (department.IsActive.Equals(false))
             {
                 <tr>
                     <td colspan="2">@department.Name <span class="text-danger">(Not Active)</span></td>
                     <td class="text-right">
-                        <a href="ViewDepartment?departmentId=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
+                        <a href="ViewDepartment?id=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
                     </td>
                 </tr>
             }
@@ -38,7 +38,8 @@
                 <tr>
                     <td colspan="2">@department.Name</td>
                     <td class="text-right">
-                        <a href="ViewDepartment?departmentId=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
+
+                        <a href="ViewDepartment?id=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
                     </td>
                 </tr>
             }

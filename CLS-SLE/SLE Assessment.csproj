@@ -390,7 +390,7 @@
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\RubricViewModel.cs" />
     <Compile Include="ViewModels\SchoolDetailViewModel.cs" />
-    <Compile Include="ViewModels\SchoolUpdateViewModel.cs" />
+    <Compile Include="ViewModels\UpdateSchoolViewModel.cs" />
     <Compile Include="ViewModels\UpdateRubric.cs" />
     <Compile Include="ViewModels\ViewDepartmentViewModel.cs" />
     <Compile Include="ViewModels\ViewUserViewModel.cs" />
@@ -2135,7 +2135,6 @@
     <Content Include="Views\RoleAdmin\Index.cshtml" />
     <Content Include="Views\Admin\AdminDashboard.cshtml" />
     <Content Include="Views\Admin\SchoolsDepartments.cshtml" />
-    <Content Include="Views\Admin\ProgramsCourses.cshtml" />
     <Content Include="Views\Admin\Assessments.cshtml" />
     <Content Include="Views\Admin\AssessmentMappings.cshtml" />
     <Content Include="Views\Admin\AssessmentScheduling.cshtml" />
@@ -2194,7 +2193,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Scripts\main\" />
-    <Folder Include="Views\AdminSchool\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

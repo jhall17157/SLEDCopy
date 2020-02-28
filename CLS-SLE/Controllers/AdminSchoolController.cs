@@ -16,110 +16,6 @@ namespace CLS_SLE.Controllers
         SLE_TrackingEntities db = new SLE_TrackingEntities();
         private Logger logger = LogManager.GetCurrentClassLogger();
 
-        //view school details 
-        //list departments
-        //edit school info
-
-        public ActionResult Index() => View(db.Schools.OrderBy(s => s.Name));
-
-        public ActionResult Create() => View();
-
-        public ActionResult Edit(short id)
-        {
-            School school = db.Schools.Where(s => s.SchoolID == id).FirstOrDefault();
-            ViewBag.Id = school.SchoolID;
-            ViewBag.SchoolName = school.Name;
-
-            return View();
-        }
-
-        public ActionResult ViewSchool(int? schoolId)
-        {
-            var school = new School();
-
-            try
-            {
-                if (schoolId.HasValue)
-                {
-                    school = db.Schools.FirstOrDefault(s => s.SchoolID == schoolId.Value);
-                }
-
-                dynamic model = new ExpandoObject();
-                model.CreatorLogin = null;
-                model.ModifierLogin = null;
-
-                if (school.CreatedByLoginID != null)
-                {
-                    model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == school.CreatedByLoginID).FirstOrDefault().Login;
-                }
-                if (school.ModifiedByLoginID != null)
-                {
-                    model.ModifierLogin = (String)db.Users.Where(u => u.PersonID == school.ModifiedByLoginID).FirstOrDefault().Login;
-                }
-                model.school = school;
-
-                return View(model);
-            }
-            catch
-            {
-                logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
-                return RedirectToAction("Signin", "User");
-            }
-        }
-
-        [HttpPost]
-        public ActionResult UpdateSchool(SchoolUpdateViewModel schoolUpdateViewModel, short id)
-        {
-            School editSchool = db.Schools.Where(s => s.SchoolID == id).FirstOrDefault();
-
-            editSchool.Name = schoolUpdateViewModel.School.Name;
-
-            db.SaveChanges();
-
-            return RedirectToAction("ViewSchools", "Admin");
-        }
-
-        public ActionResult Activate(SchoolDetailViewModel schoolDetailViewModel, short id)
-        {
-            schoolDetailViewModel.School = db.Schools.Where(s => s.SchoolID == id).SingleOrDefault();
-
-            if (schoolDetailViewModel.School.IsActive)
-            {
-                schoolDetailViewModel.School.IsActive = false;
-                db.SaveChanges();
-            }
-            else
-            {
-                schoolDetailViewModel.School.IsActive = true;
-                db.SaveChanges();
-            }
-
-            return RedirectToAction("ViewSchools", "Admin");
-        }
-    }
-}
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Dynamic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
-using System.Text.RegularExpressions;
-using CLS_SLE.Models;
-using System.Collections;
-using CLS_SLE.ViewModels;
-using NLog;
-
-namespace CLS_SLE.Controllers
-{
-    [Authorize(Roles = "Administrator")]
-    public class AdminSchoolController : Controller
-    {
-        private SLE_TrackingEntities db = new SLE_TrackingEntities();
-        private Logger logger = LogManager.GetCurrentClassLogger();
-
         // GET: AdminSchool
         /// <summary>
         ///       http get request that sends the AdminSchool/Schools view which displays a list of the schools
@@ -155,8 +51,7 @@ namespace CLS_SLE.Controllers
                 //Adding created on date
                 schoolVM.School.CreatedDateTime = DateTime.Now;
                 //Adding created by
-                //TODO add created by
-                schoolVM.School.CreatedDateTime = DateTime.Now;
+                schoolVM.School.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
                 //Adding the new school to the database
                 db.Schools.Add(schoolVM.School);
                 db.SaveChanges();
@@ -173,49 +68,92 @@ namespace CLS_SLE.Controllers
             return RedirectToAction("Schools", "AdminSchool");
         }
 
-        //// POST: AdminSchool/Create
-        //[HttpPost]
-        //public ActionResult AddSchool(AddSchoolViewModel addSchoolViewModel, FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add insert logic here
-        //        if (ModelState.IsValid)
-        //        {
-        //            var addSchool = new School(); 
-        //            //School addSchool = db.Schools.Create();
-        //            {
+        public ActionResult EditSchool(short schoolID)
+        {
+            ViewBag.school = db.Schools.Where(s => s.SchoolID == schoolID).FirstOrDefault();
+            return View();
+        }
 
-        //                addSchool.Name = "Name";
-        //            ////check if the school name exist before adding it
-        //            //if (School.ConvertAll(s => s.name.ToLower()).Contains(name.ToLower()))
-        //            //{
-        //            //    logger.Info("Duplicate school name ");
-                        
-        //            //}
-        //                addSchool.IsActive = (("IsActive").Equals("True") ? true : false);
-        //                addSchool.CreatedDateTime = DateTime.Now;
-        //                addSchool.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-        //                addSchool.ModifiedDateTime = DateTime.Now;
-        //                addSchool.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-        //            };
-                    
-                    
+        public ActionResult ViewSchool(int? schoolId)
+        {
+            var school = new School();
 
-        //            db.Schools.Add(addSchool);
-        //            db.SaveChanges();
-        //            logger.Info("School id {Id} added", addSchool.SchoolID);//trying to get a message to confirm school is added
-        //        }
-        //        //return View("Index", db.Schools);
-        //        return RedirectToAction(actionName: "Index", controllerName: "AdminSchool");
-        //    }
-        //    catch
-        //    {
-        //        logger.Error("Action not completed !!!, redirecting to sign in page.");
-        //        return RedirectToAction(actionName: "AddSchool", controllerName: "AdminSchool");
-        //    }
-        //}
+            try
+            {
+                if (schoolId.HasValue)
+                {
+                    school = db.Schools.FirstOrDefault(s => s.SchoolID == schoolId.Value);
+                }
 
-     
+                dynamic model = new ExpandoObject();
+                model.CreatorLogin = null;
+                model.ModifierLogin = null;
+
+                if (school.CreatedByLoginID != null)
+                {
+                    try {model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == school.CreatedByLoginID).FirstOrDefault().Login;}
+                    catch { model.CreatorLogin = "Unknown"; }   
+                }
+                if (school.ModifiedByLoginID != null)
+                {
+                    try { model.ModifierLogin = (String)db.Users.Where(u => u.PersonID == school.CreatedByLoginID).FirstOrDefault().Login; }
+                    catch { model.ModifierLogin = "Unknown"; }
+                }
+                model.school = school;
+
+                return View(model);
+            }
+            catch
+            {
+                logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
+                return RedirectToAction("Signin", "User");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult UpdateSchool(UpdateSchoolViewModel schoolVM, short schoolID)
+        {
+
+            School editSchool = db.Schools.Where(s => s.SchoolID == schoolID).FirstOrDefault();
+
+            if (ModelState.IsValid)
+            {
+                editSchool.Name = schoolVM.School.Name;
+                //Adding modifed on date
+                editSchool.ModifiedDateTime = DateTime.Now;
+                //Adding modifed by
+                editSchool.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                //Modifying the school in the database
+                db.SaveChanges();
+            }
+            else
+            {
+                //redirects user to the submission form if failed to add school
+                //TODO figure out how to add form errors
+                return RedirectToAction("AddSchool", "AdminSchool");
+            }
+            //logging that a new school was added
+            logger.Info("School id {Id} modified", editSchool.SchoolID);
+            //redirects user to the school view if successfully added new school
+            return RedirectToAction("Schools", "AdminSchool");
+        }
+
+        public ActionResult Activate(SchoolDetailViewModel schoolDetailViewModel, short id)
+        {
+            schoolDetailViewModel.School = db.Schools.Where(s => s.SchoolID == id).SingleOrDefault();
+
+            if (schoolDetailViewModel.School.IsActive)
+            {
+                schoolDetailViewModel.School.IsActive = false;
+                db.SaveChanges();
+            }
+            else
+            {
+                schoolDetailViewModel.School.IsActive = true;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("ViewSchools", "Admin");
+        }
     }
 }

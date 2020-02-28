@@ -31,10 +31,12 @@ namespace CLS_SLE.Controllers
 
         public ActionResult AdminDashboard()
         {
-           
+
             return View();
-            
+
         }
+
+        public ActionResult ProgramDashboard() => View();
 
         [HttpGet]
         public ActionResult ViewUsers(ViewUserViewModel viewUserViewModel)

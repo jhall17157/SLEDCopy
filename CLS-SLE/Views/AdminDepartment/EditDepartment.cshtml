@@ -6,6 +6,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Departments", "Departments", "AdminDepartment")</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)Model.Department.Name, "ViewDepartment", "AdminDepartment", new { id = Model.Department.DepartmentID }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">Edit</li>

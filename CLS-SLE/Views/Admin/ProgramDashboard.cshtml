@@ -18,25 +18,30 @@
         }
     </style>
 
-
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+            <li class="breadcrumb-item active" aria-current="page">Programs Dashboard</li>
+        </ol>
+    </nav>
     <div class="row">
 
         <div class="col-4">
-            @*<a href="~/Views/"*@
-            <div class="card-body text-center align-middle">
-                <div class="card-title"><i class="fas fa-tasks fa-6x" aria-hidden="true"></i></div>
-                <div class="card-text h3 font-weight-bold">Schools</div>
-            </div>
-            @*</a>*@
+            <a href="/AdminSchool/Schools" class="card">
+                <div class="card-body text-center align-middle">
+                    <div class="card-title"><i class="fas fa-tasks fa-6x" aria-hidden="true"></i></div>
+                    <div class="card-text h3 font-weight-bold">Schools</div>
+                </div>
+            </a>
         </div>
 
         <div class="col-4">
-            @*<a href="~/Views/"*@
-            <div class="card-body text-center align-middle">
-                <div class="card-title"><i class="fas fa-tasks fa-6x" aria-hidden="true"></i></div>
-                <div class="card-text h3 font-weight-bold">Departments</div>
-            </div>
-            @*</a>*@
+            <a href="/AdminDepartment/Departments" class="card">
+                <div class="card-body text-center align-middle">
+                    <div class="card-title"><i class="fas fa-tasks fa-6x" aria-hidden="true"></i></div>
+                    <div class="card-text h3 font-weight-bold">Departments</div>
+                </div>
+            </a>
         </div>
     </div>
 

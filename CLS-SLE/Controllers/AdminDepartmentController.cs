@@ -40,15 +40,10 @@ namespace CLS_SLE.Controllers
 
         public ActionResult ViewDepartment(short id) { return View(db.Departments.Where(d => d.DepartmentID == id).FirstOrDefault()); }
         public ActionResult EditDepartment(short id) {
-
-            dynamic model = new ExpandoObject();
-
             ViewBag.Schools = db.Schools;
             ViewBag.Department = db.Departments.Where(d => d.DepartmentID == id).FirstOrDefault();
-
             return View(); 
         }
-
 
         // POST: AdminDepartment/CreateDepartment
         /// <summary>

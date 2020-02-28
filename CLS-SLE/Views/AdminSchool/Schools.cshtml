@@ -2,12 +2,13 @@
 @{
     /**/
 
-    ViewBag.Title = "Assessments";
+    ViewBag.Title = "Schools";
 }
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
         <li class="breadcrumb-item active" aria-current="page">Schools</li>
     </ol>
 </nav>
@@ -17,7 +18,7 @@
     <thead class="thead-dark">
         <tr>
             <th scope="col" class="h3">Schools</th>
-            <th scope="col" class="text-right">Description</th>
+            <th scope="col" class="text-right"></th>
             <th scope="col" width="10%"><a class="float-right" href="/AdminSchool/AddSchool"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New School</button></a></th>
         </tr>
     </thead>

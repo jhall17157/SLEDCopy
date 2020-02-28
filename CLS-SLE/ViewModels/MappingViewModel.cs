@@ -18,6 +18,7 @@ namespace CLS_SLE.ViewModels
         public IEnumerable<Course> Courses { get; set; }
        
         public ProgramAssessmentMapping Mapping { get; set; }
+        public int? MappingID { get; set; }
 
         
     }

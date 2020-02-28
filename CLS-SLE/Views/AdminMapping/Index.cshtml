@@ -30,6 +30,7 @@
                    {
                        @id = "DropDownPrograms",
                        @class = "form-control selectpicker",
+                       
                        onchange = "this.form.submit();"
                    })
                 @*@Html.DropDownList("Program", Model.Programs, "All", new {@id = "DropDownPrograms", @class = "form-control"})*@
@@ -67,7 +68,7 @@
                         foreach (ProgramAssessmentMapping pam in ra.AssessmentRubric.ProgramAssessmentMappings)
                         {
                             <tr>
-                                <td class="align-text-bottom" valign="bottom"><span class="d-none d-md-noe d-lg-inline">&emsp;</span>@pam.Course.CourseName<button type="button" class="btn btn-danger d-inline float-right"><i class="fa fa-trash" aria-hidden="true"></i> Delete Course</button></td>
+                                <td class="align-text-bottom" valign="bottom"><span class="d-none d-md-noe d-lg-inline">&emsp;</span>@pam.Course.CourseName<button type="button" value="@pam.ProgramAssessmentMappingID" class="btn btn-danger d-inline float-right"><i class="fa fa-times fa-align-center" aria-hidden="true"></i></button></td>
                             </tr>
                         }
                     }

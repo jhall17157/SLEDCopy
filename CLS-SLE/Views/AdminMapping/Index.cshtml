@@ -19,23 +19,25 @@
 @using (Html.BeginForm("Index", "AdminMapping", FormMethod.Post))
 {
     //Populates a list of programs to choose from
-    <div class="form-inline mt-3 mb-4">
-        <div class="row">
+    <div class="form-inline mt-4 mb-4">
+        <div class="row col-12">
             @*<div class="form-group col-7">
-                    <input type="text" class="form-control mr-2 col-10" placeholder="Search For Programs..." />
+                    <input type="text" class="form-control mr-2 col10" placeholder="Search For Programs..." />
                     <input type="submit" class="btn btn-primary mt-2" value="Search" />
                 </div>*@
-            <div class="form-group col-5">
+            <div class="form-group col-12">
+                <p class="col-12 mb-1 pl-0">Search For A Program:</p>
                 @Html.DropDownListFor(p => p.ProgramID, Model.Programs, "-Select Program-", new
                    {
                        @id = "DropDownPrograms",
-                       @class = "form-control selectpicker",
+                       @class = "form-control selectpicker d-inline col-6",
                        onchange = "this.form.submit();"
                    })
+
                 @*@Html.DropDownList("Program", Model.Programs, "All", new {@id = "DropDownPrograms", @class = "form-control"})*@
                 @*@Html.DropDownListFor(x => x.SelectedProgram, Model.AvailablePrograms, new {@class = "form-control"})*@
                 @*@Html.ValidationMessageFor(model => model.Program.ProgramID)*@
-                <input type="submit" class="btn btn-primary mt-2" value="Submit" />
+                <input type="submit" class="btn btn-primary d-inline ml-2" value="Submit" />
             </div>
         </div>
     </div>
@@ -62,7 +64,7 @@
                     foreach (RubricAssessment ra in assessment.RubricAssessments.ToList())
                     {
                         <tr>
-                            <td class="bg-light" valign="bottom"><h4 class="d-inline">@ra.AssessmentRubric.Name</h4> <button type="button" class="btn btn-primary float-right"><i class="fa fa-plus" aria-hidden="true"></i> Add Course</button></td>
+                            <td class="bg-light" valign="bottom"><h4 class="d-inline font-weight-bold">@ra.AssessmentRubric.Name</h4> <button type="button" class="btn btn-success float-right"><i class="fa fa-plus" aria-hidden="true"></i> Add Course</button></td>
                         </tr>
                         foreach (ProgramAssessmentMapping pam in ra.AssessmentRubric.ProgramAssessmentMappings)
                         {
@@ -71,7 +73,7 @@
                                     <span class="d-none d-md-noe d-lg-inline">&emsp;</span>@pam.Course.CourseName
 
                                     <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-danger d-inline float-right" data-toggle="modal" data-target="#removeCourseModal"><i class="fas fa-times" aria-hidden="true"></i></button>
+                                    <button type="button" class=" btn btn-danger btn-sm d-inline float-right" data-toggle="modal" data-target="#removeCourseModal"><i class="fas fa-times" aria-hidden="true"></i></button>
                                 </td>
                             </tr>
                         }

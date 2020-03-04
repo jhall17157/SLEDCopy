@@ -22,15 +22,15 @@
     <div class="form-inline mt-3 mb-4">
         <div class="row">
             @*<div class="form-group col-7">
-                <input type="text" class="form-control mr-2 col-10" placeholder="Search For Programs..." />
-                <input type="submit" class="btn btn-primary mt-2" value="Search" />
-            </div>*@
+                    <input type="text" class="form-control mr-2 col-10" placeholder="Search For Programs..." />
+                    <input type="submit" class="btn btn-primary mt-2" value="Search" />
+                </div>*@
             <div class="form-group col-5">
                 @Html.DropDownListFor(p => p.ProgramID, Model.Programs, "-Select Program-", new
                    {
                        @id = "DropDownPrograms",
                        @class = "form-control selectpicker",
-                       
+
                        onchange = "this.form.submit();"
                    })
                 @*@Html.DropDownList("Program", Model.Programs, "All", new {@id = "DropDownPrograms", @class = "form-control"})*@
@@ -63,7 +63,7 @@
                     foreach (RubricAssessment ra in assessment.RubricAssessments.ToList())
                     {
                         <tr>
-                            <td class="bg-light" valign="bottom"><h5 class="d-inline">@ra.AssessmentRubric.Name</h5> <button type="button" class="btn btn-primary float-right"><i class="fa fa-plus" aria-hidden="true"></i> Add Course</button></td>
+                            <td class="bg-light" valign="bottom"><h5 class="d-inline">@ra.AssessmentRubric.Name</h5> <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-plus" aria-hidden="true"></i> Add Course</button></td>
                         </tr>
                         foreach (ProgramAssessmentMapping pam in ra.AssessmentRubric.ProgramAssessmentMappings)
                         {
@@ -78,6 +78,28 @@
     </table>
 
 }
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

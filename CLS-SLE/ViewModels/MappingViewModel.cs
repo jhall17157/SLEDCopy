@@ -14,9 +14,10 @@ namespace CLS_SLE.ViewModels
         public List<SelectListItem> Programs { get; set; }
         public int ProgramID { get; set; }
         public Program Program { get; set; }
-        
-        public IEnumerable<Course> Courses { get; set; }
-       
+
+        public List<SelectListItem> Courses { get; set; }
+        public int CourseID { get; set; }
+        public Course Course { get; set; }
         public ProgramAssessmentMapping Mapping { get; set; }
         public int? MappingID { get; set; }
 

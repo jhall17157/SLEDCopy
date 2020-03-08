@@ -20,9 +20,11 @@ namespace CLS_SLE.Controllers
         {
             MappingViewModel mappingViewModel = new MappingViewModel();
             mappingViewModel.Programs = (from p in db.Programs
-                                         select new SelectListItem { Text = p.Number + " " + p.Name, Value = p.ProgramID.ToString() }).Distinct().ToList();
+                                         select new SelectListItem { Text = p.Number + " " + p.Name, Value = p.ProgramID.ToString() })
+                                            .Distinct().ToList();
             mappingViewModel.Courses = (from c in db.Courses
-                                         select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() }).Distinct().ToList();
+                                         select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() })
+                                            .Distinct().ToList();
             return View(mappingViewModel);
         }
 
@@ -33,9 +35,11 @@ namespace CLS_SLE.Controllers
             
             MappingViewModel mappingViewModel = new MappingViewModel();
             mappingViewModel.Programs = (from p in db.Programs
-                                         select new SelectListItem { Text = p.Number + " " + p.Name, Value = p.ProgramID.ToString() }).Distinct().ToList();
+                                         select new SelectListItem { Text = p.Number + " " + p.Name, Value = p.ProgramID.ToString() })
+                                            .Distinct().ToList();
             mappingViewModel.Courses = (from c in db.Courses
-                                         select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() }).Distinct().ToList();
+                                         select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() })
+                                            .Distinct().ToList();
 
             mappingViewModel.Course = db.Courses.FirstOrDefault(p => p.CourseID == mappingVM.CourseID);
             mappingViewModel.Program = db.Programs.FirstOrDefault(p => p.ProgramID == mappingVM.ProgramID);

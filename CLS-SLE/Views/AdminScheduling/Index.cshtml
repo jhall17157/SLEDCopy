@@ -1,0 +1,135 @@
+﻿@using System.Text
+@using CLS_SLE.Models
+@model CLS_SLE.ViewModels.SchedulingViewModel
+@{
+    ViewBag.Title = "Index";
+}
+@Styles.Render("~/Content/bootstrap-select")
+
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item active" aria-current="page">Assessment Scheduling</li>
+    </ol>
+</nav>
+
+
+<h2>Assessment Scheduling</h2>
+
+@using (Html.BeginForm("Index", "AdminScheduling", FormMethod.Post))
+{
+    //Populates a list of semesters to choose from with live search
+    <div class="form-inline mt-4 mb-4">
+        <div class="row col-12">
+
+            <div class="form-group col-12">
+                <p class="col-12 mb-1 pl-0">Search For A Program:</p>
+                @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
+                {
+                    @id = "DropDownSemesters",
+                    @class = "form-control selectpicker d-inline col-6",
+                    onchange = "this.form.submit();"
+                })
+
+
+                <input type="submit" class="btn btn-primary d-inline ml-2" value="Submit" />
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.Semester != null)
+{
+    <hr />
+    <div class="mt-4 mb-4">
+        <h6 class="mb-1">Showing Results For</h6>
+        <h5>@Model.Semester.Name</h5>
+    </div>
+
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <td>Instructor Name</td>
+            <td>Instructor Email</td>
+            <td>Course Number</td>
+            <td>Course Name</td>
+            <td>Rubric Name</td>
+
+        </tr>
+        </thead>
+        <tbody>
+
+        @foreach (Section sec in Model.Semester.Sections.OrderBy(c => c.CourseID).ThenBy(s => s.CRN))
+        {
+            foreach (SectionRubric sr in sec.SectionRubrics)
+            {
+                var Instructor = @Model.People.FirstOrDefault(p => p.PersonID == sec.LeadInstructorID);
+                <tr>
+                    @if (Instructor != null)
+                    {
+                        <td> @String.Concat(Instructor.LastName, ", ", Instructor.FirstName)</td>
+                        <td>@Instructor.User.Email</td>
+                    }
+                    else
+                    {
+                        <td colspan="2">No Instructor Assigned</td>
+                        <td></td>
+                    }
+                    <td>@sec.Course.Number<text>-</text>@sec.CRN</td>
+                    <td>@sec.Course.CourseName</td>
+                    <td>@sr.AssessmentRubric.Name</td>
+
+
+
+                </tr>
+            }
+        }
+
+        @*@foreach (Section sec in Model.Semester.Sections.OrderBy(c => c.CourseID))
+        {
+            var Instructor = @Model.People.FirstOrDefault(p => p.PersonID == sec.LeadInstructorID);
+            <tr>
+                @if (Instructor != null)
+                {
+                    <td> @String.Concat(Instructor.LastName, ", ", Instructor.FirstName)</td>
+                    <td>@Instructor.User.Email</td>
+                }
+                else
+                {
+                    <td>No Instructor Assigned</td>
+                    <td></td>
+                }
+
+                <td>@String.Concat(sec.Course.Number, " - ", @sec.Course.CourseName)</td>
+
+
+            </tr>
+            foreach (SectionRubric sr in sec.SectionRubrics)
+            {
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>@sr.AssessmentRubric.Name</td>
+
+                </tr>
+            }
+
+        }*@
+        </tbody>
+    </table>
+
+
+   
+
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap-select")
+
+
+}

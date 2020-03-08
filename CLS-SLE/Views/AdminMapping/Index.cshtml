@@ -21,10 +21,7 @@
     //Populates a list of programs to choose from
     <div class="form-inline mt-4 mb-4">
         <div class="row col-12">
-            @*<div class="form-group col-7">
-                    <input type="text" class="form-control mr-2 col10" placeholder="Search For Programs..." />
-                    <input type="submit" class="btn btn-primary mt-2" value="Search" />
-                </div>*@
+           
             <div class="form-group col-12">
                 <p class="col-12 mb-1 pl-0">Search For A Program:</p>
                 @Html.DropDownListFor(p => p.ProgramID, Model.Programs, "-Select Program-", new
@@ -34,17 +31,13 @@
                        onchange = "this.form.submit();"
                    })
 
-                @*@Html.DropDownList("Program", Model.Programs, "All", new {@id = "DropDownPrograms", @class = "form-control"})*@
-                @*@Html.DropDownListFor(x => x.SelectedProgram, Model.AvailablePrograms, new {@class = "form-control"})*@
-                @*@Html.ValidationMessageFor(model => model.Program.ProgramID)*@
+              
                 <input type="submit" class="btn btn-primary d-inline ml-2" value="Submit" />
             </div>
         </div>
     </div>
 }
 
-@*@{var program = ""; }
-@{var rubric = ""; }*@
 @if (Model.Program != null)
 {
     <hr />

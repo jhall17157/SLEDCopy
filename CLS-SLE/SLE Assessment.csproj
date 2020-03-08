@@ -192,6 +192,7 @@
     <Compile Include="Controllers\AdminAssessmentsController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AdminMappingController.cs" />
+    <Compile Include="Controllers\AdminSchedulingController.cs" />
     <Compile Include="Controllers\AdminUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstructorAssessmentsController.cs" />
@@ -403,6 +404,7 @@
     <Compile Include="ViewModels\MappingViewModel.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\RubricViewModel.cs" />
+    <Compile Include="ViewModels\SchedulingViewModel.cs" />
     <Compile Include="ViewModels\UpdateRubric.cs" />
     <Compile Include="ViewModels\ViewUserViewModel.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
@@ -2192,8 +2194,8 @@
     <Content Include="Views\AdminAssessments\ProgramsCourses.cshtml" />
     <Content Include="Views\AdminAssessments\SchoolsDepartments.cshtml" />
     <Content Include="Views\AdminAssessments\ViewAssessment.cshtml" />
-    <Content Include="Views\AdminMapping\ViewMapping.cshtml" />
     <Content Include="Views\AdminMapping\Index.cshtml" />
+    <Content Include="Views\AdminScheduling\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

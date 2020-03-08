@@ -27,178 +27,178 @@ namespace CLS_SLE.Controllers
             return View();
 
         }
-
-        public ActionResult MappingRubricCourses()
-        {
-            var rubricCourse = from pam in db.ProgramAssessmentMappings
-                               join ar in db.AssessmentRubrics on pam.RubricID equals ar.RubricID
-                               join c in db.Courses on pam.CourseID equals c.CourseID
-                               select new
-                               {
-                                   RubricID = pam.RubricID,
-                                   CourseID = c.CourseID,
-                                   RubricName = ar.Name,
-                                   CourseName = c.CourseName
-                               };
-            foreach (var rc in rubricCourse)
-            {
-                Console.WriteLine(rc);
-            }
-
-
-            return View("AssessmentMappings", rubricCourse);
-        }
+        //TODO: review and delete after testing new mapping page/controller
+        //public ActionResult MappingRubricCourses()
+        //{
+        //    var rubricCourse = from pam in db.ProgramAssessmentMappings
+        //                       join ar in db.AssessmentRubrics on pam.RubricID equals ar.RubricID
+        //                       join c in db.Courses on pam.CourseID equals c.CourseID
+        //                       select new
+        //                       {
+        //                           RubricID = pam.RubricID,
+        //                           CourseID = c.CourseID,
+        //                           RubricName = ar.Name,
+        //                           CourseName = c.CourseName
+        //                       };
+        //    foreach (var rc in rubricCourse)
+        //    {
+        //        Console.WriteLine(rc);
+        //    }
 
 
-        public ActionResult AssessmentMappings()
-        {
-            try
-            {
-                var personId = Convert.ToInt32(Session["personID"].ToString());
-                var user = db.Users.FirstOrDefault(u => u.PersonID == personId);
-                var adminAssessments = db.Assessments.ToList();
-                logger.Info("Dashboard loaded for " + user?.Login);
-
-                /* select AR.RubricID, AR.Name,
-                 C.CourseID, C.CourseName
-
-                 From ProgramAssessmentMapping PAM
-                 Join AssessmentRubric AR on AR.RubricID = PAM.RubricID
-                 Join Course C on C.CourseID = PAM.CourseID 
-                */
-                var rubricCourse = from pam in db.ProgramAssessmentMappings
-                                   join ar in db.AssessmentRubrics on pam.RubricID equals ar.RubricID
-                                   join c in db.Courses on pam.CourseID equals c.CourseID
-                                   select new
-                                   {
-                                       RubricID = pam.RubricID,
-                                       CourseID = c.CourseID,
-                                       RubricName = ar.Name,
-                                       CourseName = c.CourseName
-                                   };
-
-                foreach (var rc in rubricCourse)
-                {
-                    Console.WriteLine(rc);
-                    Console.WriteLine("------------------------------");
-                }
+        //    return View("AssessmentMappings", rubricCourse);
+        //}
 
 
+        //public ActionResult AssessmentMappings()
+        //{
+        //    try
+        //    {
+        //        var personId = Convert.ToInt32(Session["personID"].ToString());
+        //        var user = db.Users.FirstOrDefault(u => u.PersonID == personId);
+        //        var adminAssessments = db.Assessments.ToList();
+        //        logger.Info("Dashboard loaded for " + user?.Login);
 
-                return View(new AssessmentMappingsViewModel
-                {
-                    Departments = db.Departments.ToList(),
-                    Programs = db.Programs.ToList(),
-                    Courses = db.Courses.ToList(),
-                    Categories = db.AssessmentCategories.ToList(),
-                    Assessments = adminAssessments.Distinct().OrderByDescending(a => a.IsActive).ThenBy(a => a.Name).ToList(),
-                    RubricAssessments = db.RubricAssessments.ToList(),
-                    AssessmentRubrics = db.AssessmentRubrics.ToList(),
-                    ProgramAssessmentMappings = db.ProgramAssessmentMappings.ToList(),
-                    //RubricsByProgram = db.RubricsByProgram.ToList()
-                });
+        //        /* select AR.RubricID, AR.Name,
+        //         C.CourseID, C.CourseName
+
+        //         From ProgramAssessmentMapping PAM
+        //         Join AssessmentRubric AR on AR.RubricID = PAM.RubricID
+        //         Join Course C on C.CourseID = PAM.CourseID 
+        //        */
+        //        var rubricCourse = from pam in db.ProgramAssessmentMappings
+        //                           join ar in db.AssessmentRubrics on pam.RubricID equals ar.RubricID
+        //                           join c in db.Courses on pam.CourseID equals c.CourseID
+        //                           select new
+        //                           {
+        //                               RubricID = pam.RubricID,
+        //                               CourseID = c.CourseID,
+        //                               RubricName = ar.Name,
+        //                               CourseName = c.CourseName
+        //                           };
+
+        //        foreach (var rc in rubricCourse)
+        //        {
+        //            Console.WriteLine(rc);
+        //            Console.WriteLine("------------------------------");
+        //        }
 
 
-            }
-            catch
-            {
-                logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
-                return RedirectToAction(actionName: "Signin", controllerName: "User");
-            }
 
-        }
+        //        return View(new AssessmentMappingsViewModel
+        //        {
+        //            Departments = db.Departments.ToList(),
+        //            Programs = db.Programs.ToList(),
+        //            Courses = db.Courses.ToList(),
+        //            Categories = db.AssessmentCategories.ToList(),
+        //            Assessments = adminAssessments.Distinct().OrderByDescending(a => a.IsActive).ThenBy(a => a.Name).ToList(),
+        //            RubricAssessments = db.RubricAssessments.ToList(),
+        //            AssessmentRubrics = db.AssessmentRubrics.ToList(),
+        //            ProgramAssessmentMappings = db.ProgramAssessmentMappings.ToList(),
+        //            //RubricsByProgram = db.RubricsByProgram.ToList()
+        //        });
 
-        public JsonResult getRubricsForMapping()
-        {
-            var rubricCourse = from pam in db.ProgramAssessmentMappings
-                               join ar in db.AssessmentRubrics on pam.RubricID equals ar.RubricID
-                               join c in db.Courses on pam.CourseID equals c.CourseID
-                               select new
-                               {
-                                   RubricID = pam.RubricID,
-                                   RubricName = ar.Name,
-                                   ProgramID = pam.ProgramID
-                               };
 
-            return Json(rubricCourse.Distinct(), JsonRequestBehavior.AllowGet);
-        }
+        //    }
+        //    catch
+        //    {
+        //        logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
+        //        return RedirectToAction(actionName: "Signin", controllerName: "User");
+        //    }
 
-        public JsonResult GetCoursesForMapping()
-        {
-            var course = from pam in db.ProgramAssessmentMappings
-                         join ar in db.AssessmentRubrics on pam.RubricID equals ar.RubricID
-                         join c in db.Courses on pam.CourseID equals c.CourseID
-                         select new
-                         {
-                             CourseName = c.CourseName,
-                             CourseID = c.CourseID,
-                             ProgramID = pam.ProgramID,
-                             RubricID = pam.RubricID
-                         };
+        //}
 
-            return Json(course.Distinct(), JsonRequestBehavior.AllowGet);
-        }
+        //public JsonResult getRubricsForMapping()
+        //{
+        //    var rubricCourse = from pam in db.ProgramAssessmentMappings
+        //                       join ar in db.AssessmentRubrics on pam.RubricID equals ar.RubricID
+        //                       join c in db.Courses on pam.CourseID equals c.CourseID
+        //                       select new
+        //                       {
+        //                           RubricID = pam.RubricID,
+        //                           RubricName = ar.Name,
+        //                           ProgramID = pam.ProgramID
+        //                       };
 
-        [HttpPost]
-        public JsonResult PostRubricToMapping(String programID, String rubricID)
-        {
-            ProgramAssessmentMapping pam = new ProgramAssessmentMapping
-            {
-                ProgramID = short.Parse(programID),
-                RubricID = short.Parse(rubricID),
-                CourseID = 110
-            };
-            db.ProgramAssessmentMappings.Add(pam);
-            db.SaveChanges();
-            return Json(pam, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(rubricCourse.Distinct(), JsonRequestBehavior.AllowGet);
+        //}
 
-        [HttpPost]
-        public JsonResult PostCourseToMapping(String programID, String rubricID, String courseID)
-        {
-            short ProgramID = short.Parse(programID);
-            short RubricID = short.Parse(rubricID);
-            short CourseID = short.Parse(courseID);
+        //public JsonResult GetCoursesForMapping()
+        //{
+        //    var course = from pam in db.ProgramAssessmentMappings
+        //                 join ar in db.AssessmentRubrics on pam.RubricID equals ar.RubricID
+        //                 join c in db.Courses on pam.CourseID equals c.CourseID
+        //                 select new
+        //                 {
+        //                     CourseName = c.CourseName,
+        //                     CourseID = c.CourseID,
+        //                     ProgramID = pam.ProgramID,
+        //                     RubricID = pam.RubricID
+        //                 };
 
-            if (programID != null && rubricID != null && courseID != null)
-            {
-                var pam = db.ProgramAssessmentMappings.FirstOrDefault(p => p.ProgramID == ProgramID && p.RubricID == RubricID);
+        //    return Json(course.Distinct(), JsonRequestBehavior.AllowGet);
+        //}
 
-                if (pam.CourseID == 110)
-                {
-                    pam.CourseID = CourseID;
-                }
-                else
-                {
-                    ProgramAssessmentMapping p = new ProgramAssessmentMapping
-                    {
-                        ProgramID = ProgramID,
-                        RubricID = RubricID,
-                        CourseID = CourseID
-                    };
-                    db.ProgramAssessmentMappings.Add(p);
-                }
-            }
-            db.SaveChanges();
-            return Json(JsonRequestBehavior.AllowGet);
-        }
+        //[HttpPost]
+        //public JsonResult PostRubricToMapping(String programID, String rubricID)
+        //{
+        //    ProgramAssessmentMapping pam = new ProgramAssessmentMapping
+        //    {
+        //        ProgramID = short.Parse(programID),
+        //        RubricID = short.Parse(rubricID),
+        //        CourseID = 110
+        //    };
+        //    db.ProgramAssessmentMappings.Add(pam);
+        //    db.SaveChanges();
+        //    return Json(pam, JsonRequestBehavior.AllowGet);
+        //}
 
-        public JsonResult DeleteRubricFromMapping(String programID, String rubricID)
-        {
-            short ProgramID = short.Parse(programID);
-            short RubricID = short.Parse(rubricID);
-            var pams = db.ProgramAssessmentMappings;
-            if (programID != null && rubricID != null)
-            {
-                var pam = pams.Where(p => p.ProgramID == ProgramID && p.RubricID == RubricID);
-                foreach (var p in pam)
-                {
-                    db.ProgramAssessmentMappings.Remove(p);
-                }
-                db.SaveChanges();
-            }
-            return Json(JsonRequestBehavior.AllowGet);
-        }
+        //[HttpPost]
+        //public JsonResult PostCourseToMapping(String programID, String rubricID, String courseID)
+        //{
+        //    short ProgramID = short.Parse(programID);
+        //    short RubricID = short.Parse(rubricID);
+        //    short CourseID = short.Parse(courseID);
+
+        //    if (programID != null && rubricID != null && courseID != null)
+        //    {
+        //        var pam = db.ProgramAssessmentMappings.FirstOrDefault(p => p.ProgramID == ProgramID && p.RubricID == RubricID);
+
+        //        if (pam.CourseID == 110)
+        //        {
+        //            pam.CourseID = CourseID;
+        //        }
+        //        else
+        //        {
+        //            ProgramAssessmentMapping p = new ProgramAssessmentMapping
+        //            {
+        //                ProgramID = ProgramID,
+        //                RubricID = RubricID,
+        //                CourseID = CourseID
+        //            };
+        //            db.ProgramAssessmentMappings.Add(p);
+        //        }
+        //    }
+        //    db.SaveChanges();
+        //    return Json(JsonRequestBehavior.AllowGet);
+        //}
+
+        //public JsonResult DeleteRubricFromMapping(String programID, String rubricID)
+        //{
+        //    short ProgramID = short.Parse(programID);
+        //    short RubricID = short.Parse(rubricID);
+        //    var pams = db.ProgramAssessmentMappings;
+        //    if (programID != null && rubricID != null)
+        //    {
+        //        var pam = pams.Where(p => p.ProgramID == ProgramID && p.RubricID == RubricID);
+        //        foreach (var p in pam)
+        //        {
+        //            db.ProgramAssessmentMappings.Remove(p);
+        //        }
+        //        db.SaveChanges();
+        //    }
+        //    return Json(JsonRequestBehavior.AllowGet);
+        //}
 
         [HttpPost]
         public void UpdateDateRange(string startDateTime, string endDateTime, string assessmentRubricId)
@@ -459,39 +459,40 @@ namespace CLS_SLE.Controllers
             }
         }
 
-        /*
-         * SLE-CLS Group - Fall 2019
-         * Last Updated: Matt Petermann 10/7/19
-         */
-        public ActionResult AssessmentScheduling()
-        {
-            try
-            {
-                var personId = Convert.ToInt32(Session["personID"].ToString());
-                var user = db.Users.FirstOrDefault(u => u.PersonID == personId);
-                var adminAssessments = db.Assessments.ToList();
-                logger.Info("Dashboard loaded for " + user?.Login);
+        //TODO: review and remove after creating new scheduling page/controller
+        ///*
+        // * SLE-CLS Group - Fall 2019
+        // * Last Updated: Matt Petermann 10/7/19
+        // */
+        //public ActionResult AssessmentScheduling()
+        //{
+        //    try
+        //    {
+        //        var personId = Convert.ToInt32(Session["personID"].ToString());
+        //        var user = db.Users.FirstOrDefault(u => u.PersonID == personId);
+        //        var adminAssessments = db.Assessments.ToList();
+        //        logger.Info("Dashboard loaded for " + user?.Login);
 
-                return View(new AssessmentSchedulingViewModel
-                {
-                    Departments = db.Departments.ToList(),
-                    Sections = db.Sections.ToList(),
-                    Semesters = db.Semesters.ToList(),
-                    Programs = db.Programs.ToList(),
-                    Courses = db.Courses.ToList(),
-                    Categories = db.AssessmentCategories.ToList(),
-                    AssessmentRubrics = db.AssessmentRubrics.ToList(),
-                    ProgramAssessmentMappings = db.ProgramAssessmentMappings.ToList(),
-                    Assessments = adminAssessments.Distinct().OrderByDescending(a => a.IsActive)
-                        .ThenBy(a => a.Name).ToList()
-                });
-            }
-            catch
-            {
-                logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
-                return RedirectToAction(actionName: "Signin", controllerName: "User");
-            }
-        }
+        //        return View(new AssessmentSchedulingViewModel
+        //        {
+        //            Departments = db.Departments.ToList(),
+        //            Sections = db.Sections.ToList(),
+        //            Semesters = db.Semesters.ToList(),
+        //            Programs = db.Programs.ToList(),
+        //            Courses = db.Courses.ToList(),
+        //            Categories = db.AssessmentCategories.ToList(),
+        //            AssessmentRubrics = db.AssessmentRubrics.ToList(),
+        //            ProgramAssessmentMappings = db.ProgramAssessmentMappings.ToList(),
+        //            Assessments = adminAssessments.Distinct().OrderByDescending(a => a.IsActive)
+        //                .ThenBy(a => a.Name).ToList()
+        //        });
+        //    }
+        //    catch
+        //    {
+        //        logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
+        //        return RedirectToAction(actionName: "Signin", controllerName: "User");
+        //    }
+        //}
 
         public ActionResult ProgramsCourses()
         {

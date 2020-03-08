@@ -35,7 +35,7 @@
         <EntityTypeShape EntityType="SLE_TrackingModel.ScoreSet" Width="1.5" PointX="0.75" PointY="39.875" />
         <EntityTypeShape EntityType="SLE_TrackingModel.Section" Width="1.5" PointX="4.5" PointY="29.875" />
         <EntityTypeShape EntityType="SLE_TrackingModel.SectionRubric" Width="1.5" PointX="6.75" PointY="30.375" />
-        <EntityTypeShape EntityType="SLE_TrackingModel.Semester" Width="1.5" PointX="7.5" PointY="20.625" IsExpanded="false" />
+        <EntityTypeShape EntityType="SLE_TrackingModel.Semester" Width="1.5" PointX="7.5" PointY="20.625" IsExpanded="true" />
         <EntityTypeShape EntityType="SLE_TrackingModel.StudentProgram" Width="1.5" PointX="9.75" PointY="14.375" />
         <EntityTypeShape EntityType="SLE_TrackingModel.StudentScore" Width="1.5" PointX="9.75" PointY="25.625" />
         <EntityTypeShape EntityType="SLE_TrackingModel.sysdiagram" Width="1.5" PointX="9.5" PointY="8.75" />

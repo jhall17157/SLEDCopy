@@ -153,7 +153,7 @@ namespace CLS_SLE.Controllers
                 db.SaveChanges();
             }
 
-            return RedirectToAction("ViewSchools", "Admin");
+            return RedirectToAction("Schools", "AdminSchool");
         }
     }
 }

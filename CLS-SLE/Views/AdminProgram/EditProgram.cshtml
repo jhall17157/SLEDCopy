@@ -1,4 +1,5 @@
 ﻿@using CLS_SLE.Models
+@model CLS_SLE.ViewModels.UpdateProgramViewModel
 @{
     ViewBag.Title = "EditProgram";
 }
@@ -6,42 +7,65 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Programs", "Programs", "AdminPrograms")</li>
-        <li class="breadcrumb-item">@Html.ActionLink((String)Model.program.Name, "ViewProgram", "AdminPrograms", new { programID = Model.program.ProgramID }, null)</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs", "Programs", "AdminProgram")</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)ViewBag.program.Name, "ViewProgram", "AdminProgram", new { programID = ViewBag.program.ProgramID }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">Edit</li>
     </ol>
 </nav>
-<h1>Edit Program</h1>
+<h1>Edit School</h1>
 <br />
-
-<form method="post" action="@Url.Action("SaveProgram", "AdminPrograms", new { programID = Model.program.ProgramID })">
-    <div class="form-row">
-        <div class="form-group col-9">
-            <label for="Number">Number:</label>
-            <input type="text" name="Number" class="form-control" value="@Model.program.Number" required />
-        </div>
+@using (Html.BeginForm("UpdateProgram", "AdminProgram", new { programID = ViewBag.program.ProgramID }, FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.Label("Program Number:")
+        @Html.EditorFor(Model => Model.Program.Number,
+       new { htmlAttributes = new { @class = "form-control", Value = ViewBag.program.Number } })
+        @Html.ValidationMessageFor(model => model.Program.Number)
     </div>
-    <div class="form-row">
-        <div class="form-group col-9">
-            <label for="Name">Name:</label>
-            <input type="text" name="Name" class="form-control" value="@Model.program.Name" required />
-        </div>
+    <div class="form-group">
+        @Html.Label("Program Name:")
+        @Html.EditorFor(Model => Model.Program.Name,
+       new { htmlAttributes = new { @class = "form-control", Value = ViewBag.program.Name } })
+        @Html.ValidationMessageFor(model => model.Program.Name)
     </div>
-    <fieldset class="form-group col-9">
-        <div class="row">
-            <legend class="col-form-label col-4 pt-0">Is Active:</legend>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="IsActive" id="IsActiveTrue" value="True" @(Model.program.IsActive ? " checked=\"checked\"" : "")>
-                <label class="form-check-label" for="IsActiveTrue">True</label>
+    <div class="form-group">
+        @using (Html.BeginForm("Activate", "AdminProgram", new { id = Model.Program.ProgramID }, FormMethod.Post,
+            new { htmlAttributes = new { @class = "form form-inline float-right" } }))
+        {
+            <div class="form-group mx-1">
+                <button @if (Model.Program.IsActive) { <text> class="btn btn-success col-12" type="button" </text>  } else { <text> class="btn btn-outline-success col-12" type="submit" name="submit" formmethod="post" </text> }>
+                    Active
+                </button>
             </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="IsActive" id="IsActiveFalse" value="False" @(!Model.program.IsActive ? " checked=\"checked\"" : "")>
-                <label class="form-check-label" for="IsActiveFalse">False</label>
+            <div class="form-group mx-1">
+                <button @if (Model.Program.IsActive) { <text> class="btn btn-outline-danger col-12" type="submit" name="submit" formmethod="post" </text>  } else { <text> class="btn btn-danger col-12" type="button" </text> }>
+                    Inactive
+                </button>
             </div>
-        </div>
-    </fieldset>
+        }
+    </div>
+    <div class="form-group">
+        @using (Html.BeginForm("Share", "AdminProgram", new { id = Model.Program.ProgramID }, FormMethod.Post,
+            new { htmlAttributes = new { @class = "form form-inline float-right" } }))
+        {
+            <div class="form-group mx-1">
+                <button @if (Model.Program.IsSharedProgram) { <text> class="btn btn-success col-12" type="button" </text>  } else { <text> class="btn btn-outline-success col-12" type="submit" name="submit" formmethod="post" </text> }>
+                    Shared
+                </button>
+            </div>
+            <div class="form-group mx-1">
+                <button @if (Model.Program.IsSharedProgram) { <text> class="btn btn-outline-danger col-12" type="submit" name="submit" formmethod="post" </text>  } else { <text> class="btn btn-danger col-12" type="button" </text> }>
+                    Not Shared
+                </button>
+            </div>
+        }
+    </div>
     <div class="row justify-content-end col-9">
-        <div class="col-2 p-0 mx-1"><button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Update</button></div>
-        <div class="col-2 p-0 mx-1"><a href="/AdminPrograms/ViewProgram?programID=@Model.program.ProgramID" class="btn btn-danger col-12 mx-1">Cancel</a></div>
+        <div class="form-group col-2 p-0 mx-1"><input type="submit" class="btn btn-primary col-12 mx-1" value="Submit" /></div>
+        <div class="col-2 p-0 mx-1"><a href="/AdminSchool/ViewSchool?schoolID=@ViewBag.school.SchoolID"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
     </div>
-</form>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

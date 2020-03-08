@@ -195,6 +195,7 @@
     <Compile Include="Controllers\AdminAssessmentsController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AdminDepartmentController.cs" />
+    <Compile Include="Controllers\AdminProgramController.cs" />
     <Compile Include="Controllers\AdminSchoolController.cs" />
     <Compile Include="Controllers\AdminUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -383,13 +384,16 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\AddProgramViewModel.cs" />
     <Compile Include="ViewModels\AddSchoolViewModel.cs" />
     <Compile Include="ViewModels\CriterionViewModel.cs" />
     <Compile Include="ViewModels\EditDepartmentViewModel.cs" />
     <Compile Include="ViewModels\InsertNewAssesmentViewModel.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
+    <Compile Include="ViewModels\ProgramDetailViewModel.cs" />
     <Compile Include="ViewModels\RubricViewModel.cs" />
     <Compile Include="ViewModels\SchoolDetailViewModel.cs" />
+    <Compile Include="ViewModels\UpdateProgramViewModel.cs" />
     <Compile Include="ViewModels\UpdateSchoolViewModel.cs" />
     <Compile Include="ViewModels\UpdateRubric.cs" />
     <Compile Include="ViewModels\ViewDepartmentViewModel.cs" />

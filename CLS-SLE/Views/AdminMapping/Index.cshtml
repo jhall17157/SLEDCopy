@@ -19,30 +19,32 @@
 @using (Html.BeginForm("Index", "AdminMapping", FormMethod.Post))
 {
     //Populates a list of programs to choose from
-    <div class="form-inline mt-3 mb-4">
-        <div class="row">
+    <div class="form-inline mt-4 mb-4">
+        <div class="row col-12">
             @*<div class="form-group col-7">
-                <input type="text" class="form-control mr-2 col-10" placeholder="Search For Programs..." />
-                <input type="submit" class="btn btn-primary mt-2" value="Search" />
-            </div>*@
-            <div class="form-group col-5">
+                    <input type="text" class="form-control mr-2 col10" placeholder="Search For Programs..." />
+                    <input type="submit" class="btn btn-primary mt-2" value="Search" />
+                </div>*@
+            <div class="form-group col-12">
+                <p class="col-12 mb-1 pl-0">Search For A Program:</p>
                 @Html.DropDownListFor(p => p.ProgramID, Model.Programs, "-Select Program-", new
                    {
                        @id = "DropDownPrograms",
-                       @class = "form-control selectpicker",
-                       
+                       @class = "form-control selectpicker d-inline col-6",
                        onchange = "this.form.submit();"
                    })
+
                 @*@Html.DropDownList("Program", Model.Programs, "All", new {@id = "DropDownPrograms", @class = "form-control"})*@
                 @*@Html.DropDownListFor(x => x.SelectedProgram, Model.AvailablePrograms, new {@class = "form-control"})*@
                 @*@Html.ValidationMessageFor(model => model.Program.ProgramID)*@
-                <input type="submit" class="btn btn-primary mt-2" value="Submit" />
+                <input type="submit" class="btn btn-primary d-inline ml-2" value="Submit" />
             </div>
         </div>
     </div>
 }
 
-
+@*@{var program = ""; }
+@{var rubric = ""; }*@
 @if (Model.Program != null)
 {
     <hr />
@@ -57,18 +59,28 @@
             @{
                 foreach (Assessment assessment in Model.Program.Assessments)
                 {
+                    
                     <tr>
-                        <td class="bg-dark text-white"><h3>@assessment.Name</h3><h5 class="float-left">(@Model.Program.Name)</h5></td>
+                        <td class="bg-dark text-white"><h4>@assessment.Name</h4><h5 class="float-left">(@Model.Program.Name)</h5></td>
                     </tr>
                     foreach (RubricAssessment ra in assessment.RubricAssessments.ToList())
                     {
+                       
                         <tr>
-                            <td class="bg-light" valign="bottom"><h5 class="d-inline">@ra.AssessmentRubric.Name</h5> <button type="button" class="btn btn-primary float-right"><i class="fa fa-plus" aria-hidden="true"></i> Add Course</button></td>
+                            <td class="bg-light" valign="bottom">
+                                <h4 class="d-inline font-weight-bold">@ra.AssessmentRubric.Name</h4>
+                                <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#addModal"><i class="fa fa-plus" aria-hidden="true"></i> Add Course</button>
+                            </td>
                         </tr>
                         foreach (ProgramAssessmentMapping pam in ra.AssessmentRubric.ProgramAssessmentMappings)
                         {
                             <tr>
-                                <td class="align-text-bottom" valign="bottom"><span class="d-none d-md-noe d-lg-inline">&emsp;</span>@pam.Course.CourseName<button type="button" value="@pam.ProgramAssessmentMappingID" class="btn btn-sm btn-danger d-inline float-right"><i class="fa fa-times fa-align-center" aria-hidden="true"></i></button></td>
+                                <td class="align-text-bottom" valign="bottom">
+                                    <span class="d-none d-md-noe d-lg-inline">&emsp;</span>@pam.Course.CourseName
+
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class=" btn btn-danger btn-sm d-inline float-right" data-toggle="modal" data-target="#removeCourseModal"><i class="fas fa-times" aria-hidden="true"></i></button>
+                                </td>
                             </tr>
                         }
                     }
@@ -78,6 +90,64 @@
     </table>
 
 }
+
+
+<!-- Modal For Deleting Courses-->
+<div class="modal fade" id="removeCourseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h3 class="modal-title" id="removeConfirm">Confirm Action</h3>
+                <i class="ml-auto fas fa-exclamation-triangle fa-2x"></i>
+            </div>
+            <div class="modal-body">
+                Are you sure you want remove this course?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary mr-auto" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline-danger  float-right">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModal">Add Course to Rubric</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group col-12">
+                    @*<div>Program name: @program</div>
+                    <div>Rubric Name: @rubric</div>*@
+                    <p class="col-12 mb-1 pl-0">Select a course</p>
+                    @Html.DropDownListFor(p => p.CourseID, Model.Courses, "-Select Course-", new
+                       {
+                           @id = "DropDownCourses",
+                           @class = "form-control selectpicker d-inline col-6",
+                           onchange = "this.form.submit();"
+                       })
+
+                    @*@Html.DropDownList("Program", Model.Programs, "All", new {@id = "DropDownPrograms", @class = "form-control"})*@
+                    @*@Html.DropDownListFor(x => x.SelectedProgram, Model.AvailablePrograms, new {@class = "form-control"})*@
+                    @*@Html.ValidationMessageFor(model => model.Program.ProgramID)*@
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Add a course</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

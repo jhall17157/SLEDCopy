@@ -1,0 +1,76 @@
+﻿@using CLS_SLE.Models;
+@{
+    ViewBag.Title = "View Assessment";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments")</li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.assessment.Name </li>
+    </ol>
+</nav>
+<h1> @Model.assessment.Name  - <a style="font-size: 85%;" href="/Admin/EditAssessment?AssessmentID=@Model.assessment.AssessmentID"><b>Edit</b></a> </h1>
+<br />
+<div class="py-1">
+    <b>Category:</b> @Model.assessment.Category
+</div>
+<div class="py-1">
+    <b>Description:</b> @Model.assessment.Description
+</div>
+<div class="py-1">
+    <b>Pass Rate:</b> @(Model.assessment.OutcomePassRate * 100)%
+</div>
+<div>
+    <b>Calculate Pass Rate:</b> @Model.assessment.CalculateOutcomePassRate
+</div>
+<div class="py-1">
+    <b>Program:</b> @Model.program
+</div>
+<div class="py-1">
+    <b>Is Active:</b> @Model.assessment.IsActive
+</div>
+@if (Model.ModifierLogin != null)
+{
+    <div class="py-1">
+        <b>Last Modified:</b>  @Model.assessment.ModifiedDateTime
+    </div>
+    <div class="py-1">
+        <b>By User:</b> @Model.ModifierLogin
+    </div>
+}
+else if (Model.CreatorLogin != null)
+{
+    <div class="py-1">
+        <b>Created:</b> @Model.assessment.CreatedDateTime
+    </div>
+    <div class="py-1">
+        <b>By User:</b> @Model.CreatorLogin
+    </div>
+}
+<br />
+
+<div>
+    <table class="table table-hover table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th class="h3">Rubrics</th>
+                <th><a href="~/Rubric/AddRubric?assessmentID=@Model.assessment.AssessmentID" class="float-right"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Rubric </button></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ foreach (RubricAssessment rubricAssessment in Model.assessment.RubricAssessments)
+                {
+                    AssessmentRubric assessmentRubric = rubricAssessment.AssessmentRubric;
+
+                    <tr data-userID="person.PersonID">
+                        <td>@assessmentRubric.Name</td>
+                        
+                        <td class="text-right"><a href="~/Rubric/ViewRubric?rubricID=@assessmentRubric.RubricID"><button type="button" class="btn btn-primary mr-2">View</button></a></td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

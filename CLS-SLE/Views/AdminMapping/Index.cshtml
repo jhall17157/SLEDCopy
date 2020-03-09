@@ -21,7 +21,7 @@
     //Populates a list of programs to choose from
     <div class="form-inline mt-4 mb-4">
         <div class="row col-12">
-           
+
             <div class="form-group col-12">
                 <p class="col-12 mb-1 pl-0">Search For A Program:</p>
                 @Html.DropDownListFor(p => p.ProgramID, Model.Programs, "-Select Program-", new
@@ -31,7 +31,7 @@
                        onchange = "this.form.submit();"
                    })
 
-              
+
                 <input type="submit" class="btn btn-primary d-inline ml-2" value="Submit" />
             </div>
         </div>
@@ -47,18 +47,17 @@
     </div>
 
     <table class="table table-hover">
-
         <tbody id="assessmentData">
             @{
                 foreach (Assessment assessment in Model.Program.Assessments)
                 {
-                    
+
                     <tr>
                         <td class="bg-dark text-white"><h4>@assessment.Name</h4><h5 class="float-left">(@Model.Program.Name)</h5></td>
                     </tr>
                     foreach (RubricAssessment ra in assessment.RubricAssessments.ToList())
                     {
-                       
+
                         <tr>
                             <td class="bg-light" valign="bottom">
                                 <h4 class="d-inline font-weight-bold">@ra.AssessmentRubric.Name</h4>
@@ -69,7 +68,7 @@
                         {
                             <tr>
                                 <td class="align-text-bottom" valign="bottom">
-                                    <span class="d-none d-md-noe d-lg-inline">&emsp;</span>@pam.Course.CourseName
+                                    <span class="d-none d-md-noe d-lg-inline">&emsp;</span>(@pam.Course.Number) @pam.Course.CourseName
 
                                     <!-- Button trigger modal -->
                                     <button type="button" class=" btn btn-danger btn-sm d-inline float-right" data-toggle="modal" data-target="#removeCourseModal"><i class="fas fa-times" aria-hidden="true"></i></button>
@@ -83,7 +82,6 @@
     </table>
 
 }
-
 
 <!-- Modal For Deleting Courses-->
 <div class="modal fade" id="removeCourseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -117,7 +115,7 @@
             <div class="modal-body">
                 <div class="form-group col-12">
                     @*<div>Program name: @program</div>
-                    <div>Rubric Name: @rubric</div>*@
+                        <div>Rubric Name: @rubric</div>*@
                     <p class="col-12 mb-1 pl-0">Select a course</p>
                     @Html.DropDownListFor(p => p.CourseID, Model.Courses, "-Select Course-", new
                        {

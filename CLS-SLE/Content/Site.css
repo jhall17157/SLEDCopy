@@ -98,6 +98,10 @@ small, a {
     margin-left: 4%;
 }
 
+.clickable {
+    cursor: pointer;
+}
+
 /* prevents h1 from getting crazy big on huge monitors */
 @media only screen and (min-width: 2000px) {
     h1 {

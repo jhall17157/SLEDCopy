@@ -49,22 +49,24 @@
     <table class="table table-hover">
         <tbody id="assessmentData">
             @{
+                int rubricNumber = 0;
                 foreach (Assessment assessment in Model.Program.Assessments)
                 {
-                    <tr>
-                        <td class="bg-dark text-white"><h4>@assessment.Name</h4><h5 class="float-left">(@Model.Program.Name)</h5></td>
-                    </tr>
+                <tr>
+                    <td class="bg-dark text-white"><h4>@assessment.Name</h4><h5 class="float-left">(@Model.Program.Name)</h5></td>
+                </tr>
                     foreach (RubricAssessment ra in assessment.RubricAssessments.ToList())
                     {
-                        <tr>
+                        rubricNumber++;
+                        <tr href="#" data-target=".rubricCollapse@(rubricNumber)" class="accordionTrigger clickable">
                             <td class="bg-light" valign="bottom">
-                                <h4 class="d-inline font-weight-bold">@ra.AssessmentRubric.Name</h4>
-                                <button type="button" class="btn btn-success float-right disableModalButton" data-toggle="modal" data-target="#addModal"><i class="fa fa-plus" aria-hidden="true"></i> Add Course</button>
+                                <h4 class="d-inline"><i class="rubricIcon@(rubricNumber) fas fa-angle-right"></i> @ra.AssessmentRubric.Name</h4>
+                                <button type="button" class="btn btn-success float-right disableModalButton rubricButton@(rubricNumber)" data-toggle="modal" data-target="#addModal"><i class="fa fa-plus" aria-hidden="true"></i> Add Course</button>
                             </td>
                         </tr>
                         foreach (ProgramAssessmentMapping pam in ra.AssessmentRubric.ProgramAssessmentMappings)
                         {
-                            <tr>
+                            <tr class="collapse rubricCollapse@(rubricNumber) accordionClose">
                                 <td class="align-text-bottom" valign="bottom">
                                     <span class="d-none d-md-noe d-lg-inline indent"></span>(@pam.Course.Number) @pam.Course.CourseName
 
@@ -142,18 +144,37 @@
 
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
+        $('.accordionTrigger').click(toggleAccordion);
+        $('.disableModalButton').click(checkAccordion);
         //$('[data-toggle="tooltip"]').hover(showTooltips);
         //$('.disableModalButton').click(hideTooltips);
-        //$('.enableModalButton').click(showTooltips);
+      //  $('.enableModalButton').click(showTooltips);
+
     })
 
-    function hideTooltips() {
-       //$('[data-toggle="tooltip"]').tooltip('disable');
+    function toggleAccordion() {
+        if ($($(this).data('target')).hasClass('accordionClose'))
+        {
+            $($(this).data('target')).removeClass('collapse').removeClass('accordionClose').addClass('accordionOpen');
+            var targetClass = $(this).data('target');
+            $('.rubricIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-right").addClass("fas fa-angle-down");
+            //$('.rubricButton' + targetClass[targetClass.length - 1]).removeClass("d-none").addClass("d-inline");
+        }
+        else if ($($(this).data('target')).hasClass('accordionOpen'))
+        {
+            $($(this).data('target')).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
+            var targetClass = $(this).data('target');
+            $('.rubricIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+            //$('.rubricButton' + targetClass[targetClass.length - 1]).removeClass("d-inline").addClass("d-none");
+        }
     }
+    //function hideTooltips() {
+    //   $('[data-toggle="tooltip"]').tooltip('hide');
+    //}
     
-    function showTooltips() {
-        //$('[data-toggle="tooltip"]').tooltip('enable');
-    }
+    // function showTooltips() {
+    //     $('[data-toggle="tooltip"]').tooltip('show');
+    // }
     
 </script>
 

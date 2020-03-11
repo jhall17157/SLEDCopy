@@ -51,13 +51,11 @@
             @{
                 foreach (Assessment assessment in Model.Program.Assessments)
                 {
-
                     <tr>
                         <td class="bg-dark text-white"><h4>@assessment.Name</h4><h5 class="float-left">(@Model.Program.Name)</h5></td>
                     </tr>
                     foreach (RubricAssessment ra in assessment.RubricAssessments.ToList())
                     {
-
                         <tr>
                             <td class="bg-light" valign="bottom">
                                 <h4 class="d-inline font-weight-bold">@ra.AssessmentRubric.Name</h4>
@@ -68,7 +66,7 @@
                         {
                             <tr>
                                 <td class="align-text-bottom" valign="bottom">
-                                    <span class="d-none d-md-noe d-lg-inline"></span>(@pam.Course.Number) @pam.Course.CourseName
+                                    <span class="d-none d-md-noe d-lg-inline indent"></span>(@pam.Course.Number) @pam.Course.CourseName
 
                                     <!-- Button trigger modal -->
                                     <span class="deleteTooltip d-inline float-right" data-toggle="tooltip" data-placement="right" title="Remove Course"><button type="button" class=" btn btn-danger btn-sm d-inline float-right disableModalButton" data-toggle="modal" data-target="#removeCourseModal"><i class="fas fa-times" aria-hidden="true"></i></button></span>

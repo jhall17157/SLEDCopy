@@ -99,6 +99,14 @@
                 $('#logo').css("width", 250);
             }
         }
+        
+        $(function () {
+            initButtons();
+            function initButtons() {
+                $('#first, #prev').prop('disabled', $('#start').html() == "1");
+                $('#last, #next').prop('disabled', $('#end').html() == $('#total').html());
+            }
+        });
     </script>
     @RenderSection("scripts", required: false)
 </body>

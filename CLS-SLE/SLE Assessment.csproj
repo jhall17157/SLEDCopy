@@ -194,7 +194,9 @@
     <Compile Include="App_Start\RouteConfig2.cs" />
     <Compile Include="Controllers\AdminAssessmentsController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AdminCourseController.cs" />
     <Compile Include="Controllers\AdminDepartmentController.cs" />
+    <Compile Include="Controllers\AdminDepartmentsController.cs" />
     <Compile Include="Controllers\AdminSchoolController.cs" />
     <Compile Include="Controllers\AdminUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -205,6 +207,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\PagingInfo.cs" />
+    <Compile Include="ViewModels\AddCourseViewModel.cs" />
     <Compile Include="ViewModels\AddDepartmentViewModel.cs" />
     <Compile Include="Models\Assessment.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
@@ -384,12 +388,16 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\AddSchoolViewModel.cs" />
+    <Compile Include="ViewModels\CoursesViewModel.cs" />
+    <Compile Include="ViewModels\CreateCourseViewModel.cs" />
     <Compile Include="ViewModels\CriterionViewModel.cs" />
+    <Compile Include="ViewModels\EditCourseViewModel.cs" />
     <Compile Include="ViewModels\EditDepartmentViewModel.cs" />
     <Compile Include="ViewModels\InsertNewAssesmentViewModel.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\RubricViewModel.cs" />
     <Compile Include="ViewModels\SchoolDetailViewModel.cs" />
+    <Compile Include="ViewModels\UpdateCourseViewModel.cs" />
     <Compile Include="ViewModels\UpdateSchoolViewModel.cs" />
     <Compile Include="ViewModels\UpdateRubric.cs" />
     <Compile Include="ViewModels\ViewDepartmentViewModel.cs" />
@@ -2189,10 +2197,12 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Admin\ViewSchool.cshtml" />
     <Content Include="Views\AdminSchools\Edit_Kayla.cshtml" />
+    <Content Include="Views\AdminCourse\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Scripts\main\" />
+    <Folder Include="Views\AdminDepartments\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

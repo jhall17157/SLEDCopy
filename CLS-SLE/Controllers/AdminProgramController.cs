@@ -10,10 +10,10 @@ using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
-    [Authorize(Roles = "Administration")]
+    [Authorize(Roles = "Administrator")]
     public class AdminProgramController : Controller
     {
-        SLE_TrackingEntities db = new SLE_TrackingEntities();
+        private SLE_TrackingEntities db = new SLE_TrackingEntities();
         private Logger logger = LogManager.GetCurrentClassLogger();
 
         // GET: AdminProgram
@@ -73,18 +73,20 @@ namespace CLS_SLE.Controllers
             return View();
         }
 
-        public ActionResult ViewProgram(int? programID)
+        public ActionResult ViewProgram(short id) { return View(db.Programs.Where(p => p.ProgramID == id).FirstOrDefault()); }
+
+        /*public ActionResult ViewProgram(int? programID)
         {
             var program = new Program();
-            var canEdit = false;
+            //var canEdit = false;
 
             try
             {
                 if (programID.HasValue)
                 {
                     program = db.Programs.FirstOrDefault(p => p.ProgramID == programID.Value);
-                    var permission = db.ProgramSecurities.FirstOrDefault(p => p.ProgramID == programID.Value);
-                    if (permission != null)
+                    /*var permission = db.ProgramSecurities.FirstOrDefault(p => p.ProgramID == programID.Value);
+                    /if (permission != null)
                     {
                         canEdit = permission.CanEdit == true ? true : false;
                     }
@@ -123,7 +125,7 @@ namespace CLS_SLE.Controllers
                     }
                 }
                 model.program = program;
-                model.canEdit = canEdit;
+                //model.canEdit = canEdit;
 
                 return View(model);
             }
@@ -132,7 +134,7 @@ namespace CLS_SLE.Controllers
                 logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
                 return RedirectToAction("Signin", "User");
             }
-        }
+        }*/
 
         [HttpPost]
         public ActionResult UpdateProgram(UpdateProgramViewModel programVM, short programID)

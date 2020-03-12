@@ -22,27 +22,13 @@
         @Html.ValidationMessageFor(model => model.School.Name)
     </div>
     <div class="form-group">
-        <!--@Html.LabelFor(Model => Model.School.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        Active
-        @Html.RadioButtonFor(Model => Model.School.IsActive, true)
-        InActive
-        @Html.RadioButtonFor(Model => Model.School.IsActive, false)
-    </div>-->
-        @using (Html.BeginForm("Activate", "AdminSchool", new { id = Model.School.SchoolID }, FormMethod.Post,
-            new { htmlAttributes = new { @class = "form form-inline float-right" } }))
-        {
-            <div class="form-group mx-1">
-                <button @if (Model.School.IsActive) { <text> class="btn btn-success col-12" type="button" </text>  } else { <text> class="btn btn-outline-success col-12" type="submit" name="submit" formmethod="post" </text> }>
-                    Active
-                </button>
-            </div>
-            <div class="form-group mx-1">
-                <button @if (Model.School.IsActive) { <text> class="btn btn-outline-danger col-12" type="submit" name="submit" formmethod="post" </text>  } else { <text> class="btn btn-danger col-12" type="button" </text> }>
-                    Inactive
-                </button>
-            </div>
-        }
+        @Html.LabelFor(Model => Model.School.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            Active
+            @Html.RadioButtonFor(Model => Model.School.IsActive, true)
+            InActive
+            @Html.RadioButtonFor(Model => Model.School.IsActive, false)
+        </div>
     </div>
     <div class="row justify-content-end col-9">
         <div class="form-group col-2 p-0 mx-1"><input type="submit" class="btn btn-primary col-12 mx-1" value="Submit" /></div>

@@ -97,7 +97,19 @@ namespace CLS_SLE.Controllers
 
             return RedirectToAction("Index", "AdminMapping");
         }
-        
+
+
+        //Delete method does not account for confirmation modal. 
+            //Need to bind @Model.MappingID = @pam.ProgramAssessmentID
+        [ActionName("DeleteMapping")]
+        public ActionResult DeleteMapping(short id)
+        {
+            ProgramAssessmentMapping pamId = db.ProgramAssessmentMappings.Find(id);
+            db.ProgramAssessmentMappings.Remove(pamId);
+            db.SaveChanges();
+
+            return RedirectToAction("Index", "AdminMapping");
+        }
 
 
 

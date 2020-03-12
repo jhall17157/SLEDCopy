@@ -14,7 +14,7 @@
 <h1>Add Department</h1>
 <br />
 
-@using (Html.BeginForm("CreateDepatment", "AdminDepartment", FormMethod.Post))
+@using (Html.BeginForm("CreateDepartment", "AdminDepartment", FormMethod.Post))
 {
     <div class="form-group">
         @Html.Label("Department Number:")
@@ -29,7 +29,7 @@
         @Html.ValidationMessageFor(model => model.Department.Name)
     </div>
     <div>
-        @Html.DropDownListFor(Model => Model.Department.School, new SelectList(ViewBag.Schools), "Select School",
+        @Html.DropDownListFor(Model => Model.SchoolSelection, new SelectList(Model.SchoolNames), "Select School",
        new { htmlAttributes = new { @class = "form-control" } })
         @Html.ValidationMessageFor(model => model.Department.IsActive)
     </div>

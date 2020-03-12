@@ -9,6 +9,8 @@ namespace CLS_SLE.ViewModels
 {
     public class EditDepartmentViewModel
     {
+        public IEnumerable<String> SchoolNames { get; set; }
+        public String SchoolSelection { get; set; }
         public Department Department { get; set; }
     }
 }

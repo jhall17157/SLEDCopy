@@ -23,10 +23,7 @@ namespace CLS_SLE.Controllers
         public ActionResult ViewDepartment(short id, ProgramDepartment pg)
         {
 
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            if (id == null){return new HttpStatusCodeResult(HttpStatusCode.BadRequest);}
             return View(db.Departments.Where(d => d.DepartmentID == id).FirstOrDefault());
         }
         // GET: AdminDepartments/Details/5
@@ -50,7 +47,7 @@ namespace CLS_SLE.Controllers
 
         // POST: AdminDepartments/Create
         [HttpPost]
-        public ActionResult CreateDepartment(FormCollection formCollection, AddDepartmentViewModel departmentVM)
+        public ActionResult CreateDepartment1(AddDepartmentViewModel departmentVM)
         {
             try
             {

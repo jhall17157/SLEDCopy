@@ -1,0 +1,155 @@
+﻿@using CLS_SLE.Models;
+@{
+	ViewBag.Title = "View Rubric";
+}
+
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+		<li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "AdminAssessments")</li>
+		<li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Assessment.Name, "ViewAssessment", "AdminAssessments", new { assessmentID = Model.Rubric.AssessmentID }, null)</li>
+		<li class="breadcrumb-item active" aria-current="page">@Model.Rubric.AssessmentRubric.Name </li>
+	</ol>
+</nav>
+<h1>
+	@Model.Rubric.AssessmentRubric.Name  - <a style="font-size: 85%;" href="@Url.Action("EditRubric", "Rubric", new { rubricID = Model.Rubric.RubricID, assessmentID = Model.Rubric.AssessmentID })"><b>Edit</b></a>
+</h1>
+<br />
+<div class="py-1">
+	<b>Description:</b> @Model.Rubric.AssessmentRubric.Description
+</div>
+<div class="py-1">
+	<b>Is Active:</b> @Model.Rubric.AssessmentRubric.IsActive
+</div>
+
+@if (Model.ModifierLogin != null)
+			{
+	<div class="py-1">
+		<b>Last Modified:</b>  @Model.Rubric.ModifiedDateTime
+	</div>
+	<div class="py-1">
+		<b>By User:</b> @Model.ModifierLogin
+	</div>
+		}
+else if (Model.CreatorLogin != null)
+{
+	<div class="py-1">
+		<b>Created:</b> @Model.Rubric.CreatedDateTime
+	</div>
+	<div class="py-1">
+		<b>By User:</b> @Model.CreatorLogin
+	</div>
+	}
+
+
+<br />
+<table class="table">
+
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col" class="h3">Outcomes</th>
+            <th scope="col"><a class="float-right btn btn-success" href="@Url.Action("AddOutcome", "Rubric", new { rubricID = Model.Rubric.RubricID, assessmentID = Model.Rubric.AssessmentID })"><i class="fa fa-plus"></i> Add New Outcome</a></th>
+        </tr>
+    </thead>
+
+    @foreach (Outcome outcome in Model.Outcomes)
+    {
+        <tbody id="outcome@(outcome.OutcomeID)">
+
+            <tr>
+
+                <td class="h3 align-middle py-2"><a href=".collapse@(outcome.OutcomeID)" data-toggle="collapse"><i class="fa fa-chevron-down" style="padding: 1em"></i></a>@outcome.Name</td>
+                <td class="text-right">
+                    @*<a class="btn btn-block" role="button" href=".collapse@(outcome.OutcomeID)" data-toggle="collapse">Test</a>*@
+                    <!--<button type="button" class="btn btn-primary outcomeDetailsButton">Details</button>-->
+                    <a class="btn btn-primary" role="button" href=".collapseOutcome@(outcome.OutcomeID)" data-toggle="collapse">Details</a>
+                    <a href="@Url.Action("EditOutcome", "Rubric", new { outcomeID = outcome.OutcomeID, assessmentID = Model.Rubric.AssessmentID })" class="btn btn-primary">Edit</a>
+                    <a href="@Url.Action("AddCriterion", "Rubric", new { outcomeID = outcome.OutcomeID, assessmentID = Model.Rubric.AssessmentID })" class="btn btn-success"><i class="fa fa-plus"></i> Add New Criterion</a>
+                </td>
+            </tr>
+        </tbody>
+        <tbody class="collapseOutcome@(outcome.OutcomeID) collapse">
+            <tr class="bg-light">
+                <td class="pl-4 py-1">Description: @outcome.Description</td>
+                <td class="text-right"></td>
+            </tr>
+            <tr class="bg-light">
+                <td class="pl-4 py-1">Active: @outcome.IsActive</td>
+                <td class="text-right"></td>
+            </tr>
+            @if (outcome.ModifiedByLoginID != null)
+            {
+                <tr class="bg-light">
+                    <td class="pl-4 py-1">Last Modified: @outcome.ModifiedDateTime</td>
+                    <td class="text-right"></td>
+                </tr>
+                <tr class="bg-light">
+                    <td class="pl-4 py-1">By User: @Model.Logins["Outcome"][outcome.OutcomeID.ToString()]["ModifierLogin"]</td>
+                    <td class="text-right"></td>
+                </tr>
+            }
+            @if (outcome.CreatedByLoginID != null)
+            {
+                <tr class="bg-light">
+                    <td class="pl-4 py-1">Created: @outcome.CreatedDateTime</td>
+                    <td class="text-right"></td>
+                </tr>
+                <tr class="bg-light">
+                    <td class="pl-4 py-1">By User: @Model.Logins["Outcome"][outcome.OutcomeID.ToString()]["CreatorLogin"]</td>
+                    <td class="text-right"></td>
+                </tr>
+            }
+        </tbody>
+        foreach (Criterion criterion in outcome.Criteria)
+        {
+
+            <tbody class="collapse@(outcome.OutcomeID) collapse criterion" id="criterion@(criterion.CriteriaID)">
+                <tr class="bg-light">
+                    <td class="pl-4 py-1"><button type="button" class="criterionDetailsButton btn btn-primary" style="margin: 1em"><i class="fa fa-chevron-down"></i></button> @criterion.Name </td>
+                    <td class="text-right">
+
+
+                        <a href="@Url.Action("EditCriterion", "Rubric", new { criterionID = criterion.CriteriaID, assessmentID = Model.Rubric.AssessmentID })" class="btn btn-primary">Edit</a>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody class="criterionDetails outcomeCriterion outcomeCriterion@(outcome.OutcomeID)" id="criterionDetails@(criterion.CriteriaID)">
+                <tr class="bg-light">
+                    <td class="pl-4 py-1">Example Text: @criterion.ExampleText</td>
+                    <td class="text-right"></td>
+                </tr>
+                <tr class="bg-light">
+                    <td class="pl-4 py-1">Active: @criterion.IsActive</td>
+                    <td class="text-right"></td>
+                </tr>
+                @if (criterion.ModifiedByLoginID != null)
+                {
+                    <tr class="bg-light">
+                        <td class="pl-4 py-1">Last Modified: @criterion.ModifiedDateTime</td>
+                        <td class="text-right"></td>
+                    </tr>
+                    <tr class="bg-light">
+                        <td class="pl-4 py-1">By User: @Model.Logins["Criterion"][criterion.CriteriaID.ToString()]["ModifierLogin"]</td>
+                        <td class="text-right"></td>
+                    </tr>
+                }
+                @if (criterion.CreatedByLoginID != null)
+                {
+                    <tr class="bg-light">
+                        <td class="pl-4 py-1">Created: @criterion.CreatedDateTime</td>
+                        <td class="text-right"></td>
+                    </tr>
+                    <tr class="bg-light">
+                        <td class="pl-4 py-1">By User: @Model.Logins["Criterion"][criterion.CriteriaID.ToString()]["CreatorLogin"]</td>
+                        <td class="text-right"></td>
+                    </tr>
+                }
+            </tbody>
+        }
+    }
+</table>
+
+@section scripts
+{
+	<script src="~/Scripts/rubric.js"></script>
+}

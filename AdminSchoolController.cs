@@ -23,7 +23,7 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view of schools that contains a list of schools ordered by the school's schoolID
         /// </returns>
-        public ActionResult Schools() => View(db.Schools.OrderBy(s => s.SchoolID));
+        public ActionResult Schools() => View(db.Schools.OrderBy(s => s.Name));
 
         // GET: AdminSchool/AddSchool
         /// <summary>
@@ -153,7 +153,17 @@ namespace CLS_SLE.Controllers
                 db.SaveChanges();
             }
 
-            return RedirectToAction("Schools", "AdminSchool");
+            return RedirectToAction("ViewSchools", "Admin");
         }
+
+
+        //Alert for submit
+        public ActionResult Submit(string submit)
+        {
+            ViewBag.Message = "School Added.";
+            return View();
+        }
+
+
     }
 }

@@ -23,7 +23,8 @@ namespace CLS_SLE.Controllers
                                          select new SelectListItem { Text = p.Number + " " + p.Name, Value = p.ProgramID.ToString() })
                                             .Distinct().ToList();
             mappingViewModel.Courses = (from c in db.Courses
-                                         select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() })
+                                        where !c.CourseName.Contains("Folio180")
+                                        select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() })
                                             .Distinct().ToList();
             return View(mappingViewModel);
         }
@@ -38,7 +39,8 @@ namespace CLS_SLE.Controllers
                                          select new SelectListItem { Text = p.Number + " " + p.Name, Value = p.ProgramID.ToString() })
                                             .Distinct().ToList();
             mappingViewModel.Courses = (from c in db.Courses
-                                         select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() })
+                                        where !c.CourseName.Contains("Folio180")
+                                        select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() })
                                             .Distinct().ToList();
 
             mappingViewModel.Course = db.Courses.FirstOrDefault(p => p.CourseID == mappingVM.CourseID);

@@ -9,6 +9,6 @@ namespace CLS_SLE.ViewModels
     public class ProgramDetailViewModel
     {
         public Program Program { get; set; }
-        public IQueryable<Assessment> Assessments { get; set; }
+        public IQueryable<Assessment> Assessments;
     }
 }

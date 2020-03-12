@@ -19,7 +19,7 @@
         <tr>
             <th scope="col" class="h3">Programs</th>
             <th scope="col" class="text-right">Description</th>
-            <th scope="col" width="10%"><a class="float-right" href="/AdminPrograms/AddProgram"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Program</button></a></th>
+            <th scope="col" width="10%"><a class="float-right" href="/AdminProgram/AddProgram"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Program</button></a></th>
         </tr>
     </thead>
     <tbody>
@@ -30,7 +30,7 @@
                 <tr>
                     <td colspan="2">@program.Name <span class="text-danger">(Not Active)</span></td>
                     <td class="text-right">
-                        <a href="ViewProgram?programId=@program.ProgramID"><button type="button" class="btn btn-primary">View</button></a>
+                        <a href="ViewProgram?id=@program.ProgramID"><button type="button" class="btn btn-primary">View</button></a>
                     </td>
                 </tr>
             }
@@ -39,7 +39,7 @@
                 <tr>
                     <td colspan="2">@program.Name</td>
                     <td class="text-right">
-                        <a href="ViewProgram?programId=@program.ProgramID"><button type="button" class="btn btn-primary">View</button></a>
+                        <a href="ViewProgram?id=@program.ProgramID"><button type="button" class="btn btn-primary">View</button></a>
                     </td>
                 </tr>
             }

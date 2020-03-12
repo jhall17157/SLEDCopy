@@ -2193,6 +2193,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Admin\ViewSchool.cshtml" />
     <Content Include="Views\AdminSchools\Edit_Kayla.cshtml" />
+    <Content Include="Views\Admin\ProgramDashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

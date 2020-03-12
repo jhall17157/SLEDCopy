@@ -13,7 +13,7 @@
         <li class="breadcrumb-item active" aria-current="page">Edit</li>
     </ol>
 </nav>
-<h1>Edit School</h1>
+<h1>Edit Program</h1>
 <br />
 @using (Html.BeginForm("UpdateProgram", "AdminProgram", new { programID = ViewBag.program.ProgramID }, FormMethod.Post))
 {
@@ -30,9 +30,24 @@
         @Html.ValidationMessageFor(model => model.Program.Name)
     </div>
     <div class="form-group">
-        @using (Html.BeginForm("Activate", "AdminProgram", new { id = Model.Program.ProgramID }, FormMethod.Post,
-            new { htmlAttributes = new { @class = "form form-inline float-right" } }))
-        {
+        @Html.LabelFor(Model => Model.Program.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            Active
+            @Html.RadioButtonFor(Model => Model.Program.IsActive, true)
+            InActive
+            @Html.RadioButtonFor(Model => Model.Program.IsActive, false)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(Model => Model.Program.IsSharedProgram, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            Shared
+            @Html.RadioButtonFor(Model => Model.Program.IsSharedProgram, true)
+            Not Shared
+            @Html.RadioButtonFor(Model => Model.Program.IsSharedProgram, false)
+        </div>
+    </div>
+    @*<div class="form-group">
             <div class="form-group mx-1">
                 <button @if (Model.Program.IsActive) { <text> class="btn btn-success col-12" type="button" </text>  } else { <text> class="btn btn-outline-success col-12" type="submit" name="submit" formmethod="post" </text> }>
                     Active
@@ -43,12 +58,8 @@
                     Inactive
                 </button>
             </div>
-        }
-    </div>
-    <div class="form-group">
-        @using (Html.BeginForm("Share", "AdminProgram", new { id = Model.Program.ProgramID }, FormMethod.Post,
-            new { htmlAttributes = new { @class = "form form-inline float-right" } }))
-        {
+        </div>
+        <div class="form-group">
             <div class="form-group mx-1">
                 <button @if (Model.Program.IsSharedProgram) { <text> class="btn btn-success col-12" type="button" </text>  } else { <text> class="btn btn-outline-success col-12" type="submit" name="submit" formmethod="post" </text> }>
                     Shared
@@ -59,8 +70,7 @@
                     Not Shared
                 </button>
             </div>
-        }
-    </div>
+        </div>*@
     <div class="row justify-content-end col-9">
         <div class="form-group col-2 p-0 mx-1"><input type="submit" class="btn btn-primary col-12 mx-1" value="Submit" /></div>
         <div class="col-2 p-0 mx-1"><a href="/AdminSchool/ViewSchool?schoolID=@ViewBag.school.SchoolID"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>

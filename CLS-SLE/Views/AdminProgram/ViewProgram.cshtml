@@ -8,31 +8,33 @@
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Programs", "Programs", "AdminProgram")</li>
-        <li class="breadcrumb-item active" aria-current="page">@Model.Name </li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.program.Name </li>
     </ol>
 </nav>
 @*TODO: Add the condition to display Edit function to anyone who has permission*@
-<h1> @Model.Name  - <a style="font-size: 85%;" href="/AdminProgram/EditProgram?programID=@Model.ProgramID">Edit <i class="fas fa-edit"></i></a> </h1>
+<h1> @Model.program.Name  - <a style="font-size: 85%;" href="/AdminProgram/EditProgram?programID=@Model.program.ProgramID">Edit <i class="fas fa-edit"></i></a> </h1>
 <br />
 <div class="py-1">
-    <b>Is Active:</b> @Model.IsActive
+    <b>Is Active:</b> @Model.program.IsActive
 </div>
 <div class="py-1">
-    <b>Is Shared:</b> @Model.IsSharedProgram
+    <b>Is Shared:</b> @Model.program.IsSharedProgram
 </div>
 
-<div class="py-1">
-        <b>Last Modified:</b>  @Model.ModifiedDateTime
+@if (Model.program.ModifiedDateTime != null)
+{<div class="py-1">
+        <b>Last Modified:</b>  @Model.program.ModifiedDateTime
     </div>
     <div class="py-1">
-        <b>By User:</b> @Model.ModifiedByLoginID
-    </div>  
-<div class="py-1">
-        <b>Created:</b>  @Model.CreatedDateTime
+        <b>By User:</b> @Model.ModifierLogin
+    </div>  }
+@if (Model.program.CreatedDateTime != null)
+{<div class="py-1">
+        <b>Created:</b>  @Model.program.CreatedDateTime
     </div>
     <div class="py-1">
-        <b>By User:</b> @Model.CreatedByLoginID
-    </div> 
+        <b>By User:</b> @Model.CreatorLogin
+    </div> }
 <br />
 <div>
     <table class="table table-hover table-striped">
@@ -40,7 +42,7 @@
             <b>Assessments</b>
         </thead>
         <tbody>
-            @foreach (Assessment assessment in Model.Assessments)
+            @foreach (Assessment assessment in Model.program.Assessments)
             {
                 if (assessment.IsActive.Equals(false))
                 {

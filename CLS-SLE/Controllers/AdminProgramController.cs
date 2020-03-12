@@ -73,9 +73,9 @@ namespace CLS_SLE.Controllers
             return View();
         }
 
-        public ActionResult ViewProgram(short id) { return View(db.Programs.Where(p => p.ProgramID == id).FirstOrDefault()); }
+        //public ActionResult ViewProgram(short id) { return View(db.Programs.Where(p => p.ProgramID == id).FirstOrDefault()); }
 
-        /*public ActionResult ViewProgram(int? programID)
+        public ActionResult ViewProgram(int? programID)
         {
             var program = new Program();
             //var canEdit = false;
@@ -86,10 +86,10 @@ namespace CLS_SLE.Controllers
                 {
                     program = db.Programs.FirstOrDefault(p => p.ProgramID == programID.Value);
                     /*var permission = db.ProgramSecurities.FirstOrDefault(p => p.ProgramID == programID.Value);
-                    /if (permission != null)
+                    if (permission != null)
                     {
                         canEdit = permission.CanEdit == true ? true : false;
-                    }
+                    }*/
                 }
 
                 dynamic model = new ExpandoObject();
@@ -134,7 +134,7 @@ namespace CLS_SLE.Controllers
                 logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
                 return RedirectToAction("Signin", "User");
             }
-        }*/
+        }
 
         [HttpPost]
         public ActionResult UpdateProgram(UpdateProgramViewModel programVM, short programID)
@@ -143,6 +143,7 @@ namespace CLS_SLE.Controllers
 
             if (ModelState.IsValid)
             {
+                editProgram.Number = programVM.Program.Number;
                 editProgram.Name = programVM.Program.Name;
                 // Adding modified on date
                 editProgram.ModifiedDateTime = DateTime.Now;

@@ -98,6 +98,14 @@ small, a {
     margin-left: 4%;
 }
 
+.half-indent {
+    margin-left: 2%;
+}
+
+.subheader-lh {
+    line-height: 1.5;
+}
+
 .clickable {
     cursor: pointer;
 }

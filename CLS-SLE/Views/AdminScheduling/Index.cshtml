@@ -56,6 +56,8 @@
             <td>Course Number</td>
             <td>Course Name</td>
             <td>Rubric Name</td>
+            <td>Start Date</td>
+            <td>End Date</td>
 
         </tr>
         </thead>
@@ -80,6 +82,8 @@
                     <td>@sec.Course.Number<text>-</text>@sec.CRN</td>
                     <td>@sec.Course.CourseName</td>
                     <td>@sr.AssessmentRubric.Name</td>
+                    <td>@sr.StartDate.ToShortDateString()</td>
+                    <td>@sr.EndDate.ToShortDateString()</td>
 
 
 

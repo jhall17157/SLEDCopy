@@ -6,9 +6,9 @@ using System.Web;
 
 namespace CLS_SLE.ViewModels
 {
-    public class UpdateSchoolViewModel
+    public class ProgramListViewModel
     {
-        public School School { get; set; }
-        public bool IsActive { get; set; }
+        public IEnumerable<Program> Programs { get; set; }
+        public PagingInfo PagingInfo { get; set; }
     }
 }

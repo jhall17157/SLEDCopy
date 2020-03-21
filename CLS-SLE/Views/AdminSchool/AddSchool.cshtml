@@ -24,9 +24,9 @@
     <div class="form-group">
         @Html.LabelFor(Model => Model.School.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            Active
-            @Html.RadioButtonFor(Model => Model.School.IsActive, true)
-            InActive
+            Yes
+            @Html.RadioButtonFor(Model => Model.School.IsActive, true, new { @checked = "checked" })
+            No
             @Html.RadioButtonFor(Model => Model.School.IsActive, false)
         </div>
     </div>

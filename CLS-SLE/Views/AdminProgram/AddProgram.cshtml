@@ -9,7 +9,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Programs", "Programs", "AdminProgram")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs", "Programs", "AdminProgram", new { page = 1 }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">New Program</li>
     </ol>
 </nav>
@@ -32,48 +32,24 @@
     <div class="form-group">
         @Html.LabelFor(Model => Model.Program.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            Active
-            @Html.RadioButtonFor(Model => Model.Program.IsActive, true)
-            InActive
+            @Html.RadioButtonFor(Model => Model.Program.IsActive, true, new { @checked = "checked" })
+            @Html.Label("Yes")
             @Html.RadioButtonFor(Model => Model.Program.IsActive, false)
+            @Html.Label("No")
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(Model => Model.Program.IsSharedProgram, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            Shared
-            @Html.RadioButtonFor(Model => Model.Program.IsSharedProgram, true)
-            Not Shared
+            @Html.RadioButtonFor(Model => Model.Program.IsSharedProgram, true, new { @checked = "checked" })
+            @Html.Label("Yes")
             @Html.RadioButtonFor(Model => Model.Program.IsSharedProgram, false)
+            @Html.Label("No")
         </div>
     </div>
-    @*<div class="form-group">
-            <div class="form-group mx-1">
-                <button @if (Model.Program.IsActive) { <text> class="btn btn-success col-12" type="button" </text>  } else { <text> class="btn btn-outline-success col-12" type="submit" name="submit" formmethod="post" </text> }>
-                    Active
-                </button>
-            </div>
-            <div class="form-group mx-1">
-                <button @if (Model.Program.IsActive) { <text> class="btn btn-outline-danger col-12" type="submit" name="submit" formmethod="post" </text>  } else { <text> class="btn btn-danger col-12" type="button" </text> }>
-                    Inactive
-                </button>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="form-group mx-1">
-                <button @if (Model.Program.IsSharedProgram) { <text> class="btn btn-success col-12" type="button" </text>  } else { <text> class="btn btn-outline-success col-12" type="submit" name="submit" formmethod="post" </text> }>
-                    Shared
-                </button>
-            </div>
-            <div class="form-group mx-1">
-                <button @if (Model.Program.IsSharedProgram) { <text> class="btn btn-outline-danger col-12" type="submit" name="submit" formmethod="post" </text>  } else { <text> class="btn btn-danger col-12" type="button" </text> }>
-                    Not Shared
-                </button>
-            </div>
-        </div>*@
     <div class="row justify-content-end col-9">
         <div class="form-group col-2 p-0 mx-1"><input type="submit" class="btn btn-primary col-12 mx-1" value="Submit" /></div>
-        <div class="col-2 p-0 mx-1"><a href="/AdminProgram/Programs"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
+        <div class="col-2 p-0 mx-1"><a href="/AdminProgram/Programs?page=1"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
     </div>
 
 }

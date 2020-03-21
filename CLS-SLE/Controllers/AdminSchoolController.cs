@@ -71,7 +71,11 @@ namespace CLS_SLE.Controllers
         public ActionResult EditSchool(short schoolID)
         {
             ViewBag.school = db.Schools.Where(s => s.SchoolID == schoolID).FirstOrDefault();
-            return View();
+            var model = new UpdateSchoolViewModel
+            {
+                IsActive = ViewBag.school.IsActive
+            };
+            return View(model);
         }
 
         public ActionResult ViewSchool(int? schoolId)
@@ -119,6 +123,7 @@ namespace CLS_SLE.Controllers
             if (ModelState.IsValid)
             {
                 editSchool.Name = schoolVM.School.Name;
+                editSchool.IsActive = schoolVM.IsActive;
                 //Adding modifed on date
                 editSchool.ModifiedDateTime = DateTime.Now;
                 //Adding modifed by
@@ -135,24 +140,6 @@ namespace CLS_SLE.Controllers
             //logging that a new school was added
             logger.Info("School id {Id} modified", editSchool.SchoolID);
             //redirects user to the school view if successfully added new school
-            return RedirectToAction("Schools", "AdminSchool");
-        }
-
-        public ActionResult Activate(SchoolDetailViewModel schoolDetailViewModel, short id)
-        {
-            schoolDetailViewModel.School = db.Schools.Where(s => s.SchoolID == id).SingleOrDefault();
-
-            if (schoolDetailViewModel.School.IsActive)
-            {
-                schoolDetailViewModel.School.IsActive = false;
-                db.SaveChanges();
-            }
-            else
-            {
-                schoolDetailViewModel.School.IsActive = true;
-                db.SaveChanges();
-            }
-
             return RedirectToAction("Schools", "AdminSchool");
         }
     }

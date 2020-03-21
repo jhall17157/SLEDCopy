@@ -13,6 +13,8 @@ namespace CLS_SLE.Controllers
     [Authorize(Roles = "Administrator")]
     public class AdminProgramController : Controller
     {
+        private readonly int PageSize = 20;
+
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
         private Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -23,7 +25,16 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view of programs that contains a list of programs ordered by the program's name
         /// </returns>
-        public ActionResult Programs() => View(db.Programs.OrderBy(p => p.Name));
+        public ActionResult Programs(int page) => View(new ProgramListViewModel
+        {
+            Programs = db.Programs
+                            .OrderBy(p => p.Name)
+                            .Skip((page - 1)*PageSize)
+                            .Take(PageSize),
+            PagingInfo = new PagingInfo { CurrentPage = page,
+                                            ItemsPerPage = PageSize,
+                                            TotalItems = db.Programs.Count() }
+        });
 
         // GET: AdminProgram/AddProgram
         /// <summary>
@@ -64,13 +75,18 @@ namespace CLS_SLE.Controllers
             //logging that a new program was added
             logger.Info("Program id {Id} added", programVM.Program.ProgramID);
             //redirects user to the list of programs if successfully added new program
-            return RedirectToAction("Programs", "AdminProgram");
+            return RedirectToAction("Programs", "AdminProgram", new { page = 1 });
         }
 
         public ActionResult EditProgram(short programID)
         {
             ViewBag.program = db.Programs.Where(p => p.ProgramID == programID).FirstOrDefault();
-            return View();
+            var model = new UpdateProgramViewModel
+            {
+                IsActive = ViewBag.program.IsActive,
+                IsSharedProgram = ViewBag.program.IsSharedProgram
+            };
+            return View(model);
         }
 
         //public ActionResult ViewProgram(short id) { return View(db.Programs.Where(p => p.ProgramID == id).FirstOrDefault()); }
@@ -145,6 +161,8 @@ namespace CLS_SLE.Controllers
             {
                 editProgram.Number = programVM.Program.Number;
                 editProgram.Name = programVM.Program.Name;
+                editProgram.IsActive = programVM.IsActive;
+                editProgram.IsSharedProgram = programVM.IsSharedProgram;
                 // Adding modified on date
                 editProgram.ModifiedDateTime = DateTime.Now;
                 // Adding modified by 
@@ -160,43 +178,7 @@ namespace CLS_SLE.Controllers
             //logging that a new program was added
             logger.Info("Program id {Id} modified", editProgram.ProgramID);
             //redirects user to the programs view if successfully added new program
-            return RedirectToAction("Programs", "AdminProgram");
-        }
-
-        public ActionResult Activate(ProgramDetailViewModel programDetailViewModel, short id)
-        {
-            programDetailViewModel.Program = db.Programs.Where(p => p.ProgramID == id).SingleOrDefault();
-
-            if (programDetailViewModel.Program.IsActive)
-            {
-                programDetailViewModel.Program.IsActive = false;
-                db.SaveChanges();
-            }
-            else
-            {
-                programDetailViewModel.Program.IsActive = true;
-                db.SaveChanges();
-            }
-
-            return RedirectToAction("Programs", "AdminProgram");
-        }
-
-        public ActionResult Share(ProgramDetailViewModel programDetailViewModel, short id)
-        {
-            programDetailViewModel.Program = db.Programs.Where(p => p.ProgramID == id).SingleOrDefault();
-
-            if (programDetailViewModel.Program.IsSharedProgram)
-            {
-                programDetailViewModel.Program.IsSharedProgram = false;
-                db.SaveChanges();
-            }
-            else
-            {
-                programDetailViewModel.Program.IsSharedProgram = true;
-                db.SaveChanges();
-            }
-
-            return RedirectToAction("Programs", "AdminProgram");
+            return RedirectToAction("Programs", "AdminProgram", new { page = 1 });
         }
     }
 }

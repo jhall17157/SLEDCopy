@@ -52,28 +52,39 @@
                 int rubricNumber = 0;
                 foreach (Assessment assessment in Model.Program.Assessments)
                 {
-                <tr>
-                    <td class="bg-dark text-white"><h4>@assessment.Name</h4><h5 class="float-left">(@Model.Program.Name)</h5></td>
-                </tr>
+                    <tr>
+                        <td class="bg-dark text-white"><h4>@assessment.Name</h4><h5 class="float-left">(@Model.Program.Name)</h5></td>
+                    </tr>
                     foreach (RubricAssessment ra in assessment.RubricAssessments.ToList())
                     {
                         rubricNumber++;
                         <tr href="#" data-target=".rubricCollapse@(rubricNumber)" class="accordionTrigger clickable">
                             <td class="bg-light" valign="bottom">
-                                <h4 class="d-inline half-indent subheader-lh" ><i class="rubricIcon@(rubricNumber) fas fa-angle-right"></i>&emsp;@ra.AssessmentRubric.Name</h4>
+                                <h4 class="d-inline half-indent subheader-lh"><i class="rubricIcon@(rubricNumber) fas fa-angle-right"></i>&emsp;@ra.AssessmentRubric.Name</h4>
                                 <button type="button" class="btn btn-success float-right rubricButton@(rubricNumber)" data-toggle="modal" data-target="#addModal"><i class="fa fa-plus" aria-hidden="true"></i> Add Course</button>
                             </td>
                         </tr>
-                        foreach (ProgramAssessmentMapping pam in ra.AssessmentRubric.ProgramAssessmentMappings)
+                        if (!ra.AssessmentRubric.ProgramAssessmentMappings.Any())
                         {
                             <tr class="collapse rubricCollapse@(rubricNumber) accordionClose">
                                 <td class="align-text-bottom" valign="bottom">
-                                    <span class="d-none d-md-noe d-lg-inline offset-1">(@pam.Course.Number) @pam.Course.CourseName</span>
-
-                                    <!-- Button trigger modal -->
-                                    <button type="button" class=" btn btn-danger btn-sm d-inline float-right" data-toggle="modal" data-target="#removeCourseModal"><i class="fas fa-times" aria-hidden="true" onclick="location.href='@Url.Action("DeleteMapping", "AdminMapping", new { id = pam.ProgramAssessmentMappingID})'"></i></button>
+                                    <span class="d-none d-md-noe d-lg-inline offset-1">No Courses Mapped</span>
                                 </td>
                             </tr>
+                        }
+                        else
+                        {
+                            foreach (ProgramAssessmentMapping pam in ra.AssessmentRubric.ProgramAssessmentMappings)
+                            {
+                                <tr class="collapse rubricCollapse@(rubricNumber) accordionClose">
+                                    <td class="align-text-bottom" valign="bottom">
+                                        <span class="d-none d-md-noe d-lg-inline offset-1">(@pam.Course.Number) @pam.Course.CourseName</span>
+
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class=" btn btn-danger btn-sm d-inline float-right" data-toggle="modal" data-target="#removeCourseModal"><i class="fas fa-times" aria-hidden="true" onclick="location.href='@Url.Action("DeleteMapping", "AdminMapping", new { id = pam.ProgramAssessmentMappingID })'"></i></button>
+                                    </td>
+                                </tr>
+                            }
                         }
                     }
                 }
@@ -81,7 +92,7 @@
         </tbody>
     </table>
 
-}
+} 
 
 <!-- Modal For Deleting Courses-->
 <div class="modal fade" id="removeCourseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

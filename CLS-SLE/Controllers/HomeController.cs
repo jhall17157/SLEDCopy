@@ -9,7 +9,7 @@ using System.Net.Mail;
 
 namespace CLS_SLE.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : SLEControllerBase
     {
 
         public ActionResult Index()
@@ -22,7 +22,8 @@ namespace CLS_SLE.Controllers
         {
             FormsAuthentication.SignOut();
             Session.Abandon();
-            return RedirectToAction(actionName: "SignIn", controllerName: "User");
+            //return RedirectToAction(actionName: "SignIn", controllerName: "User");
+            return Redirect(SLEConfig.SSOConfig.LogoutURL);
         }
         
         //GET: Home/CheckEmail

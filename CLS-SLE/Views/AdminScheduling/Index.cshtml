@@ -42,8 +42,13 @@
 @if (Model.Semester != null)
 {
     <hr />
+
+    <div class="mt-4 mb-4">
+        <h5>@Model.Semester.Name</h5>
+    </div>
+
     <!-- Toolbar Functions -->
-    <div class="row mt-4 mb-4 bg-dark text-white pt-2 pb-3 pl-4 pr-4">
+    <div class="row mt-4 bg-dark text-white pt-2 pb-3 pl-4 pr-4">
         <div class="row col-4">
             <p class="col-12 mb-1 pl-0">Search For A Course:</p>
             @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
@@ -62,60 +67,57 @@
             })
             <!--<button type="submit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>-->
         </div>
-        <div class="row col-4">
+        <div class="row col-5">
             <p class="col-12 mb-1 pl-0">Edit Functions</p>
-            <div class="col-8">
-                <button type="submit" class="btn btn-warning d-inline ml-1" data-toggle="modal" data-target="#editDueDatesModal">Edit All Due Dates</button>
+            <div class="col-12 ml-0">
+                <button type="submit" class="btn btn-success d-inline" data-toggle="modal" data-target="#addCourseModal"><i class="fas fa-plus"></i> Add Course</button>
+                <button type="submit" class="btn btn-warning d-inline ml-1" data-toggle="modal" data-target="#editDueDatesModal"><i class="fas fa-calendar-alt"></i> Edit All Due Dates</button>
             </div>
-
         </div>
     </div>
 
-    <div class="mt-4 mb-4">
-        <h5>@Model.Semester.Name</h5>
-    </div>
-
     <table class="table table-hover">
-        <thead>
-            <tr>
-                <td>Instructor Name</td>
-                <td>Instructor Email</td>
-                <td>Course Number</td>
-                <td>Course Name</td>
-                <td>Rubric Name</td>
-                <td>Start Date</td>
-                <td>End Date</td>
-            </tr>
-        </thead>
         <tbody>
-
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-
             @foreach (Section sec in Model.Semester.Sections.OrderBy(c => c.CourseID).ThenBy(s => s.CRN))
             {
+                <tr class="row bg-light">
+                    <td class="col-12">
+                        <h4>
+                            @sec.CRN - @sec.Course.CourseName
+                            <button type="button" class="btn btn-danger btn-sm d-inline float-right"><i class="fas fa-times" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-warning btn-sm d-inline float-right"><i class="fas fa-wrench" aria-hidden="true"></i></button>
+                        </h4>
+                    </td>
+                </tr>
                 foreach (SectionRubric sr in sec.SectionRubrics)
                 {
                     var Instructor = @Model.People.FirstOrDefault(p => p.PersonID == sec.LeadInstructorID);
                     <tr>
-                        @if (Instructor != null)
-                        {
-                            <td> @String.Concat(Instructor.LastName, ", ", Instructor.FirstName)</td>
-                            <td>@Instructor.User.Email</td>
-                        }
-                        else
-                        {
-                            <td colspan="2">No Instructor Assigned</td>
-                            <td></td>
-                        }
-                        <td>@sec.Course.Number<text>-</text>@sec.CRN</td>
-                        <td>@sec.Course.CourseName</td>
-                        <td>@sr.AssessmentRubric.Name</td>
-                        <td>@sr.StartDate.ToShortDateString()</td>
-                        <td>@sr.EndDate.ToShortDateString()</td>
+                        @*if (Instructor != null)
+                            {
+                                <td> @String.Concat(Instructor.LastName, ", ", Instructor.FirstName)</td>
+                                <td>@Instructor.User.Email</td>
+                            }
+                            else
+                            {
+                                <td colspan="2">No Instructor Assigned</td>
+                                <td></td>
+                            }
+                            <td>@sec.Course.Number<text>-</text>@sec.CRN</td>
+                            <td>@sec.Course.CourseName</td>
+                        *@
+                        <td class="row">
+                            <div class="col-6">
+                            <p class="half-indent">
+                                @sr.AssessmentRubric.Name
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                <p class="d-inline">@sr.StartDate.ToShortDateString()</p>
+                                <p class="d-inline">@sr.EndDate.ToShortDateString()</p>
+                                <button type="button" class="btn btn-danger btn-sm d-inline float-right"><i class="fas fa-times" aria-hidden="true"></i></button>
+                            </div>
+                        </td>
 
 
 
@@ -123,37 +125,6 @@
                 }
             }
 
-            @*@foreach (Section sec in Model.Semester.Sections.OrderBy(c => c.CourseID))
-                {
-                    var Instructor = @Model.People.FirstOrDefault(p => p.PersonID == sec.LeadInstructorID);
-                    <tr>
-                        @if (Instructor != null)
-                        {
-                            <td> @String.Concat(Instructor.LastName, ", ", Instructor.FirstName)</td>
-                            <td>@Instructor.User.Email</td>
-                        }
-                        else
-                        {
-                            <td>No Instructor Assigned</td>
-                            <td></td>
-                        }
-
-                        <td>@String.Concat(sec.Course.Number, " - ", @sec.Course.CourseName)</td>
-
-
-                    </tr>
-                    foreach (SectionRubric sr in sec.SectionRubrics)
-                    {
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>@sr.AssessmentRubric.Name</td>
-
-                        </tr>
-                    }
-
-                }*@
         </tbody>
     </table>
 
@@ -172,7 +143,7 @@
                         {
                             @id = "DropDownSemesters",
                             @class = "form-control d-inline col-11"
-                        })                    
+                        })
                     </div>
                     <div class="col-6">
                         <p class="col-12 mb-1 pl-0">End Date</p>
@@ -193,6 +164,10 @@
 
 }
 
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script>
+
+</script>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

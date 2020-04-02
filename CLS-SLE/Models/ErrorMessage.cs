@@ -1,8 +1,10 @@
-﻿namespace CLS_SLE.Models
+﻿using CLS_SLE.Controllers;
+
+namespace CLS_SLE.Models
 {
     public class ErrorMessage
     {
-        public string Message { get; set; }
+        public SLEError SLEError { get; set; }
 
         public string LogoutURL { get; set; }
 
@@ -10,7 +12,7 @@
         {
             get
             {
-                return (!string.IsNullOrWhiteSpace(this.Message));
+                return (this.SLEError != SLEError.Undefined);
             }
         }
     }

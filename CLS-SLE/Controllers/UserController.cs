@@ -65,7 +65,7 @@ namespace CLS_SLE.Controllers
                                 logger.Error("UserNotFound");
                                 ModelState.AddModelError("Hash", "User not setup in SLE");
 
-                                return base.GetRedirectToErrorDisplay("User not setup in SLE");
+                                return base.GetRedirectToErrorDisplay(SLEError.NotConfiguredForSLE);
                             }
 
                             if (!user.IsActive)

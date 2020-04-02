@@ -125,14 +125,14 @@ namespace CLS_SLE.Controllers
             return RedirectToAction(actionName: "AdminDashboard", controllerName: "Admin");
         }
 
-        protected ActionResult GetRedirectToErrorDisplay(string customErrorMessage = null)
+        protected ActionResult GetRedirectToErrorDisplay(SLEError customErrorMessage = SLEError.Undefined)
         {
-            if (string.IsNullOrWhiteSpace(customErrorMessage))
+            if (customErrorMessage == SLEError.Undefined)
             {
                 return RedirectToAction(actionName: "Error", controllerName: "User");
             }
 
-            return RedirectToAction(actionName: "Error", controllerName: "User", routeValues: new ErrorMessage { Message = customErrorMessage });
+            return RedirectToAction(actionName: "Error", controllerName: "User", routeValues: new ErrorMessage {SLEError = customErrorMessage });
         }
 
         #endregion
@@ -172,4 +172,10 @@ namespace CLS_SLE.Controllers
         public int PersonId { get; set; }
         public string[] UserRoles { get; set; }
     }
+    public enum SLEError
+    {
+        Undefined,
+        NotConfiguredForSLE
+    }
+
 }

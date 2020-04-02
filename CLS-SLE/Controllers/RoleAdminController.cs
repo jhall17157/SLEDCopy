@@ -12,7 +12,7 @@ using System;
 namespace CLS_SLE.Controllers
 {
     [Authorize(Roles = "Administrator")]
-    public class RoleAdminController : Controller
+    public class RoleAdminController : SLEControllerBase
     {
         SLE_TrackingEntities db = new SLE_TrackingEntities();
         public ActionResult Index() => View(db.Roles);
@@ -94,7 +94,7 @@ namespace CLS_SLE.Controllers
                             RoleID = roleID,
                             PermissionID = permissionID,
                             CreatedDateTime = DateTime.Now,
-                            CreatedByLoginID = (int?)Session["personID"]
+                            CreatedByLoginID = UserData.PersonId
 
                         };
                         db.RolePermissions.Add(rolePermission);

@@ -2,12 +2,11 @@
 using CLS_SLE.Utility.SAML;
 using NLog;
 using System;
-using System.Diagnostics;
 using System.Linq;
-using System.Net.Mail;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using System.Web.Security;
 
 namespace CLS_SLE.Controllers
@@ -38,213 +37,80 @@ namespace CLS_SLE.Controllers
                 SLEConfig.SSOConfig.AssertionConsumerServiceURL //assertion Consumer Url - the redirect URL where the provider will send authenticated users
             );
 
-            //generate the provider URL
-            string url = request.GetRedirectUrl(SLEConfig.SSOConfig.LogoutURL);
-
-            //then redirect your user to the above "url" var
-            //for example, like this:
-            //Response.Redirect(url);
-
+            string url = request.GetRedirectUrl(SLEConfig.SSOConfig.LoginURL);
 
             return Redirect(url);
-
-            // return View();
         }
 
+        [AllowAnonymous]
         //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult SignIn([Bind(Include = "Login,Hash")] UserSignIn userSignIn)
-        //{
-        //    using (SLE_TrackingEntities db = new SLE_TrackingEntities())
-        //    {
-        //        try
-        //        {
-        //            if (ModelState.IsValid)
-        //            {
-        //                try
-        //                {
-        //                    var user = db.Users.Where(u => u.Login == userSignIn.Login).FirstOrDefault();
-
-        //                    if (user is null)
-        //                    {
-        //                        // Once SSO is in place, should this forward to an error page 
-        //                        //  to say they need to be setup by the administrator?
-        //                        logger.Error("UserNotFound");
-        //                        return RedirectToAction(actionName: "Error", controllerName: "User");
-        //                    }
-
-        //                    if (!user.IsActive)
-        //                    {
-        //                        logger.Error("InactiveUser");
-        //                        return RedirectToAction(actionName: "Error", controllerName: "User");
-        //                    }
-
-        //                    if (!BCrypt.Net.BCrypt.Verify(userSignIn.Hash, user.Hash))
-        //                    {
-        //                        ModelState.AddModelError("Hash", "Username or password invalid");
-        //                        return RedirectToAction(actionName: "Error", controllerName: "User");
-        //                    }
-
-
-        //                    // Valid login processing
-
-
-        //                    FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
-        //                    Session["personID"] = user.PersonID;
-        //                    Session["User"] = user;
-        //                    Session.Timeout = 180;
-        //                    user.LastLogin = DateTime.Now;
-        //                    db.SaveChanges();
-        //                    AuthorizeUser(db, user.Login, System.Web.HttpContext.Current);
-
-        //                    if (user.MustResetPassword)
-        //                    {
-        //                        // Passwords match
-        //                        // authenticate user (Stores the UserID in an encrypted cookie)
-        //                        // User must reset their password, send them to the reset password form
-
-        //                        logger.Info("Successful login for " + user.Login + ", user must reset their password");
-        //                        return RedirectToAction(actionName: "ChangePassword", controllerName: "User");
-        //                    }
-
-        //                    // Passwords match
-        //                    // authenticate user (Stores the UserID in an encrypted cookie)
-        //                    // User does not need to reset their password, send them straight to the dashboad
-
-        //                    logger.Info("Successful login for " + user.Login + ", loading dashboard");
-        //                    if (System.Web.HttpContext.Current.User.IsInRole("Faculty"))
-        //                    {
-        //                        return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
-        //                    }
-        //                    else if (System.Web.HttpContext.Current.User.IsInRole("Administrator"))
-        //                    {
-        //                        return RedirectToAction(actionName: "AdminDashboard", controllerName: "Admin");
-        //                    }
-        //                    else
-        //                    {
-        //                        return RedirectToAction(actionName: "Error", controllerName: "User");
-        //                    }
-        //                }
-        //                catch
-        //                {
-        //                    ModelState.AddModelError("Hash", "Username or password invalid");
-        //                    return RedirectToAction(actionName: "Error", controllerName: "User");
-        //                }
-
-        //            }
-        //            logger.Error("Login failed");
-        //            return RedirectToAction(actionName: "Error", controllerName: "User");
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            FormsAuthentication.SignOut();
-        //            Session.Abandon();
-        //            return RedirectToAction(actionName: "Error", controllerName: "User");
-        //        }
-        //    }
-        //}
-
-
-        [HttpPost]
         public ActionResult Consume()
         {
             // replace with an instance of the users account.
 
-            Response samlResponse = new Response(SLEConfig.SSOConfig.Certificate, Request.Form["SAMLResponse"]);
 
-            if (samlResponse.IsValid())
+            if (base.HasSAMLResponse && base.SAMLResponse.IsValid())
             {
-                /*
-                Debug.WriteLine("OK!</br>");
-                Debug.WriteLine($"NameID: {samlResponse.GetNameID()}<br>");
-                Debug.WriteLine($"Company: {samlResponse.GetCompany()}<br>");
-                Debug.WriteLine($"Department: {samlResponse.GetDepartment()}<br>");
-                Debug.WriteLine($"Email: {samlResponse.GetEmail()}<br>");
-                Debug.WriteLine($"First Name: {samlResponse.GetFirstName()}<br>");
-                Debug.WriteLine($"Last Name: {samlResponse.GetLastName()}<br>");
-                Debug.WriteLine($"Phone: {samlResponse.GetPhone()}<br>");
-                */
-
                 using (SLE_TrackingEntities db = new SLE_TrackingEntities())
                 {
                     try
                     {
                         try
                         {
-                            var ssoNameId = samlResponse.GetNameID();
+                            var ssoNameId = SAMLResponse.GetNameID();
                             var user = db.Users.Where(u => u.Login == ssoNameId).FirstOrDefault();
 
                             if (user is null)
                             {
-                                // Once SSO is in place, should this forward to an error page 
-                                //  to say they need to be setup by the administrator?
                                 logger.Error("UserNotFound");
-                                return RedirectToAction(actionName: "Error", controllerName: "User");
+                                ModelState.AddModelError("Hash", "User not setup in SLE");
+
+                                return base.GetRedirectToErrorDisplay("User not setup in SLE");
                             }
 
                             if (!user.IsActive)
                             {
                                 logger.Error("InactiveUser");
-                                return RedirectToAction(actionName: "Error", controllerName: "User");
+                                return base.GetRedirectToErrorDisplay();
                             }
-
-                            //if (!BCrypt.Net.BCrypt.Verify(userSignIn.Hash, user.Hash))
-                            //{
-                            //    ModelState.AddModelError("Hash", "Username or password invalid");
-                            //    return RedirectToAction(actionName: "Error", controllerName: "User");
-                            //}
 
 
                             // Valid login processing
 
-
                             FormsAuthentication.SetAuthCookie(user.PersonID.ToString(), false);
-                            Session["personID"] = user.PersonID;
-                            Session["User"] = user;
+
                             Session.Timeout = 180;
+
                             user.LastLogin = DateTime.Now;
                             db.SaveChanges();
-                            AuthorizeUser(db, user.Login, System.Web.HttpContext.Current);
 
-                            //if (user.MustResetPassword)
-                            //{
-                            //    // Passwords match
-                            //    // authenticate user (Stores the UserID in an encrypted cookie)
-                            //    // User must reset their password, send them to the reset password form
-
-                            //    logger.Info("Successful login for " + user.Login + ", user must reset their password");
-                            //    return RedirectToAction(actionName: "ChangePassword", controllerName: "User");
-                            //}
-
-                            // Passwords match
-                            // authenticate user (Stores the UserID in an encrypted cookie)
-                            // User does not need to reset their password, send them straight to the dashboad
+                            AuthorizeUser(user);
 
                             logger.Info("Successful login for " + user.Login + ", loading dashboard");
                             if (System.Web.HttpContext.Current.User.IsInRole("Faculty"))
                             {
-                                return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
+                                return base.GetRedirectToInstructorAssessmentDashboard();
                             }
                             else if (System.Web.HttpContext.Current.User.IsInRole("Administrator"))
                             {
-                                return RedirectToAction(actionName: "AdminDashboard", controllerName: "Admin");
+                                return base.GetRedirectToAdminDashboard();
                             }
                             else
                             {
-                                return RedirectToAction(actionName: "Error", controllerName: "User");
+                                return base.GetRedirectToErrorDisplay();
                             }
                         }
                         catch (Exception ex)
                         {
                             ModelState.AddModelError("Hash", "Username or password invalid");
-                            return RedirectToAction(actionName: "Error", controllerName: "User");
+                            return base.GetRedirectToErrorDisplay();
                         }
                     }
                     catch (Exception ex)
                     {
                         FormsAuthentication.SignOut();
                         Session.Abandon();
-                        return RedirectToAction(actionName: "Error", controllerName: "User");
+                        return base.GetRedirectToErrorDisplay();
                     }
                 }
 
@@ -254,212 +120,62 @@ namespace CLS_SLE.Controllers
             }
             else
             {
-                logger.Error("Login failed");
-                return RedirectToAction(actionName: "Error", controllerName: "User");
+
+                try
+                {
+                    FormsAuthentication.SignOut();
+                    Session.Abandon();
+                    //return View();
+                }
+                catch (Exception ex)
+                {
+                    // return View();
+                }
+
+                var request = new AuthRequest(
+                    SLEConfig.SSOConfig.IssuerApplicationName, //put your app's "unique ID" here
+                    SLEConfig.SSOConfig.AssertionConsumerServiceURL //assertion Consumer Url - the redirect URL where the provider will send authenticated users
+                );
+
+                string url = request.GetRedirectUrl(SLEConfig.SSOConfig.LoginURL);
+
+                return Redirect(url);
             }
 
             return View();
         }
 
-
-        //[AllowAnonymous]
-        //[OutputCache(NoStore = true, Location = System.Web.UI.OutputCacheLocation.None)]
-        //[HttpGet]
-        //public ActionResult PasswordReset()
-        //{
-        //    FormsAuthentication.SignOut();
-        //    Session.Abandon();
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult PasswordReset([Bind(Include = "Login")] PasswordReset pwReset)
-        //{
-        //    using (SLE_TrackingEntities db = new SLE_TrackingEntities())
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            try
-        //            {
-        //                User user = db.Users.Where(u => u.Login == pwReset.Login).FirstOrDefault();
-        //                string alpha = "ABCDEFGHIJKLMNOPQRSTUWXYZ";
-        //                string rndChars = "";
-        //                Random rnd = new Random();
-        //                for (int i = 1; i <= 6; i++)
-        //                {
-        //                    rndChars += alpha[rnd.Next(alpha.Length)];
-        //                }
-        //                // reset key + time
-        //                user.TemporaryPasswordIssued = DateTime.Now;
-        //                user.TemporaryPasswordHash = rndChars;
-        //                db.SaveChanges();
-        //                // Send email
-        //                MailMessage msg = new MailMessage();
-        //                SmtpClient client = new SmtpClient();
-        //                try
-        //                {
-        //                    var url = Request.Url.AbsoluteUri + "Form";
-
-        //                    msg.From = new MailAddress(CLS_SLE.Properties.Settings.Default.EmailFrom);
-        //                    msg.Subject = (CLS_SLE.Properties.Settings.Default.EmailSubject);
-        //                    msg.IsBodyHtml = true;
-        //                    msg.Body = CLS_SLE.Properties.Settings.Default.EmailBody
-        //                        .Replace("[emailLink]", url)
-        //                        .Replace("[passwordHash]", user.TemporaryPasswordHash);
-        //                    msg.To.Add(user.Email);
-        //                    client.Send(msg);
-        //                }
-        //                catch (Exception ex)
-        //                {
-        //                    logger.Error("Password reset email exception: " + ex.Message);
-        //                }
-        //            }
-        //            catch
-        //            {
-        //                ModelState.AddModelError("Login", "User not found");
-        //                return View();
-        //            }
-        //            return RedirectToAction(actionName: "CheckEmail", controllerName: "Home");
-        //        }
-        //        else
-        //        {
-        //            return View();
-        //        }
-        //    }
-        //}
-
-
-        //// GET: User/PasswordResetForm
-        //[AllowAnonymous]
-        //[OutputCache(NoStore = true, Location = System.Web.UI.OutputCacheLocation.None)]
-        //[HttpGet]
-        //public ActionResult PasswordResetForm()
-        //{
-        //    FormsAuthentication.SignOut();
-        //    Session.Abandon();
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //public ActionResult PasswordResetForm([Bind(Include = "Login,PWResetKey,Hash,SecondHash")] PasswordResetEdit pwEdit)
-        //{
-        //    using (SLE_TrackingEntities db = new SLE_TrackingEntities())
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            try
-        //            {
-        //                User user = db.Users.Where(u => u.Login == pwEdit.Login).FirstOrDefault();
-        //                if (user.TemporaryPasswordHash == pwEdit.PWResetKey &&
-        //                    (DateTime.Now - user.TemporaryPasswordIssued) < TimeSpan.Parse("00:30:00.0000000"))
-        //                {
-        //                    if (user.Login == pwEdit.Login && user.TemporaryPasswordHash == pwEdit.PWResetKey && pwEdit.Hash == pwEdit.SecondHash)
-        //                    {
-        //                        if (pwEdit.Hash != pwEdit.Login && pwEdit.Hash != "Password" && pwEdit.Hash != "Test")
-        //                        {
-        //                            user.Hash = BCrypt.Net.BCrypt.HashPassword(pwEdit.Hash);
-        //                            db.SaveChanges();
-        //                            logger.Info("Password change successful for " + user.Login);
-        //                            return RedirectToAction(actionName: "SignIn", controllerName: "User");
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //            catch
-        //            {
-        //                ModelState.AddModelError("Login", "User not found");
-        //                return View();
-        //            }
-        //            return RedirectToAction(actionName: "SignIn", controllerName: "User");
-        //        }
-        //        else
-        //        {
-        //            logger.Error("User Password Reset Email Recovery Unsuccessful");
-        //            return View();
-        //        }
-        //    }
-        //}
-
-        //[Authorize]
-        //public ActionResult ChangePassword()
-        //{
-        //    if (Session["User"] != null)
-        //    {
-        //        return View();
-        //    }
-        //    return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
-        //}
-
-        //[Authorize]
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult ChangePassword(UserChangePassword cPassword)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        using (SLE_TrackingEntities db = new SLE_TrackingEntities())
-        //        {
-        //            try
-        //            {
-        //                String userLogin = ((User)Session["User"]).Login;
-        //                User user = db.Users.Where(u => u.Login == userLogin).FirstOrDefault();
-        //                if (BCrypt.Net.BCrypt.Verify(cPassword.Hash, user.Hash))
-        //                {
-        //                    user.Hash = BCrypt.Net.BCrypt.HashPassword(cPassword.NewHash);
-        //                    user.MustResetPassword = false;
-        //                    db.SaveChanges();
-        //                    Session["user"] = user;
-        //                    logger.Info("User " + user.Login + " successfully changed their password");
-        //                }
-        //                else
-        //                {
-        //                    ModelState.AddModelError("Hash", "Current password is Incorrect");
-        //                    logger.Error("User " + user.Login + " attempted to change their password but the inputed current password did not match.");
-        //                    return View();
-        //                }
-        //            }
-        //            catch
-        //            {
-        //                ModelState.AddModelError("Login", "User not found");
-        //                return View();
-        //            }
-
-        //        }
-        //        return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments"); ;
-        //    }
-        //    return View();
-        //}
-
         [AllowAnonymous]
-        public ActionResult Error()
+        public ActionResult Error(ErrorMessage errorMessage)
         {
-            return View();
+            errorMessage.LogoutURL = SLEConfig.SSOConfig.LogoutURL;
+            return View(errorMessage);
         }
 
-        protected void AuthorizeUser(SLE_TrackingEntities db, String login, HttpContext Context)
+        protected void AuthorizeUser(User login)
         {
+            var user = System.Web.HttpContext.Current.User;
 
-            var user = Context.User;
+            String[] RolesArray = login.UserRoles.Select(x => x.Role.Name).ToArray();
 
-            String[] RolesArray = (from Role in db.Roles
-                                   join UserRole in db.UserRoles
-                                   on Role.RoleID equals UserRole.RoleID
-                                   join User in db.Users
-                                   on UserRole.PersonID equals User.PersonID
-                                   where User.Login == login
-                                   select Role.Name).ToArray();
             var UserIdentity = user.Identity;
-            Context.User = new GenericPrincipal(UserIdentity, RolesArray);
+
+            System.Web.HttpContext.Current.User = new GenericPrincipal(UserIdentity, RolesArray);
+
+            var userData = new AuthUserData { PersonId = login.PersonID, UserRoles = RolesArray };
+
+            var serializer = new JavaScriptSerializer();
+
 
             FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(
                                                     1,
-                                                    login,  //user id
+                                                    login.Login,  //user id
                                                     DateTime.Now,
                                                     DateTime.Now.AddMinutes(20),  // expiry
                                                     false,  //do not remember
-                                                    string.Join(",", RolesArray),
+                                                    serializer.Serialize(userData),
                                                     "/");
+
             HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName,
                                                FormsAuthentication.Encrypt(authTicket));
             Response.Cookies.Add(cookie);

@@ -27,14 +27,14 @@
                     <li class="nav-item" style="margin-right: 10px;line-height: 40px;">Dev Mode</li>
                 }
 
-                @if (((CLS_SLE.Models.User)Session["user"]) != null)
+                @if (HttpContext.Current.User.Identity.IsAuthenticated)
                 {
                     <li class="nav-item dropleft">
                         <button type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            @(((CLS_SLE.Models.User)Session["user"]).Login.ToUpper())
+                            @(HttpContext.Current.User.Identity.Name.ToUpper())
                         </button>
                         <div style="position: absolute;" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="~/User/ChangePassword">Change Password</a>
+                            <!--<a class="dropdown-item" href="~/User/ChangePassword">Change Password</a>-->
                             <a class="dropdown-item" href="~/Home/SignOut">Sign Out</a>
                         </div>
                     </li>
@@ -44,6 +44,7 @@
     </div>
 
     @{
+
         var ControllerName = string.Empty;
         object Controller;
 
@@ -53,34 +54,37 @@
         }
 
     }
-        <div class="container">
-            @if (((CLS_SLE.Models.User)Session["user"]) != null)
-            {
-                <div class="row justify-content-center">
-                    <ul class="nav nav-tabs col-12 pt-0">
-                        @*Needs to be manually updated for each new controller*@
-                        @if (HttpContext.Current.User.IsInRole("Administrator"))
-                        {
-                            <li class="nav-item h2">
-                                <a class="nav-link align-bottom @((ControllerName.Equals("Admin") || ControllerName.Equals("RoleAdmin") || ControllerName.Equals("AdminUser") || ControllerName.Equals("Rubric")) ? "active bg-white pb-4" : "bg-light mt-3")" href="~/Admin/AdminDashboard">Admin Dashboard</a></li>
-                        }
-                        @if (HttpContext.Current.User.IsInRole("Faculty"))
-                        {
-                            <li class="nav-item h2">
-                                <a class="nav-link align-bottom @(ControllerName.Equals("InstructorAssessments")  ? "active bg-white pb-4" : "bg-light mt-3")" href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-                
+    <div class="container">
+        @if (HttpContext.Current.User.Identity.IsAuthenticated)
+        {
 
 
-            }
-                <div class="bg-white" id="MainBody">
-                    @RenderBody()
-                </div>
-            <footer style="margin-bottom:4vh"></footer>
+            <div class="row justify-content-center">
+                <ul class="nav nav-tabs col-12 pt-0">
+                    @*Needs to be manually updated for each new controller*@
+                    @if (HttpContext.Current.User.IsInRole("Administrator"))
+                    {
+                        <li class="nav-item h2">
+                            <a class="nav-link align-bottom @((ControllerName.Equals("Admin") || ControllerName.Equals("RoleAdmin") || ControllerName.Equals("AdminUser") || ControllerName.Equals("Rubric")) ? "active bg-white pb-4" : "bg-light mt-3")" href="~/Admin/AdminDashboard">Admin Dashboard</a>
+                        </li>
+                    }
+                    @if (HttpContext.Current.User.IsInRole("Faculty"))
+                    {
+                        <li class="nav-item h2">
+                            <a class="nav-link align-bottom @(ControllerName.Equals("InstructorAssessments")  ? "active bg-white pb-4" : "bg-light mt-3")" href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+
+
+        }
+        <div class="bg-white" id="MainBody">
+            @RenderBody()
         </div>
+        <footer style="margin-bottom:4vh"></footer>
+    </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

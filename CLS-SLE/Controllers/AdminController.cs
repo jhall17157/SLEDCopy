@@ -17,7 +17,7 @@ using System.Web.Routing;
 namespace CLS_SLE.Controllers
 {
     [Authorize(Roles = "Administrator")]
-    public class AdminController : Controller
+    public class AdminController : SLEControllerBase
     {
 
 
@@ -153,7 +153,7 @@ namespace CLS_SLE.Controllers
                             PersonID = personID,
                             RoleID = roleID,
                             CreatedDateTime = DateTime.Now,
-                            CreatedByLoginID = (int?)Session["personID"]
+                            CreatedByLoginID = UserData.PersonId
 
                         };
                         db.UserRoles.Add(userRole);

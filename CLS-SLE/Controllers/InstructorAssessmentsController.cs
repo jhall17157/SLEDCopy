@@ -15,7 +15,7 @@ using System.Security.Permissions;
 namespace CLS_SLE.Controllers
 {
     [Authorize(Roles = "Faculty")]
-    public class InstructorAssessmentsController : Controller
+    public class InstructorAssessmentsController : SLEControllerBase
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
         private Logger logger = LogManager.GetCurrentClassLogger();
@@ -26,9 +26,8 @@ namespace CLS_SLE.Controllers
         {
             try
             {
-                var personID = Convert.ToInt32(Session["personID"].ToString());
-                var user = db.Users.FirstOrDefault(u => u.PersonID == personID);
-                var instructorAssessments = db.InstructorAssessments.Where(i => i.PersonID == personID);
+                var user = db.Users.FirstOrDefault(u => u.PersonID == UserData.PersonId);
+                var instructorAssessments = db.InstructorAssessments.Where(i => i.PersonID == UserData.PersonId);
                 logger.Info("Dashboard loaded for " + user.Login);
                 var categories = db.AssessmentCategories.ToList();
 
@@ -69,8 +68,7 @@ namespace CLS_SLE.Controllers
         {
             try
             {
-                var personID = Convert.ToInt32(Session["personID"].ToString());
-                var instructor = db.InstructorAssessments.FirstOrDefault(r => r.RubricID == rubricID && r.PersonID == personID && r.SectionID == sectionID);
+                var instructor = db.InstructorAssessments.FirstOrDefault(r => r.RubricID == rubricID && r.PersonID == UserData.PersonId && r.SectionID == sectionID);
                 logger.Info("Assessment student list loaded for " + instructor.Login + " with rubricID " + rubricID);
 
                 var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID).OrderBy(c => c.LastName).ThenBy(c => c.FirstName);
@@ -107,8 +105,7 @@ namespace CLS_SLE.Controllers
         {
             try
             {
-                var personID = Convert.ToInt32(Session["personID"].ToString());
-                var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID && i.PersonID == personID && i.RubricID == rubricID);
+                var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID && i.PersonID == UserData.PersonId && i.RubricID == rubricID);
                 
                 Session["rubricID"] = instructor.RubricID;
                 Session["sectionID"] = instructor.SectionID;
@@ -169,7 +166,7 @@ namespace CLS_SLE.Controllers
                         EnrollmentID = Convert.ToInt32(Session["enrollmentID"]),
                         CriteriaID = criteriaID,
                         ScoreID = Convert.ToSByte(scoreID),
-                        AssessedByID = Convert.ToInt32(Session["personID"]),
+                        AssessedByID = UserData.PersonId,
                         DateTimeAssessed = DateTime.Now,
                     };
                     db.StudentScores.Add(score);

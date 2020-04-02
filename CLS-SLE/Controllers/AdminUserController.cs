@@ -10,7 +10,7 @@ using CLS_SLE.ViewModels;
 namespace CLS_SLE.Controllers
 {
     [Authorize(Roles = "Administrator")]
-    public class AdminUserController : Controller
+    public class AdminUserController : SLEControllerBase
     {
         SLE_TrackingEntities db = new SLE_TrackingEntities();
         

@@ -13,7 +13,7 @@ namespace CLS_SLE.Controllers
 {
 	[Authorize(Roles = "Administrator")]
 
-	public class RubricController : Controller
+	public class RubricController : SLEControllerBase
 	{
 		private SLE_TrackingEntities db = new SLE_TrackingEntities();
 		// GET: Rubric
@@ -108,7 +108,6 @@ namespace CLS_SLE.Controllers
 			{
 				// RubricAssessment rubricAssessment = rubricViewModel.RubricAssesssment;
 				// AssessmentRubric assessmentRubric = rubricViewModel.AssessmentRubric;
-				int personID = Convert.ToInt32(Session["personID"].ToString());
 				List<Assessment> assessments = new List<Assessment>();
 
 				foreach (var key in formCollection.AllKeys)
@@ -121,7 +120,7 @@ namespace CLS_SLE.Controllers
 				db.AssessmentRubrics.Load();
 
 				rubricViewModel.AssessmentRubric.CreatedDateTime = DateTime.Now;
-				rubricViewModel.AssessmentRubric.CreatedByLoginID = personID;
+				rubricViewModel.AssessmentRubric.CreatedByLoginID = UserData.PersonId;
 
 				db.AssessmentRubrics.Add(rubricViewModel.AssessmentRubric);
 
@@ -136,7 +135,7 @@ namespace CLS_SLE.Controllers
 					rubricAssessment.StartDate = rubricViewModel.RubricAssesssment.StartDate;
 					rubricAssessment.EndDate = rubricViewModel.RubricAssesssment.EndDate;
 					rubricAssessment.CreatedDateTime = DateTime.Now;
-					rubricAssessment.CreatedByLoginID = personID;
+					rubricAssessment.CreatedByLoginID = UserData.PersonId;
 
 					db.RubricAssessments.Add(rubricAssessment);
 				}
@@ -168,12 +167,12 @@ namespace CLS_SLE.Controllers
 
 			var model = new UpdateRubric() { RubricAssessment = rubricAssessment, AssessmentRubric = assessmentRubric };
 
-			// rubricAssessment.ModifiedDateTime = DateTime.Now;
-			// rubricAssessment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-			// assessmentRubric.ModifiedDateTime = DateTime.Now;
-			// assessmentRubric.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+            // rubricAssessment.ModifiedDateTime = DateTime.Now;
+            // rubricAssessment.ModifiedByLoginID = UserData.PersonId;
+            // assessmentRubric.ModifiedDateTime = DateTime.Now;
+            // assessmentRubric.ModifiedByLoginID = UserData.PersonId;
 
-			return View(model);
+            return View(model);
 		}
 
 		//Post for saving an edited rubric
@@ -184,7 +183,6 @@ namespace CLS_SLE.Controllers
 			{
 				AssessmentRubric editRubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
 				// RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.RubricID == rubricID).FirstOrDefault();
-				int personID = Convert.ToInt32(Session["personID"].ToString());
 				List<string> assessments = new List<string>();
 				List<short> relatedAssessmentIDs = db.RubricAssessments.Where(r => r.RubricID == rubricID).Select(r => r.AssessmentID).ToList();
 				List<string> relatedAssessments = new List<string>();
@@ -220,7 +218,7 @@ namespace CLS_SLE.Controllers
 						rubricAssessment.StartDate = updateRubric.RubricAssessment.StartDate;
 						rubricAssessment.EndDate = updateRubric.RubricAssessment.EndDate;
 						rubricAssessment.ModifiedDateTime = DateTime.Now;
-						rubricAssessment.ModifiedByLoginID = personID;
+						rubricAssessment.ModifiedByLoginID = UserData.PersonId;
 					}
 					else
 					{
@@ -231,7 +229,7 @@ namespace CLS_SLE.Controllers
 						rubricAssessment.StartDate = updateRubric.RubricAssessment.StartDate;
 						rubricAssessment.EndDate = updateRubric.RubricAssessment.EndDate;
 						rubricAssessment.CreatedDateTime = DateTime.Now;
-						rubricAssessment.CreatedByLoginID = personID;
+						rubricAssessment.CreatedByLoginID = UserData.PersonId;
 
 						db.RubricAssessments.Add(rubricAssessment);
 					}
@@ -241,7 +239,7 @@ namespace CLS_SLE.Controllers
 				editRubric.Description = updateRubric.AssessmentRubric.Description;
 				editRubric.IsActive = updateRubric.AssessmentRubric.IsActive;
 				editRubric.ModifiedDateTime = DateTime.Now;
-				editRubric.ModifiedByLoginID = personID;
+				editRubric.ModifiedByLoginID = UserData.PersonId;
 
 				db.SaveChanges();
 
@@ -279,7 +277,7 @@ namespace CLS_SLE.Controllers
                 AssessmentRubric rubric = db.AssessmentRubrics.Where(a => a.RubricID == rubricID).FirstOrDefault();
                 outcomeViewModel.OutcomeVM.SortOrder = maxSortOrder;
                 outcomeViewModel.OutcomeVM.CreatedDateTime = DateTime.Now;
-                outcomeViewModel.OutcomeVM.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                outcomeViewModel.OutcomeVM.CreatedByLoginID = UserData.PersonId;
                 rubric.Outcomes.Add(outcomeViewModel.OutcomeVM);
                 db.Outcomes.Add(outcomeViewModel.OutcomeVM);
                 db.SaveChanges();
@@ -330,7 +328,7 @@ namespace CLS_SLE.Controllers
                 editOutcome.CriteriaPassRate = updateOutcome.Outcome.Criteria.PassRate;
                 editOutcome.CalculateCriteriaPassRate = updateOutcome.Outcome.CalculateCriteriaPassRate;
                 editOutcome.ModifiedDateTime = DateTime.Now;
-                editOutcome.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                editOutcome.ModifiedByLoginID = UserData.PersonId;
 
                 db.SaveChanges();
 
@@ -356,7 +354,7 @@ namespace CLS_SLE.Controllers
 				editOutcome.CriteriaPassRate = outcomeViewModel.OutcomeVM.CriteriaPassRate / 100;
 				editOutcome.CalculateCriteriaPassRate = outcomeViewModel.OutcomeVM.CalculateCriteriaPassRate;
 				editOutcome.ModifiedDateTime = DateTime.Now;
-				editOutcome.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+				editOutcome.ModifiedByLoginID = UserData.PersonId;
 
 				//db.Entry(editOutcome).State = EntityState.Modified;
 				db.SaveChanges();
@@ -397,7 +395,7 @@ namespace CLS_SLE.Controllers
 				//db.Criteria.Load();
 				criterion.SortOrder = maxSortOrder;
 				criterion.CreatedDateTime = DateTime.Now;
-				criterion.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+				criterion.CreatedByLoginID = UserData.PersonId;
 				outcome.Criteria.Add(criterion);
 				db.Criteria.Add(criterion);
 
@@ -433,7 +431,7 @@ namespace CLS_SLE.Controllers
 				criterion.ExampleText = criterionViewModel.Criterion.ExampleText;
 				criterion.IsActive = criterionViewModel.Criterion.IsActive;
 				criterion.ModifiedDateTime = DateTime.Now;
-				criterion.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+				criterion.ModifiedByLoginID = UserData.PersonId;
 
 				//db.Entry(editCriteria).State = EntityState.Modified;
 				db.SaveChanges();

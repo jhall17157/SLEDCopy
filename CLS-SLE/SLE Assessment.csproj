@@ -21,8 +21,8 @@
     <Use64BitIISExpress>
     </Use64BitIISExpress>
     <IISExpressSSLPort>44340</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
@@ -243,6 +243,7 @@
     <Compile Include="Models\EnrollmentStatu.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ErrorMessage.cs" />
     <Compile Include="Models\ETL_StatusMapping.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
@@ -2161,6 +2162,9 @@
     <Content Include="Views\AdminAssessments\SchoolsDepartments.cshtml" />
     <Content Include="Views\AdminAssessments\ViewAssessment.cshtml" />
     <Content Include="Views\User\Consume.cshtml" />
+    <None Include="Web.Deploy.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

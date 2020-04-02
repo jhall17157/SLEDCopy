@@ -315,7 +315,7 @@ namespace CLS_SLE.Utility.SAML
         }
 
         //returns the URL you should redirect your users to (i.e. your SAML-provider login URL with the Base64-ed request in the querystring
-        public string GetRedirectUrl(string samlEndpoint, string relayState = null)
+        public string GetRedirectUrl(string samlEndpoint, string relayState = null, string returnToURL = null)
         {
             var queryStringSeparator = samlEndpoint.Contains("?") ? "&" : "?";
 
@@ -324,6 +324,11 @@ namespace CLS_SLE.Utility.SAML
             if (!string.IsNullOrEmpty(relayState))
             {
                 url += "&RelayState=" + HttpUtility.UrlEncode(relayState);
+            }
+
+            if (!string.IsNullOrEmpty(returnToURL))
+            {
+                url += "&post_logout_redirect_uri=" + HttpUtility.UrlEncode(returnToURL) + "&state=state_1";
             }
 
             return url;

@@ -56,10 +56,18 @@ namespace CLS_SLE.Controllers
         {
             if (ModelState.IsValid)
             {
+                ProgramAssessmentMapping map = new ProgramAssessmentMapping();
+                map.CourseID = Convert.ToInt16(mappingVM.CourseID);
+                map.RubricID = Convert.ToInt16(mappingVM.RubricID);
+                map.ProgramID = Convert.ToInt16(mappingVM.ProgramID);
                 
                 //assigns current date to mapping, then adds it to the database
-                mappingVM.Mapping.CreatedDateTime = DateTime.Now;
-                db.ProgramAssessmentMappings.Add(mappingVM.Mapping);
+                map.CreatedDateTime = DateTime.Now;
+                if (Session["personID"] != null)
+                {
+                    map.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                }
+                db.ProgramAssessmentMappings.Add(map);
                 db.SaveChanges();
 
             }

@@ -19,7 +19,7 @@ namespace CLS_SLE.ViewModels
         public int CourseID { get; set; }
         public Course Course { get; set; }
 
-        public List<AssessmentRubric> Rubrics { get; set; }
+        public List<SelectListItem> Rubrics { get; set; }
         public int RubricID { get; set; }
 
         public ProgramAssessmentMapping Mapping { get; set; }

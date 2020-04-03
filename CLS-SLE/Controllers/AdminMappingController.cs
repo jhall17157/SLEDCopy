@@ -26,6 +26,8 @@ namespace CLS_SLE.Controllers
                                         where !c.CourseName.Contains("Folio180")
                                         select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() })
                                             .Distinct().ToList();
+            mappingViewModel.Rubrics = (from r in db.AssessmentRubrics
+                                        select new SelectListItem { Text = r.Name, Value = r.RubricID.ToString() }).Distinct().ToList();
             return View(mappingViewModel);
         }
 

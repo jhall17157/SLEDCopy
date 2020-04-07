@@ -41,8 +41,7 @@
                 </div>
                 <div class="col-7">
                     <span>Start Date:</span><select class="d-inline form-control selectpicker col-3 ml-2"></select>
-                    <span class="ml-3">End Date:</span><select class="d-inline form-control selectpicker col-3 ml-2"></select>
-                    <button type="button" class="btn btn-success btn-sm d-inline float-right"><i class="fas fa-save" aria-hidden="true"></i></button>
+                    <span class="ml-3">End Date:</span><select class="d-inline form-control selectpicker col-3 ml-2"></select><span class="deleteTooltip d-inline float-right" data-toggle="tooltip" data-placement="right" title="Save Changes">                    <button type="button" class="btn btn-success btn-sm d-inline float-right"><i class="fas fa-save" aria-hidden="true"></i></button></span>
                 </div>
             </td>
         </tr>
@@ -67,3 +66,9 @@
     </tbody>
 </table>
 
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    })
+</script>

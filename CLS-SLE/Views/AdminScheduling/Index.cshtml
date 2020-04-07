@@ -6,6 +6,28 @@
 }
 @Styles.Render("~/Content/bootstrap-select")
 
+<style>
+    .card:hover {
+        background: rgba(0,0,0,0.07);
+        text-decoration: none;
+        color: #007bff;
+        border-color: #007bff;
+    }
+
+    .card-title {
+        padding-bottom: 10px;
+    }
+
+    .card {
+        padding-top: 15%;
+        padding-bottom: 5%;
+    }
+
+    .section-link {
+        color: rgb(0, 0, 106);
+        text-shadow: 0 5px 1px rgba(0,0,0,0.2);
+    }
+</style>
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -14,10 +36,49 @@
     </ol>
 </nav>
 
-
 <h2>Assessment Scheduling</h2>
 
-@using (Html.BeginForm("Index", "AdminScheduling", FormMethod.Post))
+<div class="row">
+    <div class="col-3 mt-5">
+        <a href="~/AdminScheduling/TimeframeSemester" class="card">
+            <div class="card-body text-center align-middle">
+                <div class="card-title"><i class="fas fa-calendar-day fa-9x section-link" aria-hidden="true"></i></div>
+                <div class="card-text h3 font-weight-bold">Modify<br />Submission<br />Timeframe</div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-3 mt-5">
+        <a href="~/AdminMapping/Index" class="card">
+            <div class="card-body text-center">
+                <div class="card-title"><i class="fas fa-search fa-9x section-link"></i></div>
+                <div class="card-text h3 font-weight-bold">Course Search</div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-3 mt-5">
+        <a href="~/Admin/ViewUsers" class="card">
+            <div class="card-body text-center">
+                <div class="card-title"><i class="fas fa-book fa-9x section-link" aria-hidden="true"></i></div>
+                <div class="card-text h3 font-weight-bold">Add Course<br />To Semester</div>
+            </div>
+        </a>
+    </div>
+    <!--
+    <div class="col-3 mt-5">
+        <a href="~/AdminScheduling/Index" class="card">
+            <div class="card-body text-center">
+                <div class="card-title"><i class="fas fa-calendar fa-9x section-link" aria-hidden="true"></i></div>
+                <div class="card-text h3 font-weight-bold">Scheduling</div>
+            </div>
+        </a>
+    </div>
+        -->
+</div>
+
+<!--
+@*using (Html.BeginForm("Index", "AdminScheduling", FormMethod.Post))
 {
     //Populates a list of semesters to choose from with live search
     <div class="form-inline mt-4 mb-4">
@@ -109,7 +170,7 @@
                         <td class="row">
                             <div class="col-6">
                             <p class="half-indent">
-                                @sr.AssessmentRubric.Name
+                                @*sr.AssessmentRubric.Name
                                 </p>
                             </div>
                             <div class="col-6">
@@ -128,7 +189,7 @@
         </tbody>
     </table>
 
-    <!-- Edit All Due Dates Modal-->
+    <!-- Edit All Due Dates Modal-->*@
     <div class="modal fade" id="editDueDatesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -139,7 +200,7 @@
                 <div class="modal-body row p-8">
                     <div class="col-6">
                         <p class="col-12 mb-1 pl-0">Start Date</p>
-                        @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
+                        @*Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
                         {
                             @id = "DropDownSemesters",
                             @class = "form-control d-inline col-11"
@@ -167,7 +228,7 @@
 <script src="~/Scripts/jquery-3.4.1.js"></script>
 <script>
 
-</script>
+</script>--> *@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

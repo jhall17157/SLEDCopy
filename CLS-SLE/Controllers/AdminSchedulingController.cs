@@ -39,5 +39,11 @@ namespace CLS_SLE.Controllers
 
             return View(schedulingViewModel);
         }
+
+
+        public ActionResult TimeframeSemester()
+        {
+            return View("TimeframeSemester");
+        }
     }
 }

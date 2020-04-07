@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "TimeframeResults";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item active" aria-current="page">Scheduling</li>
+    </ol>
+</nav>
+
+<h2>Modify Submission Timeframe</h2>
+
+<table class="table table-hover">
+    <tbody>
+
+        <tr class="row bg-dark text-white">
+            <td class="col-12">
+                <h4 class="">Fall 2020 - IS Project (152-170)</h4>
+            </td>
+        </tr>
+
+        <tr class="row bg-light">
+            <td class="col-6">
+                <h4 class="half-indent">Sections</h4>
+            </td>
+            <td class="col-6 pt-3">
+                <h5>Assessment Submission Timeframe</h5>
+            </td>
+        </tr>
+
+        <tr class="row">
+            <td class="row col-12 border-top-0">
+                <div class="col-5">
+                    <h5 class="d-inline indent">
+                        CRN: 12345
+                    </h5>
+                    <h6 class="pl-3 d-inline">
+                        End Date: 5/18/2020
+                    </h6>
+                </div>
+                <div class="col-7">
+                    <span>Start Date:</span><select class="d-inline form-control selectpicker col-3 ml-2"></select>
+                    <span class="ml-3">End Date:</span><select class="d-inline form-control selectpicker col-3 ml-2"></select>
+                    <button type="button" class="btn btn-success btn-sm d-inline float-right"><i class="fas fa-save" aria-hidden="true"></i></button>
+                </div>
+            </td>
+        </tr>
+
+        <tr class="row bg-light">
+            <td class="col-6 border-top-0">
+                <h4 class="half-indent">Paired Assessments</h4>
+            </td>
+        </tr>
+
+        <tr class="row">
+            <td class="row col-5 border-top-0">
+                <div class="col-12">
+                    <h5 class="indent">
+                        (123) MVC Development
+                    </h5>
+                </div>
+            </td>
+        </tr>
+
+
+    </tbody>
+</table>
+

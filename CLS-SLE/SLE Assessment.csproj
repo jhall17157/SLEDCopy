@@ -2047,6 +2047,7 @@
     </None>
     <None Include="Properties\PublishProfiles\Publish - Debug.pubxml" />
     <None Include="Properties\PublishProfiles\Publish - Release.pubxml" />
+    <None Include="Properties\PublishProfiles\Publish - Test.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -2164,7 +2165,7 @@
     <Content Include="Views\AdminAssessments\SchoolsDepartments.cshtml" />
     <Content Include="Views\AdminAssessments\ViewAssessment.cshtml" />
     <Content Include="Views\User\Consume.cshtml" />
-    <None Include="Web.Deploy.config">
+    <None Include="Web.Test.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
@@ -2192,7 +2193,7 @@
   <PropertyGroup>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy|AnyCPU'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

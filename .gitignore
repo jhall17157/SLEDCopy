@@ -17,10 +17,12 @@ CLS-SLE\bin\CLS-SLE.dll
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
+[Tt]est/
 x64/
 x86/
 bld/
 [Oo]bj/
+[Bb]in/
 [Ll]og/
 
 # Visual Studio 2015/2017 cache/options directory

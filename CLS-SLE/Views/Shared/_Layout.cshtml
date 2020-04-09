@@ -11,6 +11,11 @@
     @*@Styles.Render("~/Content/css")*@
     @Scripts.Render("~/bundles/modernizr")
 
+    @{
+        var ver = typeof(CLS_SLE.MvcApplication).Assembly.GetName().Version;
+        string versionDisplay = $"SLE Assessment v{ver.Major}.{ver.Minor}.{ver.Build}";
+     }
+
 </head>
 <body>
     <div class="container-fluid bg-white mb-5" style="border-bottom: 3px solid #003e7a;">
@@ -83,7 +88,11 @@
         <div class="bg-white" id="MainBody">
             @RenderBody()
         </div>
-        <footer style="margin-bottom:4vh"></footer>
+        <footer style="margin-bottom:4vh">
+            <div style="float:right;color:white;font-size:12px;">
+                @versionDisplay
+            </div>
+        </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")

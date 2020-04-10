@@ -14,6 +14,9 @@ namespace CLS_SLE.ViewModels
         public Semester Semester { get; set; }
         
         public Section Section { get; set; }
-        public IQueryable<Person> People { get; set; }
+        //public IQueryable<Person> People { get; set; }
+        
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 }

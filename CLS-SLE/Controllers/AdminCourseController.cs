@@ -13,7 +13,7 @@ namespace CLS_SLE.Controllers
     public class AdminCourseController : Controller
     {
         // a private int that can only be read which indicates the amount of results per page on the AdminCourse/Courses view
-        private readonly int PageSize = 10;
+        private readonly int PageSize = 20;
 
         // creating an instance of the database context in order to access entity framework to execute database commands
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
@@ -101,7 +101,8 @@ namespace CLS_SLE.Controllers
             {
                 id = c.CourseID,
                 name = c.CourseName,
-                number = c.Number
+                number = c.Number,
+                detailedName = c.Number + " " + c.CourseName
             }).ToList();
 
             return new JsonResult { Data = resultCourses, JsonRequestBehavior = JsonRequestBehavior.AllowGet };

@@ -10,5 +10,6 @@ namespace CLS_SLE.ViewModels
         public short id { get; set; }
         public string name { get; set; }
         public string number { get; set; }
+        public string detailedName { get; set; }
     }
 }

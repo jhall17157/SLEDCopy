@@ -125,7 +125,7 @@
                     data: {search: $("#courseSearch").val()},
                     success: function (data) {
                         response($.map(data, function (item) {
-                            return { label: item.name, value: item.name };
+                            return { label: item.detailedName, value: item.name };
                         }))
                     },
                     error: function (xhr, status, error) { alert("Error");}

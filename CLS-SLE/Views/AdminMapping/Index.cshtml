@@ -61,7 +61,7 @@
                         <tr href="#" data-target=".rubricCollapse@(rubricNumber)" class="accordionTrigger clickable">
                             <td class="bg-light" valign="bottom">
                                 <h4 class="d-inline half-indent subheader-lh"><i class="rubricIcon@(rubricNumber) fas fa-angle-right"></i>&emsp;@ra.AssessmentRubric.Name</h4>
-                                <button type="button" class="btn btn-success float-right rubricButton@(rubricNumber)" data-toggle="modal" data-target="#addModal"><i class="fa fa-plus" aria-hidden="true"></i> Add Course</button>
+                                <button type="button" class="btn btn-success float-right addMapButton rubricButton@(rubricNumber)" data-toggle="modal" @*onclick="@Model.Rubrics.SingleOrDefault(r => r.Value.AsInt() == ra.AssessmentRubric.RubricID).Selected = true" data-rubric="@ra.AssessmentRubric.RubricID"*@ data-target="#addModal"><i class="fa fa-plus" aria-hidden="true"></i> Add Course</button>
                             </td>
                         </tr>
                         if (!ra.AssessmentRubric.ProgramAssessmentMappings.Any())
@@ -113,7 +113,7 @@
     </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+@*<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -125,8 +125,8 @@
             </div>
             <div class="modal-body">
                 <div class="form-group col-12">
-                    @*<div>Program name: @program</div>
-                        <div>Rubric Name: @rubric</div>*@
+                    <div>Program name: @program</div>
+                        <div>Rubric Name: @rubric</div>
                     <p class="col-12 mb-1 pl-0">Select a course</p>
                     @Html.DropDownListFor(p => p.CourseID, Model.Courses, "-Select Course-", new
                        {
@@ -135,9 +135,9 @@
                            onchange = "this.form.submit();"
                        })
 
-                    @*@Html.DropDownList("Program", Model.Programs, "All", new {@id = "DropDownPrograms", @class = "form-control"})*@
-                    @*@Html.DropDownListFor(x => x.SelectedProgram, Model.AvailablePrograms, new {@class = "form-control"})*@
-                    @*@Html.ValidationMessageFor(model => model.Program.ProgramID)*@
+                    @Html.DropDownList("Program", Model.Programs, "All", new {@id = "DropDownPrograms", @class = "form-control"})
+                    @Html.DropDownListFor(x => x.SelectedProgram, Model.AvailablePrograms, new {@class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.Program.ProgramID)
 
                 </div>
             </div>
@@ -147,46 +147,100 @@
             </div>
         </div>
     </div>
+</div>*@
+<div class="modal fade" id="addModal" tabindex="-1" role="form" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModal">Add Course to Rubric</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("CreateMapping", "AdminMapping", FormMethod.Post))
+            {
+                <div class="modal-body">
+
+                    <div>
+                        @Html.DropDownListFor(p => p.ProgramID, Model.Programs, @*Model.Programs.SingleOrDefault(pr => pr.Value.AsInt() == Model.ProgramID).Text,*@ new
+                           {
+                               @id = "AddModalDropDownPrograms",
+                               @class = "form-control selectpicker d-inline col-6"
+
+                           })
+                    </div>
+
+                    <div>
+                        @Html.DropDownListFor(r => r.RubricID, Model.Rubrics, "-Select Rubric-", new
+                           {
+                               @id = "AddModalDropDownRubrics",
+                               @class = "form-control selectpicker d-inline col-6",
+                           })
+                    </div>
+                    <div>
+                        @Html.DropDownListFor(c => c.CourseID, Model.Courses, "-Select Course-", new
+                           {
+                               @id = "AddModalDropDownCourses",
+                               @class = "form-control selectpicker d-inline col-6",
+
+                           })
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary enableModalButton" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary enableModalButton" value="submit">Add Course</button>
+                </div>
+            }
+            </div>
+    </div>
 </div>
 
 
-<script src="~/Scripts/jquery-3.4.1.js"></script>
-<script>
+        <script src="~/Scripts/jquery-3.4.1.js"></script>
+        <script>
 
-    $(function () {
-        $('.accordionTrigger').click(toggleAccordion);
-    })
+            $(function () {
+                $('.accordionTrigger').click(toggleAccordion);
+            })
 
-    function showTooltip() {
-        $('[data-toggle="tooltip"]').show();
-    }
+            function showTooltip() {
+                $('[data-toggle="tooltip"]').show();
+            }
 
-    function hideTooltip() {
-        $('[data-toggle="tooltip"]').tooltip('hide');
-    }
+            function hideTooltip() {
+                $('[data-toggle="tooltip"]').tooltip('hide');
+            }
 
-    function toggleAccordion() {
-        if ($($(this).data('target')).hasClass('accordionClose'))
-        {
-            $($(this).data('target')).removeClass('collapse').removeClass('accordionClose').addClass('accordionOpen');
-            var targetClass = $(this).data('target');
-            $('.rubricIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-right").addClass("fas fa-angle-down");
-            //$('.rubricButton' + targetClass[targetClass.length - 1]).removeClass("d-none").addClass("d-inline");
+            function toggleAccordion() {
+                if ($($(this).data('target')).hasClass('accordionClose')) {
+                    $($(this).data('target')).removeClass('collapse').removeClass('accordionClose').addClass('accordionOpen');
+                    var targetClass = $(this).data('target');
+                    $('.rubricIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-right").addClass("fas fa-angle-down");
+                    //$('.rubricButton' + targetClass[targetClass.length - 1]).removeClass("d-none").addClass("d-inline");
+                }
+                else if ($($(this).data('target')).hasClass('accordionOpen')) {
+                    $($(this).data('target')).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
+                    var targetClass = $(this).data('target');
+                    $('.rubricIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+                    //$('.rubricButton' + targetClass[targetClass.length - 1]).removeClass("d-inline").addClass("d-none");
+                }
+            }
+            $('.addMapButton').on('click', function () {
+                var rubric = $(this).data('rubric');
+                
+                console.log(rubric);
+                $('.selectpicker #DropDownRubrics').val(rubric);
+
+            });
+        </script>
+
+
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+            @Scripts.Render("~/bundles/bootstrap-select")
+
+
         }
-        else if ($($(this).data('target')).hasClass('accordionOpen'))
-        {
-            $($(this).data('target')).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
-            var targetClass = $(this).data('target');
-            $('.rubricIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
-            //$('.rubricButton' + targetClass[targetClass.length - 1]).removeClass("d-inline").addClass("d-none");
-        }
-    }
-</script>
-
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/bootstrap-select")
-
-
-}

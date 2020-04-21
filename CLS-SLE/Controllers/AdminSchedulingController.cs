@@ -60,12 +60,15 @@ namespace CLS_SLE.Controllers
         [HttpPost]
         public ActionResult CreateSemesterSchedule(SchedulingViewModel viewModel)
         {
+            //check model state before continuing
             if(ModelState.IsValid)
             {
+                //pull semester info and default start and end dates from view model
                 Semester semester = viewModel.Semester;
                 DateTime StartDate = viewModel.StartDate;
                 DateTime EndDate = viewModel.EndDate;
                                                           
+                //based on selected semester, grab all rubrics from mappings and sections from sections tables
                 var result = from m in db.ProgramAssessmentMappings
                              join s in db.Sections on m.CourseID equals s.CourseID
                              where s.SemesterID == semester.SemesterID
@@ -74,9 +77,12 @@ namespace CLS_SLE.Controllers
                                  s.SectionID,
                                  m.RubricID
                              };
+                //ensure results are distinct to avoid duplicate entries
                 result = result.Distinct();
+                
+                //build list of schedule entries from result set
                 List<SectionRubric> Schedules = new List<SectionRubric>();
-
+                                
                 foreach (var item in result)
                 {
                     SectionRubric sectionRubric = new SectionRubric();
@@ -92,6 +98,7 @@ namespace CLS_SLE.Controllers
 
                     Schedules.Add(sectionRubric);
                 }
+                //Check if new schedule list is empty
                 if(Schedules.Any())
                 {
                     foreach(SectionRubric sectionRubric in Schedules)

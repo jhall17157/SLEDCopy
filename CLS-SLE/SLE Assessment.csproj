@@ -199,6 +199,7 @@
     <Compile Include="Controllers\AdminDepartmentsController.cs" />
     <Compile Include="Controllers\AdminProgramController.cs" />
     <Compile Include="Controllers\AdminSchoolController.cs" />
+    <Compile Include="Controllers\AdminSectionController.cs" />
     <Compile Include="Controllers\AdminUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstructorAssessmentsController.cs" />
@@ -408,6 +409,7 @@
     <Compile Include="ViewModels\UpdateProgramViewModel.cs" />
     <Compile Include="ViewModels\UpdateSchoolViewModel.cs" />
     <Compile Include="ViewModels\UpdateRubric.cs" />
+    <Compile Include="ViewModels\UpdateSectionViewModel.cs" />
     <Compile Include="ViewModels\ViewDepartmentViewModel.cs" />
     <Compile Include="ViewModels\ViewUserViewModel.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
@@ -2318,13 +2320,13 @@
     <Content Include="Views\AdminProgram\Programs.cshtml" />
     <Content Include="Views\AdminProgram\AddProgram.cshtml" />
     <Content Include="Views\AdminProgram\ViewProgram.cshtml" />
-    <Content Include="Views\AdminSections\AddSection.cshtml" />
-    <Content Include="Views\AdminSections\ViewSection.cshtml" />
+    <Content Include="Views\AdminSection\AddSection.cshtml" />
+    <Content Include="Views\AdminSection\ViewSection.cshtml" />
     <Content Include="Views\AdminCourse\EditCourse.cshtml" />
     <Content Include="Views\AdminDepartment\EditDepartment.cshtml" />
     <Content Include="Views\AdminProgram\EditProgram.cshtml" />
     <Content Include="Views\AdminSchool\EditSchool.cshtml" />
-    <Content Include="Views\AdminSections\EditSection.cshtml" />
+    <Content Include="Views\AdminSection\EditSection.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Admin\ViewSchool.cshtml" />
     <Content Include="Views\AdminCourse\Index.cshtml" />

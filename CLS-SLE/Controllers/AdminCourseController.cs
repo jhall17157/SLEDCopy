@@ -3,12 +3,14 @@ using CLS_SLE.ViewModels;
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     // class AdminController is extending the properties of the Controller class from System.Web.Mvc
     public class AdminCourseController : Controller
     {
@@ -138,8 +140,58 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///     a view that contains the details of the course with a CourseID matching 'id'
         /// </returns>
-        public ActionResult ViewCourse(short id) { return View(db.Courses.Where(c => c.CourseID == id).FirstOrDefault()); }
+        public ActionResult ViewCourse(int? courseID)
+        {
+            var course = new Course();
 
+            try
+            {
+                if (courseID.HasValue)
+                {
+                    course = db.Courses.FirstOrDefault(c => c.CourseID == courseID.Value);
+                }
+
+                dynamic model = new ExpandoObject();
+                model.CreatorLogin = null;
+                model.ModifierLogin = null;
+
+                if (course.CreatedByLoginID != null)
+                {
+                    try
+                    {
+                        model.CreatorLogin = (String)db.Users
+                            .Where(u => u.PersonID == course.CreatedByLoginID)
+                            .FirstOrDefault()
+                            .Login;
+                    }
+                    catch
+                    {
+                        model.CreatorLogin = "Unknown";
+                    }
+                }
+                if (course.ModifiedByLoginID != null)
+                {
+                    try
+                    {
+                        model.ModifierLogin = (String)db.Users
+                            .Where(u => u.PersonID == course.CreatedByLoginID)
+                            .FirstOrDefault()
+                            .Login;
+                    }
+                    catch
+                    {
+                        model.ModifierLogin = "Unknown";
+                    }
+                }
+                model.course = course;
+                return View(model);
+            }
+            catch
+            {
+                logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
+                return RedirectToAction("Signin", "User");
+            }
+        }
         // GET: AdminCourse/EditCourse
         /// <summary>
         ///     http get request that sends the AdminCourse/EditCourse view which displays a form to update information to the 

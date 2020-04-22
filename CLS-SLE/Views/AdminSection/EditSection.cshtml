@@ -19,11 +19,13 @@
 {
     <div class="form-group">
         @Html.Label("CRN:")
+    </div>
+    /*<div class="form-group">
+        @Html.Label("CRN:")
         @Html.EditorFor(Model => Model.Section.CRN,
        new { htmlAttributes = new { @class = "form-control", Value = ViewBag.section.CRN } })
-        @Html.ValidationMessageFor(model => model.Section.CRN)
     </div>
-    /*<div>
+    <div>
         @Html.Label("Semester:")
         @Html.DropDownListFor(Model => Model.SemesterSelection, new SelectList(Model.SemesterNames), Model.Section.Semester.Name,
     new
@@ -37,7 +39,7 @@
     </div>*/
     <div class="row justify-content-end col-9">
         <div class="form-group col-2 p-0 mx-1"><input type="submit" class="btn btn-primary col-12 mx-1" value="Submit" /></div>
-        <div class="col-2 p-0 mx-1"><a href="/AdminProgram/ViewProgram?programID=@ViewBag.program.ProgramID"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
+        <div class="col-2 p-0 mx-1"><a href="/AdminSection/ViewSection?sectionID=@ViewBag.section.SectionID"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
     </div>
 }
 @section Scripts {

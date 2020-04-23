@@ -56,7 +56,12 @@ namespace CLS_SLE.Controllers
 
             return View(schedulingViewModel);
         }
-        
+        public ActionResult NewSemester()
+        {
+
+            return View();
+
+        }
         [HttpPost]
         public ActionResult CreateSemesterSchedule(SchedulingViewModel viewModel)
         {

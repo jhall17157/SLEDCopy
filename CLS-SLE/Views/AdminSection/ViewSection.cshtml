@@ -7,7 +7,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Courses", "Courses", "AdminCourse", new { page = 1 }, null)</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)Model.sectionCourse, "ViewCourse", "AdminCourse", new { courseID = Model.section.CourseID }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">@Model.section.CRN</li>
     </ol>
 </nav>
@@ -72,7 +72,6 @@
                 }
                 else
                 {<tr>
-                    <td colspan="2">@enrollment.Person.User.Login</td>
                     <td colspan="2">@enrollment.Person.FirstName @enrollment.Person.LastName</td>
                     <td colspan="2">@enrollment.EnrollmentStatu.Name</td>
                 </tr>}

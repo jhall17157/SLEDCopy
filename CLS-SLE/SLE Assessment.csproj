@@ -2196,9 +2196,6 @@
     <Content Include="Views\AdminAssessments\ViewAssessment.cshtml" />
     <Content Include="Views\AdminMapping\Index.cshtml" />
     <Content Include="Views\AdminScheduling\Index.cshtml" />
-    <Content Include="Views\AdminScheduling\TimeframeSemester.cshtml" />
-    <Content Include="Views\AdminScheduling\TimeframeCourse.cshtml" />
-    <Content Include="Views\AdminScheduling\TimeframeResults.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

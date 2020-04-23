@@ -20,44 +20,48 @@
 @using (Html.BeginForm("Index", "AdminScheduling", FormMethod.Post))
 {
     //Populates a list of semesters to choose from with live search
-    <div class="form-inline mt-4 mb-4">
-        <div class="row col-12">
+<div class="form-inline mt-4 mb-4">
+    <div class="row col-7">
 
-            <div class="form-group col-12">
-                <p class="col-12 mb-1 pl-0">Search For A Semester:</p>
-                @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
-                {
-                    @id = "DropDownSemesters",
-                    @class = "form-control selectpicker d-inline col-6",
-                    onchange = "this.form.submit();"
-                })
+        <div class="form-group col-12">
+            <p class="col-12 mb-1 pl-0">Search For A Semester:</p>
+            @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
+            {
+                @id = "DropDownSemesters",
+                @class = "form-control selectpicker d-inline col-9",
+                onchange = "this.form.submit();"
+            })
 
 
-                <input type="submit" class="btn btn-primary d-inline ml-2" value="Submit" />
-            </div>
+            <input type="submit" class="btn btn-primary d-inline ml-2" value="Submit" />
         </div>
     </div>
+    <div class="row col-4 border-left">
+        <div class="form-group col-12">
+            <p class="col-12 mb-1 pl-0">Can't Find Semester?</p>
+            <input type="submit" class="btn btn-success d-inline ml-2" value="Set Up New Semester" />
+        </div>
+    </div>
+</div>
 }
 
 @if (Model.Semester != null)
 {
-    <hr />
-
     <!-- Toolbar Functions -->
     <div class="row mt-4 bg-dark text-white pt-2 pb-3 pl-4 pr-4">
-        <div class="row col-12 mt-1 mb-1">
+        <div class="row col-12 mt-2 mb-2">
             <h4>@Model.Semester.Name</h4>
         </div>
-        <div class="row col-4">
+        <div class="row col-6">
             <p class="col-12 mb-1 pl-0">Search For A Course:</p>
             @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
             {
                 @id = "DropDownSemesters",
                 @class = "form-control selectpicker d-inline col-10"
             })
-            <!--<button type="submit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>-->
+            <button type="submit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>
         </div>
-        <div class="row col-4">
+        <div class="row col-2">
             <!--<p class="col-12 mb-1 pl-0">Filter By Assessments:</p>
             @*Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
             {
@@ -120,6 +124,7 @@
                             </div>
                             <div class="col-1">
                                 <button type="button" class="btn btn-danger btn-sm d-inline float-right"><i class="fas fa-times" aria-hidden="true"></i></button>
+                                <button type="button" class="btn btn-success btn-sm d-inline float-right"><i class="fas fa-save" aria-hidden="true"></i></button>
                                 <!--<button type="button" class="btn btn-success btn-sm d-inline float-right"><i class="fas fa-save" aria-hidden="true"></i></button>-->
                             </div>
                         </td>

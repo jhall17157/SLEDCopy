@@ -15,7 +15,7 @@ namespace CLS_SLE.Controllers
     public class AdminCourseController : Controller
     {
         // a private int that can only be read which indicates the amount of results per page on the AdminCourse/Courses view
-        private readonly int PageSize = 10;
+        private readonly int PageSize = 20;
 
         // creating an instance of the database context in order to access entity framework to execute database commands
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
@@ -31,15 +31,84 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view of courses that contains a list of courses ordered by the course's Number
         /// </returns>
-        public ActionResult Courses(int page) => View(new CoursesViewModel
+        public ActionResult Courses(int page, string search, string department)
         {
-            //creating a new CoursesViewModel - the Courses is a list of Courses sorted by their Number and does not include any courses with a "000-000" Number
-            //the "000-000" Numbered Courses were imported to tie some old assessment data to that was needed in the system
-            Courses = db.Courses.Where(c => c.Number != "000-000").OrderBy(c => c.Number).Skip((page - 1) * PageSize).Take(PageSize),
+            CoursesViewModel coursesViewModel = new CoursesViewModel();
 
+            int ResultsCount;
+            if(department == null)
+            {
+                if (search == null)
+                {
+                    //creating a new CoursesViewModel - the Courses is a list of Courses sorted by their Number and does not include any courses with a "000-000" Number
+                    //the "000-000" Numbered Courses were imported to tie some old assessment data to that was needed in the system
+                    coursesViewModel.Courses = db.Courses.Where(c => c.Number != "000-000").OrderBy(c => c.Number).Skip((page - 1) * PageSize).Take(PageSize);
+                    ResultsCount = db.Courses.Where(c => c.Number != "000-000").Count();
+                }
+                else
+                {
+                    coursesViewModel.Courses = db.Courses.Where(c => c.Number != "000-000").Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).OrderBy(c => c.Number).Skip((page - 1) * PageSize).Take(PageSize);
+                    ResultsCount = db.Courses.Where(c => c.Number != "000-000").Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).Count();
+                }
+            }
+            else
+            {
+                if (search == null)
+                {
+                    //creating a new CoursesViewModel - the Courses is a list of Courses sorted by their Number and does not include any courses with a "000-000" Number
+                    //the "000-000" Numbered Courses were imported to tie some old assessment data to that was needed in the system
+                    coursesViewModel.Courses = db.Courses.Where(c => c.Number != "000-000").Where(c=>c.Department.Name == department).OrderBy(c => c.Number).Skip((page - 1) * PageSize).Take(PageSize);
+                    ResultsCount = db.Courses.Where(c => c.Number != "000-000").Where(c => c.Department.Name == department).Count();
+                }
+                else
+                {
+                    coursesViewModel.Courses = db.Courses.Where(c => c.Number != "000-000").Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).Where(c => c.Department.Name == department).OrderBy(c => c.Number).Skip((page - 1) * PageSize).Take(PageSize);
+                    ResultsCount = db.Courses.Where(c => c.Number != "000-000").Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).Where(c => c.Department.Name == department).Count();
+                }
+            }
+            
             //the Paging info is going to contain all the information required for pagination
-            PagingInfo = new PagingInfo { CurrentPage = page, ItemsPerPage = PageSize, TotalItems = db.Courses.Where(c=>c.Number!="000=-000").Count() }
-        });
+            coursesViewModel.PagingInfo = new PagingInfo { CurrentPage = page, ItemsPerPage = PageSize, TotalItems = ResultsCount };
+
+            List<String> departmentNames = new List<String>();
+
+            foreach (var d in db.Departments) { departmentNames.Add(d.Name); }
+
+            coursesViewModel.DepartmentNames = departmentNames;
+
+            coursesViewModel.SearchInput = search;
+
+            coursesViewModel.DepartmentFilter = department;
+
+            return View(coursesViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult SearchCourse(CourseSearchViewModel searchVM) {
+        
+            if(db.Courses.Where(c => !c.CourseName.Contains("Folio180")).Where(c => c.CourseName.Contains(searchVM.SearchInput))!=null||
+                db.Courses.Where(c => !c.CourseName.Contains("Folio180")).Where(c => c.Number.Contains(searchVM.SearchInput))!=null)
+            {
+                return RedirectToAction("Courses", "AdminCourse", new { page = 1, search = searchVM.SearchInput, department = searchVM.DepartmentFilter });
+            }
+            else { return RedirectToAction("CourseSearchError", "AdminCourse", new { search = searchVM.SearchInput }); }
+        }
+
+        public ActionResult CourseSearchError(string search) => View(new CourseSearchViewModel {SearchInput = search });
+
+
+        public JsonResult CourseAutoComplete (string search)
+        {
+            List<CourseSearchModel> resultCourses = db.Courses.Where(c=> !c.CourseName.Contains("Folio180")).Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).Select(c => new CourseSearchModel
+            {
+                id = c.CourseID,
+                name = c.CourseName,
+                number = c.Number,
+                detailedName = c.Number + " " + c.CourseName
+            }).ToList();
+
+            return new JsonResult { Data = resultCourses, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
 
         // GET: AdminCourse/AddCourse
         /// <summary>
@@ -57,7 +126,7 @@ namespace CLS_SLE.Controllers
 
             foreach(var d in db.Departments) { departmentNames.Add(d.Name); }
 
-            courseVM.DepartmentNames = departmentNames;
+            courseVM.DepartmentNames = departmentNames; 
 
             return View(courseVM);
         }

@@ -391,6 +391,8 @@
     </Compile>
     <Compile Include="ViewModels\AddProgramViewModel.cs" />
     <Compile Include="ViewModels\AddSchoolViewModel.cs" />
+    <Compile Include="ViewModels\CourseSearchModel.cs" />
+    <Compile Include="ViewModels\CourseSearchViewModel.cs" />
     <Compile Include="ViewModels\CoursesViewModel.cs" />
     <Compile Include="ViewModels\CreateCourseViewModel.cs" />
     <Compile Include="ViewModels\CriterionViewModel.cs" />
@@ -402,6 +404,7 @@
     <Compile Include="ViewModels\ProgramListViewModel.cs" />
     <Compile Include="ViewModels\RubricViewModel.cs" />
     <Compile Include="ViewModels\SchoolDetailViewModel.cs" />
+    <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\UpdateCourseViewModel.cs" />
     <Compile Include="ViewModels\UpdateProgramViewModel.cs" />
     <Compile Include="ViewModels\UpdateSchoolViewModel.cs" />
@@ -2193,6 +2196,7 @@
     <Content Include="obj\Debug\TempPE\Models.SLE_TrackingModel.Context.cs.dll" />
     <Content Include="obj\Debug\TempPE\Models.SLE_TrackingModel.cs.dll" />
     <Content Include="obj\Debug\TempPE\Models.SLE_TrackingModel.Designer.cs.dll" />
+    <Content Include="Scripts\autocomplete.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -2329,6 +2333,8 @@
     <Content Include="Views\Admin\ManageUsersAndRoles.cshtml" />
     <Content Include="Views\Admin\ProgramDashboard.cshtml" />
     <Content Include="Views\AdminSchool\Edit_Kayla.cshtml" />
+    <Content Include="Views\AdminCourse\CourseSearch.cshtml" />
+    <Content Include="Views\AdminCourse\CourseSearchError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

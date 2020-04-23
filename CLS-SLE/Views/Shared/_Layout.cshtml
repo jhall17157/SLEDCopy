@@ -13,6 +13,9 @@
 
 </head>
 <body>
+    <script>
+           
+    </script>
     <div class="container-fluid bg-white mb-5" style="border-bottom: 3px solid #003e7a;">
         <nav class="navbar navbar-expand-lg navbar-light">
             <a class="navbar-brand my-0 mr-md-auto" href="/">
@@ -53,37 +56,43 @@
         }
 
     }
-        <div class="container">
-            @if (((CLS_SLE.Models.User)Session["user"]) != null)
-            {
-                <div class="row justify-content-center">
-                    <ul class="nav nav-tabs col-12 pt-0">
-                        @*Needs to be manually updated for each new controller*@
-                        @if (HttpContext.Current.User.IsInRole("Administrator"))
-                        {
-                            <li class="nav-item h2">
-                                <a class="nav-link align-bottom @((ControllerName.Equals("Admin") || ControllerName.Equals("RoleAdmin") || ControllerName.Equals("AdminUser") || ControllerName.Equals("Rubric")) ? "active bg-white pb-4" : "bg-light mt-3")" href="~/Admin/AdminDashboard">Admin Dashboard</a></li>
-                        }
-                        @if (HttpContext.Current.User.IsInRole("Faculty"))
-                        {
-                            <li class="nav-item h2">
-                                <a class="nav-link align-bottom @(ControllerName.Equals("InstructorAssessments")  ? "active bg-white pb-4" : "bg-light mt-3")" href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-                
+    <div class="container">
+        @if (((CLS_SLE.Models.User)Session["user"]) != null)
+        {
+            <div class="row justify-content-center">
+                <ul class="nav nav-tabs col-12 pt-0">
+                    @*Needs to be manually updated for each new controller*@
+                    @if (HttpContext.Current.User.IsInRole("Administrator"))
+                    {
+                        <li class="nav-item h2">
+                            <a class="nav-link align-bottom @((ControllerName.Equals("Admin") || ControllerName.Equals("RoleAdmin") || ControllerName.Equals("AdminUser") || ControllerName.Equals("Rubric")) ? "active bg-white pb-4" : "bg-light mt-3")" href="~/Admin/AdminDashboard">Admin Dashboard</a>
+                        </li>
+                    }
+                    @if (HttpContext.Current.User.IsInRole("Faculty"))
+                    {
+                        <li class="nav-item h2">
+                            <a class="nav-link align-bottom @(ControllerName.Equals("InstructorAssessments")  ? "active bg-white pb-4" : "bg-light mt-3")" href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a>
+                        </li>
+                    }
+                </ul>
+            </div>
 
 
-            }
-                <div class="bg-white" id="MainBody">
-                    @RenderBody()
-                </div>
-            <footer style="margin-bottom:4vh"></footer>
+
+        }
+        <div class="bg-white" id="MainBody">
+            @RenderBody()
         </div>
+        <footer style="margin-bottom:4vh"></footer>
+    </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.0.min.js" type="text/javascript"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/jquery-ui.min.js" type="text/javascript"></script>
+    <link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/themes/blitzer/jquery-ui.css" rel="Stylesheet" type="text/css" />
+    <script src="~/Scripts/autocomplete.js" type="text/javascript"></script>
 
     <script>
         window.onscroll = function () { myFunction() };
@@ -99,7 +108,7 @@
                 $('#logo').css("width", 250);
             }
         }
-        
+
         $(function () {
             initButtons();
             function initButtons() {
@@ -107,6 +116,22 @@
                 $('#last, #next').prop('disabled', $('#end').html() == $('#total').html());
             }
         });
+
+        $("#courseSearch").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("CourseAutoComplete","AdminCourse")',
+                    dataType: "json",
+                    data: {search: $("#courseSearch").val()},
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.detailedName, value: item.name };
+                        }))
+                    },
+                    error: function (xhr, status, error) { alert("Error");}
+                });
+            }
+        });        
     </script>
     @RenderSection("scripts", required: false)
 </body>

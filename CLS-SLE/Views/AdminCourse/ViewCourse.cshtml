@@ -1,0 +1,37 @@
+﻿@using CLS_SLE.Models;
+@{
+    ViewBag.Title = "View Course";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Courses", "ViewCourse", "AdminCourse", new { page = 1 }, null)</li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.course.CourseName</li>
+    </ol>
+</nav>
+<h1> @Model.course.CourseName  - <a style="font-size: 85%;" href="/AdminCourse/EditCourse?courseID=@Model.course.CourseID">Edit <i class="fas fa-edit"></i></a> </h1>
+<br />
+
+<div>
+    <table class="table table-hover table-striped">
+        <thead class="thead-dark">
+            <b>Sections</b>
+        </thead>
+        <tbody>
+            @foreach (Section selectedSection in Model.course.Sections)
+            {
+                if (selectedSection.IsCancelled.Equals(false))
+                {
+                    <tr>
+                        <td colspan="2">@selectedSection.CRN</td>
+                        <td class="text-right">
+                            <a href="../AdminSection/ViewSection?sectionID=@selectedSection.SectionID"><button type="button" class="btn btn-primary">View</button></a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

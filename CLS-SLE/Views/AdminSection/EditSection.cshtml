@@ -1,0 +1,77 @@
+﻿@using CLS_SLE.Models
+@model CLS_SLE.ViewModels.UpdateSectionViewModel
+@{
+    ViewBag.Title = "EditSection";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)(ViewBag.sectionCourse), "ViewCourse", "AdminCourse", new { courseID = ViewBag.section.CourseID }, null)</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)(ViewBag.CRN), "ViewSection", "AdminSection", new { sectionID = ViewBag.section.SectionID }, null)</li>
+        <li class="breadcrumb-item active" aria-current="page">Edit</li>
+    </ol>
+</nav>
+<h1>Edit Section</h1>
+<br />
+@using (Html.BeginForm("UpdateSection", "AdminSection", new { sectionID = ViewBag.section.SectionID }, FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.Label("CRN:")
+        @Html.EditorFor(Model => Model.Section.CRN,
+       new { htmlAttributes = new { @class = "form-control", Value = ViewBag.section.CRN } })
+        @Html.ValidationMessageFor(model => model.Section.CRN)
+    </div>
+    <div>
+        @Html.Label("Semester:")
+        @Html.DropDownListFor(Model => Model.SemesterSelection,
+                    new SelectList(Model.SemesterNames),
+                    (String)ViewBag.section.Semester.Name,
+                    new
+                    {
+                        htmlAttributes = new
+                        {
+                            @class = "form-control",
+                            Value = ViewBag.section.Semester.Name
+                        }
+                    }
+        )
+    </div>
+    <div>
+        @Html.Label("Course:")
+        @Html.DropDownListFor(Model => Model.CourseSelection,
+                    new SelectList(Model.CourseNames),
+                    (String)ViewBag.section.Course.CourseName,
+                    new
+                    {
+                        htmlAttributes = new
+                        {
+                            @class = "form-control",
+                            Value = ViewBag.section.Course.CourseName
+                        }
+                    }
+       )
+    </div>
+    <div>
+        @Html.Label("Lead Instructor:")
+        @Html.DropDownListFor(Model => Model.LeadInstructorSelection,
+                 new SelectList(Model.LeadInstructorList),
+                 "Select Lead Instructor",
+                    new
+                    {
+                        htmlAttributes = new
+                        {
+                            @class = "form-control"
+                        }
+                    }
+       )
+    </div>
+    <div class="row justify-content-end col-9">
+        <div class="form-group col-2 p-0 mx-1"><input type="submit" class="btn btn-primary col-12 mx-1" value="Submit" /></div>
+        <div class="col-2 p-0 mx-1"><a href="/AdminSection/ViewSection?sectionID=@ViewBag.section.SectionID"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

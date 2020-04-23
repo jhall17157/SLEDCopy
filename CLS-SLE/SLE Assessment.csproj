@@ -187,10 +187,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\BundleConfig2.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\FilterConfig2.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\RouteConfig2.cs" />
     <Compile Include="Controllers\AdminAssessmentsController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AdminCourseController.cs" />
+    <Compile Include="Controllers\AdminDepartmentController.cs" />
+    <Compile Include="Controllers\AdminDepartmentsController.cs" />
+    <Compile Include="Controllers\AdminProgramController.cs" />
+    <Compile Include="Controllers\AdminSchoolController.cs" />
+    <Compile Include="Controllers\AdminSectionController.cs" />
     <Compile Include="Controllers\AdminUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstructorAssessmentsController.cs" />
@@ -200,6 +209,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\PagingInfo.cs" />
+    <Compile Include="ViewModels\AddCourseViewModel.cs" />
+    <Compile Include="ViewModels\AddDepartmentViewModel.cs" />
     <Compile Include="Models\Assessment.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
@@ -377,16 +389,126 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\AddProgramViewModel.cs" />
+    <Compile Include="ViewModels\AddSchoolViewModel.cs" />
+    <Compile Include="ViewModels\CourseSearchModel.cs" />
+    <Compile Include="ViewModels\CourseSearchViewModel.cs" />
+    <Compile Include="ViewModels\CoursesViewModel.cs" />
+    <Compile Include="ViewModels\CreateCourseViewModel.cs" />
     <Compile Include="ViewModels\CriterionViewModel.cs" />
+    <Compile Include="ViewModels\EditCourseViewModel.cs" />
+    <Compile Include="ViewModels\EditDepartmentViewModel.cs" />
     <Compile Include="ViewModels\InsertNewAssesmentViewModel.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
+    <Compile Include="ViewModels\ProgramDetailViewModel.cs" />
+    <Compile Include="ViewModels\ProgramListViewModel.cs" />
     <Compile Include="ViewModels\RubricViewModel.cs" />
+    <Compile Include="ViewModels\SchoolDetailViewModel.cs" />
+    <Compile Include="ViewModels\SearchViewModel.cs" />
+    <Compile Include="ViewModels\UpdateCourseViewModel.cs" />
+    <Compile Include="ViewModels\UpdateProgramViewModel.cs" />
+    <Compile Include="ViewModels\UpdateSchoolViewModel.cs" />
     <Compile Include="ViewModels\UpdateRubric.cs" />
+    <Compile Include="ViewModels\UpdateSectionViewModel.cs" />
+    <Compile Include="ViewModels\ViewDepartmentViewModel.cs" />
     <Compile Include="ViewModels\ViewUserViewModel.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\UpdateUserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\Antlr3.Runtime.dll" />
+    <Content Include="bin\Antlr3.Runtime.pdb" />
+    <Content Include="bin\BCrypt.Net.dll" />
+    <Content Include="bin\BCrypt.Net.pdb" />
+    <Content Include="bin\BCrypt.Net.xml" />
+    <Content Include="bin\CLS-SLE.dll" />
+    <Content Include="bin\CLS-SLE.pdb" />
+    <Content Include="bin\EntityFramework.dll" />
+    <Content Include="bin\EntityFramework.SqlServer.dll" />
+    <Content Include="bin\EntityFramework.SqlServer.xml" />
+    <Content Include="bin\EntityFramework.xml" />
+    <Content Include="bin\Microsoft.AI.Agent.Intercept.dll" />
+    <Content Include="bin\Microsoft.AI.DependencyCollector.dll" />
+    <Content Include="bin\Microsoft.AI.DependencyCollector.xml" />
+    <Content Include="bin\Microsoft.AI.PerfCounterCollector.dll" />
+    <Content Include="bin\Microsoft.AI.PerfCounterCollector.xml" />
+    <Content Include="bin\Microsoft.AI.ServerTelemetryChannel.dll" />
+    <Content Include="bin\Microsoft.AI.ServerTelemetryChannel.xml" />
+    <Content Include="bin\Microsoft.AI.Web.dll" />
+    <Content Include="bin\Microsoft.AI.Web.xml" />
+    <Content Include="bin\Microsoft.AI.WindowsServer.dll" />
+    <Content Include="bin\Microsoft.AI.WindowsServer.xml" />
+    <Content Include="bin\Microsoft.ApplicationInsights.dll" />
+    <Content Include="bin\Microsoft.ApplicationInsights.xml" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Core.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Core.xml" />
+    <Content Include="bin\Microsoft.AspNet.Identity.EntityFramework.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.EntityFramework.xml" />
+    <Content Include="bin\Microsoft.AspNet.TelemetryCorrelation.dll" />
+    <Content Include="bin\Microsoft.AspNet.TelemetryCorrelation.xml" />
+    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
+    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml" />
+    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="bin\Newtonsoft.Json.dll" />
+    <Content Include="bin\Newtonsoft.Json.xml" />
+    <Content Include="bin\NLog.dll" />
+    <Content Include="bin\NLog.xml" />
+    <Content Include="bin\roslyn\csc.exe" />
+    <Content Include="bin\roslyn\csi.exe" />
+    <Content Include="bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll" />
+    <Content Include="bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll" />
+    <Content Include="bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll" />
+    <Content Include="bin\roslyn\Microsoft.Win32.Primitives.dll" />
+    <Content Include="bin\roslyn\System.AppContext.dll" />
+    <Content Include="bin\roslyn\System.Collections.Immutable.dll" />
+    <Content Include="bin\roslyn\System.Console.dll" />
+    <Content Include="bin\roslyn\System.Diagnostics.DiagnosticSource.dll" />
+    <Content Include="bin\roslyn\System.Diagnostics.FileVersionInfo.dll" />
+    <Content Include="bin\roslyn\System.Diagnostics.StackTrace.dll" />
+    <Content Include="bin\roslyn\System.Globalization.Calendars.dll" />
+    <Content Include="bin\roslyn\System.IO.Compression.dll" />
+    <Content Include="bin\roslyn\System.IO.Compression.ZipFile.dll" />
+    <Content Include="bin\roslyn\System.IO.FileSystem.dll" />
+    <Content Include="bin\roslyn\System.IO.FileSystem.Primitives.dll" />
+    <Content Include="bin\roslyn\System.Net.Http.dll" />
+    <Content Include="bin\roslyn\System.Net.Sockets.dll" />
+    <Content Include="bin\roslyn\System.Reflection.Metadata.dll" />
+    <Content Include="bin\roslyn\System.Runtime.InteropServices.RuntimeInformation.dll" />
+    <Content Include="bin\roslyn\System.Security.Cryptography.Algorithms.dll" />
+    <Content Include="bin\roslyn\System.Security.Cryptography.Encoding.dll" />
+    <Content Include="bin\roslyn\System.Security.Cryptography.Primitives.dll" />
+    <Content Include="bin\roslyn\System.Security.Cryptography.X509Certificates.dll" />
+    <Content Include="bin\roslyn\System.Text.Encoding.CodePages.dll" />
+    <Content Include="bin\roslyn\System.Threading.Tasks.Extensions.dll" />
+    <Content Include="bin\roslyn\System.ValueTuple.dll" />
+    <Content Include="bin\roslyn\System.Xml.ReaderWriter.dll" />
+    <Content Include="bin\roslyn\System.Xml.XmlDocument.dll" />
+    <Content Include="bin\roslyn\System.Xml.XPath.dll" />
+    <Content Include="bin\roslyn\System.Xml.XPath.XDocument.dll" />
+    <Content Include="bin\roslyn\vbc.exe" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe" />
+    <Content Include="bin\System.Diagnostics.DiagnosticSource.dll" />
+    <Content Include="bin\System.Diagnostics.DiagnosticSource.xml" />
+    <Content Include="bin\System.Web.Helpers.dll" />
+    <Content Include="bin\System.Web.Helpers.xml" />
+    <Content Include="bin\System.Web.Mvc.dll" />
+    <Content Include="bin\System.Web.Mvc.xml" />
+    <Content Include="bin\System.Web.Optimization.dll" />
+    <Content Include="bin\System.Web.Optimization.xml" />
+    <Content Include="bin\System.Web.Razor.dll" />
+    <Content Include="bin\System.Web.Razor.xml" />
+    <Content Include="bin\System.Web.WebPages.Deployment.dll" />
+    <Content Include="bin\System.Web.WebPages.Deployment.xml" />
+    <Content Include="bin\System.Web.WebPages.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.xml" />
+    <Content Include="bin\System.Web.WebPages.xml" />
+    <Content Include="bin\WebGrease.dll" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
@@ -2038,13 +2160,43 @@
     <Content Include="fontawesome\webfonts\fa-solid-900.ttf" />
     <Content Include="fontawesome\webfonts\fa-solid-900.woff" />
     <Content Include="fontawesome\webfonts\fa-solid-900.woff2" />
+    <Content Include="bin\ApplicationInsights.config" />
+    <Content Include="bin\CLS-SLE.dll.config" />
+    <Content Include="bin\NLog.config" />
+    <Content Include="bin\roslyn\csc.exe.config" />
+    <Content Include="bin\roslyn\csc.rsp" />
+    <Content Include="bin\roslyn\csi.exe.config" />
+    <Content Include="bin\roslyn\csi.rsp" />
+    <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
+    <Content Include="bin\roslyn\Microsoft.Managed.Core.targets" />
+    <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
+    <Content Include="bin\roslyn\vbc.exe.config" />
+    <Content Include="bin\roslyn\vbc.rsp" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
+    <Content Include="libman.json" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="obj\Debug\build.force" />
+    <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <Content Include="obj\Debug\edmxResourcesToEmbed\Models\SLE_TrackingModel.csdl" />
+    <Content Include="obj\Debug\edmxResourcesToEmbed\Models\SLE_TrackingModel.msl" />
+    <Content Include="obj\Debug\edmxResourcesToEmbed\Models\SLE_TrackingModel.ssdl" />
+    <Content Include="obj\Debug\SLE Assessment.csproj.CopyComplete" />
+    <Content Include="obj\Debug\SLE Assessment.csprojAssemblyReference.cache" />
+    <Content Include="obj\Debug\Tsc.out" />
+    <Content Include="obj\Release\SLE Assessment.csprojAssemblyReference.cache" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="obj\Debug\CLS-SLE.dll" />
+    <Content Include="obj\Debug\CLS-SLE.pdb" />
+    <Content Include="obj\Debug\SLE Assessment.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\TempPE\Models.SLE_TrackingModel.Context.cs.dll" />
+    <Content Include="obj\Debug\TempPE\Models.SLE_TrackingModel.cs.dll" />
+    <Content Include="obj\Debug\TempPE\Models.SLE_TrackingModel.Designer.cs.dll" />
+    <Content Include="Scripts\autocomplete.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -2124,7 +2276,6 @@
     <Content Include="Views\RoleAdmin\Index.cshtml" />
     <Content Include="Views\Admin\AdminDashboard.cshtml" />
     <Content Include="Views\Admin\SchoolsDepartments.cshtml" />
-    <Content Include="Views\Admin\ProgramsCourses.cshtml" />
     <Content Include="Views\Admin\Assessments.cshtml" />
     <Content Include="Views\Admin\AssessmentMappings.cshtml" />
     <Content Include="Views\Admin\AssessmentScheduling.cshtml" />
@@ -2157,9 +2308,37 @@
     <Content Include="Views\AdminAssessments\ProgramsCourses.cshtml" />
     <Content Include="Views\AdminAssessments\SchoolsDepartments.cshtml" />
     <Content Include="Views\AdminAssessments\ViewAssessment.cshtml" />
+    <Content Include="Views\AdminSchool\Schools.cshtml" />
+    <Content Include="Views\AdminSchool\AddSchool.cshtml" />
+    <Content Include="Views\AdminSchool\ViewSchool.cshtml" />
+    <Content Include="Views\AdminCourse\Courses.cshtml" />
+    <Content Include="Views\AdminCourse\AddCourse.cshtml" />
+    <Content Include="Views\AdminCourse\ViewCourse.cshtml" />
+    <Content Include="Views\AdminDepartment\Departments.cshtml" />
+    <Content Include="Views\AdminDepartment\AddDepartment.cshtml" />
+    <Content Include="Views\AdminDepartment\ViewDepartment.cshtml" />
+    <Content Include="Views\AdminProgram\Programs.cshtml" />
+    <Content Include="Views\AdminProgram\AddProgram.cshtml" />
+    <Content Include="Views\AdminProgram\ViewProgram.cshtml" />
+    <Content Include="Views\AdminSection\AddSection.cshtml" />
+    <Content Include="Views\AdminSection\ViewSection.cshtml" />
+    <Content Include="Views\AdminCourse\EditCourse.cshtml" />
+    <Content Include="Views\AdminDepartment\EditDepartment.cshtml" />
+    <Content Include="Views\AdminProgram\EditProgram.cshtml" />
+    <Content Include="Views\AdminSchool\EditSchool.cshtml" />
+    <Content Include="Views\AdminSection\EditSection.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Admin\ViewSchool.cshtml" />
+    <Content Include="Views\AdminCourse\Index.cshtml" />
+    <Content Include="Views\Admin\ManageUsersAndRoles.cshtml" />
+    <Content Include="Views\Admin\ProgramDashboard.cshtml" />
+    <Content Include="Views\AdminSchool\Edit_Kayla.cshtml" />
+    <Content Include="Views\AdminCourse\CourseSearch.cshtml" />
+    <Content Include="Views\AdminCourse\CourseSearchError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="obj\Deploy\" />
     <Folder Include="Scripts\main\" />
   </ItemGroup>
   <ItemGroup>

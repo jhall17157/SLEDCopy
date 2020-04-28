@@ -239,7 +239,7 @@
                 $(".notAssessed").prop('checked', 'true');
                 //document.querySelectorAll('.assessedCount').forEach();
             //};
-
+                db.SaveChanges();
             });
 
             $('#close').on('click', function (e) {

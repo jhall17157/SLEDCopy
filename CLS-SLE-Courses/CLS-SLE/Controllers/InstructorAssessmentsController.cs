@@ -138,6 +138,9 @@ namespace CLS_SLE.Controllers
                 mymodel.StudentScores = studentScores.ToList();
 
                 return View(mymodel);
+                //db.SaveChanges();// Handled using jquerry
+
+               //return RedirectToAction("StudentList", "InstructorAssessments");// This has a button to show student lists, previous and next student on top of the page which looks cool
             }
             catch
             {

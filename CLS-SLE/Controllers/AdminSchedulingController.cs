@@ -36,7 +36,12 @@ namespace CLS_SLE.Controllers
                 .Distinct().ToList();
             schedulingViewModel.Semester =
                 db.Semesters.FirstOrDefault(s => s.SemesterID == viewModel.SemesterID);
-
+            //get course ids for all sections in selected semester, compares them to all courses in mappings, and returns a list of CourseIDs that have mappings for the semester
+            List<short> courseIDs = schedulingViewModel.Semester.Sections.Select(i => i.CourseID).ToList();
+            //List<short> mcourseIDs = db.ProgramAssessmentMappings.Select(i => i.CourseID).ToList();
+            //List<short> final = courseIDs.Intersect(mcourseIDs).ToList();
+            schedulingViewModel.Courses = db.Courses.Where(c => courseIDs.Contains(c.CourseID)).ToList();  
+            
             //var result = from sr in db.SectionRubrics
             //              join sec in db.Sections on sr.SectionID equals sec.SectionID
             //              join sem in db.Semesters on sec.SemesterID equals sem.SemesterID

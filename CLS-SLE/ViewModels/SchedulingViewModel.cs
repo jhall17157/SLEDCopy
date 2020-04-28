@@ -13,6 +13,8 @@ namespace CLS_SLE.ViewModels
         public int SemesterID { get; set; }
         public Semester Semester { get; set; }
         
+        public List<Course> Courses { get; set; }
+
         public Section Section { get; set; }
         //public IQueryable<Person> People { get; set; }
         

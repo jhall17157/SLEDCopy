@@ -83,33 +83,49 @@
         <tbody>
             @foreach (Course course in Model.Courses)
             {
-                <tr>
-                    <td>
-                        <h4>
-                            @course.CourseName
-                        </h4>
-                    </td>
-                </tr>
+            <tr class="row bg-light">
+                <td class="col-10 border-0">
+                    <h4>
+                        @course.CourseName (@course.Number)
+                    </h4>
+                </td>
+                <td class="col-2 border-0 text-right">
+                    <button class="btn btn-success"><i class="fas fa-plus" aria-hidden="true"></i> Add CRN</button>
+                </td>
+            </tr>
                 foreach (Section sec in Model.Semester.Sections.Where(s => s.CourseID == course.CourseID))
                 {
-                    <tr>
-                        <td>
-                            <h5>
+                    <tr class="row border-bottom">
+                        <td class="border-0 col-4">
+                            <h5 class="indent d-inline align-self-center">
                                 CRN: @sec.CRN
                             </h5>
+                            <h6 class="pl-3 d-inline">
+                                Ends: @sec.EndDate
+                            </h6>
+                        </td>
+                        <td class="col-5 text-right border-0 pl-3">
+                            <!--<h6>Submission Timeframe</h6>-->
+                        </td>
+                        <td class="col-3 border-0 text-right">
+                            <button class="btn btn-success"><i class="fas fa-plus" aria-hidden="true"></i> Add Assessment</button>
                         </td>
                     </tr>
                     foreach (SectionRubric sr in sec.SectionRubrics)
                     {
-                        <tr>
-                            <td>
+                        <tr class="row border-bottom">
+                            <td class="indent border-0 col-5">
                                 @sr.AssessmentRubric.Name
                             </td>
-                            <td>
-                                Start Date: @sr.StartDate.ToShortDateString()
+                            <td class="border-0 row col-3">
+                                <p class="col-12 mb-1 pl-0">Start Date:</p>
+                                <input type="date" class="form-control selectpicker col-9 ml-2">
                             </td>
-                            <td>
-                                End Date: @sr.EndDate.ToShortDateString()
+                            <td class="border-0 row col-3">
+                                <p class="col-12 mb-1 pl-0">End Date:</p>
+                                <input type="date" class="form-control selectpicker col-9 ml-2">
+                                <!--<p>Start Date:</p><br /><input type="date" class="form-control selectpicker col-3 ml-2"><!--<option selected>@*Html.Value(@sr.StartDate.ToShortDateString())*@</option>-->
+                                <!--<p class="">End Date:</p><br /><input type="date" class="form-control selectpicker col-3 ml-2"><!--<option value="@*Html.Raw(@sr.EndDate.ToShortDateString())" selected></option>*@</select>-->
                             </td>
                         </tr>
                     }
@@ -119,8 +135,8 @@
 
 
             @*@foreach (Section sec in Model.Semester.Sections.OrderBy(c => c.CourseID).ThenBy(s => s.CRN).GroupBy(c => c.Course))
-            {
-                <tr class="row bg-light">
+                                {
+<tr class="row bg-light">
                     <td class="col-12">
                         <h4>*@
                             @*@sec.CRN - @sec.Course.CourseName*@

@@ -17,33 +17,36 @@
 
 <h2>Assessment Scheduling</h2>
 
-@using (Html.BeginForm("Index", "AdminScheduling", FormMethod.Post))
+@using (Html.BeginForm("Index", "AdminScheduling", new { page = 1}, FormMethod.Post))
 {
     //Populates a list of semesters to choose from with live search
-<div class="form-inline mt-4 mb-4">
-    <div class="row col-7">
+    <div class="form-inline mt-4 mb-4">
+        <div class="row col-7">
 
-        <div class="form-group col-12">
-            <p class="col-12 mb-1 pl-0">Search For A Semester:</p>
-            @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
-            {
-                @id = "DropDownSemesters",
-                @class = "form-control selectpicker d-inline col-9",
-                onchange = "this.form.submit();"
-            })
+            <div class="form-group col-12">
+                <p class="col-12 mb-1 pl-0">Search For A Semester:</p>
+                @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
+                {
+                    @id = "DropDownSemesters",
+                    @class = "form-control selectpicker d-inline col-9",
+                    onchange = "this.form.submit();"
+                })
+                
+                @Html.HiddenFor(p => p.PagingInfo);
 
 
-            <input type="submit" class="btn btn-primary d-inline ml-2" value="Submit" />
+                <input type="submit" class="btn btn-primary d-inline ml-2" value="Submit" />
+            </div>
+        </div>
+        <div class="row col-4 border-left">
+            <div class="form-group col-12">
+                <p class="col-12 mb-1 pl-0">Can't Find Semester?</p>
+                @Html.ActionLink("Configure Semester", "NewSemester", "AdminScheduling", null, new { @class = "btn btn-success d-inline ml-2" })
+            </div>
         </div>
     </div>
-    <div class="row col-4 border-left">
-        <div class="form-group col-12">
-            <p class="col-12 mb-1 pl-0">Can't Find Semester?</p>
-            @Html.ActionLink("Configure Semester","NewSemester","AdminScheduling",null,new { @class = "btn btn-success d-inline ml-2" }) 
-        </div>
-    </div>
-</div>
 }
+
 
 @if (Model.Semester != null)
 {
@@ -62,13 +65,7 @@
             <button type="submit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>
         </div>
         <div class="row col-2">
-            <!--<p class="col-12 mb-1 pl-0">Filter By Assessments:</p>
-            @*Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
-            {
-                @id = "DropDownSemesters",
-                @class = "form-control selectpicker d-inline col-10"
-            })*@
-            <!--<button type="submit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>-->
+           
         </div>
         <div class="row col-5">
             <p class="col-12 mb-1 pl-0">Edit Functions</p>
@@ -83,44 +80,60 @@
         <tbody>
             @foreach (Course course in Model.Courses)
             {
-                <tr>
-                    <td>
-                        <h4>
-                            @course.CourseName
-                        </h4>
-                    </td>
-                </tr>
+            <tr class="row bg-light">
+                <td class="col-10 border-0">
+                    <h4>
+                        @course.CourseName (@course.Number)
+                    </h4>
+                </td>
+                <td class="col-2 border-0 text-right">
+                    <button class="btn btn-success"><i class="fas fa-plus" aria-hidden="true"></i> Add CRN</button>
+                </td>
+            </tr>
                 foreach (Section sec in Model.Semester.Sections.Where(s => s.CourseID == course.CourseID))
                 {
-                    <tr>
-                        <td>
-                            <h5>
+                    <tr class="row border-bottom">
+                        <td class="border-0 col-4">
+                            <h5 class="indent d-inline align-self-center">
                                 CRN: @sec.CRN
                             </h5>
+                            <h6 class="pl-3 d-inline">
+                                Ends: @sec.EndDate
+                            </h6>
+                        </td>
+                        <td class="col-5 text-right border-0 pl-3">
+                            <!--<h6>Submission Timeframe</h6>-->
+                        </td>
+                        <td class="col-3 border-0 text-right">
+                            <button class="btn btn-success"><i class="fas fa-plus" aria-hidden="true"></i> Add Assessment</button>
                         </td>
                     </tr>
                     foreach (SectionRubric sr in sec.SectionRubrics)
                     {
-                        <tr>
-                            <td>
+                        <tr class="row border-bottom">
+                            <td class="indent border-0 col-5">
                                 @sr.AssessmentRubric.Name
                             </td>
-                            <td>
-                                Start Date: @sr.StartDate.ToShortDateString()
+                            <td class="border-0 row col-3">
+                                <p class="col-12 mb-1 pl-0">Start Date:</p>
+                                <input type="date" class="form-control selectpicker col-9 ml-2">
                             </td>
-                            <td>
-                                End Date: @sr.EndDate.ToShortDateString()
+                            <td class="border-0 row col-3">
+                                <p class="col-12 mb-1 pl-0">End Date:</p>
+                                <input type="date" class="form-control selectpicker col-9 ml-2">
+                                <!--<p>Start Date:</p><br /><input type="date" class="form-control selectpicker col-3 ml-2"><!--<option selected>@*Html.Value(@sr.StartDate.ToShortDateString())*@</option>-->
+                                <!--<p class="">End Date:</p><br /><input type="date" class="form-control selectpicker col-3 ml-2"><!--<option value="@*Html.Raw(@sr.EndDate.ToShortDateString())" selected></option>*@</select>-->
                             </td>
                         </tr>
                     }
 
                 }
             }
-
+            
 
             @*@foreach (Section sec in Model.Semester.Sections.OrderBy(c => c.CourseID).ThenBy(s => s.CRN).GroupBy(c => c.Course))
-            {
-                <tr class="row bg-light">
+                                {
+<tr class="row bg-light">
                     <td class="col-12">
                         <h4>*@
                             @*@sec.CRN - @sec.Course.CourseName*@
@@ -170,8 +183,54 @@
                 }
             }*@
 
+          
+
         </tbody>
     </table>
+    <div class="row mb-3">
+        <div class="col">
+            @*First Page*@
+            @using (Html.BeginForm("Index", "AdminScheduling", new { page = 1 }, FormMethod.Post))
+            {
+                @Html.HiddenFor(s => s.SemesterID, new { @value = Model.SemesterID });
+                @Html.HiddenFor(p => p.PagingInfo); 
+                <button id="next" class="btn btn-primary" type="submit"><a class="fa fa-angle-double-left"></a></button>
+            }
+            @*Previous Page*@
+            @using (Html.BeginForm("Index", "AdminScheduling", new { page = Model.PagingInfo.PreviousPage }, FormMethod.Post))
+            {
+                @Html.HiddenFor(s => s.SemesterID, new { @value = Model.SemesterID });
+                @Html.HiddenFor(p => p.PagingInfo); 
+                <button id="next" class="btn btn-primary" type="submit"><a class="fa fa-angle-left"></a></button>
+            }
+
+            
+       
+
+        </div>
+        <div class="col text-center">
+            <span id="start">@(Model.PagingInfo.RangeStart)</span>-<span id="end">@(Model.PagingInfo.RangeEnd)</span>
+            of
+            <span id="total">@(Model.PagingInfo.TotalItems)</span>
+        </div>
+        <div class="col text-right">
+            @*Next page*@
+            @using (Html.BeginForm("Index", "AdminScheduling", new { page = Model.PagingInfo.NextPage }, FormMethod.Post))
+            {
+                @Html.HiddenFor(s => s.SemesterID, new { @value = Model.SemesterID });
+                @Html.HiddenFor(p => p.PagingInfo);
+                <button id="next" class="btn btn-primary" type="submit"><a class="fa fa-angle-right"></a></button>
+            }
+            @*Last Page*@
+            @using (Html.BeginForm("Index", "AdminScheduling", new { page = Model.PagingInfo.TotalPages }, FormMethod.Post))
+            {
+                @Html.HiddenFor(s => s.SemesterID, new { @value = Model.SemesterID });
+                @Html.HiddenFor(p => p.PagingInfo);
+                <button id="next" class="btn btn-primary" type="submit"><a class="fa fa-angle-double-right"></a></button>
+            }
+
+        </div>
+    </div>
 
     <!-- Add Course Modal-->
     <div class="modal fade" id="addCourseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -186,13 +245,13 @@
                         <p class="col-12 mb-1 pl-0">Select Course:</p>
                         @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
                         {
-                            @id = "DropDownSemesters",
+                            @id = "DropDownSemesters2",
                             @class = "form-control d-inline col-12"
                         })
                     </div>
                     <div class="col-12 mt-3">
                         <p class="col-12 mb-1 pl-0">Enter CRN:</p>
-                        <input type="text" class="form-control"/>
+                        <input type="text" class="form-control" />
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -217,7 +276,7 @@
                             <p class="col-12 mb-1 pl-0">Start Date</p>
                             @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
                             {
-                                @id = "DropDownSemesters",
+                                @id = "DropDownSemesters3",
                                 @class = "form-control d-inline col-11"
                             })
                         </div>
@@ -225,7 +284,7 @@
                             <p class="col-12 mb-1 pl-0">End Date</p>
                             @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
                             {
-                                @id = "DropDownSemesters",
+                                @id = "DropDownSemesters4",
                                 @class = "form-control d-inline col-11"
                             })
                         </div>
@@ -243,7 +302,9 @@
 
 <script src="~/Scripts/jquery-3.4.1.js"></script>
 <script>
-
+    //$('#next, #prev, #first, #last').on('click', function () {
+    //    $.post("AdminScheduling/Index", { page: $(this).data('page') });
+    //})
 </script>
 
 @section Scripts {

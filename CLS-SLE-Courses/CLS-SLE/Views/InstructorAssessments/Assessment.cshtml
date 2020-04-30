@@ -1,0 +1,317 @@
+﻿@using CLS_SLE.Models;
+@{
+    ViewBag.Title = "TSA Assessment";
+    var r = Model.Rubric;
+    var s = Model.Student;
+    bool exists = false;
+    var numCriteria = 0;
+    var filledCriteria = 0;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#" id="dashboardLink">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="#" id="studentLink">Student List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Assessment</li>
+    </ol>
+</nav>
+
+<div class="clearfix">
+    <h1>@r.RubricName</h1>
+    <h2 class="float-left" style="margin-top:10px; margin-bottom:5px;">@s.FirstName @s.LastName - @s.StudentID</h2>
+
+    <div class="btn-group right" role="group" style="margin-top:10px; margin-bottom:5px;">
+        <input type="button" class="btn btn-outline-dark" value="Previous Student" id="prevStudentSubmitTop" name="lastStudent">
+        <input type="button" class="btn btn-outline-dark" value="Mark not assessed" id="markNotAssessed" name="markNotAssessed">
+        <input type="button" class="btn btn-outline-dark" value="Back to all students" id="allStudentSubmitTop" name="backToStudents">
+        <input type="button" class="btn btn-outline-dark" value="Next Student" id="nextStudentSubmitTop" name="nextStudent">
+    </div>
+</div>
+
+<form id="assessmentInputForm" action="/InstructorAssessments/AssessmentInput" method="post">
+    @Html.AntiForgeryToken()
+    <div class="list-group">
+        @foreach (Outcome o in Model.Outcomes)
+        {
+            numCriteria = 0;
+            filledCriteria = 0;
+            foreach (RubricDetail rb in Model.Criteria)
+            {
+                if (o.Name.Equals(rb.OutcomeName))
+                {
+                    numCriteria++;
+                    //foreach (ScoreType i in Model.Selectors)
+                    foreach (Score i in Model.Selectors)
+                    {
+                        foreach (StudentScore ss in Model.StudentScores)
+                        {
+                            if (ss.CriteriaID == rb.CriteriaID && ss.ScoreID == i.ScoreID)
+                            {
+                                filledCriteria++;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            <div id="@o.OutcomeID" class="list-group-item" style="padding: 0;">
+
+                <div class="btn btn-outline-dark" style="font-size: 2.5ex; display: block; text-align:left; text-decoration: none; border-radius: 0px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"
+                     data-toggle="collapse"
+                     href="#group_@o.OutcomeID" role="button" aria-expanded="false"
+                     aria-controls="group_@o.OutcomeID">
+                    <i class="material-icons" style="@(@filledCriteria == @numCriteria ? "" : "transform: rotate(180deg); border-spacing: 180px;")">expand_more </i>
+                    @o.Name
+                    <span style="position: absolute; right: 5px; top: 5px; width: 60px;" class="float-right badge badge-dark"><span class="assessedCount" id="filled_@o.OutcomeID">@filledCriteria</span> / <span id="total_@o.OutcomeID">@numCriteria</span></span>
+                </div>
+
+                <ul class="list-group list-group-flush collapse  @(@filledCriteria == @numCriteria ? "" : "show") " id="group_@o.OutcomeID">
+                    @foreach (RubricDetail rb in Model.Criteria)
+                    {
+                        if (o.Name.Equals(rb.OutcomeName))
+                        {
+                            <li class="list-group-item">
+                                <div class="float-left" style="max-width: calc(100% - 120px);">
+                                    @rb.CriteriaName
+                                </div>
+                                <div class="float-right">
+                                    <!--foreach (ScoreType i in Model.Selectors)-->
+                                    @foreach (Score i in Model.Selectors)
+                                    {
+                                        <div class="form-check" id="@o.OutcomeID">
+                                            @foreach (StudentScore ss in Model.StudentScores)
+                                            {
+                                                exists = false;
+                                                // if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
+                                                if (ss.CriteriaID == rb.CriteriaID && ss.ScoreID == i.ScoreID)
+                                                {
+                                                    <label class="form-check-label desc">
+                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { Checked = "checked", @class = "form-check-input" })
+                                                        @i.Description
+                                                    </label>
+                                                    exists = true;
+                                                    break;
+                                                }
+                                            }
+                                            @if (!exists)
+                                            {
+                                                if (i.Description != "Not Assessed")
+                                                {
+                                                    <label class="form-check-label desc">
+                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input" })
+                                                        @i.Description
+                                                    </label>
+                                                }
+                                                else
+                                                {
+                                                    <label class="form-check-label desc">
+                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input notAssessed" })
+                                                        @i.Description
+                                                    </label>
+                                                }
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+    <div class="text-center">
+        <div class="btn-group" role="group" style="margin-top:10px;">
+            <input type="submit" class="btn btn-outline-dark" value="Previous Student" id="prevStudentSubmit" name="lastStudent">
+            <input type="submit" class="btn btn-outline-dark" value="Back to all students" id="allStudentSubmit" name="backToStudents">
+            <input type="submit" class="btn btn-outline-dark" value="Next Student" id="nextStudentSubmit" name="nextStudent">
+        </div>
+    </div>
+</form>
+
+<style>
+    input[type=radio] {
+        float: left;
+    }
+</style>
+
+<div id="changesMade" class="modal fade modal-spacing" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title float-left">Unsaved Changes</h2>
+                <button type="button" class="close float-right" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="confirmText">
+                <p><strong>Do you want to save changes?</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" id="modalSave" data-dismiss="modal" data-toggle="modal">Yes</button>
+
+                <a href="StudentList?rubricID=@r.RubricID&sectionID=@r.SectionID" class="btn btn-primary" hidden id="studentList">No</a>
+                <a href="Dashboard" class="btn btn-primary" hidden id="dashboard">No</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="notAssessedAll" class="modal fade modal-spacing" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title float-left">Notice:</h2>
+                <button type="button" class="close float-right" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="confirmText">
+                <p><strong>You are about to mark all answers as "Not Assessed". Do you wish to continue?</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" id="modalNotAssessed" data-dismiss="modal" data-toggle="modal">Yes</button>
+
+                <button type="button" class="btn btn-primary" id="close" data-dismiss="modal" data-toggle="modal">No</button>
+                <a href="Dashboard" class="btn btn-primary" hidden id="dashboard">No</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $(function ()
+        {
+            $('.list-group').on('show.bs.collapse', function () {
+                console.log();
+                $(this.parentElement.firstElementChild.firstElementChild).first().animate({ borderSpacing: 180 }, {
+                    step: function (now, fx) {
+                        $(this).css('transform', 'rotate(' + now + 'deg)');
+                    },
+                    duration: 'fast'
+                }, 'linear');
+            });
+
+            $('.list-group').on('hide.bs.collapse', function () {
+                $(this.parentElement.firstElementChild.firstElementChild).first().animate({ borderSpacing: 0 }, {
+                    step: function (now, fx) {
+                        $(this).css('transform', 'rotate(' + now + 'deg)');
+                    },
+                    duration: 'fast'
+                }, 'linear');
+            });
+
+            var studentListNav = false
+            $('#studentLink').on('click', function ()
+            {
+                if (changesMade) {
+                    studentListNav = true;
+                    $('#studentList').removeAttr('hidden');
+                    $('#changesMade').modal();
+                }
+                else {
+                    location.href = "StudentList?rubricID=@r.RubricID&sectionID=@r.SectionID";
+                }
+            });
+
+            var dashboardNav = false;
+            $('#dashboardLink').on('click', function ()
+            {
+                if (changesMade) {
+                    dashboardNav = true;
+                    $('#dashboard').removeAttr('hidden');
+                    $('#changesMade').modal();
+                }
+                else {
+                    location.href = "Dashboard";
+                }
+            });
+
+            $('#modalSave').on('click', function (e)
+            {
+                e.preventDefault();
+                $('#assessmentInputForm').submit();
+            });
+
+            $('#modalNotAssessed').on('click', function (e) {
+                $(".notAssessed").prop('checked', 'true');
+                //document.querySelectorAll('.assessedCount').forEach();
+            //};
+                db.SaveChanges();
+            });
+
+            $('#close').on('click', function (e) {
+                $('#modalNotAssessed').modal('hide');
+            })
+
+            var prevStudentTop = false;
+            $('#prevStudentSubmitTop').on('click', function (e) {
+                e.preventDefault();
+                prevStudentTop = true;
+                $('#assessmentInputForm').submit();
+            });
+
+            var nextStudentTop = false;
+            $('#nextStudentSubmitTop').on('click', function (e) {
+                e.preventDefault();
+                nextStudentTop = true;
+                $('#assessmentInputForm').submit();
+            });
+
+            $('#allStudentSubmitTop').on('click', function (e) {
+                if (changesMade == true) {
+                    e.preventDefault();
+                    $('#assessmentInputForm').submit();
+                }
+                else {
+                    location.href = "/InstructorAssessments/StudentList?rubricID=@r.RubricID&sectionID=@r.SectionID";
+                }
+            });
+
+            $('#markNotAssessed').on('click', function (e) {
+                $('#notAssessedAll').modal();
+            });
+
+            $('#assessmentInputForm').submit(function (eventObj) {
+                if (dashboardNav == true) {
+                    $(this).append('<input type="hidden" name="dashboardBreadcrum"/> ');
+                    return true;
+                }
+                if (studentListNav == true) {
+                    $(this).append('<input type="hidden" name="studentListBreadcrum"/> ');
+                    return true;
+                }
+                if (prevStudentTop == true) {
+                    $(this).append('<input type="hidden" name="lastStudent"/> ');
+                    return true;
+                }
+                if (nextStudentTop == true) {
+                    $(this).append('<input type="hidden" name="nextStudent"/> ');
+                    return true;
+                }
+            });
+
+            var serialized = $('#assessmentInputForm').serializeArray();
+            var changesMade = false;
+            $('input[type=radio]').on('change', function () {
+                changesMade = true;
+                var outcomeID = this.parentElement.parentElement.id;
+                var name = this.getAttribute("name");
+                var count = 0;
+                $.each(serialized, function (key, value) {
+                    if (value.name == name) {
+                        count++;
+                    }
+                });
+                if (count === 0) {
+                    var filled = $('#filled_' + outcomeID).html();
+                    filled++;
+                    $('#filled_' + outcomeID).html(filled);
+                    serialized = $('#assessmentInputForm').serializeArray();
+                }
+            });
+        });
+    </script>
+}

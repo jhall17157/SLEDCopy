@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - SLE Assessments</title>
+    @Styles.Render("~/Content/css")
+    <link href="https://fonts.googleapis.com/css?family=Karla" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
+    @*@Styles.Render("~/Content/css")*@
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <div class="container-fluid bg-white mb-5" style="border-bottom: 3px solid #003e7a;">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand my-0 mr-md-auto" href="/">
+                @*<img  src="https://www.wctc.edu/_resources/images/waukesha_logo.svg"  >*@
+                <img id="logo" src="~/Images/waukesha_logo.svg" alt="Waukesha County Technical College" width="250" height="54" />
+            </a>
+
+            <ul class="navbar-nav" id="navLinkOverride">
+
+                @if (Request.Url.Host.Contains("dev"))
+                {
+                    <li class="nav-item" style="margin-right: 10px;line-height: 40px;">Dev Mode</li>
+                }
+
+                @if (((CLS_SLE.Models.User)Session["user"]) != null)
+                {
+                    <li class="nav-item dropleft">
+                        <button type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @(((CLS_SLE.Models.User)Session["user"]).Login.ToUpper())
+                        </button>
+                        <div style="position: absolute;" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="~/User/ChangePassword">Change Password</a>
+                            <a class="dropdown-item" href="~/Home/SignOut">Sign Out</a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+
+    @{
+        var ControllerName = string.Empty;
+        object Controller;
+
+        if (ViewContext.RouteData.Values.TryGetValue("controller", out Controller))
+        {
+            ControllerName = Controller.ToString();
+        }
+
+    }
+        <div class="container">
+            @if (((CLS_SLE.Models.User)Session["user"]) != null)
+            {
+                <div class="row justify-content-center">
+                    <ul class="nav nav-tabs col-12 pt-0">
+                        @*Needs to be manually updated for each new controller*@
+                        @if (HttpContext.Current.User.IsInRole("Administrator"))
+                        {
+                            <li class="nav-item h2">
+                                <a class="nav-link align-bottom @((ControllerName.Equals("Admin") || ControllerName.Equals("RoleAdmin") || ControllerName.Equals("AdminUser") || ControllerName.Equals("Rubric")) ? "active bg-white pb-4" : "bg-light mt-3")" href="~/Admin/AdminDashboard">Admin Dashboard</a></li>
+                        }
+                        @if (HttpContext.Current.User.IsInRole("Faculty"))
+                        {
+                            <li class="nav-item h2">
+                                <a class="nav-link align-bottom @(ControllerName.Equals("InstructorAssessments")  ? "active bg-white pb-4" : "bg-light mt-3")" href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                
+
+
+            }
+                <div class="bg-white" id="MainBody">
+                    @RenderBody()
+                </div>
+            <footer style="margin-bottom:4vh"></footer>
+        </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script>
+        window.onscroll = function () { myFunction() };
+
+        @* Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position *@
+        function myFunction() {
+
+            if (window.scrollY >= 100) {
+                $('#logo').css("width",
+                    $('.container').css('margin-left')
+                );
+            } else {
+                $('#logo').css("width", 250);
+            }
+        }
+        
+        $(function () {
+            initButtons();
+            function initButtons() {
+                $('#first, #prev').prop('disabled', $('#start').html() == "1");
+                $('#last, #next').prop('disabled', $('#end').html() == $('#total').html());
+            }
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

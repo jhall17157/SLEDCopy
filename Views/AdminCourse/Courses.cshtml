@@ -1,4 +1,5 @@
 ﻿@using CLS_SLE.Models;
+@model CLS_SLE.ViewModels.CoursesViewModel
 @{
     /**/
 
@@ -8,31 +9,119 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
         <li class="breadcrumb-item active" aria-current="page">Courses</li>
     </ol>
 </nav>
 <h1>Courses</h1>
 <br />
-
-@if (((List<Course>)Model.courses).Where(c => c.IsERPCourse).Count() != 0)
+@using (Html.BeginForm("SearchCourse", "AdminCourse", FormMethod.Post))
 {
-    <table class="table table-hover">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col" class="h3">ERP Course</th>
-                <th scope="col" class="text-right">Description</th>
-                @*<th scope="col" width="10%"><a class="float-right" href="/Admin/AddAssessment?category=@category.Name"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Assessment</button></a></th>*@
-                <th scope="col" width="10%"><a class="float-right" href="/AdminCourse/AddCourse"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Assessment</button></a></th>
-
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (Course course in Model.courses)
-            {
-
-            }
-        </tbody>
-    </table>
+    <div class="form-group">
+        @Html.Label("Course Name:")
+        @Html.EditorFor(Model => Model.SearchInput,
+        new { htmlAttributes = new { @class = "form-control", id = "courseSearch" } })
+        @Html.ValidationMessageFor(Model => Model.SearchInput)
+    </div>
+    <div>
+        @Html.DropDownListFor(Model => Model.DepartmentFilter, new SelectList(Model.DepartmentNames), "Select Department to Filter",
+       new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.DepartmentFilter)
+    </div>
+    <br />
+    <div class="form-group col-2 p-0 mx-1"><input type="submit" class="btn btn-primary col-12 mx-1" value="Search" /></div>
 }
+<br />
+<br />
+@if (Model.SearchInput != null)
+{<h2>@Model.PagingInfo.TotalItems Search Results for "@Model.SearchInput"</h2>}
+@if (Model.DepartmentFilter != null)
+{<h2>Form @Model.DepartmentFilter</h2>}
+<br />
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col" class="h3">Course Number</th>
+            <th scope="col" class="text-left">Course Name</th>
+            <th scope="col" width="10%"><a class="float-right" href="/AdminCourse/AddCourse"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Course</button></a></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Course course in Model.Courses)
+        {
+            if (course.IsActive.Equals(false))
+            {
+                if (course.IsERPCourse.Equals(false))
+                {
+                    <tr>
+                        <td>@course.Number</td>
+                        <td class="text-left">@course.CourseName<span class="text-info">(Non Banner)</span><span class="text-danger">(Not Active)</span></td>
+                        <td class="text-right">
+                            <a href="ViewCourse?courseId=@course.CourseID"><button type="button" class="btn btn-primary">View</button></a>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td>@course.Number</td>
+                    <td class="text-left">@course.CourseName <span class="text-danger">(Not Active)</span></td>
+                    <td class="text-right">
+                        <a href="ViewCourse?courseId=@course.CourseID"><button type="button" class="btn btn-primary">View</button></a>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                if (course.IsERPCourse.Equals(false))
+                {
+                    <tr>
+                        <td>@course.Number</td>
+                        <td class="text-left">@course.CourseName<span class="text-info">(Non Banner)</span></td>
+                        <td class="text-right">
+                            <a href="ViewCourse?courseId=@course.CourseID"><button type="button" class="btn btn-primary">View</button></a>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td>@course.Number</td>
+                    <td class="text-left">@course.CourseName </td>
+                    <td class="text-right">
+                        <a href="ViewCourse?courseId=@course.CourseID"><button type="button" class="btn btn-primary">View</button></a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<div class="row mb-3">
+    <div class="col">
+        <a href="Courses?page=@(1)">
+            <button disabled id="first" class="btn btn-outline-secondary" type="button" data-page="@(1)">
+                <i class="fas fa-angle-double-left"></i><span class="d-none d-md-inline"> First</span>
+            </button>
+        </a>
+        <a href="Courses?page=@(Model.PagingInfo.PreviousPage)">
+            <button disabled id="prev" class="btn btn-outline-secondary" type="button" data-page="@(Model.PagingInfo.PreviousPage)">
+                <i class="fas fa-angle-left"></i><span class="d-none d-md-inline"> Prev</span>
+            </button>
+        </a>
+    </div>
+    <div class="col text-center text-secondary">
+        <span id="start">@(Model.PagingInfo.RangeStart)</span>-<span id="end">@(Model.PagingInfo.RangeEnd)</span>
+        of
+        <span id="total">@(Model.PagingInfo.TotalItems)</span>
+    </div>
+    <div class="col text-right">
+        <a href="Courses?page=@(Model.PagingInfo.NextPage)">
+            <button disabled id="next" class="btn btn-outline-secondary" type="button" data-page="@(Model.PagingInfo.NextPage)">
+                <span class="d-none d-md-inline">Next </span><i class="fas fa-angle-right"></i>
+            </button>
+        </a>
+        <a href="Courses?page=@(Model.PagingInfo.TotalPages)">
+            <button disabled id="last" class="btn btn-outline-secondary" type="button" data-page="@(Model.PagingInfo.TotalPages)">
+                <span class="d-none d-md-inline">Last </span><i class="fas fa-angle-double-right"></i>
+            </button>
+        </a>
+    </div>
+</div>
 
 

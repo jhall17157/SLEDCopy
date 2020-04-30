@@ -1,0 +1,79 @@
+﻿@using CLS_SLE.Models;
+@{
+    /**/
+
+    ViewBag.Title = "Programs";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item active" aria-current="page">Programs</li>
+    </ol>
+</nav>
+<h1>Programs</h1>
+<br />
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col" class="h3">Programs</th>
+            <th scope="col" class="text-right"></th>
+            <th scope="col" width="10%"><a class="float-right" href="/AdminProgram/AddProgram"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Program</button></a></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Program program in Model.Programs)
+        {
+            if (program.IsActive.Equals(false))
+            {
+                <tr>
+                    <td colspan="2">@program.Name <span class="text-danger">(Not Active)</span></td>
+                    <td class="text-right">
+                        <a href="ViewProgram?programID=@program.ProgramID"><button type="button" class="btn btn-primary">View</button></a>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td colspan="2">@program.Name</td>
+                    <td class="text-right">
+                        <a href="ViewProgram?programID=@program.ProgramID"><button type="button" class="btn btn-primary">View</button></a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<div class="row mb-3">
+    <div class="col">
+        <a href="Programs?page=@(1)">
+            <button disabled id="first" class="btn btn-outline-secondary" type="button" data-page="@(1)">
+                <i class="fas fa-angle-double-left"></i><span class="d-none d-md-inline"> First</span>
+            </button>
+        </a>
+        <a href="Programs?page=@(Model.PagingInfo.PreviousPage)">
+            <button disabled id="prev" class="btn btn-outline-secondary" type="button" data-page="@(Model.PagingInfo.PreviousPage)">
+                <i class="fas fa-angle-left"></i><span class="d-none d-md-inline"> Prev</span>
+            </button>
+        </a>
+    </div>
+    <div class="col text-center text-secondary">
+        <span id="start">@(Model.PagingInfo.RangeStart)</span>-<span id="end">@(Model.PagingInfo.RangeEnd)</span>
+        of
+        <span id="total">@(Model.PagingInfo.TotalItems)</span>
+    </div>
+    <div class="col text-right">
+        <a href="Programs?page=@(Model.PagingInfo.NextPage)">
+            <button disabled id="next" class="btn btn-outline-secondary" type="button" data-page="@(Model.PagingInfo.NextPage)">
+                <span class="d-none d-md-inline">Next </span><i class="fas fa-angle-right"></i>
+            </button>
+        </a>
+        <a href="Programs?page=@(Model.PagingInfo.TotalPages)">
+            <button disabled id="last" class="btn btn-outline-secondary" type="button" data-page="@(Model.PagingInfo.TotalPages)">
+                <span class="d-none d-md-inline">Last </span><i class="fas fa-angle-double-right"></i>
+            </button>
+        </a>
+    </div>
+</div>

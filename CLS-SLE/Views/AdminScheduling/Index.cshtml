@@ -116,8 +116,8 @@
                         if (!sec.SectionRubrics.Any())
                         {
                             <tr class="row border-0 collapse assessmentCollapse@(courseNumber)@(sectionNumber) assessmentCollapse@(courseNumber) accordionClose">
-                                <td class="ml-4 border-0 col-5">
-                                    No Assessments Assigned
+                                <td class="border-0 col-5">
+                                    <p class="ml-4">No Assessments Assigned</p>
                                 </td>
                             </tr>
                         }
@@ -126,8 +126,8 @@
                             foreach (SectionRubric sr in sec.SectionRubrics)
                             {
                                 <tr class="row border-0 collapse assessmentCollapse@(courseNumber)@(sectionNumber) assessmentCollapse@(courseNumber) accordionClose">
-                                    <td class="ml-4 border-0 col-5">
-                                        @sr.AssessmentRubric.Name
+                                    <td class="border-0 col-5">
+                                        <p class="ml-4">@sr.AssessmentRubric.Name</p>
                                     </td>
                                     <td class="border-0 row col-3">
                                         <p class="col-12 mb-1 pl-0">Start Date:</p>
@@ -135,9 +135,11 @@
                                     </td>
                                     <td class="border-0 row col-3">
                                         <p class="col-12 mb-1 pl-0">End Date:</p>
-                                        <input type="date" class="form-control selectpicker col-9 ml-2">
-                                        <!--<p>Start Date:</p><br /><input type="date" class="form-control selectpicker col-3 ml-2"><!--<option selected>@*Html.Value(@sr.StartDate.ToShortDateString())*@</option>-->
-                                        <!--<p class="">End Date:</p><br /><input type="date" class="form-control selectpicker col-3 ml-2"><!--<option value="@*Html.Raw(@sr.EndDate.ToShortDateString())" selected></option>*@</select>-->
+                                        <input type="date" class="form-control col-9 ml-2">
+                                    </td>
+                                    <td class="border-0 col-1 text-right">
+                                        <button type="button" class="btn btn-success btn-sm d-inline"><i class="fas fa-save" aria-hidden="true"></i></button>
+                                        <button type="button" class="btn btn-danger btn-sm d-inline"><i class="fas fa-times" aria-hidden="true"></i></button>
                                     </td>
                                 </tr>
                             }

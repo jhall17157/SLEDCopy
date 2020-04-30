@@ -402,8 +402,10 @@
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\ProgramDetailViewModel.cs" />
     <Compile Include="ViewModels\ProgramListViewModel.cs" />
+    <Compile Include="ViewModels\ProgramSearchModel.cs" />
     <Compile Include="ViewModels\RubricViewModel.cs" />
     <Compile Include="ViewModels\SchoolDetailViewModel.cs" />
+    <Compile Include="ViewModels\ProgramSearchViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\UpdateCourseViewModel.cs" />
     <Compile Include="ViewModels\UpdateProgramViewModel.cs" />

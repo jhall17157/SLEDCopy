@@ -1,4 +1,5 @@
 ﻿@using CLS_SLE.Models;
+@model CLS_SLE.ViewModels.ProgramListViewModel
 @{
     /**/
 
@@ -13,6 +14,25 @@
     </ol>
 </nav>
 <h1>Programs</h1>
+<br />
+<br />
+@using (Html.BeginForm("SearchProgram", "AdminProgram", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.Label("Program Name:")
+        @Html.EditorFor(Model => Model.SearchInput,
+        new { htmlAttributes = new { @class = "form-control", id = "programSearch" } })
+        @Html.ValidationMessageFor(Model => Model.SearchInput)
+    </div>
+    <br />
+    <div class="form-group col-2 p-0 mx-1"><input type="submit" class="btn btn-primary col-12 mx-1" value="Search" /></div>
+}
+<br />
+<br />
+@if (Model.SearchInput != null)
+{<h2>@Model.PagingInfo.TotalItems Search Results for "@Model.SearchInput"</h2>}
+@if (Model.DepartmentFilter != null)
+{<h2>Form @Model.DepartmentFilter</h2>}
 <br />
 <table class="table table-hover">
     <thead class="thead-dark">

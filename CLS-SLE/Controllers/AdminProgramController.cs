@@ -25,16 +25,57 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view of programs that contains a list of programs ordered by the program's name
         /// </returns>
-        public ActionResult Programs(int page) => View(new ProgramListViewModel
+        public ActionResult Programs(int page, string search)
         {
-            Programs = db.Programs
-                            .OrderBy(p => p.Name)
-                            .Skip((page - 1)*PageSize)
-                            .Take(PageSize),
-            PagingInfo = new PagingInfo { CurrentPage = page,
-                                            ItemsPerPage = PageSize,
-                                            TotalItems = db.Programs.Count() }
-        });
+            ProgramListViewModel programsViewModel = new ProgramListViewModel();
+
+            int ResultsCount;
+                if (search == null)
+                {
+                    //creating a new CoursesViewModel - the Courses is a list of Courses sorted by their Number and does not include any courses with a "000-000" Number
+                    //the "000-000" Numbered Courses were imported to tie some old assessment data to that was needed in the system
+                    programsViewModel.Programs = db.Programs.OrderBy(p => p.Number).Skip((page - 1) * PageSize).Take(PageSize);
+                    ResultsCount = db.Programs.Count();
+                }
+                else
+                {
+                    programsViewModel.Programs = db.Programs.Where(p => (p.Name.Contains(search) || p.Number.Contains(search))).OrderBy(c => c.Number).Skip((page - 1) * PageSize).Take(PageSize);
+                    ResultsCount = db.Programs.Where(p => (p.Name.Contains(search) || p.Number.Contains(search))).Count();
+                }
+
+            //the Paging info is going to contain all the information required for pagination
+            programsViewModel.PagingInfo = new PagingInfo { CurrentPage = page, ItemsPerPage = PageSize, TotalItems = ResultsCount };
+
+            programsViewModel.SearchInput = search;
+
+            return View(programsViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult SearchProgram(ProgramSearchViewModel searchVM)
+        {
+
+            if (db.Programs.Where(p => !p.Name.Contains("Folio180")).Where(p => p.Name.Contains(searchVM.SearchInput)) != null ||
+                db.Programs.Where(p => !p.Name.Contains("Folio180")).Where(p => p.Number.Contains(searchVM.SearchInput)) != null)
+            {
+                return RedirectToAction("Programs", "AdminProgram", new { page = 1, search = searchVM.SearchInput, department = searchVM.DepartmentFilter });
+            }
+            else { return RedirectToAction("ProgramSearchError", "AdminProgram", new { search = searchVM.SearchInput }); }
+        }
+
+        public ActionResult ProgramSearchError(string search) => View(new ProgramSearchViewModel { SearchInput = search });
+
+
+        public JsonResult ProgramAutoComplete(string search)
+        {
+            List<ProgramSearchModel> resultCourses = db.Programs.Where(p => !p.Name.Contains("Folio180")).Where(p => (p.Name.Contains(search) || p.Number.Contains(search))).Select(p => new ProgramSearchModel
+            {
+                id = p.ProgramID,
+                name = p.Name
+            }).ToList();
+
+            return new JsonResult { Data = resultCourses, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
 
         // GET: AdminProgram/AddProgram
         /// <summary>

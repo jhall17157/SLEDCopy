@@ -131,7 +131,23 @@
                     error: function (xhr, status, error) { alert("Error");}
                 });
             }
-        });        
+        });
+
+        $("#programSearch").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("ProgramAutoComplete","AdminProgram")',
+                    dataType: "json",
+                    data: {search: $("#programSearch").val()},
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.name };
+                        }))
+                    },
+                    error: function (xhr, status, error) { alert("Error");}
+                });
+            }
+        });
     </script>
     @RenderSection("scripts", required: false)
 </body>

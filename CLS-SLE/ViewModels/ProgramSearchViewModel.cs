@@ -6,12 +6,11 @@ using System.Web;
 
 namespace CLS_SLE.ViewModels
 {
-    public class ProgramListViewModel
+    public class ProgramSearchViewModel
     {
         public IEnumerable<Program> Programs { get; set; }
         public PagingInfo PagingInfo { get; set; }
-        public IEnumerable<String> DepartmentNames { get; set; }
-        public string SearchInput { get; set; }
+        public String SearchInput { get; set; }
         public string DepartmentFilter { get; set; }
     }
 }

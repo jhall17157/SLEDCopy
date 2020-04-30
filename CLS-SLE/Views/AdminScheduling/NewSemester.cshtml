@@ -55,7 +55,7 @@
     </div>
     <div class="row half-indent">
         <div class="col-6 mt-4 text-center">
-            <button class="btn btn-outline-dark">Cancel</button>
+            @Html.ActionLink("Cancel", "Index", "AdminScheduling", null, new { @class = "btn btn-outline-dark" })
             <button class="btn btn-success ml-1">Configure Semester</button>
         </div>
     </div>

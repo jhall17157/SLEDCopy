@@ -32,7 +32,7 @@
                     onchange = "this.form.submit();"
                 })
                 
-                @Html.HiddenFor(p => p.PagingInfo);
+                @Html.HiddenFor(p => p.PagingInfo)
 
 
                 <input type="submit" class="btn btn-primary d-inline ml-2" value="Submit" />
@@ -58,10 +58,10 @@
         <div class="row col-6">
             <p class="col-12 mb-1 pl-0">Search For A Course:</p>
             @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
-            {
-                @id = "DropDownSemesters",
-                @class = "form-control selectpicker d-inline col-10"
-            })
+       {
+           @id = "DropDownSemesters",
+           @class = "form-control selectpicker d-inline col-10"
+       })
             <button type="submit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>
         </div>
         <div class="row col-2">
@@ -78,155 +78,170 @@
 
     <table class="table table-hover">
         <tbody>
-            @foreach (Course course in Model.Courses)
-            {
-            <tr class="row bg-light">
-                <td class="col-10 border-0">
-                    <h4>
-                        @course.CourseName (@course.Number)
-                    </h4>
-                </td>
-                <td class="col-2 border-0 text-right">
-                    <button class="btn btn-success"><i class="fas fa-plus" aria-hidden="true"></i> Add CRN</button>
-                </td>
-            </tr>
-                foreach (Section sec in Model.Semester.Sections.Where(s => s.CourseID == course.CourseID))
+            @{
+                int courseNumber = 0;
+                foreach (Course course in Model.Courses)
                 {
-                    <tr class="row border-bottom">
-                        <td class="border-0 col-4">
-                            <h5 class="indent d-inline align-self-center">
-                                CRN: @sec.CRN
-                            </h5>
-                            <h6 class="pl-3 d-inline">
-                                Ends: @sec.EndDate
-                            </h6>
+                    courseNumber++;
+                    <tr href="#" data-target=".courseCollapse@(courseNumber)" class="row bg-medium border-top accordionTrigger clickable">
+                        <td class="col-10 border-0">
+                            <h4>
+                                <i class="courseIcon@(courseNumber) ml-3 mr-3 fas fa-angle-right"></i> @course.CourseName (@course.Number)
+                            </h4>
                         </td>
-                        <td class="col-5 text-right border-0 pl-3">
-                            <!--<h6>Submission Timeframe</h6>-->
-                        </td>
-                        <td class="col-3 border-0 text-right">
-                            <button class="btn btn-success"><i class="fas fa-plus" aria-hidden="true"></i> Add Assessment</button>
+                        <td class="col-2 border-0 text-right">
+                            <button class="btn btn-success"><i class="fas fa-plus" aria-hidden="true"></i> Add CRN</button>
                         </td>
                     </tr>
-                    foreach (SectionRubric sr in sec.SectionRubrics)
+                    int sectionNumber = 0;
+                    foreach (Section sec in Model.Semester.Sections.Where(s => s.CourseID == course.CourseID))
                     {
-                        <tr class="row border-bottom">
-                            <td class="indent border-0 col-5">
-                                @sr.AssessmentRubric.Name
+                        sectionNumber++;
+                        <tr href="#" data-target=".assessmentCollapse@(courseNumber)@(sectionNumber)" class="row bg-light border-0 collapse courseCollapse@(courseNumber) accordionClose lowerAccordionTrigger clickable">
+                            <td class="border-0 col-4">
+                                <h5 class="indent d-inline align-self-center">
+                                    <i class="sectionIcon@(sectionNumber) sectionIcon ml-3 mr-3 fas fa-angle-right"></i> CRN: @sec.CRN
+                                </h5>
+                                <h6 class="pl-3 d-inline">
+                                    Ends: @sec.EndDate
+                                </h6>
                             </td>
-                            <td class="border-0 row col-3">
-                                <p class="col-12 mb-1 pl-0">Start Date:</p>
-                                <input type="date" class="form-control selectpicker col-9 ml-2">
+                            <td class="col-5 text-right border-0 pl-3">
+                                <!--<h6>Submission Timeframe</h6>-->
                             </td>
-                            <td class="border-0 row col-3">
-                                <p class="col-12 mb-1 pl-0">End Date:</p>
-                                <input type="date" class="form-control selectpicker col-9 ml-2">
-                                <!--<p>Start Date:</p><br /><input type="date" class="form-control selectpicker col-3 ml-2"><!--<option selected>@*Html.Value(@sr.StartDate.ToShortDateString())*@</option>-->
-                                <!--<p class="">End Date:</p><br /><input type="date" class="form-control selectpicker col-3 ml-2"><!--<option value="@*Html.Raw(@sr.EndDate.ToShortDateString())" selected></option>*@</select>-->
+                            <td class="col-3 border-0 text-right">
+                                <button class="btn btn-success"><i class="fas fa-plus" aria-hidden="true"></i> Add Assessment</button>
                             </td>
                         </tr>
-                    }
+                        if (!sec.SectionRubrics.Any())
+                        {
+                            <tr class="row border-0 collapse assessmentCollapse@(courseNumber)@(sectionNumber) assessmentCollapse@(courseNumber) accordionClose">
+                                <td class="border-0 col-5">
+                                    <p class="ml-4">No Assessments Assigned</p>
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (SectionRubric sr in sec.SectionRubrics)
+                            {
+                                <tr class="row border-0 collapse assessmentCollapse@(courseNumber)@(sectionNumber) assessmentCollapse@(courseNumber) accordionClose">
+                                    <td class="border-0 col-5">
+                                        <p class="ml-4">@sr.AssessmentRubric.Name</p>
+                                    </td>
+                                    <td class="border-0 row col-3">
+                                        <p class="col-12 mb-1 pl-0">Start Date:</p>
+                                        <input type="date" class="form-control selectpicker col-9 ml-2">
+                                    </td>
+                                    <td class="border-0 row col-3">
+                                        <p class="col-12 mb-1 pl-0">End Date:</p>
+                                        <input type="date" class="form-control col-9 ml-2">
+                                    </td>
+                                    <td class="border-0 col-1 text-right">
+                                        <button type="button" class="btn btn-success btn-sm d-inline"><i class="fas fa-save" aria-hidden="true"></i></button>
+                                        <button type="button" class="btn btn-danger btn-sm d-inline"><i class="fas fa-times" aria-hidden="true"></i></button>
+                                    </td>
+                                </tr>
+                            }
+                        }
 
+                    }
                 }
             }
-            
 
             @*@foreach (Section sec in Model.Semester.Sections.OrderBy(c => c.CourseID).ThenBy(s => s.CRN).GroupBy(c => c.Course))
-                                {
-<tr class="row bg-light">
-                    <td class="col-12">
-                        <h4>*@
-                            @*@sec.CRN - @sec.Course.CourseName*@
-                            <!--<button type="button" class="btn btn-danger btn-sm d-inline float-right"><i class="fas fa-times" aria-hidden="true"></i></button>
-                    <button type="button" class="btn btn-warning btn-sm d-inline float-right"><i class="fas fa-wrench" aria-hidden="true"></i></button>-->
-                        @*</h4>
+                                        {
+        <tr class="row bg-light">
+                            <td class="col-12">
+                                <h4>*@
+            @*@sec.CRN - @sec.Course.CourseName*@
+            <!--<button type="button" class="btn btn-danger btn-sm d-inline float-right"><i class="fas fa-times" aria-hidden="true"></i></button>
+    <button type="button" class="btn btn-warning btn-sm d-inline float-right"><i class="fas fa-wrench" aria-hidden="true"></i></button>-->
+            @*</h4>
+            </td>
+        </tr>
+        foreach (SectionRubric sr in sec.SectionRubrics)
+        {*@
+            @*//var Instructor = @Model.People.FirstOrDefault(p => p.PersonID == sec.LeadInstructorID);
+        <tr class="row">*@
+            @*if (Instructor != null)
+        {
+            <td> @String.Concat(Instructor.LastName, ", ", Instructor.FirstName)</td>
+            <td>@Instructor.User.Email</td>
+        }
+        else
+        {
+            <td colspan="2">No Instructor Assigned</td>
+            <td></td>
+        }
+        <td>@sec.Course.Number<text>-</text>@sec.CRN</td>
+        <td>@sec.Course.CourseName</td>
+            *@
+            @*<td class="row col-12 border-top-0">
+        <div class="col-5">
+            <h5 class="d-inline indent">*@
+            @*CRN: @sec.CRN @*sr.AssessmentRubric.Name*@
+            @*</h5>
+            <h6 class="pl-3 d-inline">
+                End Date: @sr.EndDate.ToShortDateString()
+            </h6>
+        </div>
+        <div class="row col-6">*@
+            <!--<span>Start Date:</span><select class="d-inline form-control selectpicker col-3 ml-2"></select>--><!--<option selected>@*Html.Value(@sr.StartDate.ToShortDateString())*@</option>-->
+            <!--<span class="ml-3">End Date:</span><select class="d-inline form-control selectpicker col-3 ml-2"><!--<option value="@*Html.Raw(@sr.EndDate.ToShortDateString())" selected></option>*@</select>-->
+            @*</div>
+        <div class="col-1">
+            <button type="button" class="btn btn-danger btn-sm d-inline float-right"><i class="fas fa-times" aria-hidden="true"></i></button>
+            <button type="button" class="btn btn-success btn-sm d-inline float-right"><i class="fas fa-save" aria-hidden="true"></i></button>*@
+            <!--<button type="button" class="btn btn-success btn-sm d-inline float-right"><i class="fas fa-save" aria-hidden="true"></i></button>-->
+            @*</div>
                     </td>
+
                 </tr>
-                foreach (SectionRubric sr in sec.SectionRubrics)
-                {*@
-                    @*//var Instructor = @Model.People.FirstOrDefault(p => p.PersonID == sec.LeadInstructorID);
-                    <tr class="row">*@
-                        @*if (Instructor != null)
-                    {
-                        <td> @String.Concat(Instructor.LastName, ", ", Instructor.FirstName)</td>
-                        <td>@Instructor.User.Email</td>
-                    }
-                    else
-                    {
-                        <td colspan="2">No Instructor Assigned</td>
-                        <td></td>
-                    }
-                    <td>@sec.Course.Number<text>-</text>@sec.CRN</td>
-                    <td>@sec.Course.CourseName</td>
-                        *@
-                        @*<td class="row col-12 border-top-0">
-                            <div class="col-5">
-                                <h5 class="d-inline indent">*@
-                                    @*CRN: @sec.CRN @*sr.AssessmentRubric.Name*@
-                                @*</h5>
-                                <h6 class="pl-3 d-inline">
-                                    End Date: @sr.EndDate.ToShortDateString()
-                                </h6>
-                            </div>
-                            <div class="row col-6">*@
-                                <!--<span>Start Date:</span><select class="d-inline form-control selectpicker col-3 ml-2"></select>--><!--<option selected>@*Html.Value(@sr.StartDate.ToShortDateString())*@</option>-->
-                                <!--<span class="ml-3">End Date:</span><select class="d-inline form-control selectpicker col-3 ml-2"><!--<option value="@*Html.Raw(@sr.EndDate.ToShortDateString())" selected></option>*@</select>-->
-                            @*</div>
-                            <div class="col-1">
-                                <button type="button" class="btn btn-danger btn-sm d-inline float-right"><i class="fas fa-times" aria-hidden="true"></i></button>
-                                <button type="button" class="btn btn-success btn-sm d-inline float-right"><i class="fas fa-save" aria-hidden="true"></i></button>*@
-                                <!--<button type="button" class="btn btn-success btn-sm d-inline float-right"><i class="fas fa-save" aria-hidden="true"></i></button>-->
-                            @*</div>
-                        </td>
+            }
+        }*@
 
-                    </tr>
-                }
-            }*@
 
-          
 
         </tbody>
     </table>
+
     <div class="row mb-3">
-        <div class="col">
+        <div class="col-4">
             @*First Page*@
-            @using (Html.BeginForm("Index", "AdminScheduling", new { page = 1 }, FormMethod.Post))
+            @using (Html.BeginForm("Index", "AdminScheduling", new { page = 1 }, FormMethod.Post, new { @class="d-inline" }))
             {
                 @Html.HiddenFor(s => s.SemesterID, new { @value = Model.SemesterID });
                 @Html.HiddenFor(p => p.PagingInfo); 
-                <button id="next" class="btn btn-primary" type="submit"><a class="fa fa-angle-double-left"></a></button>
+                <button id="next" class="btn btn-outline-dark d-inline" type="submit"><i class="fa fa-angle-double-left"></i></button>
             }
             @*Previous Page*@
-            @using (Html.BeginForm("Index", "AdminScheduling", new { page = Model.PagingInfo.PreviousPage }, FormMethod.Post))
+            @using (Html.BeginForm("Index", "AdminScheduling", new { page = Model.PagingInfo.PreviousPage }, FormMethod.Post, new { @class="d-inline" }))
             {
                 @Html.HiddenFor(s => s.SemesterID, new { @value = Model.SemesterID });
-                @Html.HiddenFor(p => p.PagingInfo); 
-                <button id="next" class="btn btn-primary" type="submit"><a class="fa fa-angle-left"></a></button>
+                @Html.HiddenFor(p => p.PagingInfo);
+                <button id="next" class="btn btn-outline-dark d-inline" type="submit"><i class="fa fa-angle-left"></i></button>
             }
-
-            
-       
-
         </div>
-        <div class="col text-center">
+        <div class="col-4 text-center">
             <span id="start">@(Model.PagingInfo.RangeStart)</span>-<span id="end">@(Model.PagingInfo.RangeEnd)</span>
             of
             <span id="total">@(Model.PagingInfo.TotalItems)</span>
         </div>
-        <div class="col text-right">
+        <div class="col-4 text-right">
             @*Next page*@
-            @using (Html.BeginForm("Index", "AdminScheduling", new { page = Model.PagingInfo.NextPage }, FormMethod.Post))
+            @using (Html.BeginForm("Index", "AdminScheduling", new { page = Model.PagingInfo.NextPage }, FormMethod.Post, new { @class="d-inline" }))
             {
                 @Html.HiddenFor(s => s.SemesterID, new { @value = Model.SemesterID });
                 @Html.HiddenFor(p => p.PagingInfo);
-                <button id="next" class="btn btn-primary" type="submit"><a class="fa fa-angle-right"></a></button>
+                <button id="next" class="btn btn-outline-dark d-inline" type="submit"><i class="fa fa-angle-right"></i></button>
             }
             @*Last Page*@
-            @using (Html.BeginForm("Index", "AdminScheduling", new { page = Model.PagingInfo.TotalPages }, FormMethod.Post))
+            @using (Html.BeginForm("Index", "AdminScheduling", new { page = Model.PagingInfo.TotalPages }, FormMethod.Post, new { @class="d-inline" }))
             {
                 @Html.HiddenFor(s => s.SemesterID, new { @value = Model.SemesterID });
                 @Html.HiddenFor(p => p.PagingInfo);
-                <button id="next" class="btn btn-primary" type="submit"><a class="fa fa-angle-double-right"></a></button>
+                <button id="next" class="btn btn-outline-dark d-inline" type="submit"><i class="fa fa-angle-double-right"></i></button>
             }
 
         </div>
@@ -302,6 +317,38 @@
 
 <script src="~/Scripts/jquery-3.4.1.js"></script>
 <script>
+    $(function () {
+        $('.accordionTrigger').click(toggleAccordion);
+        $('.lowerAccordionTrigger').click(toggleLowerAccordion);
+    })
+
+    function toggleAccordion() {
+        if ($($(this).data('target')).hasClass('accordionClose')) {
+            $($(this).data('target')).removeClass('collapse').removeClass('accordionClose').addClass('accordionOpen');
+            var targetClass = $(this).data('target');
+            $('.courseIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-right").addClass("fas fa-angle-down");
+            $('.sectionIcon').removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+        }
+        else if ($($(this).data('target')).hasClass('accordionOpen')) {
+            $($(this).data('target')).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
+            var targetClass = $(this).data('target');
+            $('.assessmentCollapse' + targetClass[targetClass.length - 1]).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
+            $('.courseIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+        }
+    }
+
+    function toggleLowerAccordion() {
+        if ($($(this).data('target')).hasClass('accordionClose')) {
+            $($(this).data('target')).removeClass('collapse').removeClass('accordionClose').addClass('accordionOpen');
+            var targetClass = $(this).data('target');
+            $('.sectionIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-right").addClass("fas fa-angle-down");
+        }
+        else if ($($(this).data('target')).hasClass('accordionOpen')) {
+            $($(this).data('target')).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
+            var targetClass = $(this).data('target');
+            $('.sectionIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+        }
+    }
     //$('#next, #prev, #first, #last').on('click', function () {
     //    $.post("AdminScheduling/Index", { page: $(this).data('page') });
     //})
@@ -310,6 +357,4 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap-select")
-
-
 }

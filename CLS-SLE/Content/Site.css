@@ -102,6 +102,10 @@ small, a {
     margin-left: 2%;
 }
 
+.bg-medium {
+    background-color: #e8e9ea !important;
+}
+
 .subheader-lh {
     line-height: 1.5;
 }

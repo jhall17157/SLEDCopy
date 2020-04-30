@@ -1,5 +1,5 @@
 ﻿@using CLS_SLE.Models;
-@model CLS_SLE.ViewModels.CoursesViewModel
+@model CLS_SLE.ViewModels.CourseSearchViewModel
 @{
     /**/
 
@@ -10,33 +10,23 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
-        <li class="breadcrumb-item active" aria-current="page">Courses</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Courses", "Courses", "AdminCourse")</li>
+        <li class="breadcrumb-item active" aria-current="page">Course Search</li>
     </ol>
 </nav>
 <h1>Courses</h1>
 <br />
-@using (Html.BeginForm("SearchCourse", "AdminCourse", FormMethod.Post))
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
 {
-    <div class="form-group">
-        @Html.Label("Course Name:")
-        @Html.EditorFor(Model => Model.SearchInput,
-        new { htmlAttributes = new { @class = "form-control", id = "courseSearch" } })
-        @Html.ValidationMessageFor(Model => Model.SearchInput)
-    </div>
-    <div>
-        @Html.DropDownListFor(Model => Model.DepartmentFilter, new SelectList(Model.DepartmentNames), "Select Department to Filter",
-       new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.DepartmentFilter)
-    </div>
+    <label>Courses Search</label>
+    <input id="courseSearch" class="form-control" />
     <br />
-    <div class="form-group col-2 p-0 mx-1"><input type="submit" class="btn btn-primary col-12 mx-1" value="Search" /></div>
+    <br />
+    <input type="submit" id="btnSubmit" value="Search" />
 }
 <br />
 <br />
-@if (Model.SearchInput != null)
-{<h2>@Model.PagingInfo.TotalItems Search Results for "@Model.SearchInput"</h2>}
-@if (Model.DepartmentFilter != null)
-{<h2>Form @Model.DepartmentFilter</h2>}
+@if (Model.SearchInput != null) {<h2>@Model.PagingInfo.TotalItems Search Results for "@Model.SearchInput"</h2> }
 <br />
 <table class="table table-hover">
     <thead class="thead-dark">
@@ -123,5 +113,3 @@
         </a>
     </div>
 </div>
-
-

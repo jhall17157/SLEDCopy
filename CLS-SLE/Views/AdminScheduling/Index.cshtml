@@ -79,7 +79,7 @@
     <table class="table table-hover">
         <tbody>
             @{
-            int courseNumber = 0;
+                int courseNumber = 0;
                 foreach (Course course in Model.Courses)
                 {
                     courseNumber++;
@@ -97,10 +97,10 @@
                     foreach (Section sec in Model.Semester.Sections.Where(s => s.CourseID == course.CourseID))
                     {
                         sectionNumber++;
-                        <tr class="row bg-light border-0 collapse courseCollapse@(courseNumber) accordionClose">
+                        <tr href="#" data-target=".assessmentCollapse@(courseNumber)@(sectionNumber)" class="row bg-light border-0 collapse courseCollapse@(courseNumber) accordionClose lowerAccordionTrigger clickable">
                             <td class="border-0 col-4">
                                 <h5 class="indent d-inline align-self-center">
-                                    <i class="sectionIcon@(sectionNumber) ml-3 mr-3 fas fa-angle-right"></i> CRN: @sec.CRN
+                                    <i class="sectionIcon@(sectionNumber) sectionIcon ml-3 mr-3 fas fa-angle-right"></i> CRN: @sec.CRN
                                 </h5>
                                 <h6 class="pl-3 d-inline">
                                     Ends: @sec.EndDate
@@ -113,23 +113,34 @@
                                 <button class="btn btn-success"><i class="fas fa-plus" aria-hidden="true"></i> Add Assessment</button>
                             </td>
                         </tr>
-                        foreach (SectionRubric sr in sec.SectionRubrics)
+                        if (!sec.SectionRubrics.Any())
                         {
-                            <tr class="row border-0 collapse courseCollapse@(courseNumber) accordionClose">
+                            <tr class="row border-0 collapse assessmentCollapse@(courseNumber)@(sectionNumber) assessmentCollapse@(courseNumber) accordionClose">
                                 <td class="ml-4 border-0 col-5">
-                                    @sr.AssessmentRubric.Name
-                                </td>
-                                <td class="border-0 row col-3">
-                                    <p class="col-12 mb-1 pl-0">Start Date:</p>
-                                    <input type="date" class="form-control selectpicker col-9 ml-2">
-                                </td>
-                                <td class="border-0 row col-3">
-                                    <p class="col-12 mb-1 pl-0">End Date:</p>
-                                    <input type="date" class="form-control selectpicker col-9 ml-2">
-                                    <!--<p>Start Date:</p><br /><input type="date" class="form-control selectpicker col-3 ml-2"><!--<option selected>@*Html.Value(@sr.StartDate.ToShortDateString())*@</option>-->
-                                    <!--<p class="">End Date:</p><br /><input type="date" class="form-control selectpicker col-3 ml-2"><!--<option value="@*Html.Raw(@sr.EndDate.ToShortDateString())" selected></option>*@</select>-->
+                                    No Assessments Assigned
                                 </td>
                             </tr>
+                        }
+                        else
+                        {
+                            foreach (SectionRubric sr in sec.SectionRubrics)
+                            {
+                                <tr class="row border-0 collapse assessmentCollapse@(courseNumber)@(sectionNumber) assessmentCollapse@(courseNumber) accordionClose">
+                                    <td class="ml-4 border-0 col-5">
+                                        @sr.AssessmentRubric.Name
+                                    </td>
+                                    <td class="border-0 row col-3">
+                                        <p class="col-12 mb-1 pl-0">Start Date:</p>
+                                        <input type="date" class="form-control selectpicker col-9 ml-2">
+                                    </td>
+                                    <td class="border-0 row col-3">
+                                        <p class="col-12 mb-1 pl-0">End Date:</p>
+                                        <input type="date" class="form-control selectpicker col-9 ml-2">
+                                        <!--<p>Start Date:</p><br /><input type="date" class="form-control selectpicker col-3 ml-2"><!--<option selected>@*Html.Value(@sr.StartDate.ToShortDateString())*@</option>-->
+                                        <!--<p class="">End Date:</p><br /><input type="date" class="form-control selectpicker col-3 ml-2"><!--<option value="@*Html.Raw(@sr.EndDate.ToShortDateString())" selected></option>*@</select>-->
+                                    </td>
+                                </tr>
+                            }
                         }
 
                     }
@@ -306,6 +317,7 @@
 <script>
     $(function () {
         $('.accordionTrigger').click(toggleAccordion);
+        $('.lowerAccordionTrigger').click(toggleLowerAccordion);
     })
 
     function toggleAccordion() {
@@ -313,13 +325,26 @@
             $($(this).data('target')).removeClass('collapse').removeClass('accordionClose').addClass('accordionOpen');
             var targetClass = $(this).data('target');
             $('.courseIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-right").addClass("fas fa-angle-down");
-            //$('.rubricButton' + targetClass[targetClass.length - 1]).removeClass("d-none").addClass("d-inline");
+            $('.sectionIcon').removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
         }
         else if ($($(this).data('target')).hasClass('accordionOpen')) {
             $($(this).data('target')).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
             var targetClass = $(this).data('target');
+            $('.assessmentCollapse' + targetClass[targetClass.length - 1]).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
             $('.courseIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
-            //$('.rubricButton' + targetClass[targetClass.length - 1]).removeClass("d-inline").addClass("d-none");
+        }
+    }
+
+    function toggleLowerAccordion() {
+        if ($($(this).data('target')).hasClass('accordionClose')) {
+            $($(this).data('target')).removeClass('collapse').removeClass('accordionClose').addClass('accordionOpen');
+            var targetClass = $(this).data('target');
+            $('.sectionIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-right").addClass("fas fa-angle-down");
+        }
+        else if ($($(this).data('target')).hasClass('accordionOpen')) {
+            $($(this).data('target')).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
+            var targetClass = $(this).data('target');
+            $('.sectionIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
         }
     }
     //$('#next, #prev, #first, #last').on('click', function () {
@@ -330,6 +355,4 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap-select")
-
-
 }

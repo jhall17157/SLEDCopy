@@ -80,7 +80,7 @@
         <tbody>
             @foreach (Course course in Model.Courses)
             {
-            <tr class="row bg-light">
+            <tr class="row bg-medium border-top">
                 <td class="col-10 border-0">
                     <h4>
                         @course.CourseName (@course.Number)
@@ -92,7 +92,7 @@
             </tr>
                 foreach (Section sec in Model.Semester.Sections.Where(s => s.CourseID == course.CourseID))
                 {
-                    <tr class="row border-bottom">
+                    <tr class="row bg-light border-0">
                         <td class="border-0 col-4">
                             <h5 class="indent d-inline align-self-center">
                                 CRN: @sec.CRN
@@ -110,8 +110,8 @@
                     </tr>
                     foreach (SectionRubric sr in sec.SectionRubrics)
                     {
-                        <tr class="row border-bottom">
-                            <td class="indent border-0 col-5">
+                        <tr class="row border-0">
+                            <td class="ml-4 border-0 col-5">
                                 @sr.AssessmentRubric.Name
                             </td>
                             <td class="border-0 row col-3">
@@ -187,46 +187,43 @@
 
         </tbody>
     </table>
+
     <div class="row mb-3">
-        <div class="col">
+        <div class="col-4">
             @*First Page*@
-            @using (Html.BeginForm("Index", "AdminScheduling", new { page = 1 }, FormMethod.Post))
+            @using (Html.BeginForm("Index", "AdminScheduling", new { page = 1 }, FormMethod.Post, new { @class="d-inline" }))
             {
                 @Html.HiddenFor(s => s.SemesterID, new { @value = Model.SemesterID });
                 @Html.HiddenFor(p => p.PagingInfo); 
-                <button id="next" class="btn btn-primary" type="submit"><a class="fa fa-angle-double-left"></a></button>
+                <button id="next" class="btn btn-outline-dark d-inline" type="submit"><i class="fa fa-angle-double-left"></i></button>
             }
             @*Previous Page*@
-            @using (Html.BeginForm("Index", "AdminScheduling", new { page = Model.PagingInfo.PreviousPage }, FormMethod.Post))
+            @using (Html.BeginForm("Index", "AdminScheduling", new { page = Model.PagingInfo.PreviousPage }, FormMethod.Post, new { @class="d-inline" }))
             {
                 @Html.HiddenFor(s => s.SemesterID, new { @value = Model.SemesterID });
-                @Html.HiddenFor(p => p.PagingInfo); 
-                <button id="next" class="btn btn-primary" type="submit"><a class="fa fa-angle-left"></a></button>
+                @Html.HiddenFor(p => p.PagingInfo);
+                <button id="next" class="btn btn-outline-dark d-inline" type="submit"><i class="fa fa-angle-left"></i></button>
             }
-
-            
-       
-
         </div>
-        <div class="col text-center">
+        <div class="col-4 text-center">
             <span id="start">@(Model.PagingInfo.RangeStart)</span>-<span id="end">@(Model.PagingInfo.RangeEnd)</span>
             of
             <span id="total">@(Model.PagingInfo.TotalItems)</span>
         </div>
-        <div class="col text-right">
+        <div class="col-4 text-right">
             @*Next page*@
-            @using (Html.BeginForm("Index", "AdminScheduling", new { page = Model.PagingInfo.NextPage }, FormMethod.Post))
+            @using (Html.BeginForm("Index", "AdminScheduling", new { page = Model.PagingInfo.NextPage }, FormMethod.Post, new { @class="d-inline" }))
             {
                 @Html.HiddenFor(s => s.SemesterID, new { @value = Model.SemesterID });
                 @Html.HiddenFor(p => p.PagingInfo);
-                <button id="next" class="btn btn-primary" type="submit"><a class="fa fa-angle-right"></a></button>
+                <button id="next" class="btn btn-outline-dark d-inline" type="submit"><i class="fa fa-angle-right"></i></button>
             }
             @*Last Page*@
-            @using (Html.BeginForm("Index", "AdminScheduling", new { page = Model.PagingInfo.TotalPages }, FormMethod.Post))
+            @using (Html.BeginForm("Index", "AdminScheduling", new { page = Model.PagingInfo.TotalPages }, FormMethod.Post, new { @class="d-inline" }))
             {
                 @Html.HiddenFor(s => s.SemesterID, new { @value = Model.SemesterID });
                 @Html.HiddenFor(p => p.PagingInfo);
-                <button id="next" class="btn btn-primary" type="submit"><a class="fa fa-angle-double-right"></a></button>
+                <button id="next" class="btn btn-outline-dark d-inline" type="submit"><i class="fa fa-angle-double-right"></i></button>
             }
 
         </div>
@@ -302,6 +299,7 @@
 
 <script src="~/Scripts/jquery-3.4.1.js"></script>
 <script>
+
     //$('#next, #prev, #first, #last').on('click', function () {
     //    $.post("AdminScheduling/Index", { page: $(this).data('page') });
     //})

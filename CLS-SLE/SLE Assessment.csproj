@@ -403,6 +403,7 @@
     <Compile Include="ViewModels\InsertNewAssesmentViewModel.cs" />
     <Compile Include="ViewModels\MappingViewModel.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
+    <Compile Include="ViewModels\PagingInfo.cs" />
     <Compile Include="ViewModels\RubricViewModel.cs" />
     <Compile Include="ViewModels\SchedulingViewModel.cs" />
     <Compile Include="ViewModels\UpdateRubric.cs" />

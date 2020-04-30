@@ -14,6 +14,9 @@ namespace CLS_SLE.Controllers
     {
         
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
+
+        private readonly int pageSize = 10;
+
         // GET: Admin Scheduling home page with list of semesters to choose from.
         public ActionResult Index()
         {
@@ -22,45 +25,75 @@ namespace CLS_SLE.Controllers
                     select new SelectListItem {Text = s.SemesterCode + " " + s.Name, Value = s.SemesterID.ToString()})
                         .Distinct().ToList();
 
+
             return View(schedulingViewModel);
         }
-
         //Called when user selects a semester
+        //[HttpPost]
+        //public ActionResult Index(SchedulingViewModel viewModel)
+        //{
+        //    SchedulingViewModel schedulingViewModel = new SchedulingViewModel();
+        //    //schedulingViewModel.People = db.People;
+        //    schedulingViewModel.Semesters = (from s in db.Semesters
+        //                                     select new SelectListItem { Text = s.SemesterCode + " " + s.Name, Value = s.SemesterID.ToString() })
+        //        .Distinct().ToList();
+        //    schedulingViewModel.Semester =
+        //        db.Semesters.FirstOrDefault(s => s.SemesterID == viewModel.SemesterID);
+        //    //get course ids for all sections in selected semester
+        //    List<short> courseIDs = schedulingViewModel.Semester.Sections.Select(i => i.CourseID).ToList();
+
+        //    schedulingViewModel.Courses = db.Courses.Where(c => courseIDs.Contains(c.CourseID)).ToList();
+
+        //    return View(schedulingViewModel);
+        //}
+
+
         [HttpPost]
-        public ActionResult Index(SchedulingViewModel viewModel)
+        public ActionResult Index(SchedulingViewModel viewModel, int page = 1)
         {
-            SchedulingViewModel schedulingViewModel = new SchedulingViewModel();
-            //schedulingViewModel.People = db.People;
-            schedulingViewModel.Semesters = (from s in db.Semesters
-                    select new SelectListItem { Text = s.SemesterCode + " " + s.Name, Value = s.SemesterID.ToString() })
-                .Distinct().ToList();
-            schedulingViewModel.Semester =
-                db.Semesters.FirstOrDefault(s => s.SemesterID == viewModel.SemesterID);
-            //get course ids for all sections in selected semester, compares them to all courses in mappings, and returns a list of CourseIDs that have mappings for the semester
-            List<short> courseIDs = schedulingViewModel.Semester.Sections.Select(i => i.CourseID).ToList();
-            //List<short> mcourseIDs = db.ProgramAssessmentMappings.Select(i => i.CourseID).ToList();
-            //List<short> final = courseIDs.Intersect(mcourseIDs).ToList();
-            schedulingViewModel.Courses = db.Courses.Where(c => courseIDs.Contains(c.CourseID)).ToList();  
-            
-            //var result = from sr in db.SectionRubrics
-            //              join sec in db.Sections on sr.SectionID equals sec.SectionID
-            //              join sem in db.Semesters on sec.SemesterID equals sem.SemesterID
-            //              join ar in db.AssessmentRubrics on sr.RubricID equals ar.RubricID
-            //              join c in db.Courses on sec.CourseID equals c.CourseID
-            //              where sem.SemesterID == schedulingViewModel.Semester.SemesterID
-            //              select new
-            //              {                              
-            //                  semester = sem,
-            //                  course = c.CourseName,
-            //                  crn = sec.CRN,
-            //                  rubric = ar.Name,
-            //                  start = sr.StartDate,
-            //                  end = sr.EndDate
-            //              };
             
 
+            SchedulingViewModel schedulingViewModel = new SchedulingViewModel();
+
+            schedulingViewModel.SemesterID = viewModel.SemesterID;//viewModel.SemesterID;
+            schedulingViewModel.Semester = db.Semesters.FirstOrDefault(s => s.SemesterID == schedulingViewModel.SemesterID);
+            schedulingViewModel.Semesters = (from s in db.Semesters
+                                             orderby s.SemesterID descending
+                                             select new SelectListItem
+                                             {
+                                                 Text = s.SemesterCode + " " + s.Name,
+                                                 Value = s.SemesterID.ToString()
+                                             })
+                                             .Distinct().ToList();
+            
+
+            
+
+           
+
+            
+            //get course ids for all sections in selected semester and returns as a list 
+            List<short> courseIDs = schedulingViewModel.Semester.Sections.Select(i => i.CourseID).ToList();
+            //handles pagination
+            schedulingViewModel.PagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                ItemsPerPage = pageSize,
+                TotalItems = db.Courses
+                .Where(c => courseIDs.Contains(c.CourseID)).Count()
+            };
+            //get all courses whose courseIDs exist in provided list of courseids
+            schedulingViewModel.Courses = db.Courses
+                .Where(c => courseIDs.Contains(c.CourseID))
+                .OrderBy(c => c.CourseName)
+                .Skip((schedulingViewModel.PagingInfo.CurrentPage - 1) * schedulingViewModel.PagingInfo.ItemsPerPage)
+                .Take(schedulingViewModel.PagingInfo.ItemsPerPage).ToList();
+
+            ModelState.Clear();
             return View(schedulingViewModel);
         }
+
+
         public ActionResult NewSemester()
         {
 

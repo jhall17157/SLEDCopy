@@ -22,17 +22,34 @@ namespace CLS_SLE.Controllers
         {
             ViewBag.section = db.Sections.Where(s => s.SectionID == sectionID).FirstOrDefault();
             ViewBag.CRN = ViewBag.section.CRN.ToString();
+            ViewBag.sectionCourse = ViewBag.section.Course.CourseName;
+
             List<String> semesterNames = new List<String>();
             foreach (var semester in db.Semesters)
             {
                 semesterNames.Add(semester.Name);
             }
+
+
+            List<String> courseNames = new List<String>();
+            foreach (var course in db.Courses)
+            {
+                courseNames.Add(course.CourseName);
+            }
+
+            List<String> leadInstructorList = new List<String>();
+            foreach (var user in db.People)
+            {
+                leadInstructorList.Add(string.Concat(user.FirstName, " ", user.LastName));
+            }
+
             var model = new UpdateSectionViewModel
             {
                 IsCancelled = ViewBag.section.IsCancelled,
                 SemesterNames = semesterNames,
-                Section = db.Sections.Where(s => s.SectionID == sectionID).FirstOrDefault()
-            };
+                CourseNames = courseNames,
+                LeadInstructorList = leadInstructorList
+            }; 
 
             return View(model);
         }
@@ -54,7 +71,7 @@ namespace CLS_SLE.Controllers
                 model.CreatorLogin = null;
                 model.ModifierLogin = null;
 
-                if (section.LeadInstructorID != null)
+                if (!section.LeadInstructorID.Equals(null))
                 {
                     try
                     {
@@ -130,17 +147,34 @@ namespace CLS_SLE.Controllers
             {
                 editSection.CRN = sectionVM.Section.CRN;
                 //editSection.SemesterID = sectionVM.Section.SemesterID;
-                if(editSection.Semester != sectionVM.Section.Semester)
+                if(editSection.Semester != sectionVM.Section.Semester &&
+                    sectionVM.Section.Semester != null)
                 {
-                    Semester editSemester = db.Semesters.Where(s => s.SemesterID == sectionVM.Section.SemesterID).FirstOrDefault();
+                    Semester editSemester = db.Semesters
+                                        .Where(s => s.SemesterID == editSection.SemesterID)
+                                        .FirstOrDefault();
 
                     editSemester.Sections.Add(sectionVM.Section);
                     editSection.Semester = sectionVM.Section.Semester;
                 }
-                editSection.CourseID = sectionVM.Section.CourseID;
-                editSection.LeadInstructorID = sectionVM.Section.LeadInstructorID;
-                editSection.OfferingNumber = sectionVM.Section.OfferingNumber;
-                editSection.IsCancelled = sectionVM.IsCancelled;
+                //editSection.CourseID = sectionVM.Section.CourseID;
+                if (editSection.Course != sectionVM.Section.Course &&
+                    sectionVM.Section.Course != null)
+                {
+                    Course editCourse = db.Courses
+                                        .Where(c => c.CourseID == editSection.CourseID)
+                                        .FirstOrDefault();
+                    editCourse.Sections.Add(sectionVM.Section);
+                    editSection.CourseID = sectionVM.Section.CourseID;
+                }
+                //editSection.LeadInstructorID = sectionVM.Section.LeadInstructorID;
+                if (editSection.Person != sectionVM.Section.Person &&
+                    sectionVM.Section.Person != null)
+                {
+                    editSection.Person = sectionVM.Section.Person;
+                }
+                //editSection.OfferingNumber = sectionVM.Section.OfferingNumber;
+                //editSection.IsCancelled = sectionVM.IsCancelled;
                 editSection.BeginDate = sectionVM.Section.BeginDate;
                 editSection.EndDate = sectionVM.Section.EndDate;
                 // Adding modified on date
@@ -154,12 +188,12 @@ namespace CLS_SLE.Controllers
             {
                 //redirects user to the submission form if failed to update section
                 //TODO figure out how to add form errors
-                return RedirectToAction("AddProgram", "AdminProgram");
+                return RedirectToAction("AddSection", "AdminSection");
             }
             //logging that the section was updated
             logger.Info("Section id {Id} modified", editSection.SectionID);
             //redirects user to the course view if successfully added new program
-            return RedirectToAction("ViewCourse", "AdminCourse", new { id = editSection.CourseID });
+            return RedirectToAction("ViewSection", "AdminSection", new { sectionID = editSection.SectionID });
         }
     }
 }

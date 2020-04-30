@@ -20,16 +20,32 @@
             <b>Sections</b>
         </thead>
         <tbody>
-            @foreach (Section selectedSection in Model.course.Sections)
+            @foreach (Section selectedSection in Model.courseSections)
             {
                 if (selectedSection.IsCancelled.Equals(false))
                 {
-                    <tr>
-                        <td colspan="2">@selectedSection.CRN</td>
-                        <td class="text-right">
-                            <a href="../AdminSection/ViewSection?sectionID=@selectedSection.SectionID"><button type="button" class="btn btn-primary">View</button></a>
-                        </td>
-                    </tr>
+                    /*if (!selectedSection.Person.Equals(null))
+                    {
+                        <tr>
+                            <td colspan="2">@selectedSection.CRN</td>
+                            <td colspan="2">@selectedSection.Semester.Name</td>
+                            <td colspan="2">@selectedSection.Person.FirstName @selectedSection.Person.LastName</td>
+                            <td class="text-right">
+                                <a href="../AdminSection/ViewSection?sectionID=@selectedSection.SectionID"><button type="button" class="btn btn-primary">View</button></a>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {(*/
+            <tr>
+                <td colspan="2">@selectedSection.CRN</td>
+                <td colspan="2">@selectedSection.Semester.Name</td>
+                <td colspan="2">N/A</td>
+                <td class="text-right">
+                    <a href="../AdminSection/ViewSection?sectionID=@selectedSection.SectionID"><button type="button" class="btn btn-primary">View</button></a>
+                </td>
+            </tr>
+                    //}
                 }
             }
         </tbody>

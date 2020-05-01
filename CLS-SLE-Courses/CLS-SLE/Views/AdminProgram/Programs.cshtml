@@ -17,6 +17,7 @@
 <table class="table table-hover">
     <thead class="thead-dark">
         <tr>
+            <th scope="col" class="h3">Program Number</th>
             <th scope="col" class="h3">Programs</th>
             <th scope="col" class="text-right"></th>
             <th scope="col" width="10%"><a class="float-right" href="/AdminProgram/AddProgram"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Program</button></a></th>
@@ -28,6 +29,7 @@
             if (program.IsActive.Equals(false))
             {
                 <tr>
+                    <td colspan="1">@program.Number <span class="text-danger">(Not Active)</span></td>
                     <td colspan="2">@program.Name <span class="text-danger">(Not Active)</span></td>
                     <td class="text-right">
                         <a href="ViewProgram?programID=@program.ProgramID"><button type="button" class="btn btn-primary">View</button></a>
@@ -37,6 +39,7 @@
             else
             {
                 <tr>
+                    <td colspan="1">@program.Number <span class="text-danger"></span></td>
                     <td colspan="2">@program.Name</td>
                     <td class="text-right">
                         <a href="ViewProgram?programID=@program.ProgramID"><button type="button" class="btn btn-primary">View</button></a>

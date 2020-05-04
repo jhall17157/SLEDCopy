@@ -21,12 +21,26 @@ namespace CLS_SLE.Controllers
         public ActionResult Index()
         {
             SchedulingViewModel schedulingViewModel = new SchedulingViewModel();
-            schedulingViewModel.Semesters = (from s in db.Semesters
-                                             join sec in db.Sections on s.SemesterID equals sec.SemesterID
-                                             where sec.SectionRubrics.Count > 0
-                                             
-                    select new SelectListItem {Text = s.SemesterCode + " " + s.Name, Value = s.SemesterID.ToString()})
-                        .Distinct().ToList();
+
+
+
+            //This is the only way I could get the sorting to work properly. Orderby in the query didn't seem to want to work at all. Sorting the 
+            //results directly in the model's list didn't work. Reverse didn't work.
+            //Only option was to create a temp variable, sort that back onto itself, then add all the items to the model. Inelegant but it works.
+            var semesterResult = (from s in db.Semesters
+                                  join sec in db.Sections on s.SemesterID equals sec.SemesterID                                  
+                                  where sec.SectionRubrics.Count > 0
+                                  select new SelectListItem { Text = s.SemesterCode + " " + s.Name, Value = s.SemesterID.ToString() })
+                                             .Distinct().ToList();
+            semesterResult = semesterResult.OrderByDescending(s => s.Value).ToList();
+            schedulingViewModel.Semesters = new List<SelectListItem>();
+            foreach(SelectListItem item in semesterResult)
+            {
+                schedulingViewModel.Semesters.Add(item);
+            }
+            
+
+
 
 
             return View(schedulingViewModel);

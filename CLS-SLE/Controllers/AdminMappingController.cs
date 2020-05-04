@@ -19,7 +19,7 @@ namespace CLS_SLE.Controllers
         public ActionResult Index()
         {
             MappingViewModel mappingViewModel = new MappingViewModel();
-            mappingViewModel.Programs = (from p in db.Programs
+            mappingViewModel.Programs = (from p in db.Programs                                         
                                          select new SelectListItem { Text = p.Number + " " + p.Name, Value = p.ProgramID.ToString() })
                                             .Distinct().ToList();
             mappingViewModel.Courses = (from c in db.Courses

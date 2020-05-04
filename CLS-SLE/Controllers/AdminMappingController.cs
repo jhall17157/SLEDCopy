@@ -104,40 +104,42 @@ namespace CLS_SLE.Controllers
         }
 
         //removes a mapping
-        [HttpPost]
-        public ActionResult DeleteMapping(MappingViewModel mappingVM)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    db.ProgramAssessmentMappings.Remove(mappingVM.Mapping);
-                    db.SaveChanges();
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                }
-            }
-            else
-            {
-                return RedirectToAction("Index", "AdminMapping");
+        //[HttpPost]
+        //public ActionResult DeleteMapping(MappingViewModel mappingVM)
+        //{
+        //    TempData["ProgramID"] = mappingVM.ProgramID;
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            db.ProgramAssessmentMappings.Remove(mappingVM.Mapping);
+        //            db.SaveChanges();
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            Debug.WriteLine(e.Message);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return RedirectToAction("Index", "AdminMapping");
 
-            }
+        //    }
 
-            return RedirectToAction("Index", "AdminMapping");
-        }
+        //    return RedirectToAction("Index", "AdminMapping");
+        //}
 
 
         //Delete method does not account for confirmation modal. 
             //Need to bind @Model.MappingID = @pam.ProgramAssessmentID
         [ActionName("DeleteMapping")]
-        public ActionResult DeleteMapping(short id)
+        public ActionResult DeleteMapping(short mapId)
         {
-            ProgramAssessmentMapping pamId = db.ProgramAssessmentMappings.Find(id);
+            ProgramAssessmentMapping pamId = db.ProgramAssessmentMappings.Find(mapId);
+            int programId = pamId.ProgramID;
             db.ProgramAssessmentMappings.Remove(pamId);
             db.SaveChanges();
-
+            TempData["ProgramID"] = (int)programId;
             return RedirectToAction("Index", "AdminMapping");
         }
 

@@ -8,9 +8,7 @@ namespace CLS_SLE.ViewModels
     //New view model for mappings
     public class MappingViewModel
     {
-        //public SelectList AvailablePrograms { get; set; }
-        //public int? SelectedProgram { get; set; }
-        //public IEnumerable<Program> Programs { get; set; }
+        
         public List<SelectListItem> Programs { get; set; }
         public int ProgramID { get; set; }
         public Program Program { get; set; }

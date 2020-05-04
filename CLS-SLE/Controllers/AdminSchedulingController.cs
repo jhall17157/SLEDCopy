@@ -22,6 +22,9 @@ namespace CLS_SLE.Controllers
         {
             SchedulingViewModel schedulingViewModel = new SchedulingViewModel();
             schedulingViewModel.Semesters = (from s in db.Semesters
+                                             join sec in db.Sections on s.SemesterID equals sec.SemesterID
+                                             where sec.SectionRubrics.Count > 0
+                                             
                     select new SelectListItem {Text = s.SemesterCode + " " + s.Name, Value = s.SemesterID.ToString()})
                         .Distinct().ToList();
 

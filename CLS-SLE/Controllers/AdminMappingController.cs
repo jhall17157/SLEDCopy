@@ -28,6 +28,11 @@ namespace CLS_SLE.Controllers
                                             .Distinct().ToList();
             mappingViewModel.Rubrics = (from r in db.AssessmentRubrics
                                         select new SelectListItem { Text = r.Name, Value = r.RubricID.ToString() }).Distinct().ToList();
+            if(TempData["ProgramID"] != null)
+            {
+                int programID = (int)TempData["ProgramID"];
+                mappingViewModel.Program = db.Programs.FirstOrDefault(p => p.ProgramID == programID);
+            }
             return View(mappingViewModel);
         }
 
@@ -48,7 +53,17 @@ namespace CLS_SLE.Controllers
                                         select new SelectListItem { Text = r.Name, Value = r.RubricID.ToString() }).Distinct().ToList();
 
             mappingViewModel.Course = db.Courses.FirstOrDefault(p => p.CourseID == mappingVM.CourseID);
-            mappingViewModel.Program = db.Programs.FirstOrDefault(p => p.ProgramID == mappingVM.ProgramID);
+            int programID;
+            if(TempData["ProgramID"] != null)
+            {
+                programID = (int)TempData["ProgramID"]; 
+            }
+            else
+            {
+                programID = mappingVM.ProgramID;
+            }
+            
+            mappingViewModel.Program = db.Programs.FirstOrDefault(p => p.ProgramID == programID);
             
             return View(mappingViewModel);
         }
@@ -58,6 +73,7 @@ namespace CLS_SLE.Controllers
         [HttpPost]
         public ActionResult CreateMapping(MappingViewModel mappingVM)
         {
+            TempData["ProgramID"] = mappingVM.ProgramID;
             if (ModelState.IsValid)
             {
                 ProgramAssessmentMapping map = new ProgramAssessmentMapping();
@@ -78,10 +94,12 @@ namespace CLS_SLE.Controllers
             else
             {
                 {
+                    //return Index(mappingViewModel);
                     return RedirectToAction("Index", "AdminMapping");
                 }
             }
-
+            
+            //return Index(mappingViewModel);
             return RedirectToAction("Index", "AdminMapping");
         }
 

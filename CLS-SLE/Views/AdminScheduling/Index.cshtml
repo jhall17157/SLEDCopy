@@ -40,7 +40,6 @@
         </div>
         <div class="row col-4 border-left">
             <div class="form-group col-12">
-                <p class="col-12 mb-1 pl-0">Can't Find Semester?</p>
                 @Html.ActionLink("Configure Semester", "ScheduleSemester", "AdminScheduling", null, new { @class = "btn btn-success d-inline ml-2" })
             </div>
         </div>
@@ -57,7 +56,7 @@
         </div>
         <div class="row col-6">
             <p class="col-12 mb-1 pl-0">Search For A Course:</p>
-            @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
+            @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Course-", new
        {
            @id = "DropDownSemesters",
            @class = "form-control selectpicker d-inline col-10"

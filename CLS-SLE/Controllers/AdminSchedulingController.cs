@@ -124,9 +124,17 @@ namespace CLS_SLE.Controllers
             //get all courses whose courseIDs exist in provided list of courseids
             schedulingViewModel.Courses = db.Courses
                 .Where(c => courseIDs.Contains(c.CourseID))
-                .OrderBy(c => c.CourseName)
+                .OrderBy(c => c.CourseName).ToList();
+
+            foreach(Course course in schedulingViewModel.Courses)
+            {
+                schedulingViewModel.CourseSelectList.Add(new SelectListItem { Text = course.Number + " " + course.CourseName, Value = course.CourseName.ToString() });
+            }
+
+            schedulingViewModel.Courses = schedulingViewModel.Courses
                 .Skip((schedulingViewModel.PagingInfo.CurrentPage - 1) * schedulingViewModel.PagingInfo.ItemsPerPage)
                 .Take(schedulingViewModel.PagingInfo.ItemsPerPage).ToList();
+
 
             ModelState.Clear();
             return View(schedulingViewModel);

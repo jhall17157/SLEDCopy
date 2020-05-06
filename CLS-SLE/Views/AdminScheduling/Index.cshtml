@@ -41,7 +41,7 @@
         <div class="row col-4 border-left">
             <div class="form-group col-12">
                 <p class="col-12 mb-1 pl-0">Can't Find Semester?</p>
-                @Html.ActionLink("Configure Semester", "NewSemester", "AdminScheduling", null, new { @class = "btn btn-success d-inline ml-2" })
+                @Html.ActionLink("Configure Semester", "ScheduleSemester", "AdminScheduling", null, new { @class = "btn btn-success d-inline ml-2" })
             </div>
         </div>
     </div>
@@ -103,7 +103,7 @@
                                     <i class="sectionIcon@(sectionNumber) sectionIcon ml-3 mr-3 fas fa-angle-right"></i> CRN: @sec.CRN
                                 </h5>
                                 <h6 class="pl-3 d-inline">
-                                    Ends: @sec.EndDate
+                                    @*Ends: @sec.EndDate.Value.ToShortDateString();*@
                                 </h6>
                             </td>
                             <td class="col-5 text-right border-0 pl-3">

@@ -1,0 +1,153 @@
+﻿
+
+
+@using System.Text
+@using CLS_SLE.Models
+@model CLS_SLE.ViewModels.ScheduleSemesterViewModel
+@{
+    ViewBag.Title = "ScheduleSemester";
+}
+@Styles.Render("~/Content/bootstrap-select")
+
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item active" aria-current="page">@Html.ActionLink("Scheduling", "Index", "AdminScheduling")</li>
+        <li class="breadcrumb-item active" aria-current="page">Configure Semester</li>
+    </ol>
+</nav>
+
+
+<h2>Configure Semester</h2>
+
+
+
+@using (Html.BeginForm("Index", "AdminScheduling", FormMethod.Post))
+{
+
+    <div class="container">
+        <div class="row half-indent">
+            <div class="col-6 mt-4 border-bottom">
+                <h3>Semester Information</h3>
+            </div>
+        </div>
+        <div class="row half-indent mb-3">
+            <div class="col-6 mt-4">
+                <p class="col-6 mb-1 pl-0">Select Semester:</p>
+
+                @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
+                {
+                    @id = "DropDownSemesters",
+                    @class = "form-control selectpicker d-inline col-9",
+
+                })
+            </div>
+        </div>
+        <div class="row half-indent">
+            <div class="col-6 mt-4 border-bottom">
+                <h3>Set Default Timeframe</h3>
+            </div>
+        </div>
+        <div class="row half-indent">
+            <div class="col-6 mt-4">
+                <p class="col-6 mb-1 pl-0">Start Date:</p>
+                <div class="bg-light p-2 col-10 row ml-2 mb-4">
+                    <input type="number" class="form-control col-4 ml-1" />
+                    <span class="col-7 align-self-center">Days Before Section Ends</span>
+                </div>
+                <p class="col-6 mb-1 pl-0">End Date:</p>
+                <div class="bg-light p-2 col-10 row ml-2 mb-4">
+                    <input type="number" class="form-control col-4 ml-1" />
+                    <span class="col-7 align-self-center">Days After Section Ends</span>
+                </div>
+            </div>
+        </div>
+        <div class="row half-indent">
+            <div class="col-6 mt-4 text-center">
+                @Html.ActionLink("Cancel", "Index", "AdminScheduling", null, new { @class = "btn btn-outline-dark" })
+                <button class="btn btn-success ml-1">Configure Semester</button>
+            </div>
+        </div>
+    </div>
+
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/bootstrap-select")
+
+
+    }
+
+    //Populates a list of semesters to choose from with live search
+    @*<div class="form-inline mt-4 mb-4">
+            <div class="row col-7">
+
+                <div class="form-group col-12">
+                    <p class="col-12 mb-1 pl-0">Search For A Semester:</p>
+                    @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
+                    {
+                        @id = "DropDownSemesters",
+                        @class = "form-control selectpicker d-inline col-9",
+
+                    })
+
+
+
+
+                    <input type="submit" class="btn btn-primary d-inline ml-2" value="Submit" />
+                </div>
+            </div>
+            <div class="row col-4 border-left">
+                <div class="form-group col-12">
+                    <p class="col-12 mb-1 pl-0">Can't Find Semester?</p>
+                    @Html.ActionLink("Configure Semester", "ScheduleSemester", "AdminScheduling", null, new { @class = "btn btn-success d-inline ml-2" })
+                </div>
+            </div>
+        </div>*@
+}
+
+@*<div class="container">
+        <div class="row half-indent">
+            <div class="col-6 mt-4 border-bottom">
+                <h3>Semester Information</h3>
+            </div>
+        </div>
+        <div class="row half-indent mb-3">
+            <div class="col-6 mt-4">
+                <p class="col-6 mb-1 pl-0">Select Semester:</p>
+                <select class="form-control col-6 ml-1">
+                    <option>Fall 2020</option>
+                    <option>Spring 2021</option>
+                    <option>Summer 2021</option>
+                </select>
+            </div>
+        </div>
+        <div class="row half-indent">
+            <div class="col-6 mt-4 border-bottom">
+                <h3>Set Default Timeframe</h3>
+            </div>
+        </div>
+        <div class="row half-indent">
+            <div class="col-6 mt-4">
+                <p class="col-6 mb-1 pl-0">Start Date:</p>
+                <div class="bg-light p-2 col-10 row ml-2 mb-4">
+                    <input type="number" class="form-control col-4 ml-1" />
+                    <span class="col-7 align-self-center">Days Before Section Ends</span>
+                </div>
+                <p class="col-6 mb-1 pl-0">End Date:</p>
+                <div class="bg-light p-2 col-10 row ml-2 mb-4">
+                    <input type="number" class="form-control col-4 ml-1" />
+                    <span class="col-7 align-self-center">Days After Section Ends</span>
+                </div>
+            </div>
+        </div>
+        <div class="row half-indent">
+            <div class="col-6 mt-4 text-center">
+                @Html.ActionLink("Cancel", "Index", "AdminScheduling", null, new { @class = "btn btn-outline-dark" })
+                <button class="btn btn-success ml-1">Configure Semester</button>
+            </div>
+        </div>
+    </div>*@
+
+

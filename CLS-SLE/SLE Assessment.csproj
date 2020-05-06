@@ -405,6 +405,7 @@
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\PagingInfo.cs" />
     <Compile Include="ViewModels\RubricViewModel.cs" />
+    <Compile Include="ViewModels\ScheduleSemesterViewModel.cs" />
     <Compile Include="ViewModels\SchedulingViewModel.cs" />
     <Compile Include="ViewModels\UpdateRubric.cs" />
     <Compile Include="ViewModels\ViewUserViewModel.cs" />
@@ -2201,6 +2202,7 @@
     <Content Include="Views\AdminScheduling\TimeframeCourse.cshtml" />
     <Content Include="Views\AdminScheduling\TimeframeResults.cshtml" />
     <Content Include="Views\AdminScheduling\NewSemester.cshtml" />
+    <Content Include="Views\AdminScheduling\ScheduleSemester.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

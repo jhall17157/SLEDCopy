@@ -131,11 +131,26 @@
                                     
                                     <td class="border-0 row col-3">
                                         <p class="col-12 mb-1 pl-0">Start Date:</p>
-                                        <input type="date" value="@sr.StartDate" class="form-control selectpicker col-9 ml-2">
+                                        @if (sr.StartDate != null)
+                                        {
+                                            @Html.TextBox(@sr.StartDate.ToShortDateString(), "{0:MM-dd-yyyy}", new { @class = "form-control selectpicker col-9 ml-2", type = "date", @Value = @sr.StartDate.ToString("yyyy-MM-dd") })
+                                        }
+                                        else
+                                        {
+                                            <input type="date" class="form-control selectpicker col-9 ml-2">
+                                        }
                                     </td>
                                     <td class="border-0 row col-3">
                                         <p class="col-12 mb-1 pl-0">End Date:</p>
-                                        <input type="date" value="@sr.EndDate" class="form-control col-9 ml-2">
+                                        @if (sr.EndDate != null)
+                                        {
+                                            @Html.TextBox(@sr.EndDate.ToShortDateString(), "{0:MM-dd-yyyy}", new { @class = "form-control selectpicker col-9 ml-2", type = "date", @Value = @sr.EndDate.ToString("yyyy-MM-dd") })
+                                        }
+                                        else
+                                        {
+                                            <input type="date" class="form-control col-9 ml-2">
+                                        }
+
                                     </td>
                                     <td class="border-0 col-1 text-right">
                                         <button type="button" class="btn btn-success btn-sm d-inline"><i class="fas fa-save" aria-hidden="true"></i></button>
@@ -143,7 +158,7 @@
                                     </td>
                                 </tr>
                             }
-                        }
+                                        }
 
                     }
                 }

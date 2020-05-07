@@ -184,6 +184,7 @@ namespace CLS_SLE.Controllers
                     }
                 }
                 model.course = course;
+                model.courseSections = course.Sections.OrderByDescending(s => s.Semester.SemesterCode);
                 return View(model);
             }
             catch

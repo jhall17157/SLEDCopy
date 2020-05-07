@@ -7,7 +7,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Courses", "ViewCourse", "AdminCourse", new { page = 1 }, null)</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Courses", "Courses", "AdminCourse", new { page = 1 }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">@Model.course.CourseName</li>
     </ol>
 </nav>
@@ -17,19 +17,41 @@
 <div>
     <table class="table table-hover table-striped">
         <thead class="thead-dark">
-            <b>Sections</b>
+            <tr>
+                <th class="h3">Sections</th>
+                <th class="text-left">Semester</th>
+                <th class="text-left">Lead Instructor</th>
+                <th class="text-right"><a href="~/AdminSection/AddSection?courseID=@Model.course.CourseID" class="float-right btn btn-success"><i class="fa fa-plus"></i> Add New Section </a></th>
+            </tr>
         </thead>
         <tbody>
-            @foreach (Section selectedSection in Model.course.Sections)
+            @foreach (Section selectedSection in Model.courseSections)
             {
+                Person LeadInstructor = selectedSection.Person;
                 if (selectedSection.IsCancelled.Equals(false))
                 {
-                    <tr>
-                        <td colspan="2">@selectedSection.CRN</td>
-                        <td class="text-right">
-                            <a href="../AdminSection/ViewSection?sectionID=@selectedSection.SectionID"><button type="button" class="btn btn-primary">View</button></a>
-                        </td>
-                    </tr>
+                    if (LeadInstructor != null)
+                    {
+                        <tr>
+                            <td>@selectedSection.CRN</td>
+                            <td>@selectedSection.Semester.Name</td>
+                            <td>@LeadInstructor.FirstName @LeadInstructor.LastName</td>
+                            <td class="text-right">
+                                <a href="../AdminSection/ViewSection?sectionID=@selectedSection.SectionID"><button type="button" class="btn btn-primary">View</button></a>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>@selectedSection.CRN</td>
+                            <td>@selectedSection.Semester.Name</td>
+                            <td>Unknown</td>
+                            <td class="text-right">
+                                <a href="../AdminSection/ViewSection?sectionID=@selectedSection.SectionID"><button type="button" class="btn btn-primary">View</button></a>
+                            </td>
+                        </tr>
+                    }
                 }
             }
         </tbody>

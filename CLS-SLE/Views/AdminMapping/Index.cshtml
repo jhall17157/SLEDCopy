@@ -43,7 +43,7 @@
     <hr />
     <div class="mt-4 mb-4">
         <h6 class="mb-1">Showing Results For</h6>
-        <h5>@Model.Program.Name</h5>
+        <h5>@Model.Program.Name (@Model.Program.Number)</h5>
     </div>
 
     <table class="table table-hover">
@@ -53,7 +53,7 @@
                 foreach (Assessment assessment in Model.Program.Assessments)
                 {
                     <tr>
-                        <td class="bg-dark text-white"><h4>@assessment.Name</h4><h5 class="float-left">(@Model.Program.Name)</h5></td>
+                        <td class="bg-dark text-white"><h4>@assessment.Name</h4><!--<h5 class="float-left">(@*Model.Program.Name*@)</h5>--></td>
                     </tr>
                     foreach (RubricAssessment ra in assessment.RubricAssessments.ToList())
                     {
@@ -149,7 +149,7 @@
         </div>
     </div>
 </div>*@
-<div class="modal fade" id="addModal" tabindex="-1" role="form" aria-hidden="true">
+<div class="modal fade mt-lg-5" id="addModal" tabindex="-1" role="form" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -161,38 +161,39 @@
             </div>
             @using (Html.BeginForm("CreateMapping", "AdminMapping", FormMethod.Post))
             {
-                <div class="modal-body">
+            <div class="modal-body p-4">
+                <p class="col-12 mb-1 pl-0">Select Program:</p>
+                <div class="mb-3">
+                    @Html.DropDownListFor(p => p.ProgramID, Model.Programs,@*Model.Programs.SingleOrDefault(pr => pr.Value.AsInt() == Model.ProgramID).Text,*@new
+                    {
+                    @id = "AddModalDropDownPrograms",
+                    @class = "form-control selectpicker d-inline col-6"
 
-                    <div>
-                        @Html.DropDownListFor(p => p.ProgramID, Model.Programs, @*Model.Programs.SingleOrDefault(pr => pr.Value.AsInt() == Model.ProgramID).Text,*@ new
-                           {
-                               @id = "AddModalDropDownPrograms",
-                               @class = "form-control selectpicker d-inline col-6"
-
-                           })
-                    </div>
-
-                    <div>
-                        @Html.DropDownListFor(r => r.RubricID, Model.Rubrics, "-Select Rubric-", new
-                           {
-                               @id = "AddModalDropDownRubrics",
-                               @class = "form-control selectpicker d-inline col-6",
-                           })
-                    </div>
-                    <div>
-                        @Html.DropDownListFor(c => c.CourseID, Model.Courses, "-Select Course-", new
-                           {
-                               @id = "AddModalDropDownCourses",
-                               @class = "form-control selectpicker d-inline col-6",
-
-                           })
-                    </div>
-
-
+                    })
                 </div>
+                <p class="col-12 mb-1 pl-0">Select Rubric:</p>
+                <div class="mb-3">
+                    @Html.DropDownListFor(r => r.RubricID, Model.Rubrics, "-Select Rubric-", new
+                       {
+                           @id = "AddModalDropDownRubrics",
+                           @class = "form-control selectpicker d-inline col-6",
+                       })
+                </div>
+                <p class="col-12 mb-1 pl-0">Select Course:</p>
+                <div class="mb-3">
+                    @Html.DropDownListFor(c => c.CourseID, Model.Courses, "-Select Course-", new
+                       {
+                           @id = "AddModalDropDownCourses",
+                           @class = "form-control selectpicker d-inline col-6",
+
+                       })
+                </div>
+
+
+        </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary enableModalButton" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary enableModalButton" value="submit">Add Course</button>
+                    <button type="button" class="btn btn-outline-dark enableModalButton" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success enableModalButton" value="submit">Add Course</button>
                 </div>
             }
             </div>

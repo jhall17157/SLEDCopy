@@ -53,13 +53,13 @@
                 foreach (Assessment assessment in Model.Program.Assessments)
                 {
                     <tr>
-                        <td class="bg-dark text-white"><h4>@assessment.Name</h4><!--<h5 class="float-left">(@*Model.Program.Name*@)</h5>--></td>
+                        <td class="bg-dark text-white align-self-center"><h4 class="m-0 pl-2 pr-2 pt-1 pb-1">@assessment.Name</h4><!--<h5 class="float-left">(@*Model.Program.Name*@)</h5>--></td>
                     </tr>
                     foreach (RubricAssessment ra in assessment.RubricAssessments.ToList())
                     {
                         rubricNumber++;
                         <tr href="#" data-target=".rubricCollapse@(rubricNumber)" class="accordionTrigger clickable">
-                            <td class="bg-light" valign="bottom">
+                            <td class="bg-light align-self-center">
                                 <h4 class="d-inline half-indent subheader-lh"><i class="rubricIcon@(rubricNumber) fas fa-angle-right"></i>&emsp;@ra.AssessmentRubric.Name</h4>
                                 <button type="button" class="btn btn-success float-right addMapButton rubricButton@(rubricNumber)" data-toggle="modal" @*onclick="@Model.Rubrics.SingleOrDefault(r => r.Value.AsInt() == ra.AssessmentRubric.RubricID).Selected = true" data-rubric="@ra.AssessmentRubric.RubricID"*@ data-target="#addModal"><i class="fa fa-plus" aria-hidden="true"></i> Add Course</button>
                             </td>
@@ -67,7 +67,7 @@
                         if (!ra.AssessmentRubric.ProgramAssessmentMappings.Any())
                         {
                             <tr class="collapse rubricCollapse@(rubricNumber) accordionClose">
-                                <td class="align-text-bottom" valign="bottom">
+                                <td class="align-self-center">
                                     <span class="d-none d-md-noe d-lg-inline offset-1">No Courses Mapped</span>
                                 </td>
                             </tr>
@@ -77,8 +77,8 @@
                             foreach (ProgramAssessmentMapping pam in ra.AssessmentRubric.ProgramAssessmentMappings)
                             {
                                 <tr class="collapse rubricCollapse@(rubricNumber) accordionClose">
-                                    <td class="align-text-bottom" valign="bottom">
-                                        <span class="d-none d-md-noe d-lg-inline offset-1">(@pam.Course.Number) @pam.Course.CourseName</span>
+                                    <td class="align-self-center">
+                                        <p class="d-none d-md-noe d-lg-inline offset-1">(@pam.Course.Number) @pam.Course.CourseName</p>
 
                                         <!-- Button trigger modal -->
                                         <button type="button" class=" btn btn-danger btn-sm d-inline float-right" data-toggle="modal" data-target="#removeCourseModal"><i class="fas fa-times" aria-hidden="true" ></i></button>

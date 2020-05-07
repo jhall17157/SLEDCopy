@@ -125,6 +125,7 @@ namespace CLS_SLE.Controllers
             schedulingViewModel.Courses = db.Courses
                 .Where(c => courseIDs.Contains(c.CourseID))
                 .OrderBy(c => c.CourseName).ToList();
+            schedulingViewModel.CourseSelectList = new List<SelectListItem>();
 
             foreach(Course course in schedulingViewModel.Courses)
             {

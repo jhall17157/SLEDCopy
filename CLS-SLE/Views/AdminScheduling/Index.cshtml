@@ -56,7 +56,7 @@
         </div>
         <div class="row col-6">
             <p class="col-12 mb-1 pl-0">Search For A Course:</p>
-            @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Course-", new
+            @Html.DropDownListFor(s => s.CourseID, Model.CourseSelectList, "-Select Course-", new
        {
            @id = "DropDownCourses",
            @class = "form-control selectpicker d-inline col-10"

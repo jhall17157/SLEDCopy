@@ -19,40 +19,68 @@ namespace CLS_SLE.Controllers
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
         private Logger logger = LogManager.GetCurrentClassLogger();
 
+        public ActionResult AddSection(short courseID)
+        {
+            try
+            {
+                List<String> leadInstructorList = new List<String>();
+                foreach (var user in db.People)
+                {
+                    leadInstructorList.Add(string.Concat(user.FirstName, " ", user.LastName));
+                }
+
+                List<String> semesterList = new List<String>();
+                foreach (var semester in db.Semesters)
+                {
+                    semesterList.Add(semester.Name);
+                }
+
+                var model = new AddSectionViewModel()
+                {
+                    LeadInstructorList = leadInstructorList,
+                    SemesterList = semesterList
+                };
+
+                ViewBag.InitialCourse = db.Courses.Where(c => c.CourseID == courseID).FirstOrDefault();
+                ViewBag.CourseID = courseID;
+                ViewBag.CourseName = ViewBag.InitialCourse.CourseName;
+
+                return View(model);
+            }
+            catch
+            {
+                logger.Error("User attempted to add section without being signed in, redirecting to sign in page.");
+                return RedirectToAction("Signin", "User");
+            }
+        }
+
         public ActionResult EditSection(short sectionID)
         {
-            ViewBag.section = db.Sections.Where(s => s.SectionID == sectionID).FirstOrDefault();
-            ViewBag.CRN = ViewBag.section.CRN.ToString();
-            ViewBag.sectionCourse = ViewBag.section.Course.CourseName;
-
-            List<String> semesterNames = new List<String>();
-            foreach (var semester in db.Semesters)
+            try
             {
-                semesterNames.Add(semester.Name);
+                ViewBag.section = db.Sections.Where(s => s.SectionID == sectionID).FirstOrDefault();
+                ViewBag.CRN = ViewBag.section.CRN.ToString();
+                ViewBag.sectionCourse = ViewBag.section.Course.CourseName;
+
+                List<String> leadInstructorList = new List<String>();
+                foreach (var user in db.People)
+                {
+                    leadInstructorList.Add(string.Concat(user.FirstName, " ", user.LastName));
+                }
+
+                var model = new UpdateSectionViewModel
+                {
+                    IsCancelled = ViewBag.section.IsCancelled,
+                    LeadInstructorList = leadInstructorList
+                };
+
+                return View(model);
             }
-
-
-            List<String> courseNames = new List<String>();
-            foreach (var course in db.Courses)
+            catch
             {
-                courseNames.Add(course.CourseName);
+                logger.Error("User attempted to edit section without being signed in, redirecting to sign in page.");
+                return RedirectToAction("Signin", "User");
             }
-
-            List<String> leadInstructorList = new List<String>();
-            foreach (var user in db.People)
-            {
-                leadInstructorList.Add(string.Concat(user.FirstName, " ", user.LastName));
-            }
-
-            var model = new UpdateSectionViewModel
-            {
-                IsCancelled = ViewBag.section.IsCancelled,
-                SemesterNames = semesterNames,
-                CourseNames = courseNames,
-                LeadInstructorList = leadInstructorList
-            }; 
-
-            return View(model);
         }
 
         public ActionResult ViewSection(int? sectionID)
@@ -111,7 +139,7 @@ namespace CLS_SLE.Controllers
                     try
                     {
                         model.ModifierLogin = (String)db.Users
-                            .Where(u => u.PersonID == section.CreatedByLoginID)
+                            .Where(u => u.PersonID == section.ModifiedByLoginID)
                             .FirstOrDefault()
                             .Login;
                     }
@@ -140,61 +168,130 @@ namespace CLS_SLE.Controllers
         }
 
         [HttpPost]
+        public ActionResult CreateSection(AddSectionViewModel sectionVM, short courseID)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    sectionVM.Section.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                    sectionVM.Section.CreatedDateTime = DateTime.Now;
+
+                    // When a person is assigned to be the lead instructor of this new section,
+                    // this new section should also be added to the section list that this person 
+                    // is taking control of
+                    sectionVM.Section.Person = db.People
+                                                 .Where(p => string.Concat(p.FirstName, " ", p.LastName) == sectionVM.LeadInstructorSelection)
+                                                 .FirstOrDefault();
+                    Person editPerson = db.People
+                                            .Where(p => p.PersonID == sectionVM.Section.Person.PersonID)
+                                            .FirstOrDefault();
+                    editPerson.Sections.Add(sectionVM.Section);
+
+                    // When a new section is created to be in a semester,
+                    // it should also be added to the section list that start in this semester
+                    sectionVM.Section.Semester = db.Semesters
+                                                   .Where(s => s.Name == sectionVM.SemesterSelection)
+                                                   .FirstOrDefault();
+                    Semester editSemester = db.Semesters
+                                              .Where(s => s.SemesterID == sectionVM.Section.Semester.SemesterID)
+                                              .FirstOrDefault();
+                    editSemester.Sections.Add(sectionVM.Section);
+
+                    // Do the same processes to a course's section list
+                    sectionVM.Section.Course = db.Courses
+                                                .Where(c => c.CourseName == sectionVM.Section.Course.CourseName)
+                                                .FirstOrDefault();
+                    Course editCourse = db.Courses
+                                            .Where(c => c.CourseID == sectionVM.Section.Course.CourseID)
+                                            .FirstOrDefault();
+                    editCourse.Sections.Add(sectionVM.Section);
+
+                    db.Sections.Add(sectionVM.Section);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    //redirects user to the submission form if failed to add section
+                    //TODO figure out how to add form errors
+                    return RedirectToAction("AddSection", "AdminSection", new { courseID = courseID });
+                }
+                //logging that a new section was added
+                logger.Info("Section id {Id} added", sectionVM.Section.SectionID);
+                //redirects user to the list of programs if successfully added new program
+                return RedirectToAction("ViewSection", "AdminSection", new { section = sectionVM.Section.SectionID });
+            }
+            catch
+            {
+                logger.Error("User attempted to create section without being signed in, redirecting to sign in page.");
+                return RedirectToAction("Signin", "User");
+            }
+        }
+
+        [HttpPost]
         public ActionResult UpdateSection(UpdateSectionViewModel sectionVM, short sectionID)
         {
-            Section editSection = db.Sections.Where(s => s.SectionID == sectionID).FirstOrDefault();
-
-            if (ModelState.IsValid)
+            try
             {
-                editSection.CRN = sectionVM.Section.CRN;
-                //editSection.SemesterID = sectionVM.Section.SemesterID;
-                if(editSection.Semester != sectionVM.Section.Semester &&
-                    sectionVM.Section.Semester != null)
-                {
-                    Semester editSemester = db.Semesters
-                                        .Where(s => s.SemesterID == editSection.SemesterID)
-                                        .FirstOrDefault();
+                Section editSection = db.Sections.Where(s => s.SectionID == sectionID).FirstOrDefault();
+                sectionVM.Section.Person = db.People
+                                                .Where(p => string.Concat(p.FirstName, " ", p.LastName).Equals(sectionVM.LeadInstructorSelection))
+                                                .FirstOrDefault();
 
-                    editSemester.Sections.Add(sectionVM.Section);
-                    editSection.Semester = sectionVM.Section.Semester;
-                }
-                //editSection.CourseID = sectionVM.Section.CourseID;
-                if (editSection.Course != sectionVM.Section.Course &&
-                    sectionVM.Section.Course != null)
+                if (ModelState.IsValid)
                 {
-                    Course editCourse = db.Courses
-                                        .Where(c => c.CourseID == editSection.CourseID)
-                                        .FirstOrDefault();
-                    editCourse.Sections.Add(sectionVM.Section);
-                    editSection.CourseID = sectionVM.Section.CourseID;
+                    if (editSection.Person != sectionVM.Section.Person &&
+                        sectionVM.Section.Person != null)
+                    {
+                        // When the lead instructor is changed, 
+                        // this section needs to be added to the section list of the new instructor
+                        // as well as the section list of the previous instructor will no longer
+                        // include this section
+
+                        // Add this section to the new instructor's list
+                        Person editPerson = db.People.Where(p => p.PersonID == sectionVM.Section.Person.PersonID)
+                                                .FirstOrDefault();
+                        editPerson.Sections.Add(sectionVM.Section);
+
+                        // Remove this section from the previous instructor's list
+                        editSection.Person.Sections.Remove(sectionVM.Section);
+
+                        // Assign the new person to be the lead instructor
+                        editSection.Person = sectionVM.Section.Person;
+                    }
+                    editSection.BeginDate = sectionVM.Section.BeginDate;
+                    editSection.IsCancelled = sectionVM.IsCancelled;
+                    if (editSection.IsCancelled == true)
+                    {
+                        editSection.EndDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        editSection.EndDate = sectionVM.Section.EndDate;
+                    }
+                    // Adding modified on date
+                    editSection.ModifiedDateTime = DateTime.Now;
+                    // Adding modified by 
+                    editSection.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                    // Modifying the program in the database
+                    db.SaveChanges();
                 }
-                //editSection.LeadInstructorID = sectionVM.Section.LeadInstructorID;
-                if (editSection.Person != sectionVM.Section.Person &&
-                    sectionVM.Section.Person != null)
+                else
                 {
-                    editSection.Person = sectionVM.Section.Person;
+                    //redirects user to the submission form if failed to update section
+                    //TODO figure out how to add form errors
+                    return RedirectToAction("EditSection", "AdminSection", new { sectionID = sectionID });
                 }
-                //editSection.OfferingNumber = sectionVM.Section.OfferingNumber;
-                //editSection.IsCancelled = sectionVM.IsCancelled;
-                editSection.BeginDate = sectionVM.Section.BeginDate;
-                editSection.EndDate = sectionVM.Section.EndDate;
-                // Adding modified on date
-                editSection.ModifiedDateTime = DateTime.Now;
-                // Adding modified by 
-                editSection.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-                // Modifying the program in the database
-                db.SaveChanges();
+                //logging that the section was updated
+                logger.Info("Section id {Id} modified", editSection.SectionID);
+                //redirects user to the course view if successfully added new program
+                return RedirectToAction("ViewSection", "AdminSection", new { sectionID = editSection.SectionID });
             }
-            else
+            catch
             {
-                //redirects user to the submission form if failed to update section
-                //TODO figure out how to add form errors
-                return RedirectToAction("AddSection", "AdminSection");
+                logger.Error("User attempted to update section without being signed in, redirecting to sign in page.");
+                return RedirectToAction("Signin", "User");
             }
-            //logging that the section was updated
-            logger.Info("Section id {Id} modified", editSection.SectionID);
-            //redirects user to the course view if successfully added new program
-            return RedirectToAction("ViewSection", "AdminSection", new { sectionID = editSection.SectionID });
         }
 
         //public JsonResult StudentAutoComplete(string search)

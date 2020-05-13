@@ -15,49 +15,74 @@
 </nav>
 <h1>Edit Department</h1>
 <br />
-@using (Html.BeginForm("UpdateDepartment", "AdminDepartment",new {DepartmentID=Model.Department.DepartmentID } ,FormMethod.Post))
+@using (Html.BeginForm("UpdateDepartment", "AdminDepartment", new { id = Model.Department.DepartmentID }, FormMethod.Post))
 {
     <div class="form-group">
         @Html.Label("Department Number:")
         @Html.EditorFor(Model => Model.Department.Number,
-       new { htmlAttributes = new { @class = "form-control",
-       Value = Model.Department.Number} })
+       new
+            {
+                htmlAttributes = new
+                {
+                    @class = "form-control",
+       Value = Model.Department.Number
+                }
+            })
         @Html.ValidationMessageFor(model => model.Department.Number)
     </div>
     <div class="form-group">
         @Html.Label("Department Name:")
         @Html.EditorFor(Model => Model.Department.Name,
-       new { htmlAttributes = new { @class = "form-control",
-       Value = Model.Department.Name} })
+       new
+            {
+                htmlAttributes = new
+                {
+                    @class = "form-control",
+       Value = Model.Department.Name
+                }
+            })
         @Html.ValidationMessageFor(model => model.Department.Name)
     </div>
-    <div>
-        @Html.DropDownListFor(Model => Model.SchoolSelection, new SelectList(Model.SchoolNames), Model.Department.School.Name,
-       new { htmlAttributes = new { @class = "form-control",
-       Value = Model.Department.School.Name} })
-    </div>
+    @*<div>
+            @Html.DropDownListFor(Model => Model.SchoolSelection, new SelectList(Model.SchoolNames), Model.Department.School.Name,
+           new { htmlAttributes = new { @class = "form-control",
+           Value = Model.Department.School.Name} })
+            @Html.ValidationMessageFor(model => model.Department.IsActive)
+        </div>*@
 
     <div>
-        @*@Html.DropDownListFor(Model => Model.SchoolSelection, new SelectList(Model.SchoolNames), "Select School",
-       new { htmlAttributes = new { @class = "form-control" } })*@
+        @Html.DropDownListFor(Model => Model.SchoolSelection, new SelectList(Model.SchoolNames), "Select School",
+       new { htmlAttributes = new { @class = "form-control" } })
         @Html.ValidationMessageFor(model => model.Department.IsActive)
     </div>
 
 
     <br />
-     <fieldset class="form-group">
-        <div class="row">
-            <legend class="col-form-label col-4 pt-0">Is Active:</legend>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="IsActive" id="IsActiveTrue" value="True" checked>
-                <label class="form-check-label" for="IsActiveTrue">True</label>
+    @*<fieldset class="form-group">
+            <div class="row">
+                <legend class="col-form-label col-4 pt-0">Is Active:</legend>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="IsActive" id="IsActiveTrue" value="True" checked>
+                    <label class="form-check-label" for="IsActiveTrue">True</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="IsActive" id="IsActiveFalse" value="False">
+                    <label class="form-check-label" for="IsActiveFalse">False</label>
+                </div>
             </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="IsActive" id="IsActiveFalse" value="False">
-                <label class="form-check-label" for="IsActiveFalse">False</label>
-            </div>
+        </fieldset>*@
+
+    <div class="form-group">
+        @Html.LabelFor(Model => Model.Department.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            Active
+            @Html.RadioButtonFor(Model => Model.Department.IsActive, true, new { @checked = "checked" })
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            InActive
+            @Html.RadioButtonFor(Model => Model.Department.IsActive, false)
         </div>
-    </fieldset>
+    </div>
+
 
     <div class="row justify-content-end col-9">
         <div class="form-group col-2 p-0 mx-1"><input type="submit" class="btn btn-primary col-12 mx-1" value="Submit" /></div>
@@ -66,20 +91,20 @@
 
 }
 
- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $("body").on("submit", "Form", function () {
+        return confirm("Do you want to submit the change?");
+    });
+</script>
+@if (ViewBag.Message != null)
+{
     <script type="text/javascript">
-        $("body").on("submit", "Form", function () {
-            return confirm("Do you want to submit the change?");
-        });
-    </script>
-    @if (ViewBag.Message != null)
-    {
-        <script type="text/javascript">
             window.onload = function () {
                 alert('@ViewBag.Message');
             };
-        </script>
-    }
+    </script>
+}
 
 
 @section Scripts {

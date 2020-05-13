@@ -48,52 +48,8 @@ namespace CLS_SLE.Controllers
             return View(departmentVM); }
 
         public ActionResult ViewDepartment(short? id) {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            else
-            {
-                var department = new Department();
-                department = db.Departments.Where(d => d.DepartmentID == id).FirstOrDefault();
-
-                dynamic model = new ExpandoObject();
-                model.CreatorLogin = null;
-                model.ModifierLogin = null;
-
-                if (department.CreatedByLoginID != null)
-                {
-                    try
-                    {
-                        model.CreatorLogin = (String)db.Users
-                            .Where(u => u.PersonID == department.CreatedByLoginID)
-                            .FirstOrDefault()
-                            .Login;
-                    }
-                    catch
-                    {
-                        model.CreatorLogin = "Unknown";
-                    }
-                }
-                if (department.ModifiedByLoginID != null)
-                {
-                    try
-                    {
-                        model.ModifierLogin = (String)db.Users
-                            .Where(u => u.PersonID == department.ModifiedByLoginID)
-                            .FirstOrDefault()
-                            .Login;
-                    }
-                    catch
-                    {
-                        model.ModifierLogin = "Unknown";
-                    }
-                }
-
-                model.Department = department;
-                return View(model);
-            }
-        }
+            if (id == null) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+            return View(db.Departments.Where(d => d.DepartmentID == id).FirstOrDefault()); }
 
         public ActionResult EditDepartment(short? id) {
             if (id == null) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
@@ -127,7 +83,8 @@ namespace CLS_SLE.Controllers
 
                     Department createDepartment = db.Departments.Create();
                     Department department = new Department();
-                    
+
+                    department.DepartmentID = department.DepartmentID;
                     department.Number = departmentVM.Department.Number;
                     department.Name = departmentVM.Department.Name;
                     department.School = db.Schools.Where(s => s.Name == departmentVM.SchoolSelection).FirstOrDefault();
@@ -138,13 +95,6 @@ namespace CLS_SLE.Controllers
                     db.Departments.Add(department);
                     db.SaveChanges();
 
-                    // When a new department is added to a school,
-                    // it should also be added to the department list of this school also
-                    School editSchool = db.Schools.Where(s => s.Name == departmentVM.SchoolSelection).FirstOrDefault();
-                    editSchool.Departments.Add(db.Departments
-                                                .Where(d => d.Number == department.Number && d.Name == department.Name)
-                                                .FirstOrDefault());
-
                     logger.Info("Department id {Id} added", departmentVM.Department.DepartmentID);
                     //object schoolID = null;
                     //ViewData["SchoolID"] = schoolID;
@@ -153,48 +103,37 @@ namespace CLS_SLE.Controllers
 
                 else
                 {
-                    logger.Error("Check the entered credentials and retry.");
                     //TODO figure out how to add form errors
                     return RedirectToAction("CreateDepartment", "AdminDepartment");
                 }
             }
             catch
             {
-                logger.Error("User attempted to create section without being signed in, redirecting to sign in page.");
-                return RedirectToAction("Signin", "User");
+                logger.Error("Check the entered credentials and retry.");
+                return RedirectToAction("CreateDepartment", "AdminDepartment");
             }
         }
 
         [HttpPost]
         public ActionResult UpdateDepartment(EditDepartmentViewModel departmentVM, short id)
         {
-            try
-            {
-                if (ModelState.IsValid)
+            //try
+            //{
+                /*if (!DepartmentID.Equals(null)) */   // I think this might return null since I didn't firdt create a null object
+                //if (DepartmentID != null)
+                if (id.Equals(true))
                 {
                     Department editDepartment = db.Departments.Where(d => d.DepartmentID == id).FirstOrDefault();
-                    departmentVM.Department.School = db.Schools.Where(s => s.Name == departmentVM.SchoolSelection).FirstOrDefault();
 
                     editDepartment.Name = departmentVM.Department.Name;
                     editDepartment.Number = departmentVM.Department.Number;
                     editDepartment.IsActive = departmentVM.Department.IsActive;
 
-                    if (editDepartment.School != departmentVM.Department.School &&
-                        departmentVM.Department.School != null)
+                    if (editDepartment.School != departmentVM.Department.School)
                     {
-                        // When the school is changed, 
-                        // this department needs to be added to the department list of the new school
-                        // as well as the department list of the previous school will no longer
-                        // include this department
-
-                        // Add this department to the new school's department list
                         School editSchool = db.Schools.Where(s => s.SchoolID == departmentVM.Department.School.SchoolID).FirstOrDefault();
-                        editSchool.Departments.Add(editDepartment);
 
-                        // Remove this department from the old school's list
-                        editDepartment.School.Departments.Remove(editDepartment);
-
-                        // Change the department's school to the new school
+                        editSchool.Departments.Add(departmentVM.Department);
                         editDepartment.School = departmentVM.Department.School;
                     }
 
@@ -208,16 +147,15 @@ namespace CLS_SLE.Controllers
                 }
                 else
                 {
-                    //redirects user to the submission form if failed to update section
-                    //TODO figure out how to add form errors
-                    return RedirectToAction("EditDepartment", "AdminDepartment", new { id = id });
+                    throw new Exception("Invalid Credentials!!!");
                 }
-            }
-            catch
-            {
-                logger.Error("User attempted to create section without being signed in, redirecting to sign in page.");
-                return RedirectToAction("Signin", "User");
-            }
+            //return RedirectToAction("ViewDepartment", "AdminDepartment", new { id = departmentVM.Department.DepartmentID });
+        //}
+            //catch
+            //{
+            //    logger.Error("Check the entered credentials and retry.");
+            //    return RedirectToAction("ViewDepartment", "AdminDepartment", new {id=departmentVM.Department.DepartmentID });
+            //}
 
         }
     }

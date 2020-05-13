@@ -39,11 +39,7 @@
 <div>
     <table class="table table-hover table-striped">
         <thead class="thead-dark">
-            <tr>
-                <th scope="col" class="h3">Assessments</th>
-                <th scope="col" class="text-right"></th>
-                <th scope="col" width="10%"><a href="~/AdminAssessments/AddAssessment" class="float-right btn btn-success"><i class="fa fa-plus"></i> Add New Assessment </a></th>
-            </tr>
+            <b>Assessments</b>
         </thead>
         <tbody>
             @foreach (Assessment assessment in Model.program.Assessments)
@@ -53,7 +49,7 @@
                     <tr>
                         <td colspan="2">@assessment.Name <span class="text-danger">(Not Active)</span></td>
                         <td class="text-right">
-                            <a href="../AdminAssessments/ViewAssessment?assessmentId=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
+                            <a href="../AdminAssessments/ViewAssessment?programID=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
                         </td>
                     </tr>
                 }
@@ -62,7 +58,7 @@
                     <tr>
                         <td colspan="2">@assessment.Name</td>
                         <td class="text-right">
-                            <a href="../AdminAssessments/ViewAssessment?assessmentId=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
+                            <a href="../AdminAssessments/ViewAssessment?programID=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
                         </td>
                     </tr>
                 }

@@ -30,30 +30,22 @@
         @Html.ValidationMessageFor(model => model.Program.Name)
     </div>
     <div class="form-group">
-        <div class="row">
-            @Html.Label("Is Active:", htmlAttributes: new { @class = "col-3" })
-            <div class="col-sm-1">
-                @Html.RadioButtonFor(Model => Model.IsActive, true)
-                @Html.Label("Yes")
-            </div>
-            <div class="col-sm-8">
-                @Html.RadioButtonFor(Model => Model.IsActive, false)
-                @Html.Label("No")
-            </div>
+        @Html.LabelFor(Model => Model.Program.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.RadioButtonFor(Model => Model.IsActive, true)
+            @Html.Label("Yes")
+            @Html.RadioButtonFor(Model => Model.IsActive, false)
+            @Html.Label("No")
         </div>
     </div>
 
     <div class="form-group">
-        <div class="row">
-            @Html.Label("Is a Shared Program:", htmlAttributes: new { @class = "col-3" })
-            <div class="col-sm-1">
-                @Html.RadioButtonFor(Model => Model.IsSharedProgram, true)
-                @Html.Label("Yes")
-            </div>
-            <div class="col-sm-8">
-                @Html.RadioButtonFor(Model => Model.IsSharedProgram, false)
-                @Html.Label("No")
-            </div>
+        @Html.LabelFor(Model => Model.Program.IsSharedProgram, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.RadioButtonFor(Model => Model.IsSharedProgram, true)
+            @Html.Label("Yes")
+            @Html.RadioButtonFor(Model => Model.IsSharedProgram, false)
+            @Html.Label("No")
         </div>
     </div>
     <div class="row justify-content-end col-9">

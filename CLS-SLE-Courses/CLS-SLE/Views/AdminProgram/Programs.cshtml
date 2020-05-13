@@ -1,4 +1,5 @@
 ﻿@using CLS_SLE.Models;
+@model CLS_SLE.ViewModels.ProgramListViewModel
 @{
     /**/
 
@@ -14,9 +15,27 @@
 </nav>
 <h1>Programs</h1>
 <br />
+<br />
+@using (Html.BeginForm("SearchProgram", "AdminProgram", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.Label("Program Name:")
+        @Html.EditorFor(Model => Model.SearchInput,
+        new { htmlAttributes = new { @class = "form-control", id = "programSearch" } })
+        @Html.ValidationMessageFor(Model => Model.SearchInput)
+    </div>
+    <br />
+    <div class="form-group col-2 p-0 mx-1"><input type="submit" class="btn btn-primary col-12 mx-1" value="Search" /></div>
+}
+<br />
+<br />
+@if (Model.SearchInput != null)
+{<h2>@Model.PagingInfo.TotalItems Search Results for "@Model.SearchInput"</h2>}
+<br />
 <table class="table table-hover">
     <thead class="thead-dark">
         <tr>
+            <th scope="col" class="h3">Program Number</th>
             <th scope="col" class="h3">Programs</th>
             <th scope="col" class="text-right"></th>
             <th scope="col" width="10%"><a class="float-right" href="/AdminProgram/AddProgram"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Program</button></a></th>
@@ -28,6 +47,7 @@
             if (program.IsActive.Equals(false))
             {
                 <tr>
+                    <td colspan="1">@program.Number <span class="text-danger">(Not Active)</span></td>
                     <td colspan="2">@program.Name <span class="text-danger">(Not Active)</span></td>
                     <td class="text-right">
                         <a href="ViewProgram?programID=@program.ProgramID"><button type="button" class="btn btn-primary">View</button></a>
@@ -37,6 +57,7 @@
             else
             {
                 <tr>
+                    <td colspan="1">@program.Number <span class="text-danger"></span></td>
                     <td colspan="2">@program.Name</td>
                     <td class="text-right">
                         <a href="ViewProgram?programID=@program.ProgramID"><button type="button" class="btn btn-primary">View</button></a>

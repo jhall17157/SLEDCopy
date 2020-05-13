@@ -9,6 +9,9 @@ namespace CLS_SLE.ViewModels
     public class ProgramListViewModel
     {
         public IEnumerable<Program> Programs { get; set; }
+
         public PagingInfo PagingInfo { get; set; }
+        public string SearchInput { get; set; }
+
     }
 }

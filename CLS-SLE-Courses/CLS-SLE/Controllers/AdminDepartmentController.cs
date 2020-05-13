@@ -128,49 +128,43 @@ namespace CLS_SLE.Controllers
         [HttpPost]
         public ActionResult UpdateDepartment(EditDepartmentViewModel departmentVM, short DepartmentID)
         {
-            try
-            {
-                /*if (!DepartmentID.Equals(null)) */   // I think this might return null since I didn't firdt create a null object
-                                                       //if (DepartmentID != null)
-                Department editDepartment = db.Departments.Where(d => d.DepartmentID == DepartmentID).FirstOrDefault();
-                if (ModelState.IsValid)
-                {              
-                    if (editDepartment.School != departmentVM.Department.School)
-                        {
-                            School editSchool = db.Schools.Where(s => s.SchoolID == departmentVM.Department.School.SchoolID).FirstOrDefault();
-                            editSchool.Departments.Add(departmentVM.Department); 
-                            editDepartment.School = departmentVM.Department.School;
-                        }
-                    editDepartment.Name = departmentVM.Department.Name;
-                    editDepartment.Number = departmentVM.Department.Number;
-                    editDepartment.IsActive = departmentVM.Department.IsActive;
 
-                    
+            Department editDepartment = db.Departments.Where(d => d.DepartmentID == DepartmentID).FirstOrDefault();
+            bool schoolChange = false;
+            School editSchool = editDepartment.School;
 
-                    editDepartment.ModifiedDateTime = DateTime.Now;
-                    editDepartment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+            if (ModelState.IsValid)
+            {             
+                editDepartment.Name = departmentVM.Department.Name;
+                editDepartment.Number = departmentVM.Department.Number;
+                editDepartment.IsActive = departmentVM.Department.IsActive;            
+                editDepartment.ModifiedDateTime = DateTime.Now;
+                editDepartment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
 
-                    db.SaveChanges();
-
-                    //logger.Info("Department id {Id} Succesfully edited", departmentVM.Department.DepartmentID);
-                    //return RedirectToAction("Departments", "AdminDepartment");
-                }
-
-                else
+                if (departmentVM.SchoolSelection!= null)
                 {
-                    logger.Error("Check the entered credentials and retry.");
-                    return RedirectToAction("Departments", "AdminDepartment");
+                    editSchool = db.Schools.Where(s => s.Name == departmentVM.SchoolSelection).FirstOrDefault();
+                    editDepartment.School = editSchool;
+                    schoolChange = true;                       
                 }
-                //return RedirectToAction("Departments", "AdminDepartment");
-                //return RedirectToAction("ViewDepartment", "AdminDepartment", new { id = departmentVM.Department.DepartmentID });
+
+            db.SaveChanges();
+
+
+                if (schoolChange) {
+
+                    Department tempDepartment = db.Departments.Where(d => d.DepartmentID == DepartmentID).FirstOrDefault();
+                    editSchool.Departments.Add(tempDepartment);    
+                    db.SaveChanges(); 
+                }
             }
-            //return RedirectToAction("Departments", "AdminDepartment");
-            catch (Exception ex)
+            else
             {
-                logger.Info("Check the entered credentials and retry.");
-                logger.Error("Exception: " + ex.Message);
+                logger.Error("Check the entered credentials and retry.");
                 return RedirectToAction("Departments", "AdminDepartment");
             }
+;
+
             return RedirectToAction("Departments", "AdminDepartment");
         }
         //Alert for submit

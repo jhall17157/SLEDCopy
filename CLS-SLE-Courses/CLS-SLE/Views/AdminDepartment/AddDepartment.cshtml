@@ -50,19 +50,30 @@
             @Html.ValidationMessageFor(model => model.Department.IsActive)
         </div>*@
     <br />
-    <fieldset class="form-group">
-        <div class="row">
-            <legend class="col-form-label col-4 pt-0">Is Active:</legend>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="IsActive" id="IsActiveTrue" value="True" checked>
-                <label class="form-check-label" for="IsActiveTrue">True</label>
+    @*<fieldset class="form-group">
+            <div class="row">
+                <legend class="col-form-label col-4 pt-0">Is Active:</legend>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="IsActive" id="IsActiveTrue" value="True" checked>
+                    <label class="form-check-label" for="IsActiveTrue">True</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="IsActive" id="IsActiveFalse" value="False">
+                    <label class="form-check-label" for="IsActiveFalse">False</label>
+                </div>
             </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="IsActive" id="IsActiveFalse" value="False">
-                <label class="form-check-label" for="IsActiveFalse">False</label>
-            </div>
+        </fieldset>*@
+
+    <div class="form-group">
+        @Html.LabelFor(Model => Model.Department.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            Active
+            @Html.RadioButtonFor(Model => Model.Department.IsActive, true, new { @checked = "checked" })
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            InActive
+            @Html.RadioButtonFor(Model => Model.Department.IsActive, false)
         </div>
-    </fieldset>
+    </div>
 
     <div class="row justify-content-end col-9">
         <div class="form-group col-2 p-0 mx-1"><input type="submit" class="btn btn-primary col-12 mx-1" value="Submit" /></div>

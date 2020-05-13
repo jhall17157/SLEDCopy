@@ -3,17 +3,19 @@ using CLS_SLE.ViewModels;
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     // class AdminController is extending the properties of the Controller class from System.Web.Mvc
     public class AdminCourseController : Controller
     {
         // a private int that can only be read which indicates the amount of results per page on the AdminCourse/Courses view
-        private readonly int PageSize = 10;
+        private readonly int PageSize = 20;
 
         // creating an instance of the database context in order to access entity framework to execute database commands
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
@@ -29,15 +31,164 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view of courses that contains a list of courses ordered by the course's Number
         /// </returns>
-        public ActionResult Courses(int page) => View(new CoursesViewModel
+        public ActionResult Courses(int page, string search, string department, string ERP)
         {
-            //creating a new CoursesViewModel - the Courses is a list of Courses sorted by their Number and does not include any courses with a "000-000" Number
-            //the "000-000" Numbered Courses were imported to tie some old assessment data to that was needed in the system
-            Courses = db.Courses.Where(c => c.Number != "000-000").OrderBy(c => c.Number).Skip((page - 1) * PageSize).Take(PageSize),
+            CoursesViewModel coursesViewModel = new CoursesViewModel();
 
+            int ResultsCount;
+            if(department == null)
+            {
+                if(ERP == null)
+                {
+                    if (search == null)
+                    {
+                        //creating a new CoursesViewModel - the Courses is a list of Courses sorted by their Number and does not include any courses with a "000-000" Number
+                        //the "000-000" Numbered Courses were imported to tie some old assessment data to that was needed in the system
+                        coursesViewModel.Courses = db.Courses.Where(c => c.Number != "000-000").OrderBy(c => c.Number).Skip((page - 1) * PageSize).Take(PageSize);
+                        ResultsCount = db.Courses.Where(c => c.Number != "000-000").Count();
+                    }
+                    else
+                    {
+                        coursesViewModel.Courses = db.Courses.Where(c => c.Number != "000-000").Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).OrderBy(c => c.Number).Skip((page - 1) * PageSize).Take(PageSize);
+                        ResultsCount = db.Courses.Where(c => c.Number != "000-000").Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).Count();
+                    }
+                }
+                else if(ERP=="ERP")
+                {
+                    if (search == null)
+                    {
+                        //creating a new CoursesViewModel - the Courses is a list of Courses sorted by their Number and does not include any courses with a "000-000" Number
+                        //the "000-000" Numbered Courses were imported to tie some old assessment data to that was needed in the system
+                        coursesViewModel.Courses = db.Courses.Where(c => c.Number != "000-000").Where(c => c.IsERPCourse).OrderBy(c => c.Number).Skip((page - 1) * PageSize).Take(PageSize);
+                        ResultsCount = db.Courses.Where(c => c.Number != "000-000").Where(c => c.IsERPCourse).Count();
+                    }
+                    else
+                    {
+                        coursesViewModel.Courses = db.Courses.Where(c => c.Number != "000-000").Where(c => c.IsERPCourse).Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).OrderBy(c => c.Number).Skip((page - 1) * PageSize).Take(PageSize);
+                        ResultsCount = db.Courses.Where(c => c.Number != "000-000").Where(c => c.IsERPCourse).Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).Count();
+                    }
+                }
+                else
+                {
+                    if (search == null)
+                    {
+                        //creating a new CoursesViewModel - the Courses is a list of Courses sorted by their Number and does not include any courses with a "000-000" Number
+                        //the "000-000" Numbered Courses were imported to tie some old assessment data to that was needed in the system
+                        coursesViewModel.Courses = db.Courses.Where(c => c.Number != "000-000").Where(c => !c.IsERPCourse).OrderBy(c => c.Number).Skip((page - 1) * PageSize).Take(PageSize);
+                        ResultsCount = db.Courses.Where(c => c.Number != "000-000").Where(c => !c.IsERPCourse).Count();
+                    }
+                    else
+                    {
+                        coursesViewModel.Courses = db.Courses.Where(c => c.Number != "000-000").Where(c => !c.IsERPCourse).Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).OrderBy(c => c.Number).Skip((page - 1) * PageSize).Take(PageSize);
+                        ResultsCount = db.Courses.Where(c => c.Number != "000-000").Where(c => !c.IsERPCourse).Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).Count();
+                    }
+                }
+            }
+            else
+            {
+                if (ERP == null)
+                {
+                    if (search == null)
+                    {
+                        //creating a new CoursesViewModel - the Courses is a list of Courses sorted by their Number and does not include any courses with a "000-000" Number
+                        //the "000-000" Numbered Courses were imported to tie some old assessment data to that was needed in the system
+                        coursesViewModel.Courses = db.Courses.Where(c => c.Number != "000-000").Where(c => c.Department.Name == department).OrderBy(c => c.Number).Skip((page - 1) * PageSize).Take(PageSize);
+                        ResultsCount = db.Courses.Where(c => c.Number != "000-000").Where(c => c.Department.Name == department).Count();
+                    }
+                    else
+                    {
+                        coursesViewModel.Courses = db.Courses.Where(c => c.Number != "000-000").Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).Where(c => c.Department.Name == department).OrderBy(c => c.Number).Skip((page - 1) * PageSize).Take(PageSize);
+                        ResultsCount = db.Courses.Where(c => c.Number != "000-000").Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).Where(c => c.Department.Name == department).Count();
+                    }
+                }
+                else if (ERP == "ERP")
+                {
+                    if (search == null)
+                    {
+                        //creating a new CoursesViewModel - the Courses is a list of Courses sorted by their Number and does not include any courses with a "000-000" Number
+                        //the "000-000" Numbered Courses were imported to tie some old assessment data to that was needed in the system
+                        coursesViewModel.Courses = db.Courses.Where(c => c.Number != "000-000").Where(c => c.IsERPCourse).Where(c => c.Department.Name == department).OrderBy(c => c.Number).Skip((page - 1) * PageSize).Take(PageSize);
+                        ResultsCount = db.Courses.Where(c => c.Number != "000-000").Where(c => c.IsERPCourse).Where(c => c.Department.Name == department).Count();
+                    }
+                    else
+                    {
+                        coursesViewModel.Courses = db.Courses.Where(c => c.Number != "000-000").Where(c => c.IsERPCourse).Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).Where(c => c.Department.Name == department).OrderBy(c => c.Number).Skip((page - 1) * PageSize).Take(PageSize);
+                        ResultsCount = db.Courses.Where(c => c.Number != "000-000").Where(c => c.IsERPCourse).Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).Where(c => c.Department.Name == department).Count();
+                    }
+                }
+                else
+                {
+                    if (search == null)
+                    {
+                        //creating a new CoursesViewModel - the Courses is a list of Courses sorted by their Number and does not include any courses with a "000-000" Number
+                        //the "000-000" Numbered Courses were imported to tie some old assessment data to that was needed in the system
+                        coursesViewModel.Courses = db.Courses.Where(c => c.Number != "000-000").Where(c => !c.IsERPCourse).Where(c => c.Department.Name == department).OrderBy(c => c.Number).Skip((page - 1) * PageSize).Take(PageSize);
+                        ResultsCount = db.Courses.Where(c => c.Number != "000-000").Where(c => !c.IsERPCourse).Where(c => c.Department.Name == department).Count();
+                    }
+                    else
+                    {
+                        coursesViewModel.Courses = db.Courses.Where(c => c.Number != "000-000").Where(c => !c.IsERPCourse).Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).Where(c => c.Department.Name == department).OrderBy(c => c.Number).Skip((page - 1) * PageSize).Take(PageSize);
+                        ResultsCount = db.Courses.Where(c => c.Number != "000-000").Where(c => !c.IsERPCourse).Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).Where(c => c.Department.Name == department).Count();
+                    }
+                }
+            }
+            
             //the Paging info is going to contain all the information required for pagination
-            PagingInfo = new PagingInfo { CurrentPage = page, ItemsPerPage = PageSize, TotalItems = db.Courses.Where(c=>c.Number!="000=-000").Count() }
-        });
+            coursesViewModel.PagingInfo = new PagingInfo { CurrentPage = page, ItemsPerPage = PageSize, TotalItems = ResultsCount };
+
+            List<String> departmentNames = new List<String>();
+
+            List<String> list = new List<string>();
+
+            list.Add("Banner");
+            list.Add("Non-Banner");
+
+            foreach (var d in db.Departments) { departmentNames.Add(d.Name); }
+
+            coursesViewModel.DepartmentNames = departmentNames;
+
+            coursesViewModel.ERPList = list;
+
+            coursesViewModel.SearchInput = search;
+
+            coursesViewModel.ERPFilter = ERP;
+
+            coursesViewModel.DepartmentFilter = department;
+
+            return View(coursesViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult SearchCourse(CourseSearchViewModel searchVM) {
+
+            if(db.Courses.Where(c => c.CourseName == searchVM.SearchInput).FirstOrDefault()!=null) {
+                Course tempCourse = db.Courses.Where(c => c.CourseName == searchVM.SearchInput).FirstOrDefault();
+                
+                return RedirectToAction("ViewCourse","AdminCourse", new { courseID = tempCourse.CourseID }); 
+            }
+            else if (db.Courses.Where(c => !c.CourseName.Contains("Folio180")).Where(c => c.CourseName.Contains(searchVM.SearchInput)) != null ||
+                db.Courses.Where(c => !c.CourseName.Contains("Folio180")).Where(c => c.Number.Contains(searchVM.SearchInput)) != null)
+            {
+                return RedirectToAction("Courses", "AdminCourse", new { page = 1, search = searchVM.SearchInput, department = searchVM.DepartmentFilter, ERP = searchVM.ERPFilter });
+            }
+            else { return RedirectToAction("CourseSearchError", "AdminCourse", new { search = searchVM.SearchInput }); }
+        }
+
+        public ActionResult CourseSearchError(string search) => View(new CourseSearchViewModel {SearchInput = search });
+
+
+        public JsonResult CourseAutoComplete (string search)
+        {
+            List<CourseSearchModel> resultCourses = db.Courses.Where(c=> !c.CourseName.Contains("Folio180")).Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).Select(c => new CourseSearchModel
+            {
+                id = c.CourseID,
+                name = c.CourseName,
+                number = c.Number,
+                detailedName = c.Number + " " + c.CourseName
+            }).ToList();
+
+            return new JsonResult { Data = resultCourses, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
 
         // GET: AdminCourse/AddCourse
         /// <summary>
@@ -55,7 +206,7 @@ namespace CLS_SLE.Controllers
 
             foreach(var d in db.Departments) { departmentNames.Add(d.Name); }
 
-            courseVM.DepartmentNames = departmentNames;
+            courseVM.DepartmentNames = departmentNames; 
 
             return View(courseVM);
         }
@@ -69,8 +220,59 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///     a view that contains the details of the course with a CourseID matching 'id'
         /// </returns>
-        public ActionResult ViewCourse(short id) { return View(db.Courses.Where(c => c.CourseID == id).FirstOrDefault()); }
+        public ActionResult ViewCourse(int? courseID)
+        {
+            var course = new Course();
 
+            try
+            {
+                if (courseID.HasValue)
+                {
+                    course = db.Courses.FirstOrDefault(c => c.CourseID == courseID.Value);
+                }
+
+                dynamic model = new ExpandoObject();
+                model.CreatorLogin = null;
+                model.ModifierLogin = null;
+
+                if (course.CreatedByLoginID != null)
+                {
+                    try
+                    {
+                        model.CreatorLogin = (String)db.Users
+                            .Where(u => u.PersonID == course.CreatedByLoginID)
+                            .FirstOrDefault()
+                            .Login;
+                    }
+                    catch
+                    {
+                        model.CreatorLogin = "Unknown";
+                    }
+                }
+                if (course.ModifiedByLoginID != null)
+                {
+                    try
+                    {
+                        model.ModifierLogin = (String)db.Users
+                            .Where(u => u.PersonID == course.CreatedByLoginID)
+                            .FirstOrDefault()
+                            .Login;
+                    }
+                    catch
+                    {
+                        model.ModifierLogin = "Unknown";
+                    }
+                }
+                model.course = course;
+                model.courseSections = course.Sections.OrderByDescending(s => s.Semester.SemesterCode);
+                return View(model);
+            }
+            catch
+            {
+                logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
+                return RedirectToAction("Signin", "User");
+            }
+        }
         // GET: AdminCourse/EditCourse
         /// <summary>
         ///     http get request that sends the AdminCourse/EditCourse view which displays a form to update information to the 

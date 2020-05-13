@@ -28,16 +28,24 @@
        new { htmlAttributes = new { @class = "form-control" } })
         @Html.ValidationMessageFor(model => model.Department.Name)
     </div>
-    <div>
+    <div class="form-group">
+        @Html.Label("School:")
         @Html.DropDownListFor(Model => Model.SchoolSelection, new SelectList(Model.SchoolNames), "Select School",
-       new { htmlAttributes = new { @class = "form-control" } })
+        htmlAttributes: new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.Department.IsActive)
     </div>
     <div class="form-group">
-        @Html.Label("Is Active")
-        @Html.EditorFor(Model => Model.Department.IsActive,
-       new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.Department.IsActive)
+        <div class="row">
+            @Html.Label("Is Active:", htmlAttributes: new { @class = "col-3" })
+            <div class="col-sm-1">
+                @Html.RadioButtonFor(Model => Model.Department.IsActive, true)
+                @Html.Label("Yes")
+            </div>
+            <div class="col-sm-8">
+                @Html.RadioButtonFor(Model => Model.Department.IsActive, false)
+                @Html.Label("No")
+            </div>
+        </div>
     </div>
 
     <div class="row justify-content-end col-9">

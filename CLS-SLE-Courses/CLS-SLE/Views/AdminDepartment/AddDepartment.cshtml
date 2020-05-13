@@ -38,40 +38,22 @@
        new { htmlAttributes = new { @class = "form-control" } })
         @Html.ValidationMessageFor(model => model.Department.Name)
     </div>
-    <div>
-        @Html.DropDownListFor(Model => Model.SchoolSelection, new SelectList(Model.SchoolNames), "Select School",
-       new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.Department.IsActive)
-    </div>
-    @*<div class="form-group">
-            @Html.Label("Is Active")
-            @Html.EditorFor(Model => Model.Department.IsActive,
-           new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Department.IsActive)
-        </div>*@
-    <br />
-    @*<fieldset class="form-group">
-            <div class="row">
-                <legend class="col-form-label col-4 pt-0">Is Active:</legend>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="IsActive" id="IsActiveTrue" value="True" checked>
-                    <label class="form-check-label" for="IsActiveTrue">True</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="IsActive" id="IsActiveFalse" value="False">
-                    <label class="form-check-label" for="IsActiveFalse">False</label>
-                </div>
-            </div>
-        </fieldset>*@
-
     <div class="form-group">
-        @Html.LabelFor(Model => Model.Department.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            Active
-            @Html.RadioButtonFor(Model => Model.Department.IsActive, true, new { @checked = "checked" })
-            &nbsp; &nbsp; &nbsp; &nbsp;
-            InActive
-            @Html.RadioButtonFor(Model => Model.Department.IsActive, false)
+        @Html.Label("School:")
+        @Html.DropDownListFor(Model => Model.SchoolSelection, new SelectList(Model.SchoolNames), "Select School",
+        htmlAttributes: new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <div class="row">
+            @Html.Label("Is Active:", htmlAttributes: new { @class = "col-3" })
+            <div class="col-sm-1">
+                @Html.RadioButtonFor(Model => Model.Department.IsActive, true, new { @checked = "checked" })
+                @Html.Label("Yes")
+            </div>
+            <div class="col-sm-8">
+                @Html.RadioButtonFor(Model => Model.Department.IsActive, false)
+                @Html.Label("No")
+            </div>
         </div>
     </div>
 

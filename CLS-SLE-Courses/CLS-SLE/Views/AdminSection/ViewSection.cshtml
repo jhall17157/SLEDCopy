@@ -14,37 +14,39 @@
     </ol>
 </nav>
 <h1>Section @Model.section.CRN  - <a style="font-size: 65%;" href="/AdminSection/EditSection?sectionID=@Model.section.SectionID">Edit <i class="fas fa-edit"></i></a> </h1>
-<h2> @Model.section.Course.CourseName @Model.section.Course.Number</h2>
+<h2>@Model.section.Course.Number @Model.section.Course.CourseName</h2>
 <br />
 <div class="py-1">
     <b>Semester:</b> @Model.sectionSemester
 </div>
 <div class="py-1">
-    <b>Course:</b> @Model.sectionCourse
-</div>
-<div class="py-1">
     <b>Lead Instructor:</b> @Model.sectionLeadInstructor
 </div>
-<div class="py-1">
-    @if (Model.section.BeginDate != null)
-    {
+@if (Model.section.BeginDate != null)
+{
+    <div class="py-1">
         <b>Begin Date:</b> @Model.section.BeginDate
-    }
-    else
-    {
-        <b>Begin Date:</b> <p>Unknown</p>
-    }
-</div>
-<div class="py-1">
-    @if (Model.section.EndDate != null)
-    {
-        <b>End Date:</b> @Model.section.BeginDate
-    }
-    else
-    {
-        <b>End Date:</b> <p>Unknown</p>
-    }
-</div>
+    </div>
+}
+else
+{
+    <div class="py-1">
+        <b>Begin Date:</b> Unknown
+    </div>
+}
+
+@if (Model.section.EndDate != null)
+{
+    <div class="py-1">
+        <b>End Date:</b> @Model.section.EndDate
+    </div>
+}
+else
+{
+    <div class="py-1">
+        <b>End Date:</b> Unknown
+    </div>
+}
 
 @if (Model.section.ModifiedDateTime != null)
 {<div class="py-1">
@@ -52,23 +54,24 @@
     </div>
     <div class="py-1">
         <b>By User:</b> @Model.ModifierLogin
-    </div>      }
+    </div>  }
 @if (Model.section.CreatedDateTime != null)
 {<div class="py-1">
         <b>Created:</b>  @Model.section.CreatedDateTime
     </div>
     <div class="py-1">
         <b>By User:</b> @Model.CreatorLogin
-    </div>      }
+    </div>  }
 <br />
 <div>
     <h3>Enrollments</h3>
     <table class="table table-hover table-striped">
         <thead class="thead-dark">
             <tr>
-                <th colspan="9">Student Names</th>
-                <th colspan="2"></th>
-                <th colspan="1"><a class="float-right"><button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-plus"></i> Enroll Student</button></a></th>
+                <th scope="col">Student ID</th>
+                <th scope="col">Full Name</th>
+                <th scope="col">Status</th>
+                <th scope="col" class="text-right"><a class="float-right"><button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-plus"></i> Enroll Student</button></a></th>
             </tr>
         </thead>
         <tbody>
@@ -83,11 +86,12 @@
                     <tr>
                         @using (Html.BeginForm("Drop", "AdminSection", new { Id = enrollment.EnrollmentID }, FormMethod.Post))
                         {
-                            <td colspan="9">@enrollment.Person.FirstName @enrollment.Person.LastName</td>
-                            <td colspan="2">@enrollment.EnrollmentStatu.Name</td>
-                            <td colspan="1">
+                            <td scope="col">@enrollment.Person.IdNumber</td>
+                            <td scope="col">@enrollment.Person.FirstName @enrollment.Person.LastName</td>
+                            <td scope="col">@enrollment.EnrollmentStatu.Name</td>
+                            <td>
                                 @if (enrollment.EnrollmentStatusCode == "E")
-                                {<div class="form-group col-2 p-0 mx-1 float-right"><input type="submit" class="btn btn-danger col-12 mx-1" value="Drop/Withdraw" /></div>}
+                                {<div class="form-group p-0 mx-1 float-right"><input type="submit" class="btn btn-danger col-12 mx-1" value="Drop/Withdraw" /></div>}
                             </td>
                         }
                     </tr>

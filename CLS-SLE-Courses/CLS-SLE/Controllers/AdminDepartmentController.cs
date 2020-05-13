@@ -47,11 +47,56 @@ namespace CLS_SLE.Controllers
             
             return View(departmentVM); }
 
-        public ActionResult ViewDepartment(short? id) {
-            if (id == null) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
-            return View(db.Departments.Where(d => d.DepartmentID == id).FirstOrDefault()); }
+        public ActionResult ViewDepartment(short? departmentID)
+        {
+            if (departmentID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            else
+            {
+                var department = new Department();
+                department = db.Departments.Where(d => d.DepartmentID == departmentID).FirstOrDefault();
 
-        public ActionResult EditDepartment(short? id) {
+                dynamic model = new ExpandoObject();
+                model.CreatorLogin = null;
+                model.ModifierLogin = null;
+
+                if (department.CreatedByLoginID != null)
+                {
+                    try
+                    {
+                        model.CreatorLogin = (String)db.Users
+                            .Where(u => u.PersonID == department.CreatedByLoginID)
+                            .FirstOrDefault()
+                            .Login;
+                    }
+                    catch
+                    {
+                        model.CreatorLogin = "Unknown";
+                    }
+                }
+                if (department.ModifiedByLoginID != null)
+                {
+                    try
+                    {
+                        model.ModifierLogin = (String)db.Users
+                            .Where(u => u.PersonID == department.ModifiedByLoginID)
+                            .FirstOrDefault()
+                            .Login;
+                    }
+                    catch
+                    {
+                        model.ModifierLogin = "Unknown";
+                    }
+                }
+
+                model.Department = department;
+                return View(model);
+            }
+        }
+
+        public ActionResult EditDepartment(short? departmentID) {
             //if (id == null) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
             EditDepartmentViewModel departmentVM = new EditDepartmentViewModel();
@@ -59,7 +104,7 @@ namespace CLS_SLE.Controllers
 
             foreach (var s in db.Schools) { schoolNames.Add(s.Name); }
             departmentVM.SchoolNames = schoolNames;
-            departmentVM.Department = db.Departments.Where(d => d.DepartmentID == id).FirstOrDefault();
+            departmentVM.Department = db.Departments.Where(d => d.DepartmentID == departmentID).FirstOrDefault();
             return View(departmentVM);
 
             //ViewBag.department = db.Departments.Where(d => d.DepartmentID == DepartmentID).FirstOrDefault();
@@ -126,10 +171,10 @@ namespace CLS_SLE.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateDepartment(EditDepartmentViewModel departmentVM, short DepartmentID)
+        public ActionResult UpdateDepartment(EditDepartmentViewModel departmentVM, short departmentID)
         {
 
-            Department editDepartment = db.Departments.Where(d => d.DepartmentID == DepartmentID).FirstOrDefault();
+            Department editDepartment = db.Departments.Where(d => d.DepartmentID == departmentID).FirstOrDefault();
             bool schoolChange = false;
             School editSchool = editDepartment.School;
 
@@ -153,7 +198,7 @@ namespace CLS_SLE.Controllers
 
                 if (schoolChange) {
 
-                    Department tempDepartment = db.Departments.Where(d => d.DepartmentID == DepartmentID).FirstOrDefault();
+                    Department tempDepartment = db.Departments.Where(d => d.DepartmentID == departmentID).FirstOrDefault();
                     editSchool.Departments.Add(tempDepartment);    
                     db.SaveChanges(); 
                 }

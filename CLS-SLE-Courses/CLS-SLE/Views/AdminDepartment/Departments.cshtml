@@ -32,7 +32,7 @@
                     @*<td colspan="1">@department.Number <span class="text-danger">(Not Active)</span></td>*@ @*Kevin says-uncomment this line for department number to show*@
                     <td colspan="2">@department.Name <span class="text-danger">(Not Active)</span></td>
                     <td class="text-right">
-                        <a href="ViewDepartment?id=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
+                        <a href="ViewDepartment?departmentID=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
                     </td>
                 </tr>
             }
@@ -43,7 +43,7 @@
                     <td colspan="2">@department.Name</td>
                     <td class="text-right">
 
-                        <a href="ViewDepartment?id=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
+                        <a href="ViewDepartment?departmentID=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
                     </td>
                 </tr>
             }

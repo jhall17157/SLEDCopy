@@ -31,26 +31,33 @@
     <div>
         @Html.Label("Primary Department:")
         @Html.DropDownListFor(Model => Model.DepartmentSelection, new SelectList(Model.DepartmentNames), "Select Department",
-       new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.DepartmentSelection)
+        htmlAttributes: new { @class = "form-control" } )
     </div>
     <br />
     <div class="form-group">
-        @Html.Label("Is a Banner Course")
-        <div class="col-md-10">
-            Banner
-            @Html.RadioButtonFor(Model => Model.Course.IsERPCourse, true)
-            Non-Banner
-            @Html.RadioButtonFor(Model => Model.Course.IsERPCourse, false)
+        <div class="row">
+            @Html.Label("Is a Banner Course", htmlAttributes: new { @class = "col-3" })
+            <div class="col-sm-1">
+                @Html.RadioButtonFor(Model => Model.Course.IsERPCourse, true)
+                @Html.Label("Yes")
+            </div>
+            <div class="col-sm-8">
+                @Html.RadioButtonFor(Model => Model.Course.IsERPCourse, false)
+                @Html.Label("No")
+            </div>
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(Model => Model.Course.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            Active
-            @Html.RadioButtonFor(Model => Model.Course.IsActive, true)
-            InActive
-            @Html.RadioButtonFor(Model => Model.Course.IsActive, false)
+        <div class="row">
+            @Html.LabelFor(Model => Model.Course.IsActive, htmlAttributes: new { @class = "col-3" })
+            <div class="col-sm-1">
+                @Html.RadioButtonFor(Model => Model.Course.IsActive, true)
+                @Html.Label("Yes")
+            </div>
+            <div class="col-sm-8">
+                @Html.RadioButtonFor(Model => Model.Course.IsActive, false)
+                @Html.Label("No")
+            </div>
         </div>
     </div>
     <div class="row justify-content-end col-9">

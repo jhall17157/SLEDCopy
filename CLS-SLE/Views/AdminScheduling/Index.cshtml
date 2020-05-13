@@ -62,6 +62,7 @@
            @id = "DropDownCourses",
            @class = "form-control selectpicker d-inline col-10"
        })
+            @Html.HiddenFor(p => p.PagingInfo)
             <button type="submit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>
         </div>
         <div class="row col-2">

@@ -62,6 +62,7 @@
            @id = "DropDownCourses",
            @class = "form-control selectpicker d-inline col-10"
        })
+            @Html.HiddenFor(p => p.PagingInfo)
             <button type="submit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>
         </div>
         <div class="row col-2">
@@ -89,9 +90,9 @@
                                 <i class="courseIcon@(courseNumber) ml-3 mr-3 fas fa-angle-right"></i> @course.CourseName (@course.Number)
                             </h4>
                         </td>
-                        <td class="col-2 border-0 text-right">
+                        @*<td class="col-2 border-0 text-right">
                             <button class="btn btn-success"><i class="fas fa-plus" aria-hidden="true"></i> Add CRN</button>
-                        </td>
+                        </td>*@
                     </tr>
                     int sectionNumber = 0;
                     foreach (Section sec in Model.Semester.Sections.Where(s => s.CourseID == course.CourseID))

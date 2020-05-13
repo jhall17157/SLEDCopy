@@ -2201,7 +2201,6 @@
     <Content Include="Views\AdminScheduling\TimeframeSemester.cshtml" />
     <Content Include="Views\AdminScheduling\TimeframeCourse.cshtml" />
     <Content Include="Views\AdminScheduling\TimeframeResults.cshtml" />
-    <Content Include="Views\AdminScheduling\NewSemester.cshtml" />
     <Content Include="Views\AdminScheduling\ScheduleSemester.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -2,12 +2,12 @@
   "ExpandedNodes": [
     "",
     "\\CLS-SLE-Courses",
-    "\\CLS-SLE-Courses\\CLS-SLE",
-    "\\CLS-SLE-Courses\\CLS-SLE\\Controllers",
-    "\\CLS-SLE-Courses\\CLS-SLE\\Views",
+    "\\CLS-SLE-Courses\\CLS-SLE\\Views\\AdminCourse",
+    "\\CLS-SLE-Courses\\CLS-SLE\\Views\\AdminDepartment",
+    "\\CLS-SLE-Courses\\CLS-SLE\\Views\\AdminProgram",
     "\\CLS-SLE-Courses\\CLS-SLE\\Views\\AdminSection",
     "\\CLS-SLE-Courses\\CLS-SLE\\Views\\Shared"
   ],
-  "SelectedNode": "\\CLS-SLE-Courses\\CLS-SLE\\Views\\Shared\\_Layout.cshtml",
+  "SelectedNode": "\\CLS-SLE-Courses\\CLS-SLE",
   "PreviewInSolutionExplorer": false
 }

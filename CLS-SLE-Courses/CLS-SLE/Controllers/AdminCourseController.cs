@@ -282,7 +282,7 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///     a view that contains a submission form for updating information to a Course
         /// </returns>
-        public ActionResult EditCourse(short courseID) =>View(new EditCourseViewModel{Departments = db.Departments, Course = db.Courses.Where(c => c.CourseID == id).FirstOrDefault() });
+        public ActionResult EditCourse(short courseID) =>View(new EditCourseViewModel{Departments = db.Departments, Course = db.Courses.Where(c => c.CourseID == courseID).FirstOrDefault() });
 
         // POST: AdminCourse/CreateCourse
         /// <summary>

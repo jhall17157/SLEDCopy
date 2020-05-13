@@ -261,13 +261,13 @@
             });
 
             $('#allStudentSubmitTop').on('click', function (e) {
-                if (changesMade == true) {
+                //if (changesMade == true) {
                     e.preventDefault();
                     $('#assessmentInputForm').submit();
-                }
-                else {
+                //}
+                //else {
                     location.href = "/InstructorAssessments/StudentList?rubricID=@r.RubricID&sectionID=@r.SectionID";
-                }
+                //}
             });
 
             $('#markNotAssessed').on('click', function (e) {

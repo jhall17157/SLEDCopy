@@ -53,38 +53,41 @@
         }
 
     }
-        <div class="container">
-            @if (((CLS_SLE.Models.User)Session["user"]) != null)
-            {
-                <div class="row justify-content-center">
-                    <ul class="nav nav-tabs col-12 pt-0">
-                        @*Needs to be manually updated for each new controller*@
-                        @if (HttpContext.Current.User.IsInRole("Administrator"))
-                        {
-                            <li class="nav-item h2">
-                                <a class="nav-link align-bottom @((ControllerName.Equals("Admin") || ControllerName.Equals("RoleAdmin") || ControllerName.Equals("AdminUser") || ControllerName.Equals("Rubric")) ? "active bg-white pb-4" : "bg-light mt-3")" href="~/Admin/AdminDashboard">Admin Dashboard</a></li>
-                        }
-                        @if (HttpContext.Current.User.IsInRole("Faculty"))
-                        {
-                            <li class="nav-item h2">
-                                <a class="nav-link align-bottom @(ControllerName.Equals("InstructorAssessments")  ? "active bg-white pb-4" : "bg-light mt-3")" href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-                
+    <div class="container">
+        @if (((CLS_SLE.Models.User)Session["user"]) != null)
+        {
+            <div class="row justify-content-center">
+                <ul class="nav nav-tabs col-12 pt-0">
+                    @*Needs to be manually updated for each new controller*@
+                    @if (HttpContext.Current.User.IsInRole("Administrator"))
+                    {
+                        <li class="nav-item h2">
+                            <a class="nav-link align-bottom @((ControllerName.Equals("Admin") || ControllerName.Equals("RoleAdmin") || ControllerName.Equals("AdminUser") || ControllerName.Equals("Rubric")) ? "active bg-white pb-4" : "bg-light mt-3")" href="~/Admin/AdminDashboard">Admin Dashboard</a>
+                        </li>
+                    }
+                    @if (HttpContext.Current.User.IsInRole("Faculty"))
+                    {
+                        <li class="nav-item h2">
+                            <a class="nav-link align-bottom @(ControllerName.Equals("InstructorAssessments")  ? "active bg-white pb-4" : "bg-light mt-3")" href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a>
+                        </li>
+                    }
+                </ul>
+            </div>
 
 
-            }
-                <div class="bg-white" id="MainBody">
-                    @RenderBody()
-                </div>
-            <footer style="margin-bottom:4vh"></footer>
+
+        }
+        <div class="bg-white" id="MainBody">
+            @RenderBody()
         </div>
+        <footer style="margin-bottom:4vh"></footer>
+    </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.0.min.js" type="text/javascript"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/jquery-ui.min.js" type="text/javascript"></script>
+    <link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/themes/blitzer/jquery-ui.css" rel="Stylesheet" type="text/css" />
     <script>
         window.onscroll = function () { myFunction() };
 
@@ -99,7 +102,7 @@
                 $('#logo').css("width", 250);
             }
         }
-        
+
         $(function () {
             initButtons();
             function initButtons() {
@@ -107,6 +110,97 @@
                 $('#last, #next').prop('disabled', $('#end').html() == $('#total').html());
             }
         });
+
+        $("#courseSearch").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("CourseAutoComplete","AdminCourse")',
+                    dataType: "json",
+                    data: {search: $("#courseSearch").val()},
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.detailedName, value: item.name };
+                        }))
+                    },
+                    error: function (xhr, status, error) { alert("Error");}
+                });
+            }
+        });
+
+        $("#programSearch").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("ProgramAutoComplete","AdminProgram")',
+                    dataType: "json",
+                    data: {search: $("#programSearch").val()},
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.name };
+                        }))
+                    },
+                    error: function (xhr, status, error) { alert("Error");}
+                });
+            }
+        });
+
+
+        $("#studentSearch").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("StudentAutoComplete","AdminSection")',
+                    dataType: "json",
+                    data: {search: $("#studentSearch").val()},
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.listView, value: item.listView };
+                        }))
+                    },
+                    error: function (xhr, status, error) { alert("Error");}
+                });
+            }
+        });
+
+        function addStudentToList() {
+            $.ajax({
+                url: '@Url.Action("StudentListInfo","AdminSection")',
+                dataType: "json",
+                data: { search: $("#addStudentID").val() },
+                success: function (data) {
+                    $('#tempStudentList').append(
+                        '<li id="' + data.PID + '" value="' + data.id + '">' + data.lastName + ', ' + data.firstName + ' - ' + data.id + '&nbsp' +
+                        '<button onclick="removeStudentFromList(' + data.PID + ')"><i class="fas fa-minus-circle"></i></button>' +
+                        '</li>'
+                    );
+                },
+                error: function () { alert("Student with this number does not exsist!"); }
+            });
+            $('#addStudentID').val('');
+        }
+
+        function removeStudentFromList(id) {
+            $('#' + id).remove();
+        }
+
+        function enrollAllStudents(sectionID) {
+            var listItems = $("#tempStudentList li");
+            listItems.each(function () {
+                $.ajax({
+                    url: '@Url.Action("SaveEnrollment","AdminSection")',
+                    dataType: "json",
+                    data: { id: this.id, section: sectionID },
+                    success: function (data) {
+                        console.log(data)
+                    },
+                    error: function () {}
+                });
+            });
+            @*$.ajax({
+                    url: '@Url.Action("ViewSection","AdminSection",{ })',
+                    success: function (data) {},
+                    error: function () {}
+                });*@
+            location.reload();
+        }
     </script>
     @RenderSection("scripts", required: false)
 </body>

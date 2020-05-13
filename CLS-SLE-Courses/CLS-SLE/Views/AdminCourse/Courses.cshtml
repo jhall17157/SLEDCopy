@@ -15,12 +15,42 @@
 </nav>
 <h1>Courses</h1>
 <br />
+@using (Html.BeginForm("SearchCourse", "AdminCourse", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.Label("Course Name:")
+        @Html.EditorFor(Model => Model.SearchInput,
+        new { htmlAttributes = new { @class = "form-control", id = "courseSearch" } })
+        @Html.ValidationMessageFor(Model => Model.SearchInput)
+    </div>
+    <div>
+        @Html.Label("Filter by Department:")
+        @Html.DropDownListFor(Model => Model.DepartmentFilter, new SelectList(Model.DepartmentNames), "No Filter",
+       new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.DepartmentFilter)
+    </div>
+    <div>
+        @Html.Label("Is Banner:")
+        @Html.DropDownListFor(Model => Model.ERPFilter, new SelectList(Model.ERPList), "No Filter",
+       new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.ERPFilter)
+    </div>
+    <br />
+    <div class="form-group col-2 p-0 mx-1"><input type="submit" class="btn btn-primary col-12 mx-1" value="Search" /></div>
+}
+<br />
+<br />
+@if (Model.SearchInput != null)
+{<h2>@Model.PagingInfo.TotalItems Search Results for "@Model.SearchInput"</h2>}
+@if (Model.DepartmentFilter != null)
+{<h2>Form @Model.DepartmentFilter</h2>}
+<br />
 <table class="table table-hover">
     <thead class="thead-dark">
         <tr>
-            <th scope="col" class="h3">Course Number</th>
-            <th scope="col" class="text-left">Course Name</th>
-            <th scope="col" width="10%"><a class="float-right" href="/AdminCourse/AddCourse"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Course</button></a></th>
+            <th colspan="9">Course</th>
+            <th colspan="2" ></th>
+            <th colspan="1" ><a class="float-right" href="/AdminCourse/AddCourse"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Course</button></a></th>
         </tr>
     </thead>
     <tbody>
@@ -31,40 +61,46 @@
                 if (course.IsERPCourse.Equals(false))
                 {
                     <tr>
-                        <td>@course.Number</td>
-                        <td class="text-left">@course.CourseName<span class="text-info">(Non Banner)</span><span class="text-danger">(Not Active)</span></td>
-                        <td class="text-right">
+                        <td colspan="9">@course.Number &nbsp;&nbsp;@course.CourseName &nbsp;<span class="text-info">(Non Banner)</span><span class="text-danger">(Not Active)</span></td>
+                        <td colspan="2" class="text-left"></td>
+                        <td colspan="1" class="text-right">
                             <a href="ViewCourse?courseId=@course.CourseID"><button type="button" class="btn btn-primary">View</button></a>
                         </td>
                     </tr>
                 }
-                <tr>
-                    <td>@course.Number</td>
-                    <td class="text-left">@course.CourseName <span class="text-danger">(Not Active)</span></td>
-                    <td class="text-right">
-                        <a href="ViewCourse?courseId=@course.CourseID"><button type="button" class="btn btn-primary">View</button></a>
-                    </td>
-                </tr>
+                else
+                {
+                    <tr>
+                        <td colspan="9">@course.Number &nbsp;&nbsp;@course.CourseName &nbsp;<span class="text-danger">(Not Active)</span></td>
+                        <td colspan="2" ></td>
+                        <td colspan="1" class="text-right">
+                            <a href="ViewCourse?courseId=@course.CourseID"><button type="button" class="btn btn-primary">View</button></a>
+                        </td>
+                    </tr>
+                }
             }
             else
             {
                 if (course.IsERPCourse.Equals(false))
                 {
                     <tr>
-                        <td>@course.Number</td>
-                        <td class="text-left">@course.CourseName<span class="text-info">(Non Banner)</span></td>
-                        <td class="text-right">
+                        <td colspan="9">@course.Number &nbsp;&nbsp; @course.CourseName &nbsp;<span class="text-info">(Non Banner)</span></td>
+                        <td colspan="2"></td>
+                        <td colspan="1" class="text-right">
                             <a href="ViewCourse?courseId=@course.CourseID"><button type="button" class="btn btn-primary">View</button></a>
                         </td>
                     </tr>
                 }
-                <tr>
-                    <td>@course.Number</td>
-                    <td class="text-left">@course.CourseName </td>
-                    <td class="text-right">
-                        <a href="ViewCourse?courseId=@course.CourseID"><button type="button" class="btn btn-primary">View</button></a>
-                    </td>
-                </tr>
+                else
+                {
+                    <tr>
+                        <td colspan="9">@course.Number  &nbsp;&nbsp;@course.CourseName</td>
+                        <td colspan="2" class="text-left"></td>
+                        <td colspan="1" class="text-right">
+                            <a href="ViewCourse?courseId=@course.CourseID"><button type="button" class="btn btn-primary">View</button></a>
+                        </td>
+                    </tr>
+                }
             }
         }
     </tbody>
@@ -77,7 +113,7 @@
             </button>
         </a>
         <a href="Courses?page=@(Model.PagingInfo.PreviousPage)">
-            <button disabled id="prev" class="btn btn-outline-secondary" type="button"data-page="@(Model.PagingInfo.PreviousPage)">
+            <button disabled id="prev" class="btn btn-outline-secondary" type="button" data-page="@(Model.PagingInfo.PreviousPage)">
                 <i class="fas fa-angle-left"></i><span class="d-none d-md-inline"> Prev</span>
             </button>
         </a>
@@ -98,7 +134,7 @@
                 <span class="d-none d-md-inline">Last </span><i class="fas fa-angle-double-right"></i>
             </button>
         </a>
-</div>
+    </div>
 </div>
 
 

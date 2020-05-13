@@ -135,7 +135,7 @@ namespace CLS_SLE.Controllers
             {
                 //redirects user to the submission form if failed to add school
                 //TODO figure out how to add form errors
-                return RedirectToAction("AddSchool", "AdminSchool");
+                return RedirectToAction("EditSchool", "AdminSchool",schoolID = schoolID);
             }
             //logging that a new school was added
             logger.Info("School id {Id} modified", editSchool.SchoolID);

@@ -1,76 +1,39 @@
 ﻿@using CLS_SLE.Models;
 @{
-    ViewBag.Title = "View Assessment";
+    ViewBag.Title = "View Course";
 }
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "AdminAssessments")</li>
-        <li class="breadcrumb-item active" aria-current="page">@Model.assessment.Name </li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Courses", "Courses", "AdminCourse", new { page = 1 },null)</li>               
+        <li class="breadcrumb-item active" aria-current="page">@Model.course.CourseName</li>
     </ol>
 </nav>
-<h1> @Model.assessment.Name  - <a style="font-size: 85%;" href="/AdminAssessments/EditAssessment?AssessmentID=@Model.assessment.AssessmentID"><b>Edit</b></a> </h1>
-<br />
-<div class="py-1">
-    <b>Category:</b> @Model.assessment.Category
-</div>
-<div class="py-1">
-    <b>Description:</b> @Model.assessment.Description
-</div>
-<div class="py-1">
-    <b>Pass Rate:</b> @(Model.assessment.OutcomePassRate * 100)%
-</div>
-<div>
-    <b>Calculate Pass Rate:</b> @Model.assessment.CalculateOutcomePassRate
-</div>
-<div class="py-1">
-    <b>Program:</b> @Model.program
-</div>
-<div class="py-1">
-    <b>Is Active:</b> @Model.assessment.IsActive
-</div>
-@if (Model.ModifierLogin != null)
-{
-    <div class="py-1">
-        <b>Last Modified:</b>  @Model.assessment.ModifiedDateTime
-    </div>
-    <div class="py-1">
-        <b>By User:</b> @Model.ModifierLogin
-    </div>
-}
-else if (Model.CreatorLogin != null)
-{
-    <div class="py-1">
-        <b>Created:</b> @Model.assessment.CreatedDateTime
-    </div>
-    <div class="py-1">
-        <b>By User:</b> @Model.CreatorLogin
-    </div>
-}
+<h1> @Model.course.CourseName  - <a style="font-size: 85%;" href="/AdminCourse/EditCourse?courseID=@Model.course.CourseID">Edit <i class="fas fa-edit"></i></a> </h1>
 <br />
 
 <div>
     <table class="table table-hover table-striped">
         <thead class="thead-dark">
-            <tr>
-                <th class="h3">Rubrics</th>
-                <th><a href="~/Rubric/AddRubric?assessmentID=@Model.assessment.AssessmentID" class="float-right btn btn-success"><i class="fa fa-plus"></i> Add New Rubric </a></th>
-            </tr>
+            <b>Sections</b>
         </thead>
         <tbody>
-            @{ foreach (RubricAssessment rubricAssessment in Model.assessment.RubricAssessments)
+            @foreach (Section selectedSection in Model.courseSections)
+            {
+                if (selectedSection.IsCancelled.Equals(false))
                 {
-                    AssessmentRubric assessmentRubric = rubricAssessment.AssessmentRubric;
-
-                    <tr data-userID="person.PersonID">
-                        <td>@assessmentRubric.Name</td>
-
-                        <td class="text-right"><a href="@Url.Action("ViewRubric", "Rubric", new { rubricID = rubricAssessment.RubricID, assessmentID = Model.assessment.AssessmentID })" class="btn btn-primary mr-2">View</a></td>
+                    <tr>
+                        <td colspan="2">@selectedSection.CRN</td>
+                        <td colspan="2">@selectedSection.Semester.Name</td>
+                        <td colspan="2">N/A</td>
+                        <td class="text-right">
+                            <a href="../AdminSection/ViewSection?sectionID=@selectedSection.SectionID"><button type="button" class="btn btn-primary">View</button></a>
+                        </td>
                     </tr>
                 }
             }
-
         </tbody>
     </table>
 </div>

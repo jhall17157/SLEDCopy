@@ -79,6 +79,7 @@ namespace CLS_SLE.Controllers
 
             SchedulingViewModel schedulingViewModel = new SchedulingViewModel();
 
+
             if (TempData["SemesterID"] != null)
             {
                 schedulingViewModel.SemesterID = (int)TempData["ProgramID"];
@@ -122,14 +123,20 @@ namespace CLS_SLE.Controllers
                 .Where(c => courseIDs.Contains(c.CourseID)).Count()
             };
             //get all courses whose courseIDs exist in provided list of courseids
-            schedulingViewModel.Courses = db.Courses
-                .Where(c => courseIDs.Contains(c.CourseID))
-                .OrderBy(c => c.CourseName).ToList();
+            var courseResult = db.Courses
+                .Where(c => courseIDs.Contains(c.CourseID));
+                //.OrderBy(c => c.CourseName).ToList();
+            if(viewModel.CourseID != null && viewModel.CourseID != -1)
+            {
+                courseResult = courseResult.Where(c => c.CourseID == viewModel.CourseID);
+            }
+            schedulingViewModel.Courses = courseResult.OrderBy(c => c.CourseName).ToList();
             schedulingViewModel.CourseSelectList = new List<SelectListItem>();
+            schedulingViewModel.CourseSelectList.Add(new SelectListItem { Text = "All Courses For Semester", Value = "-1" });
 
             foreach(Course course in schedulingViewModel.Courses)
             {
-                schedulingViewModel.CourseSelectList.Add(new SelectListItem { Text = course.Number + " " + course.CourseName, Value = course.CourseName.ToString() });
+                schedulingViewModel.CourseSelectList.Add(new SelectListItem { Text = course.Number + " " + course.CourseName, Value = course.CourseID.ToString() });
             }
 
             schedulingViewModel.Courses = schedulingViewModel.Courses

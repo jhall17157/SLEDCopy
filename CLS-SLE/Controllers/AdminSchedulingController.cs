@@ -232,6 +232,47 @@ namespace CLS_SLE.Controllers
             
         }
 
+        [HttpPost]
+        public ActionResult AddRubricToCRN(SchedulingViewModel viewModel)
+        {
+            if(ModelState.IsValid)
+            {
+                SectionRubric sectionRubric = new SectionRubric
+                {
+                    SectionID = viewModel.SectionID,
+                    RubricID = (short)viewModel.RubricID,
+                    StartDate = viewModel.StartDate,
+                    EndDate = viewModel.EndDate,
+
+                };
+                try
+                {
+                    db.SectionRubrics.Add(sectionRubric);
+                }
+                catch(Exception e)
+                {
+                    Debug.WriteLine(e.ToString());
+                    Debug.WriteLine("Failed Scheduling information: \n" +
+                        "   SectionID: " + sectionRubric.SectionID + "\n" +
+                        "   RubricID: " + sectionRubric.RubricID + "\n" +
+                        "   Start Date: " + sectionRubric.StartDate.ToString() + "\n" +
+                        "   End Date: " + sectionRubric.EndDate.ToString());                    
+                }
+                db.SaveChanges();
+                TempData["SemesterID"] = viewModel.SemesterID;
+                return RedirectToAction("Index", "AdminScheduling");
+                
+                
+            }
+            else
+            {
+                return RedirectToAction("Index", "AdminScheduling");
+            }
+
+
+
+        }
+
 
         public ActionResult TimeframeSemester()
         {
@@ -301,6 +342,8 @@ namespace CLS_SLE.Controllers
 
             
         }
+
+        
     }
 }
 

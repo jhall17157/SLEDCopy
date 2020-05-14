@@ -15,6 +15,8 @@ namespace CLS_SLE.ViewModels
         public int? CourseID { get; set; }
         public Course CourseSearch { get; set; }
         public Section Section { get; set; }
+        public int SectionID { get; set; }
+        public int RubricID { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public PagingInfo PagingInfo { get; set; }

@@ -1,0 +1,59 @@
+﻿@using CLS_SLE.Models;
+@model CLS_SLE.ViewModels.AddProgramViewModel
+@{
+    /**/
+
+    ViewBag.Title = "AddProgram";
+}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs", "Programs", "AdminProgram", new { page = 1 }, null)</li>
+        <li class="breadcrumb-item active" aria-current="page">New Program</li>
+    </ol>
+</nav>
+<h1>Add Program</h1>
+<br />
+@using (Html.BeginForm("CreateProgram", "AdminProgram", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.Label("Program Number:")
+        @Html.EditorFor(Model => Model.Program.Number,
+       new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Program.Number)
+    </div>
+    <div class="form-group">
+        @Html.Label("Program Name:")
+        @Html.EditorFor(Model => Model.Program.Name,
+       new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Program.Name)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(Model => Model.Program.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.RadioButtonFor(Model => Model.Program.IsActive, true, new { @checked = "checked" })
+            @Html.Label("Yes")
+            @Html.RadioButtonFor(Model => Model.Program.IsActive, false)
+            @Html.Label("No")
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(Model => Model.Program.IsSharedProgram, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.RadioButtonFor(Model => Model.Program.IsSharedProgram, true, new { @checked = "checked" })
+            @Html.Label("Yes")
+            @Html.RadioButtonFor(Model => Model.Program.IsSharedProgram, false)
+            @Html.Label("No")
+        </div>
+    </div>
+    <div class="row justify-content-end col-9">
+        <div class="form-group col-2 p-0 mx-1"><input type="submit" class="btn btn-primary col-12 mx-1" value="Submit" /></div>
+        <div class="col-2 p-0 mx-1"><a href="/AdminProgram/Programs?page=1"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
+    </div>
+
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

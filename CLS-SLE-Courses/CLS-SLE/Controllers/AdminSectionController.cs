@@ -179,39 +179,53 @@ namespace CLS_SLE.Controllers
                 {
                     sectionVM.Section.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
                     sectionVM.Section.CreatedDateTime = DateTime.Now;
-
-                    // When a person is assigned to be the lead instructor of this new section,
-                    // this new section should also be added to the section list that this person 
-                    // is taking control of
-                    sectionVM.Section.Person = db.People
-                                                 .Where(p => string.Concat(p.FirstName, " ", p.LastName) == sectionVM.LeadInstructorSelection)
-                                                 .FirstOrDefault();
-                    Person editPerson = db.People
-                                            .Where(p => p.PersonID == sectionVM.Section.Person.PersonID)
-                                            .FirstOrDefault();
-                    editPerson.Sections.Add(sectionVM.Section);
-
-                    // When a new section is created to be in a semester,
-                    // it should also be added to the section list that start in this semester
-                    sectionVM.Section.Semester = db.Semesters
-                                                   .Where(s => s.Name == sectionVM.SemesterSelection)
-                                                   .FirstOrDefault();
-                    Semester editSemester = db.Semesters
-                                              .Where(s => s.SemesterID == sectionVM.Section.Semester.SemesterID)
-                                              .FirstOrDefault();
-                    editSemester.Sections.Add(sectionVM.Section);
-
-                    // Do the same processes to a course's section list
                     sectionVM.Section.Course = db.Courses
                                                 .Where(c => c.CourseName == sectionVM.Section.Course.CourseName)
                                                 .FirstOrDefault();
-                    Course editCourse = db.Courses
-                                            .Where(c => c.CourseID == sectionVM.Section.Course.CourseID)
-                                            .FirstOrDefault();
-                    editCourse.Sections.Add(sectionVM.Section);
+                    if (sectionVM.LeadInstructorSelection != null)
+                    { 
+                        sectionVM.Section.Person = db.People
+                                                     .Where(p => string.Concat(p.FirstName, " ", p.LastName) == sectionVM.LeadInstructorSelection)
+                                                     .FirstOrDefault();
+                    }
+                    if (sectionVM.SemesterSelection != null)
+                    {
+                        sectionVM.Section.Semester = db.Semesters
+                                                   .Where(s => s.Name == sectionVM.SemesterSelection)
+                                                   .FirstOrDefault();
+                    }
 
                     db.Sections.Add(sectionVM.Section);
                     db.SaveChanges();
+
+                    Section createdSection = db.Sections.Where(s => s.CRN == sectionVM.Section.CRN).FirstOrDefault();
+                    
+                    // When a person is assigned to be the lead instructor of this new section,
+                    // this new section should also be added to the section list that this person manages
+                    if (createdSection.Person != null)
+                    { 
+                        Person editPerson = db.People
+                                                .Where(p => p.PersonID == sectionVM.Section.Person.PersonID)
+                                                .FirstOrDefault();
+                        editPerson.Sections.Add(createdSection);
+                    }
+
+                    // When a new section is created to be in a semester,
+                    // it should also be added to the section list that start in this semester
+                    if (createdSection.Semester != null)
+                    {
+                        Semester editSemester = db.Semesters
+                                              .Where(s => s.SemesterID == sectionVM.Section.Semester.SemesterID)
+                                              .FirstOrDefault();
+                        editSemester.Sections.Add(createdSection);
+                    }
+
+                    // Do the same processes to a course's section list
+                    Course editCourse = db.Courses
+                                            .Where(c => c.CourseID == sectionVM.Section.Course.CourseID)
+                                            .FirstOrDefault();
+                    editCourse.Sections.Add(createdSection);
+
                 }
                 else
                 {
@@ -222,7 +236,7 @@ namespace CLS_SLE.Controllers
                 //logging that a new section was added
                 logger.Info("Section id {Id} added", sectionVM.Section.SectionID);
                 //redirects user to the list of programs if successfully added new program
-                return RedirectToAction("ViewSection", "AdminSection", new { section = sectionVM.Section.SectionID });
+                return RedirectToAction("ViewCourse", "AdminCourse", new { courseID = courseID });
             }
             catch
             {
@@ -254,10 +268,13 @@ namespace CLS_SLE.Controllers
                         // Add this section to the new instructor's list
                         Person editPerson = db.People.Where(p => p.PersonID == sectionVM.Section.Person.PersonID)
                                                 .FirstOrDefault();
-                        editPerson.Sections.Add(sectionVM.Section);
+                        editPerson.Sections.Add(editSection);
 
-                        // Remove this section from the previous instructor's list
-                        editSection.Person.Sections.Remove(sectionVM.Section);
+                        if (editSection.Person != null)
+                        {
+                            // Remove this section from the previous instructor's list
+                            editSection.Person.Sections.Remove(editSection);
+                        }
 
                         // Assign the new person to be the lead instructor
                         editSection.Person = sectionVM.Section.Person;

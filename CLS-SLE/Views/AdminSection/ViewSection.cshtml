@@ -1,0 +1,85 @@
+﻿@using CLS_SLE.Models;
+@{
+    ViewBag.Title = "View Section";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Courses", "Courses", "AdminCourse", new { page = 1 }, null)</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)Model.sectionCourse, "ViewCourse", "AdminCourse", new { courseID = Model.section.CourseID }, null)</li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.section.CRN</li>
+    </ol>
+</nav>
+<h1>Section @Model.section.CRN  - <a style="font-size: 85%;" href="/AdminSection/EditSection?sectionID=@Model.section.SectionID">Edit <i class="fas fa-edit"></i></a> </h1>
+<br />
+<div class="py-1">
+    <b>Semester:</b> @Model.sectionSemester
+</div>
+<div class="py-1">
+    <b>Course:</b> @Model.sectionCourse
+</div>
+<div class="py-1">
+    <b>Lead Instructor:</b> @Model.sectionLeadInstructor
+</div>
+@if (Model.section.BeginDate != null)
+{
+    <div class="py-1">
+        <b>Begin Date:</b> @Model.section.BeginDate
+    </div>
+}
+else
+{
+    <div class="py-1">
+        <b>Begin Date:</b> Unknown
+    </div>
+}
+
+@if (Model.section.EndDate != null)
+{
+    <div class="py-1">
+        <b>End Date:</b> @Model.section.EndDate
+    </div>
+}
+else
+{
+    <div class="py-1">
+        <b>End Date:</b> Unknown
+    </div>
+}
+
+@if (Model.section.ModifiedDateTime != null)
+{<div class="py-1">
+        <b>Last Modified:</b>  @Model.section.ModifiedDateTime
+    </div>
+    <div class="py-1">
+        <b>By User:</b> @Model.ModifierLogin
+    </div>  }
+@if (Model.section.CreatedDateTime != null)
+{<div class="py-1">
+        <b>Created:</b>  @Model.section.CreatedDateTime
+    </div>
+    <div class="py-1">
+        <b>By User:</b> @Model.CreatorLogin
+    </div>  }
+<br />
+<div>
+    <table class="table table-hover table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th class="h3">Enrollments</th>
+                <th colspan="2" class="text-md-left">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Enrollment enrollment in Model.section.Enrollments)
+            {
+                <tr>
+                    <td colspan="2">@enrollment.Person.FirstName @enrollment.Person.LastName</td>
+                    <td class="text-md-left">@enrollment.EnrollmentStatu.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

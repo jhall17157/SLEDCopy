@@ -23,27 +23,36 @@
         new { htmlAttributes = new { @class = "form-control", id = "courseSearch" } })
         @Html.ValidationMessageFor(Model => Model.SearchInput)
     </div>
-    <div>
-        @Html.Label("Filter by Department:")
-        @Html.DropDownListFor(Model => Model.DepartmentFilter, new SelectList(Model.DepartmentNames), "No Filter",
-       new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.DepartmentFilter)
-    </div>
-    <div>
-        @Html.Label("Is Banner:")
-        @Html.DropDownListFor(Model => Model.ERPFilter, new SelectList(Model.ERPList), "No Filter",
-       new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.ERPFilter)
-    </div>
+    <table>
+        <tr>
+            <td>
+                @Html.Label("Filter by Department:")
+            </td>
+            <td>
+                @Html.DropDownListFor(Model => Model.DepartmentFilter, new SelectList(Model.DepartmentNames), "No Filter",
+                new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DepartmentFilter)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.Label("Is Banner:")
+            </td>
+            <td>
+                @Html.DropDownListFor(Model => Model.ERPFilter, new SelectList(Model.ERPList), "No Filter",
+                new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ERPFilter)
+            </td>
+        </tr>
+    </table>
     <br />
     <div class="form-group col-2 p-0 mx-1"><input type="submit" class="btn btn-primary col-12 mx-1" value="Search" /></div>
 }
 <br />
-<br />
 @if (Model.SearchInput != null)
-{<h2>@Model.PagingInfo.TotalItems Search Results for "@Model.SearchInput"</h2>}
+{<br /><h2>@Model.PagingInfo.TotalItems Search Results for "@Model.SearchInput"</h2>}
 @if (Model.DepartmentFilter != null)
-{<h2>Form @Model.DepartmentFilter</h2>}
+{<br /><h2>Form @Model.DepartmentFilter</h2>}
 <br />
 <table class="table table-hover">
     <thead class="thead-dark">

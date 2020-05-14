@@ -396,6 +396,7 @@
     <Compile Include="ViewModels\CoursesViewModel.cs" />
     <Compile Include="ViewModels\CreateCourseViewModel.cs" />
     <Compile Include="ViewModels\CriterionViewModel.cs" />
+    <Compile Include="ViewModels\DepartmentsViewModel.cs" />
     <Compile Include="ViewModels\EditCourseViewModel.cs" />
     <Compile Include="ViewModels\EditDepartmentViewModel.cs" />
     <Compile Include="ViewModels\InsertNewAssesmentViewModel.cs" />
@@ -406,6 +407,7 @@
     <Compile Include="ViewModels\ProgramSearchViewModel.cs" />
     <Compile Include="ViewModels\RubricViewModel.cs" />
     <Compile Include="ViewModels\SchoolDetailViewModel.cs" />
+    <Compile Include="ViewModels\SchoolsViewModel.cs" />
     <Compile Include="ViewModels\SectionDetailViewModel.cs" />
     <Compile Include="ViewModels\StudentModel.cs" />
     <Compile Include="ViewModels\UpdateCourseViewModel.cs" />
@@ -2756,7 +2758,6 @@
     <Content Include="Views\Admin\ManageUsersAndRoles.cshtml" />
     <Content Include="Views\Admin\ProgramDashboard.cshtml" />
     <Content Include="Views\AdminSchool\Edit_Kayla.cshtml" />
-    <Content Include="Views\AdminCourse\CourseSearchError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

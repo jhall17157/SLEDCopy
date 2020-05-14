@@ -8,7 +8,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Courses", "Courses", "AdminCourse")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Courses", "Courses", "AdminCourse", new { page = 1 }, null)</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)Model.sectionCourse, "ViewCourse", "AdminCourse", new { courseID = Model.section.CourseID }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">@Model.section.CRN</li>
     </ol>
@@ -25,41 +25,45 @@
 <div class="py-1">
     <b>Lead Instructor:</b> @Model.sectionLeadInstructor
 </div>
-<div class="py-1">
-    @if (Model.section.BeginDate != null)
-    {
-        <b>Begin Date:</b> @Model.section.BeginDate
-    }
-    else
-    {
-        <b>Begin Date:</b> <p>Unknown</p>
-    }
-</div>
-<div class="py-1">
-    @if (Model.section.EndDate != null)
-    {
-        <b>End Date:</b> @Model.section.BeginDate
-    }
-    else
-    {
-        <b>End Date:</b> <p>Unknown</p>
-    }
-</div>
 
+@if (Model.section.BeginDate != null)
+{
+    <div class="py-1">
+        <b>Begin Date:</b> @Model.section.BeginDate
+    </div>
+}
+else
+{
+    <div class="py-1">
+        <b>Begin Date:</b> <span>Unknown</span>
+    </div>
+}
+@if (Model.section.EndDate != null)
+{
+    <div class="py-1">
+        <b>End Date:</b> @Model.section.BeginDate
+    </div>
+}
+else
+{
+    <div class="py-1">
+        <b>End Date:</b> <span>Unknown</span>
+    </div>
+ }
 @if (Model.section.ModifiedDateTime != null)
 {<div class="py-1">
         <b>Last Modified:</b>  @Model.section.ModifiedDateTime
     </div>
     <div class="py-1">
         <b>By User:</b> @Model.ModifierLogin
-    </div>      }
+    </div>}
 @if (Model.section.CreatedDateTime != null)
 {<div class="py-1">
         <b>Created:</b>  @Model.section.CreatedDateTime
     </div>
     <div class="py-1">
         <b>By User:</b> @Model.CreatorLogin
-    </div>      }
+    </div>}
 <br />
 <div>
     <h3>Enrollments</h3>
@@ -72,7 +76,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (Enrollment enrollment in Model.section.Enrollments)
+            @foreach (Enrollment enrollment in Model.enrolled)
             {
                 if (enrollment.Equals(null))
                 {
@@ -83,15 +87,22 @@
                     <tr>
                         @using (Html.BeginForm("Drop", "AdminSection", new { Id = enrollment.EnrollmentID }, FormMethod.Post))
                         {
-                            <td colspan="9">@enrollment.Person.FirstName @enrollment.Person.LastName</td>
+                            <td colspan="9">@enrollment.Person.LastName , @enrollment.Person.FirstName - @enrollment.Person.IdNumber</td>
                             <td colspan="2">@enrollment.EnrollmentStatu.Name</td>
                             <td colspan="1">
-                                @if (enrollment.EnrollmentStatusCode == "E")
-                                {<div class="form-group col-2 p-0 mx-1 float-right"><input type="submit" class="btn btn-danger col-12 mx-1" value="Drop/Withdraw" /></div>}
+                                <div class="form-group float-right"><input type="submit" class="btn btn-danger" value="Drop/Withdraw" /></div>
                             </td>
                         }
                     </tr>
                 }
+            }
+            @foreach (Enrollment enrollment in Model.dropped)
+            {
+                <tr>
+                    <td colspan="9">@enrollment.Person.LastName , @enrollment.Person.FirstName - @enrollment.Person.IdNumber</td>
+                    <td colspan="2" class="text-danger">@enrollment.EnrollmentStatu.Name</td>
+                    <td colspan="1"></td>
+                </tr>
             }
         </tbody>
     </table>
@@ -108,12 +119,13 @@
             </div>
             <div class="modal-body">
                 <div id="errorMessage"></div>
-                <ul id="tempStudentList"></ul>
+                <ul id="tempStudentList" style="list-style: none"></ul>
                 <label>Student ID:</label>
-                <input type="text" id="addStudentID" /> <button onclick="addStudentToList()"><i class="fas fa-plus-circle"></i></button>
+                <input type="text" id="addStudentID" style="border-radius:4px"/> 
+                <button onclick="addStudentToList(@Model.section.SectionID)" style="background-color:white; border:0; padding:0"><i class="fas fa-plus-circle" style="color:#28a745"></i></button>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="enrollAllStudents(@Model.section.SectionID)">Submit</button>
             </div>
         </div>

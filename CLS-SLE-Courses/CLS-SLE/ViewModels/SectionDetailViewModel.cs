@@ -16,5 +16,7 @@ namespace CLS_SLE.ViewModels
         public string sectionCourse { get; set; }
         public string newStudent { get; set; }
         public List<StudentModel> newStudents { get; set; }
+        public List<Enrollment> enrolled { get; set; }
+        public List<Enrollment> dropped { get; set; }
     }
 }

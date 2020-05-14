@@ -15,7 +15,7 @@
 </nav>
 <h1>Edit Department</h1>
 <br />
-@using (Html.BeginForm("UpdateDepartment", "AdminDepartment", new { id = Model.Department.DepartmentID }, FormMethod.Post))
+@using (Html.BeginForm("UpdateDepartment", "AdminDepartment", new { DepartmentID = Model.Department.DepartmentID }, FormMethod.Post))
 {
     <div class="form-group">
         @Html.Label("Department Number:")
@@ -25,7 +25,7 @@
                 htmlAttributes = new
                 {
                     @class = "form-control",
-       Value = Model.Department.Number
+                    Value = Model.Department.Number
                 }
             })
         @Html.ValidationMessageFor(model => model.Department.Number)
@@ -43,18 +43,18 @@
             })
         @Html.ValidationMessageFor(model => model.Department.Name)
     </div>
-    @*<div>
+    <div>
             @Html.DropDownListFor(Model => Model.SchoolSelection, new SelectList(Model.SchoolNames), Model.Department.School.Name,
            new { htmlAttributes = new { @class = "form-control",
            Value = Model.Department.School.Name} })
-            @Html.ValidationMessageFor(model => model.Department.IsActive)
-        </div>*@
+            @Html.ValidationMessageFor(model => model.Department.School)
+        </div>
 
-    <div>
+    @*<div>
         @Html.DropDownListFor(Model => Model.SchoolSelection, new SelectList(Model.SchoolNames), "Select School",
        new { htmlAttributes = new { @class = "form-control" } })
         @Html.ValidationMessageFor(model => model.Department.IsActive)
-    </div>
+    </div>*@
 
 
     <br />

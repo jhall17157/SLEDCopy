@@ -21,9 +21,17 @@ namespace CLS_SLE.Controllers
         ///       http get request that sends the AdminSchool/Schools view which displays a list of the schools
         /// </summary>
         /// <returns>
-        ///       a view of schools that contains a list of schools ordered by the school's schoolID
+        ///       a view of schools that contains a list of schools ordered by the school's name
         /// </returns>
-        public ActionResult Schools() => View(db.Schools.OrderBy(s => s.SchoolID));
+        public ActionResult Schools() {
+
+            SchoolsViewModel schoolVM = new SchoolsViewModel();
+            schoolVM.activeSchools = db.Schools.Where(s => s.IsActive == true).OrderBy(s => s.Name).ToList();
+            schoolVM.inActiveSchools = db.Schools.Where(s => s.IsActive != true).OrderBy(s => s.Name).ToList();
+            return View(schoolVM);
+        }
+        
+
 
         // GET: AdminSchool/AddSchool
         /// <summary>

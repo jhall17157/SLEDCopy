@@ -28,7 +28,14 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view of departments that contains a list of departments ordered by the department's departmentID
         /// </returns>
-        public ActionResult Departments() => View(db.Departments.OrderBy(d => d.Name));
+        public ActionResult Departments() {
+
+            DepartmentsViewModel departmentVM = new DepartmentsViewModel();
+            departmentVM.activeDepartments = db.Departments.Where(d => d.IsActive == true).OrderBy(d => d.Name).ToList();
+            departmentVM.inActiveDepartments = db.Departments.Where(d => d.IsActive != true).OrderBy(d => d.Name).ToList();
+            return View(departmentVM);
+        }
+        
 
         // GET: AdminDepartment/AddDepartment
         /// <summary>

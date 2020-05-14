@@ -6,8 +6,9 @@ using System.Web;
 
 namespace CLS_SLE.ViewModels
 {
-    public class UpdateCourseViewModel
+    public class SchoolsViewModel
     {
-        public Course course { get; set; }
+        public List<School> activeSchools { get; set; }
+        public List<School> inActiveSchools { get; set; }
     }
 }

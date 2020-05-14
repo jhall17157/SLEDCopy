@@ -158,6 +158,9 @@ namespace CLS_SLE.Controllers
                             .FirstOrDefault()
                             .CourseName;
                 model.newStudents = new List<StudentModel>();
+
+                model.enrolled = db.Enrollments.Where(e => e.SectionID == sectionID).Where(e => e.EnrollmentStatusCode == "E").OrderBy(e => e.Person.LastName).ToList();
+                model.dropped = db.Enrollments.Where(e => e.SectionID == sectionID).Where(e => e.EnrollmentStatusCode != "E").OrderBy(e => e.Person.LastName).ToList();
                 return View(model);
             }
             catch
@@ -294,19 +297,6 @@ namespace CLS_SLE.Controllers
             }
         }
 
-        //public JsonResult StudentAutoComplete(string search)
-        //{
-        //    List<StudentModel> resultCourses = db.People.Where(p => (p.LastName.Contains(search) || p.FirstName.Contains(search) || p.IdNumber.Contains(search))).Select(p => new StudentModel
-        //    {
-        //        id = p.IdNumber,
-        //        firstName = p.FirstName,
-        //        lastName = p.LastName,
-        //        listView = p.LastName +", "+p.FirstName+" - "+p.IdNumber
-        //    }).ToList();
-
-        //    return new JsonResult { Data = resultCourses, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-        //}
-
         [HttpPost]
         public ActionResult AddStudent(SectionDetailViewModel studentVM, short sectionID)
         {
@@ -339,12 +329,25 @@ namespace CLS_SLE.Controllers
             return RedirectToAction("ViewSection", "AdminSection", new { sectionID = tempEnrollment.SectionID });
         }
 
-        public JsonResult StudentListInfo(string search)
+        public JsonResult StudentListInfo(string search, int id)
         {
+            var dataStudent = new StudentModel();
             var student = db.People.Where(p => p.IdNumber == search).FirstOrDefault();
 
-            var dataStudent = new StudentModel { firstName = student.FirstName, lastName = student.LastName, id = student.IdNumber, PID = student.PersonID };
-
+            if (student == null) { dataStudent.message = "No student has " + id + " as an ID"; dataStudent.success = false; }
+            else
+            {
+                if (db.Enrollments.Where(e => e.SectionID == id).Where(e => e.Person.IdNumber == search).FirstOrDefault() == null)
+                {
+                    dataStudent = new StudentModel { firstName = student.FirstName, lastName = student.LastName, id = student.IdNumber, PID = student.PersonID };
+                    dataStudent.success = true;
+                }
+                else
+                {
+                    dataStudent.message = "Student is already enrolled or dropped in this section.";
+                    dataStudent.success = false;
+                }
+            }
             return new JsonResult { Data = dataStudent, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 

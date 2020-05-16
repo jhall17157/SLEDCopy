@@ -130,7 +130,7 @@ namespace CLS_SLE.Controllers
             {
                 courseResult = courseResult.Where(c => c.CourseID == viewModel.CourseID);
             }
-            schedulingViewModel.Courses = courseResult.OrderBy(c => c.CourseName).ToList();
+            schedulingViewModel.Courses = courseResult.OrderBy(c => c.Number).ToList();
             schedulingViewModel.CourseSelectList = new List<SelectListItem>();
             schedulingViewModel.CourseSelectList.Add(new SelectListItem { Text = "All Courses For Semester", Value = "-1" });
 
@@ -158,15 +158,16 @@ namespace CLS_SLE.Controllers
             return View(scheduleSemesterViewModel);
         }
         [HttpPost]
-        public ActionResult CreateSemesterSchedule(SchedulingViewModel viewModel)
+        public ActionResult CreateSemesterSchedule(ScheduleSemesterViewModel viewModel)
         {
             //check model state before continuing
             if(ModelState.IsValid)
             {
+
+                
                 //pull semester info and default start and end dates from view model
                 Semester semester = viewModel.Semester;
-                DateTime StartDate = viewModel.StartDate;
-                DateTime EndDate = viewModel.EndDate;
+                
 
                 //based on selected semester, grab all rubrics from mappings and sections from sections tables
                 var result = from m in db.ProgramAssessmentMappings
@@ -175,6 +176,8 @@ namespace CLS_SLE.Controllers
                              select new
                              {
                                  s.SectionID,
+                                 s.BeginDate,
+                                 s.EndDate,
                                  m.RubricID,                                 
                              };
                 
@@ -189,8 +192,18 @@ namespace CLS_SLE.Controllers
                     SectionRubric sectionRubric = new SectionRubric();
                     sectionRubric.SectionID = item.SectionID;
                     sectionRubric.RubricID = item.RubricID;
-                    sectionRubric.StartDate = StartDate;
-                    sectionRubric.EndDate = EndDate;
+                    if(viewModel.isDates)
+                    {
+                        sectionRubric.StartDate = viewModel.StartDate;
+                        sectionRubric.EndDate = viewModel.EndDate;
+                    }
+                    else
+                    {
+                        sectionRubric.StartDate = item.BeginDate.Value.AddDays((viewModel.StartDays * -1));
+                        sectionRubric.EndDate = item.EndDate.Value.AddDays((viewModel.EndDays));
+
+                    }
+                    
                     sectionRubric.CreatedDateTime = DateTime.Now;
                     if(Session["personID"] != null)
                     {
@@ -293,15 +306,7 @@ namespace CLS_SLE.Controllers
                                      select new SelectListItem { Text = s.SemesterCode + " " + s.Name, Value = s.SemesterID.ToString() })
                                                  .Distinct().ToList();
 
-
-
-
-                //var semesterResult = (from s in db.Semesters
-                //                      join sec in db.Sections on s.SemesterID equals sec.SemesterID
-                //                      where sec.SectionRubrics.Count > 0
-                //                      select new SelectListItem { Text = s.SemesterCode + " " + s.Name, Value = s.SemesterID.ToString() })
-                //                                 .Distinct().ToList();
-                semesterResult = semesterResult.OrderByDescending(s => s.Value).ToList();
+                semesterResult = semesterResult.OrderByDescending(s => s.Text).ToList(); //Sorts by semester Code
                 if (semesterResult.Count > 0)
                 {
                     foreach (SelectListItem item in semesterResult)

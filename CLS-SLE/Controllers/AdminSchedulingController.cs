@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
@@ -22,63 +23,21 @@ namespace CLS_SLE.Controllers
         public ActionResult Index()
         {
             SchedulingViewModel schedulingViewModel = new SchedulingViewModel();
-
-
-
-            //This is the only way I could get the sorting to work properly. Orderby in the query didn't seem to want to work at all. Sorting the 
-            //results directly in the model's list didn't work. Reverse didn't work.
-            //Only option was to create a temp variable, sort that back onto itself, then add all the items to the model. Inelegant but it works.
-            //var semesterResult = (from s in db.Semesters
-            //                      join sec in db.Sections on s.SemesterID equals sec.SemesterID                                  
-            //                      where sec.SectionRubrics.Count > 0
-            //                      select new SelectListItem { Text = s.SemesterCode + " " + s.Name, Value = s.SemesterID.ToString() })
-            //                                 .Distinct().ToList();
-            //semesterResult = semesterResult.OrderByDescending(s => s.Value).ToList();
-            //schedulingViewModel.Semesters = new List<SelectListItem>();
-            //foreach(SelectListItem item in semesterResult)
-            //{
-            //    schedulingViewModel.Semesters.Add(item);
-            //}
             schedulingViewModel.Semesters = GetSemesters(true);
-
             if (TempData["SemesterID"] != null)
             {
                 schedulingViewModel.SemesterID = (int)TempData["ProgramID"];
             }
-
-
-
-
-
             return View(schedulingViewModel);
         }
-        //Called when user selects a semester
-        //[HttpPost]
-        //public ActionResult Index(SchedulingViewModel viewModel)
-        //{
-        //    SchedulingViewModel schedulingViewModel = new SchedulingViewModel();
-        //    //schedulingViewModel.People = db.People;
-        //    schedulingViewModel.Semesters = (from s in db.Semesters
-        //                                     select new SelectListItem { Text = s.SemesterCode + " " + s.Name, Value = s.SemesterID.ToString() })
-        //        .Distinct().ToList();
-        //    schedulingViewModel.Semester =
-        //        db.Semesters.FirstOrDefault(s => s.SemesterID == viewModel.SemesterID);
-        //    //get course ids for all sections in selected semester
-        //    List<short> courseIDs = schedulingViewModel.Semester.Sections.Select(i => i.CourseID).ToList();
 
-        //    schedulingViewModel.Courses = db.Courses.Where(c => courseIDs.Contains(c.CourseID)).ToList();
-
-        //    return View(schedulingViewModel);
-        //}
-
-
+        //Called when user selects a semester 
         [HttpPost]
         public ActionResult Index(SchedulingViewModel viewModel, int page = 1)
         {
             
 
             SchedulingViewModel schedulingViewModel = new SchedulingViewModel();
-
 
             if (TempData["SemesterID"] != null)
             {
@@ -90,42 +49,22 @@ namespace CLS_SLE.Controllers
             }            
             schedulingViewModel.Semester = db.Semesters.FirstOrDefault(s => s.SemesterID == schedulingViewModel.SemesterID);
 
-            //sorted descending
-            //var semesterResult = (from s in db.Semesters
-            //                      join sec in db.Sections on s.SemesterID equals sec.SemesterID
-            //                      where sec.SectionRubrics.Count > 0
-            //                      select new SelectListItem { Text = s.SemesterCode + " " + s.Name, Value = s.SemesterID.ToString() })
-            //                                 .Distinct().ToList();
-            //semesterResult = semesterResult.OrderByDescending(s => s.Value).ToList();
-            //schedulingViewModel.Semesters = new List<SelectListItem>();
-            //foreach (SelectListItem item in semesterResult)
-            //{
-            //    schedulingViewModel.Semesters.Add(item);
-            //}
-            //schedulingViewModel.Semesters = (from s in db.Semesters
-            //                                 orderby s.SemesterID descending
-            //                                 select new SelectListItem
-            //                                 {
-            //                                     Text = s.SemesterCode + " " + s.Name,
-            //                                     Value = s.SemesterID.ToString()
-            //                                 })
-            //                                 .Distinct().ToList();
             schedulingViewModel.Semesters = GetSemesters(true);
             
-            //get course ids for all sections in selected semester and returns as a list 
-            List<short> courseIDs = schedulingViewModel.Semester.Sections.Select(i => i.CourseID).ToList();
+            //get course ids for all sections in selected semester that have assessments scheduled and returns as a list 
+            List<short> courseIDs = schedulingViewModel.Semester.Sections.Where(c => c.SectionRubrics.Count > 0).Select(i => i.CourseID).Distinct().ToList();
             //handles pagination
             schedulingViewModel.PagingInfo = new PagingInfo
             {
                 CurrentPage = page,
                 ItemsPerPage = pageSize,
-                TotalItems = db.Courses
-                .Where(c => courseIDs.Contains(c.CourseID)).Count()
+                TotalItems = courseIDs.Count()
+                
             };
             //get all courses whose courseIDs exist in provided list of courseids
             var courseResult = db.Courses
                 .Where(c => courseIDs.Contains(c.CourseID));
-                //.OrderBy(c => c.CourseName).ToList();
+
             if(viewModel.CourseID != null && viewModel.CourseID != -1)
             {
                 courseResult = courseResult.Where(c => c.CourseID == viewModel.CourseID);
@@ -143,11 +82,9 @@ namespace CLS_SLE.Controllers
                 .Skip((schedulingViewModel.PagingInfo.CurrentPage - 1) * schedulingViewModel.PagingInfo.ItemsPerPage)
                 .Take(schedulingViewModel.PagingInfo.ItemsPerPage).ToList();
 
-
             ModelState.Clear();
             return View(schedulingViewModel);
         }
-
 
         public ActionResult ScheduleSemester()
         {
@@ -157,6 +94,7 @@ namespace CLS_SLE.Controllers
 
             return View(scheduleSemesterViewModel);
         }
+
         [HttpPost]
         public ActionResult CreateSemesterSchedule(ScheduleSemesterViewModel viewModel)
         {
@@ -186,12 +124,14 @@ namespace CLS_SLE.Controllers
                 
                 //build list of schedule entries from result set
                 List<SectionRubric> Schedules = new List<SectionRubric>();
-                                
+                
+                //Iterate through result set
                 foreach (var item in result)
                 {
                     SectionRubric sectionRubric = new SectionRubric();
                     sectionRubric.SectionID = item.SectionID;
                     sectionRubric.RubricID = item.RubricID;
+                    //check if dates are set by specific date or based on section end date
                     if(viewModel.isDates)
                     {
                         sectionRubric.StartDate = viewModel.StartDate;
@@ -215,24 +155,36 @@ namespace CLS_SLE.Controllers
                 //Check if new schedule list is empty
                 if(Schedules.Any())
                 {
-                    foreach(SectionRubric sectionRubric in Schedules)
+                    try
                     {
-                        try
-                        {
-                            db.SectionRubrics.Add(sectionRubric);
-                        }
-                        catch(Exception e)
-                        {
-                            Debug.WriteLine(e.ToString());
-                            Debug.WriteLine("Failed Scheduling information: \n" +
-                                "   SectionID: " + sectionRubric.SectionID + "\n" +
-                                "   RubricID: " + sectionRubric.RubricID + "\n" +
-                                "   Start Date: " + sectionRubric.StartDate.ToString() + "\n" +
-                                "   End Date: " + sectionRubric.EndDate.ToString());
-                            continue;
-                        }
+                        db.SectionRubrics.AddRange(Schedules);
+                    }
+                    catch(Exception e)
+                    {
+                        Debug.WriteLine(e.ToString());
                         
                     }
+                    
+
+                    //foreach(SectionRubric sectionRubric in Schedules)
+                    //{
+                    //    try
+                    //    {
+                            
+                    //        db.SectionRubrics.Add(sectionRubric);
+                    //    }
+                    //    catch(Exception e)
+                    //    {
+                    //        Debug.WriteLine(e.ToString());
+                    //        Debug.WriteLine("Failed Scheduling information: \n" +
+                    //            "   SectionID: " + sectionRubric.SectionID + "\n" +
+                    //            "   RubricID: " + sectionRubric.RubricID + "\n" +
+                    //            "   Start Date: " + sectionRubric.StartDate.ToString() + "\n" +
+                    //            "   End Date: " + sectionRubric.EndDate.ToString());
+                    //        continue;
+                    //    }
+                        
+                    //}
                     db.SaveChanges();
                 }
                 TempData["SemesterID"] = semester.SemesterID;
@@ -328,7 +280,7 @@ namespace CLS_SLE.Controllers
                                       where s.Sections.SelectMany(sec => sec.SectionRubrics).Count() < 1
                                       select new SelectListItem { Text = s.SemesterCode + " " + s.Name, Value = s.SemesterID.ToString() })
                                                  .Distinct().ToList();
-                semesterResult = semesterResult.OrderByDescending(s => s.Value).ToList();
+                semesterResult = semesterResult.OrderByDescending(s => s.Text).ToList();
                 if (semesterResult.Count > 0)
                 {
                     foreach (SelectListItem item in semesterResult)

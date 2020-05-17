@@ -20,7 +20,8 @@ namespace CLS_SLE.ViewModels
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public PagingInfo PagingInfo { get; set; }
-        
+
+        public List<SelectListItem> AssesmentRubrics { get; set; }
 
 
     }

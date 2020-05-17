@@ -78,6 +78,10 @@ namespace CLS_SLE.Controllers
             
 
             SchedulingViewModel schedulingViewModel = new SchedulingViewModel();
+            
+            //Defining Rubrics
+            schedulingViewModel.AssesmentRubrics = (from r in db.AssessmentRubrics
+                                                    select new SelectListItem { Text = r.Name, Value = r.RubricID.ToString() }).Distinct().ToList();
 
 
             if (TempData["SemesterID"] != null)

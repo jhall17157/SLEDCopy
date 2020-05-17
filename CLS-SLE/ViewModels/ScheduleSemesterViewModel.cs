@@ -14,5 +14,8 @@ namespace CLS_SLE.ViewModels
         public Semester Semester { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public int StartDays { get; set; }
+        public int EndDays { get; set; }
+        public bool isDates { get; set; }
     }
 }

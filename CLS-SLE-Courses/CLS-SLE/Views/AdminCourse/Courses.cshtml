@@ -9,7 +9,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs-Courses Dashboard", "ProgramDashboard", "Admin")</li>
         <li class="breadcrumb-item active" aria-current="page">Courses</li>
     </ol>
 </nav>
@@ -29,6 +29,9 @@
                 @Html.Label("Filter by Department:")
             </td>
             <td>
+                &nbsp;
+            </td>
+            <td>
                 @Html.DropDownListFor(Model => Model.DepartmentFilter, new SelectList(Model.DepartmentNames), "No Filter",
                 new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.DepartmentFilter)
@@ -37,6 +40,9 @@
         <tr>
             <td>
                 @Html.Label("Is Banner:")
+            </td>
+            <td>
+                &nbsp;
             </td>
             <td>
                 @Html.DropDownListFor(Model => Model.ERPFilter, new SelectList(Model.ERPList), "No Filter",

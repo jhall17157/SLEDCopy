@@ -9,5 +9,7 @@ namespace CLS_SLE.ViewModels
     public class AddProgramViewModel
     {
         public Program Program { get; set; }
+        public IEnumerable<String> DepartmentNames { get; set; }
+        public String DepartmentSelection { get; set; }
     }
 }

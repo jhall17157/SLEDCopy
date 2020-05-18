@@ -6,19 +6,22 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs-Courses Dashboard", "ProgramDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Departments", "Departments", "AdminDepartment")</li>
         <li class="breadcrumb-item active" aria-current="page">@Model.Department.Name </li>
     </ol>
 </nav>
-<h1> @Model.Department.Name  - <a style="font-size: 85%;" href="/AdminDepartment/EditDepartment?departmentID=@Model.Department.DepartmentID">Edit <i class="fas fa-edit"></i></a> </h1>
+<h1> @Model.Department.Name  - <a style="font-size: 65%;" href="/AdminDepartment/EditDepartment?departmentID=@Model.Department.DepartmentID">Edit <i class="fas fa-edit"></i></a> </h1>
 <br />
 <div class="py-1">
-    <b>Number:</b> @Model.Department.Number
+    <b>Department Number:</b> @Model.Department.Number
 </div>
-<div class="py-1">
-    <b>School:</b> @Model.Department.School.Name
-</div>
+@if (@Model.Department.School != null)
+{
+    <div class="py-1">
+        <b>School:</b> <a href="/AdminSchool/ViewSchool?schoolID=@Model.Department.School.SchoolID">@Model.Department.School.Name</a>
+    </div>
+}
 <div class="py-1">
     <b>Is Active:</b> @Model.Department.IsActive
 </div>
@@ -46,9 +49,8 @@
     <table class="table table-hover table-striped">
         <thead class="thead-dark">
             <tr>
-                <th scope="col" class="h3">Programs</th>
-                <th scope="col" class="text-right"></th>
-                <th scope="col" width="10%"><a href="~/AdminProgram/AddProgram" class="float-right btn btn-success"><i class="fa fa-plus"></i> Add New Program </a></th>
+                <th colspan="2" class="h3">Programs</th>
+                <th colspan="10" class="text-right"></th>
             </tr>
         </thead>
         <tbody>

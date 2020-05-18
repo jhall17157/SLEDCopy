@@ -30,7 +30,9 @@ namespace CLS_SLE.Controllers
                 }
 
                 List<String> semesterList = new List<String>();
-                foreach (var semester in db.Semesters)
+                List<Semester> orderedSemesters = new List<Semester>();
+                orderedSemesters = db.Semesters.OrderByDescending(s => s.SemesterCode).ToList();
+                foreach (var semester in orderedSemesters)
                 {
                     semesterList.Add(semester.Name);
                 }
@@ -351,7 +353,7 @@ namespace CLS_SLE.Controllers
             var dataStudent = new StudentModel();
             var student = db.People.Where(p => p.IdNumber == search).FirstOrDefault();
 
-            if (student == null) { dataStudent.message = "No student has " + id + " as an ID"; dataStudent.success = false; }
+            if (student == null) { dataStudent.message = "No student has " + search + " as an ID"; dataStudent.success = false; }
             else
             {
                 if (db.Enrollments.Where(e => e.SectionID == id).Where(e => e.Person.IdNumber == search).FirstOrDefault() == null)
@@ -361,7 +363,7 @@ namespace CLS_SLE.Controllers
                 }
                 else
                 {
-                    dataStudent.message = "Student is already enrolled or dropped in this section.";
+                    dataStudent.message = "Student "+student.IdNumber+" is already enrolled or dropped in this section.";
                     dataStudent.success = false;
                 }
             }

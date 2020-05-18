@@ -222,50 +222,45 @@ namespace CLS_SLE.Controllers
         /// </returns>
         public ActionResult ViewCourse(int? courseID)
         {
-            var course = new Course();
+            var courseVM = new ViewCourseViewModel();
 
             try
             {
                 if (courseID.HasValue)
                 {
-                    course = db.Courses.FirstOrDefault(c => c.CourseID == courseID.Value);
+                    courseVM.course = db.Courses.FirstOrDefault(c => c.CourseID == courseID.Value);
                 }
 
-                dynamic model = new ExpandoObject();
-                model.CreatorLogin = null;
-                model.ModifierLogin = null;
-
-                if (course.CreatedByLoginID != null)
+                if (courseVM.course.CreatedByLoginID != null)
                 {
                     try
                     {
-                        model.CreatorLogin = (String)db.Users
-                            .Where(u => u.PersonID == course.CreatedByLoginID)
+                        courseVM.CreatorLogin = (String)db.Users
+                            .Where(u => u.PersonID == courseVM.course.CreatedByLoginID)
                             .FirstOrDefault()
                             .Login;
                     }
                     catch
                     {
-                        model.CreatorLogin = "Unknown";
+                        courseVM.CreatorLogin = "Unknown";
                     }
                 }
-                if (course.ModifiedByLoginID != null)
+                if (courseVM.course.ModifiedByLoginID != null)
                 {
                     try
                     {
-                        model.ModifierLogin = (String)db.Users
-                            .Where(u => u.PersonID == course.CreatedByLoginID)
+                        courseVM.ModifierLogin = (String)db.Users
+                            .Where(u => u.PersonID == courseVM.course.CreatedByLoginID)
                             .FirstOrDefault()
                             .Login;
                     }
                     catch
                     {
-                        model.ModifierLogin = "Unknown";
+                        courseVM.ModifierLogin = "Unknown";
                     }
                 }
-                model.course = course;
-                model.courseSections = course.Sections.OrderByDescending(s => s.Semester.SemesterCode);
-                return View(model);
+                courseVM.courseSections = courseVM.course.Sections.OrderByDescending(s => s.Semester.SemesterCode).ToList();
+                return View(courseVM);
             }
             catch
             {
@@ -307,8 +302,13 @@ namespace CLS_SLE.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Adding the PrimaryDepartmentID to the courseVm
-                courseVM.Course.PrimaryDepartmentID = db.Departments.Where(d => d.Name == courseVM.DepartmentSelection).FirstOrDefault().DepartmentID;
+                try
+                {
+                    //Adding the PrimaryDepartmentID to the courseVm
+                    courseVM.Course.PrimaryDepartmentID = db.Departments.Where(d => d.Name == courseVM.DepartmentSelection).FirstOrDefault().DepartmentID;
+                }
+                catch { courseVM.Course.PrimaryDepartmentID = 1; }
+                
                 //Adding created on date
                 courseVM.Course.CreatedDateTime = DateTime.Now;
                 //Adding created by

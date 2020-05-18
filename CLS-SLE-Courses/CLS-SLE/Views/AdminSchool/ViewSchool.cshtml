@@ -6,12 +6,12 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs-Courses Dashboard", "ProgramDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Schools", "Schools", "AdminSchool")</li>
         <li class="breadcrumb-item active" aria-current="page">@Model.school.Name </li>
     </ol>
 </nav>
-<h1> @Model.school.Name  - <a style="font-size: 65%;" href="/AdminSchool/EditSchool?schoolID=@Model.school.SchoolID">Edit <i class="fas fa-edit"></i></a> </h1>
+<h1> @Model.school.Name  - <a style="font-size: 60%;" href="/AdminSchool/EditSchool?schoolID=@Model.school.SchoolID">Edit <i class="fas fa-edit"></i></a> </h1>
 <br />
 <div class="py-1">
     <b>Is Active:</b> @Model.school.IsActive

@@ -9,7 +9,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs-Courses Dashboard", "ProgramDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Schools", "Schools", "AdminSchool")</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)ViewBag.school.Name, "ViewSchool", "AdminSchool", new { schoolID = ViewBag.school.SchoolID }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">Edit</li>
@@ -22,7 +22,7 @@
     <div class="form-group">
         @Html.Label("School Name:")
         @Html.EditorFor(Model => Model.School.Name,
-       new { htmlAttributes = new { @class = "form-control", Value = ViewBag.school.Name } })
+       new { htmlAttributes = new { @class = "form-control", Value = ViewBag.school.Name, required = "required" } })
         @Html.ValidationMessageFor(model => model.School.Name)
     </div>
 

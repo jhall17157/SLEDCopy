@@ -130,16 +130,32 @@ namespace CLS_SLE.Controllers
         //}
 
 
-        //Delete method does not account for confirmation modal. 
-            //Need to bind @Model.MappingID = @pam.ProgramAssessmentID
+        
+
         [ActionName("DeleteMapping")]
-        public ActionResult DeleteMapping(short mapId)
+        [HttpPost]
+        public ActionResult DeleteMapping(MappingViewModel mappingViewModel)
         {
-            ProgramAssessmentMapping pamId = db.ProgramAssessmentMappings.Find(mapId);
-            int programId = pamId.ProgramID;
-            db.ProgramAssessmentMappings.Remove(pamId);
-            db.SaveChanges();
-            TempData["ProgramID"] = (int)programId;
+            if(ModelState.IsValid)
+            {
+                var mapping = db.ProgramAssessmentMappings.Find(mappingViewModel.MappingID);
+                try
+                {
+                    db.ProgramAssessmentMappings.Remove(mapping);
+                    db.SaveChanges();
+                }
+                catch(Exception e)
+                {
+                    Debug.WriteLine(e.ToString());
+                }
+                TempData["ProgramID"] = mappingViewModel.ProgramID;
+
+            }
+            //ProgramAssessmentMapping pamId = db.ProgramAssessmentMappings.Find(mapId);
+            //int programId = pamId.ProgramID;
+            //db.ProgramAssessmentMappings.Remove(pamId);
+            //db.SaveChanges();
+            //TempData["ProgramID"] = (int)programId;
             return RedirectToAction("Index", "AdminMapping");
         }
 

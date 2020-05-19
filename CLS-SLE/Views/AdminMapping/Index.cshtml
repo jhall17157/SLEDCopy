@@ -95,7 +95,14 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-outline-secondary mr-auto" data-dismiss="modal">Cancel</button>
-                                                        <button type="button" class="btn btn-outline-danger float-right" onclick="location.href='@Url.Action("DeleteMapping", "AdminMapping", new { mapId = pam.ProgramAssessmentMappingID})'">Delete</button>
+                                                        @Html.BeginForm("DeleteMapping", "AdminMapping", FormMethod.Post)
+                                                        {
+                                                            @Html.HiddenFor(model => model.MappingID, pam.ProgramAssessmentMappingID);
+                                                            @Html.HiddenFor(model => model.ProgramID);
+                                                            <button type="submit" class="btn btn-outline-danger float-right">Delete</button>
+                                                        }
+
+                                                        @*<button type="button" class="btn btn-outline-danger float-right" onclick="location.href='@Url.Action("DeleteMapping", "AdminMapping", new { mapid = pam.ProgramAssessmentMappingID})'">Delete</button>*@
                                                     </div>
                                                 </div>
                                             </div>

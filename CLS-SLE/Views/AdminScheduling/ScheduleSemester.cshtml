@@ -141,6 +141,8 @@
             $("#courseStartSection").hide();
             $("#hardStartSection").hide();
 
+            $("#rdoCourse").prop("checked", false);
+
             $('.dateOption').on('change', function () {
                 if ($('#rdoCourse').is(':checked')) {
                     $("#courseStartSection").show();

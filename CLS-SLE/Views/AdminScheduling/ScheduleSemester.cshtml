@@ -23,7 +23,7 @@
 
 
 
-@using (Html.BeginForm("Index", "AdminScheduling", FormMethod.Post))
+@using (Html.BeginForm("Index", "AdminScheduling", FormMethod.Post, new { id = "setupForm" }))
 {
 
     <div class="container">
@@ -48,28 +48,90 @@
             <div class="col-6 mt-4 border-bottom">
                 <h3>Set Default Timeframe</h3>
             </div>
+            <div class="col-6"></div>
         </div>
         <div class="row half-indent">
-            <div class="col-6 mt-4">
-                <p class="col-6 mb-1 pl-0">Start Date:</p>
-                <div class="bg-light p-2 col-10 row ml-2 mb-4">
-                    <input type="number" class="form-control col-4 ml-1" />
-                    <span class="col-7 align-self-center">Days Before Section Ends</span>
-                </div>
-                <p class="col-6 mb-1 pl-0">End Date:</p>
-                <div class="bg-light p-2 col-10 row ml-2 mb-4">
-                    <input type="number" class="form-control col-4 ml-1" />
-                    <span class="col-7 align-self-center">Days After Section Ends</span>
+            <div class="ml-4">
+                <p class="col-12 mt-4 mb-1 pl-0">Set Default Timeframe Based On:</p>
+                <div class="col-12">
+                    <div class="form-check">
+                        <input class="form-check-input" id="course" type="radio" name="dateOption" value="course">
+                        <label class="form-check-label" for="course">
+                            Course Start/End Dates
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" id="hard" type="radio" name="dateOption" value="hard">
+                        <label class="form-check-label" for="hard">
+                            Universal Start & End Date
+                        </label>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row half-indent">
-            <div class="col-6 mt-4 text-center">
-                @Html.ActionLink("Cancel", "Index", "AdminScheduling", null, new { @class = "btn btn-outline-dark" })
-                <button class="btn btn-success ml-1">Configure Semester</button>
+            <div id="courseStartSection" class="row col-12">
+                <div class="col-12 mt-4">
+                    <p class="col-6 mb-1 pl-0">Start Date:</p>
+                    <div class="bg-light p-2 col-5 row ml-2 mb-4">
+                        <input type="number" class="form-control col-4 ml-1" />
+                        <span class="col-7 align-self-center">Days Before Section Ends</span>
+                    </div>
+                    <p class="col-6 mb-1 pl-0">End Date:</p>
+                    <div class="bg-light p-2 col-5 row ml-2 mb-4">
+                        <input type="number" class="form-control col-4 ml-1" />
+                        <span class="col-7 align-self-center">Days After Section Ends</span>
+                    </div>
+                </div>
+                <div class="row col-12">
+                    <div class="col-6 half-indent text-center mt-5">
+                        @Html.ActionLink("Cancel", "Index", "AdminScheduling", null, new { @class = "btn btn-outline-dark" })
+                        <button class="btn btn-success ml-1">Configure Semester</button>
+                    </div>
+                </div>
             </div>
-        </div>
+            <div id="hardStartSection" class="row col-12">
+                <div class="col-12 mt-4">
+                    <p class="col-6 mb-1 pl-0">Start Date:</p>
+                    <input type="date" class="form-control col-3 ml-2" />
+  
+                    <p class="col-6 mb-1 pl-0 mt-3">End Date:</p>
+                    <input type="date" class="form-control col-3 ml-2" />
+
+                </div>
+                <div class="row col-12">
+                    <div class="col-6 half-indent text-center mt-5">
+                        @Html.ActionLink("Cancel", "Index", "AdminScheduling", null, new { @class = "btn btn-outline-dark" })
+                        <button class="btn btn-success ml-1">Configure Semester</button>
+                    </div>
+                </div>
+                </div>
+            </div>
     </div>
+
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script>
+
+        $(function () {
+
+                $("#courseStartSection").hide();
+                $("#hardStartSection").hide();
+
+                $('#setupForm input').on('change', function() {
+                    if ($('input[name=dateOption]:checked', '#setupForm').val() == "course") {
+                        $("#courseStartSection").show();
+                        $("#hardStartSection").hide();
+                    }
+                    else if ($('input[name=dateOption]:checked', '#setupForm').val() == "hard") {
+                        $("#courseStartSection").hide();
+                        $("#hardStartSection").show();
+                    }
+                    else {
+                        $("#courseStartSection").show();
+                        $("#hardStartSection").hide();
+                    }
+                });
+            })
+
+    </script>
 
 
     @section Scripts {

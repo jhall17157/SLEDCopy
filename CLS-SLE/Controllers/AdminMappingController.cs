@@ -32,6 +32,7 @@ namespace CLS_SLE.Controllers
             {
                 int programID = (int)TempData["ProgramID"];
                 mappingViewModel.Program = db.Programs.FirstOrDefault(p => p.ProgramID == programID);
+                mappingViewModel.ProgramID = programID;
             }
             return View(mappingViewModel);
         }
@@ -134,12 +135,12 @@ namespace CLS_SLE.Controllers
 
         [ActionName("DeleteMapping")]
         [HttpPost]
-        public ActionResult DeleteMapping(MappingViewModel mappingViewModel)
+        public ActionResult DeleteMapping(MappingViewModel mappingViewModel, int mapID)
         {
-            var id = Request.Params["mapid"];
+            
             if(ModelState.IsValid)
             {
-                var mapping = db.ProgramAssessmentMappings.Where(m => m.ProgramAssessmentMappingID == mappingViewModel.MappingID).FirstOrDefault();
+                var mapping = db.ProgramAssessmentMappings.Where(m => m.ProgramAssessmentMappingID == mapID).FirstOrDefault();
                 try
                 {
                     db.ProgramAssessmentMappings.Remove(mapping);

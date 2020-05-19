@@ -95,10 +95,14 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-outline-secondary mr-auto" data-dismiss="modal">Cancel</button>
-                                                        @using (Html.BeginForm("DeleteMapping", "AdminMapping", FormMethod.Post))
-                                                                {
-                                                                    @Html.HiddenFor(model => model.MappingID, pam.ProgramAssessmentMappingID);
-                                                                    @Html.HiddenFor(model => model.ProgramID);
+                                                        @*@Html.ActionLink("Submit", "DeleteMapping", new { MapID = pam.ProgramAssessmentMappingID, ProgramID = Model.ProgramID})*@
+
+                                                        @using (Html.BeginForm("DeleteMapping", "AdminMapping", new { mapID = pam.ProgramAssessmentMappingID }, FormMethod.Post))
+                                                        {
+                                                            @*@Html.TextBoxFor(model => model.MappingID, null, pam.ProgramAssessmentMappingID)*@
+                                                            @*@Html.HiddenFor(model => model.MappingID, pam.ProgramAssessmentMappingID);*@
+                                                            
+                                                            @Html.HiddenFor(model => model.ProgramID);
                                                             <button type = "submit" class="btn btn-outline-danger float-right">Delete</button>
                                                         }
 
@@ -171,6 +175,7 @@
                 <div class="modal-body p-4">
                     <p class="col-12 mb-1 pl-0">Select Program:</p>
                     <div class="mb-3">
+                        @Model.ProgramID.ToString()
                         @Html.DropDownListFor(p => p.ProgramID, Model.Programs, new
                         {
                             @id = "AddModalDropDownPrograms",
@@ -201,7 +206,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-dark enableModalButton" data-dismiss="modal">Cancel</button>
                     <input type="submit" class="btn" value="submit" />
-                    <button type="submit" class="btn btn-success enableModalButton" value="submit">Add Course</button>
+                    @*<button type="submit" class="btn btn-success enableModalButton" value="submit">Add Course</button>*@
                 </div>
             }
             </div>

@@ -26,7 +26,8 @@ namespace CLS_SLE.Controllers
             schedulingViewModel.Semesters = GetSemesters(true);
             if (TempData["SemesterID"] != null)
             {
-                schedulingViewModel.SemesterID = (int)TempData["ProgramID"];
+                schedulingViewModel.SemesterID = (int)TempData["SemesterID"];
+                return Index(schedulingViewModel, 1);
             }
             return View(schedulingViewModel);
         }
@@ -157,6 +158,7 @@ namespace CLS_SLE.Controllers
                 {
                     try
                     {
+                        //trying addrange instead of foreach to see if db call times are improved
                         db.SectionRubrics.AddRange(Schedules);
                     }
                     catch(Exception e)

@@ -17,10 +17,10 @@ namespace CLS_SLE.ViewModels
         [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]        
         public DateTime EndDate { get; set; }
-        public int StartDays { get; set; }
-        public int EndDays { get; set; }
+        public int? StartDays { get; set; }
+        public int ?EndDays { get; set; }
         public bool isDates { get; set; }
     }
 }

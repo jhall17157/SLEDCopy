@@ -99,19 +99,25 @@ namespace CLS_SLE.Controllers
         [HttpPost]
         public ActionResult CreateSemesterSchedule(ScheduleSemesterViewModel viewModel)
         {
+            //rather than write an entire additional class for conditional validation this is simpler
+            if(!viewModel.isDates)
+            {
+                ModelState["StartDate"].Errors.Clear();
+                ModelState["EndDate"].Errors.Clear();
+            }
             //check model state before continuing
             if(ModelState.IsValid)
             {
 
                 
-                //pull semester info and default start and end dates from view model
-                Semester semester = viewModel.Semester;
+                ////pull semester info and default start and end dates from view model
+                //Semester semester = viewModel.Semester;
                 
 
                 //based on selected semester, grab all rubrics from mappings and sections from sections tables
                 var result = from m in db.ProgramAssessmentMappings
                              join s in db.Sections on m.CourseID equals s.CourseID
-                             where s.SemesterID == semester.SemesterID
+                             where s.SemesterID == viewModel.SemesterID
                              select new
                              {
                                  s.SectionID,
@@ -121,38 +127,46 @@ namespace CLS_SLE.Controllers
                              };
                 
                 //ensure results are distinct to avoid duplicate entries
-                result = result.Distinct();
+                if(result.Any())
+                {
+                    result = result.Distinct();
+                }
+                
                 
                 //build list of schedule entries from result set
                 List<SectionRubric> Schedules = new List<SectionRubric>();
-                
-                //Iterate through result set
-                foreach (var item in result)
+                //check if result is empty
+                if(result.Any() && result != null)
                 {
-                    SectionRubric sectionRubric = new SectionRubric();
-                    sectionRubric.SectionID = item.SectionID;
-                    sectionRubric.RubricID = item.RubricID;
-                    //check if dates are set by specific date or based on section end date
-                    if(viewModel.isDates)
+                    //Iterate through result set
+                    foreach (var item in result)
                     {
-                        sectionRubric.StartDate = viewModel.StartDate;
-                        sectionRubric.EndDate = viewModel.EndDate;
-                    }
-                    else
-                    {
-                        sectionRubric.StartDate = item.BeginDate.Value.AddDays((viewModel.StartDays * -1));
-                        sectionRubric.EndDate = item.EndDate.Value.AddDays((viewModel.EndDays));
+                        SectionRubric sectionRubric = new SectionRubric();
+                        sectionRubric.SectionID = item.SectionID;
+                        sectionRubric.RubricID = item.RubricID;
+                        //check if dates are set by specific date or based on section end date
+                        if (viewModel.isDates)
+                        {
+                            sectionRubric.StartDate = viewModel.StartDate;
+                            sectionRubric.EndDate = viewModel.EndDate;
+                        }
+                        else
+                        {
+                            sectionRubric.StartDate = item.BeginDate.Value.AddDays((viewModel.StartDays.Value * -1));
+                            sectionRubric.EndDate = item.EndDate.Value.AddDays((viewModel.EndDays.Value));
 
-                    }
-                    
-                    sectionRubric.CreatedDateTime = DateTime.Now;
-                    if(Session["personID"] != null)
-                    {
-                        sectionRubric.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-                    }
+                        }
 
-                    Schedules.Add(sectionRubric);
+                        sectionRubric.CreatedDateTime = DateTime.Now;
+                        if (Session["personID"] != null)
+                        {
+                            sectionRubric.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                        }
+
+                        Schedules.Add(sectionRubric);
+                    }
                 }
+               
                 //Check if new schedule list is empty
                 if(Schedules.Any())
                 {
@@ -189,11 +203,14 @@ namespace CLS_SLE.Controllers
                     //}
                     db.SaveChanges();
                 }
-                TempData["SemesterID"] = semester.SemesterID;
+                TempData["SemesterID"] = viewModel.SemesterID;
                 return RedirectToAction("Index", "AdminScheduling");
             }
             else
             {
+                var errors = ModelState.Select(x => x.Value.Errors)
+                           .Where(y => y.Count > 0)
+                           .ToList();
                 return RedirectToAction("Index", "AdminScheduling");
             }            
         }

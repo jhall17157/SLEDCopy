@@ -33,24 +33,33 @@
     </div>
     <div class="form-group">
         @Html.Label("Lead Instructor:")
-        <div class="form-group">
-            @Html.DropDownListFor(Model => Model.LeadInstructorSelection,
-                     new SelectList(Model.LeadInstructorList),
-                     "Select Lead Instructor",
-                     htmlAttributes: new { @class = "form-control" }
-           )
+        <div class="form-group input-group-append">
+            @if (ViewBag.section.Person == null)
+            {
+                <input list="leadInstructors" name="LeadInstructorSelection" id="LeadInstructorSelection" class="form-control" placeholder="Select Lead Instructor" />
+            }
+            else
+            {
+                <input list="leadInstructors" name="LeadInstructorSelection" id="LeadInstructorSelection" class="form-control" value="@ViewBag.LeadInstructor" />
+            }
         </div>
+        <datalist id="leadInstructors">
+            @foreach(string leadInstructorList in Model.LeadInstructorList)
+            {
+                <option value="@leadInstructorList"></option>
+            }
+        </datalist>
     </div>
     <div class="form-group">
         @Html.Label("Begin Date:")
         @Html.EditorFor(Model => Model.Section.BeginDate,
-       new { htmlAttributes = new { @class = "form-control", Value = ViewBag.section.BeginDate } })
+       new { htmlAttributes = new { type="date", @class = "form-control", Value = ViewBag.BeginDate } })
         @Html.ValidationMessageFor(model => model.Section.BeginDate)
     </div>
     <div class="form-group">
         @Html.Label("End Date:")
         @Html.EditorFor(Model => Model.Section.EndDate,
-       new { htmlAttributes = new { @class = "form-control", Value = ViewBag.section.EndDate } })
+       new { htmlAttributes = new { type = "date", @class = "form-control", Value = ViewBag.EndDate } })
         @Html.ValidationMessageFor(model => model.Section.EndDate)
     </div>
     <div class="form-group">

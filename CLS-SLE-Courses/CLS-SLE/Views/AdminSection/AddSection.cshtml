@@ -42,15 +42,27 @@
         @Html.EditorFor(Model => Model.Section.Course.CourseName,
        new { htmlAttributes = new { @class = "form-control", Value = (String)ViewBag.CourseName, @readonly = "readonly" } })
     </div>
+    @*<div class="form-group">
+            @Html.Label("Lead Instructor:")
+            <div class="form-group">
+                @Html.DropDownListFor(Model => Model.LeadInstructorSelection,
+                         new SelectList(Model.LeadInstructorList),
+                         "Select Lead Instructor",
+                         htmlAttributes: new { @class = "form-control" }
+               )
+            </div>
+        </div>*@
     <div class="form-group">
         @Html.Label("Lead Instructor:")
-        <div class="form-group">
-            @Html.DropDownListFor(Model => Model.LeadInstructorSelection,
-                     new SelectList(Model.LeadInstructorList),
-                     "Select Lead Instructor",
-                     htmlAttributes: new { @class = "form-control" }
-           )
+        <div class="form-group input-group-append">
+            <input list="leadInstructors" name="LeadInstructorSelection" id="LeadInstructorSelection" class="form-control" placeholder="Select Lead Instructor" />
         </div>
+        <datalist id="leadInstructors">
+            @foreach(string leadInstructorList in Model.LeadInstructorList)
+            {
+                <option value="@leadInstructorList"></option>
+            }
+        </datalist>
     </div>
     <div class="form-group">
         @Html.Label("Offering Number:")
@@ -61,13 +73,13 @@
     <div class="form-group">
         @Html.Label("Begin Date:")
         @Html.EditorFor(Model => Model.Section.BeginDate,
-       new { htmlAttributes = new { type = "datetime-local", @class = "form-control" } })
+       new { htmlAttributes = new { type = "date", @class = "form-control" } })
         @Html.ValidationMessageFor(model => model.Section.BeginDate)
     </div>
     <div class="form-group">
         @Html.Label("End Date:")
         @Html.EditorFor(Model => Model.Section.EndDate,
-       new { htmlAttributes = new { type = "datetime-local", @class = "form-control" } })
+       new { htmlAttributes = new { type = "date", @class = "form-control" } })
         @Html.ValidationMessageFor(model => model.Section.EndDate)
     </div>
     <div class="form-group">

@@ -67,32 +67,38 @@
             </label>
         </div>*@
                     
-                    @Html.RadioButtonFor(model => model.isDates, "false", new
-                    {
-                        @id = "rdoCourse",
-                        @class = "form-check-input dateOption",
-                        @value = "course"
-                    }) Course Start/End Dates
-                    @Html.RadioButtonFor(model => model.isDates, "true", new
-                    {
-                        @id = "rdoHard",
-                        @class = "form-check-input dateOption",
-                        @value = "hard"
-                    }) Universal Start/End Dates
-
+                    <label class="mb-0">
+                        @Html.RadioButtonFor(model => model.isDates, "false", new
+                        {
+                            @id = "rdoCourse",
+                            @class = "form-check-input dateOption",
+                            @value = "course"
+                        })
+                        Course Start/End Dates
+                    </label>
+                    <br />
+                    <label>
+                        @Html.RadioButtonFor(model => model.isDates, "true", new
+                        {
+                            @id = "rdoHard",
+                            @class = "form-check-input dateOption",
+                            @value = "hard"
+                        }) 
+                        Universal Start/End Dates
+                    </label>
                 </div>
             </div>
             <div id="courseStartSection" class="row col-12">
                 <div class="col-12 mt-4">
                     <p class="col-6 mb-1 pl-0">Start Date:</p>
                     <div class="bg-light p-2 col-5 row ml-2 mb-4">
-                        @Html.TextBoxFor(model => model.StartDays, new { @type = "number", @class = "form-control col-4 ml-1"})
+                        @Html.TextBoxFor(model => model.StartDays, new { @type = "number", @class = "form-control col-4 ml-1", @min = "0" })
                         @*<input type="number" class="form-control col-4 ml-1" />*@
                         <span class="col-7 align-self-center">Days Before Section Ends</span>
                     </div>
                     <p class="col-6 mb-1 pl-0">End Date:</p>
                     <div class="bg-light p-2 col-5 row ml-2 mb-4">
-                        @Html.TextBoxFor(model => model.EndDays, new { @type = "number", @class = "form-control col-4 ml-1" })
+                        @Html.TextBoxFor(model => model.EndDays, new { @type = "number", @class = "form-control col-4 ml-1", @min = "0" })
                         @*<input type="number" class="form-control col-4 ml-1" />*@
                         <span class="col-7 align-self-center">Days After Section Ends</span>
                     </div>
@@ -107,11 +113,13 @@
             <div id="hardStartSection" class="row col-12">
                 <div class="col-12 mt-4">
                     <p class="col-6 mb-1 pl-0">Start Date:</p>
-                    @Html.EditorFor(model => model.StartDate, new { @type = "date", @class = "form-control col-3 ml-2" })
+                    @Html.TextBoxFor(model => model.StartDate, "{0:MM-dd-yyyy}", new { @class = "form-control col-3 ml-2", type = "date"})
+                    @*Html.EditorFor(model => model.StartDate, new { @type = "date", @class = "form-control col-3 ml-2" })*@
                     @*<input type="date" class="form-control col-3 ml-2" />*@
 
                     <p class="col-6 mb-1 pl-0 mt-3">End Date:</p>
-                    @Html.EditorFor(model => model.EndDate, new { @type = "date", @class = "form-control col-3 ml-2" })
+                    @Html.TextBoxFor(model => model.EndDate, "{0:MM-dd-yyyy}", new { @class = "form-control col-3 ml-2", type = "date"})
+                    @*Html.EditorFor(model => model.EndDate, new { @type = "date", @class = "form-control col-3 ml-2" })*@
                     @*<input type="date" class="form-control col-3 ml-2" />*@
 
                 </div>
@@ -148,20 +156,6 @@
                 }
             });
 
-            //$('#setupForm input').on('change', function() {
-            //    if ($('.dateOption:checked', '#setupForm').val() == "course") {
-            //        $("#courseStartSection").show();
-            //        $("#hardStartSection").hide();
-            //    }
-            //    else if ($('.dateOption:checked', '#setupForm').val() == "hard") {
-            //        $("#courseStartSection").hide();
-            //        $("#hardStartSection").show();
-            //    }
-            //    else {
-            //        $("#courseStartSection").show();
-            //        $("#hardStartSection").hide();
-            //    }
-            //});
         })
 
     </script>

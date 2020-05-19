@@ -97,6 +97,7 @@
                                                         <button type="button" class="btn btn-outline-secondary mr-auto" data-dismiss="modal">Cancel</button>
                                                         @Html.BeginForm("DeleteMapping", "AdminMapping", FormMethod.Post)
                                                         {
+                                                        
                                                             @Html.HiddenFor(model => model.MappingID, pam.ProgramAssessmentMappingID);
                                                             @Html.HiddenFor(model => model.ProgramID);
                                                             <button type="submit" class="btn btn-outline-danger float-right">Delete</button>
@@ -168,38 +169,39 @@
             </div>
             @using (Html.BeginForm("CreateMapping", "AdminMapping", FormMethod.Post))
             {
-            <div class="modal-body p-4">
-                <p class="col-12 mb-1 pl-0">Select Program:</p>
-                <div class="mb-3">
-                    @Html.DropDownListFor(p => p.ProgramID, Model.Programs,@*Model.Programs.SingleOrDefault(pr => pr.Value.AsInt() == Model.ProgramID).Text,*@new
-                    {
-                    @id = "AddModalDropDownPrograms",
-                    @class = "form-control selectpicker d-inline col-6"
+                <div class="modal-body p-4">
+                    <p class="col-12 mb-1 pl-0">Select Program:</p>
+                    <div class="mb-3">
+                        @Html.DropDownListFor(p => p.ProgramID, Model.Programs, new
+                        {
+                            @id = "AddModalDropDownPrograms",
+                            @class = "form-control selectpicker d-inline col-6"
 
-                    })
+                        })
+                    </div>
+                    <p class="col-12 mb-1 pl-0">Select Rubric:</p>
+                    <div class="mb-3">
+                        @Html.DropDownListFor(r => r.RubricID, Model.Rubrics, "-Select Rubric-", new
+                           {
+                               @id = "AddModalDropDownRubrics",
+                               @class = "form-control selectpicker d-inline col-6",
+                           })
+                    </div>
+                    <p class="col-12 mb-1 pl-0">Select Course:</p>
+                    <div class="mb-3">
+                        @Html.DropDownListFor(c => c.CourseID, Model.Courses, "-Select Course-", new
+                           {
+                               @id = "AddModalDropDownCourses",
+                               @class = "form-control selectpicker d-inline col-6",
+
+                           })
+                    </div>
+
+
                 </div>
-                <p class="col-12 mb-1 pl-0">Select Rubric:</p>
-                <div class="mb-3">
-                    @Html.DropDownListFor(r => r.RubricID, Model.Rubrics, "-Select Rubric-", new
-                       {
-                           @id = "AddModalDropDownRubrics",
-                           @class = "form-control selectpicker d-inline col-6",
-                       })
-                </div>
-                <p class="col-12 mb-1 pl-0">Select Course:</p>
-                <div class="mb-3">
-                    @Html.DropDownListFor(c => c.CourseID, Model.Courses, "-Select Course-", new
-                       {
-                           @id = "AddModalDropDownCourses",
-                           @class = "form-control selectpicker d-inline col-6",
-
-                       })
-                </div>
-
-
-        </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-dark enableModalButton" data-dismiss="modal">Cancel</button>
+                    <input type="submit" class="btn" value="submit" />
                     <button type="submit" class="btn btn-success enableModalButton" value="submit">Add Course</button>
                 </div>
             }
@@ -237,13 +239,13 @@
                     //$('.rubricButton' + targetClass[targetClass.length - 1]).removeClass("d-inline").addClass("d-none");
                 }
             }
-            $('.addMapButton').on('click', function () {
-                var rubric = $(this).data('rubric');
+            //$('.addMapButton').on('click', function () {
+            //    var rubric = $(this).data('rubric');
                 
-                console.log(rubric);
-                $('.selectpicker #DropDownRubrics').val(rubric);
+            //    console.log(rubric);
+            //    $('.selectpicker #DropDownRubrics').val(rubric);
 
-            });
+            //});
         </script>
 
 

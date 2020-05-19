@@ -136,9 +136,10 @@ namespace CLS_SLE.Controllers
         [HttpPost]
         public ActionResult DeleteMapping(MappingViewModel mappingViewModel)
         {
+            var id = Request.Params["mapid"];
             if(ModelState.IsValid)
             {
-                var mapping = db.ProgramAssessmentMappings.Find(mappingViewModel.MappingID);
+                var mapping = db.ProgramAssessmentMappings.Where(m => m.ProgramAssessmentMappingID == mappingViewModel.MappingID).FirstOrDefault();
                 try
                 {
                     db.ProgramAssessmentMappings.Remove(mapping);

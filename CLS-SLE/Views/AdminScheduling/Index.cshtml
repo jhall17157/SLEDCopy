@@ -19,6 +19,7 @@
 
 @using (Html.BeginForm("Index", "AdminScheduling", new { page = 1 }, FormMethod.Post))
 {
+    
     //Populates a list of semesters to choose from with live search
     <div class="form-inline mt-4 mb-4">
         <div class="row col-7">
@@ -76,7 +77,8 @@
         <p class="col-12 mb-1 pl-0">Semester Functions</p>
         <div class="col-12 ml-0">
             <button type="submit" class="btn btn-success d-inline" data-toggle="modal" data-target="#addCourseModal"><i class="fas fa-plus"></i> Add Course</button>
-            <button type="submit" class="btn btn-warning d-inline ml-1" data-toggle="modal" data-target="#editDueDatesModal"><i class="fas fa-calendar-alt"></i> Edit All Due Dates</button>
+            <button class="btn btn-success d-inline"><i class="fas fa-plus" aria-hidden="true"></i> Add Assessment</button>
+            <!--<button type="submit" class="btn btn-warning d-inline ml-1" data-toggle="modal" data-target="#editDueDatesModal"><i class="fas fa-calendar-alt"></i> Edit All Due Dates</button>-->
         </div>
     </div>
 </div>
@@ -102,8 +104,8 @@
                 foreach (Section sec in Model.Semester.Sections.Where(s => s.CourseID == course.CourseID))
                 {
                     sectionNumber++;
-                    <tr href="#" data-target=".assessmentCollapse@(courseNumber)@(sectionNumber)" class="row pt-1 bg-light border-0 collapse courseCollapse@(courseNumber) accordionClose lowerAccordionTrigger clickable">
-                        <td class="border-0 col-4 align-self-center">
+                    <tr href="#" data-target=".assessmentCollapse@(courseNumber)@(sectionNumber)" class="row pt-1 bg-light border-bottom ml-0 mr-0 collapse courseCollapse@(courseNumber) accordionClose lowerAccordionTrigger clickable">
+                        <td class="border-0 col-4 align-self-center ml-0 mr-0">
                             <h5 class="indent d-inline align-self-center">
                                 <i class="sectionIcon@(sectionNumber) sectionIcon ml-3 mr-3 fas fa-angle-right"></i> CRN: @sec.CRN
                             </h5>
@@ -114,62 +116,7 @@
                         <td class="col-5 text-right border-0 pl-3">
                             <!--<h6>Submission Timeframe</h6>-->
                         </td>
-                        <td class="col-3 border-0 text-right">
-                            <button data-toggle="modal" data-target="#addRubricModal" class="btn btn-success"><i class="fas fa-plus" aria-hidden="true"></i> Add Assessment</button>
-
-
-                            @*AddRubricModal Begins here*@
-                            <div class="modal fade mt-lg-5" id="addRubricModal" tabindex="-1" role="form" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="addRubricModal"> Add Assessment To CRN</h5>
-
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        @using (Html.BeginForm("AddRubricToCRN", "AdminScheduling", FormMethod.Post))
-                                        {
-                                    <div class="modal-body p-4">
-                                        <p class="col-12 mb-1 pl-0 text-left">Select Rubric:</p>
-
-                                        @Html.HiddenFor(s => s.SectionID, sec.SectionID)
-
-                                        <div class="mb-3">
-                                            @Html.DropDownListFor(r => r.RubricID, Model.AssesmentRubrics, "-select rubric-",
-                                           new
-                                                {
-                                                   @id = "AddModalDropdownRubrics",
-                                                   @class = "form-control selectpicker d-inline col-6",
-                                               }
-                                           )
-                                        </div>
-                                        <p class="col-12 mb-1 pl-0 text-left">Earliest Submission:</p>
-                                        <div class="mb-3">
-                                            @Html.TextBoxFor(s => s.StartDate, "{0:mm-dd-yyyy}", new { @class = "form-control selectpicker col-9 ml-2", type = "date" })
-                                        </div>
-
-                                        <p class="col-12 mb-1 pl-0 text-left">Latest Submission:</p>
-                                        <div class="mb-3">
-                                            @Html.TextBoxFor(s => s.EndDate, "{0:mm-dd-yyyy}", new { @class = "form-control selectpicker col-9 ml-2", type = "date"})
-                                        </div>
-
-
-                                    </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-outline-dark enablemodalbutton" data-dismiss="modal">Cancel</button>
-                                                <button type="submit" class="btn btn-success enablemodalbutton" value="submit">Add Assessment</button>
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-
-                        </td>
+                        <td class="col-3 border-0 text-right"><!-- Space For Button Or Header --></td>
                     </tr>
                     if (!sec.SectionRubrics.Any())
                     {
@@ -183,8 +130,8 @@
                     {
                         foreach (SectionRubric sr in sec.SectionRubrics)
                         {
-                            <tr class="row pb-2 border-0 collapse assessmentCollapse@(courseNumber)@(sectionNumber) assessmentCollapse@(courseNumber) accordionClose">
-                                <td class="col-12 pt-3 pb-1"><h5 class="ml-4 mr-4 pb-3 border-bottom">Assessments</h5></td>
+                            <tr class="row pb-2 collapse assessmentCollapse@(courseNumber)@(sectionNumber) assessmentCollapse@(courseNumber) accordionClose">
+                                <td class="col-12 pt-3 pb-1 border-0 "><h5 class="ml-4 mr-4 pb-3 border-bottom">Assessments</h5></td>
                                 <td class="border-0 col-5 align-self-center">
                                     <p class="ml-4">@sr.AssessmentRubric.Name</p>
                                 </td>

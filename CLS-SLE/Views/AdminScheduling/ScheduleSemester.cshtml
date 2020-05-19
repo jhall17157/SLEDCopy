@@ -23,8 +23,9 @@
 
 
 
-@using (Html.BeginForm("Index", "AdminScheduling", FormMethod.Post, new { id = "setupForm" }))
+@using (Html.BeginForm("CreateSemesterSchedule", "AdminScheduling", FormMethod.Post, new { id = "setupForm" }))
 {
+    
 
     <div class="container">
         <div class="row half-indent">
@@ -53,54 +54,80 @@
         <div class="row half-indent">
             <div class="ml-4">
                 <p class="col-12 mt-4 mb-1 pl-0">Set Default Timeframe Based On:</p>
-                <div class="col-12">
-                    <div class="form-check">
-                        <input class="form-check-input" id="course" type="radio" name="dateOption" value="course">
-                        <label class="form-check-label" for="course">
-                            Course Start/End Dates
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" id="hard" type="radio" name="dateOption" value="hard">
-                        <label class="form-check-label" for="hard">
-                            Universal Start & End Date
-                        </label>
-                    </div>
+                <div class="col-12 form-check">
+                    @*<div class="form-check">
+            <input class="form-check-input" id="course" type="radio" name="dateOption" value="course">
+            <label class="form-check-label" for="course">
+                Course Start/End Dates
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" id="hard" type="radio" name="dateOption" value="hard">
+            <label class="form-check-label" for="hard">
+                Universal Start & End Date
+            </label>
+        </div>*@
+                    
+                    <label class="mb-0">
+                        @Html.RadioButtonFor(model => model.isDates, "false", new
+                        {
+                            @id = "rdoCourse",
+                            @class = "form-check-input dateOption",
+                            @value = "course"
+                        })
+                        Course Start/End Dates
+                    </label>
+                    <br />
+                    <label>
+                        @Html.RadioButtonFor(model => model.isDates, "true", new
+                        {
+                            @id = "rdoHard",
+                            @class = "form-check-input dateOption",
+                            @value = "hard"
+                        }) 
+                        Universal Start/End Dates
+                    </label>
                 </div>
             </div>
             <div id="courseStartSection" class="row col-12">
                 <div class="col-12 mt-4">
                     <p class="col-6 mb-1 pl-0">Start Date:</p>
                     <div class="bg-light p-2 col-5 row ml-2 mb-4">
-                        <input type="number" class="form-control col-4 ml-1" />
+                        @Html.TextBoxFor(model => model.StartDays, new { @type = "number", @class = "form-control col-4 ml-1", @min = "0" })
+                        @*<input type="number" class="form-control col-4 ml-1" />*@
                         <span class="col-7 align-self-center">Days Before Section Ends</span>
                     </div>
                     <p class="col-6 mb-1 pl-0">End Date:</p>
                     <div class="bg-light p-2 col-5 row ml-2 mb-4">
-                        <input type="number" class="form-control col-4 ml-1" />
+                        @Html.TextBoxFor(model => model.EndDays, new { @type = "number", @class = "form-control col-4 ml-1", @min = "0" })
+                        @*<input type="number" class="form-control col-4 ml-1" />*@
                         <span class="col-7 align-self-center">Days After Section Ends</span>
                     </div>
                 </div>
                 <div class="row col-12">
                     <div class="col-6 half-indent text-center mt-5">
                         @Html.ActionLink("Cancel", "Index", "AdminScheduling", null, new { @class = "btn btn-outline-dark" })
-                        <button class="btn btn-success ml-1">Configure Semester</button>
+                        <button class="btn btn-success ml-1" type="submit">Configure Semester</button>
                     </div>
                 </div>
             </div>
             <div id="hardStartSection" class="row col-12">
                 <div class="col-12 mt-4">
                     <p class="col-6 mb-1 pl-0">Start Date:</p>
-                    <input type="date" class="form-control col-3 ml-2" />
-  
+                    @Html.TextBoxFor(model => model.StartDate, "{0:MM-dd-yyyy}", new { @class = "form-control col-3 ml-2", type = "date"})
+                    @*Html.EditorFor(model => model.StartDate, new { @type = "date", @class = "form-control col-3 ml-2" })*@
+                    @*<input type="date" class="form-control col-3 ml-2" />*@
+
                     <p class="col-6 mb-1 pl-0 mt-3">End Date:</p>
-                    <input type="date" class="form-control col-3 ml-2" />
+                    @Html.TextBoxFor(model => model.EndDate, "{0:MM-dd-yyyy}", new { @class = "form-control col-3 ml-2", type = "date"})
+                    @*Html.EditorFor(model => model.EndDate, new { @type = "date", @class = "form-control col-3 ml-2" })*@
+                    @*<input type="date" class="form-control col-3 ml-2" />*@
 
                 </div>
                 <div class="row col-12">
                     <div class="col-6 half-indent text-center mt-5">
                         @Html.ActionLink("Cancel", "Index", "AdminScheduling", null, new { @class = "btn btn-outline-dark" })
-                        <button class="btn btn-success ml-1">Configure Semester</button>
+                        <button class="btn btn-success ml-1" type="submit">Configure Semester</button>
                     </div>
                 </div>
                 </div>
@@ -112,24 +139,27 @@
 
         $(function () {
 
-                $("#courseStartSection").hide();
-                $("#hardStartSection").hide();
+            $("#courseStartSection").hide();
+            $("#hardStartSection").hide();
 
-                $('#setupForm input').on('change', function() {
-                    if ($('input[name=dateOption]:checked', '#setupForm').val() == "course") {
-                        $("#courseStartSection").show();
-                        $("#hardStartSection").hide();
-                    }
-                    else if ($('input[name=dateOption]:checked', '#setupForm').val() == "hard") {
-                        $("#courseStartSection").hide();
-                        $("#hardStartSection").show();
-                    }
-                    else {
-                        $("#courseStartSection").show();
-                        $("#hardStartSection").hide();
-                    }
-                });
-            })
+            $("#rdoCourse").prop("checked", false);
+
+            $('.dateOption').on('change', function () {
+                if ($('#rdoCourse').is(':checked')) {
+                    $("#courseStartSection").show();
+                    $("#hardStartSection").hide();
+                }
+                else if ($('#rdoHard').is(':checked')) {
+                    $("#courseStartSection").hide();
+                    $("#hardStartSection").show();
+                }
+                else {
+                    $("#courseStartSection").show();
+                    $("#hardStartSection").hide();
+                }
+            });
+
+        })
 
     </script>
 

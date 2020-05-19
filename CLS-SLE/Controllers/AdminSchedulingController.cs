@@ -42,7 +42,7 @@ namespace CLS_SLE.Controllers
 
             if (TempData["SemesterID"] != null)
             {
-                schedulingViewModel.SemesterID = (int)TempData["ProgramID"];
+                schedulingViewModel.SemesterID = (int)TempData["SemesterID"];
             }
             else
             {
@@ -195,8 +195,7 @@ namespace CLS_SLE.Controllers
             else
             {
                 return RedirectToAction("Index", "AdminScheduling");
-            }
-            
+            }            
         }
 
         [HttpPost]

@@ -15,7 +15,7 @@
 </nav>
 
 
-<h2>Assessment Scheduling</h2>
+<h1>Assessment Scheduling</h1>
 
 @using (Html.BeginForm("Index", "AdminScheduling", new { page = 1 }, FormMethod.Post))
 {
@@ -35,7 +35,7 @@
                 @Html.HiddenFor(p => p.PagingInfo)
 
 
-                <input type="submit" class="btn btn-primary d-inline ml-2" value="Submit" />
+                <input type="submit" class="btn btn-primary d-inline ml-2" value="Search" />
             </div>
         </div>
         <div class="row col-4 border-left">
@@ -73,7 +73,7 @@
 
     </div>
     <div class="row col-5">
-        <p class="col-12 mb-1 pl-0">Edit Functions</p>
+        <p class="col-12 mb-1 pl-0">Semester Functions</p>
         <div class="col-12 ml-0">
             <button type="submit" class="btn btn-success d-inline" data-toggle="modal" data-target="#addCourseModal"><i class="fas fa-plus"></i> Add Course</button>
             <button type="submit" class="btn btn-warning d-inline ml-1" data-toggle="modal" data-target="#editDueDatesModal"><i class="fas fa-calendar-alt"></i> Edit All Due Dates</button>

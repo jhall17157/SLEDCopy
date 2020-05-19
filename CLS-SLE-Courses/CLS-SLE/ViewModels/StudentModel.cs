@@ -12,5 +12,7 @@ namespace CLS_SLE.ViewModels
         public string id { get; set; }
         public int PID { get; set; }
         public string listView { get; set; }
+        public string message { get; set; }
+        public bool success { get; set; }
     }
 }

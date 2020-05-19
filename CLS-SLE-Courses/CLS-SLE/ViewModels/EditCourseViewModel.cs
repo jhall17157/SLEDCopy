@@ -8,7 +8,8 @@ namespace CLS_SLE.ViewModels
 {
     public class EditCourseViewModel
     {
-        public IEnumerable<Department> Departments { get; set; }
+        public IEnumerable<String> DepartmentNames { get; set; }
+        public String DepartmentSelection { get; set; }
         public Course Course { get; set; }
     }
 }

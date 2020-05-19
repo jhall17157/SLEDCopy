@@ -63,9 +63,6 @@ namespace CLS_SLE.Controllers
             else { return RedirectToAction("ProgramSearchError", "AdminProgram", new { search = searchVM.SearchInput }); }
         }
 
-        public ActionResult ProgramSearchError(string search) => View(new ProgramSearchViewModel { SearchInput = search });
-
-
         public JsonResult ProgramAutoComplete(string search)
         {
             List<ProgramSearchModel> resultCourses = db.Programs.Where(p => !p.Name.Contains("Folio180")).Where(p => (p.Name.Contains(search) || p.Number.Contains(search))).Select(p => new ProgramSearchModel
@@ -84,7 +81,17 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view that contains a submission form for adding a new program
         /// </returns>
-        public ActionResult AddProgram() { return View(); }
+        public ActionResult AddProgram() {
+
+            AddProgramViewModel programVM = new AddProgramViewModel();
+
+            List<String> departmentNames = new List<String>();
+
+            foreach (var d in db.Departments) { departmentNames.Add(d.Name); }
+
+            programVM.DepartmentNames = departmentNames;
+
+            return View(programVM); }
 
         // POST: AdminProgram/CreateProgram
         /// <summary>
@@ -100,12 +107,30 @@ namespace CLS_SLE.Controllers
         {
             if (ModelState.IsValid)
             {
+                Department tempDepartment = new Department();
+                try
+                {
+                    //Creating a temp instance of the department matching the selected department
+                    tempDepartment = db.Departments.Where(d => d.Name == programVM.DepartmentSelection).FirstOrDefault();
+                }
+                catch { tempDepartment = db.Departments.Where(d => d.DepartmentID == 1).FirstOrDefault(); }
+                
                 // Adding created on date
                 programVM.Program.CreatedDateTime = DateTime.Now;
                 // Adding created by
                 programVM.Program.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
                 // Adding the new program to the database
                 db.Programs.Add(programVM.Program);
+                db.SaveChanges();
+
+                ProgramDepartment pd = new ProgramDepartment();
+                pd.ProgramID = db.Programs.Find(programVM.Program).ProgramID;
+                pd.DepartmentID = tempDepartment.DepartmentID;
+                // Adding created on date
+                pd.CreatedDateTime = DateTime.Now;
+                // Adding created by
+                pd.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                db.ProgramDepartments.Add(pd);
                 db.SaveChanges();
             } else
             {
@@ -134,57 +159,61 @@ namespace CLS_SLE.Controllers
 
         public ActionResult ViewProgram(int? programID)
         {
-            var program = new Program();
-            //var canEdit = false;
+            var programVM = new ViewProgramViewModel();
+
+            programVM.departments = new List<Department>();
 
             try
             {
                 if (programID.HasValue)
                 {
-                    program = db.Programs.FirstOrDefault(p => p.ProgramID == programID.Value);
-                    /*var permission = db.ProgramSecurities.FirstOrDefault(p => p.ProgramID == programID.Value);
-                    if (permission != null)
-                    {
-                        canEdit = permission.CanEdit == true ? true : false;
-                    }*/
+                    programVM.program = db.Programs.FirstOrDefault(p => p.ProgramID == programID.Value);
                 }
 
-                dynamic model = new ExpandoObject();
-                model.CreatorLogin = null;
-                model.ModifierLogin = null;
-
-                if (program.CreatedByLoginID != null)
+                if (programVM.program.CreatedByLoginID != null)
                 {
                     try
                     {
-                        model.CreatorLogin = (String)db.Users
-                            .Where(u => u.PersonID == program.CreatedByLoginID)
+                        programVM.CreatorLogin = (String)db.Users
+                            .Where(u => u.PersonID == programVM.program.CreatedByLoginID)
                             .FirstOrDefault()
                             .Login;
                     }
                     catch
                     {
-                        model.CreatorLogin = "Unknown";
+                        programVM.CreatorLogin = "Unknown";
                     }
                 }
-                if (program.ModifiedByLoginID != null)
+                if (programVM.program.ModifiedByLoginID != null)
                 {
                     try
                     {
-                        model.ModifierLogin = (String)db.Users
-                            .Where(u => u.PersonID == program.CreatedByLoginID)
+                        programVM.ModifierLogin = (String)db.Users
+                            .Where(u => u.PersonID == programVM.program.CreatedByLoginID)
                             .FirstOrDefault()
                             .Login;
                     }
                     catch
                     {
-                        model.ModifierLogin = "Unknown";
+                        programVM.ModifierLogin = "Unknown";
                     }
                 }
-                model.program = program;
-                //model.canEdit = canEdit;
 
-                return View(model);
+                var programDepartments = db.ProgramDepartments.Where(pd => pd.ProgramID == programID).ToList();
+
+                if (programDepartments !=null)
+                {
+                    foreach (ProgramDepartment pd in programDepartments) {
+                    var tempDepartment = db.Departments.Where(d => d.DepartmentID == pd.DepartmentID).FirstOrDefault();
+                    if (tempDepartment != null)
+                    {
+                        programVM.departments.Add(tempDepartment);
+                    }
+                }
+                }
+                
+
+                return View(programVM);
             }
             catch
             {

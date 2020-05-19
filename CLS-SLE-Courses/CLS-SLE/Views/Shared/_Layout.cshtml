@@ -42,7 +42,12 @@
             </ul>
         </nav>
     </div>
-
+    <div class="alert alert-success alert-dismissible fade hide" role="alert">
+        A simple success alert—check it out!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     @{
         var ControllerName = string.Empty;
         object Controller;
@@ -73,9 +78,6 @@
                     }
                 </ul>
             </div>
-
-
-
         }
         <div class="bg-white" id="MainBody">
             @RenderBody()
@@ -102,12 +104,12 @@
                 $('#logo').css("width", 250);
             }
         }
-
         $(function () {
             initButtons();
             function initButtons() {
                 $('#first, #prev').prop('disabled', $('#start').html() == "1");
                 $('#last, #next').prop('disabled', $('#end').html() == $('#total').html());
+                $("#addDepartmentSubmit").click(function () { console.log('hi');$('.alert').alert(); });
             }
         });
 
@@ -160,19 +162,28 @@
             }
         });
 
-        function addStudentToList() {
+        function addStudentToList(sectionID) {
             $.ajax({
                 url: '@Url.Action("StudentListInfo","AdminSection")',
                 dataType: "json",
-                data: { search: $("#addStudentID").val() },
+                data: { search: $("#addStudentID").val(), id: sectionID },
                 success: function (data) {
-                    $('#tempStudentList').append(
-                        '<li id="' + data.PID + '" value="' + data.id + '">' + data.lastName + ', ' + data.firstName + ' - ' + data.id + '&nbsp' +
-                        '<button onclick="removeStudentFromList(' + data.PID + ')"><i class="fas fa-minus-circle"></i></button>' +
-                        '</li>'
-                    );
+
+                    if (data.success) {
+                        $('#tempStudentList').append(
+                            '<li id="' + data.PID + '"><button onclick="removeStudentFromList(' + data.PID + ')" style="background-color:white; border:0; padding:0" >' +
+                            '<i class="fas fa-minus-circle" style="color:#dc3545"></i></button>	&nbsp;' +
+                            '<span value="' + data.id + '">' + data.lastName + ',  ' + data.firstName + ' - ' + data.id + '</span>' +
+                            '</li>'
+                        );
+                    }
+                    else {
+                        alert(data.message);
+                    }
                 },
-                error: function () { alert("Student with this number does not exsist!"); }
+                error: function (data) {
+                    alert(data.message);
+        }
             });
             $('#addStudentID').val('');
         }

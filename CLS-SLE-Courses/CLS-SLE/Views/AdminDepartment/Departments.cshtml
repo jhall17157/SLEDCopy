@@ -1,4 +1,5 @@
 ﻿@using CLS_SLE.Models;
+@model CLS_SLE.ViewModels.DepartmentsViewModel
 @{
     /**/
 
@@ -8,7 +9,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs-Courses Dashboard", "ProgramDashboard", "Admin")</li>
         <li class="breadcrumb-item active" aria-current="page">Departments</li>
     </ol>
 </nav>
@@ -24,29 +25,26 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (Department department in Model)
+        @foreach (Department department in Model.activeDepartments)
         {
-            if (department.IsActive.Equals(false))
-            {
-                <tr>
-                    @*<td colspan="1">@department.Number <span class="text-danger">(Not Active)</span></td>*@ @*Kevin says-uncomment this line for department number to show*@
-                    <td colspan="2">@department.Name <span class="text-danger">(Not Active)</span></td>
-                    <td class="text-right">
-                        <a href="ViewDepartment?departmentID=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
-                    </td>
-                </tr>
-            }
-            else
-            {
-                <tr>
-                    @*<td colspan="1">@department.Number <span class="text-danger"></span></td>*@ @*Kevin says-uncomment this line for department number to show*@
-                    <td colspan="2">@department.Name</td>
-                    <td class="text-right">
+            <tr>
+                @*<td colspan="1">@department.Number <span class="text-danger"></span></td>*@ @*Kevin says-uncomment this line for department number to show*@
+                <td colspan="2">@department.Name</td>
+                <td class="text-right">
 
-                        <a href="ViewDepartment?departmentID=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
-                    </td>
-                </tr>
-            }
+                    <a href="ViewDepartment?departmentID=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
+                </td>
+            </tr>
+        }
+        @foreach (Department department in Model.inActiveDepartments)
+        {
+            <tr>
+                @*<td colspan="1">@department.Number <span class="text-danger">(Not Active)</span></td>*@ @*Kevin says-uncomment this line for department number to show*@
+                <td colspan="2">@department.Name <span class="text-danger">(Not Active)</span></td>
+                <td class="text-right">
+                    <a href="ViewDepartment?departmentID=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

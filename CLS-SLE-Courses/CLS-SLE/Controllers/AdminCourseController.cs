@@ -222,50 +222,45 @@ namespace CLS_SLE.Controllers
         /// </returns>
         public ActionResult ViewCourse(int? courseID)
         {
-            var course = new Course();
+            var courseVM = new ViewCourseViewModel();
 
             try
             {
                 if (courseID.HasValue)
                 {
-                    course = db.Courses.FirstOrDefault(c => c.CourseID == courseID.Value);
+                    courseVM.course = db.Courses.FirstOrDefault(c => c.CourseID == courseID.Value);
                 }
 
-                dynamic model = new ExpandoObject();
-                model.CreatorLogin = null;
-                model.ModifierLogin = null;
-
-                if (course.CreatedByLoginID != null)
+                if (courseVM.course.CreatedByLoginID != null)
                 {
                     try
                     {
-                        model.CreatorLogin = (String)db.Users
-                            .Where(u => u.PersonID == course.CreatedByLoginID)
+                        courseVM.CreatorLogin = (String)db.Users
+                            .Where(u => u.PersonID == courseVM.course.CreatedByLoginID)
                             .FirstOrDefault()
                             .Login;
                     }
                     catch
                     {
-                        model.CreatorLogin = "Unknown";
+                        courseVM.CreatorLogin = "Unknown";
                     }
                 }
-                if (course.ModifiedByLoginID != null)
+                if (courseVM.course.ModifiedByLoginID != null)
                 {
                     try
                     {
-                        model.ModifierLogin = (String)db.Users
-                            .Where(u => u.PersonID == course.CreatedByLoginID)
+                        courseVM.ModifierLogin = (String)db.Users
+                            .Where(u => u.PersonID == courseVM.course.CreatedByLoginID)
                             .FirstOrDefault()
                             .Login;
                     }
                     catch
                     {
-                        model.ModifierLogin = "Unknown";
+                        courseVM.ModifierLogin = "Unknown";
                     }
                 }
-                model.course = course;
-                model.courseSections = course.Sections.OrderByDescending(s => s.Semester.SemesterCode);
-                return View(model);
+                courseVM.courseSections = courseVM.course.Sections.OrderByDescending(s => s.Semester.SemesterCode).ToList();
+                return View(courseVM);
             }
             catch
             {
@@ -282,7 +277,16 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///     a view that contains a submission form for updating information to a Course
         /// </returns>
-        public ActionResult EditCourse(short courseID) =>View(new EditCourseViewModel{Departments = db.Departments, Course = db.Courses.Where(c => c.CourseID == courseID).FirstOrDefault() });
+        public ActionResult EditCourse(short id) {
+            var editcourseVM = new EditCourseViewModel();
+            editcourseVM.Course = db.Courses.Where(c => c.CourseID == id).FirstOrDefault();
+            List<String> departmentNames = new List<String>();
+
+            foreach (var d in db.Departments) { departmentNames.Add(d.Name); }
+            editcourseVM.DepartmentNames = departmentNames;
+
+            return View(editcourseVM);
+        }
 
         // POST: AdminCourse/CreateCourse
         /// <summary>
@@ -298,8 +302,13 @@ namespace CLS_SLE.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Adding the PrimaryDepartmentID to the courseVm
-                courseVM.Course.PrimaryDepartmentID = db.Departments.Where(d => d.Name == courseVM.DepartmentSelection).FirstOrDefault().DepartmentID;
+                try
+                {
+                    //Adding the PrimaryDepartmentID to the courseVm
+                    courseVM.Course.PrimaryDepartmentID = db.Departments.Where(d => d.Name == courseVM.DepartmentSelection).FirstOrDefault().DepartmentID;
+                }
+                catch { courseVM.Course.PrimaryDepartmentID = 1; }
+                
                 //Adding created on date
                 courseVM.Course.CreatedDateTime = DateTime.Now;
                 //Adding created by
@@ -321,29 +330,48 @@ namespace CLS_SLE.Controllers
             return RedirectToAction("Courses", "AdminCourse", new { page = 1 });
         }
 
-        //[HttpPost]
-        //public ActionResult UpdateCourse(EditCourseViewModel courseVM, short id)
-        //{
-        //    Course editCourse = db.Courses.Where(c => c.CourseID == id).FirstOrDefault();
+        [HttpPost]
+        public ActionResult UpdateCourse(EditCourseViewModel courseVM, short id)
+        {
+            Course editCourse = db.Courses.Where(c => c.CourseID == id).FirstOrDefault();
+            bool departmentChange = false;
+            Department editDepartment = editCourse.Department;
 
-        //    editCourse.Name = departmentVM.Department.Name;
-        //    editCourse.Number = departmentVM.Department.Number;
-        //    editCourse.IsActive = departmentVM.Department.IsActive;
+            if (ModelState.IsValid)
+            {
+                editCourse.CourseName = courseVM.Course.CourseName;
+                editCourse.Number = courseVM.Course.Number;
+                editCourse.IsActive = courseVM.Course.IsActive;
+                editCourse.IsERPCourse = courseVM.Course.IsERPCourse;
+                editCourse.ModifiedDateTime = DateTime.Now;
+                editCourse.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
 
-        //    if (editDepartment.School != departmentVM.Department.School)
-        //    {
-        //        School editSchool = db.Schools.Where(s => s.SchoolID == departmentVM.Department.School.SchoolID).FirstOrDefault();
+                if (courseVM.DepartmentSelection != null)
+                {
+                    editDepartment = db.Departments.Where(d => d.Name == courseVM.DepartmentSelection).FirstOrDefault();
+                    editCourse.Department = editDepartment;
+                    departmentChange = true;
+                }
 
-        //        editSchool.Departments.Add(departmentVM.Department);
-        //        editDepartment.School = departmentVM.Department.School;
-        //    }
+                db.SaveChanges();
 
-        //    editDepartment.ModifiedDateTime = DateTime.Now;
-        //    editDepartment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
 
-        //    db.SaveChanges();
+                if (departmentChange)
+                {
 
-        //    return RedirectToAction("ViewUsers", "Admin");
-        //}
+                    Course tempCourse = db.Courses.Where(c => c.CourseID == id).FirstOrDefault();
+                    editDepartment.Courses.Add(tempCourse);
+                    db.SaveChanges();
+                }
+            }
+            else
+            {
+                logger.Error("Check the entered credentials and retry.");
+                return RedirectToAction("Courses", "AdminCourse", new { page = 1 });
+            }
+;
+
+            return RedirectToAction("Courses", "AdminCourse", new { page = 1 });
+        }
     }
 }

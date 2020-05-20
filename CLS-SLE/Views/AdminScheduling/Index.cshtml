@@ -340,14 +340,14 @@
         if ($($(this).data('target')).hasClass('accordionClose')) {
             $($(this).data('target')).removeClass('collapse').removeClass('accordionClose').addClass('accordionOpen');
             var targetClass = $(this).data('target');
-            $('.courseIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-right").addClass("fas fa-angle-down");
+            $('.courseIcon' + targetClass.substring(15,targetClass[targetClass.length])).removeClass("fas fa-angle-right").addClass("fas fa-angle-down");
             $('.sectionIcon').removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
         }
         else if ($($(this).data('target')).hasClass('accordionOpen')) {
             $($(this).data('target')).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
             var targetClass = $(this).data('target');
-            $('.assessmentCollapse' + targetClass[targetClass.length - 1]).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
-            $('.courseIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+            $('.assessmentCollapse' + targetClass.substring(15,targetClass[targetClass.length])).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
+            $('.courseIcon' + targetClass.substring(15,targetClass[targetClass.length])).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
         }
     }
 

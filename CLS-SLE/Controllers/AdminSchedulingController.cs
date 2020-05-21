@@ -39,6 +39,7 @@ namespace CLS_SLE.Controllers
             
 
             SchedulingViewModel schedulingViewModel = new SchedulingViewModel();
+            schedulingViewModel.Sections = Enumerable.Empty<SelectListItem>().ToList();
             
             //Defining Rubrics
             schedulingViewModel.AssesmentRubrics = (from r in db.AssessmentRubrics
@@ -218,6 +219,26 @@ namespace CLS_SLE.Controllers
                 return RedirectToAction("Index", "AdminScheduling");
             }            
         }
+
+        [HttpGet]
+        [Route("/Controllers/AdminScheduling/GetSections/{semesterID, courseID}")]
+        public ActionResult GetSections(int semesterID, int courseID)
+        {           
+            var sectionResult = db.Sections.Where(s => s.CourseID == courseID && s.SemesterID == semesterID).Select(s => new
+            {
+                Text = s.CRN,
+                Value = s.SectionID,
+                //Text = s.CRN
+            }).Distinct().OrderBy(s => s.Text).ToList();
+            foreach(var item in sectionResult)
+            {
+                Debug.WriteLine(item.Value + " " + item.Text);
+            }
+            
+            
+            return Json(sectionResult, JsonRequestBehavior.AllowGet);
+        }
+        //TODO: Get SectionRubrics
 
         [HttpPost]
         public ActionResult AddRubricToCRN(SchedulingViewModel viewModel)

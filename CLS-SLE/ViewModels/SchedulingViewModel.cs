@@ -1,6 +1,7 @@
 ﻿using CLS_SLE.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace CLS_SLE.ViewModels
@@ -15,6 +16,9 @@ namespace CLS_SLE.ViewModels
         public int? CourseID { get; set; }
         public Course CourseSearch { get; set; }
         public Section Section { get; set; }
+        public List<SelectListItem> Sections { get; set; }
+        public List<SelectListItem> SectionRubrics { get; set; }
+
         public int SectionID { get; set; }
         public int RubricID { get; set; }
 

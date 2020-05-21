@@ -91,7 +91,7 @@
                                                         <i class="ml-auto fas fa-exclamation-triangle fa-2x"></i>
                                                     </div>
                                                     <div class="modal-body">
-                                                        Are you sure you want remove<br /><strong>(@pam.Course.Number) @pam.Course.CourseName</strong> from <strong>@ra.AssessmentRubric.Name</strong>?
+                                                        Are you sure you want remove<br /><strong>(@pam.Course.Number) @pam.Course.CourseName</strong> from<br /><strong>@ra.AssessmentRubric.Name</strong>?
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-outline-secondary mr-auto" data-dismiss="modal">Cancel</button>
@@ -163,24 +163,20 @@
 <div class="modal fade mt-lg-5" id="addModal" tabindex="-1" role="form" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-light">
                 <h5 class="modal-title" id="addModal">Add Course to Rubric</h5>
 
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                    <i class="fas fa-plus"></i>
             </div>
             @using (Html.BeginForm("CreateMapping", "AdminMapping", FormMethod.Post))
             {
                 <div class="modal-body p-4">
                     <p class="col-12 mb-1 pl-0">Select Program:</p>
                     <div class="mb-3">
-                        
                         @Html.DropDownListFor(p => p.ProgramID, Model.Programs, new
                         {
                             @id = "AddModalDropDownPrograms",
                             @class = "form-control selectpicker d-inline col-6"
-
                         })
                     </div>
                     <p class="col-12 mb-1 pl-0">Select Rubric:</p>
@@ -205,7 +201,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-dark enableModalButton" data-dismiss="modal">Cancel</button>
-                    <input type="submit" class="btn" value="submit" />
+                    <input type="submit" class="btn btn-success" value="Add Course" />
                     @*<button type="submit" class="btn btn-success enableModalButton" value="submit">Add Course</button>*@
                 </div>
             }

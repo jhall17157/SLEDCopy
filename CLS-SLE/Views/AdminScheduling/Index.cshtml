@@ -6,6 +6,41 @@
 }
 @Styles.Render("~/Content/bootstrap-select")
 
+<head>
+    <style type="text/css">
+        .loadingmodal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: black;
+            z-index: 99;
+            opacity: 0.8;
+            filter: alpha(opacity=80);            
+            min-height: 100%;
+            width: 100%;
+        }
+        .loading {
+            font-family: Arial;
+            font-size: 10pt;
+            border: 5px solid #67CFF5;
+            width: 200px;
+            height: 100px;
+            display: none;
+            align-content: center;
+            text-align: center;
+            position: fixed;
+            background-color: White;
+            z-index: 999;
+        }
+        .loadingGif{
+            width: 50px;
+            height: 50px;
+            
+            align-content:center;
+            
+        }
+    </style>
+</head>
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -17,7 +52,7 @@
 
 <h1>Assessment Scheduling</h1>
 
-@using (Html.BeginForm("Index", "AdminScheduling", new { page = 1 }, FormMethod.Post))
+@using (Html.BeginForm("Index", "AdminScheduling", new { page = 1 }, FormMethod.Post, new { @id="semesterSelectForm"}))
 {
 
     //Populates a list of semesters to choose from with live search
@@ -36,7 +71,7 @@
                 @Html.HiddenFor(p => p.PagingInfo)
 
 
-                <input type="submit" class="btn btn-primary d-inline ml-2" value="Search" />
+                <input type="submit" class="btn btn-primary d-inline ml-2" value="Search" onclick="btnSemesterIDSubmit"/>
             </div>
         </div>
         <div class="row col-4 border-left">
@@ -47,7 +82,10 @@
         </div>
     </div>
 }
-
+<div class="loading" align="center">
+    Loading. Please Wait. <br/>
+    <img class="loadingGif" src="~/Images/loading.gif" alt=""/>
+</div>
 
 @{
     if (Model.Semester != null)
@@ -69,7 +107,7 @@
                     })
                     @Html.HiddenFor(p => p.PagingInfo)
                     @Html.HiddenFor(s => s.SemesterID)
-                    <button type="submit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>
+                    <button type="submit" class="btn btn-primary d-inline ml-1" value="Submit" ><i class="fas fa-search"></i></button>
                 }
             </div>
 
@@ -378,6 +416,23 @@
 
 <script src="~/Scripts/jquery-3.4.1.js"></script>
 <script>
+
+    function ShowProgress() {
+        setTimeout(function () {
+            var modal = $('<div></div>');
+            modal.addClass("loadingmodal modal");
+            $('body').append(modal);
+            var loading = $(".loading");
+            loading.show();
+            var top = Math.max($(window).height() / 2 - loading[0].offsetHeight / 2, 0);
+            var left = Math.max($(window).width() / 2 - loading[0].offsetWidth / 2, 0);
+            loading.css({ top: top, left: left });
+        }, 200);
+    }
+    $('#semesterSelectForm').change(function (e) {
+        ShowProgress();
+    })
+
     $(function () {
         $('.accordionTrigger').click(toggleAccordion);
         $('.lowerAccordionTrigger').click(toggleLowerAccordion);

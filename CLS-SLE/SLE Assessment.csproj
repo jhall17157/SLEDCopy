@@ -1975,6 +1975,9 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\site.css" />
+    <Content Include="Images\loading.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\waukesha_logo.svg" />
     <Content Include="LICENSE.txt" />
     <Content Include="ApplicationInsights.config">

@@ -11,7 +11,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Programs-Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Courses", "Courses", "AdminCourse", new { page = 1 }, null)</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)(ViewBag.sectionCourse), "ViewCourse", "AdminCourse", new { courseID = ViewBag.section.CourseID }, null)</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)(ViewBag.CRN), "ViewSection", "AdminSection", new { sectionID = ViewBag.section.SectionID }, null)</li>
@@ -33,24 +33,33 @@
     </div>
     <div class="form-group">
         @Html.Label("Lead Instructor:")
-        <div class="form-group">
-            @Html.DropDownListFor(Model => Model.LeadInstructorSelection,
-                     new SelectList(Model.LeadInstructorList),
-                     "Select Lead Instructor",
-                     htmlAttributes: new { @class = "form-control", required = "required" }
-           )
+        <div class="form-group input-group-append">
+            @if (ViewBag.section.Person == null)
+            {
+                <input list="leadInstructors" name="LeadInstructorSelection" id="LeadInstructorSelection" class="form-control" placeholder="Select Lead Instructor" />
+            }
+            else
+            {
+                <input list="leadInstructors" name="LeadInstructorSelection" id="LeadInstructorSelection" class="form-control" value="@ViewBag.LeadInstructor" />
+            }
         </div>
+        <datalist id="leadInstructors">
+            @foreach(string leadInstructorList in Model.LeadInstructorList)
+            {
+                <option value="@leadInstructorList"></option>
+            }
+        </datalist>
     </div>
     <div class="form-group">
         @Html.Label("Begin Date:")
         @Html.EditorFor(Model => Model.Section.BeginDate,
-       new { htmlAttributes = new { @class = "form-control", Value = ViewBag.section.BeginDate, required = "required" } })
+       new { htmlAttributes = new { type="date", @class = "form-control", Value = ViewBag.BeginDate } })
         @Html.ValidationMessageFor(model => model.Section.BeginDate)
     </div>
     <div class="form-group">
         @Html.Label("End Date:")
         @Html.EditorFor(Model => Model.Section.EndDate,
-       new { htmlAttributes = new { @class = "form-control", Value = ViewBag.section.EndDate, required = "required" } })
+       new { htmlAttributes = new { type = "date", @class = "form-control", Value = ViewBag.EndDate } })
         @Html.ValidationMessageFor(model => model.Section.EndDate)
     </div>
     <div class="form-group">

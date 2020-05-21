@@ -11,7 +11,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Programs-Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Courses", "Courses", "AdminCourse", new { page = 1 }, null)</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)(ViewBag.CourseName), "ViewCourse", "AdminCourse", new { courseID = ViewBag.CourseID }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">New Section</li>
@@ -22,14 +22,9 @@
 @using (Html.BeginForm("CreateSection", "AdminSection", new { courseID = ViewBag.CourseID }, FormMethod.Post))
 {
     <div class="form-group">
-        @Html.Label("Course:")
-        @Html.EditorFor(Model => Model.Section.Course.CourseName,
-       new { htmlAttributes = new { @class = "form-control", Value = (String)ViewBag.CourseName, @readonly = "readonly" } })
-    </div>
-    <div class="form-group">
         @Html.Label("CRN:")
         @Html.EditorFor(Model => Model.Section.CRN,
-       new { htmlAttributes = new { @class = "form-control", required = "required" } })
+       new { htmlAttributes = new { @class = "form-control" } })
         @Html.ValidationMessageFor(model => model.Section.CRN)
     </div>
     <div class="form-group">
@@ -38,36 +33,53 @@
             @Html.DropDownListFor(Model => Model.SemesterSelection,
                      new SelectList(Model.SemesterList),
                      "Select Semester",
-                     htmlAttributes: new { @class = "form-control",required = "required" }
+                     htmlAttributes: new { @class = "form-control" }
            )
         </div>
     </div>
     <div class="form-group">
+        @Html.Label("Course:")
+        @Html.EditorFor(Model => Model.Section.Course.CourseName,
+       new { htmlAttributes = new { @class = "form-control", Value = (String)ViewBag.CourseName, @readonly = "readonly" } })
+    </div>
+    @*<div class="form-group">
+            @Html.Label("Lead Instructor:")
+            <div class="form-group">
+                @Html.DropDownListFor(Model => Model.LeadInstructorSelection,
+                         new SelectList(Model.LeadInstructorList),
+                         "Select Lead Instructor",
+                         htmlAttributes: new { @class = "form-control" }
+               )
+            </div>
+        </div>*@
+    <div class="form-group">
         @Html.Label("Lead Instructor:")
-        <div class="form-group">
-            @Html.DropDownListFor(Model => Model.LeadInstructorSelection,
-                     new SelectList(Model.LeadInstructorList),
-                     "Select Lead Instructor",
-                     htmlAttributes: new { @class = "form-control", required = "required" }
-           )
+        <div class="form-group input-group-append">
+            <input list="leadInstructors" name="LeadInstructorSelection" id="LeadInstructorSelection" class="form-control" placeholder="Select Lead Instructor" />
         </div>
+        <datalist id="leadInstructors">
+            @foreach(string leadInstructorList in Model.LeadInstructorList)
+            {
+                <option value="@leadInstructorList"></option>
+            }
+        </datalist>
     </div>
     <div class="form-group">
         @Html.Label("Offering Number:")
         @Html.EditorFor(Model => Model.Section.OfferingNumber,
-       new { htmlAttributes = new { @class = "form-control", required = "required" } })
+       new { htmlAttributes = new { @class = "form-control" } })
         @Html.ValidationMessageFor(model => model.Section.OfferingNumber)
     </div>
     <div class="form-group">
         @Html.Label("Begin Date:")
         @Html.EditorFor(Model => Model.Section.BeginDate,
-       new { htmlAttributes = new { type = "datetime-local", @class = "form-control", required = "required" } })
+       new { htmlAttributes = new { type = "date", @class = "form-control" } })
         @Html.ValidationMessageFor(model => model.Section.BeginDate)
     </div>
     <div class="form-group">
         @Html.Label("End Date:")
         @Html.EditorFor(Model => Model.Section.EndDate,
-       new { htmlAttributes = new { type = "datetime-local", @class = "form-control", required = "required" } })
+       new { htmlAttributes = new { type = "date", @class = "form-control" } })
         @Html.ValidationMessageFor(model => model.Section.EndDate)
     </div>
     <div class="form-group">

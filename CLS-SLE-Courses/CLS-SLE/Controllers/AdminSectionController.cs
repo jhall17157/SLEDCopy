@@ -24,9 +24,36 @@ namespace CLS_SLE.Controllers
             try
             {
                 List<String> leadInstructorList = new List<String>();
-                foreach (var user in db.People)
+                var users = db.Users.ToList();
+                var roles = db.Roles.ToList();
+                var userroles = db.UserRoles.ToList();
+                var query = from ur in userroles
+
+                            join r in roles
+                            on ur.RoleID equals r.RoleID into urr
+                            from urrResult in (from r in urr
+                                                where r.Name == "Faculty"
+                                                select r).DefaultIfEmpty()
+
+                            join u in users
+                            on ur.PersonID equals u.PersonID into uru
+                            from uruResult in uru.DefaultIfEmpty()
+
+                            select new
+                            {
+                                InstructorName = uruResult != null && uruResult.Person != null ? 
+                                                uruResult.Person.FirstName + " " + uruResult.Person.LastName
+                                                : null,
+                                InstructorID = uruResult != null && uruResult.Person != null ? 
+                                                uruResult.Person.IdNumber : null,
+                                PersonRole = urrResult != null ? urrResult.Name : null
+                            };
+                foreach (var result in query)
                 {
-                    leadInstructorList.Add(string.Concat(user.FirstName, " ", user.LastName));
+                    if (result.PersonRole != null && result.InstructorName != null)
+                    {
+                        leadInstructorList.Add(string.Concat(result.InstructorID, " - ", result.InstructorName));
+                    }
                 }
 
                 List<String> semesterList = new List<String>();
@@ -60,14 +87,56 @@ namespace CLS_SLE.Controllers
         {
             try
             {
-                ViewBag.section = db.Sections.Where(s => s.SectionID == sectionID).FirstOrDefault();
-                ViewBag.CRN = ViewBag.section.CRN.ToString();
-                ViewBag.sectionCourse = ViewBag.section.Course.CourseName;
+                Section editSection = db.Sections.Where(s => s.SectionID == sectionID).FirstOrDefault();
+                ViewBag.section = editSection;
+                ViewBag.CRN = editSection.CRN.ToString();
+                ViewBag.sectionCourse = editSection.Course.CourseName;
+                if (editSection.BeginDate != null)
+                {
+                    ViewBag.BeginDate = editSection.BeginDate.Value.ToString("yyyy-MM-dd");
+                }
+                if (editSection.EndDate != null)
+                {
+                    ViewBag.EndDate = editSection.EndDate.Value.ToString("yyyy-MM-dd");
+                }
+                var leadInstructor = editSection.Person;
+                if (leadInstructor != null)
+                {
+                    ViewBag.LeadInstructor = string.Concat(leadInstructor.IdNumber, " - ", leadInstructor.FirstName, " ", leadInstructor.LastName);
+                }
 
                 List<String> leadInstructorList = new List<String>();
-                foreach (var user in db.People)
+                var users = db.Users.ToList();
+                var roles = db.Roles.ToList();
+                var userroles = db.UserRoles.ToList();
+                var query = from ur in userroles
+
+                            join r in roles
+                            on ur.RoleID equals r.RoleID into urr
+                            from urrResult in (from r in urr
+                                               where r.Name == "Faculty"
+                                               select r).DefaultIfEmpty()
+
+                            join u in users
+                            on ur.PersonID equals u.PersonID into uru
+                            from uruResult in uru.DefaultIfEmpty()
+
+                            select new
+                            {
+                                InstructorName = uruResult != null && uruResult.Person != null ?
+                                                uruResult.Person.FirstName + " " + uruResult.Person.LastName
+                                                : null,
+                                InstructorID = uruResult != null && uruResult.Person != null ?
+                                                uruResult.Person.IdNumber : null,
+                                PersonRole = urrResult != null ? urrResult.Name : null
+                            };
+                foreach (var result in query)
                 {
-                    leadInstructorList.Add(string.Concat(user.FirstName, " ", user.LastName));
+                    if (result.PersonRole != null && result.InstructorName != null)
+                    {
+                        leadInstructorList.Add(string.Concat(result.InstructorID, " - ", result.InstructorName));
+
+                    }
                 }
 
                 var model = new UpdateSectionViewModel
@@ -185,9 +254,11 @@ namespace CLS_SLE.Controllers
                                                 .Where(c => c.CourseName == sectionVM.Section.Course.CourseName)
                                                 .FirstOrDefault();
                     if (sectionVM.LeadInstructorSelection != null)
-                    { 
+                    {
+                        sectionVM.LeadInstructorSelection = sectionVM.LeadInstructorSelection
+                                                                    .Substring(0, sectionVM.LeadInstructorSelection.IndexOf("-") - 1);
                         sectionVM.Section.Person = db.People
-                                                     .Where(p => string.Concat(p.FirstName, " ", p.LastName) == sectionVM.LeadInstructorSelection)
+                                                     .Where(p => p.IdNumber == sectionVM.LeadInstructorSelection)
                                                      .FirstOrDefault();
                     }
                     if (sectionVM.SemesterSelection != null)
@@ -253,9 +324,14 @@ namespace CLS_SLE.Controllers
             try
             {
                 Section editSection = db.Sections.Where(s => s.SectionID == sectionID).FirstOrDefault();
-                sectionVM.Section.Person = db.People
-                                                .Where(p => string.Concat(p.FirstName, " ", p.LastName).Equals(sectionVM.LeadInstructorSelection))
-                                                .FirstOrDefault();
+                if (sectionVM.LeadInstructorSelection != null)
+                {
+                    sectionVM.LeadInstructorSelection = sectionVM.LeadInstructorSelection
+                                                                .Substring(0, sectionVM.LeadInstructorSelection.IndexOf("-") - 1);
+                    sectionVM.Section.Person = db.People
+                                                 .Where(p => p.IdNumber == sectionVM.LeadInstructorSelection)
+                                                 .FirstOrDefault();
+                }
 
                 if (ModelState.IsValid)
                 {

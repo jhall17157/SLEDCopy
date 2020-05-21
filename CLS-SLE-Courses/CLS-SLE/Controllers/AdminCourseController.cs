@@ -31,7 +31,7 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view of courses that contains a list of courses ordered by the course's Number
         /// </returns>
-        public ActionResult Courses(int page, string search, string department, string ERP)
+        public ActionResult Courses(int page, string search, string department, string ERP, string updatedMessage, string addedName)
         {
             CoursesViewModel coursesViewModel = new CoursesViewModel();
 
@@ -154,6 +154,12 @@ namespace CLS_SLE.Controllers
             coursesViewModel.ERPFilter = ERP;
 
             coursesViewModel.DepartmentFilter = department;
+            if (updatedMessage != null)
+            {
+                coursesViewModel.updatedMessage = updatedMessage;
+                if (coursesViewModel.updatedMessage == "success") { coursesViewModel.alertMessage = (addedName + " was added!"); }
+                else { coursesViewModel.alertMessage = (addedName + " already exsists!"); }
+            }
 
             return View(coursesViewModel);
         }
@@ -220,7 +226,7 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///     a view that contains the details of the course with a CourseID matching 'id'
         /// </returns>
-        public ActionResult ViewCourse(int? courseID)
+        public ActionResult ViewCourse(int? courseID, string updatedMessage)
         {
             var courseVM = new ViewCourseViewModel();
 
@@ -260,6 +266,12 @@ namespace CLS_SLE.Controllers
                     }
                 }
                 courseVM.courseSections = courseVM.course.Sections.OrderByDescending(s => s.Semester.SemesterCode).ToList();
+                if (updatedMessage != null)
+                {
+                    courseVM.updatedMessage = updatedMessage;
+                    if (courseVM.updatedMessage == "success") { courseVM.alertMessage = (courseVM.course.CourseName + " was updated!"); }
+                    else { courseVM.alertMessage = (courseVM.course.CourseName + " was not updated!"); }
+                }
                 return View(courseVM);
             }
             catch
@@ -300,34 +312,38 @@ namespace CLS_SLE.Controllers
         [HttpPost]
         public ActionResult CreateCourse(AddCourseViewModel courseVM)
         {
-            if (ModelState.IsValid)
+            if (db.Courses.Where(c => c.CourseName == courseVM.Course.CourseName).FirstOrDefault() == null)
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    //Adding the PrimaryDepartmentID to the courseVm
-                    courseVM.Course.PrimaryDepartmentID = db.Departments.Where(d => d.Name == courseVM.DepartmentSelection).FirstOrDefault().DepartmentID;
+                    try
+                    {
+                        //Adding the PrimaryDepartmentID to the courseVm
+                        courseVM.Course.PrimaryDepartmentID = db.Departments.Where(d => d.Name == courseVM.DepartmentSelection).FirstOrDefault().DepartmentID;
+                    }
+                    catch { courseVM.Course.PrimaryDepartmentID = 1; }
+
+                    //Adding created on date
+                    courseVM.Course.CreatedDateTime = DateTime.Now;
+                    //Adding created by
+                    //TODO add created by
+                    courseVM.Course.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                    //Adding the new course to the database
+                    db.Courses.Add(courseVM.Course);
+                    db.SaveChanges();
                 }
-                catch { courseVM.Course.PrimaryDepartmentID = 1; }
-                
-                //Adding created on date
-                courseVM.Course.CreatedDateTime = DateTime.Now;
-                //Adding created by
-                //TODO add created by
-                courseVM.Course.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-                //Adding the new course to the database
-                db.Courses.Add(courseVM.Course);
-                db.SaveChanges();
+                else
+                {
+                    //redirects user to the submission form if failed to add course
+                    //TODO figure out how to add form errors
+                    return RedirectToAction("AddCourse", "AdminCourse");
+                }
+                //logging that a new course was added
+                logger.Info("Course id {Id} added", courseVM.Course.CourseID);
+                //redirects user to the list of courses if successfully added new 
+                return RedirectToAction("Courses", "AdminCourse", new { page = 1, updatedMessage = "success", addedName = courseVM.Course.CourseName });
             }
-            else
-            {
-                //redirects user to the submission form if failed to add course
-                //TODO figure out how to add form errors
-                return RedirectToAction("AddCourse", "AdminCourse");
-            }
-            //logging that a new course was added
-            logger.Info("Course id {Id} added", courseVM.Course.CourseID);
-            //redirects user to the list of courses if successfully added new 
-            return RedirectToAction("Courses", "AdminCourse", new { page = 1 });
+            else { return RedirectToAction("Courses", "AdminCourse", new { page = 1, updatedMessage = "error", addedName = courseVM.Course.CourseName }); }
         }
 
         [HttpPost]
@@ -367,11 +383,11 @@ namespace CLS_SLE.Controllers
             else
             {
                 logger.Error("Check the entered credentials and retry.");
-                return RedirectToAction("Courses", "AdminCourse", new { page = 1 });
+                return RedirectToAction("ViewCourse", "AdminCourse", new { courseID = id, updatedMessage = "error" });
             }
 ;
 
-            return RedirectToAction("Courses", "AdminCourse", new { page = 1 });
+            return RedirectToAction("ViewCourse", "AdminCourse", new { courseID = id, updatedMessage = "success" });
         }
     }
 }

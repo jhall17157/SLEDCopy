@@ -74,3 +74,12 @@
             </tbody>*@
     </table>
 </div>
+@if(Model.updatedMessage != null)
+{
+<script type="text/javascript">
+    console.log('here');
+        window.onload = function () {
+            swal("@Model.alertMessage", "", "@Model.updatedMessage");
+            };
+</script>
+}

@@ -21,7 +21,7 @@
     <table class="table table-hover table-striped">
         <thead class="thead-dark">
             <tr>
-                <th >Section CRN</th>
+                <th>Section CRN</th>
                 <th class="text-left">Semester</th>
                 <th class="text-left">Lead Instructor</th>
                 <th class="text-right"><a href="~/AdminSection/AddSection?courseID=@Model.course.CourseID" class="float-right btn btn-success"><i class="fa fa-plus"></i> Add New Section </a></th>
@@ -60,3 +60,12 @@
         </tbody>
     </table>
 </div>
+@if (Model.updatedMessage != null)
+{
+    <script type="text/javascript">
+    console.log('here');
+        window.onload = function () {
+            swal("@Model.alertMessage", "", "@Model.updatedMessage");
+            };
+    </script>
+}

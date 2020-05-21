@@ -9,6 +9,8 @@ namespace CLS_SLE.ViewModels
     public class ViewCourseViewModel
     {
         public Course course{ get; set; }
+        public string updatedMessage { get; set; }
+        public string alertMessage { get; set; }
         public string CreatorLogin { get; set; }
         public string ModifierLogin { get; set; }
         public List<Section> courseSections { get; set; }

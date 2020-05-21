@@ -25,7 +25,7 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view of programs that contains a list of programs ordered by the program's name
         /// </returns>
-        public ActionResult Programs(int page, string search)
+        public ActionResult Programs(int page, string search, string updatedMessage, string addedName)
         {
             ProgramListViewModel programsViewModel = new ProgramListViewModel();
 
@@ -47,6 +47,13 @@ namespace CLS_SLE.Controllers
             programsViewModel.PagingInfo = new PagingInfo { CurrentPage = page, ItemsPerPage = PageSize, TotalItems = ResultsCount };
 
             programsViewModel.SearchInput = search;
+
+            if (updatedMessage != null)
+            {
+                programsViewModel.updatedMessage = updatedMessage;
+                if (programsViewModel.updatedMessage == "success") { programsViewModel.alertMessage = (addedName + " was added!"); }
+                else { programsViewModel.alertMessage = (addedName+" already exsists!"); }
+            }
 
             return View(programsViewModel);
         }
@@ -105,43 +112,49 @@ namespace CLS_SLE.Controllers
         [HttpPost]
         public ActionResult CreateProgram(AddProgramViewModel programVM)
         {
-            if (ModelState.IsValid)
+            if(db.Programs.Where(p=>p.Name==programVM.Program.Name).FirstOrDefault() == null)
             {
-                Department tempDepartment = new Department();
-                try
+                if (ModelState.IsValid)
                 {
-                    //Creating a temp instance of the department matching the selected department
-                    tempDepartment = db.Departments.Where(d => d.Name == programVM.DepartmentSelection).FirstOrDefault();
-                }
-                catch { tempDepartment = db.Departments.Where(d => d.DepartmentID == 1).FirstOrDefault(); }
-                
-                // Adding created on date
-                programVM.Program.CreatedDateTime = DateTime.Now;
-                // Adding created by
-                programVM.Program.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-                // Adding the new program to the database
-                db.Programs.Add(programVM.Program);
-                db.SaveChanges();
+                    Department tempDepartment = new Department();
+                    try
+                    {
+                        //Creating a temp instance of the department matching the selected department
+                        tempDepartment = db.Departments.Where(d => d.Name == programVM.DepartmentSelection).FirstOrDefault();
+                    }
+                    catch { tempDepartment = db.Departments.Where(d => d.DepartmentID == 1).FirstOrDefault(); }
 
-                ProgramDepartment pd = new ProgramDepartment();
-                pd.ProgramID = db.Programs.Find(programVM.Program).ProgramID;
-                pd.DepartmentID = tempDepartment.DepartmentID;
-                // Adding created on date
-                pd.CreatedDateTime = DateTime.Now;
-                // Adding created by
-                pd.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-                db.ProgramDepartments.Add(pd);
-                db.SaveChanges();
-            } else
-            {
-                //redirects user to the submission form if failed to add school
-                //TODO figure out how to add form errors
-                return RedirectToAction("AddProgram", "AdminProgram");
+                    // Adding created on date
+                    programVM.Program.CreatedDateTime = DateTime.Now;
+                    // Adding created by
+                    programVM.Program.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                    // Adding the new program to the database
+                    db.Programs.Add(programVM.Program);
+                    db.SaveChanges();
+
+                    ProgramDepartment pd = new ProgramDepartment();
+                    pd.Program = programVM.Program;
+                    pd.DepartmentID = tempDepartment.DepartmentID;
+                    // Adding created on date
+                    pd.CreatedDateTime = DateTime.Now;
+                    // Adding created by
+                    pd.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                    db.ProgramDepartments.Add(pd);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    //redirects user to the submission form if failed to add school
+                    //TODO figure out how to add form errors
+                    return RedirectToAction("AddProgram", "AdminProgram");
+                }
+                //logging that a new program was added
+                logger.Info("Program id {Id} added", programVM.Program.ProgramID);
+                //redirects user to the list of programs if successfully added new program
+                return RedirectToAction("Programs", "AdminProgram", new { page = 1, updatedMessage = "success", addedName = programVM.Program.Name });
             }
-            //logging that a new program was added
-            logger.Info("Program id {Id} added", programVM.Program.ProgramID);
-            //redirects user to the list of programs if successfully added new program
-            return RedirectToAction("Programs", "AdminProgram", new { page = 1 });
+            else { return RedirectToAction("Programs", "AdminProgram", new { page = 1, updatedMessage = "error", addedName = programVM.Program.Name }); }
+           
         }
 
         public ActionResult EditProgram(short programID)
@@ -157,10 +170,11 @@ namespace CLS_SLE.Controllers
 
         //public ActionResult ViewProgram(short id) { return View(db.Programs.Where(p => p.ProgramID == id).FirstOrDefault()); }
 
-        public ActionResult ViewProgram(int? programID)
+        public ActionResult ViewProgram(int? programID, string updatedMessage)
         {
             var programVM = new ViewProgramViewModel();
 
+            
             programVM.departments = new List<Department>();
 
             try
@@ -211,7 +225,13 @@ namespace CLS_SLE.Controllers
                     }
                 }
                 }
-                
+                if (updatedMessage != null)
+                {
+                    programVM.updatedMessage = updatedMessage;
+                    if (programVM.updatedMessage == "success") { programVM.alertMessage = (programVM.program.Name + " was updated!"); }
+                    else { programVM.alertMessage = (programVM.program.Name + " was not updated!"); }
+                }
+
 
                 return View(programVM);
             }
@@ -243,12 +263,12 @@ namespace CLS_SLE.Controllers
             {
                 //redirects user to the submission form if failed to add school
                 //TODO figure out how to add form errors
-                return RedirectToAction("AddProgram", "AdminProgram");
+                return RedirectToAction("ViewProgram", "AdminProgram", new { programID = programID, updatedMessage = "error" });
             }
-            //logging that a new program was added
+            //logging that a the program was modified
             logger.Info("Program id {Id} modified", editProgram.ProgramID);
             //redirects user to the programs view if successfully added new program
-            return RedirectToAction("Programs", "AdminProgram", new { page = 1 });
+            return RedirectToAction("ViewProgram", "AdminProgram", new { programID = programID, updatedMessage = "success" });
         }
     }
 }

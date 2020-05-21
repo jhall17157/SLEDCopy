@@ -23,11 +23,17 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view of schools that contains a list of schools ordered by the school's name
         /// </returns>
-        public ActionResult Schools() {
+        public ActionResult Schools(string updatedMessage, string addedName) {
 
             SchoolsViewModel schoolVM = new SchoolsViewModel();
             schoolVM.activeSchools = db.Schools.Where(s => s.IsActive == true).OrderBy(s => s.Name).ToList();
             schoolVM.inActiveSchools = db.Schools.Where(s => s.IsActive != true).OrderBy(s => s.Name).ToList();
+            if (updatedMessage != null)
+            {
+                schoolVM.updatedMessage = updatedMessage;
+                if (schoolVM.updatedMessage == "success") { schoolVM.alertMessage = (addedName + " was added!"); }
+                else { schoolVM.alertMessage = (addedName + " already exsists!"); }
+            }
             return View(schoolVM);
         }
         
@@ -54,26 +60,30 @@ namespace CLS_SLE.Controllers
         [HttpPost]
         public ActionResult CreateSchool(AddSchoolViewModel schoolVM)
         {
-            if (ModelState.IsValid)
+            if (db.Schools.Where(s => s.Name == schoolVM.School.Name).FirstOrDefault() == null)
             {
-                //Adding created on date
-                schoolVM.School.CreatedDateTime = DateTime.Now;
-                //Adding created by
-                schoolVM.School.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-                //Adding the new school to the database
-                db.Schools.Add(schoolVM.School);
-                db.SaveChanges();
+                if (ModelState.IsValid)
+                {
+                    //Adding created on date
+                    schoolVM.School.CreatedDateTime = DateTime.Now;
+                    //Adding created by
+                    schoolVM.School.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                    //Adding the new school to the database
+                    db.Schools.Add(schoolVM.School);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    //redirects user to the submission form if failed to add school
+                    //TODO figure out how to add form errors
+                    return RedirectToAction("AddSchool", "AdminSchool");
+                }
+                //logging that a new school was added
+                logger.Info("School id {Id} added", schoolVM.School.SchoolID);
+                //redirects user to the list of schools if successfully added new school
+                return RedirectToAction("Schools", "AdminSchool", new { updatedMessage = "success", addedName = schoolVM.School.Name });
             }
-            else
-            {
-                //redirects user to the submission form if failed to add school
-                //TODO figure out how to add form errors
-                return RedirectToAction("AddSchool", "AdminSchool");
-            }
-            //logging that a new school was added
-            logger.Info("School id {Id} added", schoolVM.School.SchoolID);
-            //redirects user to the list of schools if successfully added new school
-            return RedirectToAction("Schools", "AdminSchool");
+            else { return RedirectToAction("Schools", "AdminSchool", new {updatedMessage = "error", addedName = schoolVM.School.Name }); }
         }
 
         public ActionResult EditSchool(short schoolID)
@@ -86,7 +96,7 @@ namespace CLS_SLE.Controllers
             return View(model);
         }
 
-        public ActionResult ViewSchool(int? schoolId)
+        public ActionResult ViewSchool(int? schoolId, string updatedMessage)
         {
             var school = new School();
 
@@ -112,6 +122,13 @@ namespace CLS_SLE.Controllers
                     catch { model.ModifierLogin = "Unknown"; }
                 }
                 model.school = school;
+                if (updatedMessage != null)
+                {
+                    model.updatedMessage = updatedMessage;
+                    if (model.updatedMessage == "success") { model.alertMessage = (model.school.Name + " was updated!"); }
+                    else { model.alertMessage = (model.school.Name + " was not updated!"); }
+                }
+                else { model.updatedMessage = null; }
 
                 return View(model);
             }
@@ -143,12 +160,12 @@ namespace CLS_SLE.Controllers
             {
                 //redirects user to the submission form if failed to add school
                 //TODO figure out how to add form errors
-                return RedirectToAction("EditSchool", "AdminSchool",schoolID = schoolID);
+                return RedirectToAction("ViewSchool", "AdminSchool", new { schoolID = schoolID, updatedMessage = "error" });
             }
             //logging that a new school was added
             logger.Info("School id {Id} modified", editSchool.SchoolID);
             //redirects user to the school view if successfully added new school
-            return RedirectToAction("Schools", "AdminSchool");
+            return RedirectToAction("ViewSchool", "AdminSchool", new { schoolID = schoolID, updatedMessage = "success" });
         }
     }
 }

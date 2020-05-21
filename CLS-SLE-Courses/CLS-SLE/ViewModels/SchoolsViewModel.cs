@@ -10,5 +10,7 @@ namespace CLS_SLE.ViewModels
     {
         public List<School> activeSchools { get; set; }
         public List<School> inActiveSchools { get; set; }
+        public string updatedMessage { get; set; }
+        public string alertMessage { get; set; }
     }
 }

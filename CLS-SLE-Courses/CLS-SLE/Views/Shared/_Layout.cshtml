@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css?family=Karla" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     @*@Styles.Render("~/Content/css")*@
     @Scripts.Render("~/bundles/modernizr")
 
@@ -178,11 +179,11 @@
                         );
                     }
                     else {
-                        alert(data.message);
+                        swal("Oops!", data.message, "error");
                     }
                 },
                 error: function (data) {
-                    alert(data.message);
+                    swal("Oops!", data.message, "error");
         }
             });
             $('#addStudentID').val('');

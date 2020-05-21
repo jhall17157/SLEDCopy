@@ -56,16 +56,22 @@
 }
 <br />
 @if (Model.SearchInput != null)
-{<br /><h2>@Model.PagingInfo.TotalItems Search Results for "@Model.SearchInput"</h2>}
+{
+    <br />
+    <h2>@Model.PagingInfo.TotalItems Search Results for "@Model.SearchInput"</h2>
+}
 @if (Model.DepartmentFilter != null)
-{<br /><h2>Form @Model.DepartmentFilter</h2>}
+{
+    <br />
+    <h2>Form @Model.DepartmentFilter</h2>
+}
 <br />
 <table class="table table-hover">
     <thead class="thead-dark">
         <tr>
             <th colspan="9">Course</th>
-            <th colspan="2" ></th>
-            <th colspan="1" ><a class="float-right" href="/AdminCourse/AddCourse"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Course</button></a></th>
+            <th colspan="2"></th>
+            <th colspan="1"><a class="float-right" href="/AdminCourse/AddCourse"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Course</button></a></th>
         </tr>
     </thead>
     <tbody>
@@ -87,7 +93,7 @@
                 {
                     <tr>
                         <td colspan="9">@course.Number &nbsp;&nbsp;@course.CourseName &nbsp;<span class="text-danger">(Not Active)</span></td>
-                        <td colspan="2" ></td>
+                        <td colspan="2"></td>
                         <td colspan="1" class="text-right">
                             <a href="ViewCourse?courseId=@course.CourseID"><button type="button" class="btn btn-primary">View</button></a>
                         </td>
@@ -151,5 +157,13 @@
         </a>
     </div>
 </div>
-
+@if (Model.updatedMessage != null)
+{
+    <script type="text/javascript">
+    console.log('here');
+        window.onload = function () {
+            swal("@Model.alertMessage", "", "@Model.updatedMessage");
+            };
+    </script>
+}
 

@@ -28,7 +28,10 @@
 }
 <br />
 @if (Model.SearchInput != null)
-{<br /><h2>@Model.PagingInfo.TotalItems Search Results for "@Model.SearchInput"</h2>}
+{
+    <br />
+    <h2>@Model.PagingInfo.TotalItems Search Results for "@Model.SearchInput"</h2>
+}
 <br />
 <table class="table table-hover">
     <thead class="thead-dark">
@@ -96,3 +99,12 @@
         </a>
     </div>
 </div>
+@if (Model.updatedMessage != null)
+{
+    <script type="text/javascript">
+    console.log('here');
+        window.onload = function () {
+            swal("@Model.alertMessage", "", "@Model.updatedMessage");
+            };
+    </script>
+}

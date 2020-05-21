@@ -10,6 +10,8 @@ namespace CLS_SLE.ViewModels
     {
         public IEnumerable<Course> Courses { get; set; }
         public IEnumerable<String> DepartmentNames { get; set; }
+        public string updatedMessage { get; set; }
+        public string alertMessage { get; set; }
         public List<String> ERPList { get; set; }
         public PagingInfo PagingInfo { get; set; }
         public string SearchInput { get; set; }

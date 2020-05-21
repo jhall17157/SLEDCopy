@@ -28,11 +28,17 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view of departments that contains a list of departments ordered by the department's departmentID
         /// </returns>
-        public ActionResult Departments() {
+        public ActionResult Departments(string updatedMessage, string addedName) {
 
             DepartmentsViewModel departmentVM = new DepartmentsViewModel();
             departmentVM.activeDepartments = db.Departments.Where(d => d.IsActive == true).OrderBy(d => d.Name).ToList();
             departmentVM.inActiveDepartments = db.Departments.Where(d => d.IsActive != true).OrderBy(d => d.Name).ToList();
+            if (updatedMessage != null)
+            {
+                departmentVM.updatedMessage = updatedMessage;
+                if (departmentVM.updatedMessage == "success") { departmentVM.alertMessage = (addedName + " was added!"); }
+                else { departmentVM.alertMessage = (addedName + " already exists!"); }
+            }
             return View(departmentVM);
         }
         
@@ -54,7 +60,7 @@ namespace CLS_SLE.Controllers
             
             return View(departmentVM); }
 
-        public ActionResult ViewDepartment(short? departmentID)
+        public ActionResult ViewDepartment(short? departmentID, string updatedMessage)
         {
             if (departmentID == null)
             {
@@ -97,8 +103,15 @@ namespace CLS_SLE.Controllers
                         model.ModifierLogin = "Unknown";
                     }
                 }
-
+                
                 model.Department = department;
+                if (updatedMessage != null)
+                {
+                    model.updatedMessage = updatedMessage;
+                    if (model.updatedMessage == "success") { model.alertMessage = (model.Department.Name + " was updated!"); }
+                    else { model.alertMessage = (model.Deaprtment.Name + " was not updated!"); }
+                }
+                else { model.updatedMessage = null; }
                 return View(model);
             }
         }
@@ -113,16 +126,6 @@ namespace CLS_SLE.Controllers
             departmentVM.SchoolNames = schoolNames;
             departmentVM.Department = db.Departments.Where(d => d.DepartmentID == departmentID).FirstOrDefault();
             return View(departmentVM);
-
-            //ViewBag.department = db.Departments.Where(d => d.DepartmentID == DepartmentID).FirstOrDefault();
-            //var departmentVM = new EditDepartmentViewModel
-            //{
-            //    //foreach (var s in db.Schools) { schoolNames.Add(s.Name); }
-            //    SchoolNames = ViewBag.department.SchoolNames,
-            //    //DepartmentName = ViewBag.department.DepartmentName,
-            //};
-            //return View(departmentVM);
-
         }
 
         // POST: AdminDepartment/CreateDepartment
@@ -139,36 +142,40 @@ namespace CLS_SLE.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
+                if (db.Departments.Where(p => p.Name == departmentVM.Department.Name).FirstOrDefault() == null)
                 {
-                    db.Departments.Load();
+                    if (ModelState.IsValid)
+                    {
+                        db.Departments.Load();
 
-                    Department createDepartment = db.Departments.Create();
-                    Department department = new Department();
+                        Department createDepartment = db.Departments.Create();
+                        Department department = new Department();
 
-                    department.DepartmentID = department.DepartmentID;
-                    department.Number = departmentVM.Department.Number;
-                    department.Name = departmentVM.Department.Name;
-                    department.School = db.Schools.Where(s => s.Name == departmentVM.SchoolSelection).OrderByDescending(s => s.Name).FirstOrDefault();
-                    //department.School = new SelectList(db.Schools.Select(s => new { Id = s.SchoolID, Name = s.Name }), "ID", "Name", "[Select Name]");
-                    department.IsActive = departmentVM.Department.IsActive;
-                    department.CreatedDateTime = DateTime.Now;
-                    department.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                        department.DepartmentID = department.DepartmentID;
+                        department.Number = departmentVM.Department.Number;
+                        department.Name = departmentVM.Department.Name;
+                        department.School = db.Schools.Where(s => s.Name == departmentVM.SchoolSelection).OrderByDescending(s => s.Name).FirstOrDefault();
+                        //department.School = new SelectList(db.Schools.Select(s => new { Id = s.SchoolID, Name = s.Name }), "ID", "Name", "[Select Name]");
+                        department.IsActive = departmentVM.Department.IsActive;
+                        department.CreatedDateTime = DateTime.Now;
+                        department.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
 
-                    db.Departments.Add(department);
-                    db.SaveChanges();
+                        db.Departments.Add(department);
+                        db.SaveChanges();
 
-                    logger.Info("Department id {Id} added", departmentVM.Department.DepartmentID);
-                    //object schoolID = null;
-                    //ViewData["SchoolID"] = schoolID;
-                    return RedirectToAction("Departments", "AdminDepartment");
+                        logger.Info("Department id {Id} added", departmentVM.Department.DepartmentID);
+                        //object schoolID = null;
+                        //ViewData["SchoolID"] = schoolID;
+                        return RedirectToAction("Departments", "AdminDepartment", new { updatedMessage = "success", addedName = departmentVM.Department.Name });
+                    }
+
+                    else
+                    {
+                        //TODO figure out how to add form errors
+                        return RedirectToAction("CreateDepartment", "AdminDepartment");
+                    }
                 }
-
-                else
-                {
-                    //TODO figure out how to add form errors
-                    return RedirectToAction("CreateDepartment", "AdminDepartment");
-                }
+                else { return RedirectToAction("Departments", "AdminDepartment", new { updatedMessage = "error", addedName = departmentVM.Department.Name }); }
             }
             catch
             {
@@ -213,11 +220,11 @@ namespace CLS_SLE.Controllers
             else
             {
                 logger.Error("Check the entered credentials and retry.");
-                return RedirectToAction("Departments", "AdminDepartment");
+                return RedirectToAction("ViewDepartment", "AdminDepartment", new { departmentID = departmentID, updatedMessage = "error" });
             }
 ;
 
-            return RedirectToAction("Departments", "AdminDepartment");
+            return RedirectToAction("ViewDepartment", "AdminDepartment", new { departmentID = departmentID, updatedMessage = "success" });
         }
         //Alert for submit
         public ActionResult Submit(string submit)

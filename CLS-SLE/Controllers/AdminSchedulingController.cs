@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Mime;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
@@ -18,6 +19,7 @@ namespace CLS_SLE.Controllers
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
 
         private readonly int pageSize = 10;
+       
 
         // GET: Admin Scheduling home page with list of semesters to choose from.
         public ActionResult Index()
@@ -43,9 +45,9 @@ namespace CLS_SLE.Controllers
             
             //Defining Rubrics
             schedulingViewModel.AssesmentRubrics = (from r in db.AssessmentRubrics
-                                                    select new SelectListItem { Text = r.Name, Value = r.RubricID.ToString() }).Distinct().ToList();
+                                                    select new SelectListItem { Text = r.Name, Value = r.RubricID.ToString() }).Distinct().ToList(); //2ms
 
-            if (TempData["SemesterID"] != null)
+            if (TempData["SemesterID"] != null) //44ms
             {
                 schedulingViewModel.SemesterID = (int)TempData["SemesterID"];
             }
@@ -55,34 +57,43 @@ namespace CLS_SLE.Controllers
             }            
             schedulingViewModel.Semester = db.Semesters.FirstOrDefault(s => s.SemesterID == schedulingViewModel.SemesterID);
 
-            schedulingViewModel.Semesters = GetSemesters(true);
+            schedulingViewModel.Semesters = GetSemesters(true);//53ms
             
             //get course ids for all sections in selected semester that have assessments scheduled and returns as a list 
-            List<short> courseIDs = schedulingViewModel.Semester.Sections.Where(c => c.SectionRubrics.Count > 0).Select(i => i.CourseID).Distinct().ToList();
+            List<short> courseIDs = db.Sections
+                .Where(c => c.SectionRubrics.Any() && c.SemesterID == schedulingViewModel.Semester.SemesterID)
+                .Select(i => i.CourseID).Distinct().ToList();
+                
+                //schedulingViewModel.Semester.Sections.Where(c => c.SectionRubrics.Any()).Select(i => i.CourseID).Distinct().ToList(); //23ms
+            
             //handles pagination
+            
             schedulingViewModel.PagingInfo = new PagingInfo
             {
                 CurrentPage = page,
                 ItemsPerPage = pageSize,
                 TotalItems = courseIDs.Count()
-                
+
             };
             //get all courses whose courseIDs exist in provided list of courseids
             var courseResult = db.Courses
                 .Where(c => courseIDs.Contains(c.CourseID));
 
-            if(viewModel.CourseID != null && viewModel.CourseID != -1)
+            if(viewModel.CourseID != null && viewModel.CourseID != -1)//13 ms
             {
                 courseResult = courseResult.Where(c => c.CourseID == viewModel.CourseID);
             }
             schedulingViewModel.Courses = courseResult.OrderBy(c => c.Number).ToList();
-            schedulingViewModel.CourseSelectList = new List<SelectListItem>();
+            schedulingViewModel.CourseSelectList = new List<SelectListItem>();//60 ms
             schedulingViewModel.CourseSelectList.Add(new SelectListItem { Text = "All Courses For Semester", Value = "-1" });
 
-            foreach(Course course in schedulingViewModel.Courses)
-            {
-                schedulingViewModel.CourseSelectList.Add(new SelectListItem { Text = course.Number + " " + course.CourseName, Value = course.CourseID.ToString() });
-            }
+            schedulingViewModel.CourseSelectList = (from c in schedulingViewModel.Courses
+                select new SelectListItem {Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString()}).Distinct().ToList();
+
+            //foreach (Course course in schedulingViewModel.Courses)
+            //{
+            //    schedulingViewModel.CourseSelectList.Add(new SelectListItem { Text = course.Number + " " + course.CourseName, Value = course.CourseID.ToString() });
+            //}
 
             schedulingViewModel.Courses = schedulingViewModel.Courses
                 .Skip((schedulingViewModel.PagingInfo.CurrentPage - 1) * schedulingViewModel.PagingInfo.ItemsPerPage)

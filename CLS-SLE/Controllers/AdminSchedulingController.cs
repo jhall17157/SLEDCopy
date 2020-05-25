@@ -354,7 +354,64 @@ namespace CLS_SLE.Controllers
             
         }
 
-        
+
+        [HttpPost]
+        public ActionResult DeleteSchedule(int id, int sId) {
+
+            SchedulingViewModel svm = new SchedulingViewModel
+            {
+                SemesterID = sId
+            };
+
+            TempData["SemesterID"] = svm.SemesterID;
+            if (ModelState.IsValid)
+            {
+                var record = db.SectionRubrics.SingleOrDefault(s => s.SectionRubricID == id);
+                try 
+                {
+                    db.SectionRubrics.Remove(record);
+                    db.SaveChanges();
+                }catch(Exception e)
+                {
+                    Console.WriteLine("Error");
+                    return RedirectToAction("Index", "AdminScheduling");
+                }
+            }
+
+            return RedirectToAction("Index", "AdminScheduling");
+        }
+
+
+        [HttpPost]
+        public ActionResult SaveSchedule(string start, string end, int id, int sId) 
+        {
+
+            //Henry had this here to begin with. I don't know what he was planning on doing with it. 
+            SchedulingViewModel svm = new SchedulingViewModel
+            {
+                StartDate = Convert.ToDateTime(start),
+                EndDate = Convert.ToDateTime(end),
+                SemesterID = sId
+            };
+
+            TempData["SemesterID"] = svm.SemesterID;
+            if (ModelState.IsValid)
+            {
+                var record = db.SectionRubrics.SingleOrDefault(s => s.SectionRubricID == id);
+                if (record != null)
+                {
+                    record.StartDate = svm.StartDate;
+                    record.EndDate = svm.StartDate;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "AdminScheduling");
+                }
+            }
+
+            return RedirectToAction("Index", "AdminScheduling");
+        }
     }
 }
 

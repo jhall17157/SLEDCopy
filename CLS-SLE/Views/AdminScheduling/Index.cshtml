@@ -141,8 +141,8 @@
                                 </h4>
                             </td>
                             @*<td class="col-2 border-0 text-right">
-                                    <button class="btn btn-success"><i class="fas fa-plus" aria-hidden="true"></i> Add CRN</button>
-                                </td>*@
+                        <button class="btn btn-success"><i class="fas fa-plus" aria-hidden="true"></i> Add CRN</button>
+                    </td>*@
                         </tr>
                         int sectionNumber = 0;
                         foreach (Section sec in Model.Semester.Sections.Where(s => s.CourseID == course.CourseID))
@@ -162,18 +162,18 @@
                                 </td>
                                 <td class="col-3 border-0 text-right"><!-- Space For Button Or Header --></td>
                             </tr>
-                            @*if (!sec.SectionRubrics.Any())
+                            if (!sec.SectionRubrics.Any())
+                    {
+                        <tr class="row border-0 collapse assessmentCollapse@(courseNumber)@(sectionNumber) assessmentCollapse@(courseNumber) accordionClose">
+                            <td class="border-0 col-5 align-self-center">
+                                <p class="ml-4 mb-0 pt-1 pb-1">No Assessments Assigned</p>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                            foreach (SectionRubric sr in sec.SectionRubrics)
                             {
-                                <tr class="row border-0 collapse assessmentCollapse@(courseNumber)@(sectionNumber) assessmentCollapse@(courseNumber) accordionClose">
-                                    <td class="border-0 col-5 align-self-center">
-                                        <p class="ml-4 mb-0 pt-1 pb-1">No Assessments Assigned</p>
-                                    </td>
-                                </tr>
-                            }
-                            else
-                            {*@
-                                foreach (SectionRubric sr in sec.SectionRubrics)
-                                {
                                     <tr class="row pb-2 collapse assessmentCollapse@(courseNumber)@(sectionNumber) assessmentCollapse@(courseNumber) accordionClose">
                                         @*<td class="col-12 pt-3 pb-1 border-0 "><h5 class="ml-4 mr-4 pb-3 border-bottom">Assessments</h5></td>*@
                                         <td class="border-0 col-5 align-self-center">
@@ -181,6 +181,8 @@
                                         </td>
 
                                         <td class="border-0 row col-3 align-self-center">
+
+
                                             <p class="col-12 mb-1 pl-0">Submission Start:</p>
                                             @if (sr.StartDate != null)
                                             {
@@ -204,68 +206,102 @@
 
                                         </td>
                                         <td class="border-0 col-1 text-right align-self-center">
-                                            <button type="button" class="btn btn-success btn-sm d-inline"><i class="fas fa-save" aria-hidden="true"></i></button>
-                                            <button type="button" class="btn btn-danger btn-sm d-inline"><i class="fas fa-times" aria-hidden="true"></i></button>
+
+                                            @using (Html.BeginForm("SaveSchedule", "AdminScheduling", new { id = sr.SectionRubricID, start = sr.StartDate, end = sr.EndDate, sId = Model.SemesterID }, FormMethod.Post))
+                                            {
+                                                @Html.HiddenFor(s => s.SemesterID)
+                                                <button type="submit" class="btn btn-success btn-sm d-inline"><i class="fas fa-save" aria-hidden="true"></i></button>
+                                            }
+
+                                            <!-- Delete trigger modal -->
+                                            <button type="button" class=" btn btn-danger btn-sm d-inline float-right" data-toggle="modal" data-target=".removeCourseModal@(sr.SectionRubricID)"><i class="fas fa-times" aria-hidden="true"></i></button>
+                                            <!-- Modal For Deleting SectioRubric Assessments-->
+                                            <div class="modal fade removeCourseModal@(sr.SectionRubricID)" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-light">
+                                                            <h3 class="modal-title" id="removeConfirm">Delete Confirmation</h3>
+                                                            <i class="ml-auto fas fa-exclamation-triangle fa-2x"></i>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Are you sure you want remove<br /><strong>@sr.AssessmentRubric.Name</strong> from<br /><strong>CRN @sr.Section.CRN</strong>?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-secondary mr-auto" data-dismiss="modal">Cancel</button>
+
+                                                            @using (Html.BeginForm("DeleteSchedule", "AdminScheduling", new { id = sr.SectionRubricID, sId = Model.SemesterID }, FormMethod.Post))
+                                                            {
+                                                                <button type="submit" class="btn btn-outline-danger float-right">Delete</button>
+                                                            }
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
                                         </td>
                                     </tr>
+                                    }
                                 }
-                                //}
-
                             }
                         }
-                }
+
+                    }
 
                 @*@foreach (Section sec in Model.Semester.Sections.OrderBy(c => c.CourseID).ThenBy(s => s.CRN).GroupBy(c => c.Course))
-                                                    {
-                    <tr class="row bg-light">
-                                        <td class="col-12">
-                                            <h4>*@
+                                        {
+        <tr class="row bg-light">
+                            <td class="col-12">
+                                <h4>*@
                 @*@sec.CRN - @sec.Course.CourseName*@
                 <!--<button type="button" class="btn btn-danger btn-sm d-inline float-right"><i class="fas fa-times" aria-hidden="true"></i></button>
-                <button type="button" class="btn btn-warning btn-sm d-inline float-right"><i class="fas fa-wrench" aria-hidden="true"></i></button>-->
+    <button type="button" class="btn btn-warning btn-sm d-inline float-right"><i class="fas fa-wrench" aria-hidden="true"></i></button>-->
                 @*</h4>
-                        </td>
-                    </tr>
-                    foreach (SectionRubric sr in sec.SectionRubrics)
-                    {*@
+            </td>
+        </tr>
+        foreach (SectionRubric sr in sec.SectionRubrics)
+        {*@
                 @*//var Instructor = @Model.People.FirstOrDefault(p => p.PersonID == sec.LeadInstructorID);
-                    <tr class="row">*@
+        <tr class="row">*@
                 @*if (Instructor != null)
-                    {
-                        <td> @String.Concat(Instructor.LastName, ", ", Instructor.FirstName)</td>
-                        <td>@Instructor.User.Email</td>
-                    }
-                    else
-                    {
-                        <td colspan="2">No Instructor Assigned</td>
-                        <td></td>
-                    }
-                    <td>@sec.Course.Number<text>-</text>@sec.CRN</td>
-                    <td>@sec.Course.CourseName</td>
+        {
+            <td> @String.Concat(Instructor.LastName, ", ", Instructor.FirstName)</td>
+            <td>@Instructor.User.Email</td>
+        }
+        else
+        {
+            <td colspan="2">No Instructor Assigned</td>
+            <td></td>
+        }
+        <td>@sec.Course.Number<text>-</text>@sec.CRN</td>
+        <td>@sec.Course.CourseName</td>
                 *@
                 @*<td class="row col-12 border-top-0">
-                    <div class="col-5">
-                        <h5 class="d-inline indent">*@
+        <div class="col-5">
+            <h5 class="d-inline indent">*@
                 @*CRN: @sec.CRN @*sr.AssessmentRubric.Name*@
                 @*</h5>
-                        <h6 class="pl-3 d-inline">
-                            End Date: @sr.EndDate.ToShortDateString()
-                        </h6>
-                    </div>
-                    <div class="row col-6">*@
+            <h6 class="pl-3 d-inline">
+                End Date: @sr.EndDate.ToShortDateString()
+            </h6>
+        </div>
+        <div class="row col-6">*@
                 <!--<span>Start Date:</span><select class="d-inline form-control selectpicker col-3 ml-2"></select>--><!--<option selected>@*Html.Value(@sr.StartDate.ToShortDateString())*@</option>-->
                 <!--<span class="ml-3">End Date:</span><select class="d-inline form-control selectpicker col-3 ml-2"><!--<option value="@*Html.Raw(@sr.EndDate.ToShortDateString())" selected></option>*@</select>-->
                 @*</div>
-                    <div class="col-1">
-                        <button type="button" class="btn btn-danger btn-sm d-inline float-right"><i class="fas fa-times" aria-hidden="true"></i></button>
-                        <button type="button" class="btn btn-success btn-sm d-inline float-right"><i class="fas fa-save" aria-hidden="true"></i></button>*@
+        <div class="col-1">
+            <button type="button" class="btn btn-danger btn-sm d-inline float-right"><i class="fas fa-times" aria-hidden="true"></i></button>
+            <button type="button" class="btn btn-success btn-sm d-inline float-right"><i class="fas fa-save" aria-hidden="true"></i></button>*@
                 <!--<button type="button" class="btn btn-success btn-sm d-inline float-right"><i class="fas fa-save" aria-hidden="true"></i></button>-->
                 @*</div>
-                                </td>
+                    </td>
 
-                            </tr>
-                        }
-                    }*@
+                </tr>
+            }
+        }*@
 
 
 

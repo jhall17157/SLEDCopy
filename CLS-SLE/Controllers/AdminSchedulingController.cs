@@ -358,12 +358,12 @@ namespace CLS_SLE.Controllers
         [HttpPost]
         public ActionResult DeleteSchedule(int id, int sId) {
 
-            SchedulingViewModel svm = new SchedulingViewModel
-            {
-                SemesterID = sId
-            };
+            //SchedulingViewModel svm = new SchedulingViewModel
+            //{
+            //    SemesterID = sId
+            //};
 
-            TempData["SemesterID"] = svm.SemesterID;
+            TempData["SemesterID"] = sId;
             if (ModelState.IsValid)
             {
                 var record = db.SectionRubrics.SingleOrDefault(s => s.SectionRubricID == id);
@@ -377,31 +377,26 @@ namespace CLS_SLE.Controllers
                     return RedirectToAction("Index", "AdminScheduling");
                 }
             }
-
             return RedirectToAction("Index", "AdminScheduling");
         }
 
 
+
+
+
         [HttpPost]
-        public ActionResult SaveSchedule(string start, string end, int id, int sId) 
+        public ActionResult SaveSchedule(SchedulingViewModel svm, int id, int sId) 
         {
 
-            //Henry had this here to begin with. I don't know what he was planning on doing with it. 
-            SchedulingViewModel svm = new SchedulingViewModel
-            {
-                StartDate = Convert.ToDateTime(start),
-                EndDate = Convert.ToDateTime(end),
-                SemesterID = sId
-            };
-
-            TempData["SemesterID"] = svm.SemesterID;
+            
+            TempData["SemesterID"] = sId;
             if (ModelState.IsValid)
             {
                 var record = db.SectionRubrics.SingleOrDefault(s => s.SectionRubricID == id);
                 if (record != null)
                 {
                     record.StartDate = svm.StartDate;
-                    record.EndDate = svm.StartDate;
+                    record.EndDate = svm.EndDate;
                     db.SaveChanges();
                 }
                 else

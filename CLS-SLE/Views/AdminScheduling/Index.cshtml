@@ -162,7 +162,7 @@
                                 </td>
                                 <td class="col-3 border-0 text-right"><!-- Space For Button Or Header --></td>
                             </tr>
-                            if (!sec.SectionRubrics.Any())
+                            @*if (!sec.SectionRubrics.Any())
                             {
                                 <tr class="row border-0 collapse assessmentCollapse@(courseNumber)@(sectionNumber) assessmentCollapse@(courseNumber) accordionClose">
                                     <td class="border-0 col-5 align-self-center">
@@ -171,17 +171,17 @@
                                 </tr>
                             }
                             else
-                            {
+                            {*@
                                 foreach (SectionRubric sr in sec.SectionRubrics)
                                 {
                                     <tr class="row pb-2 collapse assessmentCollapse@(courseNumber)@(sectionNumber) assessmentCollapse@(courseNumber) accordionClose">
-                                        <td class="col-12 pt-3 pb-1 border-0 "><h5 class="ml-4 mr-4 pb-3 border-bottom">Assessments</h5></td>
+                                        @*<td class="col-12 pt-3 pb-1 border-0 "><h5 class="ml-4 mr-4 pb-3 border-bottom">Assessments</h5></td>*@
                                         <td class="border-0 col-5 align-self-center">
                                             <p class="ml-4">@sr.AssessmentRubric.Name</p>
                                         </td>
 
                                         <td class="border-0 row col-3 align-self-center">
-                                            <p class="col-12 mb-1 pl-0">Start Date:</p>
+                                            <p class="col-12 mb-1 pl-0">Submission Start:</p>
                                             @if (sr.StartDate != null)
                                             {
                                                 @Html.TextBox(@sr.StartDate.ToShortDateString(), "{0:MM-dd-yyyy}", new { @class = "form-control selectpicker col-9 ml-2", type = "date", @Value = @sr.StartDate.ToString("yyyy-MM-dd") })
@@ -192,7 +192,7 @@
                                             }
                                         </td>
                                         <td class="border-0 row col-3">
-                                            <p class="col-12 mb-1 pl-0">End Date:</p>
+                                            <p class="col-12 mb-1 pl-0">Submission End:</p>
                                             @if (sr.EndDate != null)
                                             {
                                                 @Html.TextBox(@sr.EndDate.ToShortDateString(), "{0:MM-dd-yyyy}", new { @class = "form-control selectpicker col-9 ml-2", type = "date", @Value = @sr.EndDate.ToString("yyyy-MM-dd") })
@@ -209,10 +209,10 @@
                                         </td>
                                     </tr>
                                 }
-                            }
+                                //}
 
+                            }
                         }
-                    }
                 }
 
                 @*@foreach (Section sec in Model.Semester.Sections.OrderBy(c => c.CourseID).ThenBy(s => s.CRN).GroupBy(c => c.Course))

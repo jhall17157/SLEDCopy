@@ -7,6 +7,8 @@
 @Styles.Render("~/Content/bootstrap-select")
 
     <head>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha256-rByPlHULObEjJ6XQxW/flG2r+22R5dKiAoef+aXWfik=" crossorigin="anonymous" />
         <style type="text/css">
             .loadingmodal {
                 position: fixed;
@@ -45,7 +47,6 @@
             .loadingText {
                 font-size: 1.15rem;
             }
-
         </style>
     </head>
 
@@ -91,7 +92,7 @@
 }
 <div class="loading" align="center">
     <img class="loadingGif" src="~/Images/loading.gif" alt="Spinning Loading Icon" />
-    <br /><br /><span class="loadingText">Loading. Please Wait.</span> 
+    <br /><br /><span class="loadingText">Loading. Please Wait.</span>
 </div>
 
 @{
@@ -207,7 +208,7 @@
                                                 <p class="col-12 mb-1 pl-0">Submission Start:</p>
                                                 @if (sr.StartDate != null)
                                                 {
-                                                    @Html.TextBoxFor(s => s.StartDate, "{0:MM-dd-yyyy}", new { @Value = sr.StartDate.ToShortDateString(), @Class="form-control selectpicker col-10" })
+                                                    @Html.TextBoxFor(s => s.StartDate, "{0:MM-dd-yyyy}", new {@Value = sr.StartDate.ToShortDateString(), @Class = "form-control selectpicker col-10 datewidget" })
                                                     @*@Html.EditorFor(s => s.StartDate, new { htmlAttributes = new { @class = "form-control", placeholder = sr.StartDate.ToShortDateString() } })*@
                                                 }
                                                 else
@@ -219,7 +220,7 @@
                                                 <p class="col-12 mb-1 pl-0">Submission End:</p>
                                                 @if (sr.EndDate != null)
                                                 {
-                                                    @Html.TextBoxFor(s => s.EndDate, "{0:MM-dd-yyyy}", new { @Value = sr.EndDate.ToShortDateString(), @Class="form-control selectpicker col-10" })
+                                                    @Html.TextBoxFor(s => s.EndDate, "{0:MM-dd-yyyy}", new { @Value = sr.EndDate.ToShortDateString(), @Class = "form-control selectpicker col-10 datewidget" })
                                                 }
                                                 else
                                                 {
@@ -263,11 +264,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                
+
+                                }
                             }
                         }
                     }
-                }
 
                 }
 
@@ -470,7 +471,8 @@
 }
 
 <script src="~/Scripts/jquery-3.4.1.js"></script>
-
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script>
 
     function ShowProgress() {
@@ -551,7 +553,10 @@
         }
     }
 
-    $(".datepicker").datepicker();
+
+
+
+    $(".datewidget").datepicker();
 
 
 

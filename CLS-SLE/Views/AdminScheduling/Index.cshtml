@@ -24,14 +24,16 @@
                 font-family: Arial;
                 font-size: 10pt;
                 border: 5px solid #67CFF5;
-                width: 200px;
-                height: 100px;
+                width: 250px;
+                height: 150px;
                 display: none;
                 align-content: center;
                 text-align: center;
                 position: fixed;
-                background-color: White;
+                background-color: #fff;
                 z-index: 999;
+                padding: 25px;
+                box-shadow: 0 3px 10spx #000;
             }
 
             .loadingGif {
@@ -39,6 +41,11 @@
                 height: 50px;
                 align-content: center;
             }
+
+            .loadingText {
+                font-size: 1.15rem;
+            }
+
         </style>
     </head>
 
@@ -83,8 +90,8 @@
     </div>
 }
 <div class="loading" align="center">
-    Loading. Please Wait. <br />
-    <img class="loadingGif" src="~/Images/loading.gif" alt="" />
+    <img class="loadingGif" src="~/Images/loading.gif" alt="Spinning Loading Icon" />
+    <br /><br /><span class="loadingText">Loading. Please Wait.</span> 
 </div>
 
 @{
@@ -131,6 +138,7 @@
             <tbody>
                 @{
                     int courseNumber = 0;
+                    int headerNumber = 0;
                     foreach (Course course in Model.Courses)
                     {
                         courseNumber++;
@@ -145,10 +153,12 @@
                                 </td>*@
                         </tr>
                         int sectionNumber = 0;
+
                         foreach (Section sec in Model.Semester.Sections.Where(s => s.CourseID == course.CourseID))
                         {
                             sectionNumber++;
-                            <tr href="#" data-target=".assessmentCollapse@(courseNumber)@(sectionNumber)" class="row pt-1 bg-light border-bottom ml-0 mr-0 collapse courseCollapse@(courseNumber) accordionClose lowerAccordionTrigger clickable">
+
+                            <tr href="#" data-header="@(headerNumber) " data-target=".assessmentCollapse@(courseNumber)@(sectionNumber)" class="row pt-1 bg-light border-bottom ml-0 mr-0 collapse courseCollapse@(courseNumber) accordionClose lowerAccordionTrigger clickable">
                                 <td class="border-0 col-4 align-self-center ml-0 mr-0">
                                     <h5 class="indent d-inline align-self-center">
                                         <i class="sectionIcon@(sectionNumber) sectionIcon ml-3 mr-3 fas fa-angle-right"></i> CRN: @sec.CRN
@@ -163,10 +173,12 @@
                                     <!--<h6>Submission Timeframe</h6>-->
                                 </td>
                                 <td class="col-3 border-0 text-right"><!-- Space For Button Or Header --></td>
-
-                                @*FOR CARTER'S REFERENCE-----------------------------*@
-                                
                             </tr>
+
+                            <tr class="row col-12 courseCollapse@(courseNumber) assessmentHeader assessmentHeader@(headerNumber)">
+                                <td class="col-12 pt-3 pb-1 border-0"><h5 class="ml-4 mr-4 pb-3 border-bottom">Assessments</h5></td>
+                            </tr>
+
                             if (!sec.SectionRubrics.Any())
                             {
                                 <tr class="row border-0 collapse assessmentCollapse@(courseNumber)@(sectionNumber) assessmentCollapse@(courseNumber) accordionClose">
@@ -195,7 +207,7 @@
                                                 <p class="col-12 mb-1 pl-0">Submission Start:</p>
                                                 @if (sr.StartDate != null)
                                                 {
-                                                    @Html.TextBoxFor(s => s.StartDate, "{0:MM-dd-yyyy}", new { @Value = sr.StartDate.ToShortDateString() })
+                                                    @Html.TextBoxFor(s => s.StartDate, "{0:MM-dd-yyyy}", new { @Value = sr.StartDate.ToShortDateString(), @Class="form-control selectpicker col-10" })
                                                     @*@Html.EditorFor(s => s.StartDate, new { htmlAttributes = new { @class = "form-control", placeholder = sr.StartDate.ToShortDateString() } })*@
                                                 }
                                                 else
@@ -207,7 +219,7 @@
                                                 <p class="col-12 mb-1 pl-0">Submission End:</p>
                                                 @if (sr.EndDate != null)
                                                 {
-                                                    @Html.TextBoxFor(s => s.EndDate, "{0:MM-dd-yyyy}", new { @Value = sr.EndDate.ToShortDateString() })
+                                                    @Html.TextBoxFor(s => s.EndDate, "{0:MM-dd-yyyy}", new { @Value = sr.EndDate.ToShortDateString(), @Class="form-control selectpicker col-10" })
                                                 }
                                                 else
                                                 {
@@ -223,7 +235,7 @@
 
 
                                                 <!-- Delete trigger modal -->
-                                                <button type="button" class=" btn btn-danger btn-sm d-inline float-right" data-toggle="modal" data-target=".removeCourseModal@(sr.SectionRubricID)"><i class="fas fa-times" aria-hidden="true"></i></button>
+                                                <button type="button" class=" btn btn-danger btn-sm d-inline float-right ml-1" data-toggle="modal" data-target=".removeCourseModal@(sr.SectionRubricID)"><i class="fas fa-times" aria-hidden="true"></i></button>
 
                                             </td>
                                         </tr>
@@ -458,6 +470,7 @@
 }
 
 <script src="~/Scripts/jquery-3.4.1.js"></script>
+
 <script>
 
     function ShowProgress() {
@@ -479,6 +492,7 @@
     $(function () {
         $('.accordionTrigger').click(toggleAccordion);
         $('.lowerAccordionTrigger').click(toggleLowerAccordion);
+        $('.assessmentHeader').hide();
     })
     var sectionUrl = '@Url.Action("GetSections")';
     var sections = $('#SectionID');
@@ -508,12 +522,14 @@
             var targetClass = $(this).data('target');
             $('.courseIcon' + targetClass.substring(15,targetClass[targetClass.length])).removeClass("fas fa-angle-right").addClass("fas fa-angle-down");
             $('.sectionIcon').removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+            //$('.assessmentHeader' + targetClass.substring(15,targetClass[targetClass.length])).hide();
         }
         else if ($($(this).data('target')).hasClass('accordionOpen')) {
             $($(this).data('target')).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
             var targetClass = $(this).data('target');
             $('.assessmentCollapse' + targetClass.substring(15,targetClass[targetClass.length])).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
-            $('.courseIcon' + targetClass.substring(15,targetClass[targetClass.length])).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+            $('.courseIcon' + targetClass.substring(15, targetClass[targetClass.length])).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+            //$('.assessmentHeader' + targetClass.substring(15,16)).hide();
         }
     }
 
@@ -522,11 +538,16 @@
             $($(this).data('target')).removeClass('collapse').removeClass('accordionClose').addClass('accordionOpen');
             var targetClass = $(this).data('target');
             $('.sectionIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-right").addClass("fas fa-angle-down");
+
+            //var targetHeader = $(this).data('header');
+            //alert(targetHeader);
+            //$('.assessmentHeader' + targetClass.substring(19,20)).show();
         }
         else if ($($(this).data('target')).hasClass('accordionOpen')) {
             $($(this).data('target')).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
             var targetClass = $(this).data('target');
             $('.sectionIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+            //$('.assessmentHeader' + targetClass.substring(19,20)).hide();
         }
     }
 
@@ -542,5 +563,5 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/bootstrap-select")
+    @Scripts.Render("~/bundles/bootstrap-select")'
 }

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace CLS_SLE.ViewModels
 {
+    //select lists could be generated in the cshtml page instead, if desired. Shouldn't impact performance much either way. 
     public class SchedulingViewModel
     {
         public List<SelectListItem> Semesters { get; set; }

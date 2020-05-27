@@ -10,7 +10,7 @@ namespace CLS_SLE.ViewModels
     {
         
         public List<SelectListItem> Programs { get; set; }
-        public int ProgramID { get; set; }
+        public int? ProgramID { get; set; }
         public Program Program { get; set; }
 
         public List<SelectListItem> Courses { get; set; }

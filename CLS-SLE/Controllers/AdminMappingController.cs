@@ -22,6 +22,7 @@ namespace CLS_SLE.Controllers
             mappingViewModel.Programs = (from p in db.Programs                                         
                                          select new SelectListItem { Text = p.Number + " " + p.Name, Value = p.ProgramID.ToString() })
                                             .Distinct().ToList();
+            mappingViewModel.Programs = mappingViewModel.Programs.OrderBy(p => p.Value).ToList();
             mappingViewModel.Courses = (from c in db.Courses
                                         where !c.CourseName.Contains("Folio180")
                                         select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() })
@@ -57,14 +58,14 @@ namespace CLS_SLE.Controllers
             int programID;
             if(TempData["ProgramID"] != null)
             {
-                programID = (int)TempData["ProgramID"]; 
+                mappingViewModel.ProgramID = (int)TempData["ProgramID"]; 
             }
             else
             {
-                programID = mappingVM.ProgramID;
+                mappingViewModel.ProgramID = mappingVM.ProgramID;
             }
             
-            mappingViewModel.Program = db.Programs.FirstOrDefault(p => p.ProgramID == programID);
+            mappingViewModel.Program = db.Programs.FirstOrDefault(p => p.ProgramID == mappingViewModel.ProgramID);
             
             return View(mappingViewModel);
         }

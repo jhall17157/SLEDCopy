@@ -168,7 +168,7 @@ namespace CLS_SLE.Controllers
                         }
                         else
                         {
-                            sectionRubric.StartDate = item.BeginDate.Value.AddDays((viewModel.StartDays.Value * -1));
+                            sectionRubric.StartDate = item.EndDate.Value.AddDays((viewModel.StartDays.Value * -1));
                             sectionRubric.EndDate = item.EndDate.Value.AddDays((viewModel.EndDays.Value));
 
                         }

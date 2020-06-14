@@ -19,10 +19,11 @@ namespace CLS_SLE.Controllers
         public ActionResult Index()
         {
             MappingViewModel mappingViewModel = new MappingViewModel();
-            mappingViewModel.Programs = (from p in db.Programs                                         
+            mappingViewModel.Programs = (from p in db.Programs
+                                         where p.Number != "000000" && p.Number != "999999"
                                          select new SelectListItem { Text = p.Number + " " + p.Name, Value = p.ProgramID.ToString() })
                                             .Distinct().ToList();
-            mappingViewModel.Programs = mappingViewModel.Programs.OrderBy(p => p.Value).ToList();
+            mappingViewModel.Programs = mappingViewModel.Programs.OrderBy(p => p.Text).ToList();
             mappingViewModel.Courses = (from c in db.Courses
                                         where !c.CourseName.Contains("Folio180")
                                         select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() })

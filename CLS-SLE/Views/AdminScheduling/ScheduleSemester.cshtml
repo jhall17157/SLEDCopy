@@ -1,0 +1,245 @@
+﻿
+
+
+@using System.Text
+@using CLS_SLE.Models
+@model CLS_SLE.ViewModels.ScheduleSemesterViewModel
+@{
+    ViewBag.Title = "ScheduleSemester";
+}
+@Styles.Render("~/Content/bootstrap-select")
+
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item active" aria-current="page">@Html.ActionLink("Scheduling", "Index", "AdminScheduling")</li>
+        <li class="breadcrumb-item active" aria-current="page">Configure Semester</li>
+    </ol>
+</nav>
+
+
+<h2>Configure Semester</h2>
+
+
+
+@using (Html.BeginForm("CreateSemesterSchedule", "AdminScheduling", FormMethod.Post, new { id = "setupForm" }))
+{
+    
+
+    <div class="container">
+        <div class="row half-indent">
+            <div class="col-6 mt-4 border-bottom">
+                <h3>Semester Information</h3>
+            </div>
+        </div>
+        <div class="row half-indent mb-3">
+            <div class="col-6 mt-4">
+                <p class="col-6 mb-1 pl-0">Select Semester:</p>
+
+                @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
+                {
+                    @id = "DropDownSemesters",
+                    @class = "form-control selectpicker d-inline col-9",
+
+                })
+            </div>
+        </div>
+        <div class="row half-indent">
+            <div class="col-6 mt-4 border-bottom">
+                <h3>Set Default Timeframe</h3>
+            </div>
+            <div class="col-6"></div>
+        </div>
+        <div class="row half-indent">
+            <div class="ml-4">
+                <p class="col-12 mt-4 mb-1 pl-0">Set Default Timeframe Based On:</p>
+                <div class="col-12 form-check">
+                    @*<div class="form-check">
+            <input class="form-check-input" id="course" type="radio" name="dateOption" value="course">
+            <label class="form-check-label" for="course">
+                Course Start/End Dates
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" id="hard" type="radio" name="dateOption" value="hard">
+            <label class="form-check-label" for="hard">
+                Universal Start & End Date
+            </label>
+        </div>*@
+                    
+                    <label class="mb-0">
+                        @Html.RadioButtonFor(model => model.isDates, "false", new
+                        {
+                            @id = "rdoCourse",
+                            @class = "form-check-input dateOption",
+                            @value = "course"
+                        })
+                        Course Start/End Dates
+                    </label>
+                    <br />
+                    <label>
+                        @Html.RadioButtonFor(model => model.isDates, "true", new
+                        {
+                            @id = "rdoHard",
+                            @class = "form-check-input dateOption",
+                            @value = "hard"
+                        }) 
+                        Universal Start/End Dates
+                    </label>
+                </div>
+            </div>
+            <div id="courseStartSection" class="row col-12">
+                <div class="col-12 mt-4">
+                    <p class="col-6 mb-1 pl-0">Start Date:</p>
+                    <div class="bg-light p-2 col-5 row ml-2 mb-4">
+                        @Html.TextBoxFor(model => model.StartDays, new { @type = "number", @class = "form-control col-4 ml-1", @min = "0" })
+                        @*<input type="number" class="form-control col-4 ml-1" />*@
+                        <span class="col-7 align-self-center">Days Before Section Ends</span>
+                    </div>
+                    <p class="col-6 mb-1 pl-0">End Date:</p>
+                    <div class="bg-light p-2 col-5 row ml-2 mb-4">
+                        @Html.TextBoxFor(model => model.EndDays, new { @type = "number", @class = "form-control col-4 ml-1", @min = "0" })
+                        @*<input type="number" class="form-control col-4 ml-1" />*@
+                        <span class="col-7 align-self-center">Days After Section Ends</span>
+                    </div>
+                </div>
+                <div class="row col-12">
+                    <div class="col-6 half-indent text-center mt-5">
+                        @Html.ActionLink("Cancel", "Index", "AdminScheduling", null, new { @class = "btn btn-outline-dark" })
+                        <button class="btn btn-success ml-1" type="submit">Configure Semester</button>
+                    </div>
+                </div>
+            </div>
+            <div id="hardStartSection" class="row col-12">
+                <div class="col-12 mt-4">
+                    <p class="col-6 mb-1 pl-0">Start Date:</p>
+                    @Html.TextBoxFor(model => model.StartDate, "{0:MM-dd-yyyy}", new { @class = "form-control col-3 ml-2", type = "date"})
+                    @*Html.EditorFor(model => model.StartDate, new { @type = "date", @class = "form-control col-3 ml-2" })*@
+                    @*<input type="date" class="form-control col-3 ml-2" />*@
+
+                    <p class="col-6 mb-1 pl-0 mt-3">End Date:</p>
+                    @Html.TextBoxFor(model => model.EndDate, "{0:MM-dd-yyyy}", new { @class = "form-control col-3 ml-2", type = "date"})
+                    @*Html.EditorFor(model => model.EndDate, new { @type = "date", @class = "form-control col-3 ml-2" })*@
+                    @*<input type="date" class="form-control col-3 ml-2" />*@
+
+                </div>
+                <div class="row col-12">
+                    <div class="col-6 half-indent text-center mt-5">
+                        @Html.ActionLink("Cancel", "Index", "AdminScheduling", null, new { @class = "btn btn-outline-dark" })
+                        <button class="btn btn-success ml-1" type="submit">Configure Semester</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+    </div>
+
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script>
+
+        $(function () {
+
+            $("#courseStartSection").hide();
+            $("#hardStartSection").hide();
+
+            $("#rdoCourse").prop("checked", false);
+
+            $('.dateOption').on('change', function () {
+                if ($('#rdoCourse').is(':checked')) {
+                    $("#courseStartSection").show();
+                    $("#hardStartSection").hide();
+                }
+                else if ($('#rdoHard').is(':checked')) {
+                    $("#courseStartSection").hide();
+                    $("#hardStartSection").show();
+                }
+                else {
+                    $("#courseStartSection").show();
+                    $("#hardStartSection").hide();
+                }
+            });
+
+        })
+
+    </script>
+
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/bootstrap-select")
+
+
+    }
+
+    //Populates a list of semesters to choose from with live search
+    @*<div class="form-inline mt-4 mb-4">
+            <div class="row col-7">
+
+                <div class="form-group col-12">
+                    <p class="col-12 mb-1 pl-0">Search For A Semester:</p>
+                    @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
+                    {
+                        @id = "DropDownSemesters",
+                        @class = "form-control selectpicker d-inline col-9",
+
+                    })
+
+
+
+
+                    <input type="submit" class="btn btn-primary d-inline ml-2" value="Submit" />
+                </div>
+            </div>
+            <div class="row col-4 border-left">
+                <div class="form-group col-12">
+                    <p class="col-12 mb-1 pl-0">Can't Find Semester?</p>
+                    @Html.ActionLink("Configure Semester", "ScheduleSemester", "AdminScheduling", null, new { @class = "btn btn-success d-inline ml-2" })
+                </div>
+            </div>
+        </div>*@
+}
+
+@*<div class="container">
+        <div class="row half-indent">
+            <div class="col-6 mt-4 border-bottom">
+                <h3>Semester Information</h3>
+            </div>
+        </div>
+        <div class="row half-indent mb-3">
+            <div class="col-6 mt-4">
+                <p class="col-6 mb-1 pl-0">Select Semester:</p>
+                <select class="form-control col-6 ml-1">
+                    <option>Fall 2020</option>
+                    <option>Spring 2021</option>
+                    <option>Summer 2021</option>
+                </select>
+            </div>
+        </div>
+        <div class="row half-indent">
+            <div class="col-6 mt-4 border-bottom">
+                <h3>Set Default Timeframe</h3>
+            </div>
+        </div>
+        <div class="row half-indent">
+            <div class="col-6 mt-4">
+                <p class="col-6 mb-1 pl-0">Start Date:</p>
+                <div class="bg-light p-2 col-10 row ml-2 mb-4">
+                    <input type="number" class="form-control col-4 ml-1" />
+                    <span class="col-7 align-self-center">Days Before Section Ends</span>
+                </div>
+                <p class="col-6 mb-1 pl-0">End Date:</p>
+                <div class="bg-light p-2 col-10 row ml-2 mb-4">
+                    <input type="number" class="form-control col-4 ml-1" />
+                    <span class="col-7 align-self-center">Days After Section Ends</span>
+                </div>
+            </div>
+        </div>
+        <div class="row half-indent">
+            <div class="col-6 mt-4 text-center">
+                @Html.ActionLink("Cancel", "Index", "AdminScheduling", null, new { @class = "btn btn-outline-dark" })
+                <button class="btn btn-success ml-1">Configure Semester</button>
+            </div>
+        </div>
+    </div>*@
+
+

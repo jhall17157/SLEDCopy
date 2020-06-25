@@ -9,7 +9,6 @@
 
 namespace CLS_SLE.Models
 {
-    using System.ComponentModel.DataAnnotations;
     using System;
     using System.Collections.Generic;
     
@@ -22,12 +21,7 @@ namespace CLS_SLE.Models
         }
     
         public int PersonID { get; set; }
-        [Required]
-        [RegularExpression(@"^[^<>%$*]*$", ErrorMessage = "Your username cannot contain any of the following characters: ^<>%$*")]
         public string Login { get; set; }
-        [Required(ErrorMessage = "Please include a valid eMail address")]
-        [EmailAddress]
-        [RegularExpression(@"^[^<>%$*]*$", ErrorMessage = "Your username cannot contain any of the following characters: ^<>%$*")]
         public string Email { get; set; }
         public Nullable<System.DateTime> LastLogin { get; set; }
         public bool MustResetPassword { get; set; }

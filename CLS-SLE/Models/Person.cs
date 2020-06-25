@@ -9,7 +9,6 @@
 
 namespace CLS_SLE.Models
 {
-    using System.ComponentModel.DataAnnotations;
     using System;
     using System.Collections.Generic;
     
@@ -22,21 +21,12 @@ namespace CLS_SLE.Models
             this.Sections = new HashSet<Section>();
             this.StudentPrograms = new HashSet<StudentProgram>();
             this.StudentScores = new HashSet<StudentScore>();
+            this.FactTSAs = new HashSet<FactTSA>();
         }
-
-
-        //This is a database identity number, you shouldn't treat it as a students Student ID
+    
         public int PersonID { get; set; }
-
-        [Required(ErrorMessage = "Please include a 9 character student ID number")]
-        [StringLength(9, MinimumLength = 9)]
-        [RegularExpression(@"^[0-9]*$", ErrorMessage = "A student ID can only be numbers 0, 9")]
         public string IdNumber { get; set; }
-        [Required(ErrorMessage = "Please inclulde your first name")]
-        [RegularExpression(@"^[A-Za-z]*$", ErrorMessage = "Make sure this field contains only letters, and has no spaces")]
         public string FirstName { get; set; }
-        [Required(ErrorMessage = "Please include your last name")]
-        [RegularExpression(@"^[A-Za-z]*$", ErrorMessage = "Make sure this field contains only letters, and has no spaces")]
         public string LastName { get; set; }
         public Nullable<System.DateTime> CreatedDateTime { get; set; }
         public Nullable<int> CreatedByLoginID { get; set; }
@@ -52,5 +42,7 @@ namespace CLS_SLE.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StudentScore> StudentScores { get; set; }
         public virtual User User { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FactTSA> FactTSAs { get; set; }
     }
 }

@@ -214,6 +214,7 @@
           <Property Name="CreatedByLoginID" Type="int" />
           <Property Name="ModifiedDateTime" Type="datetime" />
           <Property Name="ModifiedByLoginID" Type="int" />
+          <Property Name="InactiveDateTime" Type="datetime" />
         </EntityType>
         <EntityType Name="Permission">
           <Key>
@@ -462,6 +463,41 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SLE_Tracking.dbo.tmp_offering' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="tmp_offering">
+          <Key>
+            <PropertyRef Name="TERM" />
+            <PropertyRef Name="OFFERING_NO" />
+            <PropertyRef Name="CRN" />
+            <PropertyRef Name="FISCAL_YEAR" />
+            <PropertyRef Name="OFFERING_TITLE" />
+          </Key>
+          <Property Name="TERM" Type="int" Nullable="false" />
+          <Property Name="OFFERING_NO" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CRN" Type="int" Nullable="false" />
+          <Property Name="FISCAL_YEAR" Type="int" Nullable="false" />
+          <Property Name="OFFERING_TITLE" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="INSTRUCTOR_ID" Type="char" MaxLength="9" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SLE_Tracking.dbo.tmp_studentroster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="tmp_studentroster">
+          <Key>
+            <PropertyRef Name="STD_ID" />
+            <PropertyRef Name="TERM_CODE" />
+            <PropertyRef Name="CRN" />
+            <PropertyRef Name="STATUS_CODE" />
+            <PropertyRef Name="STATUS_DESC" />
+            <PropertyRef Name="STATUS_DATE" />
+          </Key>
+          <Property Name="STD_ID" Type="char" MaxLength="9" Nullable="false" />
+          <Property Name="TERM_CODE" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="CRN" Type="int" Nullable="false" />
+          <Property Name="STATUS_CODE" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="STATUS_DESC" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="STATUS_DATE" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="PersonID" />
@@ -491,6 +527,34 @@
           <Property Name="CreatedByLoginID" Type="int" />
           <Property Name="ModifiedDateTime" Type="datetime" />
           <Property Name="ModifiedByLoginID" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SLE_Tracking.Reporting.FactTSA' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="FactTSA">
+          <Key>
+            <PropertyRef Name="TSAID" />
+            <PropertyRef Name="StudentID" />
+            <PropertyRef Name="ProgramID" />
+            <PropertyRef Name="AcademicYear" />
+            <PropertyRef Name="OutcomesRequired" />
+            <PropertyRef Name="OutcomesAssessed" />
+            <PropertyRef Name="OutcomesMet" />
+            <PropertyRef Name="TSAPassed" />
+            <PropertyRef Name="LastUpdate" />
+          </Key>
+          <Property Name="TSAID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StudentID" Type="int" Nullable="false" />
+          <Property Name="ProgramID" Type="smallint" Nullable="false" />
+          <Property Name="AcademicYear" Type="char" MaxLength="9" Nullable="false" />
+          <Property Name="TSAStatus" Type="varchar" MaxLength="30" />
+          <Property Name="OutcomesRequired" Type="tinyint" Nullable="false" />
+          <Property Name="OutcomesAssessed" Type="tinyint" Nullable="false" />
+          <Property Name="OutcomesMet" Type="tinyint" Nullable="false" />
+          <Property Name="PassRate" Type="decimal" Precision="4" Scale="3" />
+          <Property Name="TSAPercent" Type="decimal" Precision="4" Scale="3" />
+          <Property Name="DateTSACompleted" Type="datetime" />
+          <Property Name="TSAPassed" Type="bit" Nullable="false" />
+          <Property Name="LastUpdate" Type="datetime" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'SLE_Tracking.dbo.AssessmentRubricSecurity' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -539,6 +603,51 @@ warning 6002: The table/view 'SLE_Tracking.dbo.InstructorAssessments' does not h
           <Property Name="CompletedCount" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'SLE_Tracking.dbo.ProgramMap' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ProgramMap">
+          <Key>
+            <PropertyRef Name="ProgramID" />
+            <PropertyRef Name="ProgramName" />
+            <PropertyRef Name="RubricID" />
+            <PropertyRef Name="RubricName" />
+          </Key>
+          <Property Name="ProgramID" Type="smallint" Nullable="false" />
+          <Property Name="ProgramName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ProgramNumber" Type="varchar" MaxLength="20" />
+          <Property Name="RubricID" Type="smallint" Nullable="false" />
+          <Property Name="RubricName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="CourseID" Type="smallint" />
+          <Property Name="CourseNumber" Type="varchar" MaxLength="10" />
+          <Property Name="CourseName" Type="varchar" MaxLength="150" />
+          <Property Name="AssessmentLevelCode" Type="char" MaxLength="1" />
+          <Property Name="AssessmentLevel" Type="varchar" MaxLength="30" />
+          <Property Name="ProgramAssessmentMappingID" Type="smallint" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SLE_Tracking.dbo.ProgramSecurityByUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ProgramSecurityByUser">
+          <Key>
+            <PropertyRef Name="PersonID" />
+            <PropertyRef Name="Login" />
+            <PropertyRef Name="SchoolID" />
+            <PropertyRef Name="SchoolName" />
+            <PropertyRef Name="DepartmentID" />
+            <PropertyRef Name="ProgramID" />
+            <PropertyRef Name="ProgramName" />
+          </Key>
+          <Property Name="PersonID" Type="int" Nullable="false" />
+          <Property Name="Login" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="SchoolID" Type="tinyint" Nullable="false" />
+          <Property Name="SchoolName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="DepartmentID" Type="smallint" Nullable="false" />
+          <Property Name="DepartmentName" Type="varchar" MaxLength="100" />
+          <Property Name="DepartmentNumber" Type="varchar" MaxLength="20" />
+          <Property Name="ProgramID" Type="smallint" Nullable="false" />
+          <Property Name="ProgramName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ProgramNumber" Type="varchar" MaxLength="20" />
+          <Property Name="CanEditProgramInformation" Type="tinyint" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'SLE_Tracking.dbo.RubricDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="RubricDetails">
           <Key>
@@ -560,6 +669,20 @@ warning 6002: The table/view 'SLE_Tracking.dbo.RubricDetails' does not have a pr
           <Property Name="CriteriaName" Type="varchar" MaxLength="300" Nullable="false" />
           <Property Name="ExampleText" Type="varchar" MaxLength="200" />
           <Property Name="CriteriaSortOrder" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SLE_Tracking.dbo.RubricsByProgram' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="RubricsByProgram">
+          <Key>
+            <PropertyRef Name="RubricName" />
+            <PropertyRef Name="RubricID" />
+            <PropertyRef Name="ProgramID" />
+            <PropertyRef Name="RubricIsActive" />
+          </Key>
+          <Property Name="RubricName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="RubricID" Type="smallint" Nullable="false" />
+          <Property Name="ProgramID" Type="smallint" Nullable="false" />
+          <Property Name="RubricIsActive" Type="bit" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'SLE_Tracking.dbo.SectionEnrollment' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -587,6 +710,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.SemesterDates' does not have a pr
           <Property Name="SemesterDescription" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="YearCode" Type="varchar" MaxLength="4" />
           <Property Name="TermCode" Type="varchar" MaxLength="2" />
+          <Property Name="AcademicYear" Type="varchar" MaxLength="9" />
           <Property Name="StartDate" Type="date" />
           <Property Name="EndDate" Type="date" />
         </EntityType>
@@ -807,6 +931,30 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             </Principal>
             <Dependent Role="ETL_StatusMapping">
               <PropertyRef Name="EnrollmentStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_FactTSA_ProgramID">
+          <End Role="Program" Type="Self.Program" Multiplicity="1" />
+          <End Role="FactTSA" Type="Self.FactTSA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="ProgramID" />
+            </Principal>
+            <Dependent Role="FactTSA">
+              <PropertyRef Name="ProgramID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_FactTSA_StudentID">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="FactTSA" Type="Self.FactTSA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="FactTSA">
+              <PropertyRef Name="StudentID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1229,15 +1377,14 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <ReturnType>
             <CollectionType>
               <RowType>
-                <Property Name="SchoolID" Type="tinyint" Nullable="false" />
-                <Property Name="SchoolName" Type="varchar" MaxLength="100" Nullable="false" />
-                <Property Name="DepartmentID" Type="smallint" Nullable="false" />
+                <Property Name="SchoolID" Type="tinyint" />
+                <Property Name="DepartmentID" Type="smallint" />
                 <Property Name="DepartmentNumber" Type="varchar" MaxLength="20" />
                 <Property Name="DepartmentName" Type="varchar" MaxLength="100" />
-                <Property Name="ProgramID" Type="smallint" Nullable="false" />
+                <Property Name="ProgramID" Type="smallint" />
                 <Property Name="ProgramNumber" Type="varchar" MaxLength="20" />
-                <Property Name="ProgramName" Type="varchar" MaxLength="100" Nullable="false" />
-                <Property Name="CanEdit" Type="tinyint" />
+                <Property Name="ProgramName" Type="varchar" MaxLength="100" />
+                <Property Name="CanEdit" Type="bit" />
               </RowType>
             </CollectionType>
           </ReturnType>
@@ -1338,6 +1485,43 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRole" EntityType="Self.UserRole" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tmp_offering" EntityType="Self.tmp_offering" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tmp_offering].[TERM] AS [TERM], 
+    [tmp_offering].[OFFERING_NO] AS [OFFERING_NO], 
+    [tmp_offering].[CRN] AS [CRN], 
+    [tmp_offering].[FISCAL_YEAR] AS [FISCAL_YEAR], 
+    [tmp_offering].[OFFERING_TITLE] AS [OFFERING_TITLE], 
+    [tmp_offering].[INSTRUCTOR_ID] AS [INSTRUCTOR_ID]
+    FROM [dbo].[tmp_offering] AS [tmp_offering]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tmp_studentroster" EntityType="Self.tmp_studentroster" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tmp_studentroster].[STD_ID] AS [STD_ID], 
+    [tmp_studentroster].[TERM_CODE] AS [TERM_CODE], 
+    [tmp_studentroster].[CRN] AS [CRN], 
+    [tmp_studentroster].[STATUS_CODE] AS [STATUS_CODE], 
+    [tmp_studentroster].[STATUS_DESC] AS [STATUS_DESC], 
+    [tmp_studentroster].[STATUS_DATE] AS [STATUS_DATE]
+    FROM [dbo].[tmp_studentroster] AS [tmp_studentroster]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="FactTSA" EntityType="Self.FactTSA" store:Type="Tables" store:Schema="Reporting">
+            <DefiningQuery>SELECT 
+    [FactTSA].[TSAID] AS [TSAID], 
+    [FactTSA].[StudentID] AS [StudentID], 
+    [FactTSA].[ProgramID] AS [ProgramID], 
+    [FactTSA].[AcademicYear] AS [AcademicYear], 
+    [FactTSA].[TSAStatus] AS [TSAStatus], 
+    [FactTSA].[OutcomesRequired] AS [OutcomesRequired], 
+    [FactTSA].[OutcomesAssessed] AS [OutcomesAssessed], 
+    [FactTSA].[OutcomesMet] AS [OutcomesMet], 
+    [FactTSA].[PassRate] AS [PassRate], 
+    [FactTSA].[TSAPercent] AS [TSAPercent], 
+    [FactTSA].[DateTSACompleted] AS [DateTSACompleted], 
+    [FactTSA].[TSAPassed] AS [TSAPassed], 
+    [FactTSA].[LastUpdate] AS [LastUpdate]
+    FROM [Reporting].[FactTSA] AS [FactTSA]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="AssessmentRubricSecurity" EntityType="Self.AssessmentRubricSecurity" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [AssessmentRubricSecurity].[PersonID] AS [PersonID], 
@@ -1365,6 +1549,36 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
     [InstructorAssessments].[CompletedCount] AS [CompletedCount]
     FROM [dbo].[InstructorAssessments] AS [InstructorAssessments]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="ProgramMap" EntityType="Self.ProgramMap" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ProgramMap].[ProgramID] AS [ProgramID], 
+    [ProgramMap].[ProgramName] AS [ProgramName], 
+    [ProgramMap].[ProgramNumber] AS [ProgramNumber], 
+    [ProgramMap].[RubricID] AS [RubricID], 
+    [ProgramMap].[RubricName] AS [RubricName], 
+    [ProgramMap].[CourseID] AS [CourseID], 
+    [ProgramMap].[CourseNumber] AS [CourseNumber], 
+    [ProgramMap].[CourseName] AS [CourseName], 
+    [ProgramMap].[AssessmentLevelCode] AS [AssessmentLevelCode], 
+    [ProgramMap].[AssessmentLevel] AS [AssessmentLevel], 
+    [ProgramMap].[ProgramAssessmentMappingID] AS [ProgramAssessmentMappingID]
+    FROM [dbo].[ProgramMap] AS [ProgramMap]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="ProgramSecurityByUser" EntityType="Self.ProgramSecurityByUser" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ProgramSecurityByUser].[PersonID] AS [PersonID], 
+    [ProgramSecurityByUser].[Login] AS [Login], 
+    [ProgramSecurityByUser].[SchoolID] AS [SchoolID], 
+    [ProgramSecurityByUser].[SchoolName] AS [SchoolName], 
+    [ProgramSecurityByUser].[DepartmentID] AS [DepartmentID], 
+    [ProgramSecurityByUser].[DepartmentName] AS [DepartmentName], 
+    [ProgramSecurityByUser].[DepartmentNumber] AS [DepartmentNumber], 
+    [ProgramSecurityByUser].[ProgramID] AS [ProgramID], 
+    [ProgramSecurityByUser].[ProgramName] AS [ProgramName], 
+    [ProgramSecurityByUser].[ProgramNumber] AS [ProgramNumber], 
+    [ProgramSecurityByUser].[CanEditProgramInformation] AS [CanEditProgramInformation]
+    FROM [dbo].[ProgramSecurityByUser] AS [ProgramSecurityByUser]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="RubricDetails" EntityType="Self.RubricDetails" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [RubricDetails].[AssessmentName] AS [AssessmentName], 
@@ -1378,6 +1592,14 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
     [RubricDetails].[ExampleText] AS [ExampleText], 
     [RubricDetails].[CriteriaSortOrder] AS [CriteriaSortOrder]
     FROM [dbo].[RubricDetails] AS [RubricDetails]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="RubricsByProgram" EntityType="Self.RubricsByProgram" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [RubricsByProgram].[RubricName] AS [RubricName], 
+    [RubricsByProgram].[RubricID] AS [RubricID], 
+    [RubricsByProgram].[ProgramID] AS [ProgramID], 
+    [RubricsByProgram].[RubricIsActive] AS [RubricIsActive]
+    FROM [dbo].[RubricsByProgram] AS [RubricsByProgram]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="SectionEnrollment" EntityType="Self.SectionEnrollment" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -1395,6 +1617,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
     [SemesterDates].[SemesterDescription] AS [SemesterDescription], 
     [SemesterDates].[YearCode] AS [YearCode], 
     [SemesterDates].[TermCode] AS [TermCode], 
+    [SemesterDates].[AcademicYear] AS [AcademicYear], 
     [SemesterDates].[StartDate] AS [StartDate], 
     [SemesterDates].[EndDate] AS [EndDate]
     FROM [dbo].[SemesterDates] AS [SemesterDates]</DefiningQuery>
@@ -1476,6 +1699,14 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <AssociationSet Name="fk_ETL_StatusMapping_EnrollmentStatusID" Association="Self.fk_ETL_StatusMapping_EnrollmentStatusID">
             <End Role="EnrollmentStatus" EntitySet="EnrollmentStatus" />
             <End Role="ETL_StatusMapping" EntitySet="ETL_StatusMapping" />
+          </AssociationSet>
+          <AssociationSet Name="fk_FactTSA_ProgramID" Association="Self.fk_FactTSA_ProgramID">
+            <End Role="Program" EntitySet="Program" />
+            <End Role="FactTSA" EntitySet="FactTSA" />
+          </AssociationSet>
+          <AssociationSet Name="fk_FactTSA_StudentID" Association="Self.fk_FactTSA_StudentID">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="FactTSA" EntitySet="FactTSA" />
           </AssociationSet>
           <AssociationSet Name="fk_Outcome_RubricID" Association="Self.fk_Outcome_RubricID">
             <End Role="AssessmentRubric" EntitySet="AssessmentRubric" />
@@ -1894,6 +2125,20 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             <End Role="User" EntitySet="Users" />
             <End Role="UserRole" EntitySet="UserRoles" />
           </AssociationSet>
+          <EntitySet Name="ProgramMaps" EntityType="SLE_TrackingModel.ProgramMap" />
+          <EntitySet Name="ProgramSecurityByUsers" EntityType="SLE_TrackingModel.ProgramSecurityByUser" />
+          <EntitySet Name="RubricsByPrograms" EntityType="SLE_TrackingModel.RubricsByProgram" />
+          <EntitySet Name="tmp_offering" EntityType="SLE_TrackingModel.tmp_offering" />
+          <EntitySet Name="tmp_studentroster" EntityType="SLE_TrackingModel.tmp_studentroster" />
+          <EntitySet Name="FactTSAs" EntityType="SLE_TrackingModel.FactTSA" />
+          <AssociationSet Name="fk_FactTSA_StudentID" Association="SLE_TrackingModel.fk_FactTSA_StudentID">
+            <End Role="Person" EntitySet="People" />
+            <End Role="FactTSA" EntitySet="FactTSAs" />
+          </AssociationSet>
+          <AssociationSet Name="fk_FactTSA_ProgramID" Association="SLE_TrackingModel.fk_FactTSA_ProgramID">
+            <End Role="Program" EntitySet="Programs" />
+            <End Role="FactTSA" EntitySet="FactTSAs" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="GetCompletedCountBySectionRubric_Result">
           <Property Type="Int32" Name="SectionRubricID" Nullable="false" />
@@ -1911,15 +2156,14 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Type="String" Name="CourseSubjectName" Nullable="false" MaxLength="100" />
         </ComplexType>
         <ComplexType Name="GetSecurityByLogin_Result">
-          <Property Type="Byte" Name="SchoolID" Nullable="false" />
-          <Property Type="String" Name="SchoolName" Nullable="false" MaxLength="100" />
-          <Property Type="Int16" Name="DepartmentID" Nullable="false" />
+          <Property Type="Byte" Name="SchoolID" Nullable="true" />
+          <Property Type="Int16" Name="DepartmentID" Nullable="true" />
           <Property Type="String" Name="DepartmentNumber" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="DepartmentName" Nullable="true" MaxLength="100" />
-          <Property Type="Int16" Name="ProgramID" Nullable="false" />
+          <Property Type="Int16" Name="ProgramID" Nullable="true" />
           <Property Type="String" Name="ProgramNumber" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="ProgramName" Nullable="false" MaxLength="100" />
-          <Property Type="Byte" Name="CanEdit" Nullable="true" />
+          <Property Type="String" Name="ProgramName" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="CanEdit" Nullable="true" />
         </ComplexType>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -2195,6 +2439,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="ModifiedByLoginID" Type="Int32" />
           <NavigationProperty Name="AssessmentRubric" Relationship="SLE_TrackingModel.fk_Outcome_RubricID" FromRole="Outcome" ToRole="AssessmentRubric" />
           <NavigationProperty Name="Criteria" Relationship="SLE_TrackingModel.fk_Criteria_Outcome" FromRole="Outcome" ToRole="Criterion" />
+          <Property Name="InactiveDateTime" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Permission">
           <Key>
@@ -2222,6 +2467,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <NavigationProperty Name="StudentPrograms" Relationship="SLE_TrackingModel.fk_StudentProgram_StudentID" FromRole="Person" ToRole="StudentProgram" />
           <NavigationProperty Name="StudentScores" Relationship="SLE_TrackingModel.fk_StudentScore_AssessedByID" FromRole="Person" ToRole="StudentScore" />
           <NavigationProperty Name="User" Relationship="SLE_TrackingModel.fk_User_PersonID" FromRole="Person" ToRole="User" />
+          <NavigationProperty Name="FactTSAs" Relationship="SLE_TrackingModel.fk_FactTSA_StudentID" FromRole="Person" ToRole="FactTSA" />
         </EntityType>
         <EntityType Name="Program">
           <Key>
@@ -2242,6 +2488,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <NavigationProperty Name="ProgramDepartments" Relationship="SLE_TrackingModel.fk_ProgramDepartment_ProgramID" FromRole="Program" ToRole="ProgramDepartment" />
           <NavigationProperty Name="ProgramSecurities" Relationship="SLE_TrackingModel.fk_ProgramSecurity_ProgramID" FromRole="Program" ToRole="ProgramSecurity" />
           <NavigationProperty Name="StudentPrograms" Relationship="SLE_TrackingModel.fk_StudentProgram_ProgramID" FromRole="Program" ToRole="StudentProgram" />
+          <NavigationProperty Name="FactTSAs" Relationship="SLE_TrackingModel.fk_FactTSA_ProgramID" FromRole="Program" ToRole="FactTSA" />
         </EntityType>
         <EntityType Name="ProgramAssessmentMapping">
           <Key>
@@ -2619,6 +2866,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="TermCode" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Name="StartDate" Type="DateTime" Precision="0" />
           <Property Name="EndDate" Type="DateTime" Precision="0" />
+          <Property Name="AcademicYear" Type="String" MaxLength="9" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="StudentScoreCount">
           <Key>
@@ -3222,6 +3470,142 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ProgramMap">
+          <Key>
+            <PropertyRef Name="ProgramID" />
+            <PropertyRef Name="ProgramName" />
+            <PropertyRef Name="RubricID" />
+            <PropertyRef Name="RubricName" />
+          </Key>
+          <Property Name="ProgramID" Type="Int16" Nullable="false" />
+          <Property Name="ProgramName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ProgramNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="RubricID" Type="Int16" Nullable="false" />
+          <Property Name="RubricName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CourseID" Type="Int16" />
+          <Property Name="CourseNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CourseName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="AssessmentLevelCode" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="AssessmentLevel" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ProgramAssessmentMappingID" Type="Int16" />
+        </EntityType>
+        <EntityType Name="ProgramSecurityByUser">
+          <Key>
+            <PropertyRef Name="PersonID" />
+            <PropertyRef Name="Login" />
+            <PropertyRef Name="SchoolID" />
+            <PropertyRef Name="SchoolName" />
+            <PropertyRef Name="DepartmentID" />
+            <PropertyRef Name="ProgramID" />
+            <PropertyRef Name="ProgramName" />
+          </Key>
+          <Property Name="PersonID" Type="Int32" Nullable="false" />
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="SchoolID" Type="Byte" Nullable="false" />
+          <Property Name="SchoolName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DepartmentID" Type="Int16" Nullable="false" />
+          <Property Name="DepartmentName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DepartmentNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ProgramID" Type="Int16" Nullable="false" />
+          <Property Name="ProgramName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ProgramNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CanEditProgramInformation" Type="Byte" />
+        </EntityType>
+        <EntityType Name="RubricsByProgram">
+          <Key>
+            <PropertyRef Name="RubricName" />
+            <PropertyRef Name="RubricID" />
+            <PropertyRef Name="ProgramID" />
+            <PropertyRef Name="RubricIsActive" />
+          </Key>
+          <Property Name="RubricName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="RubricID" Type="Int16" Nullable="false" />
+          <Property Name="ProgramID" Type="Int16" Nullable="false" />
+          <Property Name="RubricIsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tmp_offering">
+          <Key>
+            <PropertyRef Name="TERM" />
+            <PropertyRef Name="OFFERING_NO" />
+            <PropertyRef Name="CRN" />
+            <PropertyRef Name="FISCAL_YEAR" />
+            <PropertyRef Name="OFFERING_TITLE" />
+          </Key>
+          <Property Name="TERM" Type="Int32" Nullable="false" />
+          <Property Name="OFFERING_NO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CRN" Type="Int32" Nullable="false" />
+          <Property Name="FISCAL_YEAR" Type="Int32" Nullable="false" />
+          <Property Name="OFFERING_TITLE" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="INSTRUCTOR_ID" Type="String" MaxLength="9" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tmp_studentroster">
+          <Key>
+            <PropertyRef Name="STD_ID" />
+            <PropertyRef Name="TERM_CODE" />
+            <PropertyRef Name="CRN" />
+            <PropertyRef Name="STATUS_CODE" />
+            <PropertyRef Name="STATUS_DESC" />
+            <PropertyRef Name="STATUS_DATE" />
+          </Key>
+          <Property Name="STD_ID" Type="String" Nullable="false" MaxLength="9" FixedLength="true" Unicode="false" />
+          <Property Name="TERM_CODE" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="CRN" Type="Int32" Nullable="false" />
+          <Property Name="STATUS_CODE" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="STATUS_DESC" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="STATUS_DATE" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="FactTSA">
+          <Key>
+            <PropertyRef Name="TSAID" />
+            <PropertyRef Name="StudentID" />
+            <PropertyRef Name="ProgramID" />
+            <PropertyRef Name="AcademicYear" />
+            <PropertyRef Name="OutcomesRequired" />
+            <PropertyRef Name="OutcomesAssessed" />
+            <PropertyRef Name="OutcomesMet" />
+            <PropertyRef Name="TSAPassed" />
+            <PropertyRef Name="LastUpdate" />
+          </Key>
+          <Property Name="TSAID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StudentID" Type="Int32" Nullable="false" />
+          <Property Name="ProgramID" Type="Int16" Nullable="false" />
+          <Property Name="AcademicYear" Type="String" Nullable="false" MaxLength="9" FixedLength="true" Unicode="false" />
+          <Property Name="TSAStatus" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="OutcomesRequired" Type="Byte" Nullable="false" />
+          <Property Name="OutcomesAssessed" Type="Byte" Nullable="false" />
+          <Property Name="OutcomesMet" Type="Byte" Nullable="false" />
+          <Property Name="PassRate" Type="Decimal" Precision="4" Scale="3" />
+          <Property Name="TSAPercent" Type="Decimal" Precision="4" Scale="3" />
+          <Property Name="DateTSACompleted" Type="DateTime" Precision="3" />
+          <Property Name="TSAPassed" Type="Boolean" Nullable="false" />
+          <Property Name="LastUpdate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Person" Relationship="SLE_TrackingModel.fk_FactTSA_StudentID" FromRole="FactTSA" ToRole="Person" />
+          <NavigationProperty Name="Program" Relationship="SLE_TrackingModel.fk_FactTSA_ProgramID" FromRole="FactTSA" ToRole="Program" />
+        </EntityType>
+        <Association Name="fk_FactTSA_StudentID">
+          <End Type="SLE_TrackingModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.FactTSA" Role="FactTSA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonID" />
+            </Principal>
+            <Dependent Role="FactTSA">
+              <PropertyRef Name="StudentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_FactTSA_ProgramID">
+          <End Type="SLE_TrackingModel.Program" Role="Program" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.FactTSA" Role="FactTSA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="ProgramID" />
+            </Principal>
+            <Dependent Role="FactTSA">
+              <PropertyRef Name="ProgramID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3255,7 +3639,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             <ResultMapping>
               <ComplexTypeMapping TypeName="SLE_TrackingModel.GetSecurityByLogin_Result">
                 <ScalarProperty Name="SchoolID" ColumnName="SchoolID" />
-                <ScalarProperty Name="SchoolName" ColumnName="SchoolName" />
                 <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
                 <ScalarProperty Name="DepartmentNumber" ColumnName="DepartmentNumber" />
                 <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
@@ -3522,6 +3905,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="Outcomes">
             <EntityTypeMapping TypeName="SLE_TrackingModel.Outcome">
               <MappingFragment StoreEntitySet="Outcome">
+                <ScalarProperty Name="InactiveDateTime" ColumnName="InactiveDateTime" />
                 <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
                 <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
                 <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
@@ -3896,6 +4280,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="SemesterDates">
             <EntityTypeMapping TypeName="SLE_TrackingModel.SemesterDate">
               <MappingFragment StoreEntitySet="SemesterDates">
+                <ScalarProperty Name="AcademicYear" ColumnName="AcademicYear" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="TermCode" ColumnName="TermCode" />
@@ -3915,6 +4300,93 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
                 <ScalarProperty Name="StudentID" ColumnName="StudentID" />
                 <ScalarProperty Name="RubricID" ColumnName="RubricID" />
                 <ScalarProperty Name="SectionID" ColumnName="SectionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProgramMaps">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.ProgramMap">
+              <MappingFragment StoreEntitySet="ProgramMap">
+                <ScalarProperty Name="ProgramAssessmentMappingID" ColumnName="ProgramAssessmentMappingID" />
+                <ScalarProperty Name="AssessmentLevel" ColumnName="AssessmentLevel" />
+                <ScalarProperty Name="AssessmentLevelCode" ColumnName="AssessmentLevelCode" />
+                <ScalarProperty Name="CourseName" ColumnName="CourseName" />
+                <ScalarProperty Name="CourseNumber" ColumnName="CourseNumber" />
+                <ScalarProperty Name="CourseID" ColumnName="CourseID" />
+                <ScalarProperty Name="RubricName" ColumnName="RubricName" />
+                <ScalarProperty Name="RubricID" ColumnName="RubricID" />
+                <ScalarProperty Name="ProgramNumber" ColumnName="ProgramNumber" />
+                <ScalarProperty Name="ProgramName" ColumnName="ProgramName" />
+                <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProgramSecurityByUsers">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.ProgramSecurityByUser">
+              <MappingFragment StoreEntitySet="ProgramSecurityByUser">
+                <ScalarProperty Name="CanEditProgramInformation" ColumnName="CanEditProgramInformation" />
+                <ScalarProperty Name="ProgramNumber" ColumnName="ProgramNumber" />
+                <ScalarProperty Name="ProgramName" ColumnName="ProgramName" />
+                <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
+                <ScalarProperty Name="DepartmentNumber" ColumnName="DepartmentNumber" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="SchoolName" ColumnName="SchoolName" />
+                <ScalarProperty Name="SchoolID" ColumnName="SchoolID" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RubricsByPrograms">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.RubricsByProgram">
+              <MappingFragment StoreEntitySet="RubricsByProgram">
+                <ScalarProperty Name="RubricIsActive" ColumnName="RubricIsActive" />
+                <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
+                <ScalarProperty Name="RubricID" ColumnName="RubricID" />
+                <ScalarProperty Name="RubricName" ColumnName="RubricName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tmp_offering">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.tmp_offering">
+              <MappingFragment StoreEntitySet="tmp_offering">
+                <ScalarProperty Name="INSTRUCTOR_ID" ColumnName="INSTRUCTOR_ID" />
+                <ScalarProperty Name="OFFERING_TITLE" ColumnName="OFFERING_TITLE" />
+                <ScalarProperty Name="FISCAL_YEAR" ColumnName="FISCAL_YEAR" />
+                <ScalarProperty Name="CRN" ColumnName="CRN" />
+                <ScalarProperty Name="OFFERING_NO" ColumnName="OFFERING_NO" />
+                <ScalarProperty Name="TERM" ColumnName="TERM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tmp_studentroster">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.tmp_studentroster">
+              <MappingFragment StoreEntitySet="tmp_studentroster">
+                <ScalarProperty Name="STATUS_DATE" ColumnName="STATUS_DATE" />
+                <ScalarProperty Name="STATUS_DESC" ColumnName="STATUS_DESC" />
+                <ScalarProperty Name="STATUS_CODE" ColumnName="STATUS_CODE" />
+                <ScalarProperty Name="CRN" ColumnName="CRN" />
+                <ScalarProperty Name="TERM_CODE" ColumnName="TERM_CODE" />
+                <ScalarProperty Name="STD_ID" ColumnName="STD_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FactTSAs">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.FactTSA">
+              <MappingFragment StoreEntitySet="FactTSA">
+                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+                <ScalarProperty Name="TSAPassed" ColumnName="TSAPassed" />
+                <ScalarProperty Name="DateTSACompleted" ColumnName="DateTSACompleted" />
+                <ScalarProperty Name="TSAPercent" ColumnName="TSAPercent" />
+                <ScalarProperty Name="PassRate" ColumnName="PassRate" />
+                <ScalarProperty Name="OutcomesMet" ColumnName="OutcomesMet" />
+                <ScalarProperty Name="OutcomesAssessed" ColumnName="OutcomesAssessed" />
+                <ScalarProperty Name="OutcomesRequired" ColumnName="OutcomesRequired" />
+                <ScalarProperty Name="TSAStatus" ColumnName="TSAStatus" />
+                <ScalarProperty Name="AcademicYear" ColumnName="AcademicYear" />
+                <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
+                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+                <ScalarProperty Name="TSAID" ColumnName="TSAID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

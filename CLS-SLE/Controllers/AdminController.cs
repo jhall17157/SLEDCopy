@@ -54,8 +54,7 @@ namespace CLS_SLE.Controllers
         //{
         //    try
         //    {
-        //        var personId = Convert.ToInt32(Session["personID"].ToString());
-        //        var user = db.Users.FirstOrDefault(u => u.PersonID == personId);
+        //        var user = db.Users.FirstOrDefault(u => u.PersonID == UserData.PersonId);
         //        var adminAssessments = db.Assessments.ToList();
         //        logger.Info("Dashboard loaded for " + user?.Login);
 
@@ -245,8 +244,7 @@ namespace CLS_SLE.Controllers
         {
             try
             {
-                var personID = Convert.ToInt32(Session["personID"].ToString());
-                var user = db.Users.FirstOrDefault(u => u.PersonID == personID);
+                var user = db.Users.FirstOrDefault(u => u.PersonID == UserData.PersonId);
                 var adminAssessments = from assessments in db.Assessments
                                            //join permissions in db.AssessmentRubricSecurities on assessments.AssessmentID equals permissions.AssessmentID
                                            //where permissions.PersonID == personID
@@ -396,7 +394,7 @@ namespace CLS_SLE.Controllers
                 addAssessment.ProgramID = db.Programs.Where(p => p.Name == program).FirstOrDefault().ProgramID;
                 addAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
                 addAssessment.CreatedDateTime = DateTime.Now;
-                addAssessment.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                addAssessment.CreatedByLoginID = UserData.PersonId;
 
 
 
@@ -435,7 +433,7 @@ namespace CLS_SLE.Controllers
                         editAssessment.ProgramID = db.Programs.Where(p => p.Name == program).FirstOrDefault().ProgramID;
                         editAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
                         editAssessment.ModifiedDateTime = DateTime.Now;
-                        editAssessment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                        editAssessment.ModifiedByLoginID = UserData.PersonId;
                         db.SaveChanges();
 
                         return RedirectToAction(actionName: "ViewAssessment", controllerName: "Admin", routeValues: new { assessmentId = editAssessment.AssessmentID });
@@ -468,8 +466,7 @@ namespace CLS_SLE.Controllers
         //{
         //    try
         //    {
-        //        var personId = Convert.ToInt32(Session["personID"].ToString());
-        //        var user = db.Users.FirstOrDefault(u => u.PersonID == personId);
+        //        var user = db.Users.FirstOrDefault(u => u.PersonID == UserData.PersonId);
         //        var adminAssessments = db.Assessments.ToList();
         //        logger.Info("Dashboard loaded for " + user?.Login);
 

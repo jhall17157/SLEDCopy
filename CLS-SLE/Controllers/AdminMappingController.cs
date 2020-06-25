@@ -1,16 +1,15 @@
-﻿using System;
-using System.Diagnostics;
-using CLS_SLE.Models;
+﻿using CLS_SLE.Models;
 using CLS_SLE.ViewModels;
+using System;
+using System.Diagnostics;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
 
     //New controller for mapping page
-    public class AdminMappingController : Controller
+    public class AdminMappingController : SLEControllerBase
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
 
@@ -30,7 +29,7 @@ namespace CLS_SLE.Controllers
                                             .Distinct().ToList();
             mappingViewModel.Rubrics = (from r in db.AssessmentRubrics
                                         select new SelectListItem { Text = r.Name, Value = r.RubricID.ToString() }).Distinct().ToList();
-            if(TempData["ProgramID"] != null)
+            if (TempData["ProgramID"] != null)
             {
                 int programID = (int)TempData["ProgramID"];
                 mappingViewModel.Program = db.Programs.FirstOrDefault(p => p.ProgramID == programID);
@@ -43,7 +42,7 @@ namespace CLS_SLE.Controllers
         [HttpPost]
         public ActionResult Index(MappingViewModel mappingVM)
         {
-            
+
             MappingViewModel mappingViewModel = new MappingViewModel();
             mappingViewModel.Programs = (from p in db.Programs
                                          select new SelectListItem { Text = p.Number + " " + p.Name, Value = p.ProgramID.ToString() })
@@ -57,17 +56,17 @@ namespace CLS_SLE.Controllers
 
             mappingViewModel.Course = db.Courses.FirstOrDefault(p => p.CourseID == mappingVM.CourseID);
             int programID;
-            if(TempData["ProgramID"] != null)
+            if (TempData["ProgramID"] != null)
             {
-                mappingViewModel.ProgramID = (int)TempData["ProgramID"]; 
+                mappingViewModel.ProgramID = (int)TempData["ProgramID"];
             }
             else
             {
                 mappingViewModel.ProgramID = mappingVM.ProgramID;
             }
-            
+
             mappingViewModel.Program = db.Programs.FirstOrDefault(p => p.ProgramID == mappingViewModel.ProgramID);
-            
+
             return View(mappingViewModel);
         }
 
@@ -83,13 +82,10 @@ namespace CLS_SLE.Controllers
                 map.CourseID = Convert.ToInt16(mappingVM.CourseID);
                 map.RubricID = Convert.ToInt16(mappingVM.RubricID);
                 map.ProgramID = Convert.ToInt16(mappingVM.ProgramID);
-                
+
                 //assigns current date to mapping, then adds it to the database
                 map.CreatedDateTime = DateTime.Now;
-                if (Session["personID"] != null)
-                {
-                    map.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-                }
+                map.CreatedByLoginID = UserData.PersonId;
                 db.ProgramAssessmentMappings.Add(map);
                 db.SaveChanges();
 
@@ -101,7 +97,7 @@ namespace CLS_SLE.Controllers
                     return RedirectToAction("Index", "AdminMapping");
                 }
             }
-            
+
             //return Index(mappingViewModel);
             return RedirectToAction("Index", "AdminMapping");
         }
@@ -133,14 +129,14 @@ namespace CLS_SLE.Controllers
         //}
 
 
-        
+
 
         [ActionName("DeleteMapping")]
         [HttpPost]
         public ActionResult DeleteMapping(MappingViewModel mappingViewModel, int mapID)
         {
-            
-            if(ModelState.IsValid)
+
+            if (ModelState.IsValid)
             {
                 var mapping = db.ProgramAssessmentMappings.Where(m => m.ProgramAssessmentMappingID == mapID).FirstOrDefault();
                 try
@@ -148,7 +144,7 @@ namespace CLS_SLE.Controllers
                     db.ProgramAssessmentMappings.Remove(mapping);
                     db.SaveChanges();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Debug.WriteLine(e.ToString());
                 }

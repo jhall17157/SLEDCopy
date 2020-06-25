@@ -72,7 +72,7 @@
                     @if (HttpContext.Current.User.IsInRole("Administrator"))
                     {
                         <li class="nav-item h2">
-                            <a class="nav-link align-bottom @((ControllerName.Equals("Admin") || ControllerName.Equals("RoleAdmin") || ControllerName.Equals("AdminUser") || ControllerName.Equals("Rubric")) ? "active bg-white pb-4" : "bg-light mt-3")" href="~/Admin/AdminDashboard">Admin Dashboard</a>
+                            <a class="nav-link align-bottom @((ControllerName.Equals("Admin") || ControllerName.Equals("RoleAdmin") || ControllerName.Equals("AdminUser") || ControllerName.Equals("Rubric") || ControllerName.Equals("AdminMapping") || ControllerName.Equals("AdminScheduling")) ? "active bg-white pb-4" : "bg-light mt-3")" href="~/Admin/AdminDashboard">Admin Dashboard</a>
                         </li>
                     }
                     @if (HttpContext.Current.User.IsInRole("Faculty"))

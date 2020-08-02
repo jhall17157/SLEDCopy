@@ -1,7 +1,386 @@
-﻿
+﻿@model CLS_SLE.Models.AssessmentMappingsViewModel
+@using System.Data.SqlClient;
 @{
-    ViewBag.Title = "AssessmentMappings";
+
 }
 
-<h2>Assessment Mappings | <a href="~/Admin/AdminDashboard">Admin Dashboard</a></h2>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
+        <li class="breadcrumb-item active" aria-current="page">Mapping</li>
+    </ol>
+</nav>
 
+<h2> Assessment Mapping </h2>
+
+    @foreach (var program in Model.Programs)
+    {
+        var rubrics = Model.AssessmentRubrics.Select(r => r.ProgramAssessmentMappings.Where(m => m.ProgramID == program.ProgramID)).ToList();
+<div id="mydiv">
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col" class="h3">@program.Name <button type="button" class="btn btn-primary right assign" id="@program.ProgramID" data-toggle="modal" data-target="#modal@(program.ProgramID)">Assign</button></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var grouping in rubrics)
+            {
+                var rubricName = grouping.FirstOrDefault()?.AssessmentRubric.Name;
+
+                if (rubricName != null)
+                {
+                    <tr>
+                        <th class="thead-light"><h5><b>@rubricName</b></h5></th>
+                    </tr>
+                    foreach (var assessment in grouping)
+                    {
+                        foreach (var rubric in grouping)
+                        {
+                            if (assessment.CourseID == rubric.CourseID)
+                            {
+                                <tr>
+                                    <td><i class=""></i> @rubric.Course.CourseName</td>
+                                </tr>
+                            }
+                        }
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>
+        <!--Assign Modal-->
+        <div class="modal fade" id="modal@(program.ProgramID)" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalHeader@(program.ProgramID)">Mapping for @program.Name</h5>
+                        <button type="button" class="close modalClose" id="@program.ProgramID" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <table class="table col-6">
+                                <thead>
+                                    <tr>
+                                        <th class="border-0">Rubric</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="assessmentInModal@(program.ProgramID)" class="assessmentInModal">
+                                </tbody>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div id="rubricDropdown@(program.ProgramID)" class="rubricDropdown">
+                                                <select class="btn btn-secondary dropdown-toggle selectpicker rubricDropdownSelect@(program.ProgramID)" data-show-subtext="true" data-live-search="true">
+                                                    @foreach (var rubric in Model.AssessmentRubrics)
+                                                    {
+                                                        <option id="@rubric.RubricID">@rubric.Name</option>
+                                                    }
+                                                </select>
+                                                <button type="button" class="btn btn-outline-success float-left addRubricToProgram" id="@program.ProgramID">Add</button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div id="addRubricShow@(program.ProgramID)">
+                                                <button type="button" class="btn btn-success float-right mr-2 addRubricShow" id="@program.ProgramID"><i class="fa fa-plus"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table col-6">
+                                <thead>
+                                    <tr>
+                                        <th class="border-0">Class</th>
+                                    </tr>
+                                </thead>
+                                @foreach (var grouping in rubrics)
+                                {
+                                    var rubricName = grouping.FirstOrDefault()?.AssessmentRubric.Name;
+
+                                if (rubricName != null)
+                                {
+                                    foreach (var assessment in grouping)
+                                    {
+                                        foreach (var rubric in grouping)
+                                        {
+                                            if (assessment.CourseID == rubric.CourseID)
+                                            {
+                                                <tbody id="courseInModal@(rubric.ProgramID)" class="courseInModal">
+                                                </tbody>
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div id="classDropdown@(program.ProgramID)" class="classDropdown">
+                                            <select class="btn btn-secondary dropdown-toggle selectpicker classDropdownSelect@(program.ProgramID)" data-show-subtext="true" data-live-search="true">
+                                                @foreach (var course in Model.Courses)
+                                                {
+                                                    <option id="@course.CourseID">@course.CourseName</option>
+                                                }
+                                            </select>
+                                            <button type="button" class="btn btn-outline-success addCourseToRubric" id="@program.ProgramID">Add</button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="addClassShow@(program.ProgramID)">
+                                            <button type="button" class="btn btn-success float-right mr-2 addClassShow" id="@program.ProgramID"><i class="fa fa-plus"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-success modalClose" id="@program.ProgramID" data-dismiss="modal">Save & Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+    <script>
+
+        $(function () {
+            var programModal = "";
+            $('.assign').click(function () {
+                var id = $(this).attr("id");
+                programModal = ".programRadioForProgram" + id;
+                $(".programRadioForProgram" + id).first().attr('checked', true);
+                hideShowCourses();
+            });
+
+            $(document).on('change', programModal, function () {
+                hideShowCourses();
+            });
+
+            function hideShowCourses() {
+                var id = $(programModal + ":checked").attr("id");
+                $(programModal).each(function () {
+                    if (id == $(this).attr('id')) {
+                        $('.courseForRubric' + id).show();
+                    } else {
+                        $('.courseForRubric' + $(this).attr('id')).hide();
+                    }
+                });
+            }
+
+            $('.rubricDropdown').hide();
+            $('.classDropdown').hide();
+            getRubricsForMappingAjax();
+            getCoursesForMappingAjax();
+
+            $('.addRubricToProgram').click(function () {
+                var id = $(this).attr("id");
+                $('#addRubricShow'+id).show();
+                $('#rubricDropdown' + id).hide();
+            });
+
+            $('.addCourseToRubric').click(function () {
+                var id = $(this).attr("id");
+                $('#addClassShow'+id).show();
+                $('#classDropdown'+id).hide();
+            });
+
+            $('.addRubricShow').click(function () {
+                var id = $(this).attr("id");
+                $('#addRubricShow'+id).hide();
+                $('#rubricDropdown'+id).show();
+            });
+
+            $('.addClassShow').click(function () {
+                var id = $(this).attr("id");
+                $('#addClassShow'+id).hide();
+                $('#classDropdown'+id).show();
+            });
+
+            coursesInSemesterHideShow();
+            $(".programRadio").change(function () {
+                coursesInSemesterHideShow();
+            });
+
+            function coursesInSemesterHideShow() {
+                var id = $(".programRadio:checked").attr("id");
+                //alert(id);
+                $(".programCourses").children().each(function () {
+                    if (id == $(this).attr('id')) {
+                        //alert(id);
+                        //$('#coursesFor' + id).show();
+                        $('#coursesFor' + $(this).attr('id')).hide();
+                    } else {
+                        $('#coursesFor' + $(this).attr('id')).hide();
+                    }
+                });
+            }
+
+            $('.modalClose').click(function () {
+                var id = $(this).attr("id");
+                $('#addClassShow'+id).show();
+                $('#classDropdown' + id).hide();
+                $('#addRubricShow'+id).show();
+                $('#rubricDropdown' + id).hide();
+                $("#mydiv").load(" #mydiv > *");
+            });
+
+                $('.addRubricToProgram').click(function () {
+                    var programId = $(this).attr("id");
+                    var rubricId = $(".rubricDropdownSelect" + programId).children(":selected").attr("id");
+                    var URL = "@Url.Content("~")Admin/PostRubricToMapping";
+                $.post(URL, {programId, rubricId})
+                    .always(function (data, textStatus, statusObject) {
+
+                        if (statusObject.status == 200) {
+                            getRubricsForMappingAjax()
+                            getCoursesForMappingAjax()
+                        } else {
+
+                            console.log("Http response code: " + data.status);
+                            console.log("Http response: " + data.statusText);
+                        }
+                    });
+                  
+                });
+
+            $(document).on('click', '.deleteAssessment',function () {
+                var rubricId = $(this).attr("id");
+                var programId = $(this).parent().attr("id");
+                var URL = "@Url.Content("~")Admin/DeleteRubricFromMapping";
+                $.post(URL, {programId, rubricId})
+                    .always(function (data, textStatus, statusObject) {
+                        if (statusObject.status == 200) {
+                            getRubricsForMappingAjax()
+                            getCoursesForMappingAjax()
+                        } else {
+
+                            console.log("Http response code: " + data.status);
+                            console.log("Http response: " + data.statusText);
+                        }
+                    });
+             
+            });
+
+            function getRubricsForMappingAjax() {
+                var URL = "@Url.Content("~")Admin/GetRubricsForMapping";
+                var rubric;
+
+                $.getJSON(URL)
+                    .always(function (data, textStatus, statusObject) {
+                        if (statusObject.status == 200) {
+                            // 200 OK
+
+                            $('.assessmentInModal').html('');
+                            for (i = 0; i < data.length; i++) {
+                                var str = '';
+
+                                str = jsonStringbuilder(data, i);
+                                $('#assessmentInModal' + data[i].ProgramID).append(str);
+                                rubric = data[i].ProgramID;
+                            }
+                        } else {
+                            // Error
+                            console.log("Http response code: " + data.status);
+                            console.log("Http response: " + data.statusText);
+                        }
+                        $(programModal).first().attr('checked', true);
+                    });
+
+                function jsonStringbuilder(data, i) {
+                    var format = "";
+
+                    var str = "<tr>";
+                    str += "<td>";
+                    str += "<h5>";
+                    str += "<input type='radio' name='assessmentSelect_" + data[i].ProgramID + "' id='" + data[i].RubricID + "' class='programRadio programRadioForProgram" + data[i].ProgramID + " programRadioForRubric" + data[i].RubricID + "'> " + data[i].RubricName;
+                    str += "</h5>";
+                    str += "</td>";
+                    str += "<td  id='" + data[i].ProgramID + "'><button type='button' class='btn btn-danger float-right mr-2 deleteAssessment' id='" + data[i].RubricID + "'><i class='fas fa-times'></i></button></td>";
+                    str += "</tr>";
+
+                    return str;
+                }
+            }
+
+            $('.addCourseToRubric').click(function () {
+                var programId = $(this).attr("id");
+                var rubricId = $(".programRadioForProgram" + programId + ":checked").attr("id");
+                var courseId = $(".classDropdownSelect" + programId).children(":selected").attr("id");
+                var URL = "@Url.Content("~")Admin/PostCourseToMapping";
+                $.post(URL, {programId, rubricId, courseId})
+                    .always(function (data, textStatus, statusObject) {
+
+                        if (statusObject.status == 200) {
+                            getCoursesForMappingAjax();
+                        } else {
+
+                            console.log("Http response code: " + data.status);
+                            console.log("Http response: " + data.statusText);
+                        }
+                    });
+             
+                });
+
+            $(document).on('click','.deleteCourse',function () {
+                var programId = $(this).parent().attr("id");
+                var rubricId = $(".programRadioForProgram" + programId + ":checked").attr("id");
+                var courseId = $(this).attr("id");
+
+                var URL = "@Url.Content("~")Admin/DeleteCourseFromRubric";
+                $.post(URL, { programId, rubricId, courseId })
+                    .always(function (data, textStatus, statusObject) {
+                        if (statusObject.status == 200) {
+                            getCoursesForMappingAjax();
+                        } else {
+                            console.log("Http response code: " + data.status);
+                            console.log("Http response: " + data.statusText);
+                        }
+                    });
+                
+            });
+
+            function getCoursesForMappingAjax() {
+                var URL = "@Url.Content("~")Admin/getCoursesForMapping";
+
+                $.getJSON(URL)
+                    .always(function (data, textStatus, statusObject) {
+                        if (statusObject.status == 200) {
+                            // 200 OK
+
+                            $('.courseInModal').html('');
+                            for (i = 0; i < data.length; i++) {
+                                var str = '';
+
+                                str = jsonStringbuilder(data, i);
+                                $('#courseInModal' + data[i].ProgramID).append(str);
+                            }
+                        } else {
+                            // Error
+                            console.log("Http response code: " + data.status);
+                            console.log("Http response: " + data.statusText);
+                        }
+                        hideShowCourses();
+                    });
+
+                function jsonStringbuilder(data, i) {
+                    var format = "";
+
+                    var str = "<tr class='courseForRubric" + data[i].RubricID + "'>";
+                    str += "<td><h5>" + data[i].CourseName + "</h5></td>";
+                    str += "<td id='" + data[i].ProgramID + "'><button class='btn btn-danger float-right mr-2 deleteCourse' id=" + data[i].CourseID + "><i class='fas fa-times'></i></button></td>";
+                    str += "</tr>";
+
+                    return str;
+                }
+            }
+        });
+
+    </script>
+}

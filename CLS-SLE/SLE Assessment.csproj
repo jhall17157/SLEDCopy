@@ -190,6 +190,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminAssessmentsController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AdminMappingController.cs" />
+    <Compile Include="Controllers\AdminSchedulingController.cs" />
     <Compile Include="Controllers\AdminUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstructorAssessmentsController.cs" />
@@ -216,6 +218,8 @@
     <Compile Include="Models\AssessmentRubricSecurity.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AssessmentSchedulingViewModel.cs" />
+    <Compile Include="Models\AssessmentMappingsViewModel.cs" />
     <Compile Include="Models\Course.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
@@ -245,6 +249,9 @@
     </Compile>
     <Compile Include="Models\ErrorMessage.cs" />
     <Compile Include="Models\ETL_StatusMapping.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FactTSA.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GetCompletedCountBySectionRubric_Result.cs">
@@ -284,7 +291,13 @@
     <Compile Include="Models\ProgramDepartment.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ProgramMap.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ProgramSecurity.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProgramSecurityByUser.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Role.cs">
@@ -297,6 +310,9 @@
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\RubricDetail.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RubricsByProgram.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\School.cs">
@@ -362,6 +378,12 @@
     <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tmp_offering.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tmp_studentroster.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\User.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
@@ -382,8 +404,12 @@
     <Compile Include="Utility\SLEConfigurationInfo.cs" />
     <Compile Include="ViewModels\CriterionViewModel.cs" />
     <Compile Include="ViewModels\InsertNewAssesmentViewModel.cs" />
+    <Compile Include="ViewModels\MappingViewModel.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
+    <Compile Include="ViewModels\PagingInfo.cs" />
     <Compile Include="ViewModels\RubricViewModel.cs" />
+    <Compile Include="ViewModels\ScheduleSemesterViewModel.cs" />
+    <Compile Include="ViewModels\SchedulingViewModel.cs" />
     <Compile Include="ViewModels\UpdateRubric.cs" />
     <Compile Include="ViewModels\ViewUserViewModel.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
@@ -394,6 +420,9 @@
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
     <Content Include="Content\bootstrap-reboot.min.css" />
+    <Content Include="Content\bootstrap-select.min.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
@@ -1949,6 +1978,9 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\site.css" />
+    <Content Include="Images\loading.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\waukesha_logo.svg" />
     <Content Include="LICENSE.txt" />
     <Content Include="ApplicationInsights.config">
@@ -2042,6 +2074,9 @@
     <Content Include="fontawesome\webfonts\fa-solid-900.ttf" />
     <Content Include="fontawesome\webfonts\fa-solid-900.woff" />
     <Content Include="fontawesome\webfonts\fa-solid-900.woff2" />
+    <Content Include="Content\bootstrap-select.css.map">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -2052,6 +2087,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="Scripts\bootstrap-select.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -2068,6 +2106,9 @@
     <Content Include="Scripts\bootstrap.js.map" />
     <Content Include="Scripts\bootstrap.bundle.min.js.map" />
     <Content Include="Scripts\bootstrap.bundle.js.map" />
+    <Content Include="Scripts\bootstrap-select.min.js.map">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -2080,6 +2121,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\mapping.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="favicon.ico" />
     <Content Include="Scripts\popper-utils.js" />
@@ -2168,6 +2210,12 @@
     <None Include="Web.Test.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+    <Content Include="Views\AdminMapping\Index.cshtml" />
+    <Content Include="Views\AdminScheduling\Index.cshtml" />
+    <Content Include="Views\AdminScheduling\TimeframeSemester.cshtml" />
+    <Content Include="Views\AdminScheduling\TimeframeCourse.cshtml" />
+    <Content Include="Views\AdminScheduling\TimeframeResults.cshtml" />
+    <Content Include="Views\AdminScheduling\ScheduleSemester.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

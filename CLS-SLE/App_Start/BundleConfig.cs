@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace CLS_SLE
 {
@@ -21,7 +20,11 @@ namespace CLS_SLE
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js"));
-           
+            //Allows for live searching drop down list
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap-select").Include(
+                "~/Scripts/bootstrap-select.min.js",
+                "~/Scripts/mapping.js"));
+
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
@@ -32,6 +35,10 @@ namespace CLS_SLE
                      "~/Content/images/tasks-solid.png",
                      "~/Content/images/users-solid.png"
                      ));
+            //Styling for bootstrap-select. Allows for live searching drop down list
+            bundles.Add(new StyleBundle("~/Content/bootstrap-select").Include(
+                "~/Content/bootstrap-select.min.css"));
+            
         }
     }
 }

@@ -86,6 +86,12 @@ namespace CLS_SLE.Controllers
             schedulingViewModel.CourseSelectList = (from c in schedulingViewModel.Courses
                                                     select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() }).Distinct().ToList();
 
+
+            schedulingViewModel.CourseForAddEntry = (from c in db.Courses
+                     where c.Sections.Where(y => y.SemesterID == schedulingViewModel.SemesterID).Any()
+                     orderby c.Number
+                     select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() }).Distinct().ToList();
+
             //foreach (Course course in schedulingViewModel.Courses)
             //{
             //    schedulingViewModel.CourseSelectList.Add(new SelectListItem { Text = course.Number + " " + course.CourseName, Value = course.CourseID.ToString() });
@@ -285,11 +291,6 @@ namespace CLS_SLE.Controllers
 
         }
 
-
-        public ActionResult TimeframeSemester()
-        {
-            return View("TimeframeSemester");
-        }
 
         public List<SelectListItem> GetSemesters(bool isScheduled)
         {

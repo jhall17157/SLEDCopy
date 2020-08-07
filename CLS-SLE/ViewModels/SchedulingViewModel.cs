@@ -14,6 +14,7 @@ namespace CLS_SLE.ViewModels
         public Semester Semester { get; set; }
         public List<Course> Courses { get; set; }
         public List<SelectListItem> CourseSelectList { get; set; }
+        public List<SelectListItem> CourseForAddEntry { get; set; }
         public int? CourseID { get; set; }
         public Course CourseSearch { get; set; }
         public Section Section { get; set; }

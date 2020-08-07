@@ -2212,9 +2212,6 @@
     </None>
     <Content Include="Views\AdminMapping\Index.cshtml" />
     <Content Include="Views\AdminScheduling\Index.cshtml" />
-    <Content Include="Views\AdminScheduling\TimeframeSemester.cshtml" />
-    <Content Include="Views\AdminScheduling\TimeframeCourse.cshtml" />
-    <Content Include="Views\AdminScheduling\TimeframeResults.cshtml" />
     <Content Include="Views\AdminScheduling\ScheduleSemester.cshtml" />
   </ItemGroup>
   <ItemGroup>

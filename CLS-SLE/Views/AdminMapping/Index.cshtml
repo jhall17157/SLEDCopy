@@ -50,18 +50,18 @@
         <tbody id="assessmentData">
             @{
                 int rubricNumber = 0;
-                foreach (Assessment assessment in Model.Program.Assessments)
+                foreach (var assessment in Model.Program.Assessments)
                 {
                     <tr>
                         <td class="bg-dark text-white align-self-center"><h4 class="m-0 pl-2 pr-2 pt-1 pb-1">@assessment.Name</h4><!--<h5 class="float-left">(@*Model.Program.Name*@)</h5>--></td>
                     </tr>
-                    foreach (RubricAssessment ra in assessment.RubricAssessments.ToList())
+                    foreach (var ra in assessment.RubricAssessments.ToList())
                     {
                         rubricNumber++;
                         <tr href="#" data-target=".rubricCollapse@(rubricNumber)" class="accordionTrigger clickable">
                             <td class="bg-light align-self-center">
                                 <h4 class="d-inline half-indent subheader-lh"><i class="rubricIcon@(rubricNumber) fas fa-angle-right"></i>&emsp;@ra.AssessmentRubric.Name</h4>
-                                <button type="button" class="btn btn-success float-right addMapButton rubricButton@(rubricNumber)" data-toggle="modal" @*onclick="@Model.Rubrics.SingleOrDefault(r => r.Value.AsInt() == ra.AssessmentRubric.RubricID).Selected = true" data-rubric="@ra.AssessmentRubric.RubricID"*@ data-target="#addModal"><i class="fa fa-plus" aria-hidden="true"></i> Add Course</button>
+                                <button type="button" class="btn btn-success float-right addMapButton rubricButton@(rubricNumber)" data-toggle="modal" @*onclick="@Model.Rubrics.SingleOrDefault(r => r.Value.AsInt() == ra.AssessmentRubric.RubricID).Selected = true" data-rubric="@ra.AssessmentRubric.RubricID"*@ data-target="#addModal"><i class="fa fa-plus" aria-hidden="true"></i> Add Mapping</button>
                             </td>
                         </tr>
                         if (!ra.AssessmentRubric.ProgramAssessmentMappings.Any())
@@ -74,14 +74,14 @@
                         }
                         else
                         {
-                            foreach (ProgramAssessmentMapping pam in ra.AssessmentRubric.ProgramAssessmentMappings)
+                            foreach (var pam in ra.AssessmentRubric.ProgramAssessmentMappings)
                             {
                                 <tr class="collapse rubricCollapse@(rubricNumber) accordionClose">
                                     <td class="align-self-center">
                                         <p class="d-none d-md-noe d-lg-inline offset-1">(@pam.Course.Number) @pam.Course.CourseName</p>
 
                                         <!-- Button trigger modal -->
-                                        <button type="button" class=" btn btn-danger btn-sm d-inline float-right" data-toggle="modal" data-target=".removeCourseModal@(pam.Course.Number)"><i class="fas fa-times" aria-hidden="true" ></i></button>
+                                        <button type="button" class=" btn btn-danger btn-sm d-inline float-right" data-toggle="modal" data-target=".removeCourseModal@(pam.Course.Number)"><i class="fas fa-times" aria-hidden="true"></i></button>
                                         <!-- Modal For Deleting Courses-->
                                         <div class="modal fade removeCourseModal@(pam.Course.Number)" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -99,7 +99,7 @@
                                                         @using (Html.BeginForm("DeleteMapping", "AdminMapping", new { mapID = pam.ProgramAssessmentMappingID }, FormMethod.Post))
                                                         {
                                                             @Html.HiddenFor(model => model.ProgramID);
-                                                            <button type = "submit" class="btn btn-outline-danger float-right">Delete</button>
+                                                            <button type="submit" class="btn btn-outline-danger float-right">Delete</button>
                                                         }
 
                                                     </div>
@@ -116,52 +116,52 @@
         </tbody>
     </table>
 
-} 
+}
 
 
 <!-- Modal -->
 @*<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addModal">Add Course to Rubric</h5>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModal">Add Course to Rubric</h5>
 
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group col-12">
-                    <div>Program name: @program</div>
-                        <div>Rubric Name: @rubric</div>
-                    <p class="col-12 mb-1 pl-0">Select a course</p>
-                    @Html.DropDownListFor(p => p.CourseID, Model.Courses, "-Select Course-", new
-                       {
-                           @id = "DropDownCourses",
-                           @class = "form-control selectpicker d-inline col-6",
-                           onchange = "this.form.submit();"
-                       })
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group col-12">
+                        <div>Program name: @program</div>
+                            <div>Rubric Name: @rubric</div>
+                        <p class="col-12 mb-1 pl-0">Select a course</p>
+                        @Html.DropDownListFor(p => p.CourseID, Model.Courses, "-Select Course-", new
+                           {
+                               @id = "DropDownCourses",
+                               @class = "form-control selectpicker d-inline col-6",
+                               onchange = "this.form.submit();"
+                           })
 
-                    @Html.DropDownList("Program", Model.Programs, "All", new {@id = "DropDownPrograms", @class = "form-control"})
-                    @Html.DropDownListFor(x => x.SelectedProgram, Model.AvailablePrograms, new {@class = "form-control"})
-                    @Html.ValidationMessageFor(model => model.Program.ProgramID)
+                        @Html.DropDownList("Program", Model.Programs, "All", new {@id = "DropDownPrograms", @class = "form-control"})
+                        @Html.DropDownListFor(x => x.SelectedProgram, Model.AvailablePrograms, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(model => model.Program.ProgramID)
 
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary enableModalButton" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary enableModalButton">Add Course</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary enableModalButton" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary enableModalButton">Add Course</button>
-            </div>
         </div>
-    </div>
-</div>*@
+    </div>*@
 <div class="modal fade mt-lg-5" id="addModal" tabindex="-1" role="form" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-light">
-                <h5 class="modal-title" id="addModal">Add Course to Rubric</h5>
+                <h5 class="modal-title" id="addModal">Add Mapping to Rubric</h5>
 
-                    <i class="fas fa-plus"></i>
+                <i class="fas fa-plus"></i>
             </div>
             @using (Html.BeginForm("CreateMapping", "AdminMapping", FormMethod.Post))
             {
@@ -169,10 +169,11 @@
                     <p class="col-12 mb-1 pl-0">Select Program:</p>
                     <div class="mb-3">
                         @Html.DropDownListFor(p => p.ProgramID, Model.Programs, new
-                        {
-                            @id = "AddModalDropDownPrograms",
-                            @class = "form-control selectpicker d-inline col-6"
-                        })
+                           {
+                               @id = "AddModalDropDownPrograms",
+                               @class = "form-control selectpicker d-inline col-6",
+                               @disabled = "disabled"
+                           })
                     </div>
                     <p class="col-12 mb-1 pl-0">Select Rubric:</p>
                     <div class="mb-3">
@@ -196,57 +197,57 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-dark enableModalButton" data-dismiss="modal">Cancel</button>
-                    <input type="submit" class="btn btn-success" value="Add Course" />
+                    <input type="submit" class="btn btn-success" value="Add Mapping" />
                     @*<button type="submit" class="btn btn-success enableModalButton" value="submit">Add Course</button>*@
                 </div>
             }
-            </div>
+        </div>
     </div>
 </div>
 
 
-        <script src="~/Scripts/jquery-3.4.1.js"></script>
-        <script>
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script>
 
-            $(function () {
-                $('.accordionTrigger').click(toggleAccordion);
-            })
+    $(function () {
+        $('.accordionTrigger').click(toggleAccordion);
+    })
 
-            function showTooltip() {
-                $('[data-toggle="tooltip"]').show();
-            }
+    function showTooltip() {
+        $('[data-toggle="tooltip"]').show();
+    }
 
-            function hideTooltip() {
-                $('[data-toggle="tooltip"]').tooltip('hide');
-            }
+    function hideTooltip() {
+        $('[data-toggle="tooltip"]').tooltip('hide');
+    }
 
-            function toggleAccordion() {
-                if ($($(this).data('target')).hasClass('accordionClose')) {
-                    $($(this).data('target')).removeClass('collapse').removeClass('accordionClose').addClass('accordionOpen');
-                    var targetClass = $(this).data('target');
-                    $('.rubricIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-right").addClass("fas fa-angle-down");
-                    //$('.rubricButton' + targetClass[targetClass.length - 1]).removeClass("d-none").addClass("d-inline");
-                }
-                else if ($($(this).data('target')).hasClass('accordionOpen')) {
-                    $($(this).data('target')).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
-                    var targetClass = $(this).data('target');
-                    $('.rubricIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
-                    //$('.rubricButton' + targetClass[targetClass.length - 1]).removeClass("d-inline").addClass("d-none");
-                }
-            }
+    function toggleAccordion() {
+        if ($($(this).data('target')).hasClass('accordionClose')) {
+            $($(this).data('target')).removeClass('collapse').removeClass('accordionClose').addClass('accordionOpen');
+            var targetClass = $(this).data('target');
+            $('.rubricIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-right").addClass("fas fa-angle-down");
+            //$('.rubricButton' + targetClass[targetClass.length - 1]).removeClass("d-none").addClass("d-inline");
+        }
+        else if ($($(this).data('target')).hasClass('accordionOpen')) {
+            $($(this).data('target')).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
+            var targetClass = $(this).data('target');
+            $('.rubricIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+            //$('.rubricButton' + targetClass[targetClass.length - 1]).removeClass("d-inline").addClass("d-none");
+        }
+    }
             //$('.addMapButton').on('click', function () {
             //    var rubric = $(this).data('rubric');
-                
+
             //    console.log(rubric);
             //    $('.selectpicker #DropDownRubrics').val(rubric);
 
             //});
-        </script>
+</script>
 
 
-        @section Scripts {
-            @Scripts.Render("~/bundles/jqueryval")
-            @Scripts.Render("~/bundles/bootstrap-select")
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap-select")
 
 
-        }
+}

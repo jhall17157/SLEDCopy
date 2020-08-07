@@ -32,7 +32,11 @@ namespace CLS_SLE.Controllers
             if (TempData["ProgramID"] != null)
             {
                 int programID = (int)TempData["ProgramID"];
-                mappingViewModel.Program = db.Programs.FirstOrDefault(p => p.ProgramID == programID);
+
+
+                mappingViewModel.Program = LoadVmProgram(programID);
+
+                // mappingViewModel.Program = db.Programs.FirstOrDefault(p => p.ProgramID == programID);
                 mappingViewModel.ProgramID = programID;
             }
             return View(mappingViewModel);
@@ -42,7 +46,6 @@ namespace CLS_SLE.Controllers
         [HttpPost]
         public ActionResult Index(MappingViewModel mappingVM)
         {
-
             MappingViewModel mappingViewModel = new MappingViewModel();
             mappingViewModel.Programs = (from p in db.Programs
                                          select new SelectListItem { Text = p.Number + " " + p.Name, Value = p.ProgramID.ToString() })
@@ -52,7 +55,12 @@ namespace CLS_SLE.Controllers
                                         select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() })
                                             .Distinct().ToList();
             mappingViewModel.Rubrics = (from r in db.AssessmentRubrics
+                                        where r.RubricAssessments.Where(ra => ra.Assessment.ProgramID == mappingVM.ProgramID).Any()
                                         select new SelectListItem { Text = r.Name, Value = r.RubricID.ToString() }).Distinct().ToList();
+
+            mappingViewModel.Rubrics.AddRange((from r in db.AssessmentRubrics
+                                               where r.RubricAssessments.Where(ra => ra.Assessment.ProgramID == 0).Any()
+                                               select new SelectListItem { Text = r.Name, Value = r.RubricID.ToString() }).Distinct().ToList());
 
             mappingViewModel.Course = db.Courses.FirstOrDefault(p => p.CourseID == mappingVM.CourseID);
             int programID;
@@ -65,7 +73,11 @@ namespace CLS_SLE.Controllers
                 mappingViewModel.ProgramID = mappingVM.ProgramID;
             }
 
-            mappingViewModel.Program = db.Programs.FirstOrDefault(p => p.ProgramID == mappingViewModel.ProgramID);
+
+            mappingViewModel.Program = LoadVmProgram(mappingVM.ProgramID);
+
+
+            //mappingViewModel.Program = db.Programs.FirstOrDefault(p => p.ProgramID == mappingViewModel.ProgramID);
 
             return View(mappingViewModel);
         }
@@ -160,6 +172,61 @@ namespace CLS_SLE.Controllers
         }
 
 
+        private vmProgram LoadVmProgram(int? programID)
+        {
+            var result = (from p in db.Programs
+                          where p.ProgramID == programID
+                          select new vmProgram()
+                          {
+                              ProgramID = p.ProgramID,
+                              Name = p.Name,
+                              Number = p.Number,
+                              Assessments = p.Assessments.Where(a1 => a1.IsActive == true).Select(a => new vmAssessment()
+                              {
+                                  Name = a.Name,
+                                  AssessmentID = a.AssessmentID,
+                                  RubricAssessments = a.RubricAssessments.Where(ra1 => ra1.AssessmentRubric.IsActive == true).Select(ra => new vmRubricAssessment()
+                                  {
+                                      AssessmentRubric = new vmAssessmentRubric()
+                                      {
+                                          Name = ra.AssessmentRubric.Name,
+                                          ProgramAssessmentMappings = ra.AssessmentRubric.ProgramAssessmentMappings.Select(pam => new vmProgramAssessmentMapping()
+                                          {
+                                              ProgramAssessmentMappingID = pam.ProgramAssessmentMappingID,
+                                              Course = new vmCourse() { CourseName = pam.Course.CourseName, Number = pam.Course.Number }
+                                          }).ToList()
+                                      }
+                                  }).ToList()
+                              }).ToList()
+                          }).FirstOrDefault();
 
+            var institutionWideAssessments = (from a in db.Assessments
+                                              where a.ProgramID == 0
+                                                && a.IsActive == true
+                                              select new vmAssessment()
+                                              {
+                                                  Name = a.Name,
+                                                  AssessmentID = a.AssessmentID,
+                                                  RubricAssessments = a.RubricAssessments.Where(ra1 => ra1.AssessmentRubric.IsActive == true).Select(ra => new vmRubricAssessment()
+                                                  {
+                                                      AssessmentRubric = new vmAssessmentRubric()
+                                                      {
+                                                          Name = ra.AssessmentRubric.Name,
+                                                          ProgramAssessmentMappings = ra.AssessmentRubric.ProgramAssessmentMappings.Where(pam1 => pam1.ProgramID == programID).Select(pam => new vmProgramAssessmentMapping()
+                                                          {
+                                                              ProgramAssessmentMappingID = pam.ProgramAssessmentMappingID,
+                                                              Course = new vmCourse() { CourseName = pam.Course.CourseName, Number = pam.Course.Number }
+                                                          }).ToList()
+                                                      }
+                                                  })
+                                              }).ToList();
+            var tmpList = result.Assessments.ToList();
+            tmpList.AddRange(institutionWideAssessments);
+
+            result.Assessments = tmpList;
+
+            return result;
+        }
     }
+
 }

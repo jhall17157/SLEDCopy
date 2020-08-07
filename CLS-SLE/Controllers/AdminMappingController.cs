@@ -194,7 +194,7 @@ namespace CLS_SLE.Controllers
                                           {
                                               ProgramAssessmentMappingID = pam.ProgramAssessmentMappingID,
                                               Course = new vmCourse() { CourseName = pam.Course.CourseName, Number = pam.Course.Number }
-                                          }).ToList()
+                                          }).OrderBy(pam2 => pam2.Course.Number).ToList()
                                       }
                                   }).ToList()
                               }).ToList()
@@ -216,7 +216,7 @@ namespace CLS_SLE.Controllers
                                                           {
                                                               ProgramAssessmentMappingID = pam.ProgramAssessmentMappingID,
                                                               Course = new vmCourse() { CourseName = pam.Course.CourseName, Number = pam.Course.Number }
-                                                          }).ToList()
+                                                          }).OrderBy(pam2 => pam2.Course.Number).ToList()
                                                       }
                                                   })
                                               }).ToList();

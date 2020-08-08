@@ -2,15 +2,14 @@
 @{
     ViewBag.Title = "View Assessment";
 }
-
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "AdminAssessments")</li>
         <li class="breadcrumb-item active" aria-current="page">@Model.assessment.Name </li>
     </ol>
 </nav>
-<h1> @Model.assessment.Name  - <a style="font-size: 85%;" href="/Admin/EditAssessment?AssessmentID=@Model.assessment.AssessmentID"><b>Edit</b></a> </h1>
+<h1> @Model.assessment.Name  - <a style="font-size: 85%;" href="/AdminAssessments/EditAssessment?AssessmentID=@Model.assessment.AssessmentID"><b>Edit</b></a> </h1>
 <br />
 <div class="py-1">
     <b>Category:</b> @Model.assessment.Category
@@ -49,13 +48,12 @@ else if (Model.CreatorLogin != null)
     </div>
 }
 <br />
-
 <div>
     <table class="table table-hover table-striped">
         <thead class="thead-dark">
             <tr>
                 <th class="h3">Rubrics</th>
-                <th><a href="~/Rubric/AddRubric?assessmentID=@Model.assessment.AssessmentID" class="float-right"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Rubric </button></a></th>
+                <th><a href="~/Rubric/AddRubric?assessmentID=@Model.assessment.AssessmentID" class="float-right btn btn-success"><i class="fa fa-plus"></i> Add New Rubric </a></th>
             </tr>
         </thead>
         <tbody>
@@ -65,12 +63,11 @@ else if (Model.CreatorLogin != null)
 
                     <tr data-userID="person.PersonID">
                         <td>@assessmentRubric.Name</td>
-                        
-                        <td class="text-right"><a href="~/Rubric/ViewRubric?rubricID=@assessmentRubric.RubricID"><button type="button" class="btn btn-primary mr-2">View</button></a></td>
+
+                        <td class="text-right"><a href="@Url.Action("ViewRubric", "Rubric", new { rubricID = rubricAssessment.RubricID, assessmentID = Model.assessment.AssessmentID })" class="btn btn-primary mr-2">View</a></td>
                     </tr>
                 }
             }
-
         </tbody>
     </table>
 </div>

@@ -12,10 +12,12 @@ using NLog;
 using System.Security.Principal;
 using System.Threading;
 using Microsoft.AspNet.Identity.EntityFramework;
+using CLS_SLE.Utility.SAML;
+
 
 namespace CLS_SLE.Controllers
 {
-    public class UserController : Controller
+    public class UserController : SLEControllerBase
     {
         private Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -34,6 +36,15 @@ namespace CLS_SLE.Controllers
             {
                 return View();
             }
+
+            var request = new AuthRequest(
+                SLEConfig.SSOConfig.IssuerApplicationName, //put your app's "unique ID" here
+                SLEConfig.SSOConfig.AssertionConsumerServiceURL //assertion Consumer Url - the redirect URL where the provider will send authenticated users
+            );
+
+            string url = request.GetRedirectUrl(SLEConfig.SSOConfig.LoginURL);
+
+            return Redirect(url);
         }
 
         [HttpPost]
@@ -122,6 +133,8 @@ namespace CLS_SLE.Controllers
                 }
             }
         }
+
+
 
         [AllowAnonymous]
         [OutputCache(NoStore = true, Location = System.Web.UI.OutputCacheLocation.None)]
@@ -241,6 +254,7 @@ namespace CLS_SLE.Controllers
         [Authorize]
         public ActionResult ChangePassword()
         {
+            
             if (Session["User"] != null)
             {
                 return View();

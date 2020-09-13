@@ -204,11 +204,15 @@
     <Compile Include="Controllers\InstructorAssessmentsController.cs" />
     <Compile Include="Controllers\RoleAdminController.cs" />
     <Compile Include="Controllers\RubricController.cs" />
+    <Compile Include="Controllers\SLEControllerBase.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ErrorMessage.cs" />
     <Compile Include="Models\PagingInfo.cs" />
+    <Compile Include="Utility\SAML.cs" />
+    <Compile Include="Utility\SLEConfigurationInfo.cs" />
     <Compile Include="ViewModels\AddCourseViewModel.cs" />
     <Compile Include="ViewModels\AddDepartmentViewModel.cs" />
     <Compile Include="Models\Assessment.cs">

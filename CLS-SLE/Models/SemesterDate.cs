@@ -21,5 +21,6 @@ namespace CLS_SLE.Models
         public string TermCode { get; set; }
         public Nullable<System.DateTime> StartDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
+        public string AcademicYear { get; set; }
     }
 }

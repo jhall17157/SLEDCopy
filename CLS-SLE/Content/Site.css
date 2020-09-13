@@ -112,6 +112,26 @@ small, a {
     float: right;
 }
 
+.indent {
+    margin-left: 4%;
+}
+
+.half-indent {
+    margin-left: 2%;
+}
+
+.bg-medium {
+    background-color: #e8e9ea !important;
+}
+
+.subheader-lh {
+    line-height: 1.5;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
 /* prevents h1 from getting crazy big on huge monitors */
 @media only screen and (min-width: 2000px) {
     h1 {
@@ -156,6 +176,3 @@ h3 {
 .form-check .desc {
     white-space: nowrap;
 }
-
-
-

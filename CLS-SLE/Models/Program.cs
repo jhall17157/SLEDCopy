@@ -23,6 +23,7 @@ namespace CLS_SLE.Models
             this.ProgramDepartments = new HashSet<ProgramDepartment>();
             this.ProgramSecurities = new HashSet<ProgramSecurity>();
             this.StudentPrograms = new HashSet<StudentProgram>();
+            this.FactTSAs = new HashSet<FactTSA>();
         }
     
         public short ProgramID { get; set; }
@@ -47,5 +48,7 @@ namespace CLS_SLE.Models
         public virtual ICollection<ProgramSecurity> ProgramSecurities { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StudentProgram> StudentPrograms { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FactTSA> FactTSAs { get; set; }
     }
 }

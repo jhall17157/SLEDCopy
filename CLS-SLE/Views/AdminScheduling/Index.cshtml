@@ -1,0 +1,572 @@
+﻿@using System.Text
+@using CLS_SLE.Models
+@model CLS_SLE.ViewModels.SchedulingViewModel
+@{
+    ViewBag.Title = "Index";
+}
+@Styles.Render("~/Content/bootstrap-select")
+
+    <head>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha256-rByPlHULObEjJ6XQxW/flG2r+22R5dKiAoef+aXWfik=" crossorigin="anonymous" />
+        <style type="text/css">
+            .loadingmodal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                background-color: black;
+                z-index: 99;
+                opacity: 0.8;
+                filter: alpha(opacity=80);
+                min-height: 100%;
+                width: 100%;
+            }
+
+            .loading {
+                font-family: Arial;
+                font-size: 10pt;
+                border: 5px solid #67CFF5;
+                width: 250px;
+                height: 150px;
+                display: none;
+                align-content: center;
+                text-align: center;
+                position: fixed;
+                background-color: #fff;
+                z-index: 999;
+                padding: 25px;
+                box-shadow: 0 3px 10spx #000;
+            }
+
+            .loadingGif {
+                width: 50px;
+                height: 50px;
+                align-content: center;
+            }
+
+            .loadingText {
+                font-size: 1.15rem;
+            }
+        </style>
+    </head>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item active" aria-current="page">Scheduling</li>
+    </ol>
+</nav>
+
+
+<h1>Assessment Scheduling</h1>
+
+@using (Html.BeginForm("Index", "AdminScheduling", new { page = 1 }, FormMethod.Post, new { @id = "semesterSelectForm" }))
+{
+
+    //Populates a list of semesters to choose from with live search
+    <div class="form-inline mt-4 mb-4">
+        <div class="row col-7">
+
+            <div class="form-group col-12">
+                <p class="col-12 mb-1 pl-0">Search For A Semester:</p>
+                @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
+                {
+                    @id = "DropDownSemesters",
+                    @class = "form-control selectpicker d-inline col-9",
+                    onchange = "this.form.submit();"
+                })
+
+                @Html.HiddenFor(p => p.PagingInfo)
+
+
+                <input type="submit" class="btn btn-primary d-inline ml-2" value="Search" onclick="btnSemesterIDSubmit" />
+            </div>
+        </div>
+        <div class="row col-4 border-left">
+            <div class="form-group col-12">
+                <p class="col-12 mb-1 pl-0">&nbsp;</p>
+                @Html.ActionLink("Configure Semester", "ScheduleSemester", "AdminScheduling", null, new { @class = "btn btn-success d-inline ml-2" })
+            </div>
+        </div>
+    </div>
+}
+<div class="loading" align="center">
+    <img class="loadingGif" src="~/Images/loading.gif" alt="Spinning Loading Icon" />
+    <br /><br /><span class="loadingText">Loading. Please Wait.</span>
+</div>
+
+@{
+    if (Model.Semester != null)
+    {
+
+        <!-- Toolbar Functions -->
+        <div class="form-inline bg-dark text-white pt-2 pb-3 pl-4 pr-4">
+            <div class="row col-12 mt-2 mb-2">
+                <h4>@Model.Semester.Name</h4>
+            </div>
+            <div class="form-group col-8 row">
+                <p class="col-12 mb-1 pl-0">Search For A Course:</p>
+                @using (Html.BeginForm("Index", "AdminScheduling", new { page = 1 }, FormMethod.Post, new { @class = "row col-12" }))
+                {
+                    @Html.DropDownListFor(s => s.CourseID, Model.CourseSelectList, "-Select Course-", new
+                    {
+                        @id = "DropDownCourses",
+                        @class = "form-control selectpicker d-inline col-8"
+                    })
+                    @Html.HiddenFor(p => p.PagingInfo)
+                    @Html.HiddenFor(s => s.SemesterID)
+                    <button type="submit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>
+                }
+            </div>
+
+            <div class="row col-1">
+
+            </div>
+            <div class="row col-3">
+                <p class="col-12 mb-1 pl-0">Semester Functions</p>
+                <div class="col-12 ml-0">
+
+                    @*<button type="submit" class="btn btn-success d-inline" data-toggle="modal" data-target="#addCourseModal"><i class="fas fa-plus"></i> Add Course</button>*@
+                    <button class="btn btn-success d-inline" data-toggle="modal" data-target="#addEntryModal"><i class="fas fa-plus" aria-hidden="true"></i> Add Entry</button>
+
+
+                    <!--<button type="submit" class="btn btn-warning d-inline ml-1" data-toggle="modal" data-target="#editDueDatesModal"><i class="fas fa-calendar-alt"></i> Edit All Due Dates</button>-->
+                </div>
+            </div>
+        </div>
+
+        <table class="table">
+            <tbody>
+                @{
+                    int courseNumber = 0;
+                    int headerNumber = 0;
+                    foreach (Course course in Model.Courses)
+                    {
+                        courseNumber++;
+                        <tr href="#" data-target=".courseCollapse@(courseNumber)" class="row bg-medium border-top accordionTrigger clickable pt-1 ml-0 mr-0">
+                            <td class="col-10 border-0">
+                                <h4>
+                                    <i class="courseIcon@(courseNumber) ml-3 mr-3 fas fa-angle-right"></i> @course.CourseName (@course.Number)
+                                </h4>
+                            </td>
+                            @*<td class="col-2 border-0 text-right">
+                                    <button class="btn btn-success"><i class="fas fa-plus" aria-hidden="true"></i> Add CRN</button>
+                                </td>*@
+                        </tr>
+                        int sectionNumber = 0;
+
+                        foreach (Section sec in Model.Semester.Sections.Where(s => s.CourseID == course.CourseID))
+                        {
+                            sectionNumber++;
+
+                            <tr href="#" data-header="@(headerNumber) " data-target=".assessmentCollapse@(courseNumber)@(sectionNumber)" class="row pt-1 bg-light border-bottom ml-0 mr-0 collapse courseCollapse@(courseNumber) accordionClose lowerAccordionTrigger clickable">
+                                <td class="border-0 col-4 align-self-center ml-0 mr-0">
+                                    <h5 class="indent d-inline align-self-center">
+                                        <i class="sectionIcon@(sectionNumber) sectionIcon ml-3 mr-3 fas fa-angle-right"></i> CRN: @sec.CRN
+                                    </h5>
+
+
+                                    <h6 class="pl-3 d-inline">
+                                        @*Ends: @sec.EndDate.Value.ToShortDateString();*@
+                                    </h6>
+                                </td>
+                                <td class="col-5 text-right border-0 pl-3">
+                                    <!--<h6>Submission Timeframe</h6>-->
+                                </td>
+                                <td class="col-3 border-0 text-right"><!-- Space For Button Or Header --></td>
+                            </tr>
+
+                            <tr class="row col-12 courseCollapse@(courseNumber) assessmentHeader assessmentHeader@(headerNumber)">
+                                <td class="col-12 pt-3 pb-1 border-0"><h5 class="ml-4 mr-4 pb-3 border-bottom">Assessments</h5></td>
+                            </tr>
+
+                            if (!sec.SectionRubrics.Any())
+                            {
+                                <tr class="row border-0 collapse assessmentCollapse@(courseNumber)@(sectionNumber) assessmentCollapse@(courseNumber) accordionClose">
+                                    <td class="border-0 col-5 align-self-center">
+                                        <p class="ml-4 mb-0 pt-1 pb-1">No Assessments Assigned</p>
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                foreach (SectionRubric sr in sec.SectionRubrics)
+                                {
+
+                                    using (Html.BeginForm("SaveSchedule", "AdminScheduling", new { id = sr.SectionRubricID, sId = Model.SemesterID }, FormMethod.Post))
+                                    {
+
+                                        <tr class="row pb-2 collapse assessmentCollapse@(courseNumber)@(sectionNumber) assessmentCollapse@(courseNumber) accordionClose">
+                                            @*<td class="col-12 pt-3 pb-1 border-0 "><h5 class="ml-4 mr-4 pb-3 border-bottom">Assessments</h5></td>*@
+                                            <td class="border-0 col-5 align-self-center">
+                                                <p class="ml-4">@sr.AssessmentRubric.Name</p>
+                                            </td>
+
+                                            <td class="border-0 row col-3 align-self-center">
+
+
+                                                <p class="col-12 mb-1 pl-0">Submission Start:</p>
+                                                @if (sr.StartDate != null)
+                                                {
+                                                    @Html.TextBoxFor(s => s.StartDate, "{0:MM-dd-yyyy}", new {@Value = sr.StartDate.ToShortDateString(), @Class = "form-control selectpicker col-10 datewidget" })
+                                                    @*@Html.EditorFor(s => s.StartDate, new { htmlAttributes = new { @class = "form-control", placeholder = sr.StartDate.ToShortDateString() } })*@
+                                                }
+                                                else
+                                                {
+                                                    <input type="date" class="form-control selectpicker col-9 ml-2">
+                                                }
+                                            </td>
+                                            <td class="border-0 row col-3">
+                                                <p class="col-12 mb-1 pl-0">Submission End:</p>
+                                                @if (sr.EndDate != null)
+                                                {
+                                                    @Html.TextBoxFor(s => s.EndDate, "{0:MM-dd-yyyy}", new { @Value = sr.EndDate.ToShortDateString(), @Class = "form-control selectpicker col-10 datewidget" })
+                                                }
+                                                else
+                                                {
+                                                    <input type="date" class="form-control col-9 ml-2">
+                                                }
+
+                                            </td>
+                                            <td class="border-0 col-1 text-right align-self-center">
+
+
+                                                @Html.HiddenFor(s => s.SemesterID)
+                                                <button type="submit" class="btn btn-success btn-sm d-inline"><i class="fas fa-save" aria-hidden="true"></i></button>
+
+
+                                                <!-- Delete trigger modal -->
+                                                <button type="button" class=" btn btn-danger btn-sm d-inline float-right ml-1" data-toggle="modal" data-target=".removeCourseModal@(sr.SectionRubricID)"><i class="fas fa-times" aria-hidden="true"></i></button>
+
+                                            </td>
+                                        </tr>
+                                    }
+                                    <!-- Modal For Deleting SectioRubric Assessments-->
+                                    <div class="modal fade removeCourseModal@(sr.SectionRubricID)" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-light">
+                                                    <h3 class="modal-title" id="removeConfirm">Delete Confirmation</h3>
+                                                    <i class="ml-auto fas fa-exclamation-triangle fa-2x"></i>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want remove<br /><strong>@sr.AssessmentRubric.Name</strong> from<br /><strong>CRN @sr.Section.CRN</strong>?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-secondary mr-auto" data-dismiss="modal">Cancel</button>
+
+                                                    @using (Html.BeginForm("DeleteSchedule", "AdminScheduling", new { id = sr.SectionRubricID, sId = Model.SemesterID }, FormMethod.Post))
+                                                    {
+                                                        <button type="submit" class="btn btn-outline-danger float-right">Delete</button>
+                                                    }
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                @*@foreach (Section sec in Model.Semester.Sections.OrderBy(c => c.CourseID).ThenBy(s => s.CRN).GroupBy(c => c.Course))
+                                                    {
+                    <tr class="row bg-light">
+                                        <td class="col-12">
+                                            <h4>*@
+                @*@sec.CRN - @sec.Course.CourseName*@
+                <!--<button type="button" class="btn btn-danger btn-sm d-inline float-right"><i class="fas fa-times" aria-hidden="true"></i></button>
+                <button type="button" class="btn btn-warning btn-sm d-inline float-right"><i class="fas fa-wrench" aria-hidden="true"></i></button>-->
+                @*</h4>
+                        </td>
+                    </tr>
+                    foreach (SectionRubric sr in sec.SectionRubrics)
+                    {*@
+                @*//var Instructor = @Model.People.FirstOrDefault(p => p.PersonID == sec.LeadInstructorID);
+                    <tr class="row">*@
+                @*if (Instructor != null)
+                    {
+                        <td> @String.Concat(Instructor.LastName, ", ", Instructor.FirstName)</td>
+                        <td>@Instructor.User.Email</td>
+                    }
+                    else
+                    {
+                        <td colspan="2">No Instructor Assigned</td>
+                        <td></td>
+                    }
+                    <td>@sec.Course.Number<text>-</text>@sec.CRN</td>
+                    <td>@sec.Course.CourseName</td>
+                *@
+                @*<td class="row col-12 border-top-0">
+                    <div class="col-5">
+                        <h5 class="d-inline indent">*@
+                @*CRN: @sec.CRN @*sr.AssessmentRubric.Name*@
+                @*</h5>
+                        <h6 class="pl-3 d-inline">
+                            End Date: @sr.EndDate.ToShortDateString()
+                        </h6>
+                    </div>
+                    <div class="row col-6">*@
+                <!--<span>Start Date:</span><select class="d-inline form-control selectpicker col-3 ml-2"></select>--><!--<option selected>@*Html.Value(@sr.StartDate.ToShortDateString())*@</option>-->
+                <!--<span class="ml-3">End Date:</span><select class="d-inline form-control selectpicker col-3 ml-2"><!--<option value="@*Html.Raw(@sr.EndDate.ToShortDateString())" selected></option>*@</select>-->
+                @*</div>
+                    <div class="col-1">
+                        <button type="button" class="btn btn-danger btn-sm d-inline float-right"><i class="fas fa-times" aria-hidden="true"></i></button>
+                        <button type="button" class="btn btn-success btn-sm d-inline float-right"><i class="fas fa-save" aria-hidden="true"></i></button>*@
+                <!--<button type="button" class="btn btn-success btn-sm d-inline float-right"><i class="fas fa-save" aria-hidden="true"></i></button>-->
+                @*</div>
+                                </td>
+
+                            </tr>
+                        }
+                    }*@
+
+
+
+            </tbody>
+        </table>
+
+        <div class="row mb-3">
+            <div class="col-4">
+                @*First Page*@
+                @using (Html.BeginForm("Index", "AdminScheduling", new { page = 1 }, FormMethod.Post, new { @class = "d-inline" }))
+                {
+                    @Html.HiddenFor(s => s.SemesterID, new { @value = Model.SemesterID });
+                    @Html.HiddenFor(p => p.PagingInfo);
+                    <button id="next" class="btn btn-outline-dark d-inline" type="submit"><i class="fa fa-angle-double-left"></i></button>
+                }
+                @*Previous Page*@
+                @using (Html.BeginForm("Index", "AdminScheduling", new { page = Model.PagingInfo.PreviousPage }, FormMethod.Post, new { @class = "d-inline" }))
+                {
+                    @Html.HiddenFor(s => s.SemesterID, new { @value = Model.SemesterID });
+                    @Html.HiddenFor(p => p.PagingInfo);
+                    <button id="next" class="btn btn-outline-dark d-inline" type="submit"><i class="fa fa-angle-left"></i></button>
+                }
+            </div>
+            <div class="col-4 text-center">
+                <span id="start">@(Model.PagingInfo.RangeStart)</span>-<span id="end">@(Model.PagingInfo.RangeEnd)</span>
+                of
+                <span id="total">@(Model.PagingInfo.TotalItems)</span>
+            </div>
+            <div class="col-4 text-right">
+                @*Next page*@
+                @using (Html.BeginForm("Index", "AdminScheduling", new { page = Model.PagingInfo.NextPage }, FormMethod.Post, new { @class = "d-inline" }))
+                {
+                    @Html.HiddenFor(s => s.SemesterID, new { @value = Model.SemesterID });
+                    @Html.HiddenFor(p => p.PagingInfo);
+                    <button id="next" class="btn btn-outline-dark d-inline" type="submit"><i class="fa fa-angle-right"></i></button>
+                }
+                @*Last Page*@
+                @using (Html.BeginForm("Index", "AdminScheduling", new { page = Model.PagingInfo.TotalPages }, FormMethod.Post, new { @class = "d-inline" }))
+                {
+                    @Html.HiddenFor(s => s.SemesterID, new { @value = Model.SemesterID });
+                    @Html.HiddenFor(p => p.PagingInfo);
+                    <button id="next" class="btn btn-outline-dark d-inline" type="submit"><i class="fa fa-angle-double-right"></i></button>
+                }
+
+            </div>
+        </div>
+
+        <!-- Add Course Modal-->
+        <div class="modal fade" id="addCourseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered p-2" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-success text-white">
+                        <h3 class="modal-title" id="removeConfirm">Add Course</h3>
+                        <i class="ml-auto fas fa-plus fa-2x"></i>
+                    </div>
+                    <div class="modal-body row p-8">
+                        <div class="col-12">
+                            <p class="col-12 mb-1 pl-0">Select Course:</p>
+                            @Html.DropDownListFor(s => s.SemesterID, Model.Semesters, "-Select Semester-", new
+                            {
+                                @id = "DropDownSemesters2",
+                                @class = "form-control d-inline col-12"
+                            })
+                        </div>
+                        <div class="col-12 mt-3">
+                            <p class="col-12 mb-1 pl-0">Enter CRN:</p>
+                            <input type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary mr-auto" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-outline-success float-right">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Entry Modal-->
+        <div class="modal fade" id="addEntryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered p-2" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-light text-black">
+                        <h3 class="modal-title" id="removeConfirm">Add Entry</h3>
+                        <i class="ml-auto fas fa-plus fa-2x"></i>
+                    </div>
+
+                    @using (Html.BeginForm("AddRubricToCRN", "AdminScheduling", FormMethod.Post, new { @class = "pt-1 pl-4 pr-4" }))
+                    {
+                        <div class="modal-body row p-8">
+                            <p class="col-12 mb-1 pl-0">Select Course:</p>
+                            @Html.DropDownListFor(c => c.CourseID, Model.CourseForAddEntry, "-Select Course-", new
+                           {
+                               @class = "form-control selectpicker d-inline col-10 mb-2",
+                           })
+                            <p class="col-12 mb-1 pl-0">Select CRN:</p>
+                            @Html.DropDownListFor(s => s.SectionID, Model.Sections, "", new
+                           {
+                               @class = "form-control selectpicker d-inline col-10 mb-2"
+                           })
+                            <p class="col-12 mb-1 pl-0">Select Rubric:</p>
+                            @Html.DropDownListFor(r => r.RubricID, Model.AssesmentRubrics, "-Select Rubric-", new { @class = "form-control selectpicker d-inline col-10 mb-2" })
+                            <p class="col-12 mb-1 pl-0">Start Date:</p>
+                            @Html.TextBoxFor(model => model.StartDate, "{0:MM-dd-yyyy}", new { @class = "form-control col-6 ml-2 mb-2", type = "date" })
+                            <p class="col-12 mb-1 pl-0">End Date:</p>
+                            @Html.TextBoxFor(model => model.EndDate, "{0:MM-dd-yyyy}", new { @class = "form-control col-6 ml-2 mb-2", type = "date" })
+                            @Html.HiddenFor(model => model.SemesterID)
+                        </div>
+                        <div class="modal-footer row">
+                            <button type="button" class="btn btn-outline-secondary mr-auto" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-success float-right">Add Entry</button>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit All Due Dates Modal-->
+        <div class="modal fade" id="editDueDatesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-warning">
+                        <h3 class="modal-title" id="removeConfirm">Edit Due Dates</h3>
+                        <i class="ml-auto fas fa-calendar-alt fa-2x"></i>
+                    </div>
+                    <div class="modal-body row p-8">
+                        <div class="modal-body row p-8">
+                            <div class="col-6">
+                                <p class="col-12 mb-1 pl-0">Start Date</p>
+                                <input type="date" class="form-control d-inline col-11">
+                            </div>
+                            <div class="col-6">
+                                <p class="col-12 mb-1 pl-0">End Date</p>
+                                <input type="date" class="form-control d-inline col-11">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary mr-auto" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-success float-right">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script>
+
+    function ShowProgress() {
+        setTimeout(function () {
+            var modal = $('<div></div>');
+            modal.addClass("loadingmodal modal");
+            $('body').append(modal);
+            var loading = $(".loading");
+            loading.show();
+            var top = Math.max($(window).height() / 2 - loading[0].offsetHeight / 2, 0);
+            var left = Math.max($(window).width() / 2 - loading[0].offsetWidth / 2, 0);
+            loading.css({ top: top, left: left });
+        }, 200);
+    }
+    $('#semesterSelectForm').change(function (e) {
+        ShowProgress();
+    })
+
+    $(function () {
+        $('.accordionTrigger').click(toggleAccordion);
+        $('.lowerAccordionTrigger').click(toggleLowerAccordion);
+        $('.assessmentHeader').hide();
+    })
+    var sectionUrl = '@Url.Action("GetSections")';
+    var sections = $('#SectionID');
+    $('#CourseID').change(function () {
+
+        $('#SectionID').empty();
+        $('#SectionID').selectpicker('refresh');
+        $.getJSON(sectionUrl, { semesterID: @Html.Raw(Json.Encode(Model.SemesterID)), courseID: $(this).val() },
+            function (data) {
+                if (!data) {
+                    return;
+                }
+                $('#SectionID').append(new Option("-Select Section-", "", true));
+                $.each(data, function (index, item) {
+                    //var entry = $('<option></option').val(item.Value).text(item.Text);
+                    $('#SectionID').append(new Option(item.Text, item.Value));
+                    $('#SectionID').selectpicker('refresh');
+
+                });
+            });
+        $('#SectionID').selectpicker('refresh');
+    })
+
+    function toggleAccordion() {
+        if ($($(this).data('target')).hasClass('accordionClose')) {
+            $($(this).data('target')).removeClass('collapse').removeClass('accordionClose').addClass('accordionOpen');
+            var targetClass = $(this).data('target');
+            $('.courseIcon' + targetClass.substring(15,targetClass[targetClass.length])).removeClass("fas fa-angle-right").addClass("fas fa-angle-down");
+            $('.sectionIcon').removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+            //$('.assessmentHeader' + targetClass.substring(15,targetClass[targetClass.length])).hide();
+        }
+        else if ($($(this).data('target')).hasClass('accordionOpen')) {
+            $($(this).data('target')).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
+            var targetClass = $(this).data('target');
+            $('.assessmentCollapse' + targetClass.substring(15,targetClass[targetClass.length])).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
+            $('.courseIcon' + targetClass.substring(15, targetClass[targetClass.length])).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+            //$('.assessmentHeader' + targetClass.substring(15,16)).hide();
+        }
+    }
+
+    function toggleLowerAccordion() {
+        if ($($(this).data('target')).hasClass('accordionClose')) {
+            $($(this).data('target')).removeClass('collapse').removeClass('accordionClose').addClass('accordionOpen');
+            var targetClass = $(this).data('target');
+            $('.sectionIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-right").addClass("fas fa-angle-down");
+
+            //var targetHeader = $(this).data('header');
+            //alert(targetHeader);
+            //$('.assessmentHeader' + targetClass.substring(19,20)).show();
+        }
+        else if ($($(this).data('target')).hasClass('accordionOpen')) {
+            $($(this).data('target')).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
+            var targetClass = $(this).data('target');
+            $('.sectionIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+            //$('.assessmentHeader' + targetClass.substring(19,20)).hide();
+        }
+    }
+
+
+
+
+    $(".datewidget").datepicker();
+
+
+
+
+    //$('#next, #prev, #first, #last').on('click', function () {
+    //    $.post("AdminScheduling/Index", { page: $(this).data('page') });
+    //})
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap-select")'
+}

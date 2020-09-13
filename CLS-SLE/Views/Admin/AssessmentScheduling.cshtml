@@ -1,7 +1,295 @@
-﻿
+﻿@model CLS_SLE.Models.AssessmentSchedulingViewModel
 @{
     ViewBag.Title = "AssessmentScheduling";
 }
 
-<h2>Assessment Scheduling | <a href="~/Admin/AdminDashboard">Admin Dashboard</a></h2>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
+        <li class="breadcrumb-item active" aria-current="page">Scheduling</li>
+    </ol>
+</nav>
+<h1>Assessment Scheduling</h1>
 
+<table class="m-2 d-block w-100">
+    <tbody class="d-block w-100">
+        <tr class="d-block w-100">
+            <td class="d-block w-100">
+                <div class="row d-block w-100">
+                    <span>
+                        <select class="btn btn-secondary dropdown-toggle semester" data-show-subtext="true" data-live-search="true">
+                            @foreach (var semester in Model.Semesters)
+                            {
+                                <option id="@semester.SemesterID">@semester.Name</option>
+                            }
+                        </select>
+                    </span>
+
+                    @*
+                    <button type="button" class="btn btn-primary mr-2 float-right" data-toggle="modal" data-target="#manualAdd">Manual Add</button>
+                    <button type="button" class="btn btn-primary mr-2 float-right" data-toggle="modal" data-target="#scheduleByProgram">Schedule by Program</button>
+                    *@
+                </div>
+
+                <!--Manual Add Modal-->
+                <div class="modal fade" id="manualAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Manual Add</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                @foreach (var semester in Model.Semesters)
+                                {
+                                    var courses = Model.Courses.Select(c => c.Sections.Where(s => s.SemesterID == semester.SemesterID));
+
+                                    <select class="btn btn-secondary dropdown-toggle course" id="scheduleModal@(semester.SemesterID)"
+                                            data-show-subtext="true" data-live-search="true">
+                                        @foreach (var grouping in courses)
+                                        {
+
+                                            foreach (var c in grouping)
+                                            {
+                                                <option class="course@(c.CourseID)" id="courseDropDownBySemester@(semester.SemesterID)">
+                                                    @c.Course.CourseName
+                                                </option>
+                                            }
+                                        }
+                                    </select>
+
+                                    <select class="btn btn-secondary dropdown-toggle course" id="section@(semester.SemesterID)"
+                                            data-show-subtext="true" data-live-search="true">
+                                        @foreach (var grouping in courses)
+                                        {
+                                            foreach (var c in grouping)
+                                            {
+                                                <option class="course@(c.CourseID)" id="courseDropDownBySemester@(semester.SemesterID)">
+                                                    @c.CRN
+                                                </option>
+                                            }
+                                        }
+                                    </select>
+                                }
+                                <h2 id="selectedCourseCRN"></h2>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Schedule by Program Modal-->
+                <div class="modal fade" id="scheduleByProgram" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Schedule by Program</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <h5><input type="radio" name="defaultSchedule" class="scheduleRadio" /> Default Start/End</h5>
+                                <h5><input type="radio" name="defaultSchedule" class="scheduleRadio" /> Schedule <input type="number" class="col-sm-2" min="0" /> days before and <input type="number" class="col-sm-2" min="0" /> days after.</h5>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-success">Save and Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+@foreach (var semester in Model.Semesters)
+{
+    var courses = Model.Courses.Select(c => c.Sections.Where(s => s.SemesterID == semester.SemesterID));
+
+    <table class="table table-hover" id="semester@(semester.SemesterID)">
+        <thead>
+            <tr>
+                <th class="row">
+                    <span class="mt-2 h3 col-2"><b>Course #</b></span>
+                    <span class="mt-2  h3 col-2"><b>Name</b></span>
+                    <span class="mt-2 h3 col-2"><b>CRN</b></span>
+                    <span class="mt-2 ml-3 h3"><b>Assessment Name</b></span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var grouping in courses)
+            {
+                foreach (var c in grouping)
+                {
+                    var rubrics = Model.AssessmentRubrics.Select(r => r.ProgramAssessmentMappings.Where(m => m.CourseID == c.CourseID)).Select(n => n.Select(m => m.AssessmentRubric));
+
+                    <tr class="courseRow" id="courseRow@(c.CourseID)">
+                        <td>
+                            <div class="row">
+                                <span class="col-2">@c.Course.Number</span>
+                                <span class="col-2">@c.Course.CourseName</span>
+                                <span class="col-2">@c.CRN</span>
+                                <table class="w-50">
+                                    @foreach (var rubric in rubrics)
+                                    {
+                                        foreach (var r in rubric)
+                                        {
+                                            foreach (var rubricAssessment in r.RubricAssessments)
+                                            {
+                                                var uniqueIdentifier = Guid.NewGuid();
+
+                                                <tr class="rubricForClass">
+                                                    <td id="@(c.CourseID)" class="col-6">
+                                                        @r.Name<br />
+                                                        <i>
+                                                            @{ var startDate = rubricAssessment.StartDate; }
+                                                            @{ var endDate = rubricAssessment.EndDate; }
+                                                            <span data-time="start">
+                                                                @(startDate.Year + "-" + (startDate.Month < 10 ? "0" : "") + startDate.Month + "-" + (startDate.Day < 10 ? "0" : "") + startDate.Day)
+                                                            </span> until
+                                                            <span data-time="end">
+                                                                @(endDate?.Year + "-" + (endDate?.Month < 10 ? "0" : "") + endDate?.Month + "-" + (endDate?.Day < 10 ? "0" : "") + endDate?.Day)
+                                                            </span>
+                                                        </i>
+                                                    </td>
+                                                    <td class="col-4">
+                                                        <button type="button" class="btn btn-primary float-right mr-2"
+                                                                data-toggle="modal" data-target="#edit_@uniqueIdentifier">
+                                                            Edit
+                                                        </button>
+
+                                                        <!--Edit Modal-->
+                                                        <div class="modal fade" id="edit_@uniqueIdentifier" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="exampleModalLongTitle">Schedule</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <table>
+                                                                            <thead>
+                                                                                <span class="font-weight-bold">@c.Course.CourseName - @c.Course.CourseID</span>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <span>Start: </span><input class="form-control" type="date" value="@(startDate.Year + "-" + (startDate.Month < 10 ? "0" : "") + startDate.Month + "-" + (startDate.Day < 10 ? "0" : "") + startDate.Day)" data-endpoint="start" />
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <span>End: </span><input class="form-control" type="date" value="@(endDate?.Year + "-" + (endDate?.Month < 10 ? "0" : "") + endDate?.Month + "-" + (endDate?.Day < 10 ? "0" : "") + endDate?.Day)" data-endpoint="end" />
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <div class="alert alert-danger" data-show="alert" style="display: none;"><i class="fa fa-warning"></i>End time cannot be before start time.</div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-outline-success"
+                                                                                data-action='save-date' data-rubric-assessment-id="@rubricAssessment.RubricAssessmentID">
+                                                                            Save & Close
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+
+@section scripts{
+    <script>
+        $(function() {
+            $('.courseRow').hide();
+
+            $('.rubricForClass').children().each(function() {
+                $('#courseRow' + $(this).attr('id')).show();
+            });
+
+            semesterHideShow();
+            $(".semester").change(function() {
+                semesterHideShow();
+            });
+
+            function semesterHideShow() {
+                var id = $(".semester").children(":selected").attr("id");
+
+                $(".semester").children().each(function() {
+                    if (id === $(this).attr('id')) {
+                        $('#semester' + id).show();
+                        $('courseDropDownBySemester' + id).show();
+                        $('#scheduleModal' + $(this).attr('id')).show();
+                        $('#section' + $(this).attr('id')).show();
+                    } else {
+                        $('#semester' + $(this).attr('id')).hide();
+                        $('#courseDropDownBySemester' + id).hide();
+                        $('#scheduleModal' + $(this).attr('id')).hide();
+                        $('#section' + $(this).attr('id')).hide();
+                    }
+                });
+            }
+
+            sectionHideShow();
+            $(".course").change(function() {
+                sectionHideShow();
+            });
+
+            function sectionHideShow() {
+                var semesterID = $(".course").children(":selected").attr("id");
+                var courseID = $("").children(":selected").attr("id");
+
+                $(".course").children().each(function() {
+                    if (courseID == $(this).attr('id')) {
+                        $('#sectionDropDownByCourse' + courseID).show();
+
+                    } else {
+                        $('#sectionDropDownByCourse' + courseID).hide();
+                    }
+                });
+            }
+
+            $("[data-action='save-date']").on("click",
+                function() {
+                    var startDateTime = $(this).closest(".modal-content").find("[data-endpoint='start']").val();
+                    var endDateTime = $(this).closest(".modal-content").find("[data-endpoint='end']").val();
+                    var assessmentRubricId = $(this).data("rubric-assessment-id");
+                    
+                    if (endDateTime === "" || endDateTime > startDateTime) {
+                        $.post("@Url.Content("~")Admin/UpdateDateRange",
+                            {
+                                startDateTime,
+                                endDateTime,
+                                assessmentRubricId
+                            });
+
+                        $(this).closest(".rubricForClass").find("[data-time='start']").html(startDateTime);
+                        $(this).closest(".rubricForClass").find("[data-time='end']").html(endDateTime);
+                        $(this).closest(".modal").find("[data-show='alert']").hide();
+                        $(this).closest(".modal").modal("hide");
+                    } else {
+                        $(this).closest(".modal").find("[data-show='alert']").show();
+                    }
+                });
+        });
+    </script>
+}

@@ -1,8 +1,6 @@
-﻿using System;
+﻿using CLS_SLE.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using CLS_SLE.Models;
 
 namespace CLS_SLE.ViewModels
 {
@@ -11,6 +9,6 @@ namespace CLS_SLE.ViewModels
         public User User { get; set; }
         public List<UserSecurity> UserSecurities;
         public IQueryable<Role> Roles;
-   
+
     }
 }

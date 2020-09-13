@@ -1,18 +1,15 @@
 ﻿using CLS_SLE.Models;
 using NLog;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Dynamic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 using System.Text.RegularExpressions;
-using CLS_SLE.ViewModels;
+using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
-    public class AdminAssessmentsController : Controller
+    public class AdminAssessmentsController : SLEControllerBase
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
         private Logger logger = LogManager.GetCurrentClassLogger();
@@ -36,8 +33,7 @@ namespace CLS_SLE.Controllers
         {
             try
             {
-                var personID = Convert.ToInt32(Session["personID"].ToString());
-                var user = db.Users.FirstOrDefault(u => u.PersonID == personID);
+                var user = db.Users.FirstOrDefault(u => u.PersonID == UserData.PersonId);
                 var adminAssessments = from assessments in db.Assessments
                                            //join permissions in db.AssessmentRubricSecurities on assessments.AssessmentID equals permissions.AssessmentID
                                            //where permissions.PersonID == personID
@@ -104,7 +100,7 @@ namespace CLS_SLE.Controllers
 
                 return View(model);
             }
-            catch
+            catch (Exception ex)
             {
                 logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
                 return RedirectToAction(actionName: "Signin", controllerName: "User");
@@ -144,9 +140,9 @@ namespace CLS_SLE.Controllers
                                   orderby Program.Name
                                   select Program).ToList();
 
-			 Model.AssessmentCategories = (from Categories in db.AssessmentCategories
-									 orderby Categories.Name
-									 select Categories).ToList();
+                Model.AssessmentCategories = (from Categories in db.AssessmentCategories
+                                              orderby Categories.Name
+                                              select Categories).ToList();
 
                 Model.Assessment = assessment;
                 return View(Model);
@@ -195,7 +191,7 @@ namespace CLS_SLE.Controllers
                 addAssessment.ProgramID = db.Programs.Where(p => p.Name == program).FirstOrDefault().ProgramID;
                 addAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
                 addAssessment.CreatedDateTime = DateTime.Now;
-                addAssessment.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                addAssessment.CreatedByLoginID = UserData.PersonId;
 
 
 
@@ -222,15 +218,15 @@ namespace CLS_SLE.Controllers
             try
             {
                 // if (Int32.Parse(formCollection["AssessmentID"]) > 0)
-			 if (assessmentID > 0)
+                if (assessmentID > 0)
                 {
                     // var assessmentid = Int32.Parse(formCollection["AssessmentID"]);
                     var editAssessment = db.Assessments.FirstOrDefault(a => a.AssessmentID == assessmentID);
-					string categoryName = formCollection["Category"];
-					AssessmentCategory category = db.AssessmentCategories.Where(a => a.Name == categoryName).FirstOrDefault();
+                    string categoryName = formCollection["Category"];
+                    AssessmentCategory category = db.AssessmentCategories.Where(a => a.Name == categoryName).FirstOrDefault();
 
 
-				if (editAssessment != null)
+                    if (editAssessment != null)
                     {
                         editAssessment.Name = formCollection["Name"];
                         editAssessment.Category = category.CategoryCode;
@@ -241,7 +237,7 @@ namespace CLS_SLE.Controllers
                         editAssessment.ProgramID = db.Programs.Where(p => p.Name == program).FirstOrDefault().ProgramID;
                         editAssessment.IsActive = ((formCollection["IsActive"]).Equals("True") ? true : false);
                         editAssessment.ModifiedDateTime = DateTime.Now;
-                        editAssessment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                        editAssessment.ModifiedByLoginID = UserData.PersonId;
                         db.SaveChanges();
 
                         return RedirectToAction(actionName: "ViewAssessment", controllerName: "AdminAssessments", routeValues: new { assessmentId = editAssessment.AssessmentID });
@@ -249,20 +245,20 @@ namespace CLS_SLE.Controllers
                     else
                     {
                         logger.Error("Failed to save assessment, redirecting to sign in page.");
-				    return RedirectToAction(actionName: "Signin", controllerName: "User");
+                        return RedirectToAction(actionName: "Signin", controllerName: "User");
                     }
                 }
                 else
                 {
                     logger.Error("Failed to save assessment, redirecting to sign in page.");
-				return RedirectToAction(actionName: "Signin", controllerName: "User");
+                    return RedirectToAction(actionName: "Signin", controllerName: "User");
                 }
             }
             catch (Exception e)
             {
                 logger.Error("Failed to save assessment, redirecting to sign in page.");
-			 return Content("<html><b>Message:</b><br>" + e.Message + "<br><b>Inner Exception:</b><br>" + e.InnerException + "<br><b>Stack Trace:</b><br>" + e.StackTrace + "</html>");
-			 // return RedirectToAction(actionName: "Signin", controllerName: "User");
+                return Content("<html><b>Message:</b><br>" + e.Message + "<br><b>Inner Exception:</b><br>" + e.InnerException + "<br><b>Stack Trace:</b><br>" + e.StackTrace + "</html>");
+                // return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
         }
 

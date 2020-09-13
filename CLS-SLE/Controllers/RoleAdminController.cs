@@ -1,18 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CLS_SLE.Models;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using System.Linq;
-using CLS_SLE.Models;
-using System.Data.SqlClient;
-using System.Collections.Generic;
-using System;
 
 namespace CLS_SLE.Controllers
 {
     [Authorize(Roles = "Administrator")]
-    public class RoleAdminController : Controller
+    public class RoleAdminController : SLEControllerBase
     {
         SLE_TrackingEntities db = new SLE_TrackingEntities();
         public ActionResult Index() => View(db.Roles);
@@ -28,21 +25,21 @@ namespace CLS_SLE.Controllers
 
             return View();
         }
-        
+
 
         [HttpPost]
         public async Task<ActionResult> Create([Required]string name, [Required]string desc)
         {
             if (ModelState.IsValid)
             {
-                    var role = new Role()
-                    {
-                        Name = name,
-                        Description = desc
-                    };
+                var role = new Role()
+                {
+                    Name = name,
+                    Description = desc
+                };
 
-                    db.Roles.Add(role);
-                    db.SaveChanges();
+                db.Roles.Add(role);
+                db.SaveChanges();
             }
             return View("Index", db.Roles);
         }
@@ -67,18 +64,18 @@ namespace CLS_SLE.Controllers
         public ActionResult ManageRole(int id)
         {
 
-                int RoleID = id;
-                var Permissions = (from permission in db.Permissions
-                             select permission).OrderBy(r => r.Name);
-                var RolePermissions = from rolePermissions in db.RolePermissions
-                                where rolePermissions.RoleID == RoleID
-                                select rolePermissions;
-                var Role = (from role in db.Roles where role.RoleID == RoleID select role).FirstOrDefault();
+            int RoleID = id;
+            var Permissions = (from permission in db.Permissions
+                               select permission).OrderBy(r => r.Name);
+            var RolePermissions = from rolePermissions in db.RolePermissions
+                                  where rolePermissions.RoleID == RoleID
+                                  select rolePermissions;
+            var Role = (from role in db.Roles where role.RoleID == RoleID select role).FirstOrDefault();
 
-                ManageRole Model = new ManageRole(Role.RoleID, Role.Name, Permissions.ToList(), RolePermissions.ToList());
+            ManageRole Model = new ManageRole(Role.RoleID, Role.Name, Permissions.ToList(), RolePermissions.ToList());
 
 
-                return View(Model);
+            return View(Model);
         }
 
         [HttpPost]
@@ -94,7 +91,7 @@ namespace CLS_SLE.Controllers
                             RoleID = roleID,
                             PermissionID = permissionID,
                             CreatedDateTime = DateTime.Now,
-                            CreatedByLoginID = (int?)Session["personID"]
+                            CreatedByLoginID = UserData.PersonId
 
                         };
                         db.RolePermissions.Add(rolePermission);

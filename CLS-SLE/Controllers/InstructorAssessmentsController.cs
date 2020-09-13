@@ -1,34 +1,27 @@
-﻿using System;
+﻿using CLS_SLE.Models;
+using NLog;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
 using System.Dynamic;
 using System.Linq;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using CLS_SLE.Models;
-using System.Collections.Specialized;
-using NLog;
-using System.Security.Permissions;
 
 namespace CLS_SLE.Controllers
 {
     [Authorize(Roles = "Faculty")]
-    public class InstructorAssessmentsController : Controller
+    public class InstructorAssessmentsController : SLEControllerBase
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
         private Logger logger = LogManager.GetCurrentClassLogger();
 
         // GET: InstructorAssessments
-        
         public ActionResult Dashboard()
         {
             try
             {
-                var personID = Convert.ToInt32(Session["personID"].ToString());
-                var user = db.Users.FirstOrDefault(u => u.PersonID == personID);
-                var instructorAssessments = db.InstructorAssessments.Where(i => i.PersonID == personID);
+                var user = db.Users.FirstOrDefault(u => u.PersonID == UserData.PersonId);
+                var instructorAssessments = db.InstructorAssessments.Where(i => i.PersonID == UserData.PersonId);
                 logger.Info("Dashboard loaded for " + user.Login);
                 var categories = db.AssessmentCategories.ToList();
 
@@ -40,7 +33,7 @@ namespace CLS_SLE.Controllers
                 List<AssessmentLevelPair> assessmentLevelPairs = new List<AssessmentLevelPair>();
 
 
-                foreach(InstructorAssessment assessment in instructorAssessments)
+                foreach (InstructorAssessment assessment in instructorAssessments)
                 {
                     if (assessment.AssessmentLevel != null)
                     {
@@ -52,8 +45,8 @@ namespace CLS_SLE.Controllers
                     }
                 }
                 model.assessmentLevelPairs = assessmentLevelPairs;
-                    
-                
+
+
 
                 return View(model);
             }
@@ -64,21 +57,20 @@ namespace CLS_SLE.Controllers
             }
         }
 
-        
+
         public ActionResult StudentList(int rubricID, int sectionID)
         {
             try
             {
-                var personID = Convert.ToInt32(Session["personID"].ToString());
-                var instructor = db.InstructorAssessments.FirstOrDefault(r => r.RubricID == rubricID && r.PersonID == personID && r.SectionID == sectionID);
+                var instructor = db.InstructorAssessments.FirstOrDefault(r => r.RubricID == rubricID && r.PersonID == UserData.PersonId && r.SectionID == sectionID);
                 logger.Info("Assessment student list loaded for " + instructor.Login + " with rubricID " + rubricID);
 
                 var students = db.SectionEnrollments.Where(c => c.sectionID == instructor.SectionID).OrderBy(c => c.LastName).ThenBy(c => c.FirstName);
-                
+
                 Session["assessmentEnrollment"] = students.Select(u => u.EnrollmentID).ToList();
-                              
+
                 var completedScores = db.StudentScoreCounts.Where(c => c.RubricID == rubricID && c.SectionID == instructor.SectionID);
-                
+
                 var assessment = db.InstructorAssessments.Where(a => a.RubricID == rubricID && a.SectionID == instructor.SectionID).FirstOrDefault();
 
                 dynamic mymodel = new ExpandoObject();
@@ -86,29 +78,29 @@ namespace CLS_SLE.Controllers
                 mymodel.Assessment = assessment;
                 mymodel.CompleteScores = completedScores.ToList();
 
-                if (assessment.AssessmentLevel != null) { 
+                if (assessment.AssessmentLevel != null)
+                {
                     var level = db.AssessmentLevels.Where(l => l.AssessmentLevelCode == assessment.AssessmentLevel).FirstOrDefault().Name;
                     mymodel.Level = level;
                 }
-                
-                
+
+
 
                 return View(mymodel);
             }
-            catch 
+            catch
             {
                 logger.Error("User attempted to load dashboard without being signed in, redirecting to sign in page.");
                 return Exceptions();
             }
         }
 
-        
+
         public ActionResult Assessment(int sectionID, int enrollmentID, int rubricID)
         {
             try
             {
-                var personID = Convert.ToInt32(Session["personID"].ToString());
-                var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID && i.PersonID == personID && i.RubricID == rubricID);
+                var instructor = db.InstructorAssessments.FirstOrDefault(i => i.SectionID == sectionID && i.PersonID == UserData.PersonId && i.RubricID == rubricID);
                 
                 Session["rubricID"] = instructor.RubricID;
                 Session["sectionID"] = instructor.SectionID;
@@ -138,9 +130,6 @@ namespace CLS_SLE.Controllers
                 mymodel.StudentScores = studentScores.ToList();
 
                 return View(mymodel);
-                //db.SaveChanges();// Handled using jquerry
-
-               //return RedirectToAction("StudentList", "InstructorAssessments");// This has a button to show student lists, previous and next student on top of the page which looks cool
             }
             catch
             {
@@ -159,9 +148,9 @@ namespace CLS_SLE.Controllers
             {
                 Int16 criteriaID = Convert.ToInt16(outcomeIDs[t]);
                 Int16 scoreID = Convert.ToInt16(fc.GetValue(criteriaID.ToString()).AttemptedValue);
-                
+
                 var checkIfExists = db.StudentScores.Where(c => c.EnrollmentID == enrollmentID && c.CriteriaID == criteriaID).FirstOrDefault();
-                if(checkIfExists != null)
+                if (checkIfExists != null)
                 {
                     checkIfExists.ScoreID = scoreID;
                 }
@@ -172,7 +161,7 @@ namespace CLS_SLE.Controllers
                         EnrollmentID = Convert.ToInt32(Session["enrollmentID"]),
                         CriteriaID = criteriaID,
                         ScoreID = Convert.ToSByte(scoreID),
-                        AssessedByID = Convert.ToInt32(Session["personID"]),
+                        AssessedByID = UserData.PersonId,
                         DateTimeAssessed = DateTime.Now,
                     };
                     db.StudentScores.Add(score);
@@ -181,23 +170,23 @@ namespace CLS_SLE.Controllers
             }
             var submitType = outcomeIDs[outcomeIDs.Count() - 1];
 
-            
-            if(submitType.Equals("nextStudent"))
+
+            if (submitType.Equals("nextStudent"))
             {
                 logger.Info("Submission recieved and saved, loading data for next student");
                 return NextStudent();
             }
-            else if(submitType.Equals("lastStudent"))
+            else if (submitType.Equals("lastStudent"))
             {
                 logger.Info("Submission recieved and saved, loading data for previous student");
                 return LastStudent();
             }
-            else if(submitType.Equals("dashboardBreadcrum"))
+            else if (submitType.Equals("dashboardBreadcrum"))
             {
                 logger.Info("Submission recieved and saved, redirecting to dashboard");
                 return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
             }
-            else if(submitType.Equals("studentListBreadcrum"))
+            else if (submitType.Equals("studentListBreadcrum"))
             {
                 logger.Info("Submission recieved and saved, redirecting to student list");
                 return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"], sectionID = Session["sectionID"] });
@@ -217,7 +206,7 @@ namespace CLS_SLE.Controllers
                 {
                     try
                     {
-                        return RedirectToAction(actionName: "Assessment", controllerName: "InstructorAssessments", routeValues: new { sectionID = enrollment.sectionID, enrollmentID = list[x+1], rubricID = Session["rubricID"] });
+                        return RedirectToAction(actionName: "Assessment", controllerName: "InstructorAssessments", routeValues: new { sectionID = enrollment.sectionID, enrollmentID = list[x + 1], rubricID = Session["rubricID"] });
                     }
                     catch
                     {

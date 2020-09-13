@@ -20,9 +20,10 @@
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress>
     </Use64BitIISExpress>
-    <IISExpressSSLPort>44340</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressSSLPort>
+    </IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
@@ -193,8 +194,13 @@
     <Compile Include="App_Start\RouteConfig2.cs" />
     <Compile Include="Controllers\AdminAssessmentsController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AdminCourseController.cs" />
+    <Compile Include="Controllers\AdminDepartmentController.cs" />
     <Compile Include="Controllers\AdminMappingController.cs" />
+    <Compile Include="Controllers\AdminProgramController.cs" />
     <Compile Include="Controllers\AdminSchedulingController.cs" />
+    <Compile Include="Controllers\AdminSchoolController.cs" />
+    <Compile Include="Controllers\AdminSectionController.cs" />
     <Compile Include="Controllers\AdminUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstructorAssessmentsController.cs" />
@@ -205,212 +211,300 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ErrorMessage.cs" />
-    <Compile Include="Models\PagingInfo.cs" />
+    <Compile Include="Models\ErrorMessage.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Models\PagingInfo.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Utility\SAML.cs" />
     <Compile Include="Utility\SLEConfigurationInfo.cs" />
     <Compile Include="ViewModels\AddCourseViewModel.cs" />
     <Compile Include="ViewModels\AddDepartmentViewModel.cs" />
     <Compile Include="Models\Assessment.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\AssessmentCategory.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\AssessmentLevel.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Models\AssessmentLevelPair.cs" />
+    <Compile Include="Models\AssessmentLevelPair.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Models\AssessmentRubric.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\AssessmentRubricSecurity.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Models\AssessmentSchedulingViewModel.cs" />
-    <Compile Include="Models\AssessmentMappingsViewModel.cs" />
+    <Compile Include="Models\AssessmentSchedulingViewModel.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Models\AssessmentMappingsViewModel.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Models\Course.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\CourseProgram.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\CourseSubject.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\CourseSubjectSecurity.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\Criterion.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\Department.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\DepartmentSecurity.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\Enrollment.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\EnrollmentStatu.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Models\ErrorMessage.cs" />
     <Compile Include="Models\ETL_StatusMapping.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\FactTSA.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\GetCompletedCountBySectionRubric_Result.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\GetCourseSubjectSecurityByLogin_Result.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\GetSecurityByLogin_Result.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\GetSecurityByUserID_Result.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\InstructorAssessment.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Models\ManageRole.cs" />
-    <Compile Include="Models\ManageUser.cs" />
+    <Compile Include="Models\ManageRole.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Models\ManageUser.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Models\Outcome.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Models\PasswordReset.cs" />
-    <Compile Include="Models\PasswordResetEdit.cs" />
+    <Compile Include="Models\PasswordReset.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Models\PasswordResetEdit.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Models\Permission.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\Person.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\Program.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\ProgramAssessmentMapping.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\ProgramDepartment.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\ProgramMap.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\ProgramSecurity.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\ProgramSecurityByUser.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\Role.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\RolePermission.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\RubricAssessment.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\RubricDetail.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\RubricsByProgram.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\School.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\SchoolSecurity.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\Score.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\ScoreSet.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\Section.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\SectionEnrollment.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\SectionRubric.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\Semester.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\SemesterDate.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\SLE_TrackingModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SLE_TrackingModel.Context.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\SLE_TrackingModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\SLE_TrackingModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SLE_TrackingModel.edmx</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\Split_Result.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\sp_helpdiagrams_Result.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\StudentProgram.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\StudentScore.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\StudentScoreCount.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\tmp_offering.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\tmp_studentroster.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\User.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Models\UserChangePassword.cs" />
-    <Compile Include="Models\UserPasswordReset.cs" />
+    <Compile Include="Models\UserChangePassword.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Models\UserPasswordReset.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Models\UserRole.cs">
       <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Models\UserSecurity.cs" />
-    <Compile Include="Models\UserSignIn.cs" />
+    <Compile Include="Models\UserSecurity.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Models\UserSignIn.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Utility\SAML.cs" />
-    <Compile Include="Utility\SLEConfigurationInfo.cs" />
+    <Compile Include="ViewModels\AddProgramViewModel.cs" />
+    <Compile Include="ViewModels\AddSchoolViewModel.cs" />
+    <Compile Include="ViewModels\AddSectionViewModel.cs" />
+    <Compile Include="ViewModels\CourseSearchModel.cs" />
+    <Compile Include="ViewModels\CourseSearchViewModel.cs" />
+    <Compile Include="ViewModels\CoursesViewModel.cs" />
+    <Compile Include="ViewModels\CreateCourseViewModel.cs" />
     <Compile Include="ViewModels\CriterionViewModel.cs" />
     <Compile Include="ViewModels\DepartmentsViewModel.cs" />
     <Compile Include="ViewModels\EditCourseViewModel.cs" />
@@ -419,10 +513,21 @@
     <Compile Include="ViewModels\MappingViewModel.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\PagingInfo.cs" />
+    <Compile Include="ViewModels\ProgramDetailViewModel.cs" />
+    <Compile Include="ViewModels\ProgramListViewModel.cs" />
+    <Compile Include="ViewModels\ProgramSearchModel.cs" />
+    <Compile Include="ViewModels\ProgramSearchViewModel.cs" />
     <Compile Include="ViewModels\RubricViewModel.cs" />
     <Compile Include="ViewModels\ScheduleSemesterViewModel.cs" />
     <Compile Include="ViewModels\SchedulingViewModel.cs" />
+    <Compile Include="ViewModels\SchoolDetailViewModel.cs" />
+    <Compile Include="ViewModels\SchoolsViewModel.cs" />
+    <Compile Include="ViewModels\SectionDetailViewModel.cs" />
+    <Compile Include="ViewModels\StudentModel.cs" />
+    <Compile Include="ViewModels\UpdateCourseViewModel.cs" />
+    <Compile Include="ViewModels\UpdateProgramViewModel.cs" />
     <Compile Include="ViewModels\UpdateRubric.cs" />
+    <Compile Include="ViewModels\UpdateSchoolViewModel.cs" />
     <Compile Include="ViewModels\UpdateSectionViewModel.cs" />
     <Compile Include="ViewModels\ViewCourseViewModel.cs" />
     <Compile Include="ViewModels\ViewDepartmentViewModel.cs" />
@@ -439,10 +544,12 @@
     <Content Include="bin\BCrypt.Net.xml" />
     <Content Include="bin\CLS-SLE.dll" />
     <Content Include="bin\CLS-SLE.pdb" />
+    <Content Include="bin\Content\bootstrap-select.min.css" />
     <Content Include="bin\EntityFramework.dll" />
     <Content Include="bin\EntityFramework.SqlServer.dll" />
     <Content Include="bin\EntityFramework.SqlServer.xml" />
     <Content Include="bin\EntityFramework.xml" />
+    <Content Include="bin\Images\loading.gif" />
     <Content Include="bin\Microsoft.AI.Agent.Intercept.dll" />
     <Content Include="bin\Microsoft.AI.DependencyCollector.dll" />
     <Content Include="bin\Microsoft.AI.DependencyCollector.xml" />
@@ -508,8 +615,11 @@
     <Content Include="bin\roslyn\System.Xml.XPath.XDocument.dll" />
     <Content Include="bin\roslyn\vbc.exe" />
     <Content Include="bin\roslyn\VBCSCompiler.exe" />
+    <Content Include="bin\Scripts\bootstrap-select.min.js" />
     <Content Include="bin\System.Diagnostics.DiagnosticSource.dll" />
     <Content Include="bin\System.Diagnostics.DiagnosticSource.xml" />
+    <Content Include="bin\System.IO.Compression.dll" />
+    <Content Include="bin\System.Net.Http.dll" />
     <Content Include="bin\System.Web.Helpers.dll" />
     <Content Include="bin\System.Web.Helpers.xml" />
     <Content Include="bin\System.Web.Mvc.dll" />
@@ -534,6 +644,7 @@
     </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\images\calendar-solid.png" />
     <Content Include="favicon.ico" />
     <Content Include="fontawesome\css\all.css" />
     <Content Include="fontawesome\css\all.min.css" />
@@ -2100,11 +2211,13 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>SLE_TrackingModel.edmx</DependentUpon>
       <LastGenOutput>SLE_TrackingModel.Context.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Models\SLE_TrackingModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>SLE_TrackingModel.edmx</DependentUpon>
       <LastGenOutput>SLE_TrackingModel.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
@@ -2114,10 +2227,12 @@
     <EntityDeploy Include="Models\SLE_TrackingModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>SLE_TrackingModel.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EntityDeploy>
     <Content Include="Models\SLE_TrackingModel.edmx.diagram">
       <DependentUpon>SLE_TrackingModel.edmx</DependentUpon>
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
@@ -2186,9 +2301,44 @@
     <Content Include="Content\bootstrap-select.css.map">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="bin\ApplicationInsights.config" />
+    <Content Include="bin\CLS-SLE.dll.config" />
+    <Content Include="bin\Content\bootstrap-select.css.map" />
+    <Content Include="bin\NLog.config" />
+    <Content Include="bin\Scripts\bootstrap-select.min.js.map" />
+    <Content Include="bin\roslyn\csc.exe.config" />
+    <Content Include="bin\roslyn\csc.rsp" />
+    <Content Include="bin\roslyn\csi.exe.config" />
+    <Content Include="bin\roslyn\csi.rsp" />
+    <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
+    <Content Include="bin\roslyn\Microsoft.Managed.Core.targets" />
+    <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
+    <Content Include="bin\roslyn\vbc.exe.config" />
+    <Content Include="bin\roslyn\vbc.rsp" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="packages\NLog.Config.4.6.7\.signature.p7s" />
+    <Content Include="packages\NLog.Config.4.6.7\contentFiles\any\any\NLog.config" />
+    <Content Include="packages\NLog.Config.4.6.7\content\NLog.config" />
+    <Content Include="packages\NLog.Config.4.6.7\NLog.Config.4.6.7.nupkg" />
+    <Content Include="packages\NLog.Config.4.6.7\tools\Install.ps1" />
+    <Content Include="packages\NLog.Schema.4.6.7\.signature.p7s" />
+    <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <Content Include="obj\Debug\edmxResourcesToEmbed\Models\SLE_TrackingModel.csdl" />
+    <Content Include="obj\Debug\edmxResourcesToEmbed\Models\SLE_TrackingModel.msl" />
+    <Content Include="obj\Debug\edmxResourcesToEmbed\Models\SLE_TrackingModel.ssdl" />
+    <Content Include="obj\Debug\SLE Assessment.csproj.CopyComplete" />
+    <Content Include="obj\Debug\SLE Assessment.csprojAssemblyReference.cache" />
+    <Content Include="obj\Debug\Tsc.out" />
+    <None Include="packages\NLog.Schema.4.6.7\contentFiles\any\any\NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages\NLog.Schema.4.6.7\content\NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="packages\NLog.Schema.4.6.7\NLog.Schema.4.6.7.nupkg" />
     <None Include="Properties\PublishProfiles\Publish - Debug.pubxml" />
     <None Include="Properties\PublishProfiles\Publish - Release.pubxml" />
     <None Include="Properties\PublishProfiles\Publish - Test.pubxml" />
@@ -2555,6 +2705,25 @@
     <Content Include="Views\AdminAssessments\SchoolsDepartments.cshtml" />
     <Content Include="Views\AdminAssessments\ViewAssessment.cshtml" />
     <Content Include="Views\User\Consume.cshtml" />
+    <Content Include="Views\AdminSection\AddSection.cshtml" />
+    <Content Include="Views\AdminSection\EditSection.cshtml" />
+    <Content Include="Views\AdminSection\ViewSection.cshtml" />
+    <Content Include="Views\AdminSchool\AddSchool.cshtml" />
+    <Content Include="Views\AdminSchool\EditSchool.cshtml" />
+    <Content Include="Views\AdminSchool\Schools.cshtml" />
+    <Content Include="Views\AdminSchool\ViewSchool.cshtml" />
+    <Content Include="Views\AdminProgram\AddProgram.cshtml" />
+    <Content Include="Views\AdminProgram\EditProgram.cshtml" />
+    <Content Include="Views\AdminProgram\Programs.cshtml" />
+    <Content Include="Views\AdminProgram\ViewProgram.cshtml" />
+    <Content Include="Views\AdminCourse\AddCourse.cshtml" />
+    <Content Include="Views\AdminCourse\Courses.cshtml" />
+    <Content Include="Views\AdminCourse\EditCourse.cshtml" />
+    <Content Include="Views\AdminCourse\ViewCourse.cshtml" />
+    <Content Include="Views\AdminDepartment\AddDepartment.cshtml" />
+    <Content Include="Views\AdminDepartment\Departments.cshtml" />
+    <Content Include="Views\AdminDepartment\EditDepartment.cshtml" />
+    <Content Include="Views\AdminDepartment\ViewDepartment.cshtml" />
     <None Include="Web.Test.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

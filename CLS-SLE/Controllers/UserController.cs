@@ -55,7 +55,7 @@ namespace CLS_SLE.Controllers
         public ActionResult Consume()
         {
             // replace with an instance of the users account.
-
+            
 
             if (base.HasSAMLResponse && base.SAMLResponse.IsValid())
             {

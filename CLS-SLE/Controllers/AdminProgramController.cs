@@ -44,7 +44,7 @@ namespace CLS_SLE.Controllers
                 }
 
             //the Paging info is going to contain all the information required for pagination
-            programsViewModel.PagingInfo = new PagingInfo { CurrentPage = page, ItemsPerPage = PageSize, TotalItems = ResultsCount };
+            programsViewModel.PagingInfo = new ViewModels.PagingInfo { CurrentPage = page, ItemsPerPage = PageSize, TotalItems = ResultsCount };
 
             programsViewModel.SearchInput = search;
 

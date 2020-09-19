@@ -255,7 +255,8 @@ namespace CLS_SLE.Controllers
         {
             RubricAssessment rubric = db.RubricAssessments.Where(r => r.RubricID == rubricID && r.AssessmentID == assessmentID).FirstOrDefault();
             OutcomeViewModel model = new OutcomeViewModel() { OutcomeVM = new Outcome() { RubricID = rubricID }, Rubric = rubric };
-
+            //Defaulting form
+            model.OutcomeVM.IsActive = true;
             return View(model);
         }
 

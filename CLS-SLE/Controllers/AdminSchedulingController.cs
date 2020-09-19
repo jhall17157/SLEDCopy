@@ -64,7 +64,7 @@ namespace CLS_SLE.Controllers
 
             //handles pagination
 
-            schedulingViewModel.PagingInfo = new PagingInfo
+            schedulingViewModel.PagingInfo = new ViewModels.PagingInfo
             {
                 CurrentPage = page,
                 ItemsPerPage = pageSize,

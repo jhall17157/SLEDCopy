@@ -1,0 +1,71 @@
+﻿@using CLS_SLE.Models;
+@model CLS_SLE.ViewModels.AddCourseViewModel
+@{
+    ViewBag.Title = "AddCourse";
+}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs-Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Courses", "Courses", "AdminCourse", new { page = 1 }, null)</li>
+        <li class="breadcrumb-item active" aria-current="page">New Course</li>
+    </ol>
+</nav>
+<h1>Add Course</h1>
+<br />
+@using (Html.BeginForm("CreateCourse", "AdminCourse", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.Label("Course Name:")
+        @Html.EditorFor(Model => Model.Course.CourseName,
+       new { htmlAttributes = new { @class = "form-control", required = "required" } })
+        @Html.ValidationMessageFor(Model => Model.Course.CourseName)
+    </div>
+    <div class="form-group">
+        @Html.Label("Course Number:")
+        @Html.EditorFor(Model => Model.Course.Number,
+       new { htmlAttributes = new { @class = "form-control", required = "required" } })
+        @Html.ValidationMessageFor(Model => Model.Course.Number)
+    </div>
+    <br />
+    <div>
+        @Html.Label("Primary Department:")
+        @Html.DropDownListFor(Model => Model.DepartmentSelection, new SelectList(Model.DepartmentNames), "Select Department",
+        htmlAttributes: new { @class = "form-control", required = "required" } )
+    </div>
+    <br />
+    <div class="form-group">
+        <div class="row">
+            @Html.Label("Is a Banner Course", htmlAttributes: new { @class = "col-3" })
+            <div class="col-sm-1">
+                @Html.RadioButtonFor(Model => Model.Course.IsERPCourse, true)
+                @Html.Label("Yes")
+            </div>
+            <div class="col-sm-8">
+                @Html.RadioButtonFor(Model => Model.Course.IsERPCourse, false)
+                @Html.Label("No")
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            @Html.LabelFor(Model => Model.Course.IsActive, htmlAttributes: new { @class = "col-3" })
+            <div class="col-sm-1">
+                @Html.RadioButtonFor(Model => Model.Course.IsActive, true)
+                @Html.Label("Yes")
+            </div>
+            <div class="col-sm-8">
+                @Html.RadioButtonFor(Model => Model.Course.IsActive, false)
+                @Html.Label("No")
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-end col-9">
+        <div class="form-group col-2 p-0 mx-1"><input type="submit" class="btn btn-primary col-12 mx-1" value="Submit" /></div>
+        <div class="col-2 p-0 mx-1"><a href="/AdminCourse/Courses?page=@(1)"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
+    </div>
+
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

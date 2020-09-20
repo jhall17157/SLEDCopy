@@ -274,6 +274,7 @@ namespace CLS_SLE.Controllers
 
                 AssessmentRubric rubric = db.AssessmentRubrics.Where(a => a.RubricID == rubricID).FirstOrDefault();
                 outcomeViewModel.OutcomeVM.SortOrder = maxSortOrder;
+                outcomeViewModel.OutcomeVM.CriteriaPassRate = outcomeViewModel.OutcomeVM.CriteriaPassRate / 100;
                 outcomeViewModel.OutcomeVM.CreatedDateTime = DateTime.Now;
                 outcomeViewModel.OutcomeVM.CreatedByLoginID = UserData.PersonId;
                 rubric.Outcomes.Add(outcomeViewModel.OutcomeVM);

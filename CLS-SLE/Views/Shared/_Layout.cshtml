@@ -49,7 +49,12 @@
             </ul>
         </nav>
     </div>
-
+    <div class="alert alert-success alert-dismissible fade hide" role="alert">
+        A simple success alert—check it out!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     @{
 
         var ControllerName = string.Empty;
@@ -114,6 +119,113 @@
             } else {
                 $('#logo').css("width", 250);
             }
+        }
+        $(function () {
+            initButtons();
+            function initButtons() {
+                $('#first, #prev').prop('disabled', $('#start').html() == "1");
+                $('#last, #next').prop('disabled', $('#end').html() == $('#total').html());
+                $("#addDepartmentSubmit").click(function () { console.log('hi');$('.alert').alert(); });
+            }
+        });
+
+        $("#courseSearch").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("CourseAutoComplete","AdminCourse")',
+                    dataType: "json",
+                    data: {search: $("#courseSearch").val()},
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.detailedName, value: item.name };
+                        }))
+                    },
+                    error: function (xhr, status, error) { alert("Error");}
+                });
+            }
+        });
+
+        $("#programSearch").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("ProgramAutoComplete","AdminProgram")',
+                    dataType: "json",
+                    data: {search: $("#programSearch").val()},
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.name };
+                        }))
+                    },
+                    error: function (xhr, status, error) { alert("Error");}
+                });
+            }
+        });
+
+
+        $("#studentSearch").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("StudentAutoComplete","AdminSection")',
+                    dataType: "json",
+                    data: {search: $("#studentSearch").val()},
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.listView, value: item.listView };
+                        }))
+                    },
+                    error: function (xhr, status, error) { alert("Error");}
+                });
+            }
+        });
+
+        function addStudentToList(sectionID) {
+            $.ajax({
+                url: '@Url.Action("StudentListInfo","AdminSection")',
+                dataType: "json",
+                data: { search: $("#addStudentID").val(), id: sectionID },
+                success: function (data) {
+
+                    if (data.success) {
+                        $('#tempStudentList').append(
+                            '<li id="' + data.PID + '"><button onclick="removeStudentFromList(' + data.PID + ')" style="background-color:white; border:0; padding:0" >' +
+                            '<i class="fas fa-minus-circle" style="color:#dc3545"></i></button>	&nbsp;' +
+                            '<span value="' + data.id + '">' + data.lastName + ',  ' + data.firstName + ' - ' + data.id + '</span>' +
+                            '</li>'
+                        );
+                    }
+                    else {
+                        swal("Oops!", data.message, "error");
+                    }
+                },
+                error: function (data) {
+                    swal("Oops!", data.message, "error");
+        }
+            });
+            $('#addStudentID').val('');
+        }
+
+        function removeStudentFromList(id) {
+            $('#' + id).remove();
+        }
+
+        function enrollAllStudents(sectionID) {
+            var listItems = $("#tempStudentList li");
+            listItems.each(function () {
+                $.ajax({
+                    url: '@Url.Action("SaveEnrollment","AdminSection")',
+                    dataType: "json",
+                    data: { id: this.id, section: sectionID },
+                    success: function (data) {
+                    },
+                    error: function () {}
+                });
+            });
+            @*$.ajax({
+                    url: '@Url.Action("ViewSection","AdminSection",{ })',
+                    success: function (data) {},
+                    error: function () {}
+                });*@
+            location.reload();
         }
     </script>
     @RenderSection("scripts", required: false)

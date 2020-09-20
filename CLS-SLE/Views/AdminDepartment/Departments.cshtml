@@ -1,0 +1,59 @@
+﻿@using CLS_SLE.Models;
+@model CLS_SLE.ViewModels.DepartmentsViewModel
+@{
+    /**/
+
+    ViewBag.Title = "Departments";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs-Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item active" aria-current="page">Departments</li>
+    </ol>
+</nav>
+<h1>Departments</h1>
+<br />
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            @*<th scope="col" class="h3">Dept-Number</th>*@ @*Kevin says-uncomment this line for department number to show*@
+            <th scope="col" class="h3">Departments</th>
+            <th scope="col" class="text-right"></th>
+            <th scope="col" width="10%"><a class="float-right" href="/AdminDepartment/AddDepartment"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Department</button></a></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Department department in Model.activeDepartments)
+        {
+            <tr>
+                @*<td colspan="1">@department.Number <span class="text-danger"></span></td>*@ @*Kevin says-uncomment this line for department number to show*@
+                <td colspan="2">@department.Name</td>
+                <td class="text-right">
+
+                    <a href="ViewDepartment?departmentID=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
+                </td>
+            </tr>
+        }
+        @foreach (Department department in Model.inActiveDepartments)
+        {
+            <tr>
+                @*<td colspan="1">@department.Number <span class="text-danger">(Not Active)</span></td>*@ @*Kevin says-uncomment this line for department number to show*@
+                <td colspan="2">@department.Name <span class="text-danger">(Not Active)</span></td>
+                <td class="text-right">
+                    <a href="ViewDepartment?departmentID=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if (Model.updatedMessage != null)
+{
+    <script type="text/javascript">
+    console.log('here');
+        window.onload = function () {
+            swal("@Model.alertMessage", "", "@Model.updatedMessage");
+            };
+    </script>
+}

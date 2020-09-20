@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Administrator, RoleWithMembers, RoleWithoutMembers")]
     public class AdminController : SLEControllerBase
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();

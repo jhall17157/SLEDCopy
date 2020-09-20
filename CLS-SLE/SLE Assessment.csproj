@@ -524,6 +524,7 @@
     <Compile Include="ViewModels\SchoolsViewModel.cs" />
     <Compile Include="ViewModels\SectionDetailViewModel.cs" />
     <Compile Include="ViewModels\StudentModel.cs" />
+    <Compile Include="ViewModels\StudentSearchModel.cs" />
     <Compile Include="ViewModels\UpdateCourseViewModel.cs" />
     <Compile Include="ViewModels\UpdateProgramViewModel.cs" />
     <Compile Include="ViewModels\UpdateRubric.cs" />

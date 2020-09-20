@@ -4,19 +4,23 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - SLE Assessments</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
     @Styles.Render("~/Content/css")
-    
+
     <link href="https://fonts.googleapis.com/css?family=Karla" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+
+
     @*@Styles.Render("~/Content/css")*@
+
     @Scripts.Render("~/bundles/modernizr")
 
     @{
         var ver = typeof(CLS_SLE.MvcApplication).Assembly.GetName().Version;
         string versionDisplay = $"SLE Assessment v{ver.Major}.{ver.Minor}.{ver.Build}";
-     }
+    }
 
 </head>
 <body>
@@ -103,8 +107,13 @@
     </div>
 
     @Scripts.Render("~/bundles/jquery")
+
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+            integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+            crossorigin="anonymous"></script>
+
     @Scripts.Render("~/bundles/bootstrap")
-    
+
 
     <script>
         window.onscroll = function () { myFunction() };
@@ -178,14 +187,34 @@
             }
         });
 
+        $("#addStudentID").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("StudentAutoComplete","AdminSection")',
+                    dataType: "json",
+                    data: { search: $("#addStudentID").val() },
+                    appendTo: "#exampleModal",
+                    success: function (data) {
+                        console.log(data);
+                        response($.map(data, function (item) {
+                            return { label: item.firstName + " " + item.lastName, value: item.idNumber };
+                        }))
+                    },
+                    error: function (xhr, status, error) { alert(error)/*alert("Error")*/;}
+                });
+            }
+        });
+
         function addStudentToList(sectionID) {
+            console.log("Attempting to Add + " + sectionID);
             $.ajax({
                 url: '@Url.Action("StudentListInfo","AdminSection")',
                 dataType: "json",
-                data: { search: $("#addStudentID").val(), id: sectionID },
+                data: { search: $("#addStudentID").val(),id: sectionID },
                 success: function (data) {
-
+                    console.log("Adding");
                     if (data.success) {
+                        console.log("Added");
                         $('#tempStudentList').append(
                             '<li id="' + data.PID + '"><button onclick="removeStudentFromList(' + data.PID + ')" style="background-color:white; border:0; padding:0" >' +
                             '<i class="fas fa-minus-circle" style="color:#dc3545"></i></button>	&nbsp;' +
@@ -194,13 +223,16 @@
                         );
                     }
                     else {
-                        swal("Oops!", data.message, "error");
+                        console.log(data.message);
+                        //swal("Oops!", data.message, "error");
                     }
                 },
                 error: function (data) {
-                    swal("Oops!", data.message, "error");
+                    //swal("Oops!", data.message, "error");
+                    console.log(data.message);
         }
             });
+            console.log("END");
             $('#addStudentID').val('');
         }
 

@@ -241,6 +241,18 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        public JsonResult StudentAutoComplete(string search)
+        {
+            List<StudentSearchModel> resultStudents = db.People.Where(p => (p.IdNumber.Contains(search) || p.LastName.Contains(search))).Select(p => new StudentSearchModel
+            {
+                idNumber = p.IdNumber,
+                lastName = p.LastName,
+                firstName = p.FirstName
+            }).ToList();
+
+            return new JsonResult { Data = resultStudents, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
         [HttpPost]
         public ActionResult CreateSection(AddSectionViewModel sectionVM, short courseID)
         {

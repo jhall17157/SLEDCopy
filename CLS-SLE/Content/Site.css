@@ -176,3 +176,13 @@ h3 {
 .form-check .desc {
     white-space: nowrap;
 }
+
+
+/*Modal AutoSuggest Fix*/
+.ui-autocomplete{
+    z-index: 2000;
+}
+
+.ui-menu-item {
+    z-index: 3000;
+}

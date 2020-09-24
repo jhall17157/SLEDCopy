@@ -1,0 +1,70 @@
+﻿@using CLS_SLE.Models
+@model CLS_SLE.ViewModels.UpdateProgramViewModel
+@{
+    ViewBag.Title = "EditProgram";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs-Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs", "Programs", "AdminProgram", new { page = 1 }, null)</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)ViewBag.program.Name, "ViewProgram", "AdminProgram", new { programID = ViewBag.program.ProgramID }, null)</li>
+        <li class="breadcrumb-item active" aria-current="page">Edit</li>
+    </ol>
+</nav>
+<h1>Edit Program</h1>
+<br />
+@using (Html.BeginForm("UpdateProgram", "AdminProgram", new { programID = ViewBag.program.ProgramID }, FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.Label("Program Number:")
+        @Html.EditorFor(Model => Model.Program.Number,
+       new { htmlAttributes = new { @class = "form-control", Value = ViewBag.program.Number, required = "required" } })
+        @Html.ValidationMessageFor(model => model.Program.Number)
+    </div>
+    <div class="form-group">
+        @Html.Label("Program Name:")
+        @Html.EditorFor(Model => Model.Program.Name,
+       new { htmlAttributes = new { @class = "form-control", Value = ViewBag.program.Name, required = "required" } })
+        @Html.ValidationMessageFor(model => model.Program.Name)
+    </div>
+    <div class="form-group">
+        <div class="row">
+            @Html.Label("Is a Shared Program:", htmlAttributes: new { @class = "col-3" })
+            <div class="col-sm-1">
+                @Html.RadioButtonFor(Model => Model.IsSharedProgram, true)
+                @Html.Label("Yes")
+            </div>
+            <div class="col-sm-8">
+                @Html.RadioButtonFor(Model => Model.IsSharedProgram, false)
+                @Html.Label("No")
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="row">
+            @Html.Label("Is Active:", htmlAttributes: new { @class = "col-3" })
+            <div class="col-sm-1">
+                @Html.RadioButtonFor(Model => Model.IsActive, true)
+                @Html.Label("Yes")
+            </div>
+            <div class="col-sm-8">
+                @Html.RadioButtonFor(Model => Model.IsActive, false)
+                @Html.Label("No")
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-end col-9">
+        <div class="form-group col-2 p-0 mx-1"><input type="submit" class="btn btn-primary col-12 mx-1" id="editSubmit" value="Submit" /></div>
+        <div class="col-2 p-0 mx-1"><a href="/AdminProgram/ViewProgram?programID=@ViewBag.program.ProgramID"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
+    </div>
+}
+<script>
+    $('#editSumbit').click(function () { swal("Good job!", "You clicked the button!", "success"); });
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

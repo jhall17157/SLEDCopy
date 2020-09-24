@@ -1,0 +1,85 @@
+﻿@using CLS_SLE.Models;
+@model CLS_SLE.ViewModels.ViewProgramViewModel
+@{
+    ViewBag.Title = "View Program";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs-Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs", "Programs", "AdminProgram", new { page = 1}, null)</li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.program.Name </li>
+    </ol>
+</nav>
+@*TODO: Add the condition to display Edit function to anyone who has permission*@
+<h1> @Model.program.Name  - <a style="font-size: 65%;" href="/AdminProgram/EditProgram?programID=@Model.program.ProgramID">Edit <i class="fas fa-edit"></i></a> </h1>
+<br />
+@foreach(Department department in Model.departments){
+<div class="py-1">
+    <b>Department:</b> <a  href="/AdminDepartment/ViewDepartment?departmentID=@department.DepartmentID">@department.Name</a>
+</div>
+}
+<div class="py-1">
+    <b>Is Active:</b> @Model.program.IsActive
+</div>
+<div class="py-1">
+    <b>Is Shared:</b> @Model.program.IsSharedProgram
+</div>
+
+@if (Model.program.ModifiedDateTime != null)
+{<div class="py-1">
+    <b>Last Modified:</b>  @Model.program.ModifiedDateTime
+</div>
+<div class="py-1">
+    <b>By User:</b> @Model.ModifierLogin
+</div>  }
+@if (Model.program.CreatedDateTime != null)
+{<div class="py-1">
+    <b>Created:</b>  @Model.program.CreatedDateTime
+</div>
+<div class="py-1">
+    <b>By User:</b> @Model.CreatorLogin
+</div> }
+<br />
+<div>
+    <table class="table table-hover table-striped">
+        <thead class="thead-dark">
+            @*<b>Assessments</b>*@
+        </thead>
+        @*<tbody>
+                @foreach (Assessment assessment in Model.program.Assessments)
+                {
+                    if (assessment.IsActive.Equals(false))
+                    {
+                        <tr>
+                            <td colspan="2">@assessment.AssessmentID <span class="text-danger">(Not Active)</span></td>
+                            <td colspan="2">@assessment.Name <span class="text-danger">(Not Active)</span></td>
+                            <td class="text-right">
+                                <a href="../AdminAssessments/ViewAssessment?programID=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2">@assessment.AssessmentID <span class="text-danger"></span></td>
+                            <td colspan="2">@assessment.Name</td>
+                            <td class="text-right">
+                                <a href="../AdminAssessments/ViewAssessment?programID=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>*@
+    </table>
+</div>
+@if(Model.updatedMessage != null)
+{
+<script type="text/javascript">
+    console.log('here');
+        window.onload = function () {
+            swal("@Model.alertMessage", "", "@Model.updatedMessage");
+            };
+</script>
+}

@@ -2734,6 +2734,9 @@
     <Content Include="Views\AdminDepartment\Departments.cshtml" />
     <Content Include="Views\AdminDepartment\EditDepartment.cshtml" />
     <Content Include="Views\AdminDepartment\ViewDepartment.cshtml" />
+    <Content Include="Views\Admin\ManageUsersAndRoles.cshtml" />
+    <Content Include="Views\Admin\ProgramDashboard.cshtml" />
+    <Content Include="Views\Admin\ViewSchool.cshtml" />
     <None Include="Web.Test.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

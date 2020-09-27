@@ -64,6 +64,18 @@
             </div>
         </a>
     </div>
+    @if (ViewBag.ReportingURL != null)
+    {
+        <div class="col-3 mt-5">
+            <a href="@ViewBag.ReportingURL" class="card h-100">
+                <div class="card-body text-center">
+                    <div class="card-title"><i class="fas fa-chart-bar fa-9x section-link" aria-hidden="true"></i></div>
+                    <div class="card-text h3 font-weight-bold">Reporting</div>
+                </div>
+            </a>
+        </div>
+    }
+
 </div>
 
 

@@ -385,11 +385,15 @@ namespace CLS_SLE.Controllers
         {
             bool success = false;
 
+            //must be moving to a valid rubric
+            var validRubric = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID).Where(r => r.RubricID == rubricID).Count();
+
+            //must get the object to update
             var outcome = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID)
                 .Where(r => r.RubricID == currentID).FirstOrDefault().Outcomes.Where(o => o.OutcomeID == outcomeID)
                 .FirstOrDefault();
 
-            if (outcome != null)
+            if (outcome != null && validRubric > 0)
             {
                 success = true;
                 outcome.RubricID = Convert.ToInt16(rubricID);

@@ -260,13 +260,20 @@
                     data: { search: $("#addRubricID").val(), assessmentID: $("#addRubricID").data("assessmentid") },
                     appendTo: "#moveModal",
                     success: function (data) {
+                        console.log(data);
                         response($.map(data, function (item) {
                             return { label: item.name, value: item.rubricID };
                         }))
                     },
-                    error: function (xhr, status, error) { alert(error)/*alert("Error")*/;}
+                    error: function (xhr, status, error) { alert(error)/*alert("Error")*/; }
                 });
-            }
+            },
+            select: function (e, ui) {
+                setTimeout(function () {
+                    $("#addRubricID").val(ui.item.label);
+                    $("#addRubricID").attr("data-rubricid", ui.item.value);
+                }, 10);
+            },
         });
 
         $(".movingOutcome").on("click", function () {
@@ -283,7 +290,7 @@
                     url: '@Url.Action("MoveOutcome","Rubric")',
                     dataType: "TEXT",
                     data: {
-                        rubricID: $("#addRubricID").val(), assessmentID: $("#addRubricID").data("assessmentid"),
+                        rubricID: $("#addRubricID").data("rubricid"), assessmentID: $("#addRubricID").data("assessmentid"),
                         outcomeID: $("#addRubricID").data("outcomeid"), currentID: $("#addRubricID").data("currentid")
                     },
                     success: function (data) {

@@ -517,6 +517,7 @@
     <Compile Include="ViewModels\ProgramListViewModel.cs" />
     <Compile Include="ViewModels\ProgramSearchModel.cs" />
     <Compile Include="ViewModels\ProgramSearchViewModel.cs" />
+    <Compile Include="ViewModels\RubricSearchModel.cs" />
     <Compile Include="ViewModels\RubricViewModel.cs" />
     <Compile Include="ViewModels\ScheduleSemesterViewModel.cs" />
     <Compile Include="ViewModels\SchedulingViewModel.cs" />

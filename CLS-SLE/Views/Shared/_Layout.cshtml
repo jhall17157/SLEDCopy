@@ -243,12 +243,64 @@
                     error: function () {}
                 });
             });
+
             @*$.ajax({
                     url: '@Url.Action("ViewSection","AdminSection",{ })',
                     success: function (data) {},
                     error: function () {}
                 });*@
             location.reload();
+        }
+
+        $("#addRubricID").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("RubricAutoComplete","Rubric")',
+                    dataType: "json",
+                    data: { search: $("#addRubricID").val(), assessmentID: $("#addRubricID").data("assessmentid") },
+                    appendTo: "#moveModal",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.rubricID };
+                        }))
+                    },
+                    error: function (xhr, status, error) { alert(error)/*alert("Error")*/;}
+                });
+            }
+        });
+
+        $(".movingOutcome").on("click", function () {
+            $("#errorMessage").text("");
+            var outcomeID = $(this).data(outcomeID);
+            $("#addRubricID").attr("data-outcomeid", outcomeID.outcomeid);
+            var currentID = $(this).data(currentID);
+            $("#addRubricID").attr("data-currentid", currentID.currentid);
+        })
+
+        function validateMove() {
+            if ($("#addRubricID").val()) {
+                $.ajax({
+                    url: '@Url.Action("MoveOutcome","Rubric")',
+                    dataType: "TEXT",
+                    data: {
+                        rubricID: $("#addRubricID").val(), assessmentID: $("#addRubricID").data("assessmentid"),
+                        outcomeID: $("#addRubricID").data("outcomeid"), currentID: $("#addRubricID").data("currentid")
+                    },
+                    success: function (data) {
+                        console.log(data)
+                        if (data == 'True') {
+                            $("#errorMessage").text("");
+                            $("#moveModal").modal("hide");
+                            location.reload();
+                        } else {
+                            $("#errorMessage").text("Enter a valid Rubric ID").css('color', 'red');
+                        }
+                    },
+                    error: function (xhr, status, error) { alert(error)/*alert("Error")*/; }
+                });
+            } else {
+                $("#errorMessage").text("Enter a valid Rubric ID").css('color', 'red');
+            }
         }
     </script>
     @RenderSection("scripts", required: false)

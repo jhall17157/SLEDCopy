@@ -302,6 +302,7 @@ namespace CLS_SLE.Controllers
 
             return View(model);
         }
+
         /*
 
         public ActionResult EditOutcome(int? outcomeID, int? rubricID)
@@ -366,6 +367,36 @@ namespace CLS_SLE.Controllers
                 //logger.Error("Failed to save assessment, redirecting to sign in page.");
                 return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
+        }
+
+        public JsonResult RubricAutoComplete(string search, int assessmentID)
+        {
+            //db.AssessmentRubrics
+            List<RubricSearchModel> resultRubrics = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID).Where(a => (a.Name.Contains(search))).Select(a => new RubricSearchModel
+            {
+                name = a.Name,
+                rubricID = a.RubricID
+            }).ToList();
+
+            return new JsonResult { Data = resultRubrics, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        public Boolean MoveOutcome(int rubricID, int assessmentID, int outcomeID, int currentID)
+        {
+            bool success = false;
+
+            var outcome = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID)
+                .Where(r => r.RubricID == currentID).FirstOrDefault().Outcomes.Where(o => o.OutcomeID == outcomeID)
+                .FirstOrDefault();
+
+            if (outcome != null)
+            {
+                success = true;
+                outcome.RubricID = Convert.ToInt16(rubricID);
+                db.SaveChanges();
+            }
+
+            return success;
         }
 
         public ActionResult AddCriterion(short outcomeID, short assessmentID)

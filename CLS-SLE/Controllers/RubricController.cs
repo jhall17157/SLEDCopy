@@ -375,7 +375,7 @@ namespace CLS_SLE.Controllers
             Outcome outcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
             RubricAssessment rubric = db.RubricAssessments.Where(r => r.RubricID == outcome.RubricID && r.AssessmentID == assessmentID).FirstOrDefault();
             var model = new CriterionViewModel() { Criterion = criterion, Outcome = outcome, Rubric = rubric };
-
+            model.Criterion.IsActive = true;
             return View(model);
         }
 

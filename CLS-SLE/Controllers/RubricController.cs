@@ -255,7 +255,8 @@ namespace CLS_SLE.Controllers
         {
             RubricAssessment rubric = db.RubricAssessments.Where(r => r.RubricID == rubricID && r.AssessmentID == assessmentID).FirstOrDefault();
             OutcomeViewModel model = new OutcomeViewModel() { OutcomeVM = new Outcome() { RubricID = rubricID }, Rubric = rubric };
-
+            //Defaulting form
+            model.OutcomeVM.IsActive = true;
             return View(model);
         }
 
@@ -274,6 +275,7 @@ namespace CLS_SLE.Controllers
 
                 AssessmentRubric rubric = db.AssessmentRubrics.Where(a => a.RubricID == rubricID).FirstOrDefault();
                 outcomeViewModel.OutcomeVM.SortOrder = maxSortOrder;
+                outcomeViewModel.OutcomeVM.CriteriaPassRate = outcomeViewModel.OutcomeVM.CriteriaPassRate / 100;
                 outcomeViewModel.OutcomeVM.CreatedDateTime = DateTime.Now;
                 outcomeViewModel.OutcomeVM.CreatedByLoginID = UserData.PersonId;
                 rubric.Outcomes.Add(outcomeViewModel.OutcomeVM);

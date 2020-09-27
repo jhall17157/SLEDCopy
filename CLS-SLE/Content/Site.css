@@ -7,7 +7,25 @@
     overflow: auto;
 }
 
+#DepartmentFilter{
+    border-radius:4px;
+    width: 150px;
+}
 
+#DepartmentFilter option{
+    border-radius: 4px;
+    width: 150px;
+}
+
+#ERPFilter {
+    border-radius: 4px;
+    width: 150px;
+}
+
+#ERPFilter option {
+    border-radius: 4px;
+    width: 150px;
+}
 
 #MainBody {
     padding-top: 50px;
@@ -157,4 +175,14 @@ h3 {
 /* Prevents the radio description from wrapping with smaller screen sizes */
 .form-check .desc {
     white-space: nowrap;
+}
+
+
+/*Modal AutoSuggest Fix*/
+.ui-autocomplete{
+    z-index: 2000;
+}
+
+.ui-menu-item {
+    z-index: 3000;
 }

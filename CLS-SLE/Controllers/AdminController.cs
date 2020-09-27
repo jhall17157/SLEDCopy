@@ -501,6 +501,8 @@ namespace CLS_SLE.Controllers
             return View();
         }
 
+        public ActionResult ProgramDashboard() => View();
+
         [HttpGet]
         public ActionResult ViewUsers(ViewUserViewModel viewUserViewModel)
         {

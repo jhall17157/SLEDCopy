@@ -274,6 +274,7 @@
                 setTimeout(function () {
                     $("#addRubricID").val(ui.item.label);
                     $("#addRubricID").attr("data-rubricid", ui.item.value);
+                    $("#addRubricID").attr("data-rubricName", ui.item.label);
                 }, 10);
             },
         });
@@ -293,7 +294,7 @@
         })
 
         function validateMove() {
-            if ($("#addRubricID").val()) {
+            if ($("#addRubricID").val() == $("#addRubricID").data("rubricname")) {
                 $.ajax({
                     url: '@Url.Action("MoveOutcome","Rubric")',
                     dataType: "TEXT",

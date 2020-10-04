@@ -112,14 +112,63 @@ else
             </div>
             <div class="modal-body">
                 <div id="errorMessage"></div>
-                <ul id="tempStudentList"></ul>
+
                 <label>Student ID:</label>
-                <input type="text" id="addStudentID" /> <button onclick="addStudentToList(@Model.section.SectionID)"><i class="fas fa-plus-circle"></i></button>
+                <input type="text" id="addStudentID" /> <button onclick="addStudentToList(@Model.section.SectionID);"><i class="fas fa-plus-circle"></i><span> <b>ADD</b></span></button>
+                <ul id="tempStudentList"></ul>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="enrollAllStudents(@Model.section.SectionID)">Submit</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="enrollAllStudents(@Model.section.SectionID)" id="AddEnrollmentSubmissionButton" disabled>Submit</button>
             </div>
         </div>
     </div>
 </div>
+
+@section scripts{
+    <script>
+        function removeStudentFromList(id) {
+            $('#' + id).remove();
+            toggleButton();
+        }
+
+        function toggleButton() {
+            if ($("#tempStudentList").children().length > 0) {
+                //console.log("Button Enabled");
+                $("#AddEnrollmentSubmissionButton").prop("disabled", false);
+            }
+            else {
+                //console.log("Button Disabled");
+                $("#AddEnrollmentSubmissionButton").prop("disabled", true);
+            }
+        }
+
+        function addStudentToList(sectionID) {
+            $.ajax({
+                url: '@Url.Action("StudentListInfo","AdminSection")',
+                dataType: "json",
+                data: { search: $("#addStudentID").val(),id: sectionID },
+                success: function (data) {
+                    if (data.success) {
+                        $('#tempStudentList').append(
+                            '<li id="' + data.PID + '"><button onclick="removeStudentFromList(' + data.PID + ')" style="background-color:white; border:0; padding:0" >' +
+                            '<i class="fas fa-minus-circle" style="color:#dc3545"></i></button>	&nbsp;' +
+                            '<span value="' + data.id + '">' + data.lastName + ',  ' + data.firstName + ' - ' + data.id + '</span>' +
+                            '</li>'
+                        );
+                        toggleButton();
+                    }
+                    else {
+                        swal("Oops!", data.message, "error");
+                    }
+                },
+                error: function (data) {
+                    swal("Oops!", data.message, "error");
+        }
+            });
+            $('#addStudentID').val('');
+            
+        }
+
+    </script>
+}

@@ -21,13 +21,13 @@
 	<div class="form-group col-9">
 		@Html.Label("Rubric Name:")
 		@Html.EditorFor(Model => Model.AssessmentRubric.Name,
-	    new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.Name } })
+		new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.Name } })
 		@Html.ValidationMessageFor(model => model.AssessmentRubric.Name)
 	</div>
 	<div class="form-group col-9">
 		@Html.Label("Rubric Description:")
 		@Html.TextAreaFor(Model => Model.AssessmentRubric.Description,
-	    new { @class = "form-control", @Value = ViewBag.Description, rows = "6"})
+		new { @class = "form-control", @Value = ViewBag.Description, rows = "6" })
 		@Html.ValidationMessageFor(model => model.AssessmentRubric.Description)
 	</div>
 	<fieldset class="form-group col-9">
@@ -58,15 +58,29 @@
 			</div>
 		</div>
 	</fieldset>
+
+	<fieldset class="form-group col-9">
+		@Html.Label("Score Set:")
+		@Html.EditorFor(Model => Model.AssessmentRubric.ScoreSetID,
+	new { htmlAttributes = new { @class = "form-control input-append", @list = "scoreSets"} })
+
+		<datalist id="scoreSets">
+			@foreach (var scoreSet in ViewBag.ScoreSets)
+			{
+			<option value="@scoreSet.ScoreSetID">@scoreSet.Name</option>
+			}
+		</datalist><br>
+	</fieldset>
+
 	<div class="form-group col-9">
 		<div class="row">
 			@Html.Label("Start Date:")
 			@Html.TextBoxFor(model => model.RubricAssesssment.StartDate,
-			new { @class="form-control", @type = "date", @Value = ViewBag.StartDate })
+			new { @class = "form-control", @type = "date", @Value = ViewBag.StartDate })
 
 			@Html.Label("End Date:")
 			@Html.TextBoxFor(model => model.RubricAssesssment.EndDate,
-			new {@class="form-control", @type = "date", @Value = ViewBag.EndDate })
+			new { @class = "form-control", @type = "date", @Value = ViewBag.EndDate })
 		</div>
 	</div>
 	<div class="row justify-content-end col-9">

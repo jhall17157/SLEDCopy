@@ -57,6 +57,7 @@ namespace CLS_SLE.Controllers
             // replace with an instance of the users account.
             
 
+
             if (base.HasSAMLResponse && base.SAMLResponse.IsValid())
             {
                 using (SLE_TrackingEntities db = new SLE_TrackingEntities())

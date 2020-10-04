@@ -93,6 +93,7 @@ namespace CLS_SLE.Controllers
 
             ViewBag.Assessments = db.Assessments.Select(a => a.Name).ToList();
             ViewBag.InitialAssessment = db.Assessments.Where(a => a.AssessmentID == assessmentID).FirstOrDefault().Name;
+            ViewBag.ScoreSets = db.ScoreSets.ToList();
             ViewBag.AssessmentID = assessmentID;
             
             return View();
@@ -162,6 +163,7 @@ namespace CLS_SLE.Controllers
 
             ViewBag.RelatedAssessments = relatedAssessments;
             ViewBag.Assessments = db.Assessments.Select(a => a.Name).ToList();
+            ViewBag.ScoreSets = db.ScoreSets.ToList();
 
             var model = new UpdateRubric() { RubricAssessment = rubricAssessment, AssessmentRubric = assessmentRubric };
 
@@ -238,6 +240,7 @@ namespace CLS_SLE.Controllers
                 editRubric.IsActive = updateRubric.AssessmentRubric.IsActive;
                 editRubric.ModifiedDateTime = DateTime.Now;
                 editRubric.ModifiedByLoginID = UserData.PersonId;
+                editRubric.ScoreSetID = updateRubric.AssessmentRubric.ScoreSetID;
 
                 db.SaveChanges();
 
@@ -303,6 +306,7 @@ namespace CLS_SLE.Controllers
 
             return View(model);
         }
+
         /*
 
         public ActionResult EditOutcome(int? outcomeID, int? rubricID)
@@ -367,6 +371,40 @@ namespace CLS_SLE.Controllers
                 //logger.Error("Failed to save assessment, redirecting to sign in page.");
                 return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
+        }
+
+        public JsonResult RubricAutoComplete(string search, int assessmentID)
+        {
+            //db.AssessmentRubrics
+            List<RubricSearchModel> resultRubrics = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID).Where(a => (a.Name.Contains(search))).Select(a => new RubricSearchModel
+            {
+                name = a.Name,
+                rubricID = a.RubricID
+            }).ToList();
+
+            return new JsonResult { Data = resultRubrics, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        public Boolean MoveOutcome(int rubricID, int assessmentID, int outcomeID, int currentID)
+        {
+            bool success = false;
+
+            //must be moving to a valid rubric
+            var validRubric = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID).Where(r => r.RubricID == rubricID).Count();
+
+            //must get the object to update
+            var outcome = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID)
+                .Where(r => r.RubricID == currentID).FirstOrDefault().Outcomes.Where(o => o.OutcomeID == outcomeID)
+                .FirstOrDefault();
+
+            if (outcome != null && validRubric > 0)
+            {
+                success = true;
+                outcome.RubricID = Convert.ToInt16(rubricID);
+                db.SaveChanges();
+            }
+
+            return success;
         }
 
         public ActionResult AddCriterion(short outcomeID, short assessmentID)

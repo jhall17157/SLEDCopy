@@ -93,6 +93,7 @@ namespace CLS_SLE.Controllers
 
             ViewBag.Assessments = db.Assessments.Select(a => a.Name).ToList();
             ViewBag.InitialAssessment = db.Assessments.Where(a => a.AssessmentID == assessmentID).FirstOrDefault().Name;
+            ViewBag.ScoreSets = db.ScoreSets.ToList();
             ViewBag.AssessmentID = assessmentID;
 
             return View();
@@ -162,6 +163,7 @@ namespace CLS_SLE.Controllers
 
             ViewBag.RelatedAssessments = relatedAssessments;
             ViewBag.Assessments = db.Assessments.Select(a => a.Name).ToList();
+            ViewBag.ScoreSets = db.ScoreSets.ToList();
 
             var model = new UpdateRubric() { RubricAssessment = rubricAssessment, AssessmentRubric = assessmentRubric };
 
@@ -238,6 +240,7 @@ namespace CLS_SLE.Controllers
                 editRubric.IsActive = updateRubric.AssessmentRubric.IsActive;
                 editRubric.ModifiedDateTime = DateTime.Now;
                 editRubric.ModifiedByLoginID = UserData.PersonId;
+                editRubric.ScoreSetID = updateRubric.AssessmentRubric.ScoreSetID;
 
                 db.SaveChanges();
 

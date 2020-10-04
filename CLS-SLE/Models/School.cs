@@ -20,6 +20,7 @@ namespace CLS_SLE.Models
             this.Departments = new HashSet<Department>();
             this.SchoolSecurities = new HashSet<SchoolSecurity>();
         }
+    
         public byte SchoolID { get; set; }
         public string Name { get; set; }
         public bool IsActive { get; set; }

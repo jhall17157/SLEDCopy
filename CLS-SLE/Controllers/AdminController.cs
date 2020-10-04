@@ -23,6 +23,7 @@ namespace CLS_SLE.Controllers
 
         public ActionResult AdminDashboard()
         {
+            ViewBag.ReportingURL = System.Configuration.ConfigurationManager.AppSettings["ReportingSiteURL"];
 
             return View();
 

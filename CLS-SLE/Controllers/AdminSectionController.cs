@@ -428,10 +428,10 @@ namespace CLS_SLE.Controllers
         }
 
         [HttpPost]
-        public ActionResult Drop(int? Id)
+        public ActionResult ToggleEnrollmentStatus(int? Id)
         {
             var tempEnrollment = db.Enrollments.Where(e => e.EnrollmentID == Id).FirstOrDefault();
-            tempEnrollment.EnrollmentStatusCode = "D";
+            tempEnrollment.EnrollmentStatusCode = tempEnrollment.EnrollmentStatusCode == "E" ? "D" : "E";
             db.SaveChanges();
             return RedirectToAction("ViewSection", "AdminSection", new { sectionID = tempEnrollment.SectionID });
         }

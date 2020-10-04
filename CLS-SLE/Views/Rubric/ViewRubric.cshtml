@@ -58,7 +58,7 @@ else if (Model.CreatorLogin != null)
 
             <tr>
 
-                <td class="h3 align-middle py-2"><a href=".collapse@(outcome.OutcomeID)" data-toggle="collapse"><i class="fa fa-chevron-down" style="padding: 1em"></i></a>@outcome.Name</td>
+                <td class="h3 align-middle py-2"><a href=".collapse@(outcome.OutcomeID)" data-toggle="collapse"><i class="fa fa-chevron-down" style="padding: 1em"></i></a>@outcome.Name <span class="text-danger">@(outcome.IsActive.Equals(true) ? "" : "(Not Active)")</span></td>
                 <td class="text-right">
                     @*<a class="btn btn-block" role="button" href=".collapse@(outcome.OutcomeID)" data-toggle="collapse">Test</a>*@
                     <!--<button type="button" class="btn btn-primary outcomeDetailsButton">Details</button>-->
@@ -106,7 +106,7 @@ else if (Model.CreatorLogin != null)
 
             <tbody class="collapse@(outcome.OutcomeID) collapse criterion" id="criterion@(criterion.CriteriaID)">
                 <tr class="bg-light">
-                    <td class="pl-4 py-1"><button type="button" class="criterionDetailsButton btn btn-primary" style="margin: 1em"><i class="fa fa-chevron-down"></i></button> @criterion.Name </td>
+                    <td class="pl-4 py-1"><button type="button" class="criterionDetailsButton btn btn-primary" style="margin: 1em"><i class="fa fa-chevron-down"></i></button> @criterion.Name <span class="text-danger">@(criterion.IsActive.Equals(true)?"":"(Not Active)")</span></td>
                     <td class="text-right">
 
 

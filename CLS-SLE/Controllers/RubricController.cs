@@ -95,7 +95,7 @@ namespace CLS_SLE.Controllers
             ViewBag.InitialAssessment = db.Assessments.Where(a => a.AssessmentID == assessmentID).FirstOrDefault().Name;
             ViewBag.ScoreSets = db.ScoreSets.ToList();
             ViewBag.AssessmentID = assessmentID;
-
+            
             return View();
         }
 
@@ -260,6 +260,7 @@ namespace CLS_SLE.Controllers
             OutcomeViewModel model = new OutcomeViewModel() { OutcomeVM = new Outcome() { RubricID = rubricID }, Rubric = rubric };
             //Defaulting form
             model.OutcomeVM.IsActive = true;
+            model.OutcomeVM.CalculateCriteriaPassRate = true;
             return View(model);
         }
 
@@ -412,7 +413,7 @@ namespace CLS_SLE.Controllers
             Outcome outcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
             RubricAssessment rubric = db.RubricAssessments.Where(r => r.RubricID == outcome.RubricID && r.AssessmentID == assessmentID).FirstOrDefault();
             var model = new CriterionViewModel() { Criterion = criterion, Outcome = outcome, Rubric = rubric };
-
+            model.Criterion.IsActive = true;
             return View(model);
         }
 

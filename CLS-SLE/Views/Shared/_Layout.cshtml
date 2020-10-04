@@ -202,7 +202,7 @@
             }
         });
 
-        function addStudentToList(sectionID) {
+        @*function addStudentToList(sectionID) {
             $.ajax({
                 url: '@Url.Action("StudentListInfo","AdminSection")',
                 dataType: "json",
@@ -225,12 +225,12 @@
         }
             });
             $('#addStudentID').val('');
-        }
-
+        }*@
+        /*
         function removeStudentFromList(id) {
             $('#' + id).remove();
         }
-
+        */
         function enrollAllStudents(sectionID) {
             var listItems = $("#tempStudentList li");
             listItems.each(function () {

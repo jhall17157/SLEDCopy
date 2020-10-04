@@ -67,8 +67,7 @@
 		<datalist id="scoreSets">
 			@foreach (var scoreSet in ViewBag.ScoreSets)
 			{
-				<option value="@scoreSet.ScoreSetID" />
-				<h1>@scoreSet.Name</h1>
+			<option value="@scoreSet.ScoreSetID">@scoreSet.Name</option>
 			}
 		</datalist><br>
 	</fieldset>

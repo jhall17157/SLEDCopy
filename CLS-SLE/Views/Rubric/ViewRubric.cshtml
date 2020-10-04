@@ -58,12 +58,13 @@ else if (Model.CreatorLogin != null)
 
             <tr>
 
-                <td class="h3 align-middle py-2"><a href=".collapse@(outcome.OutcomeID)" data-toggle="collapse"><i class="fa fa-chevron-down" style="padding: 1em"></i></a>@outcome.Name</td>
+                <td class="h3 align-middle py-2"><a href=".collapse@(outcome.OutcomeID)" data-toggle="collapse"><i class="fa fa-chevron-down" style="padding: 1em"></i></a>@outcome.Name <span class="text-danger">@(outcome.IsActive.Equals(true) ? "" : "(Not Active)")</span></td>
                 <td class="text-right">
                     @*<a class="btn btn-block" role="button" href=".collapse@(outcome.OutcomeID)" data-toggle="collapse">Test</a>*@
                     <!--<button type="button" class="btn btn-primary outcomeDetailsButton">Details</button>-->
                     <a class="btn btn-primary" role="button" href=".collapseOutcome@(outcome.OutcomeID)" data-toggle="collapse">Details</a>
                     <a href="@Url.Action("EditOutcome", "Rubric", new { outcomeID = outcome.OutcomeID, assessmentID = Model.Rubric.AssessmentID })" class="btn btn-primary">Edit</a>
+                    <a class="btn btn-primary movingOutcome" href="" role="button" data-toggle="modal" data-target="#moveModal" data-outcomeID="@(outcome.OutcomeID)" data-currentid="@Model.Rubric.AssessmentRubric.RubricID" data-outcomeName="@outcome.Name">Move</a>
                     <a href="@Url.Action("AddCriterion", "Rubric", new { outcomeID = outcome.OutcomeID, assessmentID = Model.Rubric.AssessmentID })" class="btn btn-success"><i class="fa fa-plus"></i> Add New Criterion</a>
                 </td>
             </tr>
@@ -105,7 +106,7 @@ else if (Model.CreatorLogin != null)
 
             <tbody class="collapse@(outcome.OutcomeID) collapse criterion" id="criterion@(criterion.CriteriaID)">
                 <tr class="bg-light">
-                    <td class="pl-4 py-1"><button type="button" class="criterionDetailsButton btn btn-primary" style="margin: 1em"><i class="fa fa-chevron-down"></i></button> @criterion.Name </td>
+                    <td class="pl-4 py-1"><button type="button" class="criterionDetailsButton btn btn-primary" style="margin: 1em"><i class="fa fa-chevron-down"></i></button> @criterion.Name <span class="text-danger">@(criterion.IsActive.Equals(true)?"":"(Not Active)")</span></td>
                     <td class="text-right">
 
 
@@ -148,6 +149,28 @@ else if (Model.CreatorLogin != null)
         }
     }
 </table>
+
+<div class="modal fade" id="moveModal" tabindex="-1" role="dialog" aria-labelledby="moveModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="moveModalLabel">Move The <b><span id="outcomeName"></span></b> Outcome To:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="errorMessage"></div>
+                <label>Rubric Name:</label>
+                <input type="text" style="width:100%" id="addRubricID" data-outcomeID=0 data-currentid=0 data-rubricid=0 data-rubricName="" data-assessmentID="@Model.Rubric.AssessmentID" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="validateMove()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section scripts
 {

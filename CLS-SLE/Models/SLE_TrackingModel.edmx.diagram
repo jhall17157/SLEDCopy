@@ -31,7 +31,7 @@
         <EntityTypeShape EntityType="SLE_TrackingModel.RubricAssessment" Width="1.5" PointX="12" PointY="21.625" />
         <EntityTypeShape EntityType="SLE_TrackingModel.School" Width="1.5" PointX="2.25" PointY="3.75" />
         <EntityTypeShape EntityType="SLE_TrackingModel.SchoolSecurity" Width="1.5" PointX="6.75" PointY="12.625" />
-        <EntityTypeShape EntityType="SLE_TrackingModel.Score" Width="2" PointX="7.5" PointY="35" />
+        <EntityTypeShape EntityType="SLE_TrackingModel.Score" Width="2" PointX="7.5" PointY="35" IsExpanded="true" />
         <EntityTypeShape EntityType="SLE_TrackingModel.ScoreSet" Width="1.5" PointX="0.75" PointY="39.875" />
         <EntityTypeShape EntityType="SLE_TrackingModel.Section" Width="1.5" PointX="4.5" PointY="29.875" />
         <EntityTypeShape EntityType="SLE_TrackingModel.SectionRubric" Width="2.125" PointX="6.75" PointY="30.375" />

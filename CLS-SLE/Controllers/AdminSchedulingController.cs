@@ -29,13 +29,11 @@ namespace CLS_SLE.Controllers
             }
             return View(schedulingViewModel);
         }
-
-        //Called when user selects a semester 
+        
+    //Called when User Selects a Semester or Initiates a Search
         [HttpPost]
         public ActionResult Index(SchedulingViewModel viewModel, int page = 1)
         {
-
-
             SchedulingViewModel schedulingViewModel = new SchedulingViewModel();
             schedulingViewModel.Sections = Enumerable.Empty<SelectListItem>().ToList();
 
@@ -71,13 +69,15 @@ namespace CLS_SLE.Controllers
                 TotalItems = courseIDs.Count()
 
             };
+            //
             //get all courses whose courseIDs exist in provided list of courseids
             var courseResult = db.Courses
                 .Where(c => courseIDs.Contains(c.CourseID));
 
-            if (viewModel.CourseID != null && viewModel.CourseID != -1)//13 ms
+            if (viewModel.searchTerm != null && !viewModel.searchTerm.Equals(""))//13 ms
             {
-                courseResult = courseResult.Where(c => c.CourseID == viewModel.CourseID);
+                courseResult = courseResult.Where(c => c.CourseName.Contains(viewModel.searchTerm)||c.Number.ToString().Contains(viewModel.searchTerm)||c.Sections.Where(s => s.CRN.ToString().Contains(viewModel.searchTerm)).Any());
+
             }
             schedulingViewModel.Courses = courseResult.OrderBy(c => c.Number).ToList();
             schedulingViewModel.CourseSelectList = new List<SelectListItem>();//60 ms
@@ -88,9 +88,9 @@ namespace CLS_SLE.Controllers
 
 
             schedulingViewModel.CourseForAddEntry = (from c in db.Courses
-                     where c.Sections.Where(y => y.SemesterID == schedulingViewModel.SemesterID).Any()
-                     orderby c.Number
-                     select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() }).Distinct().ToList();
+                                                     where c.Sections.Where(y => y.SemesterID == schedulingViewModel.SemesterID).Any()
+                                                     orderby c.Number
+                                                     select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() }).Distinct().ToList();
 
             //foreach (Course course in schedulingViewModel.Courses)
             //{

@@ -106,32 +106,29 @@
             </div>
             <div class="form-group col-8 row">
                 <p class="col-12 mb-1 pl-0">Search For A Course:</p>
-                @using (Html.BeginForm("Index", "AdminScheduling", new { page = 1 }, FormMethod.Post, new { @class = "row col-12" }))
-                {
-                    @Html.DropDownListFor(s => s.CourseID, Model.CourseSelectList, "-Select Course-", new
-                    {
-                        @id = "DropDownCourses",
-                        @class = "form-control selectpicker d-inline col-8"
-                    })
-                    @Html.HiddenFor(p => p.PagingInfo)
-                    @Html.HiddenFor(s => s.SemesterID)
-                    <button type="submit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>
-                }
+                
+        @using (Html.BeginForm("Index", "AdminScheduling", new { page = 1 }, FormMethod.Post, new { @class = "row col-12" }))
+        {
+            @Html.TextBoxFor(vm => vm.searchTerm)
+            @Html.HiddenFor(p => p.PagingInfo)
+            @Html.HiddenFor(s => s.SemesterID)
+            <button type="submit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>
+        }
+    </div>
+
+    <div class="row col-1">
+
+    </div>
+    <div class="row col-3">
+        <p class="col-12 mb-1 pl-0">Semester Functions</p>
+        <div class="col-12 ml-0">
+
+            @*<button type="submit" class="btn btn-success d-inline" data-toggle="modal" data-target="#addCourseModal"><i class="fas fa-plus"></i> Add Course</button>*@
+            <button class="btn btn-success d-inline" data-toggle="modal" data-target="#addEntryModal"><i class="fas fa-plus" aria-hidden="true"></i> Add Entry</button>
+
+
+            <!--<button type="submit" class="btn btn-warning d-inline ml-1" data-toggle="modal" data-target="#editDueDatesModal"><i class="fas fa-calendar-alt"></i> Edit All Due Dates</button>-->
             </div>
-
-            <div class="row col-1">
-
-            </div>
-            <div class="row col-3">
-                <p class="col-12 mb-1 pl-0">Semester Functions</p>
-                <div class="col-12 ml-0">
-
-                    @*<button type="submit" class="btn btn-success d-inline" data-toggle="modal" data-target="#addCourseModal"><i class="fas fa-plus"></i> Add Course</button>*@
-                    <button class="btn btn-success d-inline" data-toggle="modal" data-target="#addEntryModal"><i class="fas fa-plus" aria-hidden="true"></i> Add Entry</button>
-
-
-                    <!--<button type="submit" class="btn btn-warning d-inline ml-1" data-toggle="modal" data-target="#editDueDatesModal"><i class="fas fa-calendar-alt"></i> Edit All Due Dates</button>-->
-                </div>
             </div>
         </div>
 

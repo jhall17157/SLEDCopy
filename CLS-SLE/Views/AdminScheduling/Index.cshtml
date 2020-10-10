@@ -140,7 +140,7 @@
                 @{
                     int courseNumber = 0;
                     int headerNumber = 0;
-                    foreach (Course course in Model.Courses)
+                    foreach (Course course in Model.Courses.OrderBy(c => c.CourseID))
                     {
                         courseNumber++;
                         <tr href="#" data-target=".courseCollapse@(courseNumber)" class="row bg-medium border-top accordionTrigger clickable pt-1 ml-0 mr-0">
@@ -155,7 +155,7 @@
                         </tr>
                         int sectionNumber = 0;
 
-                        foreach (Section sec in Model.Semester.Sections.Where(s => s.CourseID == course.CourseID))
+                        foreach (Section sec in Model.Semester.Sections.Where(s => s.CourseID == course.CourseID).OrderBy(s => s.CRN))
                         {
                             sectionNumber++;
 
@@ -164,14 +164,9 @@
                                     <h5 class="indent d-inline align-self-center">
                                         <i class="sectionIcon@(sectionNumber) sectionIcon ml-3 mr-3 fas fa-angle-right"></i> CRN: @sec.CRN
                                     </h5>
-
-
-                                    <h6 class="pl-3 d-inline">
-                                        @*Ends: @sec.EndDate.Value.ToShortDateString();*@
-                                    </h6>
                                 </td>
                                 <td class="col-5 text-right border-0 pl-3">
-                                    <!--<h6>Submission Timeframe</h6>-->
+                                    @(sec.BeginDate.HasValue ? "Begin Date: " + sec.BeginDate.Value.ToString("MM/dd/yyyy") : "") -- @(sec.EndDate.HasValue ? "End Date: " + sec.EndDate.Value.ToString("MM/dd/yyyy") : "")
                                 </td>
                                 <td class="col-3 border-0 text-right"><!-- Space For Button Or Header --></td>
                             </tr>

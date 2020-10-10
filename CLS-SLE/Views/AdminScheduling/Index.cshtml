@@ -566,16 +566,17 @@
         formEndDate = $("#EndDate" + sectionRubricID).val();
         formBeginDate = $("#StartDate" + sectionRubricID).val();
 
-        $.ajax({
+        if (!formEndDate == "" && !formBeginDate == "") {
+             $.ajax({
                     url: '@Url.Action("SaveDateChange","AdminScheduling")',
                     dataType: "json",
                     data: { SectionRubricID: sectionRubricID, beginDate: formBeginDate, endDate: formEndDate  },
-            success: function (data) {
-                alert("success");
-                    },
-            error: function (e) { alert(e);}
-    });
-    
+                success: function (data) {
+                    alert("success");
+                        },
+                error: function (e) { alert(e.responseText)}
+            });
+        }
     }
     </script>
 }

@@ -403,6 +403,20 @@ namespace CLS_SLE.Controllers
 
             return RedirectToAction("Index", "AdminScheduling");
         }
+
+        public JsonResult SaveDateChange(int SectionRubricID, DateTime beginDate, DateTime endDate)
+        {
+            SectionRubric sectionRubric = db.SectionRubrics.Where(sr => sr.SectionRubricID == SectionRubricID).FirstOrDefault();
+            if(sectionRubric!=null)
+            {
+                sectionRubric.StartDate = beginDate;
+                sectionRubric.EndDate = endDate;
+                db.SaveChanges();
+            }
+            return new JsonResult { Data = SectionRubricID, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            
+        }
+
     }
 }
 

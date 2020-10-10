@@ -200,8 +200,7 @@
                                                 <p class="col-12 mb-1 pl-0">Submission Start:</p>
                                                 @if (sr.StartDate != null)
                                                 {
-                                                    @Html.TextBoxFor(s => s.StartDate, "{0:MM-dd-yyyy}", new {@Value = sr.StartDate.ToShortDateString(), @Class = "form-control selectpicker col-10 datewidget" })
-                                                    @*@Html.EditorFor(s => s.StartDate, new { htmlAttributes = new { @class = "form-control", placeholder = sr.StartDate.ToShortDateString() } })*@
+                                                    @Html.TextBoxFor(s => s.StartDate, "{0:MM-dd-yyyy}", new {@Value = sr.StartDate.ToShortDateString(), @Class = "form-control selectpicker col-10 datewidget",id= "StartDate"+sr.SectionRubricID } )
                                                 }
                                                 else
                                                 {
@@ -212,7 +211,7 @@
                                                 <p class="col-12 mb-1 pl-0">Submission End:</p>
                                                 @if (sr.EndDate != null)
                                                 {
-                                                    @Html.TextBoxFor(s => s.EndDate, "{0:MM-dd-yyyy}", new { @Value = sr.EndDate.ToShortDateString(), @Class = "form-control selectpicker col-10 datewidget" })
+                                                    @Html.TextBoxFor(s => s.EndDate, "{0:MM-dd-yyyy}", new { @Value = sr.EndDate.ToShortDateString(), @Class = "form-control selectpicker col-10 datewidget", id= "EndDate"+sr.SectionRubricID })
                                                 }
                                                 else
                                                 {
@@ -224,7 +223,7 @@
 
 
                                                 @Html.HiddenFor(s => s.SemesterID)
-                                                <button type="submit" class="btn btn-success btn-sm d-inline"><i class="fas fa-save" aria-hidden="true"></i></button>
+                                                <button type="button" class="btn btn-success btn-sm d-inline" onclick="updateSection(@sr.SectionRubricID)"><i class="fas fa-save" aria-hidden="true"></i></button>
 
 
                                                 <!-- Delete trigger modal -->
@@ -560,5 +559,23 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/bootstrap-select")'
+    @Scripts.Render("~/bundles/bootstrap-select")
+<script>
+    //Updates Dates when Section Save Button is clicked
+    function updateSection(sectionRubricID) {
+        formEndDate = $("#EndDate" + sectionRubricID).val();
+        formBeginDate = $("#StartDate" + sectionRubricID).val();
+
+        $.ajax({
+                    url: '@Url.Action("SaveDateChange","AdminScheduling")',
+                    dataType: "json",
+                    data: { SectionRubricID: sectionRubricID, beginDate: formBeginDate, endDate: formEndDate  },
+            success: function (data) {
+                alert("success");
+                    },
+            error: function (e) { alert(e);}
+    });
+    
+    }
+    </script>
 }

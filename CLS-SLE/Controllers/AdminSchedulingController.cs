@@ -407,14 +407,24 @@ namespace CLS_SLE.Controllers
         public JsonResult SaveDateChange(int SectionRubricID, DateTime beginDate, DateTime endDate)
         {
             SectionRubric sectionRubric = db.SectionRubrics.Where(sr => sr.SectionRubricID == SectionRubricID).FirstOrDefault();
-            if(sectionRubric!=null)
+            try
             {
-                sectionRubric.StartDate = beginDate;
-                sectionRubric.EndDate = endDate;
-                db.SaveChanges();
+                if (sectionRubric != null)
+                {
+                    sectionRubric.StartDate = beginDate;
+                    sectionRubric.EndDate = endDate;
+                    db.SaveChanges();
+                    return new JsonResult { Data = SectionRubricID, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+                else
+                {
+                    return null;
+                }
             }
-            return new JsonResult { Data = SectionRubricID, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-            
+            catch(Exception e)
+            {
+                return new JsonResult { Data = e, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
         }
 
     }

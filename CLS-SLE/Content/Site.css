@@ -186,3 +186,33 @@ h3 {
 .ui-menu-item {
     z-index: 3000;
 }
+
+select.error, textarea.error, input.error {
+    color: #FF0000;
+    border: 2px solid red;
+}
+
+.fieldError{
+    font-size: 10px;
+    color:red;
+}
+
+@keyframes validInput {
+    from {
+        border-color: green;
+        border-width: 4px;
+        border-style:solid;
+    }
+
+    to {
+        border-color: none;
+        border-width: 0px;
+        border-style:solid;
+    }
+}
+
+.valid-field-submission {
+    animation-name: validInput;
+    animation-duration: 4s;
+}
+

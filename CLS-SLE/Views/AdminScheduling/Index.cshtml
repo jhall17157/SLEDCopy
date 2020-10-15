@@ -197,7 +197,7 @@
                                             <td class="border-0 row col-3 align-self-center">
 
 
-                                                <p class="col-12 mb-1 pl-0">Submission Start:</p>
+                                                <p class="col-12 mb-1 pl-0">Submission Start:<span id="@("StartDateWarning"+sr.SectionRubricID)" class="fieldError small error"></span></p>
                                                 @if (sr.StartDate != null)
                                                 {
                                                     @Html.TextBoxFor(s => s.StartDate, "{0:MM-dd-yyyy}", new {@Value = sr.StartDate.ToShortDateString(), @Class = "form-control selectpicker col-10 datewidget",id= "StartDate"+sr.SectionRubricID } )
@@ -208,7 +208,7 @@
                                                 }
                                             </td>
                                             <td class="border-0 row col-3">
-                                                <p class="col-12 mb-1 pl-0">Submission End:</p>
+                                                <p class="col-12 mb-1 pl-0">Submission End: <span id="@("EndDateWarning"+sr.SectionRubricID)" class="fieldError error small"></span></p>
                                                 @if (sr.EndDate != null)
                                                 {
                                                     @Html.TextBoxFor(s => s.EndDate, "{0:MM-dd-yyyy}", new { @Value = sr.EndDate.ToShortDateString(), @Class = "form-control selectpicker col-10 datewidget", id= "EndDate"+sr.SectionRubricID })
@@ -223,7 +223,7 @@
 
 
                                                 @Html.HiddenFor(s => s.SemesterID)
-                                                <button type="button" class="btn btn-success btn-sm d-inline" onclick="updateSection(@sr.SectionRubricID)"><i class="fas fa-save" aria-hidden="true"></i></button>
+                                                <button type="button" class="btn btn-success btn-sm d-inline" onclick="updateSection(@sr.SectionRubricID);"><i class="fas fa-save" aria-hidden="true"></i></button>
 
 
                                                 <!-- Delete trigger modal -->
@@ -560,22 +560,55 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap-select")
-<script>
+<script type="text/javascript">
+
+    
     //Updates Dates when Section Save Button is clicked
     function updateSection(sectionRubricID) {
         formEndDate = $("#EndDate" + sectionRubricID).val();
         formBeginDate = $("#StartDate" + sectionRubricID).val();
 
         if (!formEndDate == "" && !formBeginDate == "") {
+
+            $("#StartDate" + sectionRubricID).removeClass("valid-field-submission");
+            $("#EndDate" + sectionRubricID).removeClass("valid-field-submission");
+
+            $("#EndDate" + sectionRubricID).removeClass("error");
+            $("#EndDateWarning" + sectionRubricID).html("");
+            $("#StartDate" + sectionRubricID).removeClass("error");
+            $("#StartDateWarning" + sectionRubricID).html("");
+            //valid-field-submission
+
              $.ajax({
                     url: '@Url.Action("SaveDateChange","AdminScheduling")',
                     dataType: "json",
                     data: { SectionRubricID: sectionRubricID, beginDate: formBeginDate, endDate: formEndDate  },
-                success: function (data) {
-                    
+                 success: function (data) {
+                     $("#StartDate" + sectionRubricID).addClass("valid-field-submission");
+                     $("#EndDate" + sectionRubricID).addClass("valid-field-submission");
                         },
-                error: function (e) { }
+                 error: function (e) { alert(e.status + "" + e.readyState); console.log(e);}
             });
+        }
+        else {
+            if (formBeginDate == "") {
+                $("#StartDateWarning" + sectionRubricID).html("Start Date Cannot Be Blank!");
+                $("#StartDate" + sectionRubricID).addClass("error");
+            }
+            else {
+                $("#StartDateWarning" + sectionRubricID).html("");
+                $("#StartDate" + sectionRubricID).removeClass("error");
+            }
+            if (formEndDate == "") {
+                $("#EndDateWarning" + sectionRubricID).html("End Date Cannot Be Blank!");
+                $("#EndDate" + sectionRubricID).addClass("error");
+
+            }
+            else {
+                $("#EndDateWarning" + sectionRubricID).html("");
+                $("#EndDate" + sectionRubricID).removeClass("error");
+            }
+
         }
     }
     </script>

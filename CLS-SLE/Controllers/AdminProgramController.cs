@@ -165,6 +165,19 @@ namespace CLS_SLE.Controllers
                 IsActive = ViewBag.program.IsActive,
                 IsSharedProgram = ViewBag.program.IsSharedProgram
             };
+
+            List<String> departmentNames = new List<String>();
+            foreach (var d in db.Departments) { departmentNames.Add(d.Name); }
+            model.DepartmentNames = departmentNames;
+
+            model.DepartmentSelection = db.ProgramDepartments.Join(db.Departments,
+                                                                   pd => pd.DepartmentID,
+                                                                   d => d.DepartmentID,
+                                                                   (pd, d) => new { pd, d })
+                                                             .Where(a => a.pd.ProgramID == programID)
+                                                             .Select(b => b.d.Name)
+                                                             .FirstOrDefault();
+                                                  
             return View(model);
         }
 
@@ -246,9 +259,11 @@ namespace CLS_SLE.Controllers
         public ActionResult UpdateProgram(UpdateProgramViewModel programVM, short programID)
         {
             Program editProgram = db.Programs.Where(p => p.ProgramID == programID).FirstOrDefault();
+            ProgramDepartment editProgramDepartment = db.ProgramDepartments.Where(pd => pd.ProgramID == programID).FirstOrDefault();
 
             if (ModelState.IsValid)
             {
+                // Making Program changes
                 editProgram.Number = programVM.Program.Number;
                 editProgram.Name = programVM.Program.Name;
                 editProgram.IsActive = programVM.IsActive;
@@ -257,6 +272,16 @@ namespace CLS_SLE.Controllers
                 editProgram.ModifiedDateTime = DateTime.Now;
                 // Adding modified by 
                 editProgram.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+
+                // Making ProgramDepartment changes
+                editProgramDepartment.DepartmentID = db.Departments.Where(d => d.Name == programVM.DepartmentSelection)
+                                                                   .Select(d => d.DepartmentID)
+                                                                   .FirstOrDefault();
+                // Adding modified on date
+                editProgramDepartment.ModifiedDateTime = DateTime.Now;
+                // Adding modified by 
+                editProgramDepartment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+
                 // Modifying the program in the database
                 db.SaveChanges();
             } else

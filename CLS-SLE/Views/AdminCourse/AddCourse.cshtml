@@ -30,7 +30,7 @@
     <br />
     <div>
         @Html.Label("Primary Department:")
-        @Html.DropDownListFor(Model => Model.DepartmentSelection, new SelectList(Model.DepartmentNames), "Select Department",
+        @Html.DropDownListFor(Model => Model.DepartmentSelection, new SelectList(Model.DepartmentNames.OrderBy(v=>v)), "Select Department",
         htmlAttributes: new { @class = "form-control", required = "required" } )
     </div>
     <br />

@@ -19,10 +19,11 @@
 <div class="clearfix">
     <h1>@r.RubricName</h1>
     <h2 class="float-left" style="margin-top:10px; margin-bottom:5px;">@s.FirstName @s.LastName - @s.StudentID</h2>
+    <input id="ScoreSetId" type="hidden" value=@Model.ScoreSetID>
 
     <div class="btn-group right" role="group" style="margin-top:10px; margin-bottom:5px;">
         <input type="button" class="btn btn-outline-dark" value="Previous Student" id="prevStudentSubmitTop" name="lastStudent">
-        <input type="button" class="btn btn-outline-dark" value="Mark not assessed" id="markNotAssessed" name="markNotAssessed">
+        <input type="button" class="btn btn-outline-dark" value="Mark All" id="markAll" name="markAll">
         <input type="button" class="btn btn-outline-dark" value="Back to all students" id="allStudentSubmitTop" name="backToStudents">
         <input type="button" class="btn btn-outline-dark" value="Next Student" id="nextStudentSubmitTop" name="nextStudent">
     </div>
@@ -98,7 +99,7 @@
                                                 if (i.Description != "Not Assessed")
                                                 {
                                                     <label class="form-check-label desc">
-                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input" })
+                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input " + i.ScoreID})
                                                         @i.Description
                                                     </label>
                                                 }
@@ -157,20 +158,32 @@
     </div>
 </div>
 
-<div id="notAssessedAll" class="modal fade modal-spacing" tabindex="-1" role="dialog">
+<div id="AssessAll" class="modal fade modal-spacing" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title float-left">Notice:</h2>
+                <h2 class="modal-title float-left">Mark All Students As:</h2>
                 <button type="button" class="close float-right" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body" id="confirmText">
-                <p><strong>You are about to mark all answers as "Not Assessed". Do you wish to continue?</strong></p>
+                <p>You are about to mark all answers as <strong><span id="markedAs"></span></strong></p>
             </div>
+            <span id="ScoreSet1">
+            <button type="button" class="btn btn-warning" id="markAsExcExp">Exceeding Expectations</button>
+            <button type="button" class="btn btn-warning" id="markAsMeetExp">Meeting Expectations</button>
+            <button type="button" class="btn btn-warning" id="markAsAppExp">Approaching Expectations</button>
+            <button type="button" class="btn btn-warning" id="markAsNotMeetExp">Not Meeting Expectations</button>
+            </span>
+
+            <span id="ScoreSet2">
+            <button type="button" class="btn btn-warning" id="markAsMet">Met</button>
+            <button type="button" class="btn btn-warning" id="markAsNotMet">Not Met</button>
+            </span>
+            <button type="button" class="btn btn-warning" id="markAsNotAssessed">Not Assessed</button>
             <div class="modal-footer">
-                <button type="button" class="btn btn-warning" id="modalNotAssessed" data-dismiss="modal" data-toggle="modal">Yes</button>
+                <button type="button" class="btn btn-warning" id="modalAllSubmit" data-dismiss="modal" data-toggle="modal">Yes</button>
 
                 <button type="button" class="btn btn-primary" id="close" data-dismiss="modal" data-toggle="modal">No</button>
                 <a href="Dashboard" class="btn btn-primary" hidden id="dashboard">No</a>
@@ -182,8 +195,7 @@
 @section scripts
 {
     <script>
-        $(function ()
-        {
+        $(function () {
             $('.list-group').on('show.bs.collapse', function () {
                 console.log();
                 $(this.parentElement.firstElementChild.firstElementChild).first().animate({ borderSpacing: 180 }, {
@@ -204,8 +216,7 @@
             });
 
             var studentListNav = false
-            $('#studentLink').on('click', function ()
-            {
+            $('#studentLink').on('click', function () {
                 if (changesMade) {
                     studentListNav = true;
                     $('#studentList').removeAttr('hidden');
@@ -217,8 +228,7 @@
             });
 
             var dashboardNav = false;
-            $('#dashboardLink').on('click', function ()
-            {
+            $('#dashboardLink').on('click', function () {
                 if (changesMade) {
                     dashboardNav = true;
                     $('#dashboard').removeAttr('hidden');
@@ -229,21 +239,85 @@
                 }
             });
 
-            $('#modalSave').on('click', function (e)
-            {
+            $('#modalSave').on('click', function (e) {
                 e.preventDefault();
                 $('#assessmentInputForm').submit();
             });
 
-            $('#modalNotAssessed').on('click', function (e) {
-                $(".notAssessed").prop('checked', 'true');
-                //document.querySelectorAll('.assessedCount').forEach();
-            //};
-                db.SaveChanges();
+            var allAssessedAs = "Not Assessed";
+            $('#markAsExcExp').on('click', function (e) {
+                $("#markedAs").text("Exceeding Expectations");
+                allAssessedAs = "Exceeding Expectations";
+            });
+
+            $('#markAsMeetExp').on('click', function (e) {
+                $("#markedAs").text("Meeting Expectations");
+                allAssessedAs = "Meeting Expectations";
+            });
+            $('#markAsAppExp').on('click', function (e) {
+                $("#markedAs").text("Approaching Expectations");
+                allAssessedAs = "Approaching Expectations";
+            });
+
+            $('#markAsNotMeetExp').on('click', function (e) {
+                $("#markedAs").text("Not Meeting Expectations");
+                allAssessedAs = "Not Meeting Expectations";
+            });
+
+            $('#markAsMet').on('click', function (e) {
+                $("#markedAs").text("Met");
+                allAssessedAs = "Met";
+            });
+
+            $('#markAsNotMet').on('click', function (e) {
+                $("#markedAs").text("Not Met");
+                allAssessedAs = "Not Met";
+            });
+
+            $('#markAsNotAssessed').on('click', function (e) {
+                $("#markedAs").text("Not Assessed");
+                allAssessedAs = "Not Assessed";
+            });
+
+            $('#modalAllSubmit').on('click', function (e) {
+                if ($("#ScoreSetId").val() == 1) {
+                    switch(allAssessedAs) {
+                        case "Exceeding Expectations":
+                            $(".1").prop('checked', 'true');
+                            break;
+                        case "Meeting Expectations":
+                            $(".2").prop('checked', 'true');
+                            break;
+                        case "Approaching Expectations":
+                            $(".3").prop('checked', 'true');
+                            break;
+                        case "Not Meeting Expectations":
+                            $(".4").prop('checked', 'true');
+                            break;
+                        case "Not Assessed":
+                            $(".notAssessed").prop('checked', 'true');
+                            break;
+                    }
+                } else {
+                    switch(allAssessedAs) {
+                        case "Met":
+                            $(".6").prop('checked', 'true');
+                            break;
+                        case "Not Met":
+                            $(".7").prop('checked', 'true');
+                            break;
+                        case "Not Assessed":
+                            $(".notAssessed").prop('checked', 'true');
+                            break;
+                    }
+                }
+                $("#assessmentInputForm").submit(function (event) {
+                    event.preventDefault();
+                });
             });
 
             $('#close').on('click', function (e) {
-                $('#modalNotAssessed').modal('hide');
+                $('#modalAllSubmit').modal('hide');
             })
 
             var prevStudentTop = false;
@@ -270,8 +344,15 @@
                 //}
             });
 
-            $('#markNotAssessed').on('click', function (e) {
-                $('#notAssessedAll').modal();
+            $('#markAll').on('click', function (e) {
+                if ($("#ScoreSetId").val() == 1) {
+                    $("#ScoreSet1").show();
+                    $("#ScoreSet2").hide();
+                } else{
+                    $("#ScoreSet2").show();
+                    $("#ScoreSet1").hide();
+                }
+                $('#AssessAll').modal();
             });
 
             $('#assessmentInputForm').submit(function (eventObj) {

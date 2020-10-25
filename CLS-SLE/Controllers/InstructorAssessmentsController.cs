@@ -128,6 +128,7 @@ namespace CLS_SLE.Controllers
                 mymodel.Outcomes = outcomes.ToList();
                 mymodel.Criteria = criteria.ToList();
                 mymodel.StudentScores = studentScores.ToList();
+                mymodel.ScoreSetID = ScoreSet.ScoreSetID;
 
                 return View(mymodel);
             }

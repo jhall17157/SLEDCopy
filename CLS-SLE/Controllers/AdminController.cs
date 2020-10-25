@@ -269,6 +269,7 @@ namespace CLS_SLE.Controllers
 
         public ActionResult ViewAssessment(int? assessmentId)
         {
+            String DefaultUserCreateModifyValue = "Unknown";
             var assessment = new Assessment();
             var canEdit = false;
             var canAdd = false;
@@ -299,11 +300,27 @@ namespace CLS_SLE.Controllers
 
                 if (assessment.CreatedByLoginID != null)
                 {
-                    model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == assessment.CreatedByLoginID).FirstOrDefault().Login;
+                    var tempVar = db.Users.Where(u => u.PersonID == assessment.CreatedByLoginID).FirstOrDefault();
+                    if(tempVar!=null)
+                    {
+                        model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == assessment.CreatedByLoginID).FirstOrDefault().Login;
+                    }
+                    else
+                    {
+                        model.CreatorLogin = DefaultUserCreateModifyValue;
+                    }
                 }
                 if (assessment.ModifiedByLoginID != null)
                 {
-                    model.ModifierLogin = (String)db.Users.Where(u => u.PersonID == assessment.ModifiedByLoginID).FirstOrDefault().Login;
+                    var tempVar = db.Users.Where(u => u.PersonID == assessment.ModifiedByLoginID).FirstOrDefault();
+                    if(tempVar != null)
+                    {
+                        model.ModifierLogin = (String)db.Users.Where(u => u.PersonID == assessment.ModifiedByLoginID).FirstOrDefault().Login;
+                    }
+                    else
+                    {
+                        model.ModifierLogin = DefaultUserCreateModifyValue;
+                    }
                 }
                 model.program = db.Programs.Where(p => p.ProgramID == assessment.ProgramID).FirstOrDefault().Name;
                 model.assessment = assessment;

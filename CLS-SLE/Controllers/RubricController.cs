@@ -74,6 +74,15 @@ namespace CLS_SLE.Controllers
             Model.CreatorLogin = null;
             Model.ModifierLogin = null;
 
+            //get rubrics under the same assesment
+            List<RubricSearchModel> resultRubrics = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID).Select(a => new RubricSearchModel
+            {
+                name = a.Name,
+                rubricID = a.RubricID
+            }).ToList();
+
+            ViewBag.rubricsInAssessments = resultRubrics;
+
             //if (Rubric.CreatedByLoginID != null)
             //{
             //	Model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == Rubric.CreatedByLoginID).FirstOrDefault().Login;
@@ -371,18 +380,6 @@ namespace CLS_SLE.Controllers
                 //logger.Error("Failed to save assessment, redirecting to sign in page.");
                 return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
-        }
-
-        public JsonResult RubricAutoComplete(string search, int assessmentID)
-        {
-            //db.AssessmentRubrics
-            List<RubricSearchModel> resultRubrics = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID).Where(a => (a.Name.Contains(search))).Select(a => new RubricSearchModel
-            {
-                name = a.Name,
-                rubricID = a.RubricID
-            }).ToList();
-
-            return new JsonResult { Data = resultRubrics, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         public Boolean MoveOutcome(int rubricID, int assessmentID, int outcomeID, int currentID)

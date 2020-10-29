@@ -116,31 +116,32 @@ namespace CLS_SLE.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    // Adding created on date
+                    programVM.Program.CreatedDateTime = DateTime.Now;
+                    // Adding created by
+                    //programVM.Program.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                    // Adding the new program to the database
+                    db.Programs.Add(programVM.Program);
+                    db.SaveChanges();
                     Department tempDepartment = new Department();
                     try
                     {
                         //Creating a temp instance of the department matching the selected department
-                        tempDepartment = db.Departments.Where(d => d.Name == programVM.DepartmentSelection).FirstOrDefault();
+                        foreach(string department in programVM.DepartmentSelection)
+                        {
+                            tempDepartment = db.Departments.Where(d => d.Name == department).FirstOrDefault();
+                            ProgramDepartment pd = new ProgramDepartment();
+                            pd.Program = programVM.Program;
+                            pd.DepartmentID = tempDepartment.DepartmentID;
+                            // Adding created on date
+                            pd.CreatedDateTime = DateTime.Now;
+                            // Adding created by
+                            //pd.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                            db.ProgramDepartments.Add(pd);
+                            db.SaveChanges();
+                        }
                     }
                     catch { tempDepartment = db.Departments.Where(d => d.DepartmentID == 1).FirstOrDefault(); }
-
-                    // Adding created on date
-                    programVM.Program.CreatedDateTime = DateTime.Now;
-                    // Adding created by
-                    programVM.Program.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-                    // Adding the new program to the database
-                    db.Programs.Add(programVM.Program);
-                    db.SaveChanges();
-
-                    ProgramDepartment pd = new ProgramDepartment();
-                    pd.Program = programVM.Program;
-                    pd.DepartmentID = tempDepartment.DepartmentID;
-                    // Adding created on date
-                    pd.CreatedDateTime = DateTime.Now;
-                    // Adding created by
-                    pd.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
-                    db.ProgramDepartments.Add(pd);
-                    db.SaveChanges();
                 }
                 else
                 {
@@ -165,6 +166,21 @@ namespace CLS_SLE.Controllers
                 IsActive = ViewBag.program.IsActive,
                 IsSharedProgram = ViewBag.program.IsSharedProgram
             };
+
+            List<String> departmentNames = new List<String>();
+            foreach (var d in db.Departments) { departmentNames.Add(d.Name); }
+            model.DepartmentNames = departmentNames;
+
+            model.DepartmentSelection = db.ProgramDepartments.Join(db.Departments,
+                                                                   pd => pd.DepartmentID,
+                                                                   d => d.DepartmentID,
+                                                                   (pd, d) => new { pd, d })
+                                                             .Where(a => a.pd.ProgramID == programID)
+                                                             .Select(b => b.d.Name)
+                                                             .ToList();
+
+        
+                                                  
             return View(model);
         }
 
@@ -246,9 +262,15 @@ namespace CLS_SLE.Controllers
         public ActionResult UpdateProgram(UpdateProgramViewModel programVM, short programID)
         {
             Program editProgram = db.Programs.Where(p => p.ProgramID == programID).FirstOrDefault();
+            List<ProgramDepartment> editProgramDepartment = db.ProgramDepartments.Where(pd => pd.ProgramID == programID).ToList();
+            
+            IEnumerable<string> tempProgramDepartments = db.ProgramDepartments.Where(pd => pd.ProgramID == programID).Select(pd => pd.Department.Name).ToList();
+            IEnumerable<string> toDelete = tempProgramDepartments.Except(programVM.DepartmentSelection);
+            IEnumerable<string> toAdd = programVM.DepartmentSelection.Except(tempProgramDepartments);
 
             if (ModelState.IsValid)
             {
+                // Making Program changes
                 editProgram.Number = programVM.Program.Number;
                 editProgram.Name = programVM.Program.Name;
                 editProgram.IsActive = programVM.IsActive;
@@ -256,7 +278,30 @@ namespace CLS_SLE.Controllers
                 // Adding modified on date
                 editProgram.ModifiedDateTime = DateTime.Now;
                 // Adding modified by 
-                editProgram.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                //editProgram.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+
+                // Add new ProgramDepartments
+                foreach (string departmentName in toAdd)
+                {
+                    ProgramDepartment newPD = new ProgramDepartment();
+                    newPD.ProgramID = programID;
+                    newPD.Department = db.Departments.Where(d => d.Name == departmentName).FirstOrDefault();
+                    newPD.DepartmentID = db.Departments.Where(d => d.Name == departmentName)
+                                                      .Select(d => d.DepartmentID)
+                                                      .FirstOrDefault();
+                    // Adding created on date
+                    newPD.CreatedDateTime = DateTime.Now;
+                    // Adding created by
+                    //newPD.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                    db.ProgramDepartments.Add(newPD);
+                }
+               
+                // Delete old ProgramDepartments 
+                foreach (string department in toDelete)
+                {
+                    editProgramDepartment.Remove(db.ProgramDepartments.Remove(editProgramDepartment.Where(pd => pd.Department.Name == department).FirstOrDefault()));
+                }
+
                 // Modifying the program in the database
                 db.SaveChanges();
             } else

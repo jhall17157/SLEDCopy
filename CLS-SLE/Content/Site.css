@@ -86,7 +86,7 @@ img {
     transition: width 1s;
 }
 
-.btn-group > .btn {
+.btn-group > .btn:not(button.multiselect) {
     width: 170px;
 }
 /* Sets the size of headers to scale with the screen view width */
@@ -214,5 +214,10 @@ select.error, textarea.error, input.error {
 .valid-field-submission {
     animation-name: validInput;
     animation-duration: 4s;
+}
+
+
+button.multiselect {
+    border: 1px solid #ced4da;
 }
 

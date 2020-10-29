@@ -10,5 +10,7 @@ namespace CLS_SLE.ViewModels
 
         public int AssessmentID { get; set; }
         public List<string> AssessmentList { get; set; }
+
+        public List<ScoreSet> ScoreSetList { get; set; } 
     }
 }

@@ -19,12 +19,13 @@
 <div class="clearfix">
     <h1>@r.RubricName</h1>
     <h2 class="float-left" style="margin-top:10px; margin-bottom:5px;">@s.FirstName @s.LastName - @s.StudentID</h2>
+    <input id="ScoreSetId" type="hidden" value=@Model.ScoreSetID>
 
     <div class="btn-group right" role="group" style="margin-top:10px; margin-bottom:5px;">
-        <input type="button" class="btn btn-outline-dark" value="Previous Student" id="prevStudentSubmitTop" name="lastStudent">
-        <input type="button" class="btn btn-outline-dark" value="Mark not assessed" id="markNotAssessed" name="markNotAssessed">
-        <input type="button" class="btn btn-outline-dark" value="Back to all students" id="allStudentSubmitTop" name="backToStudents">
-        <input type="button" class="btn btn-outline-dark" value="Next Student" id="nextStudentSubmitTop" name="nextStudent">
+        <input type="button" class="btn btn-outline-dark prevStudentSubmit" value="Previous Student" id="prevStudentSubmitTop" name="lastStudent">
+        <input type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#AssessAll" value="Mark All" id="markAll" name="markAll">
+        <input type="button" class="btn btn-outline-dark allStudentSubmit" value="Back to all students" id="allStudentSubmitTop" name="backToStudents">
+        <input type="button" class="btn btn-outline-dark nextStudentSubmit" value="Next Student" id="nextStudentSubmitTop" name="nextStudent">
     </div>
 </div>
 
@@ -56,7 +57,7 @@
             }
             <div id="@o.OutcomeID" class="list-group-item" style="padding: 0;">
 
-                <div class="btn btn-outline-dark" style="font-size: 2.5ex; display: block; text-align:left; text-decoration: none; border-radius: 0px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"
+                <div class="btn btn-outline-dark openOnLoad" style="font-size: 2.5ex; display: block; text-align:left; text-decoration: none; border-radius: 0px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"
                      data-toggle="collapse"
                      href="#group_@o.OutcomeID" role="button" aria-expanded="false"
                      aria-controls="group_@o.OutcomeID">
@@ -95,20 +96,24 @@
                                             }
                                             @if (!exists)
                                             {
-                                                if (i.Description != "Not Assessed")
-                                                {
-                                                    <label class="form-check-label desc">
-                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input" })
-                                                        @i.Description
-                                                    </label>
-                                                }
-                                                else
-                                                {
-                                                    <label class="form-check-label desc">
-                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input notAssessed" })
-                                                        @i.Description
-                                                    </label>
-                                                }
+                                                <label class="form-check-label desc">
+                                                    @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input " + i.ScoreID })
+                                                    @i.Description
+                                                </label>
+                                                @*if (i.Description != "Not Assessed")
+                                                                                    {
+                                                                                        <label class="form-check-label desc">
+                                                                                            @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input " + i.ScoreID })
+                                                                                            @i.Description
+                                                                                        </label>
+                                                                                    }
+                                                                                    else
+                                                    {
+                                                        <label class="form-check-label desc">
+                                                            @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input notAssessed" })
+                                                            @i.Description
+                                                        </label>
+                                                    }*@
                                             }
                                         </div>
                                     }
@@ -122,9 +127,9 @@
     </div>
     <div class="text-center">
         <div class="btn-group" role="group" style="margin-top:10px;">
-            <input type="submit" class="btn btn-outline-dark" value="Previous Student" id="prevStudentSubmit" name="lastStudent">
-            <input type="submit" class="btn btn-outline-dark" value="Back to all students" id="allStudentSubmit" name="backToStudents">
-            <input type="submit" class="btn btn-outline-dark" value="Next Student" id="nextStudentSubmit" name="nextStudent">
+            <input type="submit" class="btn btn-outline-dark prevStudentSubmit" value="Previous Student" id="prevStudentSubmit" name="lastStudent">
+            <input type="submit" class="btn btn-outline-dark allStudentSubmit" value="Back to all students" id="allStudentSubmit" name="backToStudents">
+            <input type="submit" class="btn btn-outline-dark nextStudentSubmit" value="Next Student" id="nextStudentSubmit" name="nextStudent">
         </div>
     </div>
 </form>
@@ -157,22 +162,26 @@
     </div>
 </div>
 
-<div id="notAssessedAll" class="modal fade modal-spacing" tabindex="-1" role="dialog">
+<div id="AssessAll" class="modal fade modal-spacing" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title float-left">Notice:</h2>
+                <h2 class="modal-title float-left">Mark All Students As <span STYLE="font-weight: bold" id="markedAs"></span></h2>
                 <button type="button" class="close float-right" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id="confirmText">
-                <p><strong>You are about to mark all answers as "Not Assessed". Do you wish to continue?</strong></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-warning" id="modalNotAssessed" data-dismiss="modal" data-toggle="modal">Yes</button>
 
-                <button type="button" class="btn btn-primary" id="close" data-dismiss="modal" data-toggle="modal">No</button>
+            <div class="container" id="scoreSetButtons">
+                @foreach (Score i in Model.Selectors)
+                {
+                    <button type="button" STYLE="margin: 5px 0px 5px 0px" class="btn btn-primary col-12 markAll" data-description="@i.Description" value="@i.ScoreID">@i.Description</button>
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="close" data-dismiss="modal" data-toggle="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="modalAllSubmit" data-dismiss="modal" data-toggle="modal">Submit</button>
                 <a href="Dashboard" class="btn btn-primary" hidden id="dashboard">No</a>
             </div>
         </div>
@@ -182,8 +191,7 @@
 @section scripts
 {
     <script>
-        $(function ()
-        {
+        $(function () {
             $('.list-group').on('show.bs.collapse', function () {
                 console.log();
                 $(this.parentElement.firstElementChild.firstElementChild).first().animate({ borderSpacing: 180 }, {
@@ -203,9 +211,10 @@
                 }, 'linear');
             });
 
+             $(".openOnLoad").click();
+
             var studentListNav = false
-            $('#studentLink').on('click', function ()
-            {
+            $('#studentLink').on('click', function () {
                 if (changesMade) {
                     studentListNav = true;
                     $('#studentList').removeAttr('hidden');
@@ -217,8 +226,7 @@
             });
 
             var dashboardNav = false;
-            $('#dashboardLink').on('click', function ()
-            {
+            $('#dashboardLink').on('click', function () {
                 if (changesMade) {
                     dashboardNav = true;
                     $('#dashboard').removeAttr('hidden');
@@ -229,49 +237,54 @@
                 }
             });
 
-            $('#modalSave').on('click', function (e)
-            {
+            $('#modalSave').on('click', function (e) {
                 e.preventDefault();
                 $('#assessmentInputForm').submit();
             });
 
-            $('#modalNotAssessed').on('click', function (e) {
-                $(".notAssessed").prop('checked', 'true');
-                //document.querySelectorAll('.assessedCount').forEach();
-            //};
-                db.SaveChanges();
+            $("#markAll").on("click", function () {
+                $('#scoreSetButtons').children().last().click();
+            });
+            
+
+            var allAssessedAs = 0;
+            $('.markAll').on('click', function (e) {
+                $("#markedAs").text($(this).data("description"));
+                allAssessedAs = $(this).val();
             });
 
-            $('#close').on('click', function (e) {
-                $('#modalNotAssessed').modal('hide');
-            })
+            var setAll = false;
+            $('#modalAllSubmit').on('click', function (e) {
+                e.preventDefault();
+                $("." + allAssessedAs).prop('checked', 'true');
+                setAll = true;
+                $('#assessmentInputForm').submit();
+            });
 
             var prevStudentTop = false;
-            $('#prevStudentSubmitTop').on('click', function (e) {
+            $('.prevStudentSubmit').on('click', function (e) {
                 e.preventDefault();
                 prevStudentTop = true;
                 $('#assessmentInputForm').submit();
             });
 
             var nextStudentTop = false;
-            $('#nextStudentSubmitTop').on('click', function (e) {
+            $('.nextStudentSubmit').on('click', function (e) {
                 e.preventDefault();
                 nextStudentTop = true;
                 $('#assessmentInputForm').submit();
             });
 
-            $('#allStudentSubmitTop').on('click', function (e) {
+            var backToTop = false;
+            $('.allStudentSubmit').on('click', function (e) {
                 //if (changesMade == true) {
-                    e.preventDefault();
-                    $('#assessmentInputForm').submit();
+                e.preventDefault();
+                backToTop = true;
+                $('#assessmentInputForm').submit();
                 //}
                 //else {
-                    location.href = "/InstructorAssessments/StudentList?rubricID=@r.RubricID&sectionID=@r.SectionID";
+                    //location.href = "/InstructorAssessments/StudentList?rubricID=@r.RubricID&sectionID=@r.SectionID";
                 //}
-            });
-
-            $('#markNotAssessed').on('click', function (e) {
-                $('#notAssessedAll').modal();
             });
 
             $('#assessmentInputForm').submit(function (eventObj) {
@@ -291,6 +304,15 @@
                     $(this).append('<input type="hidden" name="nextStudent"/> ');
                     return true;
                 }
+                if (setAll == true) {
+                    $(this).append('<input type="hidden" name="here"/> ');
+                    return true;
+                }
+                if (backToTop == true) {
+                    $(this).append('<input type="hidden" name="backToTop"/> ');
+                    return true;
+                }
+                return false;
             });
 
             var serialized = $('#assessmentInputForm').serializeArray();

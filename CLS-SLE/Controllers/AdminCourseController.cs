@@ -270,6 +270,7 @@ namespace CLS_SLE.Controllers
                 {
                     courseVM.updatedMessage = updatedMessage;
                     if (courseVM.updatedMessage == "success") { courseVM.alertMessage = (courseVM.course.CourseName + " was updated!"); }
+                    else if (courseVM.updatedMessage == "created") { courseVM.alertMessage = (courseVM.course.CourseName + " was Created!"); }
                     else { courseVM.alertMessage = (courseVM.course.CourseName + " was not updated!"); }
                 }
                 return View(courseVM);
@@ -327,7 +328,11 @@ namespace CLS_SLE.Controllers
                     courseVM.Course.CreatedDateTime = DateTime.Now;
                     //Adding created by
                     //TODO add created by
-                    courseVM.Course.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                    if(Session["personID"]!= null)
+                    {
+                        courseVM.Course.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                    }
+                    //courseVM.Course.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
                     //Adding the new course to the database
                     db.Courses.Add(courseVM.Course);
                     db.SaveChanges();
@@ -341,7 +346,8 @@ namespace CLS_SLE.Controllers
                 //logging that a new course was added
                 logger.Info("Course id {Id} added", courseVM.Course.CourseID);
                 //redirects user to the list of courses if successfully added new 
-                return RedirectToAction("Courses", "AdminCourse", new { page = 1, updatedMessage = "success", addedName = courseVM.Course.CourseName });
+                return RedirectToAction("ViewCourse", "AdminCourse", new { courseID = courseVM.Course.CourseID, updatedMessage = "created" });
+                //return RedirectToAction("Courses", "AdminCourse", new { page = 1, updatedMessage = "success", addedName = courseVM.Course.CourseName });
             }
             else { return RedirectToAction("Courses", "AdminCourse", new { page = 1, updatedMessage = "error", addedName = courseVM.Course.CourseName }); }
         }

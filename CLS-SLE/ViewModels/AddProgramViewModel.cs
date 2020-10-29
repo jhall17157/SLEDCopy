@@ -10,6 +10,6 @@ namespace CLS_SLE.ViewModels
     {
         public Program Program { get; set; }
         public IEnumerable<String> DepartmentNames { get; set; }
-        public String DepartmentSelection { get; set; }
+        public IEnumerable<String> DepartmentSelection { get; set; }
     }
 }

@@ -23,7 +23,7 @@
 
     <div class="btn-group right" role="group" style="margin-top:10px; margin-bottom:5px;">
         <input type="button" class="btn btn-outline-dark" value="Previous Student" id="prevStudentSubmitTop" name="lastStudent">
-        <input type="button" class="btn btn-outline-dark" value="Mark All" id="markAll" name="markAll">
+        <input type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#AssessAll" value="Mark All" id="markAll" name="markAll">
         <input type="button" class="btn btn-outline-dark" value="Back to all students" id="allStudentSubmitTop" name="backToStudents">
         <input type="button" class="btn btn-outline-dark" value="Next Student" id="nextStudentSubmitTop" name="nextStudent">
     </div>
@@ -96,20 +96,24 @@
                                             }
                                             @if (!exists)
                                             {
-                                                if (i.Description != "Not Assessed")
-                                                {
-                                                    <label class="form-check-label desc">
-                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input " + i.ScoreID})
-                                                        @i.Description
-                                                    </label>
-                                                }
-                                                else
-                                                {
-                                                    <label class="form-check-label desc">
-                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input notAssessed"})
-                                                        @i.Description
-                                                    </label>
-                                                }
+                                                <label class="form-check-label desc">
+                                                    @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input " + i.ScoreID })
+                                                    @i.Description
+                                                </label>
+                                                @*if (i.Description != "Not Assessed")
+                                                                                    {
+                                                                                        <label class="form-check-label desc">
+                                                                                            @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input " + i.ScoreID })
+                                                                                            @i.Description
+                                                                                        </label>
+                                                                                    }
+                                                                                    else
+                                                    {
+                                                        <label class="form-check-label desc">
+                                                            @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input notAssessed" })
+                                                            @i.Description
+                                                        </label>
+                                                    }*@
                                             }
                                         </div>
                                     }
@@ -170,20 +174,14 @@
             <div class="modal-body" id="confirmText">
                 <p>You are about to mark all answers as <strong><span id="markedAs"></span></strong></p>
             </div>
-            <div class="container" id="ScoreSet1">
-                <button type="button" class="btn btn-warning col-12" id="markAsExcExp">Exceeding Expectations</button>
-                <button type="button" class="btn btn-warning col-12" id="markAsMeetExp">Meeting Expectations</button>
-                <button type="button" class="btn btn-warning col-12" id="markAsAppExp">Approaching Expectations</button>
-                <button type="button" class="btn btn-warning col-12" id="markAsNotMeetExp">Not Meeting Expectations</button>
+
+            <div class="container" id="scoreSetButtons">
+                @foreach (Score i in Model.Selectors)
+                {
+                    <button type="button" class="btn btn-warning col-12 markAll" data-description="@i.Description" value="@i.ScoreID">@i.Description @i.ScoreID</button>
+                }
             </div>
 
-            <div class="container" id="ScoreSet2">
-                <button type="button" class="btn btn-warning col-12" id="markAsMet">Met</button>
-                <button type="button" class="btn btn-warning col-12" id="markAsNotMet">Not Met</button>
-            </div>
-            <div class="container">
-                <button type="button" class="btn btn-warning col-12" id="markAsNotAssessed">Not Assessed</button>
-            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" id="modalAllSubmit" data-dismiss="modal" data-toggle="modal">Yes</button>
 
@@ -246,79 +244,21 @@
                 $('#assessmentInputForm').submit();
             });
 
-            var allAssessedAs = "Not Assessed";
-            $('#markAsExcExp').on('click', function (e) {
-                $("#markedAs").text("Exceeding Expectations");
-                allAssessedAs = "Exceeding Expectations";
+            $("#markAll").on("click", function () {
+                $('#scoreSetButtons').children().last().click();
             });
+            
 
-            $('#markAsMeetExp').on('click', function (e) {
-                $("#markedAs").text("Meeting Expectations");
-                allAssessedAs = "Meeting Expectations";
-            });
-            $('#markAsAppExp').on('click', function (e) {
-                $("#markedAs").text("Approaching Expectations");
-                allAssessedAs = "Approaching Expectations";
-            });
-
-            $('#markAsNotMeetExp').on('click', function (e) {
-                $("#markedAs").text("Not Meeting Expectations");
-                allAssessedAs = "Not Meeting Expectations";
-            });
-
-            $('#markAsMet').on('click', function (e) {
-                $("#markedAs").text("Met");
-                allAssessedAs = "Met";
-            });
-
-            $('#markAsNotMet').on('click', function (e) {
-                $("#markedAs").text("Not Met");
-                allAssessedAs = "Not Met";
-            });
-
-            $('#markAsNotAssessed').on('click', function (e) {
-                $("#markedAs").text("Not Assessed");
-                allAssessedAs = "Not Assessed";
+            var allAssessedAs = 0;
+            $('.markAll').on('click', function (e) {
+                $("#markedAs").text($(this).data("description"));
+                allAssessedAs = $(this).val();
             });
 
             $('#modalAllSubmit').on('click', function (e) {
-                if ($("#ScoreSetId").val() == 1) {
-                    switch(allAssessedAs) {
-                        case "Exceeding Expectations":
-                            $(".1").prop('checked', 'true');
-                            break;
-                        case "Meeting Expectations":
-                            $(".2").prop('checked', 'true');
-                            break;
-                        case "Approaching Expectations":
-                            $(".3").prop('checked', 'true');
-                            break;
-                        case "Not Meeting Expectations":
-                            $(".4").prop('checked', 'true');
-                            break;
-                        case "Not Assessed":
-                            $(".notAssessed").prop('checked', 'true');
-                            break;
-                    }
-                } else {
-                    switch(allAssessedAs) {
-                        case "Met":
-                            $(".6").prop('checked', 'true');
-                            break;
-                        case "Not Met":
-                            $(".7").prop('checked', 'true');
-                            break;
-                        case "Not Assessed":
-                            $(".notAssessed").prop('checked', 'true');
-                            break;
-                    }
-                }
-                $('#assessmentInputForm').submit();
+                $("." + allAssessedAs).prop('checked', 'true');
+                //$('#assessmentInputForm').submit();
             });
-
-            $('#close').on('click', function (e) {
-                $('#modalAllSubmit').modal('hide');
-            })
 
             var prevStudentTop = false;
             $('#prevStudentSubmitTop').on('click', function (e) {
@@ -342,17 +282,6 @@
                 //else {
                     location.href = "/InstructorAssessments/StudentList?rubricID=@r.RubricID&sectionID=@r.SectionID";
                 //}
-            });
-
-            $('#markAll').on('click', function (e) {
-                if ($("#ScoreSetId").val() == 1) {
-                    $("#ScoreSet1").show();
-                    $("#ScoreSet2").hide();
-                } else{
-                    $("#ScoreSet2").show();
-                    $("#ScoreSet1").hide();
-                }
-                $('#AssessAll').modal();
             });
 
             $('#assessmentInputForm').submit(function (eventObj) {

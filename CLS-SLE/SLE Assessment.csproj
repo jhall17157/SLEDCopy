@@ -640,6 +640,7 @@
     <Content Include="bin\WebGrease.dll" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
+    <Content Include="Content\bootstrap-multiselect.css" />
     <Content Include="Content\bootstrap-reboot.css" />
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap-select.min.css">
@@ -2595,6 +2596,7 @@
     <Content Include="packages\System.Diagnostics.DiagnosticSource.4.5.1\version.txt" />
     <Content Include="packages\WebGrease.1.6.0\lib\WebGrease.dll" />
     <Content Include="packages\WebGrease.1.6.0\tools\WG.EXE" />
+    <Content Include="Scripts\bootstrap-multiselect.js" />
     <Content Include="Scripts\bootstrap-select.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -2739,6 +2741,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="obj\Deploy\" />
     <Folder Include="Scripts\main\" />
+    <Folder Include="Views\Shared\EditorTemplates\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

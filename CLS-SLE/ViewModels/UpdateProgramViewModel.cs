@@ -12,6 +12,6 @@ namespace CLS_SLE.ViewModels
         public bool IsActive { get; set; }
         public bool IsSharedProgram { get; set; }
         public IEnumerable<String> DepartmentNames { get; set; }
-        public String DepartmentSelection { get; set; }
+        public IEnumerable<String> DepartmentSelection { get; set; }
     }
 }

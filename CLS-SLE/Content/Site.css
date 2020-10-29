@@ -86,7 +86,7 @@ img {
     transition: width 1s;
 }
 
-.btn-group > .btn {
+.btn-group > .btn:not(button.multiselect) {
     width: 170px;
 }
 /* Sets the size of headers to scale with the screen view width */
@@ -185,4 +185,8 @@ h3 {
 
 .ui-menu-item {
     z-index: 3000;
+}
+
+button.multiselect {
+    border: 1px solid #ced4da;
 }

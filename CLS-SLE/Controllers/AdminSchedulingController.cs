@@ -76,7 +76,7 @@ namespace CLS_SLE.Controllers
 
             if (viewModel.searchTerm != null && !viewModel.searchTerm.Equals(""))//13 ms
             {
-                courseResult = courseResult.Where(c => c.CourseName.Contains(viewModel.searchTerm)||c.Number.ToString().Contains(viewModel.searchTerm)||c.Sections.Where(s => s.CRN.ToString().Contains(viewModel.searchTerm)).Any());
+                courseResult = courseResult.Where(c => ( c.CourseName.Contains(viewModel.searchTerm)||c.Number.ToString().Contains(viewModel.searchTerm)||c.Sections.Where(s => s.CRN.ToString().Contains(viewModel.searchTerm) && s.SemesterID == schedulingViewModel.SemesterID).Any()));
 
             }
             schedulingViewModel.Courses = courseResult.OrderBy(c => c.Number).ToList();

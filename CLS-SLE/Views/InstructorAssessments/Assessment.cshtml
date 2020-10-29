@@ -106,7 +106,7 @@
                                                 else
                                                 {
                                                     <label class="form-check-label desc">
-                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input notAssessed" })
+                                                        @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input notAssessed"})
                                                         @i.Description
                                                     </label>
                                                 }
@@ -170,18 +170,20 @@
             <div class="modal-body" id="confirmText">
                 <p>You are about to mark all answers as <strong><span id="markedAs"></span></strong></p>
             </div>
-            <span id="ScoreSet1">
-            <button type="button" class="btn btn-warning" id="markAsExcExp">Exceeding Expectations</button>
-            <button type="button" class="btn btn-warning" id="markAsMeetExp">Meeting Expectations</button>
-            <button type="button" class="btn btn-warning" id="markAsAppExp">Approaching Expectations</button>
-            <button type="button" class="btn btn-warning" id="markAsNotMeetExp">Not Meeting Expectations</button>
-            </span>
+            <div class="container" id="ScoreSet1">
+                <button type="button" class="btn btn-warning col-12" id="markAsExcExp">Exceeding Expectations</button>
+                <button type="button" class="btn btn-warning col-12" id="markAsMeetExp">Meeting Expectations</button>
+                <button type="button" class="btn btn-warning col-12" id="markAsAppExp">Approaching Expectations</button>
+                <button type="button" class="btn btn-warning col-12" id="markAsNotMeetExp">Not Meeting Expectations</button>
+            </div>
 
-            <span id="ScoreSet2">
-            <button type="button" class="btn btn-warning" id="markAsMet">Met</button>
-            <button type="button" class="btn btn-warning" id="markAsNotMet">Not Met</button>
-            </span>
-            <button type="button" class="btn btn-warning" id="markAsNotAssessed">Not Assessed</button>
+            <div class="container" id="ScoreSet2">
+                <button type="button" class="btn btn-warning col-12" id="markAsMet">Met</button>
+                <button type="button" class="btn btn-warning col-12" id="markAsNotMet">Not Met</button>
+            </div>
+            <div class="container">
+                <button type="button" class="btn btn-warning col-12" id="markAsNotAssessed">Not Assessed</button>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" id="modalAllSubmit" data-dismiss="modal" data-toggle="modal">Yes</button>
 
@@ -311,9 +313,7 @@
                             break;
                     }
                 }
-                $("#assessmentInputForm").submit(function (event) {
-                    event.preventDefault();
-                });
+                $('#assessmentInputForm').submit();
             });
 
             $('#close').on('click', function (e) {

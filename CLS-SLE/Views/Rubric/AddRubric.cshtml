@@ -61,15 +61,8 @@
 
 	<fieldset class="form-group col-9">
 		@Html.Label("Score Set:")
-		@Html.EditorFor(Model => Model.AssessmentRubric.ScoreSetID,
-	new { htmlAttributes = new { @class = "form-control input-append", @list = "scoreSets"} })
-
-		<datalist id="scoreSets">
-			@foreach (var scoreSet in ViewBag.ScoreSets)
-			{
-			<option value="@scoreSet.ScoreSetID">@scoreSet.Name</option>
-			}
-		</datalist><br>
+		@Html.DropDownListFor(Model => Model.AssessmentRubric.ScoreSetID, new SelectList(ViewBag.ScoreSets, "ScoreSetID", "Name"),
+			new { htmlAttributes = new { @class = "form-control input-append"} })
 	</fieldset>
 
 	<div class="form-group col-9">

@@ -155,18 +155,16 @@ else if (Model.CreatorLogin != null)
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="moveModalLabel">Move The <b><span id="outcomeName"></span></b> Outcome To:</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
             </div>
             <div class="modal-body">
                 <div id="errorMessage"></div>
                 <label>Rubric Name:</label>
-                <input type="text" style="width:100%" id="addRubricID" data-outcomeID=0 data-currentid=0 data-rubricid=0 data-rubricName="" data-assessmentID="@Model.Rubric.AssessmentID" />
+                @Html.DropDownList("addRubricID", new SelectList(ViewBag.rubricsInAssessments, "RubricID", "Name"),
+			new { htmlAttributes = new { @class = "form-control input-append"} })
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="validateMove()">Submit</button>
+                <button type="button" class="btn btn-primary" id="moveSubmit" onclick="validateMove(@Model.Rubric.AssessmentID)" >Submit</button>
             </div>
         </div>
     </div>
@@ -175,4 +173,49 @@ else if (Model.CreatorLogin != null)
 @section scripts
 {
 	<script src="~/Scripts/rubric.js"></script>
+    <script>
+        $(".movingOutcome").on("click", function () {
+            //change name on modal to current outcome name
+            $("#outcomeName").text("");
+            var outcomeName = $(this).data(outcomeName);
+            $("#outcomeName").text(outcomeName.outcomename);
+
+            //pass data to modal 
+            $("#errorMessage").text("");
+            var outcomeID = $(this).data(outcomeID);
+            $("#addRubricID").attr("data-outcomeid", outcomeID.outcomeid);
+
+            var currentID = $(this).data(currentID);
+            $("#addRubricID").attr("data-currentid", currentID.currentid);
+
+            selectElement("addRubricID", currentID.currentid)
+        })
+
+        function selectElement(id, valueToSelect) {
+            let element = document.getElementById(id);
+            element.value = valueToSelect;
+        }
+
+        function validateMove(assessmentID) {
+                $.ajax({
+                    url: '@Url.Action("MoveOutcome","Rubric")',
+                    dataType: "TEXT",
+                    data: {
+                        rubricID: $('#addRubricID').find(":selected").val(), assessmentID: assessmentID,
+                        outcomeID: $("#addRubricID").data("outcomeid"), currentID: $("#addRubricID").data("currentid")
+                    },
+                    success: function (data) {
+                        console.log(data)
+                        if (data == 'True') {
+                            $("#errorMessage").text("");
+                            $("#moveModal").modal("hide");
+                            location.reload();
+                        } else {
+                            $("#errorMessage").text("Enter a valid Rubric ID").css('color', 'red');
+                        }
+                    },
+                    error: function (xhr, status, error) { alert(error)/*alert("Error")*/; }
+                });
+        }
+    </script>
 }

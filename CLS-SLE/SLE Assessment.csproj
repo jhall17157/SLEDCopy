@@ -506,11 +506,18 @@
     <Compile Include="ViewModels\CourseSearchViewModel.cs" />
     <Compile Include="ViewModels\CoursesViewModel.cs" />
     <Compile Include="ViewModels\CreateCourseViewModel.cs" />
+    <Compile Include="ViewModels\CreateRoleViewModel.cs" />
+    <Compile Include="ViewModels\CreateUserViewModel.cs" />
     <Compile Include="ViewModels\CriterionViewModel.cs" />
     <Compile Include="ViewModels\DepartmentsViewModel.cs" />
     <Compile Include="ViewModels\EditCourseViewModel.cs" />
     <Compile Include="ViewModels\EditDepartmentViewModel.cs" />
+    <Compile Include="ViewModels\EditRoleViewModel.cs" />
+    <Compile Include="ViewModels\EditUserViewModel.cs" />
     <Compile Include="ViewModels\InsertNewAssesmentViewModel.cs" />
+    <Compile Include="ViewModels\ManageRoleMembershipViewModel.cs" />
+    <Compile Include="ViewModels\ManageRolesViewModel.cs" />
+    <Compile Include="ViewModels\ManageUsersViewModel.cs" />
     <Compile Include="ViewModels\MappingViewModel.cs" />
     <Compile Include="ViewModels\OutcomeViewModel.cs" />
     <Compile Include="ViewModels\PagingInfo.cs" />
@@ -2730,6 +2737,13 @@
     <Content Include="Views\Admin\ManageUsersAndRoles.cshtml" />
     <Content Include="Views\Admin\ProgramDashboard.cshtml" />
     <Content Include="Views\Admin\ViewSchool.cshtml" />
+    <Content Include="Views\AdminUser\ManageUsers.cshtml" />
+    <Content Include="Views\AdminUser\CreateUser.cshtml" />
+    <Content Include="Views\AdminUser\EditUser.cshtml" />
+    <Content Include="Views\RoleAdmin\ManageRoles.cshtml" />
+    <Content Include="Views\RoleAdmin\EditRoles.cshtml" />
+    <Content Include="Views\RoleAdmin\CreateRoles.cshtml" />
+    <Content Include="Views\RoleAdmin\ManageRoleMembership.cshtml" />
     <None Include="Web.Test.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -132,5 +132,25 @@ namespace CLS_SLE.Controllers
 
             return RedirectToAction(actionName: "AdminDashboard", controllerName: "Admin");
         }
+
+        public ActionResult EditRole()
+        {
+            return View();
+        }
+
+        public ActionResult CreateRole()
+        {
+            return View();
+        }
+
+        public ActionResult ManageRoles()
+        {
+            return View();
+        }
+
+        public ActionResult ManageRoleMembership()
+        {
+            return View();
+        }
     }
 }

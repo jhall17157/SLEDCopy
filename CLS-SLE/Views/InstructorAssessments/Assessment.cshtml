@@ -23,7 +23,7 @@
 
     <div class="btn-group right" role="group" style="margin-top:10px; margin-bottom:5px;">
         <input type="button" class="btn btn-outline-dark prevStudentSubmit" value="Previous Student" id="prevStudentSubmitTop" name="lastStudent">
-        <input type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#AssessAll" value="Mark All" id="markAll" name="markAll">
+        <input type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#AssessAll" value="Mark All As ..." id="markAll" name="markAll">
         <input type="button" class="btn btn-outline-dark allStudentSubmit" value="Back to all students" id="allStudentSubmitTop" name="backToStudents">
         <input type="button" class="btn btn-outline-dark nextStudentSubmit" value="Next Student" id="nextStudentSubmitTop" name="nextStudent">
     </div>
@@ -166,7 +166,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title float-left">Mark All Students As <span STYLE="font-weight: bold" id="markedAs"></span></h2>
+                <h2 class="modal-title float-left">Mark All Criteria As <span STYLE="font-weight: bold" id="markedAs"></span></h2>
                 <button type="button" class="close float-right" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -175,7 +175,12 @@
             <div class="container" id="scoreSetButtons">
                 @foreach (Score i in Model.Selectors)
                 {
-                    <button type="button" STYLE="margin: 5px 0px 5px 0px" class="btn btn-primary col-12 markAll" data-description="@i.Description" value="@i.ScoreID">@i.Description</button>
+                    @*<button type="button" STYLE="margin: 5px 0px 5px 0px" class="btn btn-primary col-12 markAll" data-description="@i.Description" value="@i.ScoreID">@i.Description</button>*@
+                    <br />
+                    <label class="form-check-label desc" STYLE="margin: 0px 0px 0px 30px">
+                        @Html.RadioButton("markAll", i.ScoreID, new {@class = "form-check-input markAll", @value = "@i.ScoreID", @data_description = @i.Description })
+                        @i.Description
+                    </label>
                 }
             </div>
 
@@ -243,7 +248,7 @@
             });
 
             $("#markAll").on("click", function () {
-                $('#scoreSetButtons').children().last().click();
+                $('#scoreSetButtons').children().last().children().click();
             });
             
 

@@ -140,7 +140,7 @@
                     foreach (Course course in Model.Courses.OrderBy(c => c.CourseID))
                     {
                         courseNumber++;
-                        <tr href="#" data-target=".courseCollapse@(courseNumber)" class="row bg-medium border-top accordionTrigger clickable pt-1 ml-0 mr-0">
+                        <tr href="#" data-target=".courseCollapse@(courseNumber)" class="row bg-medium border-top accordionTrigger clickable pt-1 ml-0 mr-0" id="Course@(course.Number)Dropdown">
                             <td class="col-10 border-0">
                                 <h4>
                                     <i class="courseIcon@(courseNumber) ml-3 mr-3 fas fa-angle-right"></i> (@course.Number) @course.CourseName
@@ -156,7 +156,7 @@
                         {
                             sectionNumber++;
 
-                            <tr href="#" data-header="@(headerNumber) " data-target=".assessmentCollapse@(courseNumber)@(sectionNumber)" class="row pt-1 bg-light border-bottom ml-0 mr-0 collapse courseCollapse@(courseNumber) accordionClose lowerAccordionTrigger clickable">
+                            <tr href="#" data-header="@(headerNumber) " data-target=".assessmentCollapse@(courseNumber)@(sectionNumber)" id="CRN@(sec.CRN)Dropdown" class="row pt-1 bg-light border-bottom ml-0 mr-0 collapse courseCollapse@(courseNumber) accordionClose lowerAccordionTrigger clickable">
                                 <td class="border-0 col-4 align-self-center ml-0 mr-0">
                                     <h5 class="indent d-inline align-self-center">
                                         <i class="sectionIcon@(sectionNumber) sectionIcon ml-3 mr-3 fas fa-angle-right"></i> CRN: @sec.CRN
@@ -561,7 +561,41 @@
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap-select")
 <script type="text/javascript">
+    var focusCourse = ""+ "@(ViewBag.FocusIDCourse)";
+    var focusCRN = ""+ "@(ViewBag.FocusIDCRN)";
+    if (focusCourse != null) {
+        let target = "#Course" + focusCourse + "Dropdown";
+        if ($($(target).data('target')).hasClass('accordionClose')) {
+            $($(target).data('target')).removeClass('collapse').removeClass('accordionClose').addClass('accordionOpen');
+            var targetClass = $(target).data('target');
+            $('.courseIcon' + targetClass.substring(15,targetClass[targetClass.length])).removeClass("fas fa-angle-right").addClass("fas fa-angle-down");
+            $('.sectionIcon').removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+        }
+        else if ($($(target).data('target')).hasClass('accordionOpen')) {
+            $($(target).data('target')).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
+            var targetClass = $(target).data('target');
+            $('.assessmentCollapse' + targetClass.substring(15,targetClass[targetClass.length])).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
+            $('.courseIcon' + targetClass.substring(15, targetClass[targetClass.length])).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+        }
+    }
+    if (focusCRN != null) {
+        let target = "#CRN" + focusCRN + "Dropdown";
+        if ($($(target).data('target')).hasClass('accordionClose')) {
+            $($(target).data('target')).removeClass('collapse').removeClass('accordionClose').addClass('accordionOpen');
+            var targetClass = $(target).data('target');
+            $('.sectionIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-right").addClass("fas fa-angle-down");
+        }
+        else if ($($(target).data('target')).hasClass('accordionOpen')) {
+            $($(target).data('target')).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
+            var targetClass = $(target).data('target');
+            $('.sectionIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+        }
 
+    }
+
+    function expandDropdown(item, index) {
+
+    }
     
     //Updates Dates when Section Save Button is clicked
     function updateSection(sectionRubricID) {
@@ -587,7 +621,7 @@
                      $("#StartDate" + sectionRubricID).addClass("valid-field-submission");
                      $("#EndDate" + sectionRubricID).addClass("valid-field-submission");
                         },
-                 error: function (e) { alert(e.status + "" + e.readyState); console.log(e);}
+                 error: function (e) { /*alert(e.status + "" + e.readyState);*/ console.log(e);}
             });
         }
         else {

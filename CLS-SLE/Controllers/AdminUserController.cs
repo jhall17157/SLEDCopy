@@ -117,5 +117,22 @@ namespace CLS_SLE.Controllers
 
             return RedirectToAction("ViewUsers", "Admin");
         }
+
+        
+        public ActionResult ManageUsers()
+        {
+            return View();
+        }
+
+       
+        public ActionResult CreateUser()
+        {
+            return View();
+        }
+
+        public ActionResult EditUser()
+        {
+            return View();
+        }
     }
 }

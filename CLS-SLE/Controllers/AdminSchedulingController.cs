@@ -36,6 +36,7 @@ namespace CLS_SLE.Controllers
         {
             SchedulingViewModel schedulingViewModel = new SchedulingViewModel();
             schedulingViewModel.Sections = Enumerable.Empty<SelectListItem>().ToList();
+            string focusArea = null;
 
             //Defining Rubrics
             schedulingViewModel.AssesmentRubrics = (from r in db.AssessmentRubrics
@@ -76,7 +77,29 @@ namespace CLS_SLE.Controllers
 
             if (viewModel.searchTerm != null && !viewModel.searchTerm.Equals(""))//13 ms
             {
-                courseResult = courseResult.Where(c => c.CourseName.Contains(viewModel.searchTerm)||c.Number.ToString().Contains(viewModel.searchTerm)||c.Sections.Where(s => s.CRN.ToString().Contains(viewModel.searchTerm)).Any());
+                int searchTermCRN = -1;
+                bool searchTermIsCRN = false;
+                if(viewModel.searchTerm.Length >=4 && viewModel.searchTerm.Length <=5)
+                {
+                    searchTermIsCRN = int.TryParse(viewModel.searchTerm, out searchTermCRN);
+                }
+                if(searchTermIsCRN)
+                {
+                    courseResult = courseResult.Where(c => c.Sections.Where(s => s.CRN.ToString().Contains(viewModel.searchTerm) && s.SemesterID == schedulingViewModel.SemesterID).Any());
+                    if(courseResult.Any() && courseResult.Count() == 1)
+                    {
+                        focusArea = searchTermCRN.ToString();
+                        viewModel.FocusIDCRN = focusArea;
+                        ViewBag.FocusIDCRN = focusArea;
+                        viewModel.FocusIDCourse =  courseResult.FirstOrDefault().Number;
+                        ViewBag.FocusIDCourse = courseResult.FirstOrDefault().Number;
+                    }
+                }
+                else
+                {
+                    courseResult = courseResult.Where(c => (c.CourseName.Contains(viewModel.searchTerm) || c.Number.ToString().Contains(viewModel.searchTerm)));
+                }
+                //courseResult = courseResult.Where(c => ( c.CourseName.Contains(viewModel.searchTerm)||c.Number.ToString().Contains(viewModel.searchTerm)||c.Sections.Where(s => s.CRN.ToString().Contains(viewModel.searchTerm) && s.SemesterID == schedulingViewModel.SemesterID).Any()));
 
             }
             schedulingViewModel.Courses = courseResult.OrderBy(c => c.Number).ToList();

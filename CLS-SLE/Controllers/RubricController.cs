@@ -74,6 +74,15 @@ namespace CLS_SLE.Controllers
             Model.CreatorLogin = null;
             Model.ModifierLogin = null;
 
+            //get rubrics under the same assesment
+            List<RubricSearchModel> resultRubrics = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID).Select(a => new RubricSearchModel
+            {
+                name = a.Name,
+                rubricID = a.RubricID
+            }).ToList();
+
+            ViewBag.rubricsInAssessments = resultRubrics;
+
             //if (Rubric.CreatedByLoginID != null)
             //{
             //	Model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == Rubric.CreatedByLoginID).FirstOrDefault().Login;
@@ -93,8 +102,9 @@ namespace CLS_SLE.Controllers
 
             ViewBag.Assessments = db.Assessments.Select(a => a.Name).ToList();
             ViewBag.InitialAssessment = db.Assessments.Where(a => a.AssessmentID == assessmentID).FirstOrDefault().Name;
+            ViewBag.ScoreSets = db.ScoreSets.ToList();
             ViewBag.AssessmentID = assessmentID;
-
+            
             return View();
         }
 
@@ -162,6 +172,7 @@ namespace CLS_SLE.Controllers
 
             ViewBag.RelatedAssessments = relatedAssessments;
             ViewBag.Assessments = db.Assessments.Select(a => a.Name).ToList();
+            ViewBag.ScoreSets = db.ScoreSets.ToList();
 
             var model = new UpdateRubric() { RubricAssessment = rubricAssessment, AssessmentRubric = assessmentRubric };
 
@@ -238,6 +249,7 @@ namespace CLS_SLE.Controllers
                 editRubric.IsActive = updateRubric.AssessmentRubric.IsActive;
                 editRubric.ModifiedDateTime = DateTime.Now;
                 editRubric.ModifiedByLoginID = UserData.PersonId;
+                editRubric.ScoreSetID = updateRubric.AssessmentRubric.ScoreSetID;
 
                 db.SaveChanges();
 
@@ -255,7 +267,9 @@ namespace CLS_SLE.Controllers
         {
             RubricAssessment rubric = db.RubricAssessments.Where(r => r.RubricID == rubricID && r.AssessmentID == assessmentID).FirstOrDefault();
             OutcomeViewModel model = new OutcomeViewModel() { OutcomeVM = new Outcome() { RubricID = rubricID }, Rubric = rubric };
-
+            //Defaulting form
+            model.OutcomeVM.IsActive = true;
+            model.OutcomeVM.CalculateCriteriaPassRate = true;
             return View(model);
         }
 
@@ -274,6 +288,7 @@ namespace CLS_SLE.Controllers
 
                 AssessmentRubric rubric = db.AssessmentRubrics.Where(a => a.RubricID == rubricID).FirstOrDefault();
                 outcomeViewModel.OutcomeVM.SortOrder = maxSortOrder;
+                outcomeViewModel.OutcomeVM.CriteriaPassRate = outcomeViewModel.OutcomeVM.CriteriaPassRate / 100;
                 outcomeViewModel.OutcomeVM.CreatedDateTime = DateTime.Now;
                 outcomeViewModel.OutcomeVM.CreatedByLoginID = UserData.PersonId;
                 rubric.Outcomes.Add(outcomeViewModel.OutcomeVM);
@@ -300,6 +315,7 @@ namespace CLS_SLE.Controllers
 
             return View(model);
         }
+
         /*
 
         public ActionResult EditOutcome(int? outcomeID, int? rubricID)
@@ -366,13 +382,35 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        public Boolean MoveOutcome(int rubricID, int assessmentID, int outcomeID, int currentID)
+        {
+            bool success = false;
+
+            //must be moving to a valid rubric
+            var validRubric = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID).Where(r => r.RubricID == rubricID).Count();
+
+            //must get the object to update
+            var outcome = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID)
+                .Where(r => r.RubricID == currentID).FirstOrDefault().Outcomes.Where(o => o.OutcomeID == outcomeID)
+                .FirstOrDefault();
+
+            if (outcome != null && validRubric > 0)
+            {
+                success = true;
+                outcome.RubricID = Convert.ToInt16(rubricID);
+                db.SaveChanges();
+            }
+
+            return success;
+        }
+
         public ActionResult AddCriterion(short outcomeID, short assessmentID)
         {
             Criterion criterion = new Criterion { OutcomeID = outcomeID };
             Outcome outcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
             RubricAssessment rubric = db.RubricAssessments.Where(r => r.RubricID == outcome.RubricID && r.AssessmentID == assessmentID).FirstOrDefault();
             var model = new CriterionViewModel() { Criterion = criterion, Outcome = outcome, Rubric = rubric };
-
+            model.Criterion.IsActive = true;
             return View(model);
         }
 

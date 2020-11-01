@@ -61,13 +61,25 @@ else if (Model.CreatorLogin != null)
         <tbody>
             @{ foreach (RubricAssessment rubricAssessment in Model.assessment.RubricAssessments)
                 {
+
                     AssessmentRubric assessmentRubric = rubricAssessment.AssessmentRubric;
 
-                    <tr data-userID="person.PersonID">
-                        <td>@assessmentRubric.Name</td>
+                    if (assessmentRubric.IsActive.Equals(true))
+                    {
+                        <tr data-userID="person.PersonID">
+                            <td>@assessmentRubric.Name</td>
 
-                        <td class="text-right"><a href="@Url.Action("ViewRubric", "Rubric", new { rubricID = rubricAssessment.RubricID, assessmentID = Model.assessment.AssessmentID })" class="btn btn-primary mr-2">View</a></td>
-                    </tr>
+                            <td class="text-right"><a href="@Url.Action("ViewRubric", "Rubric", new { rubricID = rubricAssessment.RubricID, assessmentID = Model.assessment.AssessmentID })" class="btn btn-primary mr-2">View</a></td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr data-userID="person.PersonID">
+                            <td>@assessmentRubric.Name <span class="text-danger">(Not Active)</span></td>
+
+                            <td class="text-right"><a href="@Url.Action("ViewRubric", "Rubric", new { rubricID = rubricAssessment.RubricID, assessmentID = Model.assessment.AssessmentID })" class="btn btn-primary mr-2">View</a></td>
+                        </tr>
+                    }
                 }
             }
         </tbody>

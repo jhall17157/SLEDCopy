@@ -1,0 +1,56 @@
+﻿@using CLS_SLE.Models;
+@model CLS_SLE.ViewModels.SchoolsViewModel
+@{
+    /**/
+
+    ViewBag.Title = "Schools";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs-Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item active" aria-current="page">Schools</li>
+    </ol>
+</nav>
+<h1>Schools</h1>
+<br />
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col" class="h3">Schools</th>
+            <th scope="col" class="text-right"></th>
+            <th scope="col" width="10%"><a class="float-right" href="/AdminSchool/AddSchool"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New School</button></a></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (School school in Model.activeSchools)
+        {
+            <tr>
+                <td colspan="2">@school.Name</td>
+                <td class="text-right">
+                    <a href="ViewSchool?schoolId=@school.SchoolID"><button type="button" class="btn btn-primary">View</button></a>
+                </td>
+            </tr>
+        }
+        @foreach (School school in Model.inActiveSchools)
+        {
+            <tr>
+                <td colspan="2">@school.Name <span class="text-danger">(Not Active)</span></td>
+                <td class="text-right">
+                    <a href="ViewSchool?schoolId=@school.SchoolID"><button type="button" class="btn btn-primary">View</button></a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+@if (Model.updatedMessage != null)
+{
+    <script type="text/javascript">
+    console.log('here');
+        window.onload = function () {
+            swal("@Model.alertMessage", "", "@Model.updatedMessage");
+            };
+    </script>
+}

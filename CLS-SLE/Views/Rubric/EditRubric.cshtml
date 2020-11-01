@@ -82,16 +82,23 @@
 			</div>
 		</div>
 	</fieldset>
+
+	<fieldset class="form-group col-9">
+		@Html.Label("Score Set:")
+		@Html.DropDownListFor(Model => Model.AssessmentRubric.ScoreSetID, new SelectList(ViewBag.ScoreSets, "ScoreSetID", "Name"),
+			new { htmlAttributes = new { @class = "form-control input-append", @Value = Model.AssessmentRubric.ScoreSetID} })
+	</fieldset>
+
 	<div class="row">
 		<div class="form-group col-4">
 			@Html.Label("Start Date:")
 			@Html.TextBoxFor(model => model.RubricAssessment.StartDate,
-		    new { @Value = Model.RubricAssessment.StartDate.ToString("MM/dd/yyyy") })
+			new { @Value = Model.RubricAssessment.StartDate.ToString("MM/dd/yyyy") })
 		</div>
 		<div class="form-group col-4">
 			@Html.Label("End Date:")
 			@Html.TextBoxFor(model => model.RubricAssessment.EndDate,
-		    new { @Value = Model.RubricAssessment.EndDate != null ? Model.RubricAssessment.EndDate?.ToString("MM/dd/yyyy") : null })
+			new { @Value = Model.RubricAssessment.EndDate != null ? Model.RubricAssessment.EndDate?.ToString("MM/dd/yyyy") : null })
 		</div>
 	</div>
 	<div class="row justify-content-end col-9">

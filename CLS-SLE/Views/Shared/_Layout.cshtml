@@ -4,19 +4,24 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - SLE Assessments</title>
+    @Styles.Render("~/Content/jqueryUI")
     @Styles.Render("~/Content/css")
-    
+    @RenderSection("Styles", false)
+
     <link href="https://fonts.googleapis.com/css?family=Karla" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+
+
     @*@Styles.Render("~/Content/css")*@
+
     @Scripts.Render("~/bundles/modernizr")
 
     @{
         var ver = typeof(CLS_SLE.MvcApplication).Assembly.GetName().Version;
         string versionDisplay = $"SLE Assessment v{ver.Major}.{ver.Minor}.{ver.Build}";
-     }
+    }
 
 </head>
 <body>
@@ -49,7 +54,12 @@
             </ul>
         </nav>
     </div>
-
+    <div class="alert alert-success alert-dismissible fade hide" role="alert">
+        A simple success alert—check it out!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     @{
 
         var ControllerName = string.Empty;
@@ -67,9 +77,9 @@
 
 
             <div class="row justify-content-center">
-                <ul class="nav nav-tabs col-12 pt-0">
+                <ul class="nav nav-tabs col-12 pt-0">l
                     @*Needs to be manually updated for each new controller*@
-                    @if (HttpContext.Current.User.IsInRole("Administrator"))
+                    @if (HttpContext.Current.User.IsInRole("Administrator") || HttpContext.Current.User.IsInRole("RoleWithMembers") || HttpContext.Current.User.IsInRole("RoleWithoutMembers"))
                     {
                         <li class="nav-item h2">
                             <a class="nav-link align-bottom @((ControllerName.Equals("Admin") || ControllerName.Equals("RoleAdmin") || ControllerName.Equals("AdminUser") || ControllerName.Equals("Rubric") || ControllerName.Equals("AdminMapping") || ControllerName.Equals("AdminScheduling")) ? "active bg-white pb-4" : "bg-light mt-3")" href="~/Admin/AdminDashboard">Admin Dashboard</a>
@@ -98,8 +108,11 @@
     </div>
 
     @Scripts.Render("~/bundles/jquery")
+
+    @Scripts.Render("~/bundles/jqueryUI")
+
     @Scripts.Render("~/bundles/bootstrap")
-    
+
 
     <script>
         window.onscroll = function () { myFunction() };
@@ -115,6 +128,132 @@
                 $('#logo').css("width", 250);
             }
         }
+        $(function () {
+            initButtons();
+            function initButtons() {
+                $('#first, #prev').prop('disabled', $('#start').html() == "1");
+                $('#last, #next').prop('disabled', $('#end').html() == $('#total').html());
+                $("#addDepartmentSubmit").click(function () { console.log('hi');$('.alert').alert(); });
+            }
+        });
+
+        $("#courseSearch").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("CourseAutoComplete","AdminCourse")',
+                    dataType: "json",
+                    data: {search: $("#courseSearch").val()},
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.detailedName, value: item.name };
+                        }))
+                    },
+                    error: function (xhr, status, error) { alert("Error");}
+                });
+            }
+        });
+
+        $("#programSearch").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("ProgramAutoComplete","AdminProgram")',
+                    dataType: "json",
+                    data: {search: $("#programSearch").val()},
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.name };
+                        }))
+                    },
+                    error: function (xhr, status, error) { alert("Error");}
+                });
+            }
+        });
+
+
+        $("#studentSearch").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("StudentAutoComplete","AdminSection")',
+                    dataType: "json",
+                    data: {search: $("#studentSearch").val()},
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.listView, value: item.listView };
+                        }))
+                    },
+                    error: function (xhr, status, error) { alert("Error");}
+                });
+            }
+        });
+
+        $("#addStudentID").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("StudentAutoComplete","AdminSection")',
+                    dataType: "json",
+                    data: { search: $("#addStudentID").val() },
+                    appendTo: "#exampleModal",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.firstName + " " + item.lastName, value: item.idNumber };
+                        }))
+                    },
+                    error: function (xhr, status, error) { alert(error)/*alert("Error")*/;}
+                });
+            }
+        });
+
+        @*function addStudentToList(sectionID) {
+            $.ajax({
+                url: '@Url.Action("StudentListInfo","AdminSection")',
+                dataType: "json",
+                data: { search: $("#addStudentID").val(),id: sectionID },
+                success: function (data) {
+                    if (data.success) {
+                        $('#tempStudentList').append(
+                            '<li id="' + data.PID + '"><button onclick="removeStudentFromList(' + data.PID + ')" style="background-color:white; border:0; padding:0" >' +
+                            '<i class="fas fa-minus-circle" style="color:#dc3545"></i></button>	&nbsp;' +
+                            '<span value="' + data.id + '">' + data.lastName + ',  ' + data.firstName + ' - ' + data.id + '</span>' +
+                            '</li>'
+                        );
+                    }
+                    else {
+                        swal("Oops!", data.message, "error");
+                    }
+                },
+                error: function (data) {
+                    swal("Oops!", data.message, "error");
+        }
+            });
+            $('#addStudentID').val('');
+        }*@
+        /*
+        function removeStudentFromList(id) {
+            $('#' + id).remove();
+        }
+        */
+        function enrollAllStudents(sectionID) {
+            var listItems = $("#tempStudentList li");
+            listItems.each(function () {
+                $.ajax({
+                    url: '@Url.Action("SaveEnrollment","AdminSection")',
+                    dataType: "json",
+                    data: { id: this.id, section: sectionID },
+                    success: function (data) {
+                    },
+                    error: function () {}
+                });
+            });
+
+            @*$.ajax({
+                    url: '@Url.Action("ViewSection","AdminSection",{ })',
+                    success: function (data) {},
+                    error: function () {}
+                });*@
+            location.reload();
+        }
+
+        
     </script>
     @RenderSection("scripts", required: false)
 </body>

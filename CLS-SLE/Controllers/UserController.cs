@@ -8,6 +8,14 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Web.Security;
+using System.Net.Mail;
+using BCrypt.Net;
+using NLog;
+using System.Security.Principal;
+using System.Threading;
+using Microsoft.AspNet.Identity.EntityFramework;
+using CLS_SLE.Utility.SAML;
+
 
 namespace CLS_SLE.Controllers
 {
@@ -47,6 +55,7 @@ namespace CLS_SLE.Controllers
         public ActionResult Consume()
         {
             // replace with an instance of the users account.
+            
 
 
             if (base.HasSAMLResponse && base.SAMLResponse.IsValid())
@@ -143,6 +152,27 @@ namespace CLS_SLE.Controllers
             }
 
             return View();
+        }
+
+        [AllowAnonymous]
+        [OutputCache(NoStore = true, Location = System.Web.UI.OutputCacheLocation.None)]
+        [HttpGet]
+        public ActionResult PasswordReset()
+        {
+            FormsAuthentication.SignOut();
+            Session.Abandon();
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult ChangePassword()
+        {
+            
+            if (Session["User"] != null)
+            {
+                return View();
+            }
+            return RedirectToAction(actionName: "Dashboard", controllerName: "InstructorAssessments");
         }
 
         [AllowAnonymous]

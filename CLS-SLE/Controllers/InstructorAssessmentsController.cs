@@ -128,6 +128,7 @@ namespace CLS_SLE.Controllers
                 mymodel.Outcomes = outcomes.ToList();
                 mymodel.Criteria = criteria.ToList();
                 mymodel.StudentScores = studentScores.ToList();
+                mymodel.ScoreSetID = ScoreSet.ScoreSetID;
 
                 return View(mymodel);
             }
@@ -189,6 +190,16 @@ namespace CLS_SLE.Controllers
             else if (submitType.Equals("studentListBreadcrum"))
             {
                 logger.Info("Submission recieved and saved, redirecting to student list");
+                return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"], sectionID = Session["sectionID"] });
+            }
+            else if (submitType.Equals("here"))
+            {
+                logger.Info("Submission recieved and saved, returning to here");
+                return Redirect(Request.UrlReferrer.PathAndQuery);
+            }
+            else if (submitType.Equals("backToTop"))
+            {
+                logger.Info("Submission recieved and saved, returning to the list of students");
                 return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"], sectionID = Session["sectionID"] });
             }
             logger.Info("Submission recieved and saved, redirecting to assessment student list");

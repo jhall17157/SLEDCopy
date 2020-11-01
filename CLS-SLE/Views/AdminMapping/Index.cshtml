@@ -25,11 +25,11 @@
             <div class="form-group col-12">
                 <p class="col-12 mb-1 pl-0">Search For A Program:</p>
                 @Html.DropDownListFor(p => p.ProgramID, Model.Programs, "-Select Program-", new
-           {
-               @id = "DropDownPrograms",
-               @class = "form-control selectpicker d-inline col-6",
-               onchange = "this.form.submit();"
-           })
+                   {
+                       @id = "DropDownPrograms",
+                       @class = "form-control selectpicker d-inline col-6",
+                       onchange = "this.form.submit();"
+                   })
 
 
                 <input type="submit" class="btn btn-primary d-inline ml-2" value="Search" />
@@ -78,12 +78,11 @@
                             {
                                 <tr class="collapse rubricCollapse@(rubricNumber) accordionClose">
                                     <td class="align-self-center">
-                                        <p class="d-none d-md-none d-lg-inline offset-1">(@pam.Course.Number) @pam.Course.CourseName</p>
+                                        <p class="d-none d-md-noe d-lg-inline offset-1">(@pam.Course.Number) @pam.Course.CourseName</p>
 
                                         <!-- Button trigger modal -->
-                                        <button type="button" class=" btn btn-danger btn-sm d-inline float-right" data-toggle="modal" data-target="#removeCourseModal@(pam.Course.Number)@(ra.AssessmentRubric.Name.Replace(" ","_").Replace("/","_"))"><i class="fas fa-times" aria-hidden="true"></i></button>
+                                        <button type="button" class=" btn btn-danger btn-sm d-inline float-right" data-toggle="modal" data-target=".removeCourseModal@(pam.Course.Number)"><i class="fas fa-times" aria-hidden="true"></i></button>
                                         <!-- Modal For Deleting Courses-->
-                                        <!--
                                         <div class="modal fade removeCourseModal@(pam.Course.Number)" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
@@ -107,7 +106,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                            -->
                                     </td>
                                 </tr>
                             }
@@ -120,48 +118,6 @@
 
 }
 
-<div id="allModals">
-    @if (Model.Program != null)
-    { 
-    //int rubricNumber2 = 0;
-    foreach (var assessment in Model.Program.Assessments)
-    {
-
-    foreach (var ra in assessment.RubricAssessments.ToList())
-    {
-    foreach (var pam in ra.AssessmentRubric.ProgramAssessmentMappings)
-    {
-
-    <!-- Modal For Deleting Courses-->
-    <div class="modal fade removeCourseModal@(pam.Course.Number)@(ra.AssessmentRubric.Name.Replace(" ","_").Replace("/","_"))" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" id="removeCourseModal@(pam.Course.Number)@(ra.AssessmentRubric.Name.Replace(" ","_").Replace("/","_"))">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-light">
-                    <h3 class="modal-title" id="removeConfirm">Delete Confirmation</h3>
-                    <i class="ml-auto fas fa-exclamation-triangle fa-2x"></i>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want remove<br /><strong>(@pam.Course.Number) @pam.Course.CourseName</strong> from<br /><strong>@ra.AssessmentRubric.Name</strong>?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary mr-auto" data-dismiss="modal">Cancel</button>
-
-                    @using (Html.BeginForm("DeleteMapping", "AdminMapping", new { mapID = pam.ProgramAssessmentMappingID }, FormMethod.Post))
-                    {
-                        @Html.HiddenFor(model => model.ProgramID);
-                        <button type="submit" class="btn btn-outline-danger float-right">Delete</button>
-                    }
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    }
-    }
-    }
-    }
-</div>
 
 <!-- Modal -->
 @*<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

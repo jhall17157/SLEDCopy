@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
-    [Authorize(Roles = "Administrator, RoleWithMembers, RoleWithoutMembers")]
+    [Authorize(Roles = "Administrator")]
     public class AdminController : SLEControllerBase
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
@@ -23,7 +23,6 @@ namespace CLS_SLE.Controllers
 
         public ActionResult AdminDashboard()
         {
-            ViewBag.ReportingURL = System.Configuration.ConfigurationManager.AppSettings["ReportingSiteURL"];
 
             return View();
 
@@ -269,7 +268,6 @@ namespace CLS_SLE.Controllers
 
         public ActionResult ViewAssessment(int? assessmentId)
         {
-            String DefaultUserCreateModifyValue = "Unknown";
             var assessment = new Assessment();
             var canEdit = false;
             var canAdd = false;
@@ -300,27 +298,11 @@ namespace CLS_SLE.Controllers
 
                 if (assessment.CreatedByLoginID != null)
                 {
-                    var tempVar = db.Users.Where(u => u.PersonID == assessment.CreatedByLoginID).FirstOrDefault();
-                    if(tempVar!=null)
-                    {
-                        model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == assessment.CreatedByLoginID).FirstOrDefault().Login;
-                    }
-                    else
-                    {
-                        model.CreatorLogin = DefaultUserCreateModifyValue;
-                    }
+                    model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == assessment.CreatedByLoginID).FirstOrDefault().Login;
                 }
                 if (assessment.ModifiedByLoginID != null)
                 {
-                    var tempVar = db.Users.Where(u => u.PersonID == assessment.ModifiedByLoginID).FirstOrDefault();
-                    if(tempVar != null)
-                    {
-                        model.ModifierLogin = (String)db.Users.Where(u => u.PersonID == assessment.ModifiedByLoginID).FirstOrDefault().Login;
-                    }
-                    else
-                    {
-                        model.ModifierLogin = DefaultUserCreateModifyValue;
-                    }
+                    model.ModifierLogin = (String)db.Users.Where(u => u.PersonID == assessment.ModifiedByLoginID).FirstOrDefault().Login;
                 }
                 model.program = db.Programs.Where(p => p.ProgramID == assessment.ProgramID).FirstOrDefault().Name;
                 model.assessment = assessment;
@@ -518,8 +500,6 @@ namespace CLS_SLE.Controllers
         {
             return View();
         }
-
-        public ActionResult ProgramDashboard() => View();
 
         [HttpGet]
         public ActionResult ViewUsers(ViewUserViewModel viewUserViewModel)

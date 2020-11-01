@@ -38,13 +38,7 @@ namespace CLS_SLE
             //Styling for bootstrap-select. Allows for live searching drop down list
             bundles.Add(new StyleBundle("~/Content/bootstrap-select").Include(
                 "~/Content/bootstrap-select.min.css"));
-
-            bundles.Add(new StyleBundle("~/Content/jqueryUI").Include(
-                      "~/Content/jquery-ui*"));
-
-            bundles.Add(new ScriptBundle("~/bundles/jqueryUI").Include(
-                 "~/Scripts/jquery-ui*"));
-
+            
         }
     }
 }

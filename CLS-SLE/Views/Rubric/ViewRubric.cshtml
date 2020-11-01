@@ -58,13 +58,12 @@ else if (Model.CreatorLogin != null)
 
             <tr>
 
-                <td class="h3 align-middle py-2"><a href=".collapse@(outcome.OutcomeID)" data-toggle="collapse" style="float:left;"><i class="fa fa-chevron-down" style="padding: 0 1em;"></i></a><span style="display:block; overflow:hidden">@outcome.Name</span> <span class="text-danger">@(outcome.IsActive.Equals(true) ? "" : "(Not Active)")</span></td>
+                <td class="h3 align-middle py-2"><a href=".collapse@(outcome.OutcomeID)" data-toggle="collapse"><i class="fa fa-chevron-down" style="padding: 1em"></i></a>@outcome.Name</td>
                 <td class="text-right">
                     @*<a class="btn btn-block" role="button" href=".collapse@(outcome.OutcomeID)" data-toggle="collapse">Test</a>*@
                     <!--<button type="button" class="btn btn-primary outcomeDetailsButton">Details</button>-->
                     <a class="btn btn-primary" role="button" href=".collapseOutcome@(outcome.OutcomeID)" data-toggle="collapse">Details</a>
                     <a href="@Url.Action("EditOutcome", "Rubric", new { outcomeID = outcome.OutcomeID, assessmentID = Model.Rubric.AssessmentID })" class="btn btn-primary">Edit</a>
-                    <a class="btn btn-primary movingOutcome" href="" role="button" data-toggle="modal" data-target="#moveModal" data-outcomeID="@(outcome.OutcomeID)" data-currentid="@Model.Rubric.AssessmentRubric.RubricID" data-outcomeName="@outcome.Name">Move</a>
                     <a href="@Url.Action("AddCriterion", "Rubric", new { outcomeID = outcome.OutcomeID, assessmentID = Model.Rubric.AssessmentID })" class="btn btn-success"><i class="fa fa-plus"></i> Add New Criterion</a>
                 </td>
             </tr>
@@ -106,7 +105,7 @@ else if (Model.CreatorLogin != null)
 
             <tbody class="collapse@(outcome.OutcomeID) collapse criterion" id="criterion@(criterion.CriteriaID)">
                 <tr class="bg-light">
-                    <td class="pl-4 py-1"><button type="button" class="criterionDetailsButton btn btn-primary" style="margin: 1em"><i class="fa fa-chevron-down"></i></button> @criterion.Name <span class="text-danger">@(criterion.IsActive.Equals(true)?"":"(Not Active)")</span></td>
+                    <td class="pl-4 py-1"><button type="button" class="criterionDetailsButton btn btn-primary" style="margin: 1em"><i class="fa fa-chevron-down"></i></button> @criterion.Name </td>
                     <td class="text-right">
 
 
@@ -150,72 +149,7 @@ else if (Model.CreatorLogin != null)
     }
 </table>
 
-<div class="modal fade" id="moveModal" tabindex="-1" role="dialog" aria-labelledby="moveModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="moveModalLabel">Move The <b><span id="outcomeName"></span></b> Outcome To:</h5>
-            </div>
-            <div class="modal-body">
-                <div id="errorMessage"></div>
-                <label>Rubric Name:</label>
-                @Html.DropDownList("addRubricID", new SelectList(ViewBag.rubricsInAssessments, "RubricID", "Name"),
-			new { htmlAttributes = new { @class = "form-control input-append"} })
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="moveSubmit" onclick="validateMove(@Model.Rubric.AssessmentID)" >Submit</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 @section scripts
 {
 	<script src="~/Scripts/rubric.js"></script>
-    <script>
-        $(".movingOutcome").on("click", function () {
-            //change name on modal to current outcome name
-            $("#outcomeName").text("");
-            var outcomeName = $(this).data(outcomeName);
-            $("#outcomeName").text(outcomeName.outcomename);
-
-            //pass data to modal 
-            $("#errorMessage").text("");
-            var outcomeID = $(this).data(outcomeID);
-            $("#addRubricID").attr("data-outcomeid", outcomeID.outcomeid);
-
-            var currentID = $(this).data(currentID);
-            $("#addRubricID").attr("data-currentid", currentID.currentid);
-
-            selectElement("addRubricID", currentID.currentid)
-        })
-
-        function selectElement(id, valueToSelect) {
-            let element = document.getElementById(id);
-            element.value = valueToSelect;
-        }
-
-        function validateMove(assessmentID) {
-                $.ajax({
-                    url: '@Url.Action("MoveOutcome","Rubric")',
-                    dataType: "TEXT",
-                    data: {
-                        rubricID: $('#addRubricID').find(":selected").val(), assessmentID: assessmentID,
-                        outcomeID: $("#addRubricID").data("outcomeid"), currentID: $("#addRubricID").data("currentid")
-                    },
-                    success: function (data) {
-                        console.log(data)
-                        if (data == 'True') {
-                            $("#errorMessage").text("");
-                            $("#moveModal").modal("hide");
-                            location.reload();
-                        } else {
-                            $("#errorMessage").text("Enter a valid Rubric ID").css('color', 'red');
-                        }
-                    },
-                    error: function (xhr, status, error) { alert(error)/*alert("Error")*/; }
-                });
-        }
-    </script>
 }

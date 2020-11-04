@@ -1,4 +1,5 @@
 ﻿using CLS_SLE.Models;
+using CLS_SLE.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,6 +12,8 @@ namespace CLS_SLE.Controllers
     [Authorize(Roles = "Administrator")]
     public class RoleAdminController : SLEControllerBase
     {
+        List<int> NonDeletableRoleIDs = new List<int>() {1,2};
+
         SLE_TrackingEntities db = new SLE_TrackingEntities();
         public ActionResult Index() => View(db.Roles);
 
@@ -143,9 +146,39 @@ namespace CLS_SLE.Controllers
             return View();
         }
 
-        public ActionResult ManageRoles()
+        public ActionResult ManageRoles(ManageRolesViewModel vm)
         {
-            return View();
+            if(vm!= null && vm.SearchTerm != null && vm.SearchTerm != "")
+            {
+                vm.NonDeletableRoles = db.Roles.Include("UserRoles").Where(r => r.Name.ToLower().Contains(vm.SearchTerm.ToLower())&& NonDeletableRoleIDs.Contains(r.RoleID)).OrderBy(r => r.Name.ToLower()).ToList();
+                vm.DeletableRoles = db.Roles.Include("UserRoles").Where(r => r.Name.ToLower().Contains(vm.SearchTerm.ToLower()) && !NonDeletableRoleIDs.Contains(r.RoleID)).OrderBy(r => r.Name.ToLower()).ToList();
+            }
+            else
+            {
+                vm = new ManageRolesViewModel();
+                vm.NonDeletableRoles = db.Roles.Include("UserRoles").Where(r => NonDeletableRoleIDs.Contains(r.RoleID)).ToList();
+                vm.DeletableRoles =  db.Roles.Include("UserRoles").Where(r => !NonDeletableRoleIDs.Contains(r.RoleID)).ToList();
+            }
+            //vm.SearchTerm = "";
+            return View(vm);
+        }
+
+        public JsonResult DeleteRole(int TargetID)
+        {
+            try
+            {
+                Role targetRole = db.Roles.Where(r => r.RoleID == TargetID).FirstOrDefault();
+                if(targetRole != null)
+                {
+                    db.Roles.Remove(targetRole);
+                    db.SaveChanges();
+                    return new JsonResult { Data = true, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+                return null;
+            } catch (Exception e)
+            {
+                return null;
+            }
         }
 
         public ActionResult ManageRoleMembership()

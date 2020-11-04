@@ -118,13 +118,49 @@ namespace CLS_SLE.Controllers
             return RedirectToAction("ViewUsers", "Admin");
         }
 
-        
-        public ActionResult ManageUsers()
+        public JsonResult SetUserActiveStatus(int PersonID, bool IsActive)
         {
-            return View();
+
+            User targetUser = db.Users.Where(u => u.PersonID == PersonID).FirstOrDefault();
+            try
+            {
+                if (targetUser != null)
+                {
+                    targetUser.IsActive = IsActive;
+                    db.SaveChanges();
+                    return new JsonResult { Data = true, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
-       
+        /*
+        public ActionResult ManageUsers()
+        {
+            ManageUsersViewModel vm = new ManageUsersViewModel();
+            vm.Users = db.Users.Include("Person").OrderBy(u => u.Login).ToList();
+            return View(vm);
+        }
+        */
+        public ActionResult ManageUsers(ManageUsersViewModel vm)
+        {
+            if(vm.SearchTerm != null)
+            {
+                vm.Users = db.Users.Include("Person").Where(u => u.Login.ToLower().Contains(vm.SearchTerm.ToLower())||u.PersonID.ToString().ToLower().StartsWith(vm.SearchTerm.ToLower())||(u.Person.LastName + ", " + u.Person.FirstName).ToLower().Contains(vm.SearchTerm.ToLower())).OrderBy(u => u.Login).ToList();
+            }
+            else
+            {
+                vm.Users = db.Users.Include("Person").OrderBy(u => u.Login).ToList();
+            }
+            //vm.SearchTerm = "";
+            return View(vm);
+        }
+
+
         public ActionResult CreateUser()
         {
             return View();

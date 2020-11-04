@@ -1,7 +1,178 @@
-﻿
+﻿@using CLS_SLE.Models;
+@model CLS_SLE.ViewModels.ManageRolesViewModel
 @{
-    ViewBag.Title = "ManageRoles";
+    ViewBag.Title = "Manage Roles ";
+    int roleCount = 0;
+    //Role[] roles = Model.Roles.ToArray();
 }
 
-<h2>ManageRoles</h2>
+@section Styles
+{
+    <style>
+
+        #clearSearchResults {
+            background-color: red;
+        }
+
+        #searchForm {
+            display: inline;
+        }
+
+        #SearchResultDiv {
+            padding-bottom: 15px;
+        }
+    </style>
+
+
+
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
+        <li class="breadcrumb-item active" aria-current="page">Manage Roles</li>
+    </ol>
+</nav>
+<h1>Manage Roles</h1>
+<br />
+@if (Model.SearchTerm != null && Model.SearchTerm != "")
+{
+    <div id="SearchResultDiv">
+        <h2>Search Results for: @(Model.SearchTerm != null ? Model.SearchTerm : "")</h2>
+
+        <a href="#">
+            <button class="btn btn-success col-3" type="button" name="resetSearch" formmethod="post" id="clearSearchResults">
+                Clear Search Results
+            </button>
+        </a>
+    </div>
+}
+
+
+<div class="row justify-content-between">
+    <div class="col-2">
+        <a href="/RoleAdmin/CreateRoles">
+            <button class="btn btn-success col-12" type="button" name="createRole" formmethod="post">
+                <i class="fa fa-plus"></i> Add New Role
+            </button>
+        </a>
+    </div>
+
+    <div class="col-6 float-right text-right">
+
+        <span class="float-right text-right">
+            <label for="SearchTerm">Search</label> <span>
+
+                @using (Html.BeginForm("ManageRoles", "RoleAdmin", FormMethod.Post, new { id = "searchForm" }))
+                {
+                    <span>
+                        @Html.TextBoxFor(vm => vm.SearchTerm, new { id = "searchBox" })
+                    </span>
+
+                    <button type="submit" id="searchSubmit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>
+                }
+            </span>
+        </span>
+    </div>
+</div>
+
+<table class="table table-hover table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Role</th>
+            <th scope="col">Current Members</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+
+
+        @if (Model.NonDeletableRoles != null && Model.NonDeletableRoles.Count() > 0)
+        {
+            foreach (Role role in Model.NonDeletableRoles)
+            {
+                <tr id="Role@(role.RoleID)Row">
+                    <td>@Html.ActionLink(role.Name, "EditRoles", "RoleAdmin", new { id = role.RoleID }) </td>
+                    <td>@Html.ActionLink("" + role.UserRoles.Count(), "ManageRoleMembership", "RoleAdmin", new { id = role.RoleID })</td>
+                    <td></td>
+                </tr>
+            }
+        }
+
+        @if (Model.DeletableRoles != null && Model.DeletableRoles.Count() > 0)
+        {
+            foreach (Role role in Model.DeletableRoles)
+            {
+                <tr id="Role@(role.RoleID)Row">
+                    <td>@Html.ActionLink(role.Name, "EditRoles", "RoleAdmin", new { id = role.RoleID }) </td>
+                    <td>@Html.ActionLink("" + role.UserRoles.Count(), "ManageRoleMembership", "RoleAdmin", new { id = role.RoleID })</td>
+                    <td><button name="deleteRole@(role.RoleID)Button" id="deleteRole@(role.RoleID)Button" onclick="removeRoleRequest(@(role.RoleID),'@(role.Name)');"><i class="fas fa-trash"></i></button></td>
+                </tr>
+            }
+        }
+
+
+    </tbody>
+</table>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="DeletionModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Role <span id="RoleDeletionHeaderPlaceholder"></span>?</h5>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to Delete the <span id="RoleDeletionBodyPlaceholder"></span> Role?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="deleteCourse()" id="DeleteRoleButton">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap-select")
+    <script type="text/javascript">
+        var st = "@(Model.SearchTerm == null ? "null" : Model.SearchTerm)";
+        //console.log(st);
+        if (st != null)
+        {
+        }
+
+        $("#clearSearchResults").on("click", function () {
+            $("#searchBox").val("");
+            //alert($("#searchBox").val(""));
+            $("#searchForm").submit();
+        });
+
+        $("#searchBox").val("");
+
+        function removeRoleRequest(roleID, name) {
+            $("#RoleDeletionHeaderPlaceholder").html(name);
+            $("#RoleDeletionBodyPlaceholder").html(name);
+            $("#deleteModal").data("IdForRemoval", roleID);
+            $("#deleteModal").modal("show");
+            //console.log("Request for Deletion: " + roleID);
+        }
+
+        function deleteCourse() {
+            let deletionID = $("#deleteModal").data("IdForRemoval");
+            if (deletionID != null && deletionID != "") {
+                $.ajax({
+                    url: '@Url.Action("DeleteRole","RoleAdmin")',
+                    dataType: "json",
+                    data: { TargetID: deletionID },
+                    success: function (data) {
+                        location.reload();
+                        },
+                 error: function (e) { /*alert(e.status + "" + e.readyState);*/ console.log(e);}
+            });
+            }
+        }
+
+    </script>
+}
 

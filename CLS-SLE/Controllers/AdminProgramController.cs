@@ -315,5 +315,23 @@ namespace CLS_SLE.Controllers
             //redirects user to the programs view if successfully added new program
             return RedirectToAction("ViewProgram", "AdminProgram", new { programID = programID, updatedMessage = "success" });
         }
+
+        public JsonResult getAllPrograms()
+        {
+            List<Program> programs = db.Programs.OrderBy(p => p.Name).ToList();
+            if (programs.Count() > 0)
+            {
+                List<ProgramTruncated> allProgramsOutput = new List<ProgramTruncated>();
+                foreach (Program p in programs)
+                {
+                    allProgramsOutput.Add(new ProgramTruncated() { ProgramID = p.ProgramID, Name = p.Name });
+                }
+                return new JsonResult { Data = allProgramsOutput, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

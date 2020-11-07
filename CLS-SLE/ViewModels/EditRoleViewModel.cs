@@ -16,4 +16,22 @@ namespace CLS_SLE.ViewModels
         public List<Department> allDepartments { get; set; }
         public List<Program> allPrograms { get; set; }
     }
+
+    public class SchoolTruncated
+    {
+        public String Name { get; set; }
+        public int SchoolID { get; set; }
+    }
+
+    public class ProgramTruncated
+    {
+        public String Name { get; set; }
+        public int ProgramID { get; set; }
+    }
+
+    public class DepartmentTruncated
+    {
+        public String Name { get; set; }
+        public int DepartmentID { get; set; }
+    }
 }

@@ -292,6 +292,88 @@ namespace CLS_SLE.Controllers
             return View(vm);
         }
 
+        public JsonResult getRelatedSchoolSecurities(int roleID)
+        {
+            Role targetRole = db.Roles.Where(r => r.RoleID == roleID).FirstOrDefault();
+            if (targetRole != null)
+            {
+                List<SchoolSecurity> schoolSecurities = targetRole.SchoolSecurities.OrderBy(ss => ss.School.Name).ToList();
+                if(schoolSecurities.Count() > 0)
+                {
+
+                    List<SchoolTruncated> allSchoolsOutput = new List<SchoolTruncated>();
+                    foreach (SchoolSecurity s in schoolSecurities)
+                    {
+                        allSchoolsOutput.Add(new SchoolTruncated() { SchoolID = s.SchoolID, Name = s.School.Name });
+                    }
+                    return new JsonResult { Data = allSchoolsOutput, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+                else
+                {
+                    return null;
+                }
+                
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public JsonResult getRelatedDepartmentSecurities(int roleID)
+        {
+            Role targetRole = db.Roles.Where(r => r.RoleID == roleID).FirstOrDefault();
+            if (targetRole != null)
+            {
+                List<DepartmentSecurity> departmentSecurities = targetRole.DepartmentSecurities.OrderBy(ds => ds.Department.Name).ToList();
+                if (departmentSecurities.Count() > 0)
+                {
+                    List<DepartmentTruncated> allDepartmentsOutput = new List<DepartmentTruncated>();
+                    foreach (DepartmentSecurity d in departmentSecurities)
+                    {
+                        allDepartmentsOutput.Add(new DepartmentTruncated() { DepartmentID = d.DepartmentID, Name = d.Department.Name });
+                    }
+                    return new JsonResult { Data = allDepartmentsOutput, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+                else
+                {
+                    return new JsonResult { Data = null, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+
+            }
+            else
+            {
+                return new JsonResult { Data = null, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
+        }
+
+        public JsonResult getRelatedProgramSecurities(int roleID)
+        {
+            Role targetRole = db.Roles.Where(r => r.RoleID == roleID).FirstOrDefault();
+            if (targetRole != null)
+            {
+                List<ProgramSecurity> programSecurities = targetRole.ProgramSecurities.OrderBy(ps => ps.Program.Name).ToList();
+                if (programSecurities.Count() > 0)
+                {
+                    List<ProgramTruncated> allProgramsOutput = new List<ProgramTruncated>();
+                    foreach (ProgramSecurity ps in programSecurities)
+                    {
+                        allProgramsOutput.Add(new ProgramTruncated() { ProgramID = ps.ProgramID, Name = ps.Program.Name });
+                    }
+                    return new JsonResult { Data = allProgramsOutput, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+                else
+                {
+                    return new JsonResult { Data = null, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+
+            }
+            else
+            {
+                return new JsonResult { Data = null, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
+        }
+
         public JsonResult DeleteRole(int TargetID)
         {
             try

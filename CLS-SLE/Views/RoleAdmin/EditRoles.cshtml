@@ -1,7 +1,102 @@
-﻿
+﻿@using CLS_SLE.Models;
+@model CLS_SLE.ViewModels.EditRoleViewModel
 @{
-    ViewBag.Title = "EditRoles";
+    ViewBag.Title = "Edit Role";
+
 }
 
-<h2>EditRoles</h2>
+@section Styles
+{
+    <style>
+        #RoleAttributesSection
+        {
+            padding-left: 0px;
+            margin-left: 0px;
+            margin-bottom: 20px;
+        }
+
+        .input-lable
+        {
+            padding-left: 0px;
+            margin-left: 0px;
+        }
+
+        .input-field
+        {
+            padding-left: 0px;
+            margin-left: 0px;
+        }
+
+        #updateNameAndDescButton
+        {
+            margin-left: 0px;
+            margin-top: 5px;
+        }
+
+    </style>
+
+
+
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item active" aria-current="page">Edit Role</li>
+    </ol>
+</nav>
+<h1>Edit Role</h1>
+<br />
+<h2>Role: @(Model.role.Name)</h2>
+
+
+<div id="RoleAttributesSection" class="container align-content-start">
+    <div class="col-3 input-lable">
+        @Html.Label("Name: ")
+    </div>
+
+    <div class="col-6 input-field">
+        @Html.TextBoxFor(model => model.role.Name, new { @class = "form-control", id="RoleName" })
+    </div>
+    <br />
+    <div class="col-3 input-lable">
+        @Html.Label("Description: ")
+    </div>
+
+    <div class="col-6 input-field">
+        @Html.TextAreaFor(model => model.role.Description, new { @class = "form-control", id = "RoleDesc" })
+    </div>
+
+    <button id="updateNameAndDescButton" class="btn btn-primary">Update</button>
+    
+</div>
+<!--
+<div id="RoleDataSecuritySection">
+    <h2>Data Security for this Role</h2>
+</div>
+    -->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap-select")
+    <script type="text/javascript">
+
+        var roleId = @(Model.role.RoleID);
+
+            $("#updateNameAndDescButton").on("click", function () {
+                let roleName = $("#RoleName").val();
+                let roleDesc = $("#RoleDesc").val();
+            $.ajax({
+                    url: '@Url.Action("updateRoleNameAndDescription","RoleAdmin")',
+                dataType: "json",
+                data: { roleID: roleId, updatedRoleName: roleName, updatedRoleDescription: roleDesc},
+                success: function (data) {
+                    console.log("Update Success");
+                        },
+                 error: function (e) {  console.log(e);}
+        });
+        });
+
+    </script>
+}
 

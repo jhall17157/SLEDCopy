@@ -136,10 +136,139 @@ namespace CLS_SLE.Controllers
             return RedirectToAction(actionName: "AdminDashboard", controllerName: "Admin");
         }
 
-        public ActionResult EditRole()
+        public ActionResult EditRoles(int id, EditRoleViewModel viewModel)
         {
-            return View();
+
+            viewModel = new EditRoleViewModel();
+            viewModel.role = db.Roles.Where(r => r.RoleID == id).FirstOrDefault();
+            if (viewModel.role != null)
+            {
+                viewModel.schoolSecurities = db.SchoolSecurities.Where(sc => sc.RoleID == id).ToList();
+                viewModel.departmentSecurities = db.DepartmentSecurities.Where(ds => ds.RoleID == id).ToList();
+                viewModel.programSecurities = db.ProgramSecurities.Where(ps => ps.RoleID == id).ToList();
+                viewModel.allDepartments = db.Departments.OrderBy(d => d.Name).ToList();
+                viewModel.allPrograms = db.Programs.OrderBy(p => p.Name).ToList();
+                viewModel.allSchools = db.Schools.OrderBy(s => s.Name).ToList();
+            }
+            else
+            {
+                return RedirectToAction("ManageRoles");
+            }
+            return View(viewModel);
         }
+
+        public JsonResult updateRoleNameAndDescription(int roleID, string updatedRoleName, string updatedRoleDescription)
+        {
+            Role targetRole = db.Roles.Where(r => r.RoleID == roleID).FirstOrDefault();
+            if(targetRole != null)
+            {
+                targetRole.Name = updatedRoleName;
+                targetRole.Description = updatedRoleDescription;
+                db.SaveChanges();
+                return new JsonResult { Data = true, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public JsonResult toggleSchoolSecurity(int roleID, int SchoolID)
+        {
+            Role targetRole = db.Roles.Where(r => r.RoleID == roleID).FirstOrDefault();
+            if (targetRole != null)
+            {
+                SchoolSecurity targetSchoolSec = targetRole.SchoolSecurities.Where(ss => ss.SchoolID == SchoolID).FirstOrDefault();
+                if(targetSchoolSec != null)
+                {
+                    db.SchoolSecurities.Remove(targetSchoolSec);
+                    db.SaveChanges();
+                    return new JsonResult { Data = true, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+                else
+                {
+                    SchoolSecurity newSchoolSec = new SchoolSecurity();
+                    newSchoolSec.RoleID = (short)roleID;
+                    newSchoolSec.SchoolID = (byte)SchoolID;
+                    newSchoolSec.CreatedDateTime = DateTime.Now;
+                    newSchoolSec.ModifiedDateTime = DateTime.Now;
+                    newSchoolSec.CreatedByLoginID = UserData.PersonId;
+                    newSchoolSec.ModifiedByLoginID = UserData.PersonId;
+                    db.SchoolSecurities.Add(newSchoolSec);
+                    db.SaveChanges();
+                    return new JsonResult { Data = true, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public JsonResult toggleProgramSecurity(int roleID, int ProgramID)
+        {
+            Role targetRole = db.Roles.Where(r => r.RoleID == roleID).FirstOrDefault();
+            if (targetRole != null)
+            {
+                ProgramSecurity targetProgramSec = targetRole.ProgramSecurities.Where(ps => ps.ProgramID == ProgramID).FirstOrDefault();
+                if (targetProgramSec != null)
+                {
+                    db.ProgramSecurities.Remove(targetProgramSec);
+                    db.SaveChanges();
+                    return new JsonResult { Data = true, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+                else
+                {
+                    ProgramSecurity newProgramSec = new ProgramSecurity();
+                    newProgramSec.RoleID = (short)roleID;
+                    newProgramSec.ProgramID = (byte)ProgramID;
+                    newProgramSec.CreatedDateTime = DateTime.Now;
+                    newProgramSec.ModifiedDateTime = DateTime.Now;
+                    newProgramSec.CreatedByLoginID = UserData.PersonId;
+                    newProgramSec.ModifiedByLoginID = UserData.PersonId;
+                    db.ProgramSecurities.Add(newProgramSec);
+                    db.SaveChanges();
+                    return new JsonResult { Data = true, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public JsonResult toggleDepartmentSecurity(int roleID, int DepartmentID)
+        {
+            Role targetRole = db.Roles.Where(r => r.RoleID == roleID).FirstOrDefault();
+            if (targetRole != null)
+            {
+                DepartmentSecurity targetDepartmentSec = targetRole.DepartmentSecurities.Where(ds => ds.DepartmentID == DepartmentID).FirstOrDefault();
+                if (targetDepartmentSec != null)
+                {
+                    db.DepartmentSecurities.Remove(targetDepartmentSec);
+                    db.SaveChanges();
+                    return new JsonResult { Data = true, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+                else
+                {
+                    DepartmentSecurity newDepartmentSec = new DepartmentSecurity();
+                    newDepartmentSec.RoleID = (short)roleID;
+                    newDepartmentSec.DepartmentID = (byte)DepartmentID;
+                    newDepartmentSec.CreatedDateTime = DateTime.Now;
+                    newDepartmentSec.ModifiedDateTime = DateTime.Now;
+                    newDepartmentSec.CreatedByLoginID = UserData.PersonId;
+                    newDepartmentSec.ModifiedByLoginID = UserData.PersonId;
+                    db.DepartmentSecurities.Add(newDepartmentSec);
+                    db.SaveChanges();
+                    return new JsonResult { Data = true, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
 
         public ActionResult CreateRole()
         {

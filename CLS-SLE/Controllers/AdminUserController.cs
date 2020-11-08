@@ -1,6 +1,7 @@
 ﻿using CLS_SLE.Models;
 using CLS_SLE.ViewModels;
 using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -18,16 +19,21 @@ namespace CLS_SLE.Controllers
 
         public ActionResult Edit(short id)
         {
-            User user = db.Users.Where(u => u.PersonID == id).FirstOrDefault();
-            Person person = db.People.Where(p => p.PersonID == id).FirstOrDefault();
-            ViewBag.Id = user.PersonID;
-            ViewBag.First = person.FirstName;
-            ViewBag.Last = person.LastName;
-            ViewBag.Email = user.Email;
-            ViewBag.Login = user.Login;
-            return View();
-        }
+            int UserID = id;
+            var UserRoles = db.UserRoles.Where(ur => ur.PersonID == id).ToList();
+            var Roles = db.UserRoles.Where(ur => ur.PersonID == id).Select(r => r.Role.Name).ToList();
+            var User = db.Users.Where(u => u.Person.PersonID == id).FirstOrDefault();
+            var Person = db.People.Where(p => p.PersonID == id).FirstOrDefault();
 
+            UpdateUserViewModel model = new UpdateUserViewModel();
+            model.Person = Person;
+            model.Roles = Roles;
+            model.UserRoles = UserRoles;
+            model.User = User;
+
+            return View(model);
+        }
+        
         /**
          * Lucas Nolting
          * This is a method I will be converting to use Model binding
@@ -80,6 +86,16 @@ namespace CLS_SLE.Controllers
          * TODO Document this and all other model bound method
          */
         [HttpPost]
+        public JsonResult RemoveUserRole(string roleName, short id)
+        {
+            var roleID = db.Roles.Where(r => r.Name == roleName).Select(r => r.RoleID).FirstOrDefault();
+            var deletionEntry = db.UserRoles.Where(ur => ur.PersonID == id && ur.RoleID == roleID).FirstOrDefault();
+            db.UserRoles.Remove(deletionEntry);
+
+            db.SaveChanges();
+
+            return new JsonResult { Data = true };
+        }
         public ActionResult UpdateUser(UpdateUserViewModel updateUserViewModel, short id)
         {
             User editUser = db.Users.Where(u => u.PersonID == id).FirstOrDefault();
@@ -87,13 +103,18 @@ namespace CLS_SLE.Controllers
 
             editPerson.FirstName = updateUserViewModel.Person.FirstName;
             editPerson.LastName = updateUserViewModel.Person.LastName;
+            editPerson.IdNumber = updateUserViewModel.Person.IdNumber;
             editUser.Login = updateUserViewModel.User.Login;
             editUser.Email = updateUserViewModel.User.Email;
+            editUser.IsActive = updateUserViewModel.User.IsActive;
 
             db.SaveChanges();
 
             return RedirectToAction("ViewUsers", "Admin");
         }
+
+        [HttpPost]
+
 
         public ActionResult Activate(ViewUserViewModel viewUserViewModel, short id)
         {

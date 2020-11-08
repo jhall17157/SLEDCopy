@@ -23,6 +23,15 @@
         #SearchResultDiv {
             padding-bottom: 15px;
         }
+
+        #topRow
+        {
+            border-radius: 40px 40px 0px 0px;
+            margin-left:0;
+            margin-right: 0;
+            padding-bottom: 10px;
+            padding-top: 10px;
+        }
     </style>
 
 
@@ -45,7 +54,7 @@
 }
 
 
-<div class="row justify-content-between">
+<div class="row justify-content-between bg-dark" id="topRow" >
     <div class="col-2">
         <a href="/RoleAdmin/CreateRoles">
             <button class="btn btn-success col-12" type="button" name="createRole" formmethod="post">
@@ -63,7 +72,7 @@
         }
         <span class="float-right text-right">
 
-            <label for="SearchTerm">Search</label> <span>
+            <label for="SearchTerm" class="text-light">Search</label> <span>
 
                 @using (Html.BeginForm("ManageRoles", "RoleAdmin", FormMethod.Post, new { id = "searchForm" }))
                 {

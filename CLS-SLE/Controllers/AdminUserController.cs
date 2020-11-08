@@ -46,7 +46,24 @@ namespace CLS_SLE.Controllers
             {
                 //person
                 userVM.Person.CreatedDateTime = DateTime.Now;
-                db.People.Add(userVM.Person);
+                Person existingPerson = db.People.FirstOrDefault(u => u.IdNumber == userVM.Person.IdNumber);
+                //Checks if Existing Person, and Creates if Not, Updates if is
+                if (existingPerson==null)
+                {
+                    db.People.Add(userVM.Person);
+                    db.SaveChanges();
+                    userVM.User.PersonID = userVM.Person.PersonID;
+
+                }
+                else
+                {
+                    existingPerson.FirstName = userVM.Person.FirstName;
+                    existingPerson.LastName = userVM.Person.LastName;
+                    existingPerson.ModifiedDateTime = DateTime.Now;
+                    db.SaveChanges();
+                    userVM.User.PersonID = existingPerson.PersonID;
+                }
+                //db.People.Add(userVM.Person);
 
                 //user
                 userVM.User.CreatedDateTime = DateTime.Now;

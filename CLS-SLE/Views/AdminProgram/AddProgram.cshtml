@@ -35,7 +35,7 @@
         @Html.ValidationMessageFor(model => model.Program.Name)
     </div>
     <div>
-        @Html.Label("Primary Department:")
+        @Html.Label("Primary Department(s):")
         @Html.ListBoxFor(d => d.DepartmentSelection, new MultiSelectList(Model.DepartmentNames),
          new { id = "ListBox1", @class = "form-control", multiple = "multiple" })
     </div>

@@ -167,5 +167,23 @@ namespace CLS_SLE.Controllers
             //redirects user to the school view if successfully added new school
             return RedirectToAction("ViewSchool", "AdminSchool", new { schoolID = schoolID, updatedMessage = "success" });
         }
+
+        public JsonResult getAllSchools()
+        {
+            List<School> schools = db.Schools.OrderBy(s => s.Name).ToList();
+            if(schools.Count() >0)
+            {
+                List<SchoolTruncated> allSchoolsOutput = new List<SchoolTruncated>();
+                foreach (School s in schools)
+                {
+                    allSchoolsOutput.Add(new SchoolTruncated() { SchoolID = s.SchoolID, Name = s.Name });
+                }
+                return new JsonResult { Data = allSchoolsOutput, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

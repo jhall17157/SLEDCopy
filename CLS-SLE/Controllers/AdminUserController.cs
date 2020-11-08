@@ -13,7 +13,7 @@ namespace CLS_SLE.Controllers
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
 
 
-        public ActionResult Index() => View(db.Users.OrderBy(u => u.Login));
+        //public ActionResult Index() => View(db.Users.OrderBy(u => u.Login));
 
         public ActionResult Create() => View();
 
@@ -79,7 +79,7 @@ namespace CLS_SLE.Controllers
                 return RedirectToAction("Create", "AdminUser");
             }
 
-            return RedirectToAction("ViewUsers", "Admin");
+            return RedirectToAction("ManageUsers", "AdminUser");
         }
 
         /**
@@ -110,7 +110,7 @@ namespace CLS_SLE.Controllers
 
             db.SaveChanges();
 
-            return RedirectToAction("ViewUsers", "Admin");
+            return RedirectToAction("ManageUsers", "AdminUser");
         }
 
         [HttpPost]
@@ -136,7 +136,7 @@ namespace CLS_SLE.Controllers
             }
 
 
-            return RedirectToAction("ViewUsers", "Admin");
+            return RedirectToAction("ManageUsers", "AdminUser");
         }
 
         public JsonResult SetUserActiveStatus(int PersonID, bool IsActive)
@@ -179,17 +179,6 @@ namespace CLS_SLE.Controllers
             }
             //vm.SearchTerm = "";
             return View(vm);
-        }
-
-
-        public ActionResult CreateUser()
-        {
-            return View();
-        }
-
-        public ActionResult EditUser()
-        {
-            return View();
         }
     }
 }

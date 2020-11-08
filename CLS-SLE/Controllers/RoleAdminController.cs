@@ -16,7 +16,7 @@ namespace CLS_SLE.Controllers
         List<int> NonDeletableRoleIDs = new List<int>() {1,2};
 
         SLE_TrackingEntities db = new SLE_TrackingEntities();
-        public ActionResult Index() => View(db.Roles);
+       // public ActionResult Index() => View(db.Roles);
 
 
         public ActionResult Create() => View();
@@ -45,7 +45,7 @@ namespace CLS_SLE.Controllers
                 db.Roles.Add(role);
                 db.SaveChanges();
             }
-            return View("Index", db.Roles);
+            return RedirectToAction(actionName: "ManageRoles", controllerName: "RoleAdmin");
         }
 
         [HttpPost]
@@ -61,58 +61,9 @@ namespace CLS_SLE.Controllers
             }
             db.Roles.Remove(role);
             db.SaveChanges();
-            return RedirectToAction(actionName: "Index", controllerName: "RoleAdmin");
+            return RedirectToAction(actionName: "ManageRoles", controllerName: "RoleAdmin");
         }
-
-        [HttpGet]
-        public ActionResult ManageRole(int id)
-        {
-
-            int RoleID = id;
-            var Permissions = (from permission in db.Permissions
-                               select permission).OrderBy(r => r.Name);
-            var RolePermissions = from rolePermissions in db.RolePermissions
-                                  where rolePermissions.RoleID == RoleID
-                                  select rolePermissions;
-            var Role = (from role in db.Roles where role.RoleID == RoleID select role).FirstOrDefault();
-
-            ManageRole Model = new ManageRole(Role.RoleID, Role.Name, Permissions.ToList(), RolePermissions.ToList());
-
-
-            return View(Model);
-        }
-
-        [HttpPost]
-        public ActionResult UpdateRole(FormCollection form, String submit, short roleID, short permissionID)
-        {
-            // Int16 RoleID = RoleID = Int16.Parse(form["roleID"]);
-            // Int16 PermissionID = PermissionID = Int16.Parse(form["permissionID"]);
-                switch (submit)
-                {
-                    case "add":
-                        RolePermission rolePermission = new RolePermission
-                        {
-                            RoleID = roleID,
-                            PermissionID = permissionID,
-                            CreatedDateTime = DateTime.Now,
-                            CreatedByLoginID = UserData.PersonId
-
-                        };
-                        db.RolePermissions.Add(rolePermission);
-
-                        break;
-                    case "delete":
-                        var deletionEntry = (from RolePermission in db.RolePermissions
-                                             where RolePermission.RoleID == roleID && RolePermission.PermissionID == permissionID
-                                             select RolePermission).FirstOrDefault();
-                        db.RolePermissions.Remove(deletionEntry);
-                        break;
-                }
-			 db.SaveChanges();
-			 return RedirectToAction("ManageRole", "RoleAdmin", new { id = roleID });
-                // return Content("<html><script>window.location.href = '/RoleAdmin/ManageRole?id=" + RoleID.ToString() + "';</script></html>");
-        }
-
+ 
         public ActionResult RoleAssign(int role, List<Permission> permissions)
         {
             var results = db.RolePermissions.Where(rp => rp.RoleID == role);
@@ -382,6 +333,10 @@ namespace CLS_SLE.Controllers
                 Role targetRole = db.Roles.Where(r => r.RoleID == TargetID).FirstOrDefault();
                 if(targetRole != null)
                 {
+                    //targetRole.UserRoles = null;
+                    IQueryable<UserRole> affectedUserRoles = db.UserRoles.Where(ur => ur.RoleID == targetRole.RoleID);
+                    db.UserRoles.RemoveRange(affectedUserRoles);
+                    db.SaveChanges();
                     db.Roles.Remove(targetRole);
                     db.SaveChanges();
                     return new JsonResult { Data = true, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -420,7 +375,7 @@ namespace CLS_SLE.Controllers
             }
             else
             {
-                ManageRoleMembershipViewModel.UsersInRole = GetUserSecurities().Where(p => p.Roles.Any(r => r.RoleID == 1)).ToList();
+                ManageRoleMembershipViewModel.UsersInRole = GetUserSecurities().Where(p => p.Roles.Any(r => r.RoleID == ManageRoleMembershipViewModel.RoleID)).ToList();
             }
 
             var CurrentRole = (from Role in db.Roles
@@ -506,11 +461,11 @@ namespace CLS_SLE.Controllers
                 db.UserRoles.Add(userRole);
 
                 db.SaveChanges();
-                return RedirectToAction("ManageRoleMembership", new { roleID = rID });
+                return RedirectToAction("ManageRoleMembership", "RoleAdmin", new { roleID = rID });
             }
             catch(Exception e)
             {
-                return RedirectToAction("ManageRoleMembership", new { roleID = rID });
+                return RedirectToAction("ManageRoleMembership", "RoleAdmin", new { roleID = rID });
             }
         }
 

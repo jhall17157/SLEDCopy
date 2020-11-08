@@ -1,7 +1,214 @@
-﻿
+﻿@using CLS_SLE.Models;
+@model CLS_SLE.ViewModels.ManageRoleMembershipViewModel
 @{
     ViewBag.Title = "ManageRoleMembership";
 }
+<style>
+    #searchForm {
+        display: inline;
+    }
+    #topRow{
+        border-radius: 40px 40px 0px 0px;
+    }
+    #errorMessage{
+        color: red;
+    }
+</style>
 
-<h2>ManageRoleMembership</h2>
+<h2>Manage Role Membership</h2>
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Manage Roles", "RoleAdmin")</li>
+        <li class="breadcrumb-item active" aria-current="page">Manage Role Membership</li>
+    </ol>
+</nav>
+
+<h1>Role: @Model.CurrentRole.Name</h1>
+<input type="hidden" id="hiddenRoleID" value="@Model.RoleID">
+<br />
+<div id="topRow" class="container pb-5 pt-2 bg-dark">
+    <div id="addUserButtonDiv" class="col-3 float-left text-left">
+        <button class="btn btn-primary" id="addUserButton" data-toggle="modal" data-target="#addUserModal"><i class="fas fa-plus"></i>Add Role Member(s)</button>
+    </div>
+    <div class="col-6 float-right text-right">
+        <span class="float-right text-right">
+            <label for="SearchTerm" class="text-light">Search</label> <span>
+
+                @using (Html.BeginForm("ManageRoleMembership", "RoleAdmin", FormMethod.Post, new { id = "searchForm" }))
+                {
+                    <span>
+                        @Html.TextBoxFor(vm => vm.SearchTerm, new { id = "searchBox" })
+                    </span>
+
+                    if (Model.SearchTerm == null || Model.SearchTerm == "")
+                    {
+                        <button type="submit" id="searchSubmit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>
+                    }
+                    else
+                    {
+                        <button type="submit" id="searchClear" class="btn btn-danger d-inline ml-1" value="Submit"><i class="fas fa-times"></i></button>
+                    }
+                }
+            </span>
+        </span>
+    </div>
+</div>
+
+<div id="tableDiv">
+    <table class="table table-hover table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Login</th>
+                <th scope="col">Name</th>
+                <th scope="col">ID</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ foreach (UserSecurity person in Model.UsersInRole)
+                {
+                    <tr data-userID="person.PersonID">
+                        <td>@person.Login</td>
+                        <td>@person.LastName<text>,</text> @person.FirstName</td>
+                        <td>@person.IDNumber</td>
+                        <td class="text-right"><button class="btn btn-danger removeRoleButton" id="@person.PersonID"><i class="fas fa-trash"></i></button></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUserModalLabel">Add Users To Role</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="errorMessage"></div>
+
+                <label>User ID:</label>
+                <input type="text" id="addUserID" /> <button onclick="addUserToList();"><i class="fas fa-plus-circle"></i><span> <b>ADD</b></span></button>
+                <ul id="tempUserList"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addAllUsers()" id="AddMemberSubmissionButton" disabled>Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+
+        
+        $("#searchClear").on("click", function (e) {
+            $("#searchBox").val("");
+            $("#searchForm").submit();
+        });
+
+        function removeUserFromList(id) {
+            $('#' + id).remove();
+            toggleButton();
+        }
+
+        function toggleButton() {
+            if ($("#tempUserList").children().length > 0) {
+                //console.log("Button Enabled");
+                $("#AddMemberSubmissionButton").prop("disabled", false);
+            }
+            else {
+                //console.log("Button Disabled");
+                $("#AddMemberSubmissionButton").prop("disabled", true);
+            }
+        }
+
+        $("#addUserID").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("UserAutoComplete","RoleAdmin")',
+                    dataType: "json",
+                    data: { search: $("#addUserID").val(), roleID: $("#hiddenRoleID").val() },
+                    appendTo: "#addUserModal",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: "Login: " + item.login + " Name: " + item.firstName + " "
+                                    + item.lastName + "ID: " + item.idNumber, value: item.personID
+                            };
+                        }))
+                    },
+                    error: function (xhr, status, error) { alert(error)/*alert("Error")*/;}
+                });
+            }
+        });
+
+        function addUserToList() {
+            $.ajax({
+                url: '@Url.Action("UserListInfo","RoleAdmin")',
+                dataType: "json",
+                data: { search: $("#addUserID").val(), roleID: $("#hiddenRoleID").val() },
+                success: function (data) {
+                    if (data.success) {
+                        $('#tempUserList').append(
+                            '<li id="' + data.PID + '"><button onclick="removeUserFromList(' + data.PID + ')" style="background-color:white; border:0; padding:0" >' +
+                            '<i class="fas fa-minus-circle" style="color:#dc3545"></i></button>	&nbsp;' +
+                            '<span value="' + data.id + '">' + data.lastName + ',  ' + data.firstName + ' - ' + data.id + '</span>' +
+                            '</li>'
+                        );
+                        toggleButton();
+                    }
+                    else {
+                        $("#errorMessage").html("");
+                        $("#errorMessage").append(data.message);
+                    }
+                },
+                error: function (data) {
+                    $("#errorMessage").html("");
+                    $("#errorMessage").append(data.message);
+        }
+            });
+            $('#addStudentID').val('');
+            
+        }
+
+        function addAllUsers() {
+            var listItems = $("#tempUserList li");
+            listItems.each(function () {
+                $.ajax({
+                    url: '@Url.Action("AddUserToRole","RoleAdmin")',
+                    dataType: "json",
+                    data: { personID: this.id, roleID: $("#hiddenRoleID").val() },
+                    success: function (data) {
+                        location.reload(true);
+                    },
+                    error: function (data) {
+                        location.reload(true);
+                    }
+                });
+            });
+        }
+
+        $(".removeRoleButton").on("click", function () {
+            console.log("here");
+            $.ajax({
+                url: '@Url.Action("RemoveUserFromRole","RoleAdmin")',
+                dataType: "json",
+                data: { personID: this.id, roleID: $("#hiddenRoleID").val() },
+                success: function (data) {
+                    location.reload(true);
+                },
+                error: function (data) {
+                    location.reload(true);
+                }
+            });
+        });
+    </script>
+    }

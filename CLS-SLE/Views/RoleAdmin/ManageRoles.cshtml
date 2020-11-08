@@ -12,6 +12,8 @@
 
         #clearSearchResults {
             background-color: red;
+            text-decoration: none;
+            width: 10%;
         }
 
         #searchForm {
@@ -39,12 +41,6 @@
 {
     <div id="SearchResultDiv">
         <h2>Search Results for: @(Model.SearchTerm != null ? Model.SearchTerm : "")</h2>
-
-        <a href="#">
-            <button class="btn btn-success col-3" type="button" name="resetSearch" formmethod="post" id="clearSearchResults">
-                Clear Search Results
-            </button>
-        </a>
     </div>
 }
 
@@ -59,8 +55,14 @@
     </div>
 
     <div class="col-6 float-right text-right">
-
+        @if (Model != null && Model.SearchTerm != null && Model.SearchTerm != "")
+        {
+            <button class="btn btn-success col-3" type="button" name="resetSearch" formmethod="post" id="clearSearchResults">
+                <i class="fas fa-times"> </i>
+            </button>
+        }
         <span class="float-right text-right">
+
             <label for="SearchTerm">Search</label> <span>
 
                 @using (Html.BeginForm("ManageRoles", "RoleAdmin", FormMethod.Post, new { id = "searchForm" }))

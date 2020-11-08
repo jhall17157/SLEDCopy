@@ -525,6 +525,7 @@
     <Compile Include="ViewModels\ProgramListViewModel.cs" />
     <Compile Include="ViewModels\ProgramSearchModel.cs" />
     <Compile Include="ViewModels\ProgramSearchViewModel.cs" />
+    <Compile Include="ViewModels\RoleMembershipUserModel.cs" />
     <Compile Include="ViewModels\RubricSearchModel.cs" />
     <Compile Include="ViewModels\RubricViewModel.cs" />
     <Compile Include="ViewModels\ScheduleSemesterViewModel.cs" />
@@ -539,6 +540,7 @@
     <Compile Include="ViewModels\UpdateRubric.cs" />
     <Compile Include="ViewModels\UpdateSchoolViewModel.cs" />
     <Compile Include="ViewModels\UpdateSectionViewModel.cs" />
+    <Compile Include="ViewModels\UserRoleSearchModel.cs" />
     <Compile Include="ViewModels\ViewCourseViewModel.cs" />
     <Compile Include="ViewModels\ViewDepartmentViewModel.cs" />
     <Compile Include="ViewModels\ViewProgramViewModel.cs" />

@@ -12,6 +12,7 @@ using System.Collections;
 using CLS_SLE.ViewModels;
 using NLog;
 using System.Net;
+using System.Web.Helpers;
 
 namespace CLS_SLE.Controllers
 {
@@ -231,6 +232,24 @@ namespace CLS_SLE.Controllers
         {
             ViewBag.Message = "Successful!!!";
             return View();
+        }
+
+        public JsonResult getAllDepartments()
+        {
+            List<Department> departments = db.Departments.OrderBy(d => d.Name).ToList();
+            if (departments.Count() > 0)
+            {
+                List<DepartmentTruncated> allDepartmentsOutput = new List<DepartmentTruncated>();
+                foreach(Department d in departments)
+                {
+                    allDepartmentsOutput.Add(new DepartmentTruncated() { DepartmentID = d.DepartmentID,Name = d.Name});
+                }
+                return new JsonResult { Data = allDepartmentsOutput, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

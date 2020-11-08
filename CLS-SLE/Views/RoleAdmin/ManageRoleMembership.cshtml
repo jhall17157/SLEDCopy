@@ -28,11 +28,11 @@
 <h1>Role: @Model.CurrentRole.Name</h1>
 <input type="hidden" id="hiddenRoleID" value="@Model.RoleID">
 <br />
-<div id="topRow" class="container pb-5 pt-2 bg-dark">
-    <div id="addUserButtonDiv" class="col-3 float-left text-left">
+<div id="topRow" class="container bg-dark pb-5 pt-2">
+    <div id="addUserButtonDiv" class="col-5 float-left text-left">
         <button class="btn btn-primary" id="addUserButton" data-toggle="modal" data-target="#addUserModal"><i class="fas fa-plus"></i>Add Role Member(s)</button>
     </div>
-    <div class="col-6 float-right text-right">
+    <div class="col-7 float-right text-right">
         <span class="float-right text-right">
             <label for="SearchTerm" class="text-light">Search</label> <span>
 
@@ -108,10 +108,13 @@
 @section Scripts {
     <script type="text/javascript">
 
-        
-        $("#searchClear").on("click", function (e) {
+        function reloadPage() {
             $("#searchBox").val("");
             $("#searchForm").submit();
+        }
+        
+        $("#searchClear").on("click", function (e) {
+            reloadPage();
         });
 
         function removeUserFromList(id) {
@@ -187,10 +190,10 @@
                     dataType: "json",
                     data: { personID: this.id, roleID: $("#hiddenRoleID").val() },
                     success: function (data) {
-                        location.reload(true);
+                        reloadPage();
                     },
                     error: function (data) {
-                        location.reload(true);
+                        reloadPage();
                     }
                 });
             });
@@ -203,10 +206,10 @@
                 dataType: "json",
                 data: { personID: this.id, roleID: $("#hiddenRoleID").val() },
                 success: function (data) {
-                    location.reload(true);
+                    reloadPage();
                 },
                 error: function (data) {
-                    location.reload(true);
+                    reloadPage();
                 }
             });
         });

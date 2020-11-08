@@ -62,11 +62,11 @@
 	<fieldset class="form-group col-9">
 		@Html.Label("Score Set:")
 		@Html.DropDownListFor(Model => Model.AssessmentRubric.ScoreSetID, new SelectList(ViewBag.ScoreSets, "ScoreSetID", "Name"),
-			new { htmlAttributes = new { @class = "form-control input-append"} })
+			new { @class = "form-control input-append" })
 	</fieldset>
 
 	<div class="form-group col-9">
-		<div class="row">
+		<div class="row col-9">
 			@Html.Label("Start Date:")
 			@Html.TextBoxFor(model => model.RubricAssesssment.StartDate,
 			new { @class = "form-control", @type = "date", @Value = ViewBag.StartDate })

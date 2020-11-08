@@ -112,7 +112,7 @@
 
 <div class="row justify-content-between bg-dark" id="topRow">
     <div class="col-2">
-        <a href="/AdminUser/CreateUser">
+        <a href="/AdminUser/Create">
             <button class="btn btn-success col-12" type="button" name="createUser" formmethod="post">
                 <i class="fa fa-plus"></i> Add New User
             </button>
@@ -128,7 +128,7 @@
         }
 
         <span class="float-right text-right">
-            <label for="SearchTerm">Search</label> <span>
+            <label for="SearchTerm" class="text-light">Search</label> <span>
 
                 @using (Html.BeginForm("ManageUsers", "AdminUser", FormMethod.Post, new { id = "searchForm" }))
                 {
@@ -170,7 +170,7 @@
             foreach (User user in Model.Users)
             {
                 <tr id="User@(user.PersonID)Row">
-                    <td>@(user.Login)</td>
+                    <td>@Html.ActionLink(user.Login, "Edit", "AdminUser", new { id = user.PersonID }, null)</td>
                     <td>@(user.Person.LastName), @(user.Person.FirstName)</td>
                     <td>@(user.Person.IdNumber)</td>
                     <td><label class="switch">@Html.CheckBoxFor(u => u.Users.Where(userItem => userItem.PersonID == user.PersonID).FirstOrDefault().IsActive, new { id = user.PersonID + "Toggle", @class = "ActiveToggle" }) <div class="slider round"></div> </label></td>

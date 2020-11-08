@@ -5,7 +5,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Manage Roles", "Index", "RoleAdmin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Manage Roles", "ManageRoles", "RoleAdmin")</li>
         <li class="breadcrumb-item active" aria-current="page">New Role</li>
     </ol>
 </nav>
@@ -20,5 +20,5 @@
         <input name="name" class="form-control" />
     </div>
     <button type="submit" class="btn btn-outline-primary">Create</button>
-    <a href="~/RoleAdmin/Index" class="btn btn-outline-secondary">Cancel</a>
+    <a href="~/RoleAdmin/ManageRoles" class="btn btn-outline-secondary">Cancel</a>
 </form>

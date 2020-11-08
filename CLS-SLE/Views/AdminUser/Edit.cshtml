@@ -7,39 +7,64 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Manage Users", "ViewUsers", "Admin")</li>
-        <li class="breadcrumb-item active" aria-current="page">Edit User - @ViewBag.Login</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Manage Users", "ManageUsers", "AdminUser")</li>
+        <li class="breadcrumb-item active" aria-current="page">Edit User - @Model.User.Login</li>
     </ol>
 </nav>
-<h1>Edit User - @ViewBag.Login</h1>
+<h1>Edit User - @Model.User.Login</h1>
 <br />
 
-@using (Html.BeginForm("UpdateUser", "AdminUser", new { id = ViewBag.Id }, FormMethod.Post))
+@using (Html.BeginForm("UpdateUser", "AdminUser", new { id = Model.Person.PersonID }, FormMethod.Post))
 {
     <!--<input type="hidden" name="id" id="id" value="@ViewBag.Id" />-->
-    <div class="form-group">
-        @Html.Label("First Name:")
+    <div class="form-group row">
+        @Html.Label("First Name:", new { @class = "col-1" })
         @Html.EditorFor(Model => Model.Person.FirstName,
-        new {htmlAttributes = new { @class = "form-control", @Value = ViewBag.First} })
+     new { htmlAttributes = new { @class = "form-control col-11", @Value = Model.Person.FirstName } })
         @Html.ValidationMessageFor(Model => Model.Person.FirstName)
     </div>
-    <div class="form-group">
-        @Html.Label("Last Name:")
+    <div class="form-group row">
+        @Html.Label("Last Name:", new { @class = "col-1" })
         @Html.EditorFor(Model => Model.Person.LastName,
-        new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.Last} })
+     new { htmlAttributes = new { @class = "form-control col-11", @Value = Model.Person.LastName } })
         @Html.ValidationMessageFor(Model => Model.Person.LastName)
     </div>
-    <div class="form-group">
-        @Html.Label("Login:")
+    <div class="form-group row">
+        @Html.Label("Login:", new { @class = "col-1" })
         @Html.EditorFor(Model => Model.User.Login,
-        new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.Login } })
+     new { htmlAttributes = new { @class = "form-control col-11", @Value = Model.User.Login } })
         @Html.ValidationMessageFor(Model => Model.User.Login)
     </div>
-    <div class="form-group">
-        @Html.Label("Email:")
+    <div class="form-group row">
+        @Html.Label("Email:", new {@class = "col-1" })
         @Html.EditorFor(Model => Model.User.Email,
-        new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.Email } } )
+     new { htmlAttributes = new { @class = "form-control col-11", @Value = Model.User.Email } })
         @Html.ValidationMessageFor(Model => Model.User.Email)
+    </div>
+    <div class="form-group row">
+        @Html.Label("Id Number:", new { @class = "col-1" })
+        @Html.EditorFor(Model => Model.Person.IdNumber,
+     new { htmlAttributes = new { @class = "form-control col-11", @Value = Model.Person.IdNumber } })
+        @Html.ValidationMessageFor(Model => Model.Person.IdNumber)
+    </div>
+
+    <div class="form-group row custom-control custom-switch">
+        @Html.CheckBoxFor(Model => Model.User.IsActive,
+       new { @class = "custom-control-input col-1", @checked = Model.User.IsActive })
+        <label class="custom-control-label col-11" for="User_IsActive">Active</label>
+    </div>
+
+    <h3>Role Membership</h3>
+    <div class="form-group" id="roleGroup" data-id=@Model.Person.PersonID style="border: 1px solid; padding: 20px;">
+        @for (int i = 0; i < Model.Roles.Count; i++)
+        {   
+            <div class="row" style="margin: 10px;">
+                <span class="col-3" id=@i>@Model.Roles[i]</span>
+                <div class="col-6">
+                <button type="button" id="@i-remove" class="btn-sm btn-danger role-remove-button">Remove</button>
+                </div>
+            </div>
+        }
     </div>
     <div class="form-group">
         <input type="submit" class="btn-block btn-primary" value="Submit" />
@@ -47,5 +72,25 @@
 }
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")    
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+    $(document).ready(function () {
+        $('.role-remove-button').click(function (e) {
+
+            var removalID = $(this).attr('id').slice(0, -7);
+
+            $.ajax({
+                url: '@Url.Action("RemoveUserRole","AdminUser")',
+                type: "POST",
+                dataType: "json",
+                data: { roleName: $('#' + removalID).html(), id: $("#roleGroup").data("id") },
+                    success: function (data) {
+                        $('#' + removalID).remove();
+                        $('#' + removalID + '-remove').remove();
+                    },
+                    error: function (xhr, status, error) { alert(error)/*alert("Error")*/; }
+                });
+        });
+    });
+    </script>
 }

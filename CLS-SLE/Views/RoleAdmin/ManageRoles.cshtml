@@ -56,7 +56,7 @@
 
 <div class="row justify-content-between bg-dark" id="topRow" >
     <div class="col-2">
-        <a href="/RoleAdmin/CreateRoles">
+        <a href="/RoleAdmin/Create">
             <button class="btn btn-success col-12" type="button" name="createRole" formmethod="post">
                 <i class="fa fa-plus"></i> Add New Role
             </button>
@@ -104,7 +104,7 @@
             {
                 <tr id="Role@(role.RoleID)Row">
                     <td>@Html.ActionLink(role.Name, "EditRoles", "RoleAdmin", new { id = role.RoleID },null) </td>
-                    <td>@Html.ActionLink("" + role.UserRoles.Count(), "ManageRoleMembership", "RoleAdmin", new { id = role.RoleID},null)</td>
+                    <td>@Html.ActionLink("" + role.UserRoles.Count(), "ManageRoleMembership", "RoleAdmin", new { roleID = role.RoleID},null)</td>
                     <td></td>
                 </tr>
             }
@@ -116,7 +116,7 @@
             {
                 <tr id="Role@(role.RoleID)Row">
                     <td>@Html.ActionLink(role.Name, "EditRoles", "RoleAdmin", new { id = role.RoleID },null) </td>
-                    <td>@Html.ActionLink("" + role.UserRoles.Count(), "ManageRoleMembership", "RoleAdmin", new { id = role.RoleID },null)</td>
+                    <td>@Html.ActionLink("" + role.UserRoles.Count(), "ManageRoleMembership", "RoleAdmin", new { roleID = role.RoleID },null)</td>
                     <td><button name="deleteRole@(role.RoleID)Button" id="deleteRole@(role.RoleID)Button" onclick="removeRoleRequest(@(role.RoleID),'@(role.Name)');" class="btn btn-danger"><i class="fas fa-trash"></i></button></td>
                 </tr>
             }

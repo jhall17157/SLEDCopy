@@ -13,7 +13,7 @@ namespace CLS_SLE.Controllers
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
 
 
-        public ActionResult Index() => View(db.Users.OrderBy(u => u.Login));
+        //public ActionResult Index() => View(db.Users.OrderBy(u => u.Login));
 
         public ActionResult Create() => View();
 
@@ -79,7 +79,7 @@ namespace CLS_SLE.Controllers
                 return RedirectToAction("Create", "AdminUser");
             }
 
-            return RedirectToAction("ViewUsers", "Admin");
+            return RedirectToAction("ManageUsers", "AdminUser");
         }
 
         /**
@@ -110,7 +110,7 @@ namespace CLS_SLE.Controllers
 
             db.SaveChanges();
 
-            return RedirectToAction("ViewUsers", "Admin");
+            return RedirectToAction("ManageUsers", "AdminUser");
         }
 
         [HttpPost]
@@ -136,24 +136,49 @@ namespace CLS_SLE.Controllers
             }
 
 
-            return RedirectToAction("ViewUsers", "Admin");
+            return RedirectToAction("ManageUsers", "AdminUser");
         }
 
-        
+        public JsonResult SetUserActiveStatus(int PersonID, bool IsActive)
+        {
+
+            User targetUser = db.Users.Where(u => u.PersonID == PersonID).FirstOrDefault();
+            try
+            {
+                if (targetUser != null)
+                {
+                    targetUser.IsActive = IsActive;
+                    db.SaveChanges();
+                    return new JsonResult { Data = true, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        /*
         public ActionResult ManageUsers()
         {
-            return View();
+            ManageUsersViewModel vm = new ManageUsersViewModel();
+            vm.Users = db.Users.Include("Person").OrderBy(u => u.Login).ToList();
+            return View(vm);
         }
-
-       
-        public ActionResult CreateUser()
+        */
+        public ActionResult ManageUsers(ManageUsersViewModel vm)
         {
-            return View();
-        }
-
-        public ActionResult EditUser()
-        {
-            return View();
+            if(vm.SearchTerm != null)
+            {
+                vm.Users = db.Users.Include("Person").Where(u => u.Login.ToLower().Contains(vm.SearchTerm.ToLower())||u.PersonID.ToString().ToLower().StartsWith(vm.SearchTerm.ToLower())||(u.Person.LastName + ", " + u.Person.FirstName).ToLower().Contains(vm.SearchTerm.ToLower())).OrderBy(u => u.Login).ToList();
+            }
+            else
+            {
+                vm.Users = db.Users.Include("Person").OrderBy(u => u.Login).ToList();
+            }
+            //vm.SearchTerm = "";
+            return View(vm);
         }
     }
 }

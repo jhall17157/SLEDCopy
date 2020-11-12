@@ -7,10 +7,12 @@
     #searchForm {
         display: inline;
     }
-    #topRow{
+
+    #topRow {
         border-radius: 40px 40px 0px 0px;
     }
-    #errorMessage{
+
+    #errorMessage {
         color: red;
     }
 </style>
@@ -19,7 +21,7 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard","Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Manage Roles", "ManageRoles")</li>
         <li class="breadcrumb-item active" aria-current="page">Manage Role Membership</li>
     </ol>
@@ -39,6 +41,7 @@
                 @using (Html.BeginForm("ManageRoleMembership", "RoleAdmin", FormMethod.Post, new { id = "searchForm" }))
                 {
                     <span>
+                        @Html.HiddenFor(vm => vm.RoleID);
                         @Html.TextBoxFor(vm => vm.SearchTerm, new { id = "searchBox" })
                     </span>
 
@@ -94,7 +97,7 @@
                 <div id="errorMessage"></div>
 
                 <label>User ID:</label>
-                <input type="text" id="addUserID" /> <button onclick="addUserToList();"><i class="fas fa-plus-circle"></i><span> <b>ADD</b></span></button>
+                <input type="text" id="addUserID" /> <button onclick="addUserToList()"><i class="fas fa-plus-circle"></i><span> <b>ADD</b></span></button>
                 <ul id="tempUserList"></ul>
             </div>
             <div class="modal-footer">
@@ -112,7 +115,7 @@
             $("#searchBox").val("");
             $("#searchForm").submit();
         }
-        
+
         $("#searchClear").on("click", function (e) {
             reloadPage();
         });
@@ -138,9 +141,10 @@
                 $.ajax({
                     url: '@Url.Action("UserAutoComplete","RoleAdmin")',
                     dataType: "json",
-                    data: { search: $("#addUserID").val(), roleID: $("#hiddenRoleID").val() },
-                    appendTo: "#addUserModal",
-                    success: function (data) {
+                    data: {
+                        search: $("#addUserID").val(), roleID: $("#hiddenRoleID").val() },
+                        appendTo: "#addUserModal",
+                        success: function (data) {
                         response($.map(data, function (item) {
                             return {
                                 label: "Login: " + item.login + " Name: " + item.firstName + " "
@@ -148,11 +152,18 @@
                             };
                         }))
                     },
-                    error: function (xhr, status, error) { alert(error)/*alert("Error")*/;}
+                    error: function (xhr, status, error) { alert(error)/*alert("Error")*/; }
                 });
+            },
+            select: function (e, ui) {
+                setTimeout(function () {
+                    addUserToList();
+                }, 10);
+                addUserToList();
             }
         });
 
+        var unique = true;
         function addUserToList() {
             $.ajax({
                 url: '@Url.Action("UserListInfo","RoleAdmin")',
@@ -160,13 +171,24 @@
                 data: { search: $("#addUserID").val(), roleID: $("#hiddenRoleID").val() },
                 success: function (data) {
                     if (data.success) {
-                        $('#tempUserList').append(
-                            '<li id="' + data.PID + '"><button onclick="removeUserFromList(' + data.PID + ')" style="background-color:white; border:0; padding:0" >' +
-                            '<i class="fas fa-minus-circle" style="color:#dc3545"></i></button>	&nbsp;' +
-                            '<span value="' + data.id + '">' + data.lastName + ',  ' + data.firstName + ' - ' + data.id + '</span>' +
-                            '</li>'
-                        );
-                        toggleButton();
+                        var listItems = $("#tempUserList li");
+                        listItems.each(function () {
+                            if (this.id == data.PID) {
+                                unique = false;
+                                $("#errorMessage").html("");
+                                $("#errorMessage").append("You have already added a user with an ID of " + data.id);
+                            }
+                        })
+                        if (unique) {
+                            $("#errorMessage").html("");
+                            $('#tempUserList').append(
+                                '<li id="' + data.PID + '"><button onclick="removeUserFromList(' + data.PID + ')" style="background-color:white; border:0; padding:0" >' +
+                                '<i class="fas fa-minus-circle" style="color:#dc3545"></i></button>	&nbsp;' +
+                                '<span value="' + data.id + '">' + data.lastName + ',  ' + data.firstName + ' - ' + data.id + '</span>' +
+                                '</li>'
+                            );
+                            toggleButton();
+                        };
                     }
                     else {
                         $("#errorMessage").html("");
@@ -176,10 +198,10 @@
                 error: function (data) {
                     $("#errorMessage").html("");
                     $("#errorMessage").append(data.message);
-        }
+                }
             });
-            $('#addStudentID').val('');
-            
+            $('#addUserID').val("");
+
         }
 
         function addAllUsers() {
@@ -214,4 +236,4 @@
             });
         });
     </script>
-    }
+}

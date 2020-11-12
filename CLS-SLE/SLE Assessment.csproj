@@ -2692,7 +2692,6 @@
     <Content Include="Views\User\PasswordResetForm.cshtml" />
     <Content Include="Views\User\ChangePassword.cshtml" />
     <Content Include="Views\User\Error.cshtml" />
-    <Content Include="Views\RoleAdmin\Index.cshtml" />
     <Content Include="Views\Admin\AdminDashboard.cshtml" />
     <Content Include="Views\Admin\Assessments.cshtml" />
     <Content Include="Views\RoleAdmin\Create.cshtml" />
@@ -2713,7 +2712,6 @@
     <Content Include="Views\Rubric\EditCriterion.cshtml" />
     <Content Include="Views\AdminUser\Create.cshtml" />
     <Content Include="Views\AdminUser\Edit.cshtml" />
-    <Content Include="Views\RoleAdmin\ManageRole.cshtml" />
     <Content Include="Views\AdminAssessments\AddAssessment.cshtml" />
     <Content Include="Views\AdminAssessments\EditAssessment.cshtml" />
     <Content Include="Views\User\Consume.cshtml" />
@@ -2740,8 +2738,6 @@
     <Content Include="Views\Admin\ProgramDashboard.cshtml" />
     <Content Include="Views\Admin\ViewSchool.cshtml" />
     <Content Include="Views\AdminUser\ManageUsers.cshtml" />
-    <Content Include="Views\AdminUser\CreateUser.cshtml" />
-    <Content Include="Views\AdminUser\EditUser.cshtml" />
     <Content Include="Views\RoleAdmin\ManageRoles.cshtml" />
     <Content Include="Views\RoleAdmin\EditRoles.cshtml" />
     <Content Include="Views\RoleAdmin\CreateRoles.cshtml" />

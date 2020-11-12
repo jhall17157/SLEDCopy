@@ -355,7 +355,8 @@ namespace CLS_SLE.Controllers
             {
                 ManageRoleMembershipViewModel.RoleID = roleID;
             }
-            else
+
+            if (!(ManageRoleMembershipViewModel.RoleID.HasValue))
             {
                 ManageRoleMembershipViewModel.RoleID = 1;
             }
@@ -388,9 +389,11 @@ namespace CLS_SLE.Controllers
 
         public JsonResult UserAutoComplete(string search, int roleID)
         {
-            var UsersInRole = GetUserSecurities().ToList();
 
-            List<UserRoleSearchModel> resultUsers = UsersInRole.Where(p => (p.Login.Contains(search) || 
+
+            var UsersNotInRole = GetUserSecurities().Where(u => u.Roles.All(r => r.RoleID != roleID));
+
+            List<UserRoleSearchModel> resultUsers = UsersNotInRole.Where(p => (p.Login.Contains(search) || 
                 p.LastName.Contains(search) || 
                 p.FirstName.Contains(search) || 
                 p.IDNumber.Contains(search)))
@@ -424,7 +427,7 @@ namespace CLS_SLE.Controllers
                     if (User == null) { DataUser.message = "No User has " + search + " as an ID"; DataUser.success = false; }
                     else
                     {
-                        if (!(User.Roles.Where(r => r.RoleID == roleID) == null))
+                        if (!(User.Roles.Any(r => r.RoleID == roleID)))
                         {
                             DataUser = new RoleMembershipUserModel { login = User.Login, firstName = User.FirstName, lastName = User.LastName, id = User.IDNumber, PID = User.PersonID };
                             DataUser.success = true;

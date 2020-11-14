@@ -4,6 +4,53 @@
     ViewBag.Title = "Create";
 }
 
+@section Styles
+{
+<style>
+    .custom-switch {
+  padding-left: 2.25rem;
+  padding-bottom: 1rem; 
+}
+
+.custom-control-label { 
+  padding-top: 0.5rem;
+  padding-left: 2rem;
+  padding-bottom: 0.1rem;
+}
+
+.custom-switch .custom-control-label::before {
+  left: -2.25rem;
+  height: 1.8rem;
+  width: 3.2rem;    
+  pointer-events: all;
+  border-radius: 1rem;
+}
+
+.custom-switch .custom-control-label::after {
+  top: calc(0.25rem + 2px);
+  left: calc(-2.25rem + 2px);
+  width: calc(1.8rem - 4px);  
+  height: calc(1.8rem - 4px);  
+  background-color: #adb5bd;
+  border-radius: 2rem; 
+  transition: background-color 0.4s ease-in-out, border-color 0.4s ease-in-out, box-shadow 0.4s ease-in-out, -webkit-transform 0.4s ease-in-out;
+  transition: transform 0.4s ease-in-out, background-color 0.4s ease-in-out, border-color 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+  transition: transform 0.4s ease-in-out, background-color 0.4s ease-in-out, border-color 0.4s ease-in-out, box-shadow 0.4s ease-in-out, -webkit-transform 0.4s ease-in-out;
+}
+@@media (prefers-reduced-motion: reduce) {
+  .custom-switch .custom-control-label::after {
+    transition: none;
+  }
+}
+
+.custom-switch .custom-control-input:checked ~ .custom-control-label::after {
+  background-color: #fff;
+  -webkit-transform: translateX(1.4rem); 
+  transform: translateX(1.4rem); 
+}
+</style>    
+}
+
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>

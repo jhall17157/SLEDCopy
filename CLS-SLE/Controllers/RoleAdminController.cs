@@ -222,9 +222,30 @@ namespace CLS_SLE.Controllers
         }
 
 
-        public ActionResult CreateRole()
+        public ActionResult CreateRoles( CreateRoleViewModel vm)
         {
-            return View();
+
+            return View(vm);
+        }
+
+        public ActionResult SubmitRoleCreation(CreateRoleViewModel vm)
+        {
+            try
+            {
+                if(vm.role != null && vm.role.Name != null && vm.role.Name != "" )
+                {
+                    db.Roles.Add(vm.role);
+                    db.SaveChanges();
+                    return RedirectToAction("ManageRoles", "RoleAdmin");
+                }
+                else
+                {
+                    return View("CreateRole", vm);
+                }
+            } catch (Exception e)
+            {
+                return View("CreateRole",vm);
+            }
         }
 
         public ActionResult ManageRoles(ManageRolesViewModel vm)

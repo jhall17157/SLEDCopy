@@ -4,6 +4,8 @@
     ViewBag.Title = "Manage Roles ";
     int roleCount = 0;
     //Role[] roles = Model.Roles.ToArray();
+    List<Role> allRoles = Model.NonDeletableRoles.ToList();
+    allRoles.AddRange(Model.DeletableRoles.ToList());
 }
 
 @section Styles
@@ -31,6 +33,10 @@
             margin-right: 0;
             padding-bottom: 10px;
             padding-top: 10px;
+        }
+        #modalWarningArea
+        {
+            font-weight:bold;
         }
     </style>
 
@@ -97,28 +103,26 @@
     </thead>
     <tbody>
 
-
-        @if (Model.NonDeletableRoles != null && Model.NonDeletableRoles.Count() > 0)
+        @if (allRoles != null && allRoles.Count > 0)
         {
-            foreach (Role role in Model.NonDeletableRoles)
+            foreach (Role role in allRoles.OrderBy(r => r.Name))
             {
-                <tr id="Role@(role.RoleID)Row">
-                    <td>@Html.ActionLink(role.Name, "EditRoles", "RoleAdmin", new { id = role.RoleID },null) </td>
-                    <td>@Html.ActionLink("" + role.UserRoles.Count(), "ManageRoleMembership", "RoleAdmin", new { roleID = role.RoleID},null)</td>
-                    <td></td>
-                </tr>
-            }
-        }
-
-        @if (Model.DeletableRoles != null && Model.DeletableRoles.Count() > 0)
-        {
-            foreach (Role role in Model.DeletableRoles)
-            {
-                <tr id="Role@(role.RoleID)Row">
-                    <td>@Html.ActionLink(role.Name, "EditRoles", "RoleAdmin", new { id = role.RoleID },null) </td>
-                    <td>@Html.ActionLink("" + role.UserRoles.Count(), "ManageRoleMembership", "RoleAdmin", new { roleID = role.RoleID },null)</td>
-                    <td><button name="deleteRole@(role.RoleID)Button" id="deleteRole@(role.RoleID)Button" onclick="removeRoleRequest(@(role.RoleID),'@(role.Name)');" class="btn btn-danger"><i class="fas fa-trash"></i></button></td>
-                </tr>
+                if (Model.NonDeletableRoles.Contains(role))
+                {
+                    <tr id="Role@(role.RoleID)Row">
+                        <td>@Html.ActionLink(role.Name, "EditRoles", "RoleAdmin", new { id = role.RoleID }, null) </td>
+                        <td>@Html.ActionLink("" + role.UserRoles.Count(), "ManageRoleMembership", "RoleAdmin", new { roleID = role.RoleID }, null)</td>
+                        <td></td>
+                    </tr>
+                }
+                else if (Model.DeletableRoles.Contains(role))
+                {
+                    <tr id="Role@(role.RoleID)Row">
+                        <td>@Html.ActionLink(role.Name, "EditRoles", "RoleAdmin", new { id = role.RoleID }, null) </td>
+                        <td>@Html.ActionLink("" + role.UserRoles.Count(), "ManageRoleMembership", "RoleAdmin", new { roleID = role.RoleID }, null)</td>
+                        <td><button name="deleteRole@(role.RoleID)Button" id="deleteRole@(role.RoleID)Button" onclick="removeRoleRequest(@(role.RoleID),'@(role.Name)',@role.UserRoles.Count);" class="btn btn-danger"><i class="fas fa-trash"></i></button></td>
+                    </tr>
+                }
             }
         }
 
@@ -133,6 +137,7 @@
                 <h5 class="modal-title" id="exampleModalLabel">Delete Role <span id="RoleDeletionHeaderPlaceholder"></span>?</h5>
             </div>
             <div class="modal-body">
+                <p id="modalWarningArea"></p>
                 <p>Are you sure you want to Delete the <span id="RoleDeletionBodyPlaceholder"></span> Role?</p>
             </div>
             <div class="modal-footer">
@@ -161,9 +166,15 @@
 
         $("#searchBox").val("");
 
-        function removeRoleRequest(roleID, name) {
+        function removeRoleRequest(roleID, name, count) {
             $("#RoleDeletionHeaderPlaceholder").html(name);
             $("#RoleDeletionBodyPlaceholder").html(name);
+            if (count != null && count > 0) {
+                $("#modalWarningArea").html("THIS ROLE HAS MEMBERS!");
+            }
+            else {
+                $("#modalWarningArea").html("");
+            }
             $("#deleteModal").data("IdForRemoval", roleID);
             $("#deleteModal").modal("show");
             //console.log("Request for Deletion: " + roleID);

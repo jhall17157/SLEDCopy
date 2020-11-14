@@ -88,7 +88,7 @@
         @Html.Label("Name: ")
     </div>
 
-    <div class="col-6 input-field">
+    <div class="col-12 input-field">
         @Html.TextBoxFor(model => model.role.Name, new { @class = "form-control", id="RoleName" })
     </div>
     <br />
@@ -96,7 +96,7 @@
         @Html.Label("Description: ")
     </div>
 
-    <div class="col-6 input-field">
+    <div class="col-12 input-field">
         @Html.TextAreaFor(model => model.role.Description, new { @class = "form-control", id = "RoleDesc" })
     </div>
 
@@ -111,7 +111,7 @@
         <div class="col-4 SecurityBoxDiv">
             <table id="SchoolSecTable" class="SecurityBox table table-hover table-striped">
                 <thead class="thead-dark">
-                    <tr><th>School Security <button id="AddSchoolButton" class="btn btn-primary"><i class="fas fa-plus" /></button></th></tr>
+                    <tr><th><span><button id="AddSchoolButton" class="btn btn-success"><i class="fas fa-plus"> </i></button> School Security</span></th></tr>
                 </thead>
                 <tbody id="SchoolSecurityBody">
                 </tbody>
@@ -121,7 +121,7 @@
         <div class="col-4 SecurityBoxDiv">
             <table id="DepartmentSecTable" class="SecurityBox table table-hover table-striped">
                 <thead class="thead-dark">
-                <tr><th>Department Security <button id="AddDepartmentButton" class="btn btn-primary"><i class="fas fa-plus"/></button></th></tr>
+                <tr><th><span><button id="AddDepartmentButton" class="btn btn-success"><i class="fas fa-plus"></i></button> Department Security</span></th></tr>
                 </thead>
                 <tbody id="DepartmentSecurityBody">
                 </tbody>
@@ -131,7 +131,7 @@
         <div class="col-4 SecurityBoxDiv">
             <table id="ProgramSecTable" class="SecurityBox table table-hover table-striped">
                 <thead class="thead-dark">
-                    <tr><th>Program Security <button id="AddProgramButton" class="btn btn-primary"><i class="fas fa-plus" /></button></th></tr>
+                    <tr><th><span><button id="AddProgramButton" class="btn btn-success"> <i class="fas fa-plus"></i> </button> Program Security</span></th></tr>
                 </thead>
                 <tbody id="ProgramSecurityBody">
                 </tbody>

@@ -515,6 +515,7 @@
     <Compile Include="ViewModels\EditRoleViewModel.cs" />
     <Compile Include="ViewModels\EditUserViewModel.cs" />
     <Compile Include="ViewModels\InsertNewAssesmentViewModel.cs" />
+    <Compile Include="ViewModels\LeadInstructorViewModel.cs" />
     <Compile Include="ViewModels\ManageRoleMembershipViewModel.cs" />
     <Compile Include="ViewModels\ManageRolesViewModel.cs" />
     <Compile Include="ViewModels\ManageUsersViewModel.cs" />

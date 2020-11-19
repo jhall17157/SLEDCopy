@@ -68,6 +68,7 @@
         .DeleteSecurityButton
         {
             height: 3em;
+            
         }
 
     </style>
@@ -304,7 +305,7 @@
                 if (relatedDepartments != null && relatedDepartments.length != null && relatedDepartments.length > 0) {
                     $("#DepartmentSecurityBody").html("");
                     for (i = 0; i < relatedDepartments.length; i++) {
-                        $("#DepartmentSecurityBody").append("<tr><td><div class='row justify-content-between p-2'><p class='col-10'>" + relatedDepartments[i].Name + "</p><button class='DeleteSecurityButton btn col-2 btn-primary departmentSecBtn' data-departmentid=\"" + relatedDepartments[i].DepartmentID + "\" ><i class='fas fa-trash' /></button></div></td></tr>");
+                        $("#DepartmentSecurityBody").append("<tr><td><div class='row justify-content-between p-2'><p class='col-10'>" + relatedDepartments[i].Name + "</p><button class='DeleteSecurityButton btn col-2 btn-danger departmentSecBtn' data-departmentid=\"" + relatedDepartments[i].DepartmentID + "\" ><i class='fas fa-trash' /></button></div></td></tr>");
                     }
                 }
                 else {
@@ -315,7 +316,7 @@
                 if (relatedSchools != null && relatedSchools.length != null && relatedSchools.length > 0) {
                     $("#SchoolSecurityBody").html("");
                     for (i = 0; i < relatedSchools.length; i++) {
-                        $("#SchoolSecurityBody").append("<tr><td><div class='row justify-content-between p-2'><p class='col-10'>" + relatedSchools[i].Name + "</p><button class='DeleteSecurityButton btn col-2 btn-primary schoolSecBtn' data-schoolid=\"" + relatedSchools[i].SchoolID + "\" ><i class='fas fa-trash' /></button></div></td></tr>");
+                        $("#SchoolSecurityBody").append("<tr><td><div class='row justify-content-between p-2'><p class='col-10'>" + relatedSchools[i].Name + "</p><button class='DeleteSecurityButton btn col-2 btn-danger schoolSecBtn' data-schoolid=\"" + relatedSchools[i].SchoolID + "\" ><i class='fas fa-trash' /></button></div></td></tr>");
                     }
                 }
                 else {
@@ -326,7 +327,7 @@
                 if (relatedPrograms != null && relatedPrograms.length != null && relatedPrograms.length > 0) {
                     $("#ProgramSecurityBody").html("");
                     for (i = 0; i < relatedPrograms.length; i++) {
-                        $("#ProgramSecurityBody").append("<tr><td><div class='row justify-content-between p-2'><p class='col-10'>" + relatedPrograms[i].Name + "</p><button class='DeleteSecurityButton btn btn-primary col-2 programSecBtn' data-programid=\"" + relatedPrograms[i].ProgramID + "\" ><i class='fas fa-trash' /></button></div></td></tr>");
+                        $("#ProgramSecurityBody").append("<tr><td><div class='row justify-content-between p-2'><p class='col-10'>" + relatedPrograms[i].Name + "</p><button class='DeleteSecurityButton btn btn-danger col-2 programSecBtn' data-programid=\"" + relatedPrograms[i].ProgramID + "\" ><i class='fas fa-trash' /></button></div></td></tr>");
                     }
                 }
                 else {

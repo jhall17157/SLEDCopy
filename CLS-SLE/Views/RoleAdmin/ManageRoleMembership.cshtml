@@ -147,7 +147,7 @@
                         success: function (data) {
                         response($.map(data, function (item) {
                             return {
-                                label: "" + item.lastName + " " + item.firstName + " (" + item.login + " " + item.idNumber + ") ", value: item.idNumber
+                                label: "" + item.lastName + ", " + item.firstName + " (" + item.login + " " + item.idNumber + ") ", value: item.idNumber
                                 //label: item.lastName + " " + item.firstName + " (" + item.login + ") ", value: item.idNumber
                             };
                         }))

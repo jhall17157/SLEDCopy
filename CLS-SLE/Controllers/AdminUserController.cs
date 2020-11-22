@@ -171,11 +171,11 @@ namespace CLS_SLE.Controllers
         {
             if(vm.SearchTerm != null)
             {
-                vm.Users = db.Users.Include("Person").Where(u => u.Login.ToLower().Contains(vm.SearchTerm.ToLower())||u.PersonID.ToString().ToLower().StartsWith(vm.SearchTerm.ToLower())||(u.Person.LastName + ", " + u.Person.FirstName).ToLower().Contains(vm.SearchTerm.ToLower())).OrderBy(u => u.Login).ToList();
+                vm.Users = db.Users.Include("Person").Where(u => u.Login.ToLower().Contains(vm.SearchTerm.ToLower())||u.PersonID.ToString().ToLower().StartsWith(vm.SearchTerm.ToLower())||(u.Person.LastName + ", " + u.Person.FirstName).ToLower().Contains(vm.SearchTerm.ToLower())).OrderBy(u => u.Person.LastName).ToList();
             }
             else
             {
-                vm.Users = db.Users.Include("Person").OrderBy(u => u.Login).ToList();
+                vm.Users = db.Users.Include("Person").OrderBy(u => u.Person.LastName).ToList();
             }
             //vm.SearchTerm = "";
             return View(vm);

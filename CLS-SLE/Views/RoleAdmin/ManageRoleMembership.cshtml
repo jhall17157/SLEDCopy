@@ -32,7 +32,7 @@
 <br />
 <div id="topRow" class="container bg-dark pb-5 pt-2">
     <div id="addUserButtonDiv" class="col-5 float-left text-left">
-        <button class="btn btn-primary" id="addUserButton" data-toggle="modal" data-target="#addUserModal"><i class="fas fa-plus"></i>Add Role Member(s)</button>
+        <button class="btn btn-success" id="addUserButton" data-toggle="modal" data-target="#addUserModal"><i class="fas fa-plus"></i>Add Role Member(s)</button>
     </div>
     <div class="col-7 float-right text-right">
         <span class="float-right text-right">
@@ -147,8 +147,8 @@
                         success: function (data) {
                         response($.map(data, function (item) {
                             return {
-                                label: "Login: " + item.login + " Name: " + item.firstName + " "
-                                    + item.lastName + "ID: " + item.idNumber, value: item.personID
+                                label: "" + item.lastName + ", " + item.firstName + " (" + item.login + " " + item.idNumber + ") ", value: item.idNumber
+                                //label: item.lastName + " " + item.firstName + " (" + item.login + ") ", value: item.idNumber
                             };
                         }))
                     },
@@ -157,7 +157,7 @@
             },
             select: function (e, ui) {
                 setTimeout(function () {
-                    addUserToList();
+                    //addUserToList();
                 }, 10);
                 addUserToList();
             }

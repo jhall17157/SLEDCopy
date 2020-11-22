@@ -33,11 +33,15 @@
             margin-top: 5px;
         }
 
-        .SecurityBoxDiv
+        #goToManageRoleMembership
         {
+            margin-top: 5px;
+        }
+
+        .SecurityBoxDiv {
             border: 2px solid black;
-            padding:0;
-            display:flex;
+            padding: 0;
+            display: flex;
         }
 
         .SecurityBox
@@ -89,7 +93,7 @@
     </div>
 
     <div class="col-6 input-field">
-        @Html.TextBoxFor(model => model.role.Name, new { @class = "form-control", id="RoleName" })
+        @Html.TextBoxFor(model => model.role.Name, new { @class = "form-control", id = "RoleName" })
     </div>
     <br />
     <div class="col-3 input-lable">
@@ -101,7 +105,8 @@
     </div>
 
     <button id="updateNameAndDescButton" class="btn btn-primary">Update</button>
-    
+    <button id="goToManageRoleMembership" class="btn btn-primary">Manage Role Membership</button>
+
 </div>
 
 <div id="RoleDataSecuritySection">
@@ -207,6 +212,10 @@
 
             //getRelatedSchoolsDeptartmentsAndPrograms();
             updateSecurityBoxes();
+
+            $("#goToManageRoleMembership").on("click", function () {
+                window.location.href = '@Url.Action("ManageRoleMembership", "RoleAdmin", new { roleID = Model.role.RoleID }, null)';
+            })
 
             function getRelatedSchoolsDeptartmentsAndPrograms() {
                 $.ajax({

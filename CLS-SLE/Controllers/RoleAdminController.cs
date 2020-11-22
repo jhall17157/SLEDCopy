@@ -372,11 +372,11 @@ namespace CLS_SLE.Controllers
                 var LoginList = UsersInRole.Where(u => u.Login.ToLower().Contains(ManageRoleMembershipViewModel.SearchTerm.ToLower()));
                 var IDList = UsersInRole.Where(u => u.IDNumber.ToLower().Contains(ManageRoleMembershipViewModel.SearchTerm.ToLower()));
 
-                ManageRoleMembershipViewModel.UsersInRole = FirstNameList.Union(lastNameList).Union(LoginList).Union(IDList).OrderBy(u => u.Login).ToList();
+                ManageRoleMembershipViewModel.UsersInRole = FirstNameList.Union(lastNameList).Union(LoginList).Union(IDList).OrderBy(u => u.LastName).ToList();
             }
             else
             {
-                ManageRoleMembershipViewModel.UsersInRole = GetUserSecurities().Where(p => p.Roles.Any(r => r.RoleID == ManageRoleMembershipViewModel.RoleID)).ToList();
+                ManageRoleMembershipViewModel.UsersInRole = GetUserSecurities().Where(p => p.Roles.Any(r => r.RoleID == ManageRoleMembershipViewModel.RoleID)).OrderBy(u => u.LastName).ToList();
             }
 
             var CurrentRole = (from Role in db.Roles
@@ -414,7 +414,7 @@ namespace CLS_SLE.Controllers
             var DataUser = new RoleMembershipUserModel();
             if (String.IsNullOrEmpty(search))
             {
-                DataUser.message = "Please Enter A Valid Number";
+                DataUser.message = "Please Enter A Valid ID";
                 DataUser.success = false;
             }
             else
@@ -422,7 +422,7 @@ namespace CLS_SLE.Controllers
                 int personID = 0;
                 if (Int32.TryParse(search, out personID))
                 {
-                    var User = GetUserSecurities().ToList().Where(p => p.PersonID == personID).FirstOrDefault();
+                    var User = GetUserSecurities().ToList().Where(p => p.IDNumber == search).FirstOrDefault();
 
                     if (User == null) { DataUser.message = "No User has " + search + " as an ID"; DataUser.success = false; }
                     else

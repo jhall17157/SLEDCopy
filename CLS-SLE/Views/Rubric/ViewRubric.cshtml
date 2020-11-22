@@ -6,8 +6,8 @@
 <nav aria-label="breadcrumb">
 	<ol class="breadcrumb">
 		<li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-		<li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "AdminAssessments")</li>
-		<li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Assessment.Name, "ViewAssessment", "AdminAssessments", new { assessmentID = Model.Rubric.AssessmentID }, null)</li>
+		<li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
+		<li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = Model.Rubric.AssessmentID }, null)</li>
 		<li class="breadcrumb-item active" aria-current="page">@Model.Rubric.AssessmentRubric.Name </li>
 	</ol>
 </nav>
@@ -58,7 +58,7 @@ else if (Model.CreatorLogin != null)
 
             <tr>
 
-                <td class="h3 align-middle py-2"><a href=".collapse@(outcome.OutcomeID)" data-toggle="collapse" style="float:left;"><i class="fa fa-chevron-down" style="padding: 0 1em;"></i></a><span style="display:block; overflow:hidden">@outcome.Name</span> <span class="text-danger">@(outcome.IsActive.Equals(true) ? "" : "(Not Active)")</span></td>
+                <td class="align-middle py-2"><a href=".collapse@(outcome.OutcomeID)" data-toggle="collapse" style="float:left;"><i class="fa fa-chevron-down" style="padding: 0 1em;"></i></a><span style="display:block; overflow:hidden">@outcome.Name</span> <span class="text-danger">@(outcome.IsActive.Equals(true) ? "" : "(Not Active)")</span></td>
                 <td class="text-right">
                     @*<a class="btn btn-block" role="button" href=".collapse@(outcome.OutcomeID)" data-toggle="collapse">Test</a>*@
                     <!--<button type="button" class="btn btn-primary outcomeDetailsButton">Details</button>-->

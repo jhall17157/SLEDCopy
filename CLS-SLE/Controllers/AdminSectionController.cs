@@ -23,38 +23,6 @@ namespace CLS_SLE.Controllers
         {
             try
             {
-                List<String> leadInstructorList = new List<String>();
-                var users = db.Users.ToList();
-                var roles = db.Roles.ToList();
-                var userroles = db.UserRoles.ToList();
-                var query = from ur in userroles
-
-                            join r in roles
-                            on ur.RoleID equals r.RoleID into urr
-                            from urrResult in (from r in urr
-                                                where r.Name == "Faculty"
-                                                select r).DefaultIfEmpty()
-
-                            join u in users
-                            on ur.PersonID equals u.PersonID into uru
-                            from uruResult in uru.DefaultIfEmpty()
-
-                            select new
-                            {
-                                InstructorName = uruResult != null && uruResult.Person != null ? 
-                                                uruResult.Person.FirstName + " " + uruResult.Person.LastName
-                                                : null,
-                                InstructorID = uruResult != null && uruResult.Person != null ? 
-                                                uruResult.Person.IdNumber : null,
-                                PersonRole = urrResult != null ? urrResult.Name : null
-                            };
-                foreach (var result in query)
-                {
-                    if (result.PersonRole != null && result.InstructorName != null)
-                    {
-                        leadInstructorList.Add(string.Concat(result.InstructorID, " - ", result.InstructorName));
-                    }
-                }
 
                 List<String> semesterList = new List<String>();
                 List<Semester> orderedSemesters = new List<Semester>();
@@ -66,7 +34,6 @@ namespace CLS_SLE.Controllers
 
                 var model = new AddSectionViewModel()
                 {
-                    LeadInstructorList = leadInstructorList,
                     SemesterList = semesterList
                 };
 
@@ -475,6 +442,21 @@ namespace CLS_SLE.Controllers
             db.SaveChanges();
 
             return new JsonResult { Data = id, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        public JsonResult LeadInstructorAutoComplete(string search)
+        {
+            var instructors = db.Users.Where(r => r.UserRoles.Any(ur => ur.Role.Name == "Faculty"));
+            List<LeadInstructorViewModel> resultLeadInsturctors = instructors.Where(p => (p.Person.FirstName.Contains(search) ||
+            p.Person.LastName.Contains(search) ||
+            p.Person.IdNumber.Contains(search)))
+                .Select(p => new LeadInstructorViewModel
+                {
+                    id = p.Person.IdNumber,
+                    name = p.Person.FirstName + " " + p.Person.LastName
+                }).ToList();
+
+            return new JsonResult { Data = resultLeadInsturctors, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
     }
 }

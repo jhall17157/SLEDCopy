@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\CLS-SLE",
-    "\\CLS-SLE\\Models",
+    "\\CLS-SLE\\Controllers",
     "\\CLS-SLE\\Views",
+    "\\CLS-SLE\\Views\\RoleAdmin",
     "\\CLS-SLE\\Views\\Rubric"
   ],
   "SelectedNode": "\\SLE Assessment.sln",

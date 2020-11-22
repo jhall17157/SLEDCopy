@@ -1,11 +1,11 @@
 ﻿@using CLS_SLE.Models
 @model CLS_SLE.ViewModels.UpdateSectionViewModel
 @{
-                /**/
+    /**/
 
-                /**/
+    /**/
 
-                ViewBag.Title = "EditSection";
+    ViewBag.Title = "EditSection";
 }
 
 <nav aria-label="breadcrumb">
@@ -36,24 +36,18 @@
         <div class="form-group input-group-append">
             @if (ViewBag.section.Person == null)
             {
-                <input list="leadInstructors" name="LeadInstructorSelection" id="LeadInstructorSelection" class="form-control" placeholder="Select Lead Instructor" />
+                <input name="LeadInstructorSelection" id="LeadInstructorSelection" class="form-control" placeholder="Select Lead Instructor" />
             }
             else
             {
-                <input list="leadInstructors" name="LeadInstructorSelection" id="LeadInstructorSelection" class="form-control" value="@ViewBag.LeadInstructor" />
+                <input name="LeadInstructorSelection" id="LeadInstructorSelection" class="form-control" placeholder="Select Lead Instructor" value="@ViewBag.LeadInstructor"/>
             }
         </div>
-        <datalist id="leadInstructors">
-            @foreach(string leadInstructorList in Model.LeadInstructorList)
-            {
-                <option value="@leadInstructorList"></option>
-            }
-        </datalist>
     </div>
     <div class="form-group">
         @Html.Label("Begin Date:")
         @Html.EditorFor(Model => Model.Section.BeginDate,
-       new { htmlAttributes = new { type="date", @class = "form-control", Value = ViewBag.BeginDate } })
+       new { htmlAttributes = new { type = "date", @class = "form-control", Value = ViewBag.BeginDate } })
         @Html.ValidationMessageFor(model => model.Section.BeginDate)
     </div>
     <div class="form-group">
@@ -83,4 +77,29 @@
 }
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $("#LeadInstructorSelection").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("LeadInstructorAutoComplete","AdminSection")',
+                    dataType: "json",
+                    data: {
+                        search: $("#LeadInstructorSelection").val() },
+                        appendTo: "#LeadInstructorSelection",
+                        success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: "" + item.id + " - " + item.name , value: "" + item.id + " - " + item.name
+                                //label: "" + item.name + " - " + item.id , value: item.idNumber
+                            };
+                        }))
+                    },
+                    error: function (xhr, status, error) { alert(error)/*alert("Error")*/; }
+                });
+            },
+            select: function (e, ui) {
+            }
+        });
+    </script>
 }

@@ -52,6 +52,7 @@
     </style>
 }
 
+
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
@@ -96,10 +97,10 @@
         @Html.ValidationMessageFor(Model => Model.Person.IdNumber)
     </div>
 
-    <div class="form-group row custom-control custom-switch">
+    <div class="form-group row custom-control custom-control-right custom-control-inline custom-switch">
         @Html.CheckBoxFor(Model => Model.User.IsActive,
        new { @class = "custom-control-input col-1", @checked = Model.User.IsActive })
-        <label class="custom-control-label col-11" for="User_IsActive">Active</label>
+        <label style="padding-left: 0px" class="custom-control-label col-11" for="User_IsActive">Active</label>
     </div>
 
     <h3>Role Membership</h3>
@@ -109,13 +110,14 @@
             <div class="row" style="margin: 10px;">
                 <span class="col-3" id=@i>@Model.Roles[i]</span>
                 <div class="col-6">
-                    <button type="button" id="@i-remove" class="btn-sm btn-danger role-remove-button">Remove</button>
+                <button type="button" id="@i-remove" class="btn-sm btn-danger role-remove-button"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
         }
     </div>
-    <div class="form-group">
-        <input type="submit" class="btn-block btn-primary" value="Submit" />
+    <div class="row justify-content-center">
+        <div class="col-2 p-0 mx-1"><button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Update</button></div>
+        <div class="col-2 p-0 mx-1"><a href="@Url.Action("ManageUsers", "AdminUser")" class="btn btn-danger col-12 mx-1">Cancel</a></div>
     </div>
 }
 

@@ -69,6 +69,12 @@
             margin-left: 15px;
         }
 
+        .DeleteSecurityButton
+        {
+            height: 3em;
+            
+        }
+
     </style>
 
 
@@ -92,15 +98,16 @@
         @Html.Label("Name: ")
     </div>
 
-    <div class="col-6 input-field">
-        @Html.TextBoxFor(model => model.role.Name, new { @class = "form-control", id = "RoleName" })
+    <div class="col-12 input-field">
+        @Html.TextBoxFor(model => model.role.Name, new { @class = "form-control", id="RoleName" })
+
     </div>
     <br />
     <div class="col-3 input-lable">
         @Html.Label("Description: ")
     </div>
 
-    <div class="col-6 input-field">
+    <div class="col-12 input-field">
         @Html.TextAreaFor(model => model.role.Description, new { @class = "form-control", id = "RoleDesc" })
     </div>
 
@@ -116,7 +123,7 @@
         <div class="col-4 SecurityBoxDiv">
             <table id="SchoolSecTable" class="SecurityBox table table-hover table-striped">
                 <thead class="thead-dark">
-                    <tr><th>School Security <button id="AddSchoolButton" class="btn btn-primary"><i class="fas fa-plus" /></button></th></tr>
+                    <tr><th><span><button id="AddSchoolButton" class="btn btn-success"><i class="fas fa-plus"> </i></button> School Security</span></th></tr>
                 </thead>
                 <tbody id="SchoolSecurityBody">
                 </tbody>
@@ -126,7 +133,7 @@
         <div class="col-4 SecurityBoxDiv">
             <table id="DepartmentSecTable" class="SecurityBox table table-hover table-striped">
                 <thead class="thead-dark">
-                <tr><th>Department Security <button id="AddDepartmentButton" class="btn btn-primary"><i class="fas fa-plus"/></button></th></tr>
+                <tr><th><span><button id="AddDepartmentButton" class="btn btn-success"><i class="fas fa-plus"></i></button> Department Security</span></th></tr>
                 </thead>
                 <tbody id="DepartmentSecurityBody">
                 </tbody>
@@ -136,7 +143,7 @@
         <div class="col-4 SecurityBoxDiv">
             <table id="ProgramSecTable" class="SecurityBox table table-hover table-striped">
                 <thead class="thead-dark">
-                    <tr><th>Program Security <button id="AddProgramButton" class="btn btn-primary"><i class="fas fa-plus" /></button></th></tr>
+                    <tr><th><span><button id="AddProgramButton" class="btn btn-success"> <i class="fas fa-plus"></i> </button> Program Security</span></th></tr>
                 </thead>
                 <tbody id="ProgramSecurityBody">
                 </tbody>
@@ -308,7 +315,7 @@
                 if (relatedDepartments != null && relatedDepartments.length != null && relatedDepartments.length > 0) {
                     $("#DepartmentSecurityBody").html("");
                     for (i = 0; i < relatedDepartments.length; i++) {
-                        $("#DepartmentSecurityBody").append("<tr><td>" + relatedDepartments[i].Name + "</td></tr>");
+                        $("#DepartmentSecurityBody").append("<tr><td><div class='row justify-content-between p-2'><p class='col-10'>" + relatedDepartments[i].Name + "</p><button class='DeleteSecurityButton btn col-2 btn-danger departmentSecBtn' data-departmentid=\"" + relatedDepartments[i].DepartmentID + "\" ><i class='fas fa-trash' /></button></div></td></tr>");
                     }
                 }
                 else {
@@ -319,7 +326,7 @@
                 if (relatedSchools != null && relatedSchools.length != null && relatedSchools.length > 0) {
                     $("#SchoolSecurityBody").html("");
                     for (i = 0; i < relatedSchools.length; i++) {
-                        $("#SchoolSecurityBody").append("<tr><td>" + relatedSchools[i].Name + "</td></tr>");
+                        $("#SchoolSecurityBody").append("<tr><td><div class='row justify-content-between p-2'><p class='col-10'>" + relatedSchools[i].Name + "</p><button class='DeleteSecurityButton btn col-2 btn-danger schoolSecBtn' data-schoolid=\"" + relatedSchools[i].SchoolID + "\" ><i class='fas fa-trash' /></button></div></td></tr>");
                     }
                 }
                 else {
@@ -330,7 +337,7 @@
                 if (relatedPrograms != null && relatedPrograms.length != null && relatedPrograms.length > 0) {
                     $("#ProgramSecurityBody").html("");
                     for (i = 0; i < relatedPrograms.length; i++) {
-                        $("#ProgramSecurityBody").append("<tr><td>" + relatedPrograms[i].Name + "</td></tr>");
+                        $("#ProgramSecurityBody").append("<tr><td><div class='row justify-content-between p-2'><p class='col-10'>" + relatedPrograms[i].Name + "</p><button class='DeleteSecurityButton btn btn-danger col-2 programSecBtn' data-programid=\"" + relatedPrograms[i].ProgramID + "\" ><i class='fas fa-trash' /></button></div></td></tr>");
                     }
                 }
                 else {
@@ -418,8 +425,8 @@
             });
 
             $("#ConfirmDepartmentAdditionButton").on("click", function () {
-                //console.log("Start");
-                let DepartmentsToAdd = $(".departmentModalInput");
+                console.log("Start");
+                let DepartmentsToAdd = $(".DepartmentModalInput");
                 //console.log(DepartmentsToAdd);
                 for (i = 0; i < DepartmentsToAdd.length; i++) {
                     if ($(DepartmentsToAdd[i]).prop("checked") == true) {
@@ -429,14 +436,62 @@
                             dataType: "json",
                             async: false,
                             data: { roleID: roleId, DepartmentID: targetDepartmentID },
-                success: function (data) {
-
+                            success: function (data) {
+                                console.log("Success");
                         },
                  error: function (e) {  console.log(e);}
                 });
                     }
                 }
 
+                updateSecurityBoxes();
+            });
+
+
+            $("#SchoolSecTable").on("click",".schoolSecBtn", function (e) {
+                var targetSchoolID = $(this).data("schoolid");
+                $.ajax({
+                    url: '@Url.Action("toggleSchoolSecurity","RoleAdmin")',
+                            dataType: "json",
+                            async: false,
+                            data: { roleID: roleId, SchoolID: targetSchoolID },
+                    success: function (data) {
+                        console.log("Success");
+                        },
+                 error: function (e) {  console.log(e);}
+                });
+                updateSecurityBoxes();
+            });
+
+            $("#ProgramSecTable").on("click",".programSecBtn", function (e) {
+                var targetProgramID = $(this).data("programid");
+                $.ajax({
+                    url: '@Url.Action("toggleProgramSecurity","RoleAdmin")',
+                            dataType: "json",
+                            async: false,
+                            data: { roleID: roleId, ProgramID: targetProgramID },
+                success: function (data) {
+
+                        },
+                 error: function (e) {  console.log(e);}
+                });
+                updateSecurityBoxes();
+            });
+            
+            
+
+            $("#DepartmentSecTable").on("click",".departmentSecBtn", function (e) {
+                var targetDepartmentID = $(this).data("departmentid");
+                $.ajax({
+                    url: '@Url.Action("toggleDepartmentSecurity","RoleAdmin")',
+                            dataType: "json",
+                            async: false,
+                            data: { roleID: roleId, DepartmentID: targetDepartmentID },
+                success: function (data) {
+
+                        },
+                 error: function (e) {  console.log(e);}
+                });
                 updateSecurityBoxes();
             });
 

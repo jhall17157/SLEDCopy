@@ -29,9 +29,10 @@
                         <span style="position: absolute; right: 5px; top: 5px; width: 60px;" class="float-right badge badge-dark">@assessmentLevelPair.Assessment.CompletedCount / @assessmentLevelPair.Assessment.StudentCount</span>
                         <div class="">
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-9">
                                     <b style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"> @Html.ActionLink(assessmentLevelPair.Assessment.RubricName, "StudentList", new { rubricID = assessmentLevelPair.Assessment.RubricID, sectionID = assessmentLevelPair.Assessment.SectionID }) </b>
                                 </div>
+                                <div class="col-md-3 ml-auto">@Html.ActionLink("Assess", "StudentList", new { rubricID = assessmentLevelPair.Assessment.RubricID, sectionID = assessmentLevelPair.Assessment.SectionID })</div>
                             </div>
                             <div class="row">
                                 <div class="col-md-9">
@@ -48,9 +49,6 @@
                                         </div>
                                     }
                                 }
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3 ml-auto">@Html.ActionLink("Assess", "StudentList", new { rubricID = assessmentLevelPair.Assessment.RubricID, sectionID = assessmentLevelPair.Assessment.SectionID })</div>
                             </div>
                         </div>
                     </li>

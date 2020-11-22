@@ -4,6 +4,7 @@
 
 }
 
+
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
@@ -48,10 +49,10 @@
         @Html.ValidationMessageFor(Model => Model.Person.IdNumber)
     </div>
 
-    <div class="form-group row custom-control custom-switch">
+    <div class="form-group row custom-control custom-control-right custom-control-inline custom-switch">
         @Html.CheckBoxFor(Model => Model.User.IsActive,
        new { @class = "custom-control-input col-1", @checked = Model.User.IsActive })
-        <label class="custom-control-label col-11" for="User_IsActive">Active</label>
+        <label style="padding-left: 0px" class="custom-control-label col-11" for="User_IsActive">Active</label>
     </div>
 
     <h3>Role Membership</h3>

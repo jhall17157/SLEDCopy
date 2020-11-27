@@ -199,7 +199,7 @@ namespace CLS_SLE.Controllers
                 db.SaveChanges();
 
 
-                return RedirectToAction(actionName: "Assessments", controllerName: "AdminAssessments");
+                return RedirectToAction(actionName: "Assessments", controllerName: "Admin");
 
             }
             catch (Exception e)

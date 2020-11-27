@@ -6,8 +6,8 @@
 <nav aria-label="breadcrumb">
 	<ol class="breadcrumb">
 		<li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-		<li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "AdminAssessments")</li>
-		<li class="breadcrumb-item">@Html.ActionLink((String)Model.RubricAssessment.Assessment.Name, "ViewAssessment", "AdminAssessments", new { assessmentID = Model.RubricAssessment.AssessmentID }, null)</li>
+		<li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
+		<li class="breadcrumb-item">@Html.ActionLink((String)Model.RubricAssessment.Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = Model.RubricAssessment.AssessmentID }, null)</li>
 		<li class="breadcrumb-item">@Html.ActionLink((String)Model.RubricAssessment.AssessmentRubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.RubricAssessment.RubricID, assessmentID = Model.RubricAssessment.AssessmentID }, null)</li>
 		<li class="breadcrumb-item active" aria-current="page">Edit</li>
 	</ol>
@@ -44,7 +44,7 @@
 							<div class="input-group relatedAssessment">
 								<input list="assessments" name="relatedAssessment@(id)" class="form-control" value="@relatedAssessment">
 								<div class="input-group-append">
-									<button type="button" class="btn btn-danger deleteRelatedAssessment">Delete</button>
+									<button type="button" class="btn btn-danger deleteRelatedAssessment"><i class="fas fa-trash"></i></button>
 								</div>
 							</div>
 						</text>

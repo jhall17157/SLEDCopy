@@ -9,7 +9,7 @@
     }
 
     #topRow {
-        border-radius: 40px 40px 0px 0px;
+        border-radius: 5px 5px 0px 0px;
     }
 
     #errorMessage {
@@ -30,6 +30,12 @@
 <h1>Role: @Model.CurrentRole.Name</h1>
 <input type="hidden" id="hiddenRoleID" value="@Model.RoleID">
 <br />
+@if (Model.SearchTerm != null && Model.SearchTerm != "")
+{
+    <div id="SearchResultDiv">
+        <h2>Search Results for: @(Model.SearchTerm != null ? Model.SearchTerm : "")</h2>
+    </div>
+}
 <div id="topRow" class="container bg-dark pb-5 pt-2">
     <div id="addUserButtonDiv" class="col-5 float-left text-left">
         <button class="btn btn-success" id="addUserButton" data-toggle="modal" data-target="#addUserModal"><i class="fas fa-plus"></i>Add Role Member(s)</button>
@@ -44,15 +50,8 @@
                         @Html.HiddenFor(vm => vm.RoleID);
                         @Html.TextBoxFor(vm => vm.SearchTerm, new { id = "searchBox" })
                     </span>
+                    <button type="submit" id="searchSubmit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>
 
-                    if (Model.SearchTerm == null || Model.SearchTerm == "")
-                    {
-                        <button type="submit" id="searchSubmit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>
-                    }
-                    else
-                    {
-                        <button type="submit" id="searchClear" class="btn btn-danger d-inline ml-1" value="Submit"><i class="fas fa-times"></i></button>
-                    }
                 }
             </span>
         </span>
@@ -110,6 +109,7 @@
 
 @section Scripts {
     <script type="text/javascript">
+        $("#searchBox").val("");
 
         function reloadPage() {
             $("#searchBox").val("");

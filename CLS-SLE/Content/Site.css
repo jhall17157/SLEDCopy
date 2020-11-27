@@ -221,3 +221,21 @@ button.multiselect {
     border: 1px solid #ced4da;
 }
 
+div.custom-control-right {
+    padding-right: 24px;
+    padding-left: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* Make Label for bootstrap switch appear on the left side of the switch (Use classes: custom-control-right custom-control-inline) */
+div.custom-control-right .custom-control-label::after {
+    right: -1.5rem;
+    left: auto;
+}
+
+div.custom-control-right .custom-control-label::before {
+    right: -2.35rem;
+    left: auto;
+}
+

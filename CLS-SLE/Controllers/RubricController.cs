@@ -364,7 +364,12 @@ namespace CLS_SLE.Controllers
 
                 editOutcome.Name = outcomeViewModel.OutcomeVM.Name;
                 editOutcome.Description = outcomeViewModel.OutcomeVM.Description;
+                bool oldIsActive = editOutcome.IsActive;
                 editOutcome.IsActive = outcomeViewModel.OutcomeVM.IsActive;
+                if (outcomeViewModel.OutcomeVM.IsActive == false && oldIsActive == true)
+                {
+                    editOutcome.InactiveDateTime = DateTime.Now;
+                }
                 editOutcome.CriteriaPassRate = outcomeViewModel.OutcomeVM.CriteriaPassRate / 100;
                 editOutcome.CalculateCriteriaPassRate = outcomeViewModel.OutcomeVM.CalculateCriteriaPassRate;
                 editOutcome.ModifiedDateTime = DateTime.Now;

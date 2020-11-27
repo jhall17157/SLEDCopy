@@ -4,6 +4,55 @@
 
 }
 
+@section Styles
+{
+    <style>
+        .custom-switch {
+            padding-left: 2.25rem;
+            padding-bottom: 1rem;
+        }
+
+        .custom-control-label {
+            padding-top: 0.5rem;
+            padding-left: 2rem;
+            padding-bottom: 0.1rem;
+        }
+
+        .custom-switch .custom-control-label::before {
+            left: -2.25rem;
+            height: 1.8rem;
+            width: 3.2rem;
+            pointer-events: all;
+            border-radius: 1rem;
+        }
+
+        .custom-switch .custom-control-label::after {
+            top: calc(0.25rem + 2px);
+            left: calc(-2.25rem + 2px);
+            width: calc(1.8rem - 4px);
+            height: calc(1.8rem - 4px);
+            background-color: #adb5bd;
+            border-radius: 2rem;
+            transition: background-color 0.4s ease-in-out, border-color 0.4s ease-in-out, box-shadow 0.4s ease-in-out, -webkit-transform 0.4s ease-in-out;
+            transition: transform 0.4s ease-in-out, background-color 0.4s ease-in-out, border-color 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+            transition: transform 0.4s ease-in-out, background-color 0.4s ease-in-out, border-color 0.4s ease-in-out, box-shadow 0.4s ease-in-out, -webkit-transform 0.4s ease-in-out;
+        }
+
+        @@media (prefers-reduced-motion: reduce) {
+            .custom-switch .custom-control-label::after {
+                transition: none;
+            }
+        }
+
+        .custom-switch .custom-control-input:checked ~ .custom-control-label::after {
+            background-color: #fff;
+            -webkit-transform: translateX(1.4rem);
+            transform: translateX(1.4rem);
+        }
+    </style>
+}
+
+
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
@@ -36,7 +85,7 @@
         @Html.ValidationMessageFor(Model => Model.User.Login)
     </div>
     <div class="form-group row">
-        @Html.Label("Email:", new {@class = "col-1" })
+        @Html.Label("Email:", new { @class = "col-1" })
         @Html.EditorFor(Model => Model.User.Email,
      new { htmlAttributes = new { @class = "form-control col-11", @Value = Model.User.Email } })
         @Html.ValidationMessageFor(Model => Model.User.Email)
@@ -48,26 +97,27 @@
         @Html.ValidationMessageFor(Model => Model.Person.IdNumber)
     </div>
 
-    <div class="form-group row custom-control custom-switch">
+    <div class="form-group row custom-control custom-control-right custom-control-inline custom-switch">
         @Html.CheckBoxFor(Model => Model.User.IsActive,
        new { @class = "custom-control-input col-1", @checked = Model.User.IsActive })
-        <label class="custom-control-label col-11" for="User_IsActive">Active</label>
+        <label style="padding-left: 0px" class="custom-control-label col-11" for="User_IsActive">Active</label>
     </div>
 
     <h3>Role Membership</h3>
     <div class="form-group" id="roleGroup" data-id=@Model.Person.PersonID style="border: 1px solid; padding: 20px;">
         @for (int i = 0; i < Model.Roles.Count; i++)
-        {   
+        {
             <div class="row" style="margin: 10px;">
                 <span class="col-3" id=@i>@Model.Roles[i]</span>
                 <div class="col-6">
-                <button type="button" id="@i-remove" class="btn-sm btn-danger role-remove-button">Remove</button>
+                <button type="button" id="@i-remove" class="btn-sm btn-danger role-remove-button"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
         }
     </div>
-    <div class="form-group">
-        <input type="submit" class="btn-block btn-primary" value="Submit" />
+    <div class="row justify-content-center">
+        <div class="col-2 p-0 mx-1"><button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Update</button></div>
+        <div class="col-2 p-0 mx-1"><a href="@Url.Action("ManageUsers", "AdminUser")" class="btn btn-danger col-12 mx-1">Cancel</a></div>
     </div>
 }
 

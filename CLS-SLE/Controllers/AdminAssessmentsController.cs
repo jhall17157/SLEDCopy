@@ -240,7 +240,7 @@ namespace CLS_SLE.Controllers
                         editAssessment.ModifiedByLoginID = UserData.PersonId;
                         db.SaveChanges();
 
-                        return RedirectToAction(actionName: "ViewAssessment", controllerName: "AdminAssessments", routeValues: new { assessmentId = editAssessment.AssessmentID });
+                        return RedirectToAction(actionName: "ViewAssessment", controllerName: "Admin", routeValues: new { assessmentId = editAssessment.AssessmentID });
                     }
                     else
                     {

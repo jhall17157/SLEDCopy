@@ -72,9 +72,8 @@ namespace CLS_SLE.Models
         public virtual DbSet<ProgramMap> ProgramMaps { get; set; }
         public virtual DbSet<ProgramSecurityByUser> ProgramSecurityByUsers { get; set; }
         public virtual DbSet<RubricsByProgram> RubricsByPrograms { get; set; }
-        public virtual DbSet<tmp_offering> tmp_offering { get; set; }
-        public virtual DbSet<tmp_studentroster> tmp_studentroster { get; set; }
         public virtual DbSet<FactTSA> FactTSAs { get; set; }
+        public virtual DbSet<Subterm> Subterms { get; set; }
     
         [DbFunction("SLE_TrackingEntities", "GetCompletedCountBySectionRubric")]
         public virtual IQueryable<GetCompletedCountBySectionRubric_Result> GetCompletedCountBySectionRubric(Nullable<int> sectionRubricID)

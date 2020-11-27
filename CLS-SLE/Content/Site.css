@@ -235,7 +235,7 @@ div.custom-control-right .custom-control-label::after {
 }
 
 div.custom-control-right .custom-control-label::before {
-    right: -2.35rem;
+    right: -3.0rem;
     left: auto;
 }
 

@@ -61,7 +61,7 @@
                         <tr href="#" data-target=".rubricCollapse@(rubricNumber)" class="accordionTrigger clickable">
                             <td class="bg-light align-self-center">
                                 <h4 class="d-inline half-indent subheader-lh"><i class="rubricIcon@(rubricNumber) fas fa-angle-right"></i>&emsp;@ra.AssessmentRubric.Name</h4>
-                                <button type="button" class="btn btn-success float-right addMapButton rubricButton@(rubricNumber)" data-toggle="modal" @*onclick="@Model.Rubrics.SingleOrDefault(r => r.Value.AsInt() == ra.AssessmentRubric.RubricID).Selected = true" data-rubric="@ra.AssessmentRubric.RubricID"*@ data-target="#addModal"><i class="fa fa-plus" aria-hidden="true"></i> Add Mapping</button>
+                                <button type="button" class="btn btn-success float-right addMapButton rubricButton@(rubricNumber)" data-toggle="modal" onclick="setMappingProgramAndRubric(@Model.Program.ProgramID,@ra.AssessmentRubric.RubricID);"  data-target="#addModal" data-program="@Model.ProgramID" data-rubric="@ra.RubricID"><i class="fa fa-plus" aria-hidden="true"></i> Add Mapping</button>
                             </td>
                         </tr>
                         if (!ra.AssessmentRubric.ProgramAssessmentMappings.Any())
@@ -210,23 +210,11 @@
             @using (Html.BeginForm("CreateMapping", "AdminMapping", FormMethod.Post))
             {
                 <div class="modal-body p-4">
-                    <p class="col-12 mb-1 pl-0">Select Program:</p>
-                    <div class="mb-3">
-                        @Html.DropDownListFor(p => p.ProgramID, Model.Programs, new
-                           {
-                               @id = "AddModalDropDownPrograms",
-                               @class = "form-control selectpicker d-inline col-6"@*,
-                               @disabled = "disabled"   --commented out, ID not passed when dropdown disabled *@
-                           })
-                    </div>
-                    <p class="col-12 mb-1 pl-0">Select Rubric:</p>
-                    <div class="mb-3">
-                        @Html.DropDownListFor(r => r.RubricID, Model.Rubrics, "-Select Rubric-", new
-                           {
-                               @id = "AddModalDropDownRubrics",
-                               @class = "form-control selectpicker d-inline col-6",
-                           })
-                    </div>
+                    
+                        @Html.HiddenFor(p => p.ProgramID, new { @id = "AddModalProgramHidden" })
+                    
+                        @Html.HiddenFor(r => r.RubricID, new { @id = "AddModalRubricHidden"})
+                    
                     <p class="col-12 mb-1 pl-0">Select Course:</p>
                     <div class="mb-3">
                         @Html.DropDownListFor(c => c.CourseID, Model.Courses, "-Select Course-", new
@@ -252,6 +240,9 @@
 
 <script src="~/Scripts/jquery-3.4.1.js"></script>
 <script>
+
+    var currentTargetProgramID = @Model.ProgramID;
+    var currentTargetRubricID = null;
 
     $(function () {
         $('.accordionTrigger').click(toggleAccordion);
@@ -279,6 +270,17 @@
             //$('.rubricButton' + targetClass[targetClass.length - 1]).removeClass("d-inline").addClass("d-none");
         }
     }
+
+    function setMappingProgramAndRubric(programID, rubricID)
+    {
+        currentTargetProgramID = programID;
+        $("#AddModalProgramHidden").val(currentTargetProgramID);
+        currentTargetRubricID = rubricID;
+        $("#AddModalRubricHidden").val(currentTargetRubricID);
+        console.log(programID + " " + rubricID);
+    }
+
+
             //$('.addMapButton').on('click', function () {
             //    var rubric = $(this).data('rubric');
 

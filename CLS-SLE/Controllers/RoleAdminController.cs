@@ -222,9 +222,30 @@ namespace CLS_SLE.Controllers
         }
 
 
-        public ActionResult CreateRole()
+        public ActionResult CreateRoles( CreateRoleViewModel vm)
         {
-            return View();
+
+            return View(vm);
+        }
+
+        public ActionResult SubmitRoleCreation(CreateRoleViewModel vm)
+        {
+            try
+            {
+                if(vm.role != null && vm.role.Name != null && vm.role.Name != "" )
+                {
+                    db.Roles.Add(vm.role);
+                    db.SaveChanges();
+                    return RedirectToAction("ManageRoles", "RoleAdmin");
+                }
+                else
+                {
+                    return View("CreateRole", vm);
+                }
+            } catch (Exception e)
+            {
+                return View("CreateRole",vm);
+            }
         }
 
         public ActionResult ManageRoles(ManageRolesViewModel vm)
@@ -355,7 +376,8 @@ namespace CLS_SLE.Controllers
             {
                 ManageRoleMembershipViewModel.RoleID = roleID;
             }
-            else
+
+            if (!(ManageRoleMembershipViewModel.RoleID.HasValue))
             {
                 ManageRoleMembershipViewModel.RoleID = 1;
             }
@@ -371,11 +393,11 @@ namespace CLS_SLE.Controllers
                 var LoginList = UsersInRole.Where(u => u.Login.ToLower().Contains(ManageRoleMembershipViewModel.SearchTerm.ToLower()));
                 var IDList = UsersInRole.Where(u => u.IDNumber.ToLower().Contains(ManageRoleMembershipViewModel.SearchTerm.ToLower()));
 
-                ManageRoleMembershipViewModel.UsersInRole = FirstNameList.Union(lastNameList).Union(LoginList).Union(IDList).OrderBy(u => u.Login).ToList();
+                ManageRoleMembershipViewModel.UsersInRole = FirstNameList.Union(lastNameList).Union(LoginList).Union(IDList).OrderBy(u => u.LastName).ToList();
             }
             else
             {
-                ManageRoleMembershipViewModel.UsersInRole = GetUserSecurities().Where(p => p.Roles.Any(r => r.RoleID == ManageRoleMembershipViewModel.RoleID)).ToList();
+                ManageRoleMembershipViewModel.UsersInRole = GetUserSecurities().Where(p => p.Roles.Any(r => r.RoleID == ManageRoleMembershipViewModel.RoleID)).OrderBy(u => u.LastName).ToList();
             }
 
             var CurrentRole = (from Role in db.Roles
@@ -388,9 +410,11 @@ namespace CLS_SLE.Controllers
 
         public JsonResult UserAutoComplete(string search, int roleID)
         {
-            var UsersInRole = GetUserSecurities().ToList();
 
-            List<UserRoleSearchModel> resultUsers = UsersInRole.Where(p => (p.Login.Contains(search) || 
+
+            var UsersNotInRole = GetUserSecurities().Where(u => u.Roles.All(r => r.RoleID != roleID));
+
+            List<UserRoleSearchModel> resultUsers = UsersNotInRole.Where(p => (p.Login.Contains(search) || 
                 p.LastName.Contains(search) || 
                 p.FirstName.Contains(search) || 
                 p.IDNumber.Contains(search)))
@@ -411,7 +435,7 @@ namespace CLS_SLE.Controllers
             var DataUser = new RoleMembershipUserModel();
             if (String.IsNullOrEmpty(search))
             {
-                DataUser.message = "Please Enter A Valid Number";
+                DataUser.message = "Please Enter A Valid ID";
                 DataUser.success = false;
             }
             else
@@ -419,12 +443,12 @@ namespace CLS_SLE.Controllers
                 int personID = 0;
                 if (Int32.TryParse(search, out personID))
                 {
-                    var User = GetUserSecurities().ToList().Where(p => p.PersonID == personID).FirstOrDefault();
+                    var User = GetUserSecurities().ToList().Where(p => p.IDNumber == search).FirstOrDefault();
 
                     if (User == null) { DataUser.message = "No User has " + search + " as an ID"; DataUser.success = false; }
                     else
                     {
-                        if (!(User.Roles.Where(r => r.RoleID == roleID) == null))
+                        if (!(User.Roles.Any(r => r.RoleID == roleID)))
                         {
                             DataUser = new RoleMembershipUserModel { login = User.Login, firstName = User.FirstName, lastName = User.LastName, id = User.IDNumber, PID = User.PersonID };
                             DataUser.success = true;

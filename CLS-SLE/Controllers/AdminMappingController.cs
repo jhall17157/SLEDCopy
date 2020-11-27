@@ -190,6 +190,7 @@ namespace CLS_SLE.Controllers
                                       AssessmentRubric = new vmAssessmentRubric()
                                       {
                                           Name = ra.AssessmentRubric.Name,
+                                          RubricID = ra.RubricID,
                                           ProgramAssessmentMappings = ra.AssessmentRubric.ProgramAssessmentMappings.Select(pam => new vmProgramAssessmentMapping()
                                           {
                                               ProgramAssessmentMappingID = pam.ProgramAssessmentMappingID,
@@ -212,6 +213,7 @@ namespace CLS_SLE.Controllers
                                                       AssessmentRubric = new vmAssessmentRubric()
                                                       {
                                                           Name = ra.AssessmentRubric.Name,
+                                                          RubricID = ra.RubricID,
                                                           ProgramAssessmentMappings = ra.AssessmentRubric.ProgramAssessmentMappings.Where(pam1 => pam1.ProgramID == programID).Select(pam => new vmProgramAssessmentMapping()
                                                           {
                                                               ProgramAssessmentMappingID = pam.ProgramAssessmentMappingID,

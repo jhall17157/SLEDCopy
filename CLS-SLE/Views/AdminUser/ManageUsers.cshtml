@@ -12,8 +12,8 @@
         .switch {
             position: relative;
             display: inline-block;
-            width: 30px;
-            height: 17px;
+            width: 50px;
+            height: 27px;
         }
 
             .switch input {
@@ -24,7 +24,7 @@
             position: absolute;
             cursor: pointer;
             top: 0;
-            left: 0;
+            left: 3px;
             right: 0;
             bottom: 0;
             background-color: #ccc;
@@ -34,10 +34,10 @@
             .slider:before {
                 position: absolute;
                 content: "";
-                height: 13px;
-                width: 13px;
-                left: 2px;
-                bottom: 2px;
+                height: 20px;
+                width: 20px;
+                left: 3px;
+                bottom: 3px;
                 background-color: white;
                 transition: .4s;
             }
@@ -54,7 +54,7 @@
 
         input[type="checkbox"]:checked + input[type="hidden"] + .slider:before,
         input[type="checkbox"]:checked + .slider:before {
-            transform: translateX(13px);
+            transform: translateX(20px);
         }
 
         .slider.round {
@@ -82,7 +82,7 @@
 
          #topRow
         {
-            border-radius: 40px 40px 0px 0px;
+            border-radius: 5px 5px 0px 0px;
             margin-left:0;
             margin-right: 0;
             padding-bottom: 10px;
@@ -120,12 +120,6 @@
     </div>
 
     <div class="col-6 float-right text-right">
-        @if (Model != null && Model.SearchTerm != null && Model.SearchTerm != "")
-        {
-                    <button class="btn btn-success col-3" type="button" name="resetSearch" formmethod="post" id="clearSearchResults">
-                        <i class="fas fa-times"> </i>
-                    </button>
-        }
 
         <span class="float-right text-right">
             <label for="SearchTerm" class="text-light">Search</label> <span>

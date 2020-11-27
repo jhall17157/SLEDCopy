@@ -78,6 +78,10 @@ else if (Model.CreatorLogin != null)
                 <td class="pl-4 py-1">Active: @outcome.IsActive</td>
                 <td class="text-right"></td>
             </tr>
+            <tr class="bg-light">
+                <td class="pl-4 py-1">TSA Outcome: @outcome.IsTSAOutcome</td>
+                <td class="text-right"></td>
+            </tr>
             @if (outcome.ModifiedByLoginID != null)
             {
                 <tr class="bg-light">

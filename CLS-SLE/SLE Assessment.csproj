@@ -212,37 +212,179 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Assessment.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AssessmentCategory.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AssessmentLevel.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AssessmentRubric.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AssessmentRubricSecurity.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Course.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CourseProgram.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CourseSubject.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CourseSubjectSecurity.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Criterion.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Department.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DepartmentSecurity.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Enrollment.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EnrollmentStatu.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ErrorMessage.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Models\ETL_StatusMapping.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FactTSA.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetCompletedCountBySectionRubric_Result.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetCourseSubjectSecurityByLogin_Result.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetSecurityByLogin_Result.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetSecurityByUserID_Result.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\InstructorAssessment.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Outcome.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PagingInfo.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Models\Permission.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Person.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Program.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProgramAssessmentMapping.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProgramDepartment.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProgramMap.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProgramSecurity.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProgramSecurityByUser.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Role.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RolePermission.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RubricAssessment.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RubricDetail.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RubricsByProgram.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\School.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SchoolSecurity.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Score.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ScoreSet.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Section.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SectionEnrollment.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SectionRubric.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Semester.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SemesterDate.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Split_Result.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StudentProgram.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StudentScore.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StudentScoreCount.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Subterm.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sysdiagram.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\User.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserRole.cs">
+      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Utility\SAML.cs" />
     <Compile Include="Utility\SLEConfigurationInfo.cs" />
     <Compile Include="ViewModels\AddCourseViewModel.cs" />
     <Compile Include="ViewModels\AddDepartmentViewModel.cs" />
-    <Compile Include="Models\Assessment.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\AssessmentCategory.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\AssessmentLevel.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
     <Compile Include="Models\AssessmentLevelPair.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\AssessmentRubric.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\AssessmentRubricSecurity.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\AssessmentSchedulingViewModel.cs">
@@ -251,172 +393,16 @@
     <Compile Include="Models\AssessmentMappingsViewModel.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Models\Course.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\CourseProgram.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\CourseSubject.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\CourseSubjectSecurity.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\Criterion.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\Department.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\DepartmentSecurity.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\Enrollment.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\EnrollmentStatu.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\ETL_StatusMapping.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\FactTSA.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\GetCompletedCountBySectionRubric_Result.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\GetCourseSubjectSecurityByLogin_Result.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\GetSecurityByLogin_Result.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\GetSecurityByUserID_Result.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\InstructorAssessment.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
     <Compile Include="Models\ManageRole.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\ManageUser.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Models\Outcome.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
     <Compile Include="Models\PasswordReset.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\PasswordResetEdit.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\Permission.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\Person.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\Program.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\ProgramAssessmentMapping.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\ProgramDepartment.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\ProgramMap.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\ProgramSecurity.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\ProgramSecurityByUser.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\Role.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\RolePermission.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\RubricAssessment.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\RubricDetail.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\RubricsByProgram.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\School.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\SchoolSecurity.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\Score.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\ScoreSet.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\Section.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\SectionEnrollment.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\SectionRubric.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\Semester.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\SemesterDate.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\SLE_TrackingModel.Context.cs">
@@ -437,54 +423,10 @@
       <DependentUpon>SLE_TrackingModel.edmx</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Models\Split_Result.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagrams_Result.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\StudentProgram.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\StudentScore.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\StudentScoreCount.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\sysdiagram.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\tmp_offering.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\tmp_studentroster.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\User.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
     <Compile Include="Models\UserChangePassword.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\UserPasswordReset.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Models\UserRole.cs">
-      <DependentUpon>SLE_TrackingModel.tt</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\UserSecurity.cs">

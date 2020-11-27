@@ -65,6 +65,19 @@
             </div>
         </div>
     </fieldset>
+    <fieldset class="form-group col-9">
+        <div class="row">
+            <legend class="col-form-label col-2 pt-0">TSA Outcome:</legend>
+            <div class="form-check form-check-inline">
+                <label class="form-check-input" id="IsTSAOutcomeTrue" for="IsTSAOutcomeTrue">True</label>
+                @Html.RadioButtonFor(Model => Model.OutcomeVM.IsTSAOutcome, "True")
+            </div>
+            <div class="form-check form-check-inline">
+                <label class="form-check-input" id="IsTSAOutcome" for="IsTSAOutcome">False</label>
+                @Html.RadioButtonFor(Model => Model.OutcomeVM.IsTSAOutcome, "False")
+            </div>
+        </div>
+    </fieldset>
     <div class="row justify-content-end col-9">
         <div class="col-2 p-0 mx-1"><button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Update</button></div>
         <div class="col-2 p-0 mx-1"><a href="@Url.Action("ViewRubric", "Rubric", new { rubricID = Model.Rubric.RubricID, assessmentID = Model.Rubric.AssessmentID })" class="btn btn-danger col-12 mx-1">Cancel</a></div>

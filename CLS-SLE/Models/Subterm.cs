@@ -12,31 +12,23 @@ namespace CLS_SLE.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Outcome
+    public partial class Subterm
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Outcome()
+        public Subterm()
         {
-            this.Criteria = new HashSet<Criterion>();
+            this.Sections = new HashSet<Section>();
         }
     
-        public short OutcomeID { get; set; }
-        public short RubricID { get; set; }
+        public byte SubtermID { get; set; }
+        public string SubtermCode { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
-        public byte SortOrder { get; set; }
-        public Nullable<decimal> CriteriaPassRate { get; set; }
-        public bool CalculateCriteriaPassRate { get; set; }
-        public bool IsActive { get; set; }
         public Nullable<System.DateTime> CreatedDateTime { get; set; }
         public Nullable<int> CreatedByLoginID { get; set; }
         public Nullable<System.DateTime> ModifiedDateTime { get; set; }
         public Nullable<int> ModifiedByLoginID { get; set; }
-        public Nullable<System.DateTime> InactiveDateTime { get; set; }
-        public bool IsTSAOutcome { get; set; }
     
-        public virtual AssessmentRubric AssessmentRubric { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Criterion> Criteria { get; set; }
+        public virtual ICollection<Section> Sections { get; set; }
     }
 }

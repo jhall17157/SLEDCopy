@@ -270,6 +270,7 @@ namespace CLS_SLE.Controllers
             //Defaulting form
             model.OutcomeVM.IsActive = true;
             model.OutcomeVM.CalculateCriteriaPassRate = true;
+            model.OutcomeVM.IsTSAOutcome = true;
             return View(model);
         }
 
@@ -372,6 +373,7 @@ namespace CLS_SLE.Controllers
                 }
                 editOutcome.CriteriaPassRate = outcomeViewModel.OutcomeVM.CriteriaPassRate / 100;
                 editOutcome.CalculateCriteriaPassRate = outcomeViewModel.OutcomeVM.CalculateCriteriaPassRate;
+                editOutcome.IsTSAOutcome = outcomeViewModel.OutcomeVM.IsTSAOutcome;
                 editOutcome.ModifiedDateTime = DateTime.Now;
                 editOutcome.ModifiedByLoginID = UserData.PersonId;
 

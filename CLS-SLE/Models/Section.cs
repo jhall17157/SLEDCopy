@@ -25,7 +25,7 @@ namespace CLS_SLE.Models
         public int CRN { get; set; }
         public short SemesterID { get; set; }
         public short CourseID { get; set; }
-        public int LeadInstructorID { get; set; }
+        public Nullable<int> LeadInstructorID { get; set; }
         public string OfferingNumber { get; set; }
         public bool IsCancelled { get; set; }
         public Nullable<System.DateTime> BeginDate { get; set; }
@@ -34,6 +34,7 @@ namespace CLS_SLE.Models
         public Nullable<int> CreatedByLoginID { get; set; }
         public Nullable<System.DateTime> ModifiedDateTime { get; set; }
         public Nullable<int> ModifiedByLoginID { get; set; }
+        public byte SubtermID { get; set; }
     
         public virtual Course Course { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -42,5 +43,6 @@ namespace CLS_SLE.Models
         public virtual Semester Semester { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SectionRubric> SectionRubrics { get; set; }
+        public virtual Subterm Subterm { get; set; }
     }
 }

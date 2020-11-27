@@ -32,10 +32,14 @@ namespace CLS_SLE.Controllers
                     semesterList.Add(semester.Name);
                 }
 
+                //List<String> subtermList = db.Subterms.Select(s => s.SubtermCode).ToList();
+
                 var model = new AddSectionViewModel()
                 {
-                    SemesterList = semesterList
-                };
+                    LeadInstructorList = leadInstructorList,
+                    SemesterList = semesterList,
+                    SubtermList = db.Subterms.Select(s => s.SubtermCode).ToList()
+            };
 
                 ViewBag.InitialCourse = db.Courses.Where(c => c.CourseID == courseID).FirstOrDefault();
                 ViewBag.CourseID = courseID;
@@ -245,6 +249,10 @@ namespace CLS_SLE.Controllers
                         sectionVM.Section.Semester = db.Semesters
                                                    .Where(s => s.Name == sectionVM.SemesterSelection)
                                                    .FirstOrDefault();
+                    }
+                    if (sectionVM.SubtermSelection != null)
+                    {
+                        sectionVM.Section.Subterm = db.Subterms.Where(s => s.SubtermCode == sectionVM.SubtermSelection).FirstOrDefault();
                     }
 
                     db.Sections.Add(sectionVM.Section);

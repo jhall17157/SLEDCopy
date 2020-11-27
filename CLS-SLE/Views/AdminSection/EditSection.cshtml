@@ -32,6 +32,9 @@
         Semester: @ViewBag.section.Semester.Name
     </div>
     <div class="form-group">
+        Subterm: @ViewBag.section.Subterm.SubtermCode
+    </div>
+    <div class="form-group">
         @Html.Label("Lead Instructor:")
         <div class="form-group input-group-append">
             @if (ViewBag.section.Person == null)
@@ -43,6 +46,12 @@
                 <input name="LeadInstructorSelection" id="LeadInstructorSelection" class="form-control" placeholder="Select Lead Instructor" value="@ViewBag.LeadInstructor"/>
             }
         </div>
+        <datalist id="leadInstructors">
+            @foreach (string leadInstructorList in Model.LeadInstructorList)
+            {
+                <option value="@leadInstructorList"></option>
+            }
+        </datalist>
     </div>
     <div class="form-group">
         @Html.Label("Begin Date:")

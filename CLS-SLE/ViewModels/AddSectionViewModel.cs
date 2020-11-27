@@ -14,5 +14,8 @@ namespace CLS_SLE.ViewModels
         public String SemesterSelection { get; set; }
         public List<String> LeadInstructorList { get; set; }
         public String LeadInstructorSelection { get; set; }
+
+        public List<String> SubtermList { get; set; }
+        public String SubtermSelection { get; set; }
     }
 }

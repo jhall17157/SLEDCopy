@@ -8,7 +8,7 @@
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = Model.Rubric.AssessmentID }, null)</li>
-	   <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.AssessmentRubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.Rubric.RubricID, assessmentID = Model.Rubric.AssessmentID }, null)</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.AssessmentRubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.Rubric.RubricID, assessmentID = Model.Rubric.AssessmentID }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">New Outcome</li>
     </ol>
 </nav>
@@ -21,13 +21,13 @@
     <div class="form-group col-9">
         @Html.Label("Outcome Name:")
         @Html.EditorFor(Model => Model.OutcomeVM.Name,
-	    new { htmlAttributes = new { @class = "form-control" } })
+        new { htmlAttributes = new { @class = "form-control" } })
         @Html.ValidationMessageFor(Model => Model.OutcomeVM.Name)
     </div>
     <div class="form-group col-9">
         @Html.Label("Outcome Description:")
         @Html.TextAreaFor(Model => Model.OutcomeVM.Description,
-	    new { @class = "form-control", rows = "6" })
+        new { @class = "form-control", rows = "6" })
         @Html.ValidationMessageFor(Model => Model.OutcomeVM.Description)
     </div>
     <fieldset class="form-group col-9">
@@ -47,7 +47,7 @@
         <div class="form-group col-9">
             @Html.Label("Pass Percentage:")
             @Html.EditorFor(Model => Model.OutcomeVM.CriteriaPassRate,
-            new { htmlAttributes = new { @class = "form-control"} })
+            new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(Model => Model.OutcomeVM.CriteriaPassRate)
         </div>
     </div>
@@ -61,6 +61,19 @@
             <div class="form-check form-check-inline">
                 <label class="form-check-input" id="CalculateCriteriaPassRate" for="CalculateCriteriaPassRate">False</label>
                 @Html.RadioButtonFor(Model => Model.OutcomeVM.CalculateCriteriaPassRate, "False")
+            </div>
+        </div>
+    </fieldset>
+    <fieldset class="form-group col-9">
+        <div class="row">
+            <legend class="col-form-label col-2 pt-0">TSA Outcome:</legend>
+            <div class="form-check form-check-inline">
+                <label class="form-check-input" id="IsTSAOutcomeTrue" for="IsTSAOutcomeTrue">True</label>
+                @Html.RadioButtonFor(Model => Model.OutcomeVM.IsTSAOutcome, "True")
+            </div>
+            <div class="form-check form-check-inline">
+                <label class="form-check-input" id="IsTSAOutcome" for="IsTSAOutcome">False</label>
+                @Html.RadioButtonFor(Model => Model.OutcomeVM.IsTSAOutcome, "False")
             </div>
         </div>
     </fieldset>

@@ -17,7 +17,7 @@ using System.Web.Helpers;
 namespace CLS_SLE.Controllers
 {
     [Authorize(Roles = "Administrator")]
-    public class AdminDepartmentController : Controller
+    public class AdminDepartmentController : SLEControllerBase
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
         private Logger logger = LogManager.GetCurrentClassLogger();
@@ -159,7 +159,7 @@ namespace CLS_SLE.Controllers
                         //department.School = new SelectList(db.Schools.Select(s => new { Id = s.SchoolID, Name = s.Name }), "ID", "Name", "[Select Name]");
                         department.IsActive = departmentVM.Department.IsActive;
                         department.CreatedDateTime = DateTime.Now;
-                        department.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                        department.CreatedByLoginID = UserData.PersonId;
 
                         db.Departments.Add(department);
                         db.SaveChanges();
@@ -199,7 +199,7 @@ namespace CLS_SLE.Controllers
                 editDepartment.Number = departmentVM.Department.Number;
                 editDepartment.IsActive = departmentVM.Department.IsActive;            
                 editDepartment.ModifiedDateTime = DateTime.Now;
-                editDepartment.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                editDepartment.ModifiedByLoginID = UserData.PersonId;
 
                 if (departmentVM.SchoolSelection!= null)
                 {

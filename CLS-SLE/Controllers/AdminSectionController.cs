@@ -12,7 +12,7 @@ using System.Web.Mvc;
 namespace CLS_SLE.Controllers
 {
     [Authorize(Roles = "Administrator")]
-    public class AdminSectionController : Controller
+    public class AdminSectionController : SLEControllerBase
     {
         //private readonly int PageSize = 20;
 
@@ -271,7 +271,7 @@ namespace CLS_SLE.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    sectionVM.Section.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                    sectionVM.Section.CreatedByLoginID = UserData.PersonId;
                     sectionVM.Section.CreatedDateTime = DateTime.Now;
                     sectionVM.Section.Course = db.Courses
                                                 .Where(c => c.CourseName == sectionVM.Section.Course.CourseName)
@@ -397,7 +397,7 @@ namespace CLS_SLE.Controllers
                     // Adding modified on date
                     editSection.ModifiedDateTime = DateTime.Now;
                     // Adding modified by 
-                    editSection.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                    editSection.ModifiedByLoginID = UserData.PersonId;
                     // Modifying the program in the database
                     db.SaveChanges();
                 }

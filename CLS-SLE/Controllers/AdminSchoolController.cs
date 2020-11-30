@@ -11,7 +11,7 @@ using System.Web.Mvc;
 namespace CLS_SLE.Controllers
 {
     [Authorize(Roles = "Administrator")]
-    public class AdminSchoolController : Controller
+    public class AdminSchoolController : SLEControllerBase
     {
         SLE_TrackingEntities db = new SLE_TrackingEntities();
         private Logger logger = LogManager.GetCurrentClassLogger();
@@ -67,7 +67,7 @@ namespace CLS_SLE.Controllers
                     //Adding created on date
                     schoolVM.School.CreatedDateTime = DateTime.Now;
                     //Adding created by
-                    schoolVM.School.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                    schoolVM.School.CreatedByLoginID = UserData.PersonId;
                     //Adding the new school to the database
                     db.Schools.Add(schoolVM.School);
                     db.SaveChanges();
@@ -152,7 +152,7 @@ namespace CLS_SLE.Controllers
                 //Adding modifed on date
                 editSchool.ModifiedDateTime = DateTime.Now;
                 //Adding modifed by
-                editSchool.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                editSchool.ModifiedByLoginID = UserData.PersonId;
                 //Modifying the school in the database
                 db.SaveChanges();
             }

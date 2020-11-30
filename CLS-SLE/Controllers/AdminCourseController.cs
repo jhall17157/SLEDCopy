@@ -12,7 +12,7 @@ namespace CLS_SLE.Controllers
 {
     [Authorize(Roles = "Administrator")]
     // class AdminController is extending the properties of the Controller class from System.Web.Mvc
-    public class AdminCourseController : Controller
+    public class AdminCourseController : SLEControllerBase
     {
         // a private int that can only be read which indicates the amount of results per page on the AdminCourse/Courses view
         private readonly int PageSize = 20;
@@ -330,9 +330,8 @@ namespace CLS_SLE.Controllers
                     //TODO add created by
                     if(Session["personID"]!= null)
                     {
-                        courseVM.Course.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                        courseVM.Course.CreatedByLoginID = UserData.PersonId;
                     }
-                    //courseVM.Course.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
                     //Adding the new course to the database
                     db.Courses.Add(courseVM.Course);
                     db.SaveChanges();
@@ -366,7 +365,7 @@ namespace CLS_SLE.Controllers
                 editCourse.IsActive = courseVM.Course.IsActive;
                 editCourse.IsERPCourse = courseVM.Course.IsERPCourse;
                 editCourse.ModifiedDateTime = DateTime.Now;
-                editCourse.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                editCourse.ModifiedByLoginID = UserData.PersonId;
 
                 if (courseVM.DepartmentSelection != null)
                 {

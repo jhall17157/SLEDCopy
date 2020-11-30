@@ -11,7 +11,7 @@ using System.Web.Mvc;
 namespace CLS_SLE.Controllers
 {
     [Authorize(Roles = "Administrator")]
-    public class AdminProgramController : Controller
+    public class AdminProgramController : SLEControllerBase
     {
         private readonly int PageSize = 20;
 
@@ -119,7 +119,7 @@ namespace CLS_SLE.Controllers
                     // Adding created on date
                     programVM.Program.CreatedDateTime = DateTime.Now;
                     // Adding created by
-                    //programVM.Program.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                    programVM.Program.CreatedByLoginID = UserData.PersonId;
                     // Adding the new program to the database
                     db.Programs.Add(programVM.Program);
                     db.SaveChanges();
@@ -136,7 +136,7 @@ namespace CLS_SLE.Controllers
                             // Adding created on date
                             pd.CreatedDateTime = DateTime.Now;
                             // Adding created by
-                            //pd.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                            pd.CreatedByLoginID = UserData.PersonId;
                             db.ProgramDepartments.Add(pd);
                             db.SaveChanges();
                         }
@@ -278,7 +278,7 @@ namespace CLS_SLE.Controllers
                 // Adding modified on date
                 editProgram.ModifiedDateTime = DateTime.Now;
                 // Adding modified by 
-                //editProgram.ModifiedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                editProgram.ModifiedByLoginID = UserData.PersonId;
 
                 // Add new ProgramDepartments
                 foreach (string departmentName in toAdd)
@@ -292,7 +292,7 @@ namespace CLS_SLE.Controllers
                     // Adding created on date
                     newPD.CreatedDateTime = DateTime.Now;
                     // Adding created by
-                    //newPD.CreatedByLoginID = Convert.ToInt32(Session["personID"].ToString());
+                    newPD.CreatedByLoginID = UserData.PersonId;
                     db.ProgramDepartments.Add(newPD);
                 }
                

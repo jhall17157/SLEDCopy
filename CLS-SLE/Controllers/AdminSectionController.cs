@@ -23,6 +23,46 @@ namespace CLS_SLE.Controllers
         {
             try
             {
+                List<String> leadInstructorList = new List<String>();
+                var instructors = db.Users.Where(r => r.UserRoles.Any(ur => ur.Role.Name == "Faculty"));
+                foreach(var instructor in instructors)
+                {
+                    leadInstructorList.Add(instructor.Person.IdNumber + " - " + instructor.Person.FirstName + " " + instructor.Person.LastName);
+                };
+
+                //List<String> leadInstructorList = new List<String>();
+                //var users = db.Users.ToList();
+                //var roles = db.Roles.ToList();
+                //var userroles = db.UserRoles.ToList();
+                //var query = from ur in userroles
+
+                //            join r in roles
+                //            on ur.RoleID equals r.RoleID into urr
+                //            from urrResult in (from r in urr
+                //                               where r.Name == "Faculty"
+                //                               select r).DefaultIfEmpty()
+
+                //            join u in users
+                //            on ur.PersonID equals u.PersonID into uru
+                //            from uruResult in uru.DefaultIfEmpty()
+
+                //            select new
+                //            {
+                //                InstructorName = uruResult != null && uruResult.Person != null ?
+                //                                uruResult.Person.FirstName + " " + uruResult.Person.LastName
+                //                                : null,
+                //                InstructorID = uruResult != null && uruResult.Person != null ?
+                //                                uruResult.Person.IdNumber : null,
+                //                PersonRole = urrResult != null ? urrResult.Name : null
+                //            };
+                //foreach (var result in query)
+                //{
+                //    if (result.PersonRole != null && result.InstructorName != null)
+                //    {
+                //        leadInstructorList.Add(string.Concat(result.InstructorID, " - ", result.InstructorName));
+
+                //    }
+                //}
 
                 List<String> semesterList = new List<String>();
                 List<Semester> orderedSemesters = new List<Semester>();

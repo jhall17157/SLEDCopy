@@ -364,7 +364,7 @@
             $("#AddSchoolButton").on("click", function () {
                 //console.log("Start Process");
                 getRelatedSchoolsDeptartmentsAndPrograms();
-                let DisplaySchools = allSchools;
+                let DisplaySchools = [...allSchools];
                 if (relatedSchools != null && relatedSchools.length > 0) {
                     for (i = 0; i < relatedSchools.length; i++) {
                         let index = DisplaySchools.findIndex(s => s.SchoolID === relatedSchools[i].SchoolID);
@@ -373,7 +373,7 @@
                         }
                     }
                 }
-                //console.log(DisplaySchools);
+
                 $("#SchoolModalOptions").html("");
                 for (i = 0; i < DisplaySchools.length; i++) {
                     //console.log(i);
@@ -385,7 +385,7 @@
             $("#AddProgramButton").on("click", function () {
                 //console.log("Start Process");
                 getRelatedSchoolsDeptartmentsAndPrograms();
-                let DisplayPrograms = allPrograms;
+                let DisplayPrograms = [...allPrograms];
                 if (relatedPrograms != null && relatedPrograms.length > 0) {
                     for (i = 0; i < relatedPrograms.length; i++) {
                         let index = DisplayPrograms.findIndex(s => s.ProgramID === relatedPrograms[i].ProgramID);
@@ -406,7 +406,7 @@
             $("#AddDepartmentButton").on("click", function () {
                 //console.log("Start Process");
                 getRelatedSchoolsDeptartmentsAndPrograms();
-                let DisplayDepartments = allDepartments;
+                let DisplayDepartments = [...allDepartments];
                 if (relatedDepartments != null && relatedDepartments.length > 0) {
                     for (i = 0; i < relatedDepartments.length; i++) {
                         let index = DisplayDepartments.findIndex(s => s.DepartmentID === relatedDepartments[i].DepartmentID);

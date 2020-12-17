@@ -74,6 +74,15 @@ namespace CLS_SLE.Controllers
             Model.CreatorLogin = null;
             Model.ModifierLogin = null;
 
+            //get rubrics under the same assesment
+            List<RubricSearchModel> resultRubrics = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID).Select(a => new RubricSearchModel
+            {
+                name = a.Name,
+                rubricID = a.RubricID
+            }).ToList();
+
+            ViewBag.rubricsInAssessments = resultRubrics;
+
             //if (Rubric.CreatedByLoginID != null)
             //{
             //	Model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == Rubric.CreatedByLoginID).FirstOrDefault().Login;
@@ -93,8 +102,9 @@ namespace CLS_SLE.Controllers
 
             ViewBag.Assessments = db.Assessments.Select(a => a.Name).ToList();
             ViewBag.InitialAssessment = db.Assessments.Where(a => a.AssessmentID == assessmentID).FirstOrDefault().Name;
+            ViewBag.ScoreSets = db.ScoreSets.ToList();
             ViewBag.AssessmentID = assessmentID;
-
+            
             return View();
         }
 
@@ -162,6 +172,7 @@ namespace CLS_SLE.Controllers
 
             ViewBag.RelatedAssessments = relatedAssessments;
             ViewBag.Assessments = db.Assessments.Select(a => a.Name).ToList();
+            ViewBag.ScoreSets = db.ScoreSets.ToList();
 
             var model = new UpdateRubric() { RubricAssessment = rubricAssessment, AssessmentRubric = assessmentRubric };
 
@@ -238,6 +249,7 @@ namespace CLS_SLE.Controllers
                 editRubric.IsActive = updateRubric.AssessmentRubric.IsActive;
                 editRubric.ModifiedDateTime = DateTime.Now;
                 editRubric.ModifiedByLoginID = UserData.PersonId;
+                editRubric.ScoreSetID = updateRubric.AssessmentRubric.ScoreSetID;
 
                 db.SaveChanges();
 
@@ -255,7 +267,10 @@ namespace CLS_SLE.Controllers
         {
             RubricAssessment rubric = db.RubricAssessments.Where(r => r.RubricID == rubricID && r.AssessmentID == assessmentID).FirstOrDefault();
             OutcomeViewModel model = new OutcomeViewModel() { OutcomeVM = new Outcome() { RubricID = rubricID }, Rubric = rubric };
-
+            //Defaulting form
+            model.OutcomeVM.IsActive = true;
+            model.OutcomeVM.CalculateCriteriaPassRate = true;
+            model.OutcomeVM.IsTSAOutcome = true;
             return View(model);
         }
 
@@ -274,6 +289,7 @@ namespace CLS_SLE.Controllers
 
                 AssessmentRubric rubric = db.AssessmentRubrics.Where(a => a.RubricID == rubricID).FirstOrDefault();
                 outcomeViewModel.OutcomeVM.SortOrder = maxSortOrder;
+                outcomeViewModel.OutcomeVM.CriteriaPassRate = outcomeViewModel.OutcomeVM.CriteriaPassRate / 100;
                 outcomeViewModel.OutcomeVM.CreatedDateTime = DateTime.Now;
                 outcomeViewModel.OutcomeVM.CreatedByLoginID = UserData.PersonId;
                 rubric.Outcomes.Add(outcomeViewModel.OutcomeVM);
@@ -286,7 +302,7 @@ namespace CLS_SLE.Controllers
             {
                 //logger.Error("Failed to save assessment, redirecting to sign in page.");
                 return Content("<html><b>Message:</b><br>" + e.Message + "<br><b>Inner Exception:</b><br>" + e.InnerException + "<br><b>Stack Trace:</b><br>" + e.StackTrace + "</html>");
-                return RedirectToAction(actionName: "Signin", controllerName: "User");
+               // return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
         }
 
@@ -300,6 +316,7 @@ namespace CLS_SLE.Controllers
 
             return View(model);
         }
+
         /*
 
         public ActionResult EditOutcome(int? outcomeID, int? rubricID)
@@ -344,17 +361,30 @@ namespace CLS_SLE.Controllers
         {
             try
             {
-                Outcome editOutcome = db.Outcomes.Where(o => o.OutcomeID == outcomeViewModel.OutcomeVM.OutcomeID).FirstOrDefault();
+                Outcome outcome = db.Outcomes.Where(o => o.OutcomeID == outcomeViewModel.OutcomeVM.OutcomeID).FirstOrDefault();
 
-                editOutcome.Name = outcomeViewModel.OutcomeVM.Name;
-                editOutcome.Description = outcomeViewModel.OutcomeVM.Description;
-                editOutcome.IsActive = outcomeViewModel.OutcomeVM.IsActive;
-                editOutcome.CriteriaPassRate = outcomeViewModel.OutcomeVM.CriteriaPassRate / 100;
-                editOutcome.CalculateCriteriaPassRate = outcomeViewModel.OutcomeVM.CalculateCriteriaPassRate;
-                editOutcome.ModifiedDateTime = DateTime.Now;
-                editOutcome.ModifiedByLoginID = UserData.PersonId;
+                outcome.Name = outcomeViewModel.OutcomeVM.Name;
+                outcome.Description = outcomeViewModel.OutcomeVM.Description;
+                //check if the IsActive field changed status
+                if (outcome.IsActive != outcomeViewModel.OutcomeVM.IsActive)
+                {
+                    //outcome is no longer active
+                    if(!outcomeViewModel.OutcomeVM.IsActive)
+                    {
+                        outcome.InactiveDateTime = DateTime.Now;
+                    }
+                    else //outcome was inactive, now active
+                    {
+                        outcome.InactiveDateTime = null;
+                    }
+                }
+                outcome.IsActive = outcomeViewModel.OutcomeVM.IsActive;
+                outcome.CriteriaPassRate = outcomeViewModel.OutcomeVM.CriteriaPassRate / 100;
+                outcome.CalculateCriteriaPassRate = outcomeViewModel.OutcomeVM.CalculateCriteriaPassRate;
+                outcome.IsTSAOutcome = outcomeViewModel.OutcomeVM.IsTSAOutcome;
+                outcome.ModifiedDateTime = DateTime.Now;
+                outcome.ModifiedByLoginID = UserData.PersonId;
 
-                //db.Entry(editOutcome).State = EntityState.Modified;
                 db.SaveChanges();
 
                 return RedirectToAction("ViewRubric", "Rubric", new { rubricID = outcomeViewModel.Rubric.RubricID, assessmentID = outcomeViewModel.Rubric.AssessmentID });
@@ -366,13 +396,37 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        public Boolean MoveOutcome(int rubricID, int assessmentID, int outcomeID, int currentID)
+        {
+            //must be moving to a valid rubric
+            var validRubric = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID).Where(r => r.RubricID == rubricID).Count();
+
+            //must get the object to update
+            var outcome = db.Outcomes.Where(o => o.RubricID == currentID && o.OutcomeID == outcomeID).FirstOrDefault();
+
+            //get the max sort order of outcomes for the new rubric and increment it
+            int sortOrder = db.Outcomes.Where(o => o.RubricID == rubricID).Max(o => o.SortOrder);
+            sortOrder++;
+
+            if (outcome != null && validRubric > 0)
+            {
+                outcome.SortOrder = Convert.ToByte(sortOrder);
+                outcome.RubricID = Convert.ToInt16(rubricID);
+                outcome.ModifiedByLoginID = UserData.PersonId;
+                outcome.ModifiedDateTime = DateTime.Now;
+                db.SaveChanges();
+                return true;
+            }
+            else return false;
+        }
+
         public ActionResult AddCriterion(short outcomeID, short assessmentID)
         {
             Criterion criterion = new Criterion { OutcomeID = outcomeID };
             Outcome outcome = db.Outcomes.Where(o => o.OutcomeID == outcomeID).FirstOrDefault();
             RubricAssessment rubric = db.RubricAssessments.Where(r => r.RubricID == outcome.RubricID && r.AssessmentID == assessmentID).FirstOrDefault();
             var model = new CriterionViewModel() { Criterion = criterion, Outcome = outcome, Rubric = rubric };
-
+            model.Criterion.IsActive = true;
             return View(model);
         }
 
@@ -390,14 +444,12 @@ namespace CLS_SLE.Controllers
                 }
                 maxSortOrder++;
 
-                //db.Criteria.Load();
                 criterion.SortOrder = maxSortOrder;
                 criterion.CreatedDateTime = DateTime.Now;
                 criterion.CreatedByLoginID = UserData.PersonId;
                 outcome.Criteria.Add(criterion);
                 db.Criteria.Add(criterion);
 
-                //db.Entry(addCriteria).State = EntityState.Added;
                 db.SaveChanges();
 
                 return RedirectToAction("ViewRubric", "Rubric", new { rubricID = criterionViewModel.Rubric.RubricID, assessmentID = criterionViewModel.Rubric.AssessmentID });
@@ -427,6 +479,19 @@ namespace CLS_SLE.Controllers
                 //db.Criteria.Load();
                 criterion.Name = criterionViewModel.Criterion.Name;
                 criterion.ExampleText = criterionViewModel.Criterion.ExampleText;
+                //if the active status has changed...
+                if (criterion.IsActive !=  criterionViewModel.Criterion.IsActive)
+                {
+                    //criterion is no longer active, set the inactive date time
+                    if (!criterionViewModel.Criterion.IsActive)
+                    {
+                        criterion.InactiveDateTime = DateTime.Now;
+                    }
+                    else // was inactive, now active
+                    {
+                        criterion.InactiveDateTime = null;
+                    }
+                }
                 criterion.IsActive = criterionViewModel.Criterion.IsActive;
                 criterion.ModifiedDateTime = DateTime.Now;
                 criterion.ModifiedByLoginID = UserData.PersonId;

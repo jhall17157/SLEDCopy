@@ -112,13 +112,9 @@ namespace CLS_SLE.Controllers
 
                 logger.Info("Assessment loaded for student " + student.FirstName + " by " + instructor.Login + " in assesssment with rubricID " + rubricID);
                 var rubric = db.InstructorAssessments.FirstOrDefault(n => n.RubricID == instructor.RubricID && n.SectionID == instructor.SectionID);
-
                 var outcomes = db.Outcomes.Where(c => c.RubricID == instructor.RubricID && c.IsActive == true);
-
                 var criteria = db.RubricDetails.Where(c => c.RubricID == instructor.RubricID);
-
-                var numberOfSelectors = db.Scores.Where(n => n.ScoreSetID == ScoreSet.ScoreSetID);//db.ScoreTypes.Where(n => n.RubricID == instructor.RubricID);
-
+                var numberOfSelectors = db.Scores.Where(n => n.ScoreSetID == ScoreSet.ScoreSetID && n.IsActive == true).OrderBy(n => n.SortOrder);
                 var studentScores = db.StudentScores.Where(s => s.EnrollmentID == student.EnrollmentID);
 
                 dynamic mymodel = new ExpandoObject();
@@ -128,6 +124,7 @@ namespace CLS_SLE.Controllers
                 mymodel.Outcomes = outcomes.ToList();
                 mymodel.Criteria = criteria.ToList();
                 mymodel.StudentScores = studentScores.ToList();
+                mymodel.ScoreSetID = ScoreSet.ScoreSetID;
 
                 return View(mymodel);
             }
@@ -146,27 +143,34 @@ namespace CLS_SLE.Controllers
             int enrollmentID = Convert.ToInt32(Session["enrollmentID"]);
             for (var t = 1; t < fc.Count - 1; t++)
             {
-                Int16 criteriaID = Convert.ToInt16(outcomeIDs[t]);
-                Int16 scoreID = Convert.ToInt16(fc.GetValue(criteriaID.ToString()).AttemptedValue);
-
-                var checkIfExists = db.StudentScores.Where(c => c.EnrollmentID == enrollmentID && c.CriteriaID == criteriaID).FirstOrDefault();
-                if (checkIfExists != null)
+                try
                 {
-                    checkIfExists.ScoreID = scoreID;
-                }
-                else
-                {
-                    StudentScore score = new StudentScore()
+                    Int16 criteriaID = Convert.ToInt16(outcomeIDs[t]);
+                    Int16 scoreID = Convert.ToInt16(fc.GetValue(criteriaID.ToString()).AttemptedValue);
+                    var checkIfExists = db.StudentScores.Where(c => c.EnrollmentID == enrollmentID && c.CriteriaID == criteriaID).FirstOrDefault();
+                    if (checkIfExists != null)
                     {
-                        EnrollmentID = Convert.ToInt32(Session["enrollmentID"]),
-                        CriteriaID = criteriaID,
-                        ScoreID = Convert.ToSByte(scoreID),
-                        AssessedByID = UserData.PersonId,
-                        DateTimeAssessed = DateTime.Now,
-                    };
-                    db.StudentScores.Add(score);
+                        checkIfExists.ScoreID = scoreID;
+                    }
+                    else
+                    {
+                        StudentScore score = new StudentScore()
+                        {
+                            EnrollmentID = Convert.ToInt32(Session["enrollmentID"]),
+                            CriteriaID = criteriaID,
+                            ScoreID = Convert.ToSByte(scoreID),
+                            AssessedByID = UserData.PersonId,
+                            DateTimeAssessed = DateTime.Now,
+                        };
+                        db.StudentScores.Add(score);
+                    }
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
+                catch (Exception e)
+                {
+                    //do nothing - if the user hits the next button too fast, it fills in additional items into the array that are not scores
+                    //kind of a hack fix but it works
+                }
             }
             var submitType = outcomeIDs[outcomeIDs.Count() - 1];
 
@@ -189,6 +193,16 @@ namespace CLS_SLE.Controllers
             else if (submitType.Equals("studentListBreadcrum"))
             {
                 logger.Info("Submission recieved and saved, redirecting to student list");
+                return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"], sectionID = Session["sectionID"] });
+            }
+            else if (submitType.Equals("here"))
+            {
+                logger.Info("Submission recieved and saved, returning to here");
+                return Redirect(Request.UrlReferrer.PathAndQuery);
+            }
+            else if (submitType.Equals("backToTop"))
+            {
+                logger.Info("Submission recieved and saved, returning to the list of students");
                 return RedirectToAction(actionName: "StudentList", controllerName: "InstructorAssessments", routeValues: new { rubricID = Session["rubricID"], sectionID = Session["sectionID"] });
             }
             logger.Info("Submission recieved and saved, redirecting to assessment student list");

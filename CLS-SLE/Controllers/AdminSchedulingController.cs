@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class AdminSchedulingController : SLEControllerBase
     {
 
@@ -29,15 +30,14 @@ namespace CLS_SLE.Controllers
             }
             return View(schedulingViewModel);
         }
-
-        //Called when user selects a semester 
+        
+    //Called when User Selects a Semester or Initiates a Search
         [HttpPost]
         public ActionResult Index(SchedulingViewModel viewModel, int page = 1)
         {
-
-
             SchedulingViewModel schedulingViewModel = new SchedulingViewModel();
             schedulingViewModel.Sections = Enumerable.Empty<SelectListItem>().ToList();
+            string focusArea = null;
 
             //Defining Rubrics
             schedulingViewModel.AssesmentRubrics = (from r in db.AssessmentRubrics
@@ -56,28 +56,53 @@ namespace CLS_SLE.Controllers
             schedulingViewModel.Semesters = GetSemesters(true);//53ms
 
             //get course ids for all sections in selected semester that have assessments scheduled and returns as a list 
+            // exclude cancelled courses
             List<short> courseIDs = db.Sections
-                .Where(c => c.SectionRubrics.Any() && c.SemesterID == schedulingViewModel.Semester.SemesterID)
+                .Where(c => c.SectionRubrics.Any() && c.SemesterID == schedulingViewModel.Semester.SemesterID && c.IsCancelled == false)
                 .Select(i => i.CourseID).Distinct().ToList();
 
             //schedulingViewModel.Semester.Sections.Where(c => c.SectionRubrics.Any()).Select(i => i.CourseID).Distinct().ToList(); //23ms
 
             //handles pagination
 
-            schedulingViewModel.PagingInfo = new PagingInfo
+            schedulingViewModel.PagingInfo = new ViewModels.PagingInfo
             {
                 CurrentPage = page,
                 ItemsPerPage = pageSize,
                 TotalItems = courseIDs.Count()
 
             };
+            //
             //get all courses whose courseIDs exist in provided list of courseids
             var courseResult = db.Courses
                 .Where(c => courseIDs.Contains(c.CourseID));
 
-            if (viewModel.CourseID != null && viewModel.CourseID != -1)//13 ms
+            if (viewModel.searchTerm != null && !viewModel.searchTerm.Equals(""))//13 ms
             {
-                courseResult = courseResult.Where(c => c.CourseID == viewModel.CourseID);
+                int searchTermCRN = -1;
+                bool searchTermIsCRN = false;
+                if(viewModel.searchTerm.Length >=4 && viewModel.searchTerm.Length <=5)
+                {
+                    searchTermIsCRN = int.TryParse(viewModel.searchTerm, out searchTermCRN);
+                }
+                if(searchTermIsCRN)
+                {
+                    courseResult = courseResult.Where(c => c.Sections.Where(s => s.CRN.ToString().Contains(viewModel.searchTerm) && s.SemesterID == schedulingViewModel.SemesterID).Any());
+                    if(courseResult.Any() && courseResult.Count() == 1)
+                    {
+                        focusArea = searchTermCRN.ToString();
+                        viewModel.FocusIDCRN = focusArea;
+                        ViewBag.FocusIDCRN = focusArea;
+                        viewModel.FocusIDCourse =  courseResult.FirstOrDefault().Number;
+                        ViewBag.FocusIDCourse = courseResult.FirstOrDefault().Number;
+                    }
+                }
+                else
+                {
+                    courseResult = courseResult.Where(c => (c.CourseName.Contains(viewModel.searchTerm) || c.Number.ToString().Contains(viewModel.searchTerm)));
+                }
+                //courseResult = courseResult.Where(c => ( c.CourseName.Contains(viewModel.searchTerm)||c.Number.ToString().Contains(viewModel.searchTerm)||c.Sections.Where(s => s.CRN.ToString().Contains(viewModel.searchTerm) && s.SemesterID == schedulingViewModel.SemesterID).Any()));
+
             }
             schedulingViewModel.Courses = courseResult.OrderBy(c => c.Number).ToList();
             schedulingViewModel.CourseSelectList = new List<SelectListItem>();//60 ms
@@ -88,9 +113,9 @@ namespace CLS_SLE.Controllers
 
 
             schedulingViewModel.CourseForAddEntry = (from c in db.Courses
-                     where c.Sections.Where(y => y.SemesterID == schedulingViewModel.SemesterID).Any()
-                     orderby c.Number
-                     select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() }).Distinct().ToList();
+                                                     where c.Sections.Where(y => y.SemesterID == schedulingViewModel.SemesterID && y.IsCancelled == false).Any()
+                                                     orderby c.Number
+                                                     select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() }).Distinct().ToList();
 
             //foreach (Course course in schedulingViewModel.Courses)
             //{
@@ -261,6 +286,9 @@ namespace CLS_SLE.Controllers
                     RubricID = (short)viewModel.RubricID,
                     StartDate = viewModel.StartDate,
                     EndDate = viewModel.EndDate,
+                    CreatedByLoginID = UserData.PersonId,
+                    CreatedDateTime = DateTime.Now
+            
 
                 };
                 try
@@ -393,6 +421,8 @@ namespace CLS_SLE.Controllers
                 {
                     record.StartDate = svm.StartDate;
                     record.EndDate = svm.EndDate;
+                    record.ModifiedByLoginID = UserData.PersonId;
+                    record.ModifiedDateTime = DateTime.Now;
                     db.SaveChanges();
                 }
                 else
@@ -403,6 +433,32 @@ namespace CLS_SLE.Controllers
 
             return RedirectToAction("Index", "AdminScheduling");
         }
+
+        public JsonResult SaveDateChange(int SectionRubricID, DateTime beginDate, DateTime endDate)
+        {
+            SectionRubric sectionRubric = db.SectionRubrics.Where(sr => sr.SectionRubricID == SectionRubricID).FirstOrDefault();
+            try
+            {
+                if (sectionRubric != null)
+                {
+                    sectionRubric.StartDate = beginDate;
+                    sectionRubric.EndDate = endDate;
+                    sectionRubric.ModifiedByLoginID = UserData.PersonId;
+                    sectionRubric.ModifiedDateTime = DateTime.Now;
+                    db.SaveChanges();
+                    return new JsonResult { Data = SectionRubricID, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch(Exception e)
+            {
+                return new JsonResult { Data = e, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
+        }
+
     }
 }
 

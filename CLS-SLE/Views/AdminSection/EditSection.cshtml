@@ -1,0 +1,114 @@
+﻿@using CLS_SLE.Models
+@model CLS_SLE.ViewModels.UpdateSectionViewModel
+@{
+    /**/
+
+    /**/
+
+    ViewBag.Title = "EditSection";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs & Courses", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Courses", "Courses", "AdminCourse", new { page = 1 }, null)</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)(ViewBag.sectionCourse), "ViewCourse", "AdminCourse", new { courseID = ViewBag.section.CourseID }, null)</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)(ViewBag.CRN), "ViewSection", "AdminSection", new { sectionID = ViewBag.section.SectionID }, null)</li>
+        <li class="breadcrumb-item active" aria-current="page">Edit</li>
+    </ol>
+</nav>
+<h1>Edit Section</h1>
+<br />
+@using (Html.BeginForm("UpdateSection", "AdminSection", new { sectionID = ViewBag.section.SectionID }, FormMethod.Post))
+{
+    <div class="form-group">
+        CRN: @ViewBag.section.CRN
+    </div>
+    <div class="form-group">
+        Course: @ViewBag.section.Course.CourseName
+    </div>
+    <div class="form-group">
+        Semester: @ViewBag.section.Semester.Name
+    </div>
+    <div class="form-group">
+        Subterm: @ViewBag.section.Subterm.Name
+    </div>
+    <div class="form-group">
+        @Html.Label("Lead Instructor:")
+        <div class="form-group input-group-append">
+            @if (ViewBag.section.Person == null)
+            {
+                <input name="LeadInstructorSelection" id="LeadInstructorSelection" class="form-control" placeholder="Select Lead Instructor" />
+            }
+            else
+            {
+                <input name="LeadInstructorSelection" id="LeadInstructorSelection" class="form-control" placeholder="Select Lead Instructor" value="@ViewBag.LeadInstructor"/>
+            }
+        </div>
+        <datalist id="leadInstructors">
+            @foreach (string leadInstructorList in Model.LeadInstructorList)
+            {
+                <option value="@leadInstructorList"></option>
+            }
+        </datalist>
+    </div>
+    <div class="form-group">
+        @Html.Label("Begin Date:")
+        @Html.EditorFor(Model => Model.Section.BeginDate,
+       new { htmlAttributes = new { type = "date", @class = "form-control", Value = ViewBag.BeginDate } })
+        @Html.ValidationMessageFor(model => model.Section.BeginDate)
+    </div>
+    <div class="form-group">
+        @Html.Label("End Date:")
+        @Html.EditorFor(Model => Model.Section.EndDate,
+       new { htmlAttributes = new { type = "date", @class = "form-control", Value = ViewBag.EndDate } })
+        @Html.ValidationMessageFor(model => model.Section.EndDate)
+    </div>
+    <div class="form-group">
+        <div class="row">
+            @Html.Label("Is Cancelled:", htmlAttributes: new { @class = "col-3" })
+            <div class="col-sm-1">
+                @Html.RadioButtonFor(Model => Model.IsCancelled, true)
+                @Html.Label("Yes")
+            </div>
+            <div class="col-sm-8">
+                @Html.RadioButtonFor(Model => Model.IsCancelled, false)
+                @Html.Label("No")
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-end col-9">
+        <div class="form-group col-2 p-0 mx-1"><input type="submit" class="btn btn-primary col-12 mx-1" value="Submit" /></div>
+        <div class="col-2 p-0 mx-1"><a href="/AdminSection/ViewSection?sectionID=@ViewBag.section.SectionID"><button type="button" class="btn btn-danger col-12 mx-1">Cancel</button></a></div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $("#LeadInstructorSelection").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("LeadInstructorAutoComplete","AdminSection")',
+                    dataType: "json",
+                    data: {
+                        search: $("#LeadInstructorSelection").val() },
+                        appendTo: "#LeadInstructorSelection",
+                        success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: "" + item.id + " - " + item.name , value: "" + item.id + " - " + item.name
+                                //label: "" + item.name + " - " + item.id , value: item.idNumber
+                            };
+                        }))
+                    },
+                    error: function (xhr, status, error) { alert(error)/*alert("Error")*/; }
+                });
+            },
+            select: function (e, ui) {
+            }
+        });
+    </script>
+}

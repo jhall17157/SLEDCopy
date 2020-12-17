@@ -1,0 +1,101 @@
+﻿@using CLS_SLE.Models;
+@model CLS_SLE.ViewModels.CreateRoleViewModel
+@{
+    ViewBag.Title = "Create Role";
+
+}
+
+@section Styles
+{
+    <style>
+        #RoleAttributesSection {
+            padding-left: 0px;
+            margin-left: 0px;
+            margin-bottom: 20px;
+        }
+
+        .input-lable {
+            padding-left: 0px;
+            margin-left: 0px;
+        }
+
+        .input-field {
+            padding-left: 0px;
+            margin-left: 0px;
+        }
+
+        #CreateButton {
+            margin-left: 0px;
+            margin-top: 5px;
+        }
+
+    </style>
+
+
+
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Manage Roles", "ManageRoles", "RoleAdmin")</li>
+        <li class="breadcrumb-item active" aria-current="page">Create Role</li>
+    </ol>
+</nav>
+<h1>Create Role</h1>
+<br />
+
+<div id="RoleAttributesSection" class="container align-content-start container-fluid">
+    @using (Html.BeginForm("SubmitRoleCreation", "RoleAdmin", FormMethod.Post))
+    {
+        <div class="col-3 input-lable">
+            @Html.Label("Name: ")
+        </div>
+
+        <div class="col-12 input-field">
+            @Html.TextBoxFor(model => model.role.Name, new { @class = "form-control", id = "RoleName" })
+        </div>
+        <br />
+        <div class="col-3 input-lable">
+            @Html.Label("Description: ")
+        </div>
+
+        <div class="col-12 input-field">
+            @Html.TextAreaFor(model => model.role.Description, new { @class = "form-control", id = "RoleDesc" })
+        </div>
+
+        <input type="submit" name="submit" id="CreateButton" class="btn btn-primary" value="Create" />
+    }
+
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap-select")
+    <script type="text/javascript">
+        $(function () {
+            var roleId = @(Model.role.RoleID);
+            
+
+            $("#CreateButton").on("click", function () {
+                let roleName = $("#RoleName").val();
+                let roleDesc = $("#RoleDesc").val();
+            $.ajax({
+                    url: '@Url.Action("updateRoleNameAndDescription","RoleAdmin")',
+                dataType: "json",
+                data: { roleID: roleId, updatedRoleName: roleName, updatedRoleDescription: roleDesc},
+                success: function (data) {
+
+                        },
+                 error: function (e) {  console.log(e);}
+                });
+            });
+
+            
+
+        });
+
+    </script>
+}
+

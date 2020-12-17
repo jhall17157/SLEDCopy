@@ -99,11 +99,11 @@
         <EntityTypeShape EntityType="SLE_TrackingModel.ProgramMap" Width="3.625" PointX="15.75" PointY="0.75" />
         <EntityTypeShape EntityType="SLE_TrackingModel.ProgramSecurityByUser" Width="3.625" PointX="15.75" PointY="13.75" />
         <EntityTypeShape EntityType="SLE_TrackingModel.RubricsByProgram" Width="3.625" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="SLE_TrackingModel.tmp_offering" Width="1.5" PointX="16.375" PointY="4.75" />
-        <EntityTypeShape EntityType="SLE_TrackingModel.tmp_studentroster" Width="1.5" PointX="16.375" PointY="7.75" />
         <EntityTypeShape EntityType="SLE_TrackingModel.FactTSA" Width="1.5" PointX="15.375" PointY="17.75" />
         <AssociationConnector Association="SLE_TrackingModel.fk_FactTSA_StudentID" />
         <AssociationConnector Association="SLE_TrackingModel.fk_FactTSA_ProgramID" />
+        <EntityTypeShape EntityType="SLE_TrackingModel.Subterm" Width="1.5" PointX="17.375" PointY="18" />
+        <AssociationConnector Association="SLE_TrackingModel.fk_Section_SubtermID" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

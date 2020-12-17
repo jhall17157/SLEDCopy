@@ -21,41 +21,71 @@
 
 <div class="row">
     <div class="col-3 mt-5">
-        <a href="~/Admin/Assessments" class="card">
+        <a href="~/Admin/Assessments" class="card h-100">
             <div class="card-body text-center align-middle">
                 <div class="card-title"><i class="fas fa-tasks fa-9x section-link" aria-hidden="true"></i></div>
-                <div class="card-text h3 font-weight-bold">Assessments</div>
+                <div class="card-text h3 font-weight-bold text-wrap">Assessments</div>
             </div>
         </a>
     </div>
 
     <div class="col-3 mt-5">
-        <a href="~/Admin/ViewUsers" class="card">
+        <a href="~/AdminUser/ManageUsers" class="card h-100">
             <div class="card-body text-center">
                 <div class="card-title"><i class="fas fa-users fa-9x section-link" aria-hidden="true"></i></div>
-                <div class="card-text h3 font-weight-bold">Users &amp; Roles</div>
+                <div class="card-text h3 font-weight-bold text-wrap">Users</div>
             </div>
         </a>
     </div>
 
     <div class="col-3 mt-5">
-        <a href="~/AdminMapping/Index" class="card">
+        <a href="~/RoleAdmin/ManageRoles" class="card h-100">
+            <div class="card-body text-center">
+                <div class="card-title"><i class="fas fa-briefcase fa-9x section-link" aria-hidden="true"></i></div>
+                <div class="card-text h3 font-weight-bold text-wrap">Roles</div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-3 mt-5">
+        <a href="~/Admin/ProgramDashboard" class="card h-100">
+            <div class="card-body text-center">
+                <div class="card-title"><i class="fas fa-project-diagram fa-9x section-link" aria-hidden="true"></i></div>
+                <div class="card-text h3 font-weight-bold  text-wrap">Programs & Courses</div>
+            </div>
+        </a>
+    </div>
+
+
+    <div class="col-3 mt-5">
+        <a href="~/AdminMapping/Index" class="card h-100">
             <div class="card-body text-center">
                 <div class="card-title"><i class="fas fa-sitemap fa-9x section-link"></i></div>
-                <div class="card-text h3 font-weight-bold">Mapping</div>
+                <div class="card-text h3 font-weight-bold text-wrap">Mapping</div>
             </div>
         </a>
     </div>
 
     <div class="col-3 mt-5">
-        <a href="~/AdminScheduling/Index" class="card">
+        <a href="~/AdminScheduling/Index" class="card h-100">
             <div class="card-body text-center">
                 <div class="card-title"><i class="fas fa-calendar fa-9x section-link" aria-hidden="true"></i></div>
-                <div class="card-text h3 font-weight-bold">Scheduling</div>
+                <div class="card-text h3 font-weight-bold text-wrap">Scheduling</div>
             </div>
         </a>
     </div>
 
+    @if (ViewBag.ReportingURL != null)
+    {
+        <div class="col-3 mt-5">
+            <a href="@ViewBag.ReportingURL" class="card h-100">
+                <div class="card-body text-center">
+                    <div class="card-title"><i class="fas fa-chart-bar fa-9x section-link" aria-hidden="true"></i></div>
+                    <div class="card-text h3 font-weight-bold text-wrap">Reporting</div>
+                </div>
+            </a>
+        </div>
+    }
 </div>
 
 

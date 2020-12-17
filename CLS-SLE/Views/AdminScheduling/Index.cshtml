@@ -106,32 +106,29 @@
             </div>
             <div class="form-group col-8 row">
                 <p class="col-12 mb-1 pl-0">Search For A Course:</p>
-                @using (Html.BeginForm("Index", "AdminScheduling", new { page = 1 }, FormMethod.Post, new { @class = "row col-12" }))
-                {
-                    @Html.DropDownListFor(s => s.CourseID, Model.CourseSelectList, "-Select Course-", new
-                    {
-                        @id = "DropDownCourses",
-                        @class = "form-control selectpicker d-inline col-8"
-                    })
-                    @Html.HiddenFor(p => p.PagingInfo)
-                    @Html.HiddenFor(s => s.SemesterID)
-                    <button type="submit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>
-                }
+                
+        @using (Html.BeginForm("Index", "AdminScheduling", new { page = 1 }, FormMethod.Post, new { @class = "row col-12" }))
+        {
+            @Html.TextBoxFor(vm => vm.searchTerm)
+            @Html.HiddenFor(p => p.PagingInfo)
+            @Html.HiddenFor(s => s.SemesterID)
+            <button type="submit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>
+        }
+    </div>
+
+    <div class="row col-1">
+
+    </div>
+    <div class="row col-3">
+        <p class="col-12 mb-1 pl-0">Semester Functions</p>
+        <div class="col-12 ml-0">
+
+            @*<button type="submit" class="btn btn-success d-inline" data-toggle="modal" data-target="#addCourseModal"><i class="fas fa-plus"></i> Add Course</button>*@
+            <button class="btn btn-success d-inline" data-toggle="modal" data-target="#addEntryModal"><i class="fas fa-plus" aria-hidden="true"></i> Add Entry</button>
+
+
+            <!--<button type="submit" class="btn btn-warning d-inline ml-1" data-toggle="modal" data-target="#editDueDatesModal"><i class="fas fa-calendar-alt"></i> Edit All Due Dates</button>-->
             </div>
-
-            <div class="row col-1">
-
-            </div>
-            <div class="row col-3">
-                <p class="col-12 mb-1 pl-0">Semester Functions</p>
-                <div class="col-12 ml-0">
-
-                    @*<button type="submit" class="btn btn-success d-inline" data-toggle="modal" data-target="#addCourseModal"><i class="fas fa-plus"></i> Add Course</button>*@
-                    <button class="btn btn-success d-inline" data-toggle="modal" data-target="#addEntryModal"><i class="fas fa-plus" aria-hidden="true"></i> Add Entry</button>
-
-
-                    <!--<button type="submit" class="btn btn-warning d-inline ml-1" data-toggle="modal" data-target="#editDueDatesModal"><i class="fas fa-calendar-alt"></i> Edit All Due Dates</button>-->
-                </div>
             </div>
         </div>
 
@@ -140,13 +137,13 @@
                 @{
                     int courseNumber = 0;
                     int headerNumber = 0;
-                    foreach (Course course in Model.Courses)
+                    foreach (Course course in Model.Courses.OrderBy(c => c.CourseID))
                     {
                         courseNumber++;
-                        <tr href="#" data-target=".courseCollapse@(courseNumber)" class="row bg-medium border-top accordionTrigger clickable pt-1 ml-0 mr-0">
+                        <tr href="#" data-target=".courseCollapse@(courseNumber)" class="row bg-medium border-top accordionTrigger clickable pt-1 ml-0 mr-0" id="Course@(course.Number)Dropdown">
                             <td class="col-10 border-0">
                                 <h4>
-                                    <i class="courseIcon@(courseNumber) ml-3 mr-3 fas fa-angle-right"></i> @course.CourseName (@course.Number)
+                                    <i class="courseIcon@(courseNumber) ml-3 mr-3 fas fa-angle-right"></i> (@course.Number) @course.CourseName
                                 </h4>
                             </td>
                             @*<td class="col-2 border-0 text-right">
@@ -155,23 +152,18 @@
                         </tr>
                         int sectionNumber = 0;
 
-                        foreach (Section sec in Model.Semester.Sections.Where(s => s.CourseID == course.CourseID))
+                        foreach (Section sec in Model.Semester.Sections.Where(s => s.CourseID == course.CourseID).OrderBy(s => s.CRN))
                         {
                             sectionNumber++;
 
-                            <tr href="#" data-header="@(headerNumber) " data-target=".assessmentCollapse@(courseNumber)@(sectionNumber)" class="row pt-1 bg-light border-bottom ml-0 mr-0 collapse courseCollapse@(courseNumber) accordionClose lowerAccordionTrigger clickable">
+                            <tr href="#" data-header="@(headerNumber) " data-target=".assessmentCollapse@(courseNumber)@(sectionNumber)" id="CRN@(sec.CRN)Dropdown" class="row pt-1 bg-light border-bottom ml-0 mr-0 collapse courseCollapse@(courseNumber) accordionClose lowerAccordionTrigger clickable">
                                 <td class="border-0 col-4 align-self-center ml-0 mr-0">
                                     <h5 class="indent d-inline align-self-center">
                                         <i class="sectionIcon@(sectionNumber) sectionIcon ml-3 mr-3 fas fa-angle-right"></i> CRN: @sec.CRN
                                     </h5>
-
-
-                                    <h6 class="pl-3 d-inline">
-                                        @*Ends: @sec.EndDate.Value.ToShortDateString();*@
-                                    </h6>
                                 </td>
                                 <td class="col-5 text-right border-0 pl-3">
-                                    <!--<h6>Submission Timeframe</h6>-->
+                                    @(sec.BeginDate.HasValue ? "Begin Date: " + sec.BeginDate.Value.ToString("MM/dd/yyyy") : "") -- @(sec.EndDate.HasValue ? "End Date: " + sec.EndDate.Value.ToString("MM/dd/yyyy") : "")
                                 </td>
                                 <td class="col-3 border-0 text-right"><!-- Space For Button Or Header --></td>
                             </tr>
@@ -205,11 +197,10 @@
                                             <td class="border-0 row col-3 align-self-center">
 
 
-                                                <p class="col-12 mb-1 pl-0">Submission Start:</p>
+                                                <p class="col-12 mb-1 pl-0">Submission Start:<span id="@("StartDateWarning"+sr.SectionRubricID)" class="fieldError small error"></span></p>
                                                 @if (sr.StartDate != null)
                                                 {
-                                                    @Html.TextBoxFor(s => s.StartDate, "{0:MM-dd-yyyy}", new {@Value = sr.StartDate.ToShortDateString(), @Class = "form-control selectpicker col-10 datewidget" })
-                                                    @*@Html.EditorFor(s => s.StartDate, new { htmlAttributes = new { @class = "form-control", placeholder = sr.StartDate.ToShortDateString() } })*@
+                                                    @Html.TextBoxFor(s => s.StartDate, "{0:MM-dd-yyyy}", new {@Value = sr.StartDate.ToShortDateString(), @Class = "form-control selectpicker col-10 datewidget",id= "StartDate"+sr.SectionRubricID } )
                                                 }
                                                 else
                                                 {
@@ -217,10 +208,10 @@
                                                 }
                                             </td>
                                             <td class="border-0 row col-3">
-                                                <p class="col-12 mb-1 pl-0">Submission End:</p>
+                                                <p class="col-12 mb-1 pl-0">Submission End: <span id="@("EndDateWarning"+sr.SectionRubricID)" class="fieldError error small"></span></p>
                                                 @if (sr.EndDate != null)
                                                 {
-                                                    @Html.TextBoxFor(s => s.EndDate, "{0:MM-dd-yyyy}", new { @Value = sr.EndDate.ToShortDateString(), @Class = "form-control selectpicker col-10 datewidget" })
+                                                    @Html.TextBoxFor(s => s.EndDate, "{0:MM-dd-yyyy}", new { @Value = sr.EndDate.ToShortDateString(), @Class = "form-control selectpicker col-10 datewidget", id= "EndDate"+sr.SectionRubricID })
                                                 }
                                                 else
                                                 {
@@ -232,11 +223,11 @@
 
 
                                                 @Html.HiddenFor(s => s.SemesterID)
-                                                <button type="submit" class="btn btn-success btn-sm d-inline"><i class="fas fa-save" aria-hidden="true"></i></button>
+                                                <button type="button" class="btn btn-success btn-sm d-inline" onclick="updateSection(@sr.SectionRubricID);"><i class="fas fa-save" aria-hidden="true"></i></button>
 
 
                                                 <!-- Delete trigger modal -->
-                                                <button type="button" class=" btn btn-danger btn-sm d-inline float-right ml-1" data-toggle="modal" data-target=".removeCourseModal@(sr.SectionRubricID)"><i class="fas fa-times" aria-hidden="true"></i></button>
+                                                <button type="button" class=" btn btn-danger btn-sm d-inline float-right ml-1" data-toggle="modal" data-target=".removeCourseModal@(sr.SectionRubricID)"><i class="fas fa-trash" aria-hidden="true"></i></button>
 
                                             </td>
                                         </tr>
@@ -470,7 +461,7 @@
     }
 }
 
-<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script src="~/Scripts/jquery-3.5.1.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script>
@@ -568,5 +559,91 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/bootstrap-select")'
+    @Scripts.Render("~/bundles/bootstrap-select")
+<script type="text/javascript">
+    var focusCourse = ""+ "@(ViewBag.FocusIDCourse)";
+    var focusCRN = ""+ "@(ViewBag.FocusIDCRN)";
+    if (focusCourse != null) {
+        let target = "#Course" + focusCourse + "Dropdown";
+        if ($($(target).data('target')).hasClass('accordionClose')) {
+            $($(target).data('target')).removeClass('collapse').removeClass('accordionClose').addClass('accordionOpen');
+            var targetClass = $(target).data('target');
+            $('.courseIcon' + targetClass.substring(15,targetClass[targetClass.length])).removeClass("fas fa-angle-right").addClass("fas fa-angle-down");
+            $('.sectionIcon').removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+        }
+        else if ($($(target).data('target')).hasClass('accordionOpen')) {
+            $($(target).data('target')).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
+            var targetClass = $(target).data('target');
+            $('.assessmentCollapse' + targetClass.substring(15,targetClass[targetClass.length])).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
+            $('.courseIcon' + targetClass.substring(15, targetClass[targetClass.length])).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+        }
+    }
+    if (focusCRN != null) {
+        let target = "#CRN" + focusCRN + "Dropdown";
+        if ($($(target).data('target')).hasClass('accordionClose')) {
+            $($(target).data('target')).removeClass('collapse').removeClass('accordionClose').addClass('accordionOpen');
+            var targetClass = $(target).data('target');
+            $('.sectionIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-right").addClass("fas fa-angle-down");
+        }
+        else if ($($(target).data('target')).hasClass('accordionOpen')) {
+            $($(target).data('target')).addClass('collapse').removeClass('accordionOpen').addClass('accordionClose');
+            var targetClass = $(target).data('target');
+            $('.sectionIcon' + targetClass[targetClass.length - 1]).removeClass("fas fa-angle-down").addClass("fas fa-angle-right");
+        }
+
+    }
+
+    function expandDropdown(item, index) {
+
+    }
+    
+    //Updates Dates when Section Save Button is clicked
+    function updateSection(sectionRubricID) {
+        formEndDate = $("#EndDate" + sectionRubricID).val();
+        formBeginDate = $("#StartDate" + sectionRubricID).val();
+
+        if (!formEndDate == "" && !formBeginDate == "") {
+
+            $("#StartDate" + sectionRubricID).removeClass("valid-field-submission");
+            $("#EndDate" + sectionRubricID).removeClass("valid-field-submission");
+
+            $("#EndDate" + sectionRubricID).removeClass("error");
+            $("#EndDateWarning" + sectionRubricID).html("");
+            $("#StartDate" + sectionRubricID).removeClass("error");
+            $("#StartDateWarning" + sectionRubricID).html("");
+            //valid-field-submission
+
+             $.ajax({
+                    url: '@Url.Action("SaveDateChange","AdminScheduling")',
+                    dataType: "json",
+                    data: { SectionRubricID: sectionRubricID, beginDate: formBeginDate, endDate: formEndDate  },
+                 success: function (data) {
+                     $("#StartDate" + sectionRubricID).addClass("valid-field-submission");
+                     $("#EndDate" + sectionRubricID).addClass("valid-field-submission");
+                        },
+                 error: function (e) { /*alert(e.status + "" + e.readyState);*/ console.log(e);}
+            });
+        }
+        else {
+            if (formBeginDate == "") {
+                $("#StartDateWarning" + sectionRubricID).html("Start Date Cannot Be Blank!");
+                $("#StartDate" + sectionRubricID).addClass("error");
+            }
+            else {
+                $("#StartDateWarning" + sectionRubricID).html("");
+                $("#StartDate" + sectionRubricID).removeClass("error");
+            }
+            if (formEndDate == "") {
+                $("#EndDateWarning" + sectionRubricID).html("End Date Cannot Be Blank!");
+                $("#EndDate" + sectionRubricID).addClass("error");
+
+            }
+            else {
+                $("#EndDateWarning" + sectionRubricID).html("");
+                $("#EndDate" + sectionRubricID).removeClass("error");
+            }
+
+        }
+    }
+    </script>
 }

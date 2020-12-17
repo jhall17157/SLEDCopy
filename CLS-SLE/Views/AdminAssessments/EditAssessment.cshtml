@@ -6,8 +6,8 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "AdminAssessments")</li>
-        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Assessment.Name, "ViewAssessment", "AdminAssessments", new { assessmentID = Model.Assessment.AssessmentID }, null)</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = Model.Assessment.AssessmentID }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">Edit</li>
     </ol>
 </nav>
@@ -95,7 +95,7 @@
 	</fieldset>
 	<div class="row justify-content-end col-9">
 		<div class="col-2 p-0 mx-1"><button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Update</button></div>
-		<div class="col-2 p-0 mx-1"><a href="/AdminAssessments/ViewAssessment?assessmentID=@Model.Assessment.AssessmentID" class="btn btn-danger col-12 mx-1">Cancel</a></div>
+		<div class="col-2 p-0 mx-1"><a href="/Admin/ViewAssessment?assessmentID=@Model.Assessment.AssessmentID" class="btn btn-danger col-12 mx-1">Cancel</a></div>
 	</div>
 
 	<!--<div hidden>

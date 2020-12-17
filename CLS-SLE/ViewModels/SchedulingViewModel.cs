@@ -28,6 +28,8 @@ namespace CLS_SLE.ViewModels
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public PagingInfo PagingInfo { get; set; }
+        public String FocusIDCRN { get; set; }
+        public String FocusIDCourse { get; set; }
 
         public List<SelectListItem> AssesmentRubrics { get; set; }
 

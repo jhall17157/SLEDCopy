@@ -6,8 +6,8 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "AdminAssessments")</li>
-        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Assessment.Name, "ViewAssessment", "AdminAssessments", new { assessmentID = Model.Rubric.AssessmentID }, null)</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = Model.Rubric.AssessmentID }, null)</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.AssessmentRubric.Name, "ViewRubric", "Rubric", new { rubricID = Model.Rubric.RubricID, assessmentID = Model.Rubric.AssessmentID }, null)</li>
         <li class="breadcrumb-item">@((String)Model.OutcomeVM.Name)</li>
         <li class="breadcrumb-item active" aria-current="page">Edit</li>
@@ -62,6 +62,19 @@
             <div class="form-check form-check-inline">
                 <label class="form-check-input" id="CalculatePassRateFalse" for="CalculatePassFalse">False</label>
                 @Html.RadioButtonFor(Model => Model.OutcomeVM.CalculateCriteriaPassRate, "False", Model.OutcomeVM.CalculateCriteriaPassRate ? null : new { Checked = "checked" })
+            </div>
+        </div>
+    </fieldset>
+    <fieldset class="form-group col-9">
+        <div class="row">
+            <legend class="col-form-label col-2 pt-0">TSA Outcome:</legend>
+            <div class="form-check form-check-inline">
+                <label class="form-check-input" id="IsTSAOutcomeTrue" for="IsTSAOutcomeTrue">True</label>
+                @Html.RadioButtonFor(Model => Model.OutcomeVM.IsTSAOutcome, "True")
+            </div>
+            <div class="form-check form-check-inline">
+                <label class="form-check-input" id="IsTSAOutcome" for="IsTSAOutcome">False</label>
+                @Html.RadioButtonFor(Model => Model.OutcomeVM.IsTSAOutcome, "False")
             </div>
         </div>
     </fieldset>

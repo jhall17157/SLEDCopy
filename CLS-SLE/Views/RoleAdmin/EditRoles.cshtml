@@ -1,0 +1,564 @@
+﻿@using CLS_SLE.Models;
+@model CLS_SLE.ViewModels.EditRoleViewModel
+@{
+    ViewBag.Title = "Edit Role";
+
+}
+
+@section Styles
+{
+    <style>
+        #RoleAttributesSection
+        {
+            padding-left: 0px;
+            margin-left: 0px;
+            margin-bottom: 20px;
+        }
+
+        .input-lable
+        {
+            padding-left: 0px;
+            margin-left: 0px;
+        }
+
+        .input-field
+        {
+            padding-left: 0px;
+            margin-left: 0px;
+        }
+
+        #updateNameAndDescButton
+        {
+            margin-left: 0px;
+            margin-top: 5px;
+        }
+
+        #goToManageRoleMembership
+        {
+            margin-top: 5px;
+        }
+
+        .SecurityBoxDiv {
+            border: 2px solid black;
+            padding: 0;
+            display: flex;
+        }
+
+        .SecurityBox
+        {
+            
+        }
+
+        .SchoolModalInput, .ProgramModalInput, .DepartmentModalInput{
+            width: 20px;
+            display:inline;
+            margin-right: 15px;
+        }
+
+        .secInput
+        {
+            
+        }
+
+        .modal-body
+        {
+            
+        }
+
+        .inputLable{
+            margin-left: 15px;
+        }
+
+        .DeleteSecurityButton
+        {
+            height: 3em;
+            
+        }
+
+    </style>
+
+
+
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Manage Roles", "ManageRoles", "RoleAdmin")</li>
+        <li class="breadcrumb-item active" aria-current="page">Edit Role</li>
+    </ol>
+</nav>
+<h1>Edit Role</h1>
+<br />
+<h2>Role: @(Model.role.Name)</h2>
+
+
+<div id="RoleAttributesSection" class="container align-content-start container-fluid">
+    <div class="col-3 input-lable">
+        @Html.Label("Name: ")
+    </div>
+
+    <div class="col-12 input-field">
+        @Html.TextBoxFor(model => model.role.Name, new { @class = "form-control",id ="RoleName", @readonly = true })<!-- Added read-only for now, as security is based on rolename-->
+
+    </div>
+    <br />
+    <div class="col-3 input-lable">
+        @Html.Label("Description: ")
+    </div>
+
+    <div class="col-12 input-field">
+        @Html.TextAreaFor(model => model.role.Description, new { @class = "form-control", id = "RoleDesc" })
+    </div>
+
+    <button id="updateNameAndDescButton" class="btn btn-primary">Update</button>
+    <button id="goToManageRoleMembership" class="btn btn-primary">Manage Role Membership</button>
+
+</div>
+<!-- not currently used - uncomment later
+<div id="RoleDataSecuritySection">
+    <h2>Data Security for this Role</h2>
+
+    <div id="SecurityBoxes" class="container justify-content-between row">
+        <div class="col-4 SecurityBoxDiv">
+            <table id="SchoolSecTable" class="SecurityBox table table-hover table-striped">
+                <thead class="thead-dark">
+                    <tr><th><span><button id="AddSchoolButton" class="btn btn-success"><i class="fas fa-plus"> </i></button> School Security</span></th></tr>
+                </thead>
+                <tbody id="SchoolSecurityBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-4 SecurityBoxDiv">
+            <table id="DepartmentSecTable" class="SecurityBox table table-hover table-striped">
+                <thead class="thead-dark">
+                <tr><th><span><button id="AddDepartmentButton" class="btn btn-success"><i class="fas fa-plus"></i></button> Department Security</span></th></tr>
+                </thead>
+                <tbody id="DepartmentSecurityBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-4 SecurityBoxDiv">
+            <table id="ProgramSecTable" class="SecurityBox table table-hover table-striped">
+                <thead class="thead-dark">
+                    <tr><th><span><button id="AddProgramButton" class="btn btn-success"> <i class="fas fa-plus"></i> </button> Program Security</span></th></tr>
+                </thead>
+                <tbody id="ProgramSecurityBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+    -->
+<div class="modal fade" id="DepartmentModal" tabindex="-1" role="dialog" aria-labelledby="DepartmentModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add A Department: </h5>
+            </div>
+            <div class="modal-body" id="DepartmentModalOptions">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"  id="ConfirmDepartmentAdditionButton">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ProgramModal" tabindex="-1" role="dialog" aria-labelledby="ProgramModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add A Program: </h5>
+            </div>
+            <div class="modal-body" id="ProgramModalOptions">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="ConfirmProgramAdditionButton">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="SchoolModal" tabindex="-1" role="dialog" aria-labelledby="SchoolModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add A School: </h5>
+            </div>
+            <div class="modal-body" id="SchoolModalOptions">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"  id="ConfirmSchoolAdditionButton">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+    
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap-select")
+    <script type="text/javascript">
+        $(function () {
+            var roleId = @(Model.role.RoleID);
+            var allSchools = null;
+            var allDepartments = null;
+            var allPrograms = null;
+            var relatedPrograms = null;
+            var relatedSchools = null;
+            var relatedDepartments = null;
+
+            //getRelatedSchoolsDeptartmentsAndPrograms();
+            updateSecurityBoxes();
+
+            $("#goToManageRoleMembership").on("click", function () {
+                window.location.href = '@Url.Action("ManageRoleMembership", "RoleAdmin", new { roleID = Model.role.RoleID }, null)';
+            })
+
+            function getRelatedSchoolsDeptartmentsAndPrograms() {
+                $.ajax({
+                    url: '@Url.Action("getRelatedProgramSecurities","RoleAdmin")',
+                    dataType: "json",
+                    async: false,
+                    data: { roleID: roleId },
+                success: function (data) {
+                    relatedPrograms = data;
+                        },
+                    error: function (e) {
+                        //console.log(e);
+                        relatedPrograms = null;
+                    }
+                });
+
+                $.ajax({
+                    url: '@Url.Action("getRelatedSchoolSecurities","RoleAdmin")',
+                    dataType: "json",
+                    async: false,
+                    data: { roleID: roleId },
+                success: function (data) {
+                    relatedSchools = data;
+                        },
+                    error: function (e) {
+                        //console.log(e);
+                        relatedSchools = null;
+                    }
+                });
+
+                $.ajax({
+                    url: '@Url.Action("getRelatedDepartmentSecurities","RoleAdmin")',
+                    dataType: "json",
+                    async: false,
+                    data: { roleID: roleId },
+                success: function (data) {
+                    relatedDepartments = data;
+                        },
+                    error: function (e) {
+                        //console.log(e);
+                        relatedDepartments = null;
+                    }
+                });
+            }
+
+
+            getAllSchoolsDeptartmentsAndPrograms();
+
+            function getAllSchoolsDeptartmentsAndPrograms() {
+                $.ajax({
+                    url: '@Url.Action("getAllDepartments","AdminDepartment")',
+                    dataType: "json",
+                async: false,
+                success: function (data) {
+                    allDepartments = data;
+                        },
+                    error: function (e) {
+                        allDepartments = null;
+                    }
+                });
+
+                $.ajax({
+                    url: '@Url.Action("getAllSchools","AdminSchool")',
+                    dataType: "json",
+                async: false,
+                success: function (data) {
+                    allSchools = data;
+                        },
+                    error: function (e) {
+                        allSchools = null;
+                    }
+                });
+
+                $.ajax({
+                    url: '@Url.Action("getAllPrograms","AdminProgram")',
+                    dataType: "json",
+                async: false,
+                success: function (data) {
+                    allPrograms = data;
+                        },
+                    error: function (e) {
+                        allPrograms = null;
+                    }
+                });
+            }
+
+            function updateSecurityBoxes() {
+                getRelatedSchoolsDeptartmentsAndPrograms();
+
+                if (relatedDepartments != null && relatedDepartments.length != null && relatedDepartments.length > 0) {
+                    $("#DepartmentSecurityBody").html("");
+                    for (i = 0; i < relatedDepartments.length; i++) {
+                        $("#DepartmentSecurityBody").append("<tr><td><div class='row justify-content-between p-2'><p class='col-10'>" + relatedDepartments[i].Name + "</p><button class='DeleteSecurityButton btn col-2 btn-danger departmentSecBtn' data-departmentid=\"" + relatedDepartments[i].DepartmentID + "\" ><i class='fas fa-trash' /></button></div></td></tr>");
+                    }
+                }
+                else {
+                    $("#DepartmentSecurityBody").html("");
+                    $("#DepartmentSecurityBody").append("<tr><td>No Related Departments</td></tr>");
+                }
+
+                if (relatedSchools != null && relatedSchools.length != null && relatedSchools.length > 0) {
+                    $("#SchoolSecurityBody").html("");
+                    for (i = 0; i < relatedSchools.length; i++) {
+                        $("#SchoolSecurityBody").append("<tr><td><div class='row justify-content-between p-2'><p class='col-10'>" + relatedSchools[i].Name + "</p><button class='DeleteSecurityButton btn col-2 btn-danger schoolSecBtn' data-schoolid=\"" + relatedSchools[i].SchoolID + "\" ><i class='fas fa-trash' /></button></div></td></tr>");
+                    }
+                }
+                else {
+                    $("#SchoolSecurityBody").html("");
+                    $("#SchoolSecurityBody").append("<tr><td>No Related Schools</td></tr>");
+                }
+
+                if (relatedPrograms != null && relatedPrograms.length != null && relatedPrograms.length > 0) {
+                    $("#ProgramSecurityBody").html("");
+                    for (i = 0; i < relatedPrograms.length; i++) {
+                        $("#ProgramSecurityBody").append("<tr><td><div class='row justify-content-between p-2'><p class='col-10'>" + relatedPrograms[i].Name + "</p><button class='DeleteSecurityButton btn btn-danger col-2 programSecBtn' data-programid=\"" + relatedPrograms[i].ProgramID + "\" ><i class='fas fa-trash' /></button></div></td></tr>");
+                    }
+                }
+                else {
+                    $("#ProgramSecurityBody").html("");
+                    $("#ProgramSecurityBody").append("<tr><td>No Related Programs</td></tr>");
+                }
+                
+            }
+
+            $("#updateNameAndDescButton").on("click", function () {
+                let roleName = $("#RoleName").val();
+                let roleDesc = $("#RoleDesc").val();
+            $.ajax({
+                    url: '@Url.Action("updateRoleNameAndDescription","RoleAdmin")',
+                dataType: "json",
+                data: { roleID: roleId, updatedRoleName: roleName, updatedRoleDescription: roleDesc},
+                success: function (data) {
+
+                        },
+                 error: function (e) {  console.log(e);}
+                });
+            });
+
+            $("#AddSchoolButton").on("click", function () {
+                //console.log("Start Process");
+                getRelatedSchoolsDeptartmentsAndPrograms();
+                let DisplaySchools = [...allSchools];
+                if (relatedSchools != null && relatedSchools.length > 0) {
+                    for (i = 0; i < relatedSchools.length; i++) {
+                        let index = DisplaySchools.findIndex(s => s.SchoolID === relatedSchools[i].SchoolID);
+                        if (index != -1) {
+                            DisplaySchools.splice(index, 1);
+                        }
+                    }
+                }
+
+                $("#SchoolModalOptions").html("");
+                for (i = 0; i < DisplaySchools.length; i++) {
+                    //console.log(i);
+                    $("#SchoolModalOptions").append("<div class=\"row justify-content-between secInput\"><label class=\"inputLable\" for=\"SchoolCheckbox" + DisplaySchools[i].SchoolID + "\">" + DisplaySchools[i].Name + "</label><span><input type=\"checkbox\" data-SchoolID=\"" + DisplaySchools[i].SchoolID + "\" class=\"form-control SchoolModalInput\" id=\SchoolCheckbox" + DisplaySchools[i].SchoolID + "\" /></span></div>");
+                }
+                ShowSchoolModal();
+            });
+
+            $("#AddProgramButton").on("click", function () {
+                //console.log("Start Process");
+                getRelatedSchoolsDeptartmentsAndPrograms();
+                let DisplayPrograms = [...allPrograms];
+                if (relatedPrograms != null && relatedPrograms.length > 0) {
+                    for (i = 0; i < relatedPrograms.length; i++) {
+                        let index = DisplayPrograms.findIndex(s => s.ProgramID === relatedPrograms[i].ProgramID);
+                        if (index != -1) {
+                            DisplayPrograms.splice(index, 1);
+                        }
+                    }
+                }
+                //console.log(DisplayPrograms);
+                $("#ProgramModalOptions").html("");
+                for (i = 0; i < DisplayPrograms.length; i++) {
+                    //console.log(i);
+                    $("#ProgramModalOptions").append("<div class=\"row justify-content-between secInput\"><label class=\"inputLable\" for=\"ProgramCheckbox" + DisplayPrograms[i].ProgramID + "\">" + DisplayPrograms[i].Name + "</label><span><input type=\"checkbox\" data-ProgramID=\"" + DisplayPrograms[i].ProgramID + "\" class=\"form-control ProgramModalInput\" id=\ProgramCheckbox" + DisplayPrograms[i].ProgramID + "\" /></span></div>");
+                }
+                ShowProgramModal();
+            });
+
+            $("#AddDepartmentButton").on("click", function () {
+                //console.log("Start Process");
+                getRelatedSchoolsDeptartmentsAndPrograms();
+                let DisplayDepartments = [...allDepartments];
+                if (relatedDepartments != null && relatedDepartments.length > 0) {
+                    for (i = 0; i < relatedDepartments.length; i++) {
+                        let index = DisplayDepartments.findIndex(s => s.DepartmentID === relatedDepartments[i].DepartmentID);
+                        if (index != -1) {
+                            DisplayDepartments.splice(index, 1);
+                        }
+                    }
+                }
+                //console.log(DisplayDepartments);
+                $("#DepartmentModalOptions").html("");
+                for (i = 0; i < DisplayDepartments.length; i++) {
+                    //console.log(i);
+                    $("#DepartmentModalOptions").append("<div class=\"row justify-content-between secInput\"><label class=\"inputLable\" for=\"DepartmentCheckbox" + DisplayDepartments[i].DepartmentID + "\">" + DisplayDepartments[i].Name + "</label><span><input type=\"checkbox\" data-DepartmentID=\"" + DisplayDepartments[i].DepartmentID + "\" class=\"form-control DepartmentModalInput\" id=\DepartmentCheckbox" + DisplayDepartments[i].DepartmentID + "\" /></span></div>");
+                }
+                ShowDepartmentModal();
+            });
+
+            $("#ConfirmDepartmentAdditionButton").on("click", function () {
+                console.log("Start");
+                let DepartmentsToAdd = $(".DepartmentModalInput");
+                //console.log(DepartmentsToAdd);
+                for (i = 0; i < DepartmentsToAdd.length; i++) {
+                    if ($(DepartmentsToAdd[i]).prop("checked") == true) {
+                        let targetDepartmentID = $(DepartmentsToAdd[i]).data("departmentid");
+                        $.ajax({
+                    url: '@Url.Action("toggleDepartmentSecurity","RoleAdmin")',
+                            dataType: "json",
+                            async: false,
+                            data: { roleID: roleId, DepartmentID: targetDepartmentID },
+                            success: function (data) {
+                                console.log("Success");
+                        },
+                 error: function (e) {  console.log(e);}
+                });
+                    }
+                }
+
+                updateSecurityBoxes();
+            });
+
+
+            $("#SchoolSecTable").on("click",".schoolSecBtn", function (e) {
+                var targetSchoolID = $(this).data("schoolid");
+                $.ajax({
+                    url: '@Url.Action("toggleSchoolSecurity","RoleAdmin")',
+                            dataType: "json",
+                            async: false,
+                            data: { roleID: roleId, SchoolID: targetSchoolID },
+                    success: function (data) {
+                        console.log("Success");
+                        },
+                 error: function (e) {  console.log(e);}
+                });
+                updateSecurityBoxes();
+            });
+
+            $("#ProgramSecTable").on("click",".programSecBtn", function (e) {
+                var targetProgramID = $(this).data("programid");
+                $.ajax({
+                    url: '@Url.Action("toggleProgramSecurity","RoleAdmin")',
+                            dataType: "json",
+                            async: false,
+                            data: { roleID: roleId, ProgramID: targetProgramID },
+                success: function (data) {
+
+                        },
+                 error: function (e) {  console.log(e);}
+                });
+                updateSecurityBoxes();
+            });
+            
+            
+
+            $("#DepartmentSecTable").on("click",".departmentSecBtn", function (e) {
+                var targetDepartmentID = $(this).data("departmentid");
+                $.ajax({
+                    url: '@Url.Action("toggleDepartmentSecurity","RoleAdmin")',
+                            dataType: "json",
+                            async: false,
+                            data: { roleID: roleId, DepartmentID: targetDepartmentID },
+                success: function (data) {
+
+                        },
+                 error: function (e) {  console.log(e);}
+                });
+                updateSecurityBoxes();
+            });
+
+            $("#ConfirmSchoolAdditionButton").on("click", function () {
+                //console.log("Start");
+                let SchoolsToAdd = $(".SchoolModalInput");
+                //console.log(SchoolsToAdd);
+                for (i = 0; i < SchoolsToAdd.length; i++) {
+                    if ($(SchoolsToAdd[i]).prop("checked") == true) {
+                        let targetSchoolID = $(SchoolsToAdd[i]).data("schoolid");
+                        $.ajax({
+                    url: '@Url.Action("toggleSchoolSecurity","RoleAdmin")',
+                            dataType: "json",
+                            async: false,
+                            data: { roleID: roleId, SchoolID: targetSchoolID },
+                success: function (data) {
+
+                        },
+                 error: function (e) {  console.log(e);}
+                });
+                    }
+                }
+
+                updateSecurityBoxes();
+            });
+
+            $("#ConfirmProgramAdditionButton").on("click", function () {
+                //console.log("Start");
+                let ProgramsToAdd = $(".ProgramModalInput");
+                //console.log(ProgramsToAdd);
+                for (i = 0; i < ProgramsToAdd.length; i++) {
+                    if ($(ProgramsToAdd[i]).prop("checked") == true) {
+                        let targetProgramID = $(ProgramsToAdd[i]).data("programid");
+                        $.ajax({
+                    url: '@Url.Action("toggleProgramSecurity","RoleAdmin")',
+                            dataType: "json",
+                            async: false,
+                            data: { roleID: roleId, ProgramID: targetProgramID },
+                success: function (data) {
+
+                        },
+                 error: function (e) {  console.log(e);}
+                });
+                    }
+                }
+
+                updateSecurityBoxes();
+            });
+
+            function ShowDepartmentModal() {
+                //$("#DepartmentModalOptions").html("");
+                $("#DepartmentModal").modal("show");
+            }
+
+            function ShowProgramModal() {
+                //$("#ProgramModalOptions").html("");
+                $("#ProgramModal").modal("show");
+            }
+
+            function ShowSchoolModal() {
+                //$("#SchoolModalOptions").html("");
+                //console.log("Modal Triggered");
+                $("#SchoolModal").modal("show");
+            }
+
+        });
+
+    </script>
+}
+

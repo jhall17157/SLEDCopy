@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class AdminAssessmentsController : SLEControllerBase
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
@@ -199,7 +200,7 @@ namespace CLS_SLE.Controllers
                 db.SaveChanges();
 
 
-                return RedirectToAction(actionName: "Assessments", controllerName: "AdminAssessments");
+                return RedirectToAction(actionName: "Assessments", controllerName: "Admin");
 
             }
             catch (Exception e)
@@ -240,7 +241,7 @@ namespace CLS_SLE.Controllers
                         editAssessment.ModifiedByLoginID = UserData.PersonId;
                         db.SaveChanges();
 
-                        return RedirectToAction(actionName: "ViewAssessment", controllerName: "AdminAssessments", routeValues: new { assessmentId = editAssessment.AssessmentID });
+                        return RedirectToAction(actionName: "ViewAssessment", controllerName: "Admin", routeValues: new { assessmentId = editAssessment.AssessmentID });
                     }
                     else
                     {

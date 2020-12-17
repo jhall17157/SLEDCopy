@@ -190,7 +190,7 @@
             <PropertyRef Name="StatusCode" />
           </Key>
           <Property Name="StatusCode" Type="char" MaxLength="2" Nullable="false" />
-          <Property Name="StatusDescription" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="StatusDescription" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="EnrollmentStatusID" Type="char" MaxLength="1" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="CreatedDateTime" Type="datetime" />
@@ -204,17 +204,18 @@
           </Key>
           <Property Name="OutcomeID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RubricID" Type="smallint" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="300" Nullable="false" />
           <Property Name="Description" Type="varchar(max)" />
           <Property Name="SortOrder" Type="tinyint" Nullable="false" />
           <Property Name="CriteriaPassRate" Type="numeric" Precision="4" Scale="3" />
           <Property Name="CalculateCriteriaPassRate" Type="bit" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="InactiveDateTime" Type="datetime" />
+          <Property Name="IsTSAOutcome" Type="bit" Nullable="false" />
           <Property Name="CreatedDateTime" Type="datetime" />
           <Property Name="CreatedByLoginID" Type="int" />
           <Property Name="ModifiedDateTime" Type="datetime" />
           <Property Name="ModifiedByLoginID" Type="int" />
-          <Property Name="InactiveDateTime" Type="datetime" />
         </EntityType>
         <EntityType Name="Permission">
           <Key>
@@ -260,12 +261,12 @@
           <Property Name="RubricID" Type="smallint" Nullable="false" />
           <Property Name="CourseID" Type="smallint" Nullable="false" />
           <Property Name="AssessmentLevelCode" Type="char" MaxLength="1" />
+          <Property Name="BeginDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
           <Property Name="CreatedDateTime" Type="datetime" />
           <Property Name="CreatedByLoginID" Type="int" />
           <Property Name="ModifiedDateTime" Type="datetime" />
           <Property Name="ModifiedByLoginID" Type="int" />
-          <Property Name="BeginDate" Type="datetime" />
-          <Property Name="EndDate" Type="datetime" />
         </EntityType>
         <EntityType Name="ProgramDepartment">
           <Key>
@@ -365,11 +366,11 @@
           <Property Name="Value" Type="tinyint" Nullable="false" />
           <Property Name="SortOrder" Type="tinyint" Nullable="false" />
           <Property Name="IsUnassessedScore" Type="bit" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="CreatedDateTime" Type="datetime" />
           <Property Name="CreatedByLoginID" Type="int" />
           <Property Name="ModifiedDateTime" Type="datetime" />
           <Property Name="ModifiedByLoginID" Type="int" />
-          <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="ScoreSet">
           <Key>
@@ -377,11 +378,11 @@
           </Key>
           <Property Name="ScoreSetID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="CreatedDateTime" Type="datetime" />
           <Property Name="CreatedByLoginID" Type="int" />
           <Property Name="ModifiedDateTime" Type="datetime" />
           <Property Name="ModifiedByLoginID" Type="int" />
-          <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Section">
           <Key>
@@ -391,7 +392,8 @@
           <Property Name="CRN" Type="int" Nullable="false" />
           <Property Name="SemesterID" Type="smallint" Nullable="false" />
           <Property Name="CourseID" Type="smallint" Nullable="false" />
-          <Property Name="LeadInstructorID" Type="int" Nullable="false" />
+          <Property Name="SubtermID" Type="tinyint" Nullable="false" />
+          <Property Name="LeadInstructorID" Type="int" />
           <Property Name="OfferingNumber" Type="char" MaxLength="3" />
           <Property Name="IsCancelled" Type="bit" Nullable="false" />
           <Property Name="BeginDate" Type="date" />
@@ -453,6 +455,18 @@
           <Property Name="DateTimeAssessed" Type="datetime" />
           <Property Name="ScoreID" Type="smallint" Nullable="false" />
         </EntityType>
+        <EntityType Name="Subterm">
+          <Key>
+            <PropertyRef Name="SubtermID" />
+          </Key>
+          <Property Name="SubtermID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubtermCode" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" />
+          <Property Name="CreatedByLoginID" Type="int" />
+          <Property Name="ModifiedDateTime" Type="datetime" />
+          <Property Name="ModifiedByLoginID" Type="int" />
+        </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -462,41 +476,6 @@
           <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'SLE_Tracking.dbo.tmp_offering' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="tmp_offering">
-          <Key>
-            <PropertyRef Name="TERM" />
-            <PropertyRef Name="OFFERING_NO" />
-            <PropertyRef Name="CRN" />
-            <PropertyRef Name="FISCAL_YEAR" />
-            <PropertyRef Name="OFFERING_TITLE" />
-          </Key>
-          <Property Name="TERM" Type="int" Nullable="false" />
-          <Property Name="OFFERING_NO" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="CRN" Type="int" Nullable="false" />
-          <Property Name="FISCAL_YEAR" Type="int" Nullable="false" />
-          <Property Name="OFFERING_TITLE" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="INSTRUCTOR_ID" Type="char" MaxLength="9" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'SLE_Tracking.dbo.tmp_studentroster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="tmp_studentroster">
-          <Key>
-            <PropertyRef Name="STD_ID" />
-            <PropertyRef Name="TERM_CODE" />
-            <PropertyRef Name="CRN" />
-            <PropertyRef Name="STATUS_CODE" />
-            <PropertyRef Name="STATUS_DESC" />
-            <PropertyRef Name="STATUS_DATE" />
-          </Key>
-          <Property Name="STD_ID" Type="char" MaxLength="9" Nullable="false" />
-          <Property Name="TERM_CODE" Type="char" MaxLength="6" Nullable="false" />
-          <Property Name="CRN" Type="int" Nullable="false" />
-          <Property Name="STATUS_CODE" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="STATUS_DESC" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="STATUS_DATE" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -653,6 +632,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.RubricDetails' does not have a pr
           <Key>
             <PropertyRef Name="RubricID" />
             <PropertyRef Name="RubricName" />
+            <PropertyRef Name="OutcomeID" />
             <PropertyRef Name="OutcomeName" />
             <PropertyRef Name="OutcomeSortOrder" />
             <PropertyRef Name="CriteriaID" />
@@ -663,7 +643,8 @@ warning 6002: The table/view 'SLE_Tracking.dbo.RubricDetails' does not have a pr
           <Property Name="RubricID" Type="smallint" Nullable="false" />
           <Property Name="RubricName" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Description" Type="varchar(max)" />
-          <Property Name="OutcomeName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="OutcomeID" Type="smallint" Nullable="false" />
+          <Property Name="OutcomeName" Type="varchar" MaxLength="300" Nullable="false" />
           <Property Name="OutcomeSortOrder" Type="tinyint" Nullable="false" />
           <Property Name="CriteriaID" Type="smallint" Nullable="false" />
           <Property Name="CriteriaName" Type="varchar" MaxLength="300" Nullable="false" />
@@ -1163,7 +1144,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           </ReferentialConstraint>
         </Association>
         <Association Name="fk_Section_LeadInstructorID">
-          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
           <End Role="Section" Type="Self.Section" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Person">
@@ -1183,6 +1164,18 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             </Principal>
             <Dependent Role="Section">
               <PropertyRef Name="SemesterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Section_SubtermID">
+          <End Role="Subterm" Type="Self.Subterm" Multiplicity="1" />
+          <End Role="Section" Type="Self.Section" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subterm">
+              <PropertyRef Name="SubtermID" />
+            </Principal>
+            <Dependent Role="Section">
+              <PropertyRef Name="SubtermID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1482,29 +1475,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySet Name="Semester" EntityType="Self.Semester" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StudentProgram" EntityType="Self.StudentProgram" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StudentScore" EntityType="Self.StudentScore" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subterm" EntityType="Self.Subterm" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRole" EntityType="Self.UserRole" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tmp_offering" EntityType="Self.tmp_offering" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [tmp_offering].[TERM] AS [TERM], 
-    [tmp_offering].[OFFERING_NO] AS [OFFERING_NO], 
-    [tmp_offering].[CRN] AS [CRN], 
-    [tmp_offering].[FISCAL_YEAR] AS [FISCAL_YEAR], 
-    [tmp_offering].[OFFERING_TITLE] AS [OFFERING_TITLE], 
-    [tmp_offering].[INSTRUCTOR_ID] AS [INSTRUCTOR_ID]
-    FROM [dbo].[tmp_offering] AS [tmp_offering]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="tmp_studentroster" EntityType="Self.tmp_studentroster" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [tmp_studentroster].[STD_ID] AS [STD_ID], 
-    [tmp_studentroster].[TERM_CODE] AS [TERM_CODE], 
-    [tmp_studentroster].[CRN] AS [CRN], 
-    [tmp_studentroster].[STATUS_CODE] AS [STATUS_CODE], 
-    [tmp_studentroster].[STATUS_DESC] AS [STATUS_DESC], 
-    [tmp_studentroster].[STATUS_DATE] AS [STATUS_DATE]
-    FROM [dbo].[tmp_studentroster] AS [tmp_studentroster]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="FactTSA" EntityType="Self.FactTSA" store:Type="Tables" store:Schema="Reporting">
             <DefiningQuery>SELECT 
     [FactTSA].[TSAID] AS [TSAID], 
@@ -1585,6 +1559,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
     [RubricDetails].[RubricID] AS [RubricID], 
     [RubricDetails].[RubricName] AS [RubricName], 
     [RubricDetails].[Description] AS [Description], 
+    [RubricDetails].[OutcomeID] AS [OutcomeID], 
     [RubricDetails].[OutcomeName] AS [OutcomeName], 
     [RubricDetails].[OutcomeSortOrder] AS [OutcomeSortOrder], 
     [RubricDetails].[CriteriaID] AS [CriteriaID], 
@@ -1782,6 +1757,10 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           </AssociationSet>
           <AssociationSet Name="fk_Section_SemesterID" Association="Self.fk_Section_SemesterID">
             <End Role="Semester" EntitySet="Semester" />
+            <End Role="Section" EntitySet="Section" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Section_SubtermID" Association="Self.fk_Section_SubtermID">
+            <End Role="Subterm" EntitySet="Subterm" />
             <End Role="Section" EntitySet="Section" />
           </AssociationSet>
           <AssociationSet Name="fk_SectionRubric_AssessmentLevelID" Association="Self.fk_SectionRubric_AssessmentLevelID">
@@ -2128,8 +2107,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySet Name="ProgramMaps" EntityType="SLE_TrackingModel.ProgramMap" />
           <EntitySet Name="ProgramSecurityByUsers" EntityType="SLE_TrackingModel.ProgramSecurityByUser" />
           <EntitySet Name="RubricsByPrograms" EntityType="SLE_TrackingModel.RubricsByProgram" />
-          <EntitySet Name="tmp_offering" EntityType="SLE_TrackingModel.tmp_offering" />
-          <EntitySet Name="tmp_studentroster" EntityType="SLE_TrackingModel.tmp_studentroster" />
           <EntitySet Name="FactTSAs" EntityType="SLE_TrackingModel.FactTSA" />
           <AssociationSet Name="fk_FactTSA_StudentID" Association="SLE_TrackingModel.fk_FactTSA_StudentID">
             <End Role="Person" EntitySet="People" />
@@ -2138,6 +2115,11 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <AssociationSet Name="fk_FactTSA_ProgramID" Association="SLE_TrackingModel.fk_FactTSA_ProgramID">
             <End Role="Program" EntitySet="Programs" />
             <End Role="FactTSA" EntitySet="FactTSAs" />
+          </AssociationSet>
+          <EntitySet Name="Subterms" EntityType="SLE_TrackingModel.Subterm" />
+          <AssociationSet Name="fk_Section_SubtermID" Association="SLE_TrackingModel.fk_Section_SubtermID">
+            <End Role="Subterm" EntitySet="Subterms" />
+            <End Role="Section" EntitySet="Sections" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="GetCompletedCountBySectionRubric_Result">
@@ -2412,7 +2394,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             <PropertyRef Name="StatusCode" />
           </Key>
           <Property Name="StatusCode" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
-          <Property Name="StatusDescription" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="StatusDescription" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="EnrollmentStatusID" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
@@ -2440,6 +2422,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <NavigationProperty Name="AssessmentRubric" Relationship="SLE_TrackingModel.fk_Outcome_RubricID" FromRole="Outcome" ToRole="AssessmentRubric" />
           <NavigationProperty Name="Criteria" Relationship="SLE_TrackingModel.fk_Criteria_Outcome" FromRole="Outcome" ToRole="Criterion" />
           <Property Name="InactiveDateTime" Type="DateTime" Precision="3" />
+          <Property Name="IsTSAOutcome" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Permission">
           <Key>
@@ -2656,7 +2639,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="CRN" Type="Int32" Nullable="false" />
           <Property Name="SemesterID" Type="Int16" Nullable="false" />
           <Property Name="CourseID" Type="Int16" Nullable="false" />
-          <Property Name="LeadInstructorID" Type="Int32" Nullable="false" />
+          <Property Name="LeadInstructorID" Type="Int32" />
           <Property Name="OfferingNumber" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
           <Property Name="IsCancelled" Type="Boolean" Nullable="false" />
           <Property Name="BeginDate" Type="DateTime" Precision="0" />
@@ -2670,6 +2653,8 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <NavigationProperty Name="Person" Relationship="SLE_TrackingModel.fk_Section_LeadInstructorID" FromRole="Section" ToRole="Person" />
           <NavigationProperty Name="Semester" Relationship="SLE_TrackingModel.fk_Section_SemesterID" FromRole="Section" ToRole="Semester" />
           <NavigationProperty Name="SectionRubrics" Relationship="SLE_TrackingModel.fk_SectionRubric_SectionID" FromRole="Section" ToRole="SectionRubric" />
+          <Property Name="SubtermID" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Subterm" Relationship="SLE_TrackingModel.fk_Section_SubtermID" FromRole="Section" ToRole="Subterm" />
         </EntityType>
         <EntityType Name="SectionRubric">
           <Key>
@@ -2830,17 +2815,19 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             <PropertyRef Name="CriteriaID" />
             <PropertyRef Name="CriteriaName" />
             <PropertyRef Name="CriteriaSortOrder" />
+            <PropertyRef Name="OutcomeID" />
           </Key>
           <Property Name="AssessmentName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="RubricID" Type="Int16" Nullable="false" />
           <Property Name="RubricName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="OutcomeName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="OutcomeName" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="OutcomeSortOrder" Type="Byte" Nullable="false" />
           <Property Name="CriteriaID" Type="Int16" Nullable="false" />
           <Property Name="CriteriaName" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="ExampleText" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="CriteriaSortOrder" Type="Byte" Nullable="false" />
+          <Property Name="OutcomeID" Type="Int16" Nullable="false" />
         </EntityType>
         <EntityType Name="SectionEnrollment">
           <Key>
@@ -3243,7 +3230,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           </ReferentialConstraint>
         </Association>
         <Association Name="fk_Section_LeadInstructorID">
-          <End Type="SLE_TrackingModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.Person" Role="Person" Multiplicity="0..1" />
           <End Type="SLE_TrackingModel.Section" Role="Section" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Person">
@@ -3523,37 +3510,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="ProgramID" Type="Int16" Nullable="false" />
           <Property Name="RubricIsActive" Type="Boolean" Nullable="false" />
         </EntityType>
-        <EntityType Name="tmp_offering">
-          <Key>
-            <PropertyRef Name="TERM" />
-            <PropertyRef Name="OFFERING_NO" />
-            <PropertyRef Name="CRN" />
-            <PropertyRef Name="FISCAL_YEAR" />
-            <PropertyRef Name="OFFERING_TITLE" />
-          </Key>
-          <Property Name="TERM" Type="Int32" Nullable="false" />
-          <Property Name="OFFERING_NO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CRN" Type="Int32" Nullable="false" />
-          <Property Name="FISCAL_YEAR" Type="Int32" Nullable="false" />
-          <Property Name="OFFERING_TITLE" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="INSTRUCTOR_ID" Type="String" MaxLength="9" FixedLength="true" Unicode="false" />
-        </EntityType>
-        <EntityType Name="tmp_studentroster">
-          <Key>
-            <PropertyRef Name="STD_ID" />
-            <PropertyRef Name="TERM_CODE" />
-            <PropertyRef Name="CRN" />
-            <PropertyRef Name="STATUS_CODE" />
-            <PropertyRef Name="STATUS_DESC" />
-            <PropertyRef Name="STATUS_DATE" />
-          </Key>
-          <Property Name="STD_ID" Type="String" Nullable="false" MaxLength="9" FixedLength="true" Unicode="false" />
-          <Property Name="TERM_CODE" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
-          <Property Name="CRN" Type="Int32" Nullable="false" />
-          <Property Name="STATUS_CODE" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="STATUS_DESC" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="STATUS_DATE" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
         <EntityType Name="FactTSA">
           <Key>
             <PropertyRef Name="TSAID" />
@@ -3603,6 +3559,31 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             </Principal>
             <Dependent Role="FactTSA">
               <PropertyRef Name="ProgramID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Subterm">
+          <Key>
+            <PropertyRef Name="SubtermID" />
+          </Key>
+          <Property Name="SubtermID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubtermCode" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="CreatedByLoginID" Type="Int32" />
+          <Property Name="ModifiedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedByLoginID" Type="Int32" />
+          <NavigationProperty Name="Sections" Relationship="SLE_TrackingModel.fk_Section_SubtermID" FromRole="Subterm" ToRole="Section" />
+        </EntityType>
+        <Association Name="fk_Section_SubtermID">
+          <End Type="SLE_TrackingModel.Subterm" Role="Subterm" Multiplicity="1" />
+          <End Type="SLE_TrackingModel.Section" Role="Section" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subterm">
+              <PropertyRef Name="SubtermID" />
+            </Principal>
+            <Dependent Role="Section">
+              <PropertyRef Name="SubtermID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3905,6 +3886,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="Outcomes">
             <EntityTypeMapping TypeName="SLE_TrackingModel.Outcome">
               <MappingFragment StoreEntitySet="Outcome">
+                <ScalarProperty Name="IsTSAOutcome" ColumnName="IsTSAOutcome" />
                 <ScalarProperty Name="InactiveDateTime" ColumnName="InactiveDateTime" />
                 <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
                 <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
@@ -4104,6 +4086,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="Sections">
             <EntityTypeMapping TypeName="SLE_TrackingModel.Section">
               <MappingFragment StoreEntitySet="Section">
+                <ScalarProperty Name="SubtermID" ColumnName="SubtermID" />
                 <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
                 <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
                 <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
@@ -4253,6 +4236,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="RubricDetails">
             <EntityTypeMapping TypeName="SLE_TrackingModel.RubricDetail">
               <MappingFragment StoreEntitySet="RubricDetails">
+                <ScalarProperty Name="OutcomeID" ColumnName="OutcomeID" />
                 <ScalarProperty Name="CriteriaSortOrder" ColumnName="CriteriaSortOrder" />
                 <ScalarProperty Name="ExampleText" ColumnName="ExampleText" />
                 <ScalarProperty Name="CriteriaName" ColumnName="CriteriaName" />
@@ -4347,30 +4331,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tmp_offering">
-            <EntityTypeMapping TypeName="SLE_TrackingModel.tmp_offering">
-              <MappingFragment StoreEntitySet="tmp_offering">
-                <ScalarProperty Name="INSTRUCTOR_ID" ColumnName="INSTRUCTOR_ID" />
-                <ScalarProperty Name="OFFERING_TITLE" ColumnName="OFFERING_TITLE" />
-                <ScalarProperty Name="FISCAL_YEAR" ColumnName="FISCAL_YEAR" />
-                <ScalarProperty Name="CRN" ColumnName="CRN" />
-                <ScalarProperty Name="OFFERING_NO" ColumnName="OFFERING_NO" />
-                <ScalarProperty Name="TERM" ColumnName="TERM" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tmp_studentroster">
-            <EntityTypeMapping TypeName="SLE_TrackingModel.tmp_studentroster">
-              <MappingFragment StoreEntitySet="tmp_studentroster">
-                <ScalarProperty Name="STATUS_DATE" ColumnName="STATUS_DATE" />
-                <ScalarProperty Name="STATUS_DESC" ColumnName="STATUS_DESC" />
-                <ScalarProperty Name="STATUS_CODE" ColumnName="STATUS_CODE" />
-                <ScalarProperty Name="CRN" ColumnName="CRN" />
-                <ScalarProperty Name="TERM_CODE" ColumnName="TERM_CODE" />
-                <ScalarProperty Name="STD_ID" ColumnName="STD_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="FactTSAs">
             <EntityTypeMapping TypeName="SLE_TrackingModel.FactTSA">
               <MappingFragment StoreEntitySet="FactTSA">
@@ -4387,6 +4347,19 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
                 <ScalarProperty Name="ProgramID" ColumnName="ProgramID" />
                 <ScalarProperty Name="StudentID" ColumnName="StudentID" />
                 <ScalarProperty Name="TSAID" ColumnName="TSAID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subterms">
+            <EntityTypeMapping TypeName="SLE_TrackingModel.Subterm">
+              <MappingFragment StoreEntitySet="Subterm">
+                <ScalarProperty Name="ModifiedByLoginID" ColumnName="ModifiedByLoginID" />
+                <ScalarProperty Name="ModifiedDateTime" ColumnName="ModifiedDateTime" />
+                <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SubtermCode" ColumnName="SubtermCode" />
+                <ScalarProperty Name="SubtermID" ColumnName="SubtermID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

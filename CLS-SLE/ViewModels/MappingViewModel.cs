@@ -71,6 +71,7 @@ namespace CLS_SLE.ViewModels
         }
 
         public string Name { get; set; }
+        public int RubricID { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual IEnumerable<vmProgramAssessmentMapping> ProgramAssessmentMappings { get; set; }

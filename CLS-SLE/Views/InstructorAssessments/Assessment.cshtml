@@ -69,7 +69,7 @@
                 <ul class="list-group list-group-flush collapse  @(@filledCriteria == @numCriteria ? "" : "show") " id="group_@o.OutcomeID">
                     @foreach (RubricDetail rb in Model.Criteria)
                     {
-                        if (o.Name.Equals(rb.OutcomeName))
+                        if (o.OutcomeID.Equals(rb.OutcomeID))
                         {
                             <li class="list-group-item">
                                 <div class="float-left" style="max-width: calc(100% - 120px);">
@@ -99,20 +99,6 @@
                                                     @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input " + i.ScoreID })
                                                     @i.Description
                                                 </label>
-                                                @*if (i.Description != "Not Assessed")
-                                                                                    {
-                                                                                        <label class="form-check-label desc">
-                                                                                            @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input " + i.ScoreID })
-                                                                                            @i.Description
-                                                                                        </label>
-                                                                                    }
-                                                                                    else
-                                                    {
-                                                        <label class="form-check-label desc">
-                                                            @Html.RadioButton(rb.CriteriaID.ToString(), i.ScoreID, new { @class = "form-check-input notAssessed" })
-                                                            @i.Description
-                                                        </label>
-                                                    }*@
                                             }
                                         </div>
                                     }

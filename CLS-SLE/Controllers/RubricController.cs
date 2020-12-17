@@ -398,24 +398,26 @@ namespace CLS_SLE.Controllers
 
         public Boolean MoveOutcome(int rubricID, int assessmentID, int outcomeID, int currentID)
         {
-            bool success = false;
-
             //must be moving to a valid rubric
             var validRubric = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID).Where(r => r.RubricID == rubricID).Count();
 
             //must get the object to update
-            var outcome = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID)
-                .Where(r => r.RubricID == currentID).FirstOrDefault().Outcomes.Where(o => o.OutcomeID == outcomeID)
-                .FirstOrDefault();
+            var outcome = db.Outcomes.Where(o => o.RubricID == currentID && o.OutcomeID == outcomeID).FirstOrDefault();
+
+            //get the max sort order of outcomes for the new rubric and increment it
+            int sortOrder = db.Outcomes.Where(o => o.RubricID == rubricID).Max(o => o.SortOrder);
+            sortOrder++;
 
             if (outcome != null && validRubric > 0)
             {
-                success = true;
+                outcome.SortOrder = Convert.ToByte(sortOrder);
                 outcome.RubricID = Convert.ToInt16(rubricID);
+                outcome.ModifiedByLoginID = UserData.PersonId;
+                outcome.ModifiedDateTime = DateTime.Now;
                 db.SaveChanges();
+                return true;
             }
-
-            return success;
+            else return false;
         }
 
         public ActionResult AddCriterion(short outcomeID, short assessmentID)

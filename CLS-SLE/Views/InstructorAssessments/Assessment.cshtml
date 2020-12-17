@@ -38,7 +38,7 @@
             filledCriteria = 0;
             foreach (RubricDetail rb in Model.Criteria)
             {
-                if (o.Name.Equals(rb.OutcomeName))
+                if (o.OutcomeID.Equals(rb.OutcomeID))
                 {
                     numCriteria++;
                     //foreach (ScoreType i in Model.Selectors)
@@ -83,7 +83,6 @@
                                             @foreach (StudentScore ss in Model.StudentScores)
                                             {
                                                 exists = false;
-                                                // if (ss.CriteriaID == rb.CriteriaID && ss.ScoreTypeID == i.ScoreTypeID)
                                                 if (ss.CriteriaID == rb.CriteriaID && ss.ScoreID == i.ScoreID)
                                                 {
                                                     <label class="form-check-label desc">

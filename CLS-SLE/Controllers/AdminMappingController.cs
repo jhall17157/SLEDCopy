@@ -65,7 +65,7 @@ namespace CLS_SLE.Controllers
                                                select new SelectListItem { Text = r.Name, Value = r.RubricID.ToString() }).Distinct().ToList());
 
             mappingViewModel.Course = db.Courses.FirstOrDefault(p => p.CourseID == mappingVM.CourseID);
-            int programID;
+            
             if (TempData["ProgramID"] != null)
             {
                 mappingViewModel.ProgramID = (int)TempData["ProgramID"];

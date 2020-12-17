@@ -185,38 +185,6 @@
           <Property Name="ModifiedDateTime" Type="datetime" />
           <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'SLE_Tracking.dbo.ETL_Instructor' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="ETL_Instructor">
-          <Property Name="InstructorID" Type="char" MaxLength="9" />
-          <Property Name="FirstName" Type="varchar" MaxLength="50" />
-          <Property Name="LastName" Type="varchar" MaxLength="50" />
-          <Property Name="Email" Type="varchar" MaxLength="50" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'SLE_Tracking.dbo.ETL_Roster' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="ETL_Roster">
-          <Property Name="StudentID" Type="char" MaxLength="9" />
-          <Property Name="SemesterCode" Type="int" />
-          <Property Name="CRN" Type="int" />
-          <Property Name="StatusCode" Type="varchar" MaxLength="5" />
-          <Property Name="StatusDescription" Type="varchar" MaxLength="30" />
-          <Property Name="StatusDate" Type="date" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'SLE_Tracking.dbo.ETL_Section' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="ETL_Section">
-          <Property Name="SemesterCode" Type="int" />
-          <Property Name="OfferingNumber" Type="varchar" MaxLength="20" />
-          <Property Name="CRN" Type="int" />
-          <Property Name="CourseTitle" Type="varchar" MaxLength="50" />
-          <Property Name="BeginDate" Type="datetime" />
-          <Property Name="EndDate" Type="datetime" />
-          <Property Name="LeadInstructorID" Type="char" MaxLength="9" />
-          <Property Name="DepartmentNumber" Type="varchar" MaxLength="3" />
-          <Property Name="SubtermCode" Type="varchar" MaxLength="5" />
-          <Property Name="SubtermDescription" Type="varchar" MaxLength="20" />
-        </EntityType>-->
         <EntityType Name="ETL_StatusMapping">
           <Key>
             <PropertyRef Name="StatusCode" />
@@ -230,15 +198,6 @@ warning 6013: The table/view 'SLE_Tracking.dbo.ETL_Section' does not have a prim
           <Property Name="ModifiedDateTime" Type="datetime" />
           <Property Name="ModifiedByLoginID" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'SLE_Tracking.dbo.ETL_Student' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="ETL_Student">
-          <Property Name="StudentID" Type="char" MaxLength="9" />
-          <Property Name="FirstName" Type="varchar" MaxLength="50" />
-          <Property Name="LastName" Type="varchar" MaxLength="50" />
-          <Property Name="SemesterCode" Type="int" />
-          <Property Name="Programs" Type="varchar(max)" />
-        </EntityType>-->
         <EntityType Name="Outcome">
           <Key>
             <PropertyRef Name="OutcomeID" />
@@ -673,6 +632,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.RubricDetails' does not have a pr
           <Key>
             <PropertyRef Name="RubricID" />
             <PropertyRef Name="RubricName" />
+            <PropertyRef Name="OutcomeID" />
             <PropertyRef Name="OutcomeName" />
             <PropertyRef Name="OutcomeSortOrder" />
             <PropertyRef Name="CriteriaID" />
@@ -683,6 +643,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.RubricDetails' does not have a pr
           <Property Name="RubricID" Type="smallint" Nullable="false" />
           <Property Name="RubricName" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Description" Type="varchar(max)" />
+          <Property Name="OutcomeID" Type="smallint" Nullable="false" />
           <Property Name="OutcomeName" Type="varchar" MaxLength="300" Nullable="false" />
           <Property Name="OutcomeSortOrder" Type="tinyint" Nullable="false" />
           <Property Name="CriteriaID" Type="smallint" Nullable="false" />
@@ -1598,6 +1559,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
     [RubricDetails].[RubricID] AS [RubricID], 
     [RubricDetails].[RubricName] AS [RubricName], 
     [RubricDetails].[Description] AS [Description], 
+    [RubricDetails].[OutcomeID] AS [OutcomeID], 
     [RubricDetails].[OutcomeName] AS [OutcomeName], 
     [RubricDetails].[OutcomeSortOrder] AS [OutcomeSortOrder], 
     [RubricDetails].[CriteriaID] AS [CriteriaID], 
@@ -2853,6 +2815,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
             <PropertyRef Name="CriteriaID" />
             <PropertyRef Name="CriteriaName" />
             <PropertyRef Name="CriteriaSortOrder" />
+            <PropertyRef Name="OutcomeID" />
           </Key>
           <Property Name="AssessmentName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="RubricID" Type="Int16" Nullable="false" />
@@ -2864,6 +2827,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="CriteriaName" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="ExampleText" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="CriteriaSortOrder" Type="Byte" Nullable="false" />
+          <Property Name="OutcomeID" Type="Int16" Nullable="false" />
         </EntityType>
         <EntityType Name="SectionEnrollment">
           <Key>
@@ -4272,6 +4236,7 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <EntitySetMapping Name="RubricDetails">
             <EntityTypeMapping TypeName="SLE_TrackingModel.RubricDetail">
               <MappingFragment StoreEntitySet="RubricDetails">
+                <ScalarProperty Name="OutcomeID" ColumnName="OutcomeID" />
                 <ScalarProperty Name="CriteriaSortOrder" ColumnName="CriteriaSortOrder" />
                 <ScalarProperty Name="ExampleText" ColumnName="ExampleText" />
                 <ScalarProperty Name="CriteriaName" ColumnName="CriteriaName" />

@@ -7,10 +7,10 @@
     List<Role> allRoles = Model.NonDeletableRoles.ToList();
     allRoles.AddRange(Model.DeletableRoles.ToList());
 }
-
 @section Styles
 {
     <style>
+
 
         #clearSearchResults {
             background-color: red;
@@ -26,27 +26,23 @@
             padding-bottom: 15px;
         }
 
-        #topRow
-        {
+        #topRow {
             border-radius: 5px 5px 0px 0px;
-            margin-left:0;
+            margin-left: 0;
             margin-right: 0;
             padding-bottom: 10px;
             padding-top: 10px;
         }
-        #modalWarningArea
-        {
-            font-weight:bold;
+
+        #modalWarningArea {
+            font-weight: bold;
         }
     </style>
 
-
-
 }
-
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard","Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
         <li class="breadcrumb-item active" aria-current="page">Manage Roles</li>
     </ol>
 </nav>
@@ -59,34 +55,30 @@
     </div>
 }
 
-
 <div class="row justify-content-between bg-dark" id="topRow" >
     <div class="col-2">
-        <a href="/RoleAdmin/CreateRoles">
-            <button class="btn btn-success col-12" type="button" name="createRole" formmethod="post">
-                <i class="fa fa-plus"></i> Add New Role
-            </button>
-        </a>
+        <!-- <a href="/RoleAdmin/CreateRoles">
+    <button class="btn btn-success col-12" type="button" name="createRole" formmethod="post">
+        <i class="fa fa-plus"></i> Add New Role
+    </button>
+        </a>-->
     </div>
 
-    <div class="col-6 float-right text-right">
+        <div class="col-6 float-right text-right">
+            <span class="float-right text-right">
+                <label for="SearchTerm" class="text-light">Search</label> <span>
+                    @using (Html.BeginForm("ManageRoles", "RoleAdmin", FormMethod.Post, new { id = "searchForm" }))
+                    {
+                        <span>
+                            @Html.TextBoxFor(vm => vm.SearchTerm, new { id = "searchBox" })
+                        </span>
 
-        <span class="float-right text-right">
-
-            <label for="SearchTerm" class="text-light">Search</label> <span>
-
-                @using (Html.BeginForm("ManageRoles", "RoleAdmin", FormMethod.Post, new { id = "searchForm" }))
-                {
-                    <span>
-                        @Html.TextBoxFor(vm => vm.SearchTerm, new { id = "searchBox" })
-                    </span>
-
-                    <button type="submit" id="searchSubmit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>
-                }
+                        <button type="submit" id="searchSubmit" class="btn btn-primary d-inline ml-1" value="Submit"><i class="fas fa-search"></i></button>
+                    }
+                </span>
             </span>
-        </span>
+        </div>
     </div>
-</div>
 
 <table class="table table-hover table-striped">
     <thead class="thead-dark">
@@ -97,7 +89,6 @@
         </tr>
     </thead>
     <tbody>
-
         @if (allRoles != null && allRoles.Count > 0)
         {
             foreach (Role role in allRoles.OrderBy(r => r.Name))
@@ -121,10 +112,8 @@
             }
         }
 
-
     </tbody>
 </table>
-
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="DeletionModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -142,7 +131,6 @@
         </div>
     </div>
 </div>
-
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap-select")
@@ -192,4 +180,3 @@
 
     </script>
 }
-

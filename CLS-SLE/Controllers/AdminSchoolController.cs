@@ -64,9 +64,8 @@ namespace CLS_SLE.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    //Adding created on date
+                    
                     schoolVM.School.CreatedDateTime = DateTime.Now;
-                    //Adding created by
                     schoolVM.School.CreatedByLoginID = UserData.PersonId;
                     //Adding the new school to the database
                     db.Schools.Add(schoolVM.School);
@@ -149,9 +148,7 @@ namespace CLS_SLE.Controllers
             {
                 editSchool.Name = schoolVM.School.Name;
                 editSchool.IsActive = schoolVM.IsActive;
-                //Adding modifed on date
                 editSchool.ModifiedDateTime = DateTime.Now;
-                //Adding modifed by
                 editSchool.ModifiedByLoginID = UserData.PersonId;
                 //Modifying the school in the database
                 db.SaveChanges();

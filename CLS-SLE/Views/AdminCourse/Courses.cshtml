@@ -9,7 +9,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Programs-Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs & Courses", "ProgramDashboard", "Admin")</li>
         <li class="breadcrumb-item active" aria-current="page">Courses</li>
     </ol>
 </nav>
@@ -63,7 +63,7 @@
 @if (Model.DepartmentFilter != null)
 {
     <br />
-    <h2>Form @Model.DepartmentFilter</h2>
+    <h2>@Model.DepartmentFilter Course</h2>
 }
 <br />
 <table class="table table-hover">

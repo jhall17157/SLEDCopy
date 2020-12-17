@@ -143,7 +143,8 @@ namespace CLS_SLE.Controllers
             list.Add("Banner");
             list.Add("Non-Banner");
 
-            foreach (var d in db.Departments) { departmentNames.Add(d.Name); }
+            foreach (var d in db.Departments.Where(d => d.IsActive == true).OrderBy(d => d.Name)) { departmentNames.Add(d.Name); }
+            
 
             coursesViewModel.DepartmentNames = departmentNames;
 

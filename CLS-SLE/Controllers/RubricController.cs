@@ -302,7 +302,7 @@ namespace CLS_SLE.Controllers
             {
                 //logger.Error("Failed to save assessment, redirecting to sign in page.");
                 return Content("<html><b>Message:</b><br>" + e.Message + "<br><b>Inner Exception:</b><br>" + e.InnerException + "<br><b>Stack Trace:</b><br>" + e.StackTrace + "</html>");
-                return RedirectToAction(actionName: "Signin", controllerName: "User");
+               // return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
         }
 
@@ -361,23 +361,30 @@ namespace CLS_SLE.Controllers
         {
             try
             {
-                Outcome editOutcome = db.Outcomes.Where(o => o.OutcomeID == outcomeViewModel.OutcomeVM.OutcomeID).FirstOrDefault();
+                Outcome outcome = db.Outcomes.Where(o => o.OutcomeID == outcomeViewModel.OutcomeVM.OutcomeID).FirstOrDefault();
 
-                editOutcome.Name = outcomeViewModel.OutcomeVM.Name;
-                editOutcome.Description = outcomeViewModel.OutcomeVM.Description;
-                bool oldIsActive = editOutcome.IsActive;
-                editOutcome.IsActive = outcomeViewModel.OutcomeVM.IsActive;
-                if (outcomeViewModel.OutcomeVM.IsActive == false && oldIsActive == true)
+                outcome.Name = outcomeViewModel.OutcomeVM.Name;
+                outcome.Description = outcomeViewModel.OutcomeVM.Description;
+                //check if the IsActive field changed status
+                if (outcome.IsActive != outcomeViewModel.OutcomeVM.IsActive)
                 {
-                    editOutcome.InactiveDateTime = DateTime.Now;
+                    //outcome is no longer active
+                    if(!outcomeViewModel.OutcomeVM.IsActive)
+                    {
+                        outcome.InactiveDateTime = DateTime.Now;
+                    }
+                    else //outcome was inactive, now active
+                    {
+                        outcome.InactiveDateTime = null;
+                    }
                 }
-                editOutcome.CriteriaPassRate = outcomeViewModel.OutcomeVM.CriteriaPassRate / 100;
-                editOutcome.CalculateCriteriaPassRate = outcomeViewModel.OutcomeVM.CalculateCriteriaPassRate;
-                editOutcome.IsTSAOutcome = outcomeViewModel.OutcomeVM.IsTSAOutcome;
-                editOutcome.ModifiedDateTime = DateTime.Now;
-                editOutcome.ModifiedByLoginID = UserData.PersonId;
+                outcome.IsActive = outcomeViewModel.OutcomeVM.IsActive;
+                outcome.CriteriaPassRate = outcomeViewModel.OutcomeVM.CriteriaPassRate / 100;
+                outcome.CalculateCriteriaPassRate = outcomeViewModel.OutcomeVM.CalculateCriteriaPassRate;
+                outcome.IsTSAOutcome = outcomeViewModel.OutcomeVM.IsTSAOutcome;
+                outcome.ModifiedDateTime = DateTime.Now;
+                outcome.ModifiedByLoginID = UserData.PersonId;
 
-                //db.Entry(editOutcome).State = EntityState.Modified;
                 db.SaveChanges();
 
                 return RedirectToAction("ViewRubric", "Rubric", new { rubricID = outcomeViewModel.Rubric.RubricID, assessmentID = outcomeViewModel.Rubric.AssessmentID });
@@ -435,14 +442,12 @@ namespace CLS_SLE.Controllers
                 }
                 maxSortOrder++;
 
-                //db.Criteria.Load();
                 criterion.SortOrder = maxSortOrder;
                 criterion.CreatedDateTime = DateTime.Now;
                 criterion.CreatedByLoginID = UserData.PersonId;
                 outcome.Criteria.Add(criterion);
                 db.Criteria.Add(criterion);
 
-                //db.Entry(addCriteria).State = EntityState.Added;
                 db.SaveChanges();
 
                 return RedirectToAction("ViewRubric", "Rubric", new { rubricID = criterionViewModel.Rubric.RubricID, assessmentID = criterionViewModel.Rubric.AssessmentID });
@@ -472,6 +477,19 @@ namespace CLS_SLE.Controllers
                 //db.Criteria.Load();
                 criterion.Name = criterionViewModel.Criterion.Name;
                 criterion.ExampleText = criterionViewModel.Criterion.ExampleText;
+                //if the active status has changed...
+                if (criterion.IsActive !=  criterionViewModel.Criterion.IsActive)
+                {
+                    //criterion is no longer active, set the inactive date time
+                    if (!criterionViewModel.Criterion.IsActive)
+                    {
+                        criterion.InactiveDateTime = DateTime.Now;
+                    }
+                    else // was inactive, now active
+                    {
+                        criterion.InactiveDateTime = null;
+                    }
+                }
                 criterion.IsActive = criterionViewModel.Criterion.IsActive;
                 criterion.ModifiedDateTime = DateTime.Now;
                 criterion.ModifiedByLoginID = UserData.PersonId;

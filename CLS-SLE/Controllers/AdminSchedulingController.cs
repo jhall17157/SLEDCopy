@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class AdminSchedulingController : SLEControllerBase
     {
 
@@ -55,8 +56,9 @@ namespace CLS_SLE.Controllers
             schedulingViewModel.Semesters = GetSemesters(true);//53ms
 
             //get course ids for all sections in selected semester that have assessments scheduled and returns as a list 
+            // exclude cancelled courses
             List<short> courseIDs = db.Sections
-                .Where(c => c.SectionRubrics.Any() && c.SemesterID == schedulingViewModel.Semester.SemesterID)
+                .Where(c => c.SectionRubrics.Any() && c.SemesterID == schedulingViewModel.Semester.SemesterID && c.IsCancelled == false)
                 .Select(i => i.CourseID).Distinct().ToList();
 
             //schedulingViewModel.Semester.Sections.Where(c => c.SectionRubrics.Any()).Select(i => i.CourseID).Distinct().ToList(); //23ms
@@ -111,7 +113,7 @@ namespace CLS_SLE.Controllers
 
 
             schedulingViewModel.CourseForAddEntry = (from c in db.Courses
-                                                     where c.Sections.Where(y => y.SemesterID == schedulingViewModel.SemesterID).Any()
+                                                     where c.Sections.Where(y => y.SemesterID == schedulingViewModel.SemesterID && y.IsCancelled == false).Any()
                                                      orderby c.Number
                                                      select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() }).Distinct().ToList();
 
@@ -284,6 +286,9 @@ namespace CLS_SLE.Controllers
                     RubricID = (short)viewModel.RubricID,
                     StartDate = viewModel.StartDate,
                     EndDate = viewModel.EndDate,
+                    CreatedByLoginID = UserData.PersonId,
+                    CreatedDateTime = DateTime.Now
+            
 
                 };
                 try
@@ -416,6 +421,8 @@ namespace CLS_SLE.Controllers
                 {
                     record.StartDate = svm.StartDate;
                     record.EndDate = svm.EndDate;
+                    record.ModifiedByLoginID = UserData.PersonId;
+                    record.ModifiedDateTime = DateTime.Now;
                     db.SaveChanges();
                 }
                 else
@@ -436,6 +443,8 @@ namespace CLS_SLE.Controllers
                 {
                     sectionRubric.StartDate = beginDate;
                     sectionRubric.EndDate = endDate;
+                    sectionRubric.ModifiedByLoginID = UserData.PersonId;
+                    sectionRubric.ModifiedDateTime = DateTime.Now;
                     db.SaveChanges();
                     return new JsonResult { Data = SectionRubricID, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                 }

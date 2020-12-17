@@ -24,46 +24,13 @@ namespace CLS_SLE.Controllers
             try
             {
                 List<String> leadInstructorList = new List<String>();
-                var instructors = db.Users.Where(r => r.UserRoles.Any(ur => ur.Role.Name == "Faculty"));
+                var instructors = db.Users.Where(r => r.UserRoles.Any(ur => ur.Role.Name == "Faculty") && r.IsActive == true);
                 foreach(var instructor in instructors)
                 {
                     leadInstructorList.Add(instructor.Person.IdNumber + " - " + instructor.Person.FirstName + " " + instructor.Person.LastName);
                 };
 
-                //List<String> leadInstructorList = new List<String>();
-                //var users = db.Users.ToList();
-                //var roles = db.Roles.ToList();
-                //var userroles = db.UserRoles.ToList();
-                //var query = from ur in userroles
-
-                //            join r in roles
-                //            on ur.RoleID equals r.RoleID into urr
-                //            from urrResult in (from r in urr
-                //                               where r.Name == "Faculty"
-                //                               select r).DefaultIfEmpty()
-
-                //            join u in users
-                //            on ur.PersonID equals u.PersonID into uru
-                //            from uruResult in uru.DefaultIfEmpty()
-
-                //            select new
-                //            {
-                //                InstructorName = uruResult != null && uruResult.Person != null ?
-                //                                uruResult.Person.FirstName + " " + uruResult.Person.LastName
-                //                                : null,
-                //                InstructorID = uruResult != null && uruResult.Person != null ?
-                //                                uruResult.Person.IdNumber : null,
-                //                PersonRole = urrResult != null ? urrResult.Name : null
-                //            };
-                //foreach (var result in query)
-                //{
-                //    if (result.PersonRole != null && result.InstructorName != null)
-                //    {
-                //        leadInstructorList.Add(string.Concat(result.InstructorID, " - ", result.InstructorName));
-
-                //    }
-                //}
-
+                
                 List<String> semesterList = new List<String>();
                 List<Semester> orderedSemesters = new List<Semester>();
                 
@@ -72,40 +39,6 @@ namespace CLS_SLE.Controllers
                 {
                     semesterList.Add(semester.Name);
                 }
-
-                //var users = db.Users.ToList();
-                //var roles = db.Roles.ToList();
-                //var userroles = db.UserRoles.ToList();
-                //var query = from ur in userroles
-
-                //            join r in roles
-                //            on ur.RoleID equals r.RoleID into urr
-                //            from urrResult in (from r in urr
-                //                               where r.Name == "Faculty"
-                //                               select r).DefaultIfEmpty()
-
-                //            join u in users
-                //            on ur.PersonID equals u.PersonID into uru
-                //            from uruResult in uru.DefaultIfEmpty()
-
-                //            select new
-                //            {
-                //                InstructorName = uruResult != null && uruResult.Person != null ?
-                //                                uruResult.Person.FirstName + " " + uruResult.Person.LastName
-                //                                : null,
-                //                InstructorID = uruResult != null && uruResult.Person != null ?
-                //                                uruResult.Person.IdNumber : null,
-                //                PersonRole = urrResult != null ? urrResult.Name : null
-                //            };
-                //foreach (var result in query)
-                //{
-                //    if (result.PersonRole != null && result.InstructorName != null)
-                //    {
-                //        leadInstructorList.Add(string.Concat(result.InstructorID, " - ", result.InstructorName));
-
-                //    }
-                //}
-                //List<String> subtermList = db.Subterms.Select(s => s.SubtermCode).ToList();
 
                 var model = new AddSectionViewModel()
                 {
@@ -419,14 +352,8 @@ namespace CLS_SLE.Controllers
                     }
                     editSection.BeginDate = sectionVM.Section.BeginDate;
                     editSection.IsCancelled = sectionVM.IsCancelled;
-                    if (editSection.IsCancelled == true)
-                    {
-                        editSection.EndDate = DateTime.Now;
-                    }
-                    else
-                    {
-                        editSection.EndDate = sectionVM.Section.EndDate;
-                    }
+                    editSection.EndDate = sectionVM.Section.EndDate;
+                    
                     // Adding modified on date
                     editSection.ModifiedDateTime = DateTime.Now;
                     // Adding modified by 
@@ -466,7 +393,7 @@ namespace CLS_SLE.Controllers
                 EnrollmentStatusCode = "E",
                 StatusDate = DateTime.Now,
                 CreatedDateTime = DateTime.Now,
-                CreatedByLoginID = Convert.ToInt32(Session["personID"])
+                CreatedByLoginID = UserData.PersonId
             };
 
             db.Enrollments.Add(newEnrollment);
@@ -480,6 +407,8 @@ namespace CLS_SLE.Controllers
         {
             var tempEnrollment = db.Enrollments.Where(e => e.EnrollmentID == Id).FirstOrDefault();
             tempEnrollment.EnrollmentStatusCode = tempEnrollment.EnrollmentStatusCode == "E" ? "D" : "E";
+            tempEnrollment.ModifiedByLoginID = UserData.PersonId;
+            tempEnrollment.ModifiedDateTime = DateTime.Now;
             db.SaveChanges();
             return RedirectToAction("ViewSection", "AdminSection", new { sectionID = tempEnrollment.SectionID });
         }
@@ -489,7 +418,10 @@ namespace CLS_SLE.Controllers
             var dataStudent = new StudentModel();
             var student = db.People.Where(p => p.IdNumber == search).FirstOrDefault();
 
-            if (student == null) { dataStudent.message = "No student has " + search + " as an ID"; dataStudent.success = false; }
+            if (student == null)
+            {
+                dataStudent.message = "No student has " + search + " as an ID"; dataStudent.success = false;
+            }
             else
             {
                 if (db.Enrollments.Where(e => e.SectionID == id).Where(e => e.Person.IdNumber == search).FirstOrDefault() == null)
@@ -516,7 +448,7 @@ namespace CLS_SLE.Controllers
                 EnrollmentStatusCode = "E",
                 StatusDate = DateTime.Now,
                 CreatedDateTime = DateTime.Now,
-                CreatedByLoginID = Convert.ToInt32(Session["personID"])
+                CreatedByLoginID = UserData.PersonId
             };
 
             db.Enrollments.Add(newEnrollment);

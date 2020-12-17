@@ -99,7 +99,7 @@
     </div>
 
     <div class="col-12 input-field">
-        @Html.TextBoxFor(model => model.role.Name, new { @class = "form-control", id="RoleName" })
+        @Html.TextBoxFor(model => model.role.Name, new { @class = "form-control",id ="RoleName", @readonly = true })<!-- Added read-only for now, as security is based on rolename-->
 
     </div>
     <br />
@@ -115,7 +115,7 @@
     <button id="goToManageRoleMembership" class="btn btn-primary">Manage Role Membership</button>
 
 </div>
-
+<!-- not currently used - uncomment later
 <div id="RoleDataSecuritySection">
     <h2>Data Security for this Role</h2>
 
@@ -151,7 +151,7 @@
         </div>
     </div>
 </div>
-
+    -->
 <div class="modal fade" id="DepartmentModal" tabindex="-1" role="dialog" aria-labelledby="DepartmentModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

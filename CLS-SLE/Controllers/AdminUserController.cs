@@ -46,6 +46,7 @@ namespace CLS_SLE.Controllers
             {
                 //person
                 userVM.Person.CreatedDateTime = DateTime.Now;
+                userVM.Person.CreatedByLoginID = UserData.PersonId;
                 Person existingPerson = db.People.FirstOrDefault(u => u.IdNumber == userVM.Person.IdNumber);
                 //Checks if Existing Person, and Creates if Not, Updates if is
                 if (existingPerson==null)
@@ -60,15 +61,16 @@ namespace CLS_SLE.Controllers
                     existingPerson.FirstName = userVM.Person.FirstName;
                     existingPerson.LastName = userVM.Person.LastName;
                     existingPerson.ModifiedDateTime = DateTime.Now;
+                    existingPerson.ModifiedByLoginID = UserData.PersonId;
                     db.SaveChanges();
                     userVM.User.PersonID = existingPerson.PersonID;
                 }
-                //db.People.Add(userVM.Person);
-
+            
                 //user
                 userVM.User.CreatedDateTime = DateTime.Now;
+                userVM.User.CreatedByLoginID = UserData.PersonId;
                 //hash pass on submission
-                userVM.HashStudentID(userVM.Person.IdNumber);
+               // userVM.HashStudentID(userVM.Person.IdNumber);
                 db.Users.Add(userVM.User);
                 db.SaveChanges();
 
@@ -104,9 +106,13 @@ namespace CLS_SLE.Controllers
             editPerson.FirstName = updateUserViewModel.Person.FirstName;
             editPerson.LastName = updateUserViewModel.Person.LastName;
             editPerson.IdNumber = updateUserViewModel.Person.IdNumber;
+            editPerson.ModifiedByLoginID = UserData.PersonId;
+            editPerson.ModifiedDateTime = DateTime.Now;
             editUser.Login = updateUserViewModel.User.Login;
             editUser.Email = updateUserViewModel.User.Email;
             editUser.IsActive = updateUserViewModel.User.IsActive;
+            editUser.ModifiedDateTime = DateTime.Now;
+            editUser.ModifiedByLoginID = UserData.PersonId;
 
             db.SaveChanges();
 
@@ -118,8 +124,6 @@ namespace CLS_SLE.Controllers
 
         public ActionResult Activate(ViewUserViewModel viewUserViewModel, short id)
         {
-
-
 
             //int id = Int32.Parse(form["id"]);
             viewUserViewModel.User = db.Users.Where(u => u.PersonID == id).SingleOrDefault();

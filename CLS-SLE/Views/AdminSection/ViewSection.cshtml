@@ -7,14 +7,13 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Programs/Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs & Courses", "ProgramDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Courses", "Courses", "AdminCourse", new { page = 1 }, null)</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)Model.sectionCourse, "ViewCourse", "AdminCourse", new { courseID = Model.section.CourseID }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">@Model.section.CRN</li>
     </ol>
 </nav>
-<h1>Section @Model.section.CRN  - <a style="font-size: 65%;" href="/AdminSection/EditSection?sectionID=@Model.section.SectionID">Edit <i class="fas fa-edit"></i></a> </h1>
-<h2>@Model.section.Course.Number @Model.section.Course.CourseName</h2>
+<h1>@Model.section.Course.Number @Model.section.CRN @Model.section.Course.CourseName <a style="font-size: 65%;" href="/AdminSection/EditSection?sectionID=@Model.section.SectionID">Edit <i class="fas fa-edit"></i></a> </h1>
 <br />
 <div class="py-1">
     <b>Semester:</b> @Model.sectionSemester
@@ -67,7 +66,7 @@ else
     </div>  }
 <br />
 <div>
-    <h3>Enrollments</h3>
+    <h2>Enrollments</h2>
     <table class="table table-hover table-striped">
         <thead class="thead-dark">
             <tr>
@@ -95,7 +94,7 @@ else
                             <td>
                                 @if (enrollment.EnrollmentStatusCode == "E")
                                 {<div class="form-group p-0 mx-1 float-right"><input type="submit" class="btn btn-danger col-12 mx-1" value="Drop/Withdraw" /></div>}
-                                else if (enrollment.EnrollmentStatusCode == "D")
+                                else 
                                 {<div class="form-group p-0 mx-1 float-right"><input type="submit" class="btn btn-primary col-12 mx-1" value="Re-enroll" /></div>}
                             </td>
                         }

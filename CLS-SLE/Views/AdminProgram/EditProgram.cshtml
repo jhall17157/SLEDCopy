@@ -11,7 +11,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Programs-Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs & Courses", "ProgramDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Programs", "Programs", "AdminProgram", new { page = 1 }, null)</li>
         <li class="breadcrumb-item">@Html.ActionLink((String)ViewBag.program.Name, "ViewProgram", "AdminProgram", new { programID = ViewBag.program.ProgramID }, null)</li>
         <li class="breadcrumb-item active" aria-current="page">Edit</li>
@@ -34,7 +34,7 @@
         @Html.ValidationMessageFor(model => model.Program.Name)
     </div>
     <div>
-         @Html.Label("Primary Department(s):")
+         @Html.Label("Department(s):")
          @Html.ListBoxFor(d => d.DepartmentSelection, new MultiSelectList(Model.DepartmentNames, Model.DepartmentSelection),
          new { id = "ListBox1", @class = "form-control", multiple = "multiple" })
     </div>

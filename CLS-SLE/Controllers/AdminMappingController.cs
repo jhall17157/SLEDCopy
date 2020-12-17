@@ -9,6 +9,7 @@ namespace CLS_SLE.Controllers
 {
 
     //New controller for mapping page
+    [Authorize(Roles = "Administrator")]
     public class AdminMappingController : SLEControllerBase
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
@@ -19,15 +20,16 @@ namespace CLS_SLE.Controllers
         {
             MappingViewModel mappingViewModel = new MappingViewModel();
             mappingViewModel.Programs = (from p in db.Programs
-                                         where p.Number != "000000" && p.Number != "999999"
+                                         where p.Number != "000000" && p.Number != "999999" && p.IsActive == true
                                          select new SelectListItem { Text = p.Number + " " + p.Name, Value = p.ProgramID.ToString() })
                                             .Distinct().ToList();
             mappingViewModel.Programs = mappingViewModel.Programs.OrderBy(p => p.Text).ToList();
             mappingViewModel.Courses = (from c in db.Courses
-                                        where !c.CourseName.Contains("Folio180")
+                                        where !c.CourseName.Contains("Folio180") && c.IsActive == true 
                                         select new SelectListItem { Text = c.Number + " " + c.CourseName, Value = c.CourseID.ToString() })
                                             .Distinct().ToList();
             mappingViewModel.Rubrics = (from r in db.AssessmentRubrics
+                                        where r.IsActive == true
                                         select new SelectListItem { Text = r.Name, Value = r.RubricID.ToString() }).Distinct().ToList();
             if (TempData["ProgramID"] != null)
             {

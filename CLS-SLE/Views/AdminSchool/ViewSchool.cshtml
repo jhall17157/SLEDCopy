@@ -6,7 +6,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-        <li class="breadcrumb-item">@Html.ActionLink("Programs-Courses Dashboard", "ProgramDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Programs & Courses", "ProgramDashboard", "Admin")</li>
         <li class="breadcrumb-item">@Html.ActionLink("Schools", "Schools", "AdminSchool")</li>
         <li class="breadcrumb-item active" aria-current="page">@Model.school.Name </li>
     </ol>
@@ -37,6 +37,7 @@
         <thead class="thead-dark">
             <tr>
                 <th scope="col" class="h3">Departments</th>
+                <th scope="col" class="h3"></th>
                 <th scope="col" class="text-right"></th>
                 <th scope="col" width="10%">
                     <a href="~/AdminDepartment/AddDepartment" class="float-right btn btn-success">
@@ -50,16 +51,18 @@
             {
                 if (department.IsActive.Equals(false))
                 {
-                    <tr>
-                        <td colspan="2">@department.Name <span class="text-danger">(Not Active)</span></td>
-                        <td class="text-right">
-                            <a href="../AdminDepartment/ViewDepartment?departmentID=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
-                        </td>
-                    </tr>
+            <tr>
+                <td colspan="1">@department.Number</td>
+                <td colspan="2">@department.Name<span class="text-danger">(Not Active)</span></td>
+                <td class="text-right">
+                    <a href="../AdminDepartment/ViewDepartment?departmentID=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
+                </td>
+            </tr>
                 }
                 else
                 {
                     <tr>
+                        <td colspan="1">@department.Number</td>
                         <td colspan="2">@department.Name</td>
                         <td class="text-right">
                             <a href="../AdminDepartment/ViewDepartment?departmentID=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>

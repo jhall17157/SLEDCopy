@@ -9,12 +9,8 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Web.Security;
 using System.Net.Mail;
-using BCrypt.Net;
-using NLog;
-using System.Security.Principal;
 using System.Threading;
 using Microsoft.AspNet.Identity.EntityFramework;
-using CLS_SLE.Utility.SAML;
 
 
 namespace CLS_SLE.Controllers

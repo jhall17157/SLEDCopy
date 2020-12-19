@@ -75,9 +75,9 @@ namespace CLS_SLE.Controllers
             Model.ModifierLogin = null;
 
             //get rubrics under the same assesment
-            List<RubricSearchModel> resultRubrics = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID).Select(a => new RubricSearchModel
+            List<RubricSearchModel> resultRubrics = db.RubricAssessments.Where(a => a.AssessmentID == assessmentID).Select(a => new RubricSearchModel
             {
-                name = a.Name,
+                name = a.AssessmentRubric.Name,
                 rubricID = a.RubricID
             }).ToList();
 

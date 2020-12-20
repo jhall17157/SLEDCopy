@@ -1,13 +1,83 @@
 <?xml version="1.0"?>
-<doc>
+<doc xml:lang="en">
     <assembly>
         <name>Microsoft.AI.WindowsServer</name>
     </assembly>
     <members>
+        <member name="T:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule">
+            <summary>
+            Provides default values for the heartbeat feature of Application Insights that
+            are specific to Azure App Services (Web Apps, Functions, etc...).
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule.WebHeartbeatPropertyNameEnvVarMap">
+            <summary>
+            Environment variables and the Application Insights heartbeat field names that accompany them.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule.#ctor">
+            <summary>
+            Initializes a new instance of the<see cref="T:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule" /> class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule.#ctor(Microsoft.ApplicationInsights.Extensibility.Implementation.Tracing.IHeartbeatPropertyManager)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule" /> class. This is
+            internal, and allows for overriding the Heartbeat Property Manager to test this module with.
+            </summary>
+            <param name="hbeatPropManager">The heartbeat property manager to use when setting/updating env var values.</param>
+        </member>
+        <member name="P:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule.HeartbeatPropertyManager">
+            <summary>
+            Gets or sets an instance of IHeartbeatPropertyManager. 
+            </summary>
+            <remarks>
+            This is expected to be an instance of <see cref="T:Microsoft.ApplicationInsights.Extensibility.Implementation.Tracing.DiagnosticsTelemetryModule"/>.
+            </remarks>
+        </member>
+        <member name="P:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule.IsInitialized">
+            <summary>Gets a value indicating whether this module has been initialized.</summary>
+            <remarks>Used to determine if we call Add or Set heartbeat properties in the case of updates.</remarks>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule.Initialize(Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration)">
+            <summary>
+            Initialize the default heartbeat provider for Azure App Services. This module
+            looks for specific environment variables and sets them into the heartbeat 
+            properties for Application Insights, if they exist.
+            </summary>
+            <param name="configuration">Unused parameter.</param>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule.UpdateHeartbeatWithAppServiceEnvVarValues">
+            <summary>
+            Signal the AppServicesHeartbeatTelemetryModule to update the values of the 
+            Environment variables we use in our heartbeat payload.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule.Dispose">
+            <summary>
+            Remove our event handler from the environment variable monitor.
+            </summary>
+        </member>
         <member name="T:Microsoft.ApplicationInsights.WindowsServer.AzureInstanceMetadataTelemetryModule">
             <summary>
             A telemetry module that adds Azure instance metadata context information to the heartbeat, if it is available.
             </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.AzureInstanceMetadataTelemetryModule.#ctor">
+            <summary>
+            Initializes a new instance of the<see cref="T:Microsoft.ApplicationInsights.WindowsServer.AzureInstanceMetadataTelemetryModule" /> class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.ApplicationInsights.WindowsServer.AzureInstanceMetadataTelemetryModule.HeartbeatPropertyManager">
+            <summary>
+            Gets or sets an instance of IHeartbeatPropertyManager. 
+            </summary>
+            <remarks>
+            This is expected to be an instance of <see cref="T:Microsoft.ApplicationInsights.Extensibility.Implementation.Tracing.DiagnosticsTelemetryModule"/>.
+            </remarks>
+        </member>
+        <member name="P:Microsoft.ApplicationInsights.WindowsServer.AzureInstanceMetadataTelemetryModule.IsInitialized">
+            <summary>Gets a value indicating whether this module has been initialized.</summary>
         </member>
         <member name="M:Microsoft.ApplicationInsights.WindowsServer.AzureInstanceMetadataTelemetryModule.Initialize(Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration)">
             <summary>
@@ -17,6 +87,28 @@
             present no added IMS data is added to the heartbeat.
             </summary>
             <param name="unused">Unused parameter for this TelemetryModule.</param>
+        </member>
+        <member name="T:Microsoft.ApplicationInsights.WindowsServer.AzureRoleEnvironmentTelemetryInitializer">
+            <summary>
+            A telemetry initializer that will gather Azure Role Environment context information.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.AzureRoleEnvironmentTelemetryInitializer.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.ApplicationInsights.WindowsServer.AzureRoleEnvironmentTelemetryInitializer" /> class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.AzureRoleEnvironmentTelemetryInitializer.Initialize(Microsoft.ApplicationInsights.Channel.ITelemetry)">
+            <summary>
+            Initializes <see cref="T:Microsoft.ApplicationInsights.Channel.ITelemetry" /> device context.
+            </summary>
+            <param name="telemetry">The telemetry to initialize.</param>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.AzureRoleEnvironmentTelemetryInitializer.IsAppRunningInAzureWebApp">
+            <summary>
+            Searches for the environment variable specific to Azure web applications and confirms if the current application is a web application or not.
+            </summary>
+            <returns>Boolean, which is true if the current application is an Azure web application.</returns>
         </member>
         <member name="T:Microsoft.ApplicationInsights.WindowsServer.AzureWebAppRoleEnvironmentTelemetryInitializer">
             <summary>
@@ -91,6 +183,16 @@
             </summary>
             <param name="configuration">Configuration object.</param>
         </member>
+        <member name="T:Microsoft.ApplicationInsights.WindowsServer.DeviceTelemetryInitializer">
+            <summary>
+            A telemetry context initializer that will gather device context information.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.DeviceTelemetryInitializer.Initialize(Microsoft.ApplicationInsights.Channel.ITelemetry)">
+            <summary>
+            Populates device properties on a telemetry item.
+            </summary>
+        </member>
         <member name="T:Microsoft.ApplicationInsights.WindowsServer.DomainNameRoleInstanceTelemetryInitializer">
             <summary>
             Obsolete. A telemetry context initializer that used to populate role instance name. Preserved for backward compatibility. 
@@ -103,47 +205,38 @@
             </summary>
             <param name="telemetry">The telemetry to initialize.</param>
         </member>
-        <member name="T:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule">
+        <member name="T:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule">
             <summary>
-            Provides default values for the heartbeat feature of Application Insights that
-            are specific to Azure App Services (Web Apps, Functions, etc...).
+            The module subscribed to AppDomain.CurrentDomain.FirstChanceException to send exceptions statistics to ApplicationInsights.
             </summary>
         </member>
-        <member name="F:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule.WebHeartbeatPropertyNameEnvVarMap">
+        <member name="F:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule.executionSyncObject">
             <summary>
-            Environment variables and the Application Insights heartbeat field names that accompany them.
+            This object prevents double entry into the exception callback.
             </summary>
         </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule.#ctor">
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule.#ctor">
             <summary>
-            Initializes a new instance of the<see cref="T:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule" /> class.
+            Initializes a new instance of the <see cref="T:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule" /> class.
             </summary>
         </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule.#ctor(Microsoft.ApplicationInsights.Extensibility.Implementation.Tracing.IHeartbeatPropertyManager)">
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule.Initialize(Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration)">
             <summary>
-            Initializes a new instance of the <see cref="T:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule" /> class. This is
-            internal, and allows for overriding the Heartbeat Property Manager to test this module with.
+            Initializes the telemetry module.
             </summary>
-            <param name="hbeatPropManager">The heartbeat property manager to use when setting/updating env var values.</param>
+            <param name="configuration">Telemetry Configuration used for creating TelemetryClient for sending exception statistics to Application Insights.</param>
         </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule.Initialize(Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration)">
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule.Dispose">
             <summary>
-            Initialize the default heartbeat provider for Azure App Services. This module
-            looks for specific environment variables and sets them into the heartbeat 
-            properties for Application Insights, if they exist.
-            </summary>
-            <param name="configuration">Unused parameter.</param>
-        </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule.UpdateHeartbeatWithAppServiceEnvVarValues">
-            <summary>
-            Signal the AppServicesHeartbeatTelemetryModule to update the values of the 
-            Environment variables we use in our heartbeat payload.
+            Disposing TaskSchedulerOnUnobservedTaskException instance. This class doesn't have the finalize method as we expect it 
+            live for a duration of the process and be disposed by AI infrastructure.
             </summary>
         </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.AppServicesHeartbeatTelemetryModule.Dispose">
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule.Dispose(System.Boolean)">
             <summary>
-            Remove our event handler from the environment variable monitor.
+            IDisposable implementation.
             </summary>
+            <param name="disposing">The method has been called directly or indirectly by a user's code.</param>
         </member>
         <member name="T:Microsoft.ApplicationInsights.WindowsServer.Implementation.AppServiceEnvironmentVariableMonitor">
             <summary>
@@ -208,74 +301,6 @@
             At this time, this service does not support https. We should monitor their website for more information. https://docs.microsoft.com/azure/virtual-machines/windows/instance-metadata-service .
             </remarks>
         </member>
-        <member name="T:Microsoft.ApplicationInsights.WindowsServer.Implementation.DataContracts.AzureInstanceComputeMetadata">
-            <summary>
-            Class representing the returned structure from an Azure Instance Metadata request
-            for Compute information.
-            </summary>
-        </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.Implementation.DataContracts.AzureInstanceComputeMetadata.VerifyExpectedValue(System.String)">
-            <summary>
-            Because the Azure IMS is on a non-routable IP we need to do some due diligence in our accepting
-            values returned from it. This method takes the fieldname and value received for that field, and
-            if we can test that value against known limitations of that field we do so here. If the test fails
-            we return the empty string, otherwise we return the string given.
-            </summary>
-            <param name="fieldName">Name of the field acquired from the call to Azure IMS.</param>
-            <returns>The value of the field, verified, or the empty string.</returns>
-        </member>
-        <member name="T:Microsoft.ApplicationInsights.WindowsServer.Implementation.EnvironmentVariableMonitor">
-            <summary>
-            Utility to monitor the value of environment variables which may change 
-            during the run of an application. Checks the environment variables 
-            intermittently.
-            </summary>
-        </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.Implementation.EnvironmentVariableMonitor.#ctor(System.Collections.Generic.IEnumerable{System.String},System.TimeSpan)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Microsoft.ApplicationInsights.WindowsServer.Implementation.EnvironmentVariableMonitor" /> class.
-            </summary>
-        </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.Implementation.EnvironmentVariableMonitor.GetCurrentEnvironmentVariableValue(System.String,System.String@)">
-            <summary>
-            Get the latest value assigned to an environment variable.
-            </summary>
-            <param name="envVarName">Name of the environment variable to acquire.</param>
-            <param name="value">Current cached value of the environment variable.</param>
-        </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.Implementation.EnvironmentVariableMonitor.OnEnvironmentVariableUpdated">
-            <summary>
-            Method to update subscribers whenever a change in the tracked environment variables is detected.
-            </summary>
-        </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.Implementation.EnvironmentVariableMonitor.CheckVariablesIntermittent(System.Object)">
-            <summary>
-            Check and update the variables being tracked and if any updates are detected,
-            raise the OnEnvironmentVariableUpdated event. Restart the timer to check again
-            in the configured interval once complete.
-            </summary>
-            <param name="state">Variable left unused in this implementation of TimerCallback.</param>
-        </member>
-        <member name="T:Microsoft.ApplicationInsights.WindowsServer.Implementation.WindowsServerEventSource">
-            <summary>
-            ETW EventSource tracing class.
-            </summary>
-        </member>
-        <member name="F:Microsoft.ApplicationInsights.WindowsServer.Implementation.WindowsServerEventSource.Log">
-            <summary>
-            Instance of the WindowsServerEventSource class.
-            </summary>
-        </member>
-        <member name="T:Microsoft.ApplicationInsights.WindowsServer.Implementation.WindowsServerEventSource.Keywords">
-            <summary>
-            Keywords for the PlatformEventSource. Those keywords should match keywords in Core.
-            </summary>
-        </member>
-        <member name="F:Microsoft.ApplicationInsights.WindowsServer.Implementation.WindowsServerEventSource.Keywords.UserActionable">
-            <summary>
-            Key word for user actionable events.
-            </summary>
-        </member>
         <member name="F:Microsoft.ApplicationInsights.WindowsServer.Implementation.AzureRoleEnvironmentContextReader.instance">
             <summary>
             The singleton instance for our reader.
@@ -323,6 +348,22 @@
             Contains logic to load AzureServiceRuntime assembly and read context using reflection.
             Inherits MarshalByRefObject so that methods of this class can be executed remotely in separate AppDomain.
             </summary>    
+        </member>
+        <member name="T:Microsoft.ApplicationInsights.WindowsServer.Implementation.DataContracts.AzureInstanceComputeMetadata">
+            <summary>
+            Class representing the returned structure from an Azure Instance Metadata request
+            for Compute information.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.Implementation.DataContracts.AzureInstanceComputeMetadata.VerifyExpectedValue(System.String)">
+            <summary>
+            Because the Azure IMS is on a non-routable IP we need to do some due diligence in our accepting
+            values returned from it. This method takes the fieldname and value received for that field, and
+            if we can test that value against known limitations of that field we do so here. If the test fails
+            we return the empty string, otherwise we return the string given.
+            </summary>
+            <param name="fieldName">Name of the field acquired from the call to Azure IMS.</param>
+            <returns>The value of the field, verified, or the empty string.</returns>
         </member>
         <member name="T:Microsoft.ApplicationInsights.WindowsServer.Implementation.DeviceContextReader">
             <summary>
@@ -380,6 +421,38 @@
             <param name="property">The property.</param>
             <param name="defaultValue">The default value of the property if WMI fails.</param>
             <returns>The value if found, Unknown otherwise.</returns>
+        </member>
+        <member name="T:Microsoft.ApplicationInsights.WindowsServer.Implementation.EnvironmentVariableMonitor">
+            <summary>
+            Utility to monitor the value of environment variables which may change 
+            during the run of an application. Checks the environment variables 
+            intermittently.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.Implementation.EnvironmentVariableMonitor.#ctor(System.Collections.Generic.IEnumerable{System.String},System.TimeSpan)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.ApplicationInsights.WindowsServer.Implementation.EnvironmentVariableMonitor" /> class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.Implementation.EnvironmentVariableMonitor.GetCurrentEnvironmentVariableValue(System.String,System.String@)">
+            <summary>
+            Get the latest value assigned to an environment variable.
+            </summary>
+            <param name="envVarName">Name of the environment variable to acquire.</param>
+            <param name="value">Current cached value of the environment variable.</param>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.Implementation.EnvironmentVariableMonitor.OnEnvironmentVariableUpdated">
+            <summary>
+            Method to update subscribers whenever a change in the tracked environment variables is detected.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.Implementation.EnvironmentVariableMonitor.CheckVariablesIntermittent(System.Object)">
+            <summary>
+            Check and update the variables being tracked and if any updates are detected,
+            raise the OnEnvironmentVariableUpdated event. Restart the timer to check again
+            in the configured interval once complete.
+            </summary>
+            <param name="state">Variable left unused in this implementation of TimerCallback.</param>
         </member>
         <member name="T:Microsoft.ApplicationInsights.WindowsServer.Implementation.IAzureRoleEnvironmentContextReader">
             <summary>
@@ -598,91 +671,25 @@
             The role environment object.
             </returns>
         </member>
-        <member name="T:Microsoft.ApplicationInsights.WindowsServer.UnobservedExceptionTelemetryModule">
+        <member name="T:Microsoft.ApplicationInsights.WindowsServer.Implementation.WindowsServerEventSource">
             <summary>
-            The module subscribed to TaskScheduler.UnobservedTaskException to send exceptions to ApplicationInsights.
+            ETW EventSource tracing class.
             </summary>
         </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.UnobservedExceptionTelemetryModule.#ctor">
+        <member name="F:Microsoft.ApplicationInsights.WindowsServer.Implementation.WindowsServerEventSource.Log">
             <summary>
-            Initializes a new instance of the <see cref="T:Microsoft.ApplicationInsights.WindowsServer.UnobservedExceptionTelemetryModule" /> class.
+            Instance of the WindowsServerEventSource class.
             </summary>
         </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.UnobservedExceptionTelemetryModule.Initialize(Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration)">
+        <member name="T:Microsoft.ApplicationInsights.WindowsServer.Implementation.WindowsServerEventSource.Keywords">
             <summary>
-            Initializes the telemetry module.
-            </summary>
-            <param name="configuration">Telemetry Configuration used for creating TelemetryClient for sending exceptions to ApplicationInsights.</param>
-        </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.UnobservedExceptionTelemetryModule.Dispose">
-            <summary>
-            Disposing TaskSchedulerOnUnobservedTaskException instance.
+            Keywords for the PlatformEventSource. Those keywords should match keywords in Core.
             </summary>
         </member>
-        <member name="T:Microsoft.ApplicationInsights.WindowsServer.AzureRoleEnvironmentTelemetryInitializer">
+        <member name="F:Microsoft.ApplicationInsights.WindowsServer.Implementation.WindowsServerEventSource.Keywords.UserActionable">
             <summary>
-            A telemetry initializer that will gather Azure Role Environment context information.
+            Key word for user actionable events.
             </summary>
-        </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.AzureRoleEnvironmentTelemetryInitializer.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Microsoft.ApplicationInsights.WindowsServer.AzureRoleEnvironmentTelemetryInitializer" /> class.
-            </summary>
-        </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.AzureRoleEnvironmentTelemetryInitializer.Initialize(Microsoft.ApplicationInsights.Channel.ITelemetry)">
-            <summary>
-            Initializes <see cref="T:Microsoft.ApplicationInsights.Channel.ITelemetry" /> device context.
-            </summary>
-            <param name="telemetry">The telemetry to initialize.</param>
-        </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.AzureRoleEnvironmentTelemetryInitializer.IsAppRunningInAzureWebApp">
-            <summary>
-            Searches for the environment variable specific to Azure web applications and confirms if the current application is a web application or not.
-            </summary>
-            <returns>Boolean, which is true if the current application is an Azure web application.</returns>
-        </member>
-        <member name="T:Microsoft.ApplicationInsights.WindowsServer.DeviceTelemetryInitializer">
-            <summary>
-            A telemetry context initializer that will gather device context information.
-            </summary>
-        </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.DeviceTelemetryInitializer.Initialize(Microsoft.ApplicationInsights.Channel.ITelemetry)">
-            <summary>
-            Populates device properties on a telemetry item.
-            </summary>
-        </member>
-        <member name="T:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule">
-            <summary>
-            The module subscribed to AppDomain.CurrentDomain.FirstChanceException to send exceptions statistics to ApplicationInsights.
-            </summary>
-        </member>
-        <member name="F:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule.executionSyncObject">
-            <summary>
-            This object prevents double entry into the exception callback.
-            </summary>
-        </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule" /> class.
-            </summary>
-        </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule.Initialize(Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration)">
-            <summary>
-            Initializes the telemetry module.
-            </summary>
-            <param name="configuration">Telemetry Configuration used for creating TelemetryClient for sending exception statistics to Application Insights.</param>
-        </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule.Dispose">
-            <summary>
-            Disposing TaskSchedulerOnUnobservedTaskException instance. This class doesn't have the finalize method as we expect it 
-            live for a duration of the process and be disposed by AI infrastructure.
-            </summary>
-        </member>
-        <member name="M:Microsoft.ApplicationInsights.WindowsServer.FirstChanceExceptionStatisticsTelemetryModule.Dispose(System.Boolean)">
-            <summary>
-            IDisposable implementation.
-            </summary>
-            <param name="disposing">The method has been called directly or indirectly by a user's code.</param>
         </member>
         <member name="T:Microsoft.ApplicationInsights.WindowsServer.IMetricProcessor">
             <summary>
@@ -1032,6 +1039,27 @@
             Disposing UnhandledExceptionTelemetryModule instance.
             </summary>
         </member>
+        <member name="T:Microsoft.ApplicationInsights.WindowsServer.UnobservedExceptionTelemetryModule">
+            <summary>
+            The module subscribed to TaskScheduler.UnobservedTaskException to send exceptions to ApplicationInsights.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.UnobservedExceptionTelemetryModule.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.ApplicationInsights.WindowsServer.UnobservedExceptionTelemetryModule" /> class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.UnobservedExceptionTelemetryModule.Initialize(Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration)">
+            <summary>
+            Initializes the telemetry module.
+            </summary>
+            <param name="configuration">Telemetry Configuration used for creating TelemetryClient for sending exceptions to ApplicationInsights.</param>
+        </member>
+        <member name="M:Microsoft.ApplicationInsights.WindowsServer.UnobservedExceptionTelemetryModule.Dispose">
+            <summary>
+            Disposing TaskSchedulerOnUnobservedTaskException instance.
+            </summary>
+        </member>
         <member name="T:Microsoft.ApplicationInsights.Common.AppMapCorrelationEventSource">
             <summary>
             ETW EventSource tracing class.
@@ -1058,16 +1086,16 @@
             </summary>
             <remarks>
             Array.Empty() was added to Net Framework in 4.6
-            This adds support for Net45.
+            This adds support for net452.
             </remarks>
         </member>
         <member name="T:Microsoft.ApplicationInsights.Common.ArrayExtensions.EmptyArray`1">
             <summary>
-            [Net45 Only] Copied from Net Framework (https://referencesource.microsoft.com/#mscorlib/system/array.cs,bc9fd1be0e4f4e70,references).
+            [net452 Only] Copied from Net Framework (https://referencesource.microsoft.com/#mscorlib/system/array.cs,bc9fd1be0e4f4e70,references).
             </summary>
             <remarks>
             Array.Empty() was added to Net Framework in 4.6
-            This adds support for Net45.
+            This adds support for net452.
             </remarks>
         </member>
         <member name="T:Microsoft.ApplicationInsights.Common.ConditionalWeakTableExtensions">
@@ -1132,6 +1160,20 @@
             Remove all other characters.
             </summary>
         </member>
+        <member name="T:Microsoft.ApplicationInsights.Common.Internal.ExperimentalConstants">
+            <summary>
+            These values are listed to guard against malicious injections by limiting the max size allowed in an HTTP Response.
+            These max limits are intentionally exaggerated to allow for unexpected responses, while still guarding against unreasonably large responses.
+            Example: While a 32 character response may be expected, 50 characters may be permitted while a 10,000 character response would be unreasonable and malicious.
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.Common.Internal.ExperimentalConstants.DeferRequestTrackingProperties">
+            <summary>
+            This is used to defer setting properties on RequestTelemetry until after Sampling.
+            QuickPulse expects these properties so we have to set them here as well.
+            Used to set QuickPulseTelemetryProcessor.EvaluateDisabledTrackingProperties and RequestTrackingTelemetryModule.DisableTrackingProperties.
+            </summary>
+        </member>
         <member name="T:Microsoft.ApplicationInsights.Common.Internal.InjectionGuardConstants">
             <summary>
             These values are listed to guard against malicious injections by limiting the max size allowed in an HTTP Response.
@@ -1172,6 +1214,11 @@
         <member name="F:Microsoft.ApplicationInsights.Common.Internal.InjectionGuardConstants.TraceStateMaxPairs">
             <summary>
             Max number of key value pairs in the tracestate header.
+            </summary>
+        </member>
+        <member name="F:Microsoft.ApplicationInsights.Common.Internal.InjectionGuardConstants.QuickPulseResponseHeaderMaxLength">
+            <summary>
+            Max length of incoming Response Header value allowed.
             </summary>
         </member>
         <member name="T:Microsoft.ApplicationInsights.Common.Internal.StringUtilities">
@@ -1317,6 +1364,14 @@
             <param name="maxItems">Maximum allowed number comma separated values in the header.</param>
             <returns>List of comma separated values in the given header.</returns>
         </member>
+        <member name="M:Microsoft.ApplicationInsights.Common.WebHeaderCollectionExtensions.ReadActivityBaggage(System.Collections.Specialized.NameValueCollection,System.Diagnostics.Activity)">
+            <summary>
+            Reads Correlation-Context and populates it on Activity.Baggage following https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.DiagnosticSource/src/HttpCorrelationProtocol.md#correlation-context.
+            Use this method when you want force parsing Correlation-Context is absence of Request-Id or traceparent. 
+            </summary>
+            <param name="headers">Header collection.</param>
+            <param name="activity">Activity to populate baggage on.</param>
+        </member>
         <member name="T:Microsoft.ApplicationInsights.W3C.Internal.W3CConstants">
             <summary>
             W3C constants.
@@ -1345,66 +1400,6 @@
         <member name="F:Microsoft.ApplicationInsights.W3C.Internal.W3CConstants.TracestateAzureSeparator">
             <summary>
             Separator between Azure namespace values.
-            </summary>
-        </member>
-        <member name="F:Microsoft.ApplicationInsights.W3C.Internal.W3CConstants.TraceIdTag">
-            <summary>
-            Trace-Id tag name.
-            </summary>
-        </member>
-        <member name="F:Microsoft.ApplicationInsights.W3C.Internal.W3CConstants.SpanIdTag">
-            <summary>
-            Span-Id tag name.
-            </summary>
-        </member>
-        <member name="F:Microsoft.ApplicationInsights.W3C.Internal.W3CConstants.ParentSpanIdTag">
-            <summary>
-            Parent span-Id tag name.
-            </summary>
-        </member>
-        <member name="F:Microsoft.ApplicationInsights.W3C.Internal.W3CConstants.VersionTag">
-            <summary>
-            Version tag name.
-            </summary>
-        </member>
-        <member name="F:Microsoft.ApplicationInsights.W3C.Internal.W3CConstants.SampledTag">
-            <summary>
-            Sampled tag name.
-            </summary>
-        </member>
-        <member name="F:Microsoft.ApplicationInsights.W3C.Internal.W3CConstants.TracestateTag">
-            <summary>
-            Tracestate tag name.
-            </summary>
-        </member>
-        <member name="F:Microsoft.ApplicationInsights.W3C.Internal.W3CConstants.DefaultVersion">
-            <summary>
-            Default version value.
-            </summary>
-        </member>
-        <member name="F:Microsoft.ApplicationInsights.W3C.Internal.W3CConstants.TraceFlagRecordedAndNotRequested">
-            <summary>
-            Default sampled flag value: may be recorded, not requested.
-            </summary>
-        </member>
-        <member name="F:Microsoft.ApplicationInsights.W3C.Internal.W3CConstants.TraceFlagRecordedAndRequested">
-            <summary>
-            Recorded and requested sampled flag value.
-            </summary>
-        </member>
-        <member name="F:Microsoft.ApplicationInsights.W3C.Internal.W3CConstants.RequestedTraceFlag">
-            <summary>
-            Requested trace flag.
-            </summary>
-        </member>
-        <member name="F:Microsoft.ApplicationInsights.W3C.Internal.W3CConstants.LegacyRootIdProperty">
-            <summary>
-            Legacy root Id tag name.
-            </summary>
-        </member>
-        <member name="F:Microsoft.ApplicationInsights.W3C.Internal.W3CConstants.LegacyRequestIdProperty">
-            <summary>
-            Legacy root Id tag name.
             </summary>
         </member>
     </members>

@@ -9,9 +9,19 @@
             Extensions of Activity class
             </summary>
         </member>
-        <member name="F:Microsoft.AspNet.TelemetryCorrelation.ActivityExtensions.RequestIDHeaderName">
+        <member name="F:Microsoft.AspNet.TelemetryCorrelation.ActivityExtensions.RequestIdHeaderName">
             <summary>
-            Http header name to carry the Request ID.
+            Http header name to carry the Request Id: https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.DiagnosticSource/src/HttpCorrelationProtocol.md.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.TelemetryCorrelation.ActivityExtensions.TraceparentHeaderName">
+            <summary>
+            Http header name to carry the traceparent: https://www.w3.org/TR/trace-context/.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.TelemetryCorrelation.ActivityExtensions.TracestateHeaderName">
+            <summary>
+            Http header name to carry the tracestate: https://www.w3.org/TR/trace-context/.
             </summary>
         </member>
         <member name="F:Microsoft.AspNet.TelemetryCorrelation.ActivityExtensions.CorrelationContextHeaderName">
@@ -21,7 +31,7 @@
         </member>
         <member name="F:Microsoft.AspNet.TelemetryCorrelation.ActivityExtensions.MaxCorrelationContextLength">
             <summary>
-            Maximum length of Correlation-Context herader value.
+            Maximum length of Correlation-Context header value.
             </summary>
         </member>
         <member name="M:Microsoft.AspNet.TelemetryCorrelation.ActivityExtensions.Extract(System.Diagnostics.Activity,System.Collections.Specialized.NameValueCollection)">
@@ -60,47 +70,16 @@
             Event name for the activity start event.
             </summary>
         </member>
-        <member name="F:Microsoft.AspNet.TelemetryCorrelation.ActivityHelper.AspNetActivityLostStopName">
-            <summary>
-            Event name for the lost activity stop event.
-            </summary>
-        </member>
-        <member name="F:Microsoft.AspNet.TelemetryCorrelation.ActivityHelper.AspNetActivityRestoredStopName">
-            <summary>
-            Event name for the restored activity stop event.
-            </summary>
-        </member>
         <member name="F:Microsoft.AspNet.TelemetryCorrelation.ActivityHelper.ActivityKey">
             <summary>
             Key to store the activity in HttpContext.
             </summary>
         </member>
-        <member name="F:Microsoft.AspNet.TelemetryCorrelation.ActivityHelper.RestoredActivityKey">
-            <summary>
-            Key to store the restored activity in HttpContext.
-            </summary>
-        </member>
-        <member name="M:Microsoft.AspNet.TelemetryCorrelation.ActivityHelper.StopAspNetActivity(System.Diagnostics.Activity,System.Collections.IDictionary)">
+        <member name="M:Microsoft.AspNet.TelemetryCorrelation.ActivityHelper.StopAspNetActivity(System.Collections.IDictionary)">
             <summary>
             Stops the activity and notifies listeners about it.
             </summary>
-            <param name="activity">Activity to stop.</param>
             <param name="contextItems">HttpContext.Items.</param>
-            <returns>True if activity was found in the stack, false otherwise.</returns>
-        </member>
-        <member name="M:Microsoft.AspNet.TelemetryCorrelation.ActivityHelper.StopLostActivity(System.Diagnostics.Activity,System.Web.HttpContext)">
-            <summary>
-            Notifies listeners that activity was ended and lost during execution.
-            </summary>
-            <param name="activity">Activity to notify about.</param>
-            <param name="context">Current HttpContext.</param>
-        </member>
-        <member name="M:Microsoft.AspNet.TelemetryCorrelation.ActivityHelper.StopRestoredActivity(System.Diagnostics.Activity,System.Web.HttpContext)">
-            <summary>
-            Notifies listeners that there the lost activity was lost during execution and there was an intermediate activity.
-            </summary>
-            <param name="activity">Activity to notify about.</param>
-            <param name="context">Current HttpContext.</param>
         </member>
         <member name="M:Microsoft.AspNet.TelemetryCorrelation.ActivityHelper.CreateRootActivity(System.Web.HttpContext,System.Boolean)">
             <summary>
@@ -109,14 +88,6 @@
             <param name="context">Current HttpContext.</param>
             <param name="parseHeaders">Determines if headers should be parsed get correlation ids.</param>
             <returns>New root activity.</returns>
-        </member>
-        <member name="M:Microsoft.AspNet.TelemetryCorrelation.ActivityHelper.SaveCurrentActivity(System.Collections.IDictionary,System.String,System.Diagnostics.Activity)">
-            <summary>
-            Saves activity in the HttpContext.Items.
-            </summary>
-            <param name="contextItems">Context to save context to.</param>
-            <param name="key">Slot name.</param>
-            <param name="activity">Activity to save.</param>
         </member>
         <member name="M:Microsoft.AspNet.TelemetryCorrelation.ActivityHelper.RestoreActivityIfNeeded(System.Collections.IDictionary)">
             <summary>

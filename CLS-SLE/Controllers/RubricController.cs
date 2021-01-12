@@ -216,34 +216,36 @@ namespace CLS_SLE.Controllers
                         db.RubricAssessments.Remove(db.RubricAssessments.Where(r => r.AssessmentID == AssessmentID && r.RubricID == rubricID).FirstOrDefault());
                     }
 
-                foreach (string assessment in assessments)
+                if (updateRubric.RubricAssessment != null)
                 {
-                    short AssessmentID = db.Assessments.Where(a => a.Name == assessment).FirstOrDefault().AssessmentID;
-
-                    if (db.RubricAssessments.Where(r => r.AssessmentID == AssessmentID && r.RubricID == rubricID).Any())
+                    foreach (string assessment in assessments)
                     {
-                        RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.AssessmentID == AssessmentID && r.RubricID == rubricID).FirstOrDefault();
+                        short AssessmentID = db.Assessments.Where(a => a.Name == assessment).FirstOrDefault().AssessmentID;
 
-                        rubricAssessment.StartDate = updateRubric.RubricAssessment.StartDate;
-                        rubricAssessment.EndDate = updateRubric.RubricAssessment.EndDate;
-                        rubricAssessment.ModifiedDateTime = DateTime.Now;
-                        rubricAssessment.ModifiedByLoginID = UserData.PersonId;
-                    }
-                    else
-                    {
-                        RubricAssessment rubricAssessment = new RubricAssessment();
+                        if (db.RubricAssessments.Where(r => r.AssessmentID == AssessmentID && r.RubricID == rubricID).Any())
+                        {
+                            RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.AssessmentID == AssessmentID && r.RubricID == rubricID).FirstOrDefault();
 
-                        rubricAssessment.AssessmentID = AssessmentID;
-                        rubricAssessment.RubricID = rubricID;
-                        rubricAssessment.StartDate = updateRubric.RubricAssessment.StartDate;
-                        rubricAssessment.EndDate = updateRubric.RubricAssessment.EndDate;
-                        rubricAssessment.CreatedDateTime = DateTime.Now;
-                        rubricAssessment.CreatedByLoginID = UserData.PersonId;
+                            rubricAssessment.StartDate = updateRubric.RubricAssessment.StartDate;
+                            rubricAssessment.EndDate = updateRubric.RubricAssessment.EndDate;
+                            rubricAssessment.ModifiedDateTime = DateTime.Now;
+                            rubricAssessment.ModifiedByLoginID = UserData.PersonId;
+                        }
+                        else
+                        {
+                            RubricAssessment rubricAssessment = new RubricAssessment();
 
-                        db.RubricAssessments.Add(rubricAssessment);
+                            rubricAssessment.AssessmentID = AssessmentID;
+                            rubricAssessment.RubricID = rubricID;
+                            rubricAssessment.StartDate = updateRubric.RubricAssessment.StartDate;
+                            rubricAssessment.EndDate = updateRubric.RubricAssessment.EndDate;
+                            rubricAssessment.CreatedDateTime = DateTime.Now;
+                            rubricAssessment.CreatedByLoginID = UserData.PersonId;
+
+                            db.RubricAssessments.Add(rubricAssessment);
+                        }
                     }
                 }
-
                 editRubric.Name = updateRubric.AssessmentRubric.Name;
                 editRubric.Description = updateRubric.AssessmentRubric.Description;
                 editRubric.IsActive = updateRubric.AssessmentRubric.IsActive;

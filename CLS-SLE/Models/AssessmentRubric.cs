@@ -39,8 +39,6 @@ public partial class AssessmentRubric
 
     public string Description { get; set; }
 
-    public Nullable<short> AssessmentID { get; set; }
-
     public Nullable<byte> ScoreSetID { get; set; }
 
     public Nullable<System.DateTime> CreatedDateTime { get; set; }

@@ -34,23 +34,22 @@
 		<label>Related Assessments</label><br>
 		<div id="relatedAssessments" class="input-append">
 			<div class="input-group relatedAssessment">
-				<input list="assessments" name="relatedAssessment1" class="form-control" value="@ViewBag.InitialAssessment">
+                <select name="relatedAssessment1" class="form-control">
+                    @foreach (var assessment in ViewBag.Assessments)
+                    {
+                        <option value="@assessment.AssessmentID" @(assessment.AssessmentID == ViewBag.InitialAssessmentID ? "selected" : "")>@assessment.Name</option>
+                    }
+                </select>
 			</div>
 		</div>
-		<datalist id="assessments">
-			@foreach (string assessment in ViewBag.Assessments)
-			{
-				<option value="@assessment" />
-			}
-		</datalist><br>
 		<button type="button" class="btn btn-primary" id="addRelatedAssessment">Add Related Assessment</button>
 	</fieldset>
 	<fieldset class="form-group col-9">
 		<div class="row">
 			<legend class="col-form-label col-2 pt-0">Is Active:</legend>
 			<div class="form-check form-check-inline">
-				<label class="form-check-input" id="IsActive" for="IsActiveTrue">True</label>
-				@Html.RadioButtonFor(Model => Model.AssessmentRubric.IsActive, "True")
+				<label class="form-check-input" id="IsActive" for="IsActiveTrue" >True</label>
+				@Html.RadioButtonFor(Model => Model.AssessmentRubric.IsActive, "True", new { @checked = "true"})
 			</div>
 			<div class="form-check form-check-inline">
 				<label class="form-check-input" id="IsActiveFalse" for="IsActiveFalse">False</label>

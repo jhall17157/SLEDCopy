@@ -54,7 +54,6 @@
           <Property Name="RubricID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Description" Type="varchar(max)" />
-          <Property Name="AssessmentID" Type="smallint" />
           <Property Name="ScoreSetID" Type="tinyint" />
           <Property Name="CreatedDateTime" Type="datetime" />
           <Property Name="CreatedByLoginID" Type="int" />
@@ -2228,7 +2227,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
           <Property Name="RubricID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="AssessmentID" Type="Int16" />
           <Property Name="ScoreSetID" Type="Byte" />
           <Property Name="CreatedDateTime" Type="DateTime" Precision="3" />
           <Property Name="CreatedByLoginID" Type="Int32" />
@@ -3730,7 +3728,6 @@ warning 6002: The table/view 'SLE_Tracking.dbo.StudentScoreCount' does not have 
                 <ScalarProperty Name="CreatedByLoginID" ColumnName="CreatedByLoginID" />
                 <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
                 <ScalarProperty Name="ScoreSetID" ColumnName="ScoreSetID" />
-                <ScalarProperty Name="AssessmentID" ColumnName="AssessmentID" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="RubricID" ColumnName="RubricID" />

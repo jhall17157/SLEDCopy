@@ -83,28 +83,16 @@ namespace CLS_SLE.Controllers
 
             ViewBag.rubricsInAssessments = resultRubrics;
 
-            //if (Rubric.CreatedByLoginID != null)
-            //{
-            //	Model.CreatorLogin = (String)db.Users.Where(u => u.PersonID == Rubric.CreatedByLoginID).FirstOrDefault().Login;
-            //}
-            //if (Rubric.ModifiedByLoginID != null)
-            //{
-            //	Model.ModifierLogin = (String)db.Users.Where(u => u.PersonID == Rubric.ModifiedByLoginID).FirstOrDefault().Login;
-            //}
             return View(Model);
         }
         [HttpGet]
         public ActionResult AddRubric(short? assessmentID)
         {
-            RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.AssessmentID == assessmentID).FirstOrDefault();
-            // rubricAssessment.AssessmentID = assessmentID;
-            //assessmentID = Convert.ToInt16(rubricAssessment.AssessmentID);
-
-            ViewBag.Assessments = db.Assessments.Select(a => a.Name).ToList();
-            ViewBag.InitialAssessment = db.Assessments.Where(a => a.AssessmentID == assessmentID).FirstOrDefault().Name;
+            string category = db.Assessments.Where(a => a.AssessmentID == assessmentID).Select(a => a.Category).FirstOrDefault();
+            ViewBag.Assessments = db.Assessments.Where(a => a.Category == category).ToList();
             ViewBag.ScoreSets = db.ScoreSets.ToList();
-            ViewBag.AssessmentID = assessmentID;
-            
+            ViewBag.InitialAssessmentID = assessmentID;
+
             return View();
         }
 
@@ -121,10 +109,10 @@ namespace CLS_SLE.Controllers
                 foreach (var key in formCollection.AllKeys)
                     if (key.Contains("relatedAssessment"))
                     {
-                        string name = formCollection[key];
-                        assessments.Add(db.Assessments.Where(a => a.Name == name).FirstOrDefault());
+                        int id = Convert.ToInt32(formCollection[key]);
+                        assessments.Add(db.Assessments.Where(a => a.AssessmentID == id ).FirstOrDefault());
                     }
-
+                   
                 db.AssessmentRubrics.Load();
 
                 rubricViewModel.AssessmentRubric.CreatedDateTime = DateTime.Now;
@@ -165,21 +153,18 @@ namespace CLS_SLE.Controllers
             RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.RubricID == rubricID && r.AssessmentID == assessmentID).FirstOrDefault();
             AssessmentRubric assessmentRubric = db.AssessmentRubrics.Where(a => a.RubricID == rubricID).FirstOrDefault();
             List<short> relatedAssessmentIDs = db.RubricAssessments.Where(r => r.RubricID == rubricID).Select(r => r.AssessmentID).ToList();
-            List<string> relatedAssessments = new List<string>();
+            // List<string> relatedAssessments = new List<string>();
 
-            foreach (short relatedAssessmentID in relatedAssessmentIDs)
-                relatedAssessments.Add(db.Assessments.Where(a => a.AssessmentID == relatedAssessmentID).FirstOrDefault().Name);
+            // foreach (short relatedAssessmentID in relatedAssessmentIDs)
+            //    relatedAssessments.Add(db.Assessments.Where(a => a.AssessmentID == relatedAssessmentID).FirstOrDefault().Name);
 
-            ViewBag.RelatedAssessments = relatedAssessments;
-            ViewBag.Assessments = db.Assessments.Select(a => a.Name).ToList();
+            string category = db.Assessments.Where(a => a.AssessmentID == assessmentID).Select(a => a.Category).FirstOrDefault();
+            ViewBag.Assessments = db.Assessments.Where(a => a.Category == category).ToList();
+
+            ViewBag.RelatedAssessmentIDs = relatedAssessmentIDs;
             ViewBag.ScoreSets = db.ScoreSets.ToList();
 
             var model = new UpdateRubric() { RubricAssessment = rubricAssessment, AssessmentRubric = assessmentRubric };
-
-            // rubricAssessment.ModifiedDateTime = DateTime.Now;
-            // rubricAssessment.ModifiedByLoginID = UserData.PersonId;
-            // assessmentRubric.ModifiedDateTime = DateTime.Now;
-            // assessmentRubric.ModifiedByLoginID = UserData.PersonId;
 
             return View(model);
         }
@@ -191,69 +176,55 @@ namespace CLS_SLE.Controllers
             try
             {
                 AssessmentRubric editRubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
-                // RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.RubricID == rubricID).FirstOrDefault();
-                List<string> assessments = new List<string>();
-                List<short> relatedAssessmentIDs = db.RubricAssessments.Where(r => r.RubricID == rubricID).Select(r => r.AssessmentID).ToList();
-                List<string> relatedAssessments = new List<string>();
+                List<short> dbRelatedAssessmentIDs = db.RubricAssessments.Where(r => r.RubricID == rubricID).Select(r => r.AssessmentID).ToList();
+                List<short> editRelatedAssessmentIDs = new List<short>();
 
                 foreach (var key in formCollection.AllKeys)
                     if (key.Contains("relatedAssessment"))
                     {
-                        string name = formCollection[key];
-                        assessments.Add(name);
+                        short id = Convert.ToInt16(formCollection[key]);
+                        editRelatedAssessmentIDs.Add(id);
                     }
 
-                foreach (short relatedAssessmentID in relatedAssessmentIDs)
-                    relatedAssessments.Add(db.Assessments.Where(a => a.AssessmentID == relatedAssessmentID).FirstOrDefault().Name);
+                    db.RubricAssessments.Load();
 
-                db.RubricAssessments.Load();
-
-                foreach (string assessment in relatedAssessments)
-                    if (!assessments.Contains(assessment))
+                //if a related assessment got deleted, delete it in the db
+                foreach (short dbRelatedID in dbRelatedAssessmentIDs)
+                    if (editRelatedAssessmentIDs.IndexOf(dbRelatedID) == -1)
                     {
-                        short AssessmentID = db.Assessments.Where(a => a.Name == assessment).FirstOrDefault().AssessmentID;
-
-                        db.RubricAssessments.Remove(db.RubricAssessments.Where(r => r.AssessmentID == AssessmentID && r.RubricID == rubricID).FirstOrDefault());
+                        db.RubricAssessments.Remove(db.RubricAssessments.Where(r => r.AssessmentID == dbRelatedID && r.RubricID == rubricID).FirstOrDefault());
                     }
 
-                foreach (string assessment in assessments)
-                {
-                    short AssessmentID = db.Assessments.Where(a => a.Name == assessment).FirstOrDefault().AssessmentID;
-
-                    if (db.RubricAssessments.Where(r => r.AssessmentID == AssessmentID && r.RubricID == rubricID).Any())
+                // add new related assessments
+                foreach (short editRelatedAssessmentID in editRelatedAssessmentIDs)
+                    if (dbRelatedAssessmentIDs.IndexOf(editRelatedAssessmentID) == -1)
                     {
-                        RubricAssessment rubricAssessment = db.RubricAssessments.Where(r => r.AssessmentID == AssessmentID && r.RubricID == rubricID).FirstOrDefault();
 
-                        rubricAssessment.StartDate = updateRubric.RubricAssessment.StartDate;
-                        rubricAssessment.EndDate = updateRubric.RubricAssessment.EndDate;
-                        rubricAssessment.ModifiedDateTime = DateTime.Now;
-                        rubricAssessment.ModifiedByLoginID = UserData.PersonId;
-                    }
-                    else
-                    {
                         RubricAssessment rubricAssessment = new RubricAssessment();
 
-                        rubricAssessment.AssessmentID = AssessmentID;
+                        rubricAssessment.AssessmentID = editRelatedAssessmentID;
                         rubricAssessment.RubricID = rubricID;
-                        rubricAssessment.StartDate = updateRubric.RubricAssessment.StartDate;
-                        rubricAssessment.EndDate = updateRubric.RubricAssessment.EndDate;
+                        rubricAssessment.StartDate = DateTime.Now;//set to the current date time for now
+                        rubricAssessment.EndDate = null;//set to null for now
                         rubricAssessment.CreatedDateTime = DateTime.Now;
                         rubricAssessment.CreatedByLoginID = UserData.PersonId;
 
                         db.RubricAssessments.Add(rubricAssessment);
                     }
-                }
+                
+                AssessmentRubric UpdateRubric = new AssessmentRubric
+                {
+                    Name = updateRubric.AssessmentRubric.Name,
+                    Description = updateRubric.AssessmentRubric.Description,
+                    IsActive = updateRubric.AssessmentRubric.IsActive,
+                    ModifiedDateTime = DateTime.Now,
+                    ModifiedByLoginID = UserData.PersonId,
+                    ScoreSetID = updateRubric.AssessmentRubric.ScoreSetID
+                };
 
-                editRubric.Name = updateRubric.AssessmentRubric.Name;
-                editRubric.Description = updateRubric.AssessmentRubric.Description;
-                editRubric.IsActive = updateRubric.AssessmentRubric.IsActive;
-                editRubric.ModifiedDateTime = DateTime.Now;
-                editRubric.ModifiedByLoginID = UserData.PersonId;
-                editRubric.ScoreSetID = updateRubric.AssessmentRubric.ScoreSetID;
+            db.SaveChanges();
 
-                db.SaveChanges();
-
-                return RedirectToAction("ViewRubric", "Rubric", new { rubricID, assessmentID = relatedAssessmentIDs.Contains(assessmentID) ? assessmentID : relatedAssessmentIDs[0] });
+                return RedirectToAction("ViewRubric", "Rubric", new { rubricID, assessmentID = editRelatedAssessmentIDs.Contains(assessmentID) ? assessmentID : editRelatedAssessmentIDs[0] });
             }
             catch (Exception e)
             {
@@ -399,7 +370,7 @@ namespace CLS_SLE.Controllers
         public Boolean MoveOutcome(int rubricID, int assessmentID, int outcomeID, int currentID)
         {
             //must be moving to a valid rubric
-            var validRubric = db.AssessmentRubrics.Where(a => a.AssessmentID == assessmentID).Where(r => r.RubricID == rubricID).Count();
+            var validRubric = db.RubricAssessments.Where(a => a.AssessmentID == assessmentID).Where(r => r.RubricID == rubricID).Count();
 
             //must get the object to update
             var outcome = db.Outcomes.Where(o => o.RubricID == currentID && o.OutcomeID == outcomeID).FirstOrDefault();

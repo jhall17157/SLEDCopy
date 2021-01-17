@@ -4,12 +4,12 @@
 }
 
 <nav aria-label="breadcrumb">
-	<ol class="breadcrumb">
-		<li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
-		<li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
-		<li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = Model.Rubric.AssessmentID }, null)</li>
-		<li class="breadcrumb-item active" aria-current="page">@Model.Rubric.AssessmentRubric.Name </li>
-	</ol>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Assessments", "Assessments", "Admin")</li>
+        <li class="breadcrumb-item">@Html.ActionLink((String)Model.Rubric.Assessment.Name, "ViewAssessment", "Admin", new { assessmentID = Model.Rubric.AssessmentID }, null)</li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.Rubric.AssessmentRubric.Name </li>
+    </ol>
 </nav>
 <h1>
 	@Model.Rubric.AssessmentRubric.Name  - <a style="font-size: 85%;" href="@Url.Action("EditRubric", "Rubric", new { rubricID = Model.Rubric.RubricID, assessmentID = Model.Rubric.AssessmentID })"><b>Edit</b></a>

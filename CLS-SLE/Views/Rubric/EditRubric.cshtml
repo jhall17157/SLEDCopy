@@ -34,37 +34,31 @@
             @{
                 byte id = 1;
 
-                if (ViewBag.RelatedAssessments.Count > 1)
+                
+                foreach (short relatedAssessmentID in ViewBag.RelatedAssessmentIDs)
                 {
-                    foreach (string relatedAssessment in ViewBag.RelatedAssessments)
+                   
+            <div class="input-group relatedAssessment">
+                   <select name="@("relatedAssessment" + id.ToString())" class="form-control">
+                    @foreach (var assessment in ViewBag.Assessments)
                     {
-                        <text>
-                            <div class="input-group relatedAssessment">
-                                <input list="assessments" name="relatedAssessment@(id)" class="form-control" value="@relatedAssessment">
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-danger deleteRelatedAssessment"><i class="fas fa-trash"></i></button>
-                                </div>
-                            </div>
-                        </text>
-                        id++;
+                        <option value="@assessment.AssessmentID" @(assessment.AssessmentID == relatedAssessmentID ? "selected" : "")>@assessment.Name</option>
                     }
-                }
-                else
+                </select>
+
+                @if (ViewBag.RelatedAssessmentIDs.Count > 1)
                 {
-                    <text>
-                        <div class="input-group relatedAssessment">
-                            <input list="assessments" name="relatedAssessment@(id)" class="form-control" value="@ViewBag.RelatedAssessments[0]">
-                        </div>
-                    </text>
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-danger deleteRelatedAssessment"><i class="fas fa-trash"></i></button>
+                </div>
+                }
+            </div>
+                     
+                    id++;
+                    
                 }
             }
         </div>
-        <datalist id="assessments">
-            @foreach (string assessment in ViewBag.Assessments)
-            {
-                <option value="@assessment" />
-            }
-        </datalist><br>
         <button type="button" class="btn btn-primary" id="addRelatedAssessment">Add Related Assessment</button>
     </fieldset>
     <fieldset class="form-group">

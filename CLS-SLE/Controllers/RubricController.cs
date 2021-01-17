@@ -211,18 +211,17 @@ namespace CLS_SLE.Controllers
 
                         db.RubricAssessments.Add(rubricAssessment);
                     }
-                
-                AssessmentRubric UpdateRubric = new AssessmentRubric
-                {
-                    Name = updateRubric.AssessmentRubric.Name,
-                    Description = updateRubric.AssessmentRubric.Description,
-                    IsActive = updateRubric.AssessmentRubric.IsActive,
-                    ModifiedDateTime = DateTime.Now,
-                    ModifiedByLoginID = UserData.PersonId,
-                    ScoreSetID = updateRubric.AssessmentRubric.ScoreSetID
-                };
 
-            db.SaveChanges();
+                AssessmentRubric UpdateRubric = db.AssessmentRubrics.Where(r => r.RubricID == rubricID).FirstOrDefault();
+
+                UpdateRubric.Name = updateRubric.AssessmentRubric.Name;
+                UpdateRubric.Description = updateRubric.AssessmentRubric.Description;
+                UpdateRubric.IsActive = updateRubric.AssessmentRubric.IsActive;
+                UpdateRubric.ModifiedDateTime = DateTime.Now;
+                UpdateRubric.ModifiedByLoginID = UserData.PersonId;
+                UpdateRubric.ScoreSetID = updateRubric.AssessmentRubric.ScoreSetID;
+                                
+                db.SaveChanges();
 
                 return RedirectToAction("ViewRubric", "Rubric", new { rubricID, assessmentID = editRelatedAssessmentIDs.Contains(assessmentID) ? assessmentID : editRelatedAssessmentIDs[0] });
             }

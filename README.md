@@ -1,7 +1,7 @@
 # SLED
 WCTC is required to report student learning evidence to the state, board, and others.
 
-##Model Binding and View Models
+## Model Binding and View Models
 Instead of using form controls you should bind a ViewModel to your controller method. Think of the view models as a shell of all the data you will need in the given View. I have put together a slideshow with a short explanation here:
 - https://docs.google.com/presentation/d/1tBl486R-VpDw_TXrjX3NKXrhzyHfa3xBlQVnSn9wfOE/edit?usp=sharing
 

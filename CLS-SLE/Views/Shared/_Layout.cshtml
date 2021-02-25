@@ -253,7 +253,30 @@
             location.reload();
         }
 
-        
+
+        //The following functions add and remove a percent sign from 
+        //Inputs requesting percentages. If the element is in focus it
+        //adds a percent sign, when out of focus it removes it
+        //This is for use in the Add/Edit Assessment pages along with
+        //The Add/Edit Outcome pages in the rubric folder
+        var percentInput = document.getElementById("percent");
+
+        percentInput.addEventListener("focus", function e() {
+            percentInput.value = addPercentSign(percentInput.value);
+        });
+        percentInput.addEventListener("focusout", function e() {
+            percentInput.value = removePercentSign(percentInput.value);
+        });
+
+        function addPercentSign(value) {
+            console.log(value);
+            return value + "%";
+        }
+        function removePercentSign(value) {
+            return value.replace("%", "");
+        }
+        //------------------------------------------------------------
+
     </script>
     @RenderSection("scripts", required: false)
 </body>

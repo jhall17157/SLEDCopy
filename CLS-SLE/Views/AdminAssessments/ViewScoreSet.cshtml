@@ -1,0 +1,53 @@
+﻿@using CLS_SLE.Models;
+
+@{
+    ViewBag.Title = "ScoreSetDashboard";
+}
+
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item active" aria-current="page">Score Set</li>
+    </ol>
+</nav>
+<div>
+    <h1>Score Set</h1>
+</div>
+<div class="row">
+    <div class="border-dark col-6">
+        <fieldset class="form-group col-9">
+            <label>Score Sets</label><br>
+            <div id="scoreSets" class="input-append">
+                <div class="input-group">
+                    <select name="scoreSet1" class="form-control">
+                        @foreach (var scoreSet in Model.sets)
+                        {
+                            <option value="@scoreSet.Name">@scoreSet.Name </option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" id="addNewScoreSet">Add New Score Set</button>
+        </fieldset>
+    </div>
+    <div class="border-dark col-6">
+        <div class="row">
+            <p class="col-2">Score ID</p>
+                <p class="col-2">Score Set ID</p>
+                <p class="col-6">Description</p>
+        </div>
+        @foreach (Score ids in Model.scores)
+        {
+            <div class="row">
+                <p class="col-2">@ids.ScoreID</p>
+                <p class="col-2">@ids.ScoreSetID</p>
+                <p class="col-6">@ids.Description</p>
+            </div>
+
+        }
+        
+    </div>
+</div>
+
+

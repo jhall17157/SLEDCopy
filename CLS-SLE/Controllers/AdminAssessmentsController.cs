@@ -1,6 +1,7 @@
 ﻿using CLS_SLE.Models;
 using NLog;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Dynamic;
 using System.Linq;
@@ -41,6 +42,7 @@ namespace CLS_SLE.Controllers
                                        select assessments;
                 logger.Info("Dashboard loaded for " + user.Login);
                 var categories = db.AssessmentCategories.ToList();
+                
 
                 dynamic model = new ExpandoObject();
 
@@ -276,6 +278,21 @@ namespace CLS_SLE.Controllers
         public ActionResult SchoolsDepartments()
         {
             return View();
+        }
+
+        public ActionResult ViewScoreSet()
+        {
+            var user = db.Users.FirstOrDefault(u => u.PersonID == UserData.PersonId);
+            var score = from scores in db.Scores
+                                   select scores;
+            var scoreList = db.Scores.Where(s => s.ScoreSetID == 1).ToList();
+            var sets = db.ScoreSets.ToList();
+            
+            dynamic model = new ExpandoObject();
+            
+            model.scores = scoreList;
+            model.sets = sets;
+            return View(model);
         }
     }
 }

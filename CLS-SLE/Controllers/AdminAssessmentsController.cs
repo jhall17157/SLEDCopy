@@ -285,6 +285,7 @@ namespace CLS_SLE.Controllers
             var user = db.Users.FirstOrDefault(u => u.PersonID == UserData.PersonId);
             var score = from scores in db.Scores
                                    select scores;
+            //Need to make this dynamic and chosen by what score set is selected on the ViewScoreSet page
             var scoreList = db.Scores.Where(s => s.ScoreSetID == 1).ToList();
             var sets = db.ScoreSets.ToList();
             
@@ -294,5 +295,11 @@ namespace CLS_SLE.Controllers
             model.sets = sets;
             return View(model);
         }
+        public ActionResult AddScoreSet()
+        {
+
+            return View();
+        }
+
     }
 }

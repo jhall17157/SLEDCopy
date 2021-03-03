@@ -14,40 +14,23 @@
 <div>
     <h1>Score Set</h1>
 </div>
-<div class="row">
-    <div class="border-dark col-6">
-        <fieldset class="form-group col-9">
-            <label>Score Sets</label><br>
-            <div id="scoreSets" class="input-append">
-                <div class="input-group">
-                    <select name="scoreSet1" class="form-control">
-                        @foreach (var scoreSet in Model.sets)
-                        {
-                            <option value="@scoreSet.Name">@scoreSet.Name </option>
-                        }
-                    </select>
-                </div>
-            </div>
-            <a href="/AdminAssessments/AddScoreSet" class="btn btn-primary" id="addNewScoreSet">Add New Score Set</a>
-        </fieldset>
-    </div>
-    <div class="border-dark col-6">
-        <div class="row">
-            <p class="col-2">Score ID</p>
-                <p class="col-2">Score Set ID</p>
-                <p class="col-6">Description</p>
-        </div>
-        @foreach (Score ids in Model.scores)
-        {
-            <div class="row">
-                <p class="col-2">@ids.ScoreID</p>
-                <p class="col-2">@ids.ScoreSetID</p>
-                <p class="col-6">@ids.Description</p>
-            </div>
 
-        }
-        
-    </div>
-</div>
+    <label><a href="/AdminAssessments/AddScoreSet">Add New Score Set</a></label><br />
+    <table class="table table-hover">
+        <tbody>
+            @foreach (var scoreSet in Model.sets)
+            {
+                <tr>
+                    <td class="col-10">@scoreSet.Name </td>
+                    <td class="col-2">
+                        <a href="/AdminAssessments/ViewScore?ScoreSetID=@scoreSet.ScoreSetID" class="btn btn-primary">View</a>
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+        </table>
+
+
 
 

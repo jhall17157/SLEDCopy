@@ -1,0 +1,19 @@
+﻿@using CLS_SLE.Models;
+
+@{
+    ViewBag.Title = "View Scores";
+}
+
+
+<h2>@Model.name.Name</h2>
+
+<br />
+@foreach (Score item in Model.scores)
+{
+    <div class="row">
+        <p class="col-6">@item.Description</p>
+        <p class="col-6">@item.Value</p>
+    </div>
+}
+<label>Score Sets</label>
+<br />

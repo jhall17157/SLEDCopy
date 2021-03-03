@@ -283,21 +283,61 @@ namespace CLS_SLE.Controllers
         public ActionResult ViewScoreSet()
         {
             var user = db.Users.FirstOrDefault(u => u.PersonID == UserData.PersonId);
-            var score = from scores in db.Scores
-                                   select scores;
-            //Need to make this dynamic and chosen by what score set is selected on the ViewScoreSet page
-            var scoreList = db.Scores.Where(s => s.ScoreSetID == 1).ToList();
+
             var sets = db.ScoreSets.ToList();
             
             dynamic model = new ExpandoObject();
             
-            model.scores = scoreList;
             model.sets = sets;
+
             return View(model);
         }
         public ActionResult AddScoreSet()
         {
+            return View();
+        }
+        public ActionResult CreateNewScoreSet(FormCollection formCollection)
+        {
+            try
+            {
+                var user = db.Users.FirstOrDefault(u => u.PersonID == UserData.PersonId);
+                ScoreSet addScoreSet = db.ScoreSets.Create();
+                DateTime dateTime = DateTime.Now;
 
+                addScoreSet.Name = formCollection["name"];
+                addScoreSet.IsActive = ((formCollection["isActive"]).Equals("True") ? true : false);
+                addScoreSet.CreatedDateTime = dateTime;
+                addScoreSet.CreatedByLoginID = user.PersonID;
+
+                db.Entry(addScoreSet).State = EntityState.Added;
+                db.SaveChanges();
+
+                return RedirectToAction(actionName: "ViewScoreSet", controllerName: "AdminAssessments");
+
+            }
+            catch (Exception)
+            {
+
+                logger.Error("Failed to save Score Set, redirecting to sign in page.");
+                return RedirectToAction(actionName: "Signin", controllerName: "User");
+            }
+        }
+        public ActionResult ViewScore(int? ScoreSetID)
+        {
+            var set = ScoreSetID;
+
+            var scoreList = db.Scores.Where(s => s.ScoreSetID == ScoreSetID).ToList();
+
+            dynamic model = new ExpandoObject();
+
+            model.scores = scoreList;
+            model.name = db.ScoreSets.FirstOrDefault(s => s.ScoreSetID == set);
+
+            return View(model);
+        }
+
+        public ActionResult AddScore()
+        {
             return View();
         }
 

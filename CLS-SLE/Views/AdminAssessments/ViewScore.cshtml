@@ -1,19 +1,70 @@
 ﻿@using CLS_SLE.Models;
-
+@model CLS_SLE.ViewModels.ScoreViewModel
 @{
     ViewBag.Title = "View Scores";
 }
 
 
-<h2>@Model.name.Name</h2>
+<h2>@Model.ScoreSetID @Model.ScoreSetName Scores</h2>
 
-<br />
+<hr />
+<div class="row">
+
+
+    <h4 class="col-5">Description</h4>
+    <h4 class="col-5">Value</h4>
+</div>
 @foreach (Score item in Model.scores)
 {
     <div class="row">
-        <p class="col-6">@item.Description</p>
-        <p class="col-6">@item.Value</p>
+        @*<button type="button" class="btn btn-danger"><i class="fas fa-trash"></i></button>*@
+        <p class="col-5">@item.Description</p>
+        <p class="col-5">@item.Value</p>
     </div>
 }
-<label>Score Sets</label>
+<div>
+    <h5>Add new Score</h5>
+    <hr />
+    @using (Html.BeginForm("CreateNewScore", "AdminAssessments", new { scoreSetID = Model.ScoreSetID }, FormMethod.Post))
+    {
+        <div class="row">
+            <div class="form-row col-5">
+                <div class="form-group">
+                    @Html.Label("Description:")
+                    @Html.EditorFor(Model => Model.Description,
+                   new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                    @Html.ValidationMessageFor(Model => Model.Description)
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-5">
+                    @Html.Label("Value:")
+                    @Html.EditorFor(Model => Model.Value,
+                    new { htmlAttributes = new { @class = "form-control",type = "number", required = "required", min = 0} })
+                    @Html.ValidationMessageFor(Model => Model.Value)
+                </div>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <div class="row">
+                
+                <div class="col-sm-1">
+                    @Html.CheckBoxFor(Model => Model.IsActive, true)
+                    @Html.Label("Is Active", htmlAttributes: new { @class = "col-4" })
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-end col-9">
+            <div class="col-2 p-0 mx-1">
+                <button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Submit</button>
+            </div>
+            <div class="col-2 p-0 mx-1">
+                <a href="/AdminAssessments/ViewScoreSet" class="btn btn-danger col-12 mx-1">Cancel</a>
+            </div>
+        </div>
+    }
+
+</div>
+
 <br />

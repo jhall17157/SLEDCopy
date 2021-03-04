@@ -484,6 +484,7 @@
     <Compile Include="ViewModels\AddProgramViewModel.cs" />
     <Compile Include="ViewModels\AddSchoolViewModel.cs" />
     <Compile Include="ViewModels\AddSectionViewModel.cs" />
+    <Compile Include="ViewModels\ScoreViewModel.cs" />
     <Compile Include="ViewModels\CourseSearchModel.cs" />
     <Compile Include="ViewModels\CourseSearchViewModel.cs" />
     <Compile Include="ViewModels\CoursesViewModel.cs" />

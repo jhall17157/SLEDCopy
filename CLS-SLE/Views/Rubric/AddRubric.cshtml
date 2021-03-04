@@ -58,7 +58,7 @@
 		</div>
 	</fieldset>
 
-	<fieldset class="row form-group col-9">
+	<fieldset class="row form-group col-9 ml-1">
         <div class="row col-10">
             @Html.Label("Score Set:")
             @Html.DropDownListFor(Model => Model.AssessmentRubric.ScoreSetID, new SelectList(ViewBag.ScoreSets, "ScoreSetID", "Name"),

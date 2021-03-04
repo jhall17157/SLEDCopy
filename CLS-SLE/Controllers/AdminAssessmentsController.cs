@@ -1,4 +1,5 @@
 ﻿using CLS_SLE.Models;
+using CLS_SLE.ViewModels;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -283,7 +284,6 @@ namespace CLS_SLE.Controllers
         public ActionResult ViewScoreSet()
         {
             var user = db.Users.FirstOrDefault(u => u.PersonID == UserData.PersonId);
-
             var sets = db.ScoreSets.ToList();
             
             dynamic model = new ExpandoObject();
@@ -292,10 +292,12 @@ namespace CLS_SLE.Controllers
 
             return View(model);
         }
+
         public ActionResult AddScoreSet()
         {
             return View();
         }
+
         public ActionResult CreateNewScoreSet(FormCollection formCollection)
         {
             try
@@ -322,23 +324,40 @@ namespace CLS_SLE.Controllers
                 return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
         }
-        public ActionResult ViewScore(int? ScoreSetID)
+        public ActionResult ViewScore(ScoreViewModel scoreVM,byte? ScoreSetID)
         {
             var set = ScoreSetID;
-
             var scoreList = db.Scores.Where(s => s.ScoreSetID == ScoreSetID).ToList();
+            var name = db.ScoreSets.FirstOrDefault(s => s.ScoreSetID == set);
+            
+            scoreVM.scores = scoreList;
+            scoreVM.ScoreSetName = name.Name;
+            scoreVM.ScoreSetID = (byte)ScoreSetID;
 
-            dynamic model = new ExpandoObject();
-
-            model.scores = scoreList;
-            model.name = db.ScoreSets.FirstOrDefault(s => s.ScoreSetID == set);
-
-            return View(model);
+            return View(scoreVM);
         }
 
         public ActionResult AddScore()
         {
             return View();
+        }
+        [HttpPost]
+        public ActionResult CreateNewScore(ScoreViewModel scoreVM, byte scoreSetID)
+        {
+            var user = db.Users.FirstOrDefault(u => u.PersonID == UserData.PersonId);
+            DateTime dateTime = DateTime.Now;
+            Score score = new Score();
+
+            score.ScoreSetID = scoreSetID;
+            score.CreatedByLoginID = user.PersonID;
+            score.CreatedDateTime = dateTime;
+            score.Description = scoreVM.Description;
+            score.Value = (byte)scoreVM.Value;
+
+            db.Scores.Add(score);
+            db.SaveChanges();
+
+            return RedirectToAction(actionName: "ViewScoreSet", controllerName: "AdminAssessments"); ;
         }
 
     }

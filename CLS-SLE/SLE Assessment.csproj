@@ -2458,7 +2458,6 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
-    <Content Include="Views\AdminAssessments\DeleteThisFileLater.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -2549,8 +2548,6 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\AdminAssessments\ViewScoreSet.cshtml" />
-    <Content Include="Views\AdminAssessments\AddScoreSet.cshtml" />
-    <Content Include="Views\AdminAssessments\AddScore.cshtml" />
     <Content Include="Views\AdminAssessments\ViewScore.cshtml" />
     <None Include="Web.Test.config">
       <DependentUpon>Web.config</DependentUpon>

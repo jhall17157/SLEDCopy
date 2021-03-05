@@ -1,5 +1,5 @@
 ﻿@using CLS_SLE.Models;
-
+@model CLS_SLE.ViewModels.ScoreSetViewModel
 @{
     ViewBag.Title = "ScoreSetDashboard";
 }
@@ -15,21 +15,66 @@
     <h1>Score Set</h1>
 </div>
 
-    <label><a href="/AdminAssessments/AddScoreSet">Add New Score Set</a></label><br />
-    <table class="table table-hover">
-        <tbody>
-            @foreach (var scoreSet in Model.sets)
-            {
-                <tr>
-                    <td class="col-10">@scoreSet.Name </td>
-                    <td class="col-2">
-                        <a href="/AdminAssessments/ViewScore?ScoreSetID=@scoreSet.ScoreSetID" class="btn btn-primary">View</a>
-                    </td>
-                </tr>
+@*<label><a href="/AdminAssessments/AddScoreSet">Add New Score Set</a></label>*@
+<br />
+<table class="table table-hover">
+    <tbody>
+        @foreach (var scoreSet in Model.ScoreSets)
+        {
+            <tr>
+                <td class="col-8">@scoreSet.Name </td>
+                <td class="col-2">
+                    <a href="/AdminAssessments/ViewScore?ScoreSetID=@scoreSet.ScoreSetID" class="btn btn-primary">View</a>
+                </td>
+                <td class="col-2">
+                    @using (Html.BeginForm("ScoreSetRemoval", "AdminAssessments", new { scoreSetID = scoreSet.ScoreSetID }, FormMethod.Post))
+                    {
+                        <button class="btn btn-danger mx-1 col-12" type="submit" name="submit" formmethod="post"><i class="fas fa-trash-alt"></i></button>
+                    }
+                    @*<a href="/AdminAssessments/ScoreSetRemoval?ScoreSetID=@scoreSet.ScoreSetID" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>*@
+                </td>
+            </tr>
 
-            }
-        </tbody>
-        </table>
+        }
+    </tbody>
+</table>
+<hr />
+<h5>Add new Score Set</h5>
+
+@using (Html.BeginForm("CreateNewScoreSet", "AdminAssessments", FormMethod.Post))
+{
+    <div class="row border border-dark">
+        <div class="form-row col-5">
+            <div class="form-group">
+                @Html.Label("Score Set Name:")
+                @Html.EditorFor(Model => Model.Name,
+        new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(Model => Model.Name)
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                <div class="row form-check form-check-inline">
+                    <div class="mt-4">
+                        @Html.CheckBoxFor(Model => Model.IsActive, true)
+                    </div>
+                    <div class="mt-4">
+                        @Html.Label("Is Active", htmlAttributes: new { @class = "col-12" })
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row col-9">
+            <div class="col-2 p-0 mx-1">
+                <button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Submit</button>
+            </div>
+            <div class="col-2 p-0 mx-1">
+                <a href="/Admin/Assessments" class="btn btn-danger col-12 mx-1">Cancel</a>
+            </div>
+        </div>
+    </div>
+}
 
 
 

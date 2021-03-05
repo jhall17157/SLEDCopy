@@ -43,7 +43,7 @@ namespace CLS_SLE.Controllers
                                        select assessments;
                 logger.Info("Dashboard loaded for " + user.Login);
                 var categories = db.AssessmentCategories.ToList();
-                
+
 
                 dynamic model = new ExpandoObject();
 
@@ -281,24 +281,17 @@ namespace CLS_SLE.Controllers
             return View();
         }
 
-        public ActionResult ViewScoreSet()
+        public ActionResult ViewScoreSet(ScoreSetViewModel scoreSetVM)
         {
             var user = db.Users.FirstOrDefault(u => u.PersonID == UserData.PersonId);
             var sets = db.ScoreSets.ToList();
-            
-            dynamic model = new ExpandoObject();
-            
-            model.sets = sets;
 
-            return View(model);
+            scoreSetVM.ScoreSets = sets;
+
+            return View(scoreSetVM);
         }
-
-        public ActionResult AddScoreSet()
-        {
-            return View();
-        }
-
-        public ActionResult CreateNewScoreSet(FormCollection formCollection)
+        [HttpPost]
+        public ActionResult CreateNewScoreSet(ScoreSetViewModel scoreSetVM)
         {
             try
             {
@@ -306,8 +299,8 @@ namespace CLS_SLE.Controllers
                 ScoreSet addScoreSet = db.ScoreSets.Create();
                 DateTime dateTime = DateTime.Now;
 
-                addScoreSet.Name = formCollection["name"];
-                addScoreSet.IsActive = ((formCollection["isActive"]).Equals("True") ? true : false);
+                addScoreSet.Name = scoreSetVM.Name;
+                addScoreSet.IsActive = scoreSetVM.IsActive;
                 addScoreSet.CreatedDateTime = dateTime;
                 addScoreSet.CreatedByLoginID = user.PersonID;
 
@@ -324,12 +317,27 @@ namespace CLS_SLE.Controllers
                 return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
         }
-        public ActionResult ViewScore(ScoreViewModel scoreVM,byte? ScoreSetID)
+
+        [HttpPost]
+        public ActionResult ScoreSetRemoval(byte scoreSetID)
+        {
+            //return RedirectToAction(actionName: "Signin", controllerName: "User");
+            var sets = db.ScoreSets.Where(s => s.ScoreSetID == scoreSetID).FirstOrDefault();
+            if (sets.Scores.Count > 0)
+            {
+
+            }
+            db.ScoreSets.Remove(sets);
+            db.SaveChanges();
+            return RedirectToAction(actionName: "ViewScoreSet", controllerName: "AdminAssessments");
+
+        }
+        public ActionResult ViewScore(ScoreViewModel scoreVM, byte? ScoreSetID)
         {
             var set = ScoreSetID;
             var scoreList = db.Scores.Where(s => s.ScoreSetID == ScoreSetID).ToList();
             var name = db.ScoreSets.FirstOrDefault(s => s.ScoreSetID == set);
-            
+
             scoreVM.scores = scoreList;
             scoreVM.ScoreSetName = name.Name;
             scoreVM.ScoreSetID = (byte)ScoreSetID;
@@ -337,10 +345,6 @@ namespace CLS_SLE.Controllers
             return View(scoreVM);
         }
 
-        public ActionResult AddScore()
-        {
-            return View();
-        }
         [HttpPost]
         public ActionResult CreateNewScore(ScoreViewModel scoreVM, byte scoreSetID)
         {
@@ -349,6 +353,7 @@ namespace CLS_SLE.Controllers
             Score score = new Score();
 
             score.ScoreSetID = scoreSetID;
+            score.IsActive = scoreVM.IsActive;
             score.CreatedByLoginID = user.PersonID;
             score.CreatedDateTime = dateTime;
             score.Description = scoreVM.Description;
@@ -357,8 +362,10 @@ namespace CLS_SLE.Controllers
             db.Scores.Add(score);
             db.SaveChanges();
 
-            return RedirectToAction(actionName: "ViewScoreSet", controllerName: "AdminAssessments"); ;
+            return RedirectToAction(actionName: "ViewScore", controllerName: "AdminAssessments", new { scoreSetID = score.ScoreSetID }); ;
         }
+
+
 
     }
 }

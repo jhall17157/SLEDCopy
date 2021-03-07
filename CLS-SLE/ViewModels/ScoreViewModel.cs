@@ -18,16 +18,10 @@ namespace CLS_SLE.ViewModels
         public List<Score> scores { get; set; }
         public string ScoreSetName { get; set; }
         public Score Score { get; set; }
-        
+        public List<StudentScore> StudentScores { get; set; }
+        public string message { get; set; }
 
-        //  [Description]
-        //,[Value]
-        //,[SortOrder]
-        //,[IsUnassessedScore]
-        //,[IsActive]
-        //,[CreatedDateTime]
-        //,[CreatedByLoginID]
-        //,[ModifiedDateTime]
-        //,[ModifiedByLoginID]
+
+
     }
 }

@@ -12,5 +12,7 @@ namespace CLS_SLE.ViewModels
         public string Name { get; set; }
         public bool IsActive { get; set; }
         public List<ScoreSet> ScoreSets { get; set; }
+        public List<StudentScore> StudentScores { get; set; }
+        public string message { get; set; }
     }
 }

@@ -281,13 +281,13 @@ namespace CLS_SLE.Controllers
             return View();
         }
 
-        public ActionResult ViewScoreSet(ScoreSetViewModel scoreSetVM)
+        public ActionResult ViewScoreSet(ScoreSetViewModel scoreSetVM, string message)
         {
             var user = db.Users.FirstOrDefault(u => u.PersonID == UserData.PersonId);
             var sets = db.ScoreSets.ToList();
 
             scoreSetVM.ScoreSets = sets;
-
+            scoreSetVM.message = message;
             return View(scoreSetVM);
         }
         [HttpPost]
@@ -321,18 +321,34 @@ namespace CLS_SLE.Controllers
         [HttpPost]
         public ActionResult ScoreSetRemoval(byte scoreSetID)
         {
-            //return RedirectToAction(actionName: "Signin", controllerName: "User");
+            string msg = "";
             var sets = db.ScoreSets.Where(s => s.ScoreSetID == scoreSetID).FirstOrDefault();
             if (sets.Scores.Count > 0)
             {
-
+                msg = "Please remove all scores form score set before deleting";
             }
-            db.ScoreSets.Remove(sets);
-            db.SaveChanges();
-            return RedirectToAction(actionName: "ViewScoreSet", controllerName: "AdminAssessments");
+            else
+            {
+                db.ScoreSets.Remove(sets);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction(actionName: "ViewScoreSet", controllerName: "AdminAssessments", new { message = msg });
 
         }
-        public ActionResult ViewScore(ScoreViewModel scoreVM, byte? ScoreSetID)
+        [HttpPost]
+        public ActionResult ToggleScoreSetActive(byte scoreSetID)
+        {
+            var scoreSet = db.ScoreSets.Where(s => s.ScoreSetID == scoreSetID).FirstOrDefault();
+            
+            if (scoreSet.IsActive){scoreSet.IsActive = false;}
+            else{scoreSet.IsActive = true;}
+
+            db.SaveChanges();
+            return RedirectToAction(actionName: "ViewScoreSet", controllerName: "AdminAssessments");
+        }
+
+        public ActionResult ViewScore(ScoreViewModel scoreVM, byte? ScoreSetID, string message)
         {
             var set = ScoreSetID;
             var scoreList = db.Scores.Where(s => s.ScoreSetID == ScoreSetID).ToList();
@@ -341,8 +357,21 @@ namespace CLS_SLE.Controllers
             scoreVM.scores = scoreList;
             scoreVM.ScoreSetName = name.Name;
             scoreVM.ScoreSetID = (byte)ScoreSetID;
+            scoreVM.message = message;
 
             return View(scoreVM);
+        }
+        [HttpPost]
+        public ActionResult ToggleActive(byte scoreID, byte scoreSetID)
+        {
+            var score = db.Scores.Where(s => s.ScoreID == scoreID).FirstOrDefault();
+            //score.IsActive = true ? score.IsActive=false : score.IsActive=true;
+            if (score.IsActive){score.IsActive = false;}
+            else{score.IsActive = true;}
+
+            db.SaveChanges();
+
+            return RedirectToAction(actionName: "ViewScore", controllerName: "AdminAssessments", new { scoreSetID = score.ScoreSetID });
         }
 
         [HttpPost]
@@ -363,6 +392,23 @@ namespace CLS_SLE.Controllers
             db.SaveChanges();
 
             return RedirectToAction(actionName: "ViewScore", controllerName: "AdminAssessments", new { scoreSetID = score.ScoreSetID }); ;
+        }
+        [HttpPost]
+        public ActionResult RemoveScore(byte scoreId, byte scoreSetID)
+        {
+            string msg = "";
+            var scores = db.Scores.Where(s => s.ScoreID == scoreId).FirstOrDefault();
+            var StudentScores = db.StudentScores.Where(s => s.ScoreID == scoreId).ToList();
+            if (StudentScores.Count > 0)
+            {
+                msg = "Cannot delete scores that have been assigned to students";
+            }
+            else
+            {
+                db.Scores.Remove(scores);
+                db.SaveChanges();
+            }
+            return RedirectToAction(actionName: "ViewScore", controllerName: "AdminAssessments", new { scoreSetID = scoreSetID, message = msg });
         }
 
 

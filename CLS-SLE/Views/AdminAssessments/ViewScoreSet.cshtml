@@ -4,7 +4,7 @@
     ViewBag.Title = "ScoreSetDashboard";
 }
 
-
+<h1 class="alert-danger">@Model.message</h1>
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
@@ -55,7 +55,7 @@
         }
     </tbody>
 </table>
-<h1 class="alert-danger">@Model.message</h1>
+
 <hr />
 <h5>Add new Score Set</h5>
 

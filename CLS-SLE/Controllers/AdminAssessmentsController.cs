@@ -325,7 +325,7 @@ namespace CLS_SLE.Controllers
             var sets = db.ScoreSets.Where(s => s.ScoreSetID == scoreSetID).FirstOrDefault();
             if (sets.Scores.Count > 0)
             {
-                msg = "Please remove all scores form score set before deleting";
+                msg = "Please remove all scores from " + sets.Name + " score set before deleting";
             }
             else
             {

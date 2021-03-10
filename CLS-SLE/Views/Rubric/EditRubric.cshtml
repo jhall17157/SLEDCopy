@@ -75,10 +75,16 @@
         </div>
     </fieldset>
 
-    <fieldset class="form-group">
-        @Html.Label("Score Set:")
-        @Html.DropDownListFor(Model => Model.AssessmentRubric.ScoreSetID, new SelectList(ViewBag.ScoreSets, "ScoreSetID", "Name"),
-            new { @class = "form-control input-append", @Value = Model.AssessmentRubric.ScoreSetID })
+    <fieldset class="row form-group ml-1">
+        <div class="row col-10">
+            @Html.Label("Score Set:")
+            @Html.DropDownListFor(Model => Model.AssessmentRubric.ScoreSetID, new SelectList(ViewBag.ScoreSets, "ScoreSetID", "Name"),
+                          new { @class = "form-control input-append", @Value = Model.AssessmentRubric.ScoreSetID })
+        </div>
+        <div>
+            <br />
+            <a href="/AdminAssessments/ViewScoreSet"><button type="button" class="btn btn-primary mt-2"> Edit Score Set</button></a>
+        </div>
     </fieldset>
 
     <!-- These should belong to the individual rubric assessment rows... need to fix!

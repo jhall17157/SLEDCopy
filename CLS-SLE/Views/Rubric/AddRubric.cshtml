@@ -58,10 +58,18 @@
 		</div>
 	</fieldset>
 
-	<fieldset class="form-group col-9">
-		@Html.Label("Score Set:")
-		@Html.DropDownListFor(Model => Model.AssessmentRubric.ScoreSetID, new SelectList(ViewBag.ScoreSets, "ScoreSetID", "Name"),
-			new { @class = "form-control input-append" })
+	<fieldset class="row form-group col-9 ml-1">
+        <div class="row col-10">
+            @Html.Label("Score Set:")
+            @Html.DropDownListFor(Model => Model.AssessmentRubric.ScoreSetID, new SelectList(ViewBag.ScoreSets, "ScoreSetID", "Name"),
+				new { @class = "form-control input-append" })
+        </div>
+        <div>
+            <br />
+            <a href="/AdminAssessments/ViewScoreSet"><button type="button" class="btn btn-primary mt-2"> Edit Score Set</button></a>
+        </div>
+       
+		
 	</fieldset>
 
 	<div class="form-group col-9">

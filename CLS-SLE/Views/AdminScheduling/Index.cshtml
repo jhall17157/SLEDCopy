@@ -411,7 +411,8 @@
                             <p class="col-12 mb-1 pl-0">Select CRN:</p>
                             @Html.DropDownListFor(s => s.SectionID, Model.Sections, "", new
                            {
-                               @class = "form-control selectpicker d-inline col-10 mb-2"
+                               @class = "form-control selectpicker d-inline col-10 mb-2",
+                               @multiple = "multiple"
                            })
                             <p class="col-12 mb-1 pl-0">Select Rubric:</p>
                             @Html.DropDownListFor(r => r.RubricID, Model.AssesmentRubrics, "-Select Rubric-", new { @class = "form-control selectpicker d-inline col-10 mb-2" })

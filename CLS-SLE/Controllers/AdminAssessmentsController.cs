@@ -1,6 +1,8 @@
 ﻿using CLS_SLE.Models;
+using CLS_SLE.ViewModels;
 using NLog;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Dynamic;
 using System.Linq;
@@ -41,6 +43,7 @@ namespace CLS_SLE.Controllers
                                        select assessments;
                 logger.Info("Dashboard loaded for " + user.Login);
                 var categories = db.AssessmentCategories.ToList();
+
 
                 dynamic model = new ExpandoObject();
 
@@ -277,5 +280,139 @@ namespace CLS_SLE.Controllers
         {
             return View();
         }
+
+        public ActionResult ViewScoreSet(ScoreSetViewModel scoreSetVM, string message)
+        {
+            var user = db.Users.FirstOrDefault(u => u.PersonID == UserData.PersonId);
+            var sets = db.ScoreSets.ToList();
+
+            scoreSetVM.ScoreSets = sets;
+            scoreSetVM.message = message;
+            return View(scoreSetVM);
+        }
+        [HttpPost]
+        public ActionResult CreateNewScoreSet(ScoreSetViewModel scoreSetVM)
+        {
+            try
+            {
+                var user = db.Users.FirstOrDefault(u => u.PersonID == UserData.PersonId);
+                ScoreSet addScoreSet = db.ScoreSets.Create();
+                DateTime dateTime = DateTime.Now;
+
+                addScoreSet.Name = scoreSetVM.Name;
+                addScoreSet.IsActive = scoreSetVM.IsActive;
+                addScoreSet.CreatedDateTime = dateTime;
+                addScoreSet.CreatedByLoginID = user.PersonID;
+
+                db.Entry(addScoreSet).State = EntityState.Added;
+                db.SaveChanges();
+
+                return RedirectToAction(actionName: "ViewScoreSet", controllerName: "AdminAssessments");
+
+            }
+            catch (Exception)
+            {
+
+                logger.Error("Failed to save Score Set, redirecting to sign in page.");
+                return RedirectToAction(actionName: "Signin", controllerName: "User");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ScoreSetRemoval(byte scoreSetID)
+        {
+            string msg = "";
+            var sets = db.ScoreSets.Where(s => s.ScoreSetID == scoreSetID).FirstOrDefault();
+            if (sets.Scores.Count > 0)
+            {
+                msg = "Please remove all scores from " + sets.Name + " score set before deleting";
+            }
+            else
+            {
+                db.ScoreSets.Remove(sets);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction(actionName: "ViewScoreSet", controllerName: "AdminAssessments", new { message = msg });
+
+        }
+        [HttpPost]
+        public ActionResult ToggleScoreSetActive(byte scoreSetID)
+        {
+            var scoreSet = db.ScoreSets.Where(s => s.ScoreSetID == scoreSetID).FirstOrDefault();
+            
+            if (scoreSet.IsActive){scoreSet.IsActive = false;}
+            else{scoreSet.IsActive = true;}
+
+            db.SaveChanges();
+            return RedirectToAction(actionName: "ViewScoreSet", controllerName: "AdminAssessments");
+        }
+
+        public ActionResult ViewScore(ScoreViewModel scoreVM, byte? ScoreSetID, string message)
+        {
+            var set = ScoreSetID;
+            var scoreList = db.Scores.Where(s => s.ScoreSetID == ScoreSetID).OrderByDescending(s => s.SortOrder).ToList();
+            var name = db.ScoreSets.FirstOrDefault(s => s.ScoreSetID == set);
+
+            scoreVM.scores = scoreList;
+            scoreVM.ScoreSetName = name.Name;
+            scoreVM.ScoreSetID = (byte)ScoreSetID;
+            scoreVM.message = message;
+
+            return View(scoreVM);
+        }
+        [HttpPost]
+        public ActionResult ToggleActive(byte scoreID, byte scoreSetID)
+        {
+            var score = db.Scores.Where(s => s.ScoreID == scoreID).FirstOrDefault();
+            //score.IsActive = true ? score.IsActive=false : score.IsActive=true;
+            if (score.IsActive){score.IsActive = false;}
+            else{score.IsActive = true;}
+
+            db.SaveChanges();
+
+            return RedirectToAction(actionName: "ViewScore", controllerName: "AdminAssessments", new { scoreSetID = score.ScoreSetID });
+        }
+
+        [HttpPost]
+        public ActionResult CreateNewScore(ScoreViewModel scoreVM, byte scoreSetID)
+        {
+            var user = db.Users.FirstOrDefault(u => u.PersonID == UserData.PersonId);
+            DateTime dateTime = DateTime.Now;
+            Score score = new Score();
+
+            score.ScoreSetID = scoreSetID;
+            score.IsActive = scoreVM.IsActive;
+            score.CreatedByLoginID = user.PersonID;
+            score.CreatedDateTime = dateTime;
+            score.Description = scoreVM.Description;
+            score.Value = (byte)scoreVM.Value;
+            score.SortOrder = (byte)scoreVM.SortOrder;
+
+            db.Scores.Add(score);
+            db.SaveChanges();
+
+            return RedirectToAction(actionName: "ViewScore", controllerName: "AdminAssessments", new { scoreSetID = score.ScoreSetID }); ;
+        }
+        [HttpPost]
+        public ActionResult RemoveScore(byte scoreId, byte scoreSetID)
+        {
+            string msg = "";
+            var scores = db.Scores.Where(s => s.ScoreID == scoreId).FirstOrDefault();
+            var StudentScores = db.StudentScores.Where(s => s.ScoreID == scoreId).ToList();
+            if (StudentScores.Count > 0)
+            {
+                msg = "Cannot delete scores that have been assigned to students";
+            }
+            else
+            {
+                db.Scores.Remove(scores);
+                db.SaveChanges();
+            }
+            return RedirectToAction(actionName: "ViewScore", controllerName: "AdminAssessments", new { scoreSetID = scoreSetID, message = msg });
+        }
+
+
+
     }
 }

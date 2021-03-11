@@ -3,11 +3,11 @@
     "",
     "\\CLS-SLE",
     "\\CLS-SLE\\Controllers",
+    "\\CLS-SLE\\Models",
+    "\\CLS-SLE\\ViewModels",
     "\\CLS-SLE\\Views",
-    "\\CLS-SLE\\Views\\InstructorAssessments",
-    "\\CLS-SLE\\Views\\RoleAdmin",
-    "\\CLS-SLE\\Views\\Shared"
+    "\\CLS-SLE\\Views\\RoleAdmin"
   ],
-  "SelectedNode": "\\SLE Assessment.sln",
+  "SelectedNode": "\\CLS-SLE\\Models\\Role.cs",
   "PreviewInSolutionExplorer": false
 }

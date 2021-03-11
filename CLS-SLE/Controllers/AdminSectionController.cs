@@ -382,10 +382,10 @@ namespace CLS_SLE.Controllers
         [HttpPost]
         public ActionResult AddStudent(SectionDetailViewModel studentVM, short sectionID)
         {
-            string studentid = studentVM.newStudent.Substring(studentVM.newStudent.Length-9,9);
+            //string studentid = studentVM.newStudent.Substring(studentVM.newStudent.Length-9,9);
+            //int id = db.People.Where(p => p.IdNumber == studentid).FirstOrDefault().PersonID;
 
-            int id = db.People.Where(p => p.IdNumber == studentid).FirstOrDefault().PersonID;
-
+            int id = db.People.Where(p => p.IdNumber == studentVM.newStudent).FirstOrDefault().PersonID;
             Enrollment newEnrollment = new Enrollment
             {
                 SectionID = sectionID,

@@ -1,0 +1,99 @@
+﻿@using CLS_SLE.Models;
+@model CLS_SLE.ViewModels.ScoreSetViewModel
+@{
+    ViewBag.Title = "ScoreSetDashboard";
+}
+
+<h1 class="alert-danger">@Model.message</h1>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
+        <li class="breadcrumb-item active" aria-current="page">Score Set</li>
+    </ol>
+</nav>
+<div>
+    <h1>Score Set</h1>
+</div>
+
+@*<label><a href="/AdminAssessments/AddScoreSet">Add New Score Set</a></label>*@
+<br />
+<table class="table table-hover">
+    <tbody>
+        @foreach (var scoreSet in Model.ScoreSets)
+        {
+            <tr>
+                <td class="col-6">@scoreSet.Name </td>
+                <td class="col-2 ">
+                    @using (Html.BeginForm("ToggleScoreSetActive", "AdminAssessments", new {scoreSetID = scoreSet.ScoreSetID }))
+                    {
+                        if (scoreSet.IsActive)
+                        {
+                            <button type="submit" class="btn btn-success " style="width:100px"><span><i class="fas fa-check-square"></i> Active</span></button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-outline-warning" style="width:100px"><i class="far fa-check-square"></i> Active</button>
+                        }
+
+                    }
+                </td>
+                <td class="col-2">
+                    <a href="/AdminAssessments/ViewScore?ScoreSetID=@scoreSet.ScoreSetID" class="btn btn-primary">View</a>
+                </td>
+                <td class="col-2">
+                    @using (Html.BeginForm("ScoreSetRemoval", "AdminAssessments", new { scoreSetID = scoreSet.ScoreSetID }, FormMethod.Post))
+                    {
+                        //var scores = Model.ScoreSets.Where(sc => sc.)
+                        //var student = Model.StudentScores.Where(s => s.ScoreID == scoreSet.ScoreID).FirstOrDefault();
+                        //if () { }
+                        <button class="btn btn-danger mx-1 col-12" type="submit" name="submit" formmethod="post"><i class="fas fa-trash-alt"></i></button>
+                    }
+                    @*<a href="/AdminAssessments/ScoreSetRemoval?ScoreSetID=@scoreSet.ScoreSetID" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>*@
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+
+<hr />
+<h5>Add new Score Set</h5>
+
+@using (Html.BeginForm("CreateNewScoreSet", "AdminAssessments", FormMethod.Post))
+{
+    <div class="row border border-dark">
+        <div class="form-row col-5">
+            <div class="form-group">
+                @Html.Label("Score Set Name:")
+                @Html.EditorFor(Model => Model.Name,
+        new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(Model => Model.Name)
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                <div class="row form-check form-check-inline">
+                    <div class="mt-4">
+                        @Html.CheckBoxFor(Model => Model.IsActive, true)
+                    </div>
+                    <div class="mt-4">
+                        @Html.Label("Is Active", htmlAttributes: new { @class = "col-12" })
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row col-9">
+            <div class="col-2 p-0 mx-1">
+                <button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Submit</button>
+            </div>
+            <div class="col-2 p-0 mx-1">
+                <a href="/Admin/Assessments" class="btn btn-danger col-12 mx-1">Cancel</a>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+

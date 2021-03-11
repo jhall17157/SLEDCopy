@@ -50,8 +50,8 @@
 	</div>
 	<div class="form-row">
 		<div class="form-group col-9">
-			<label for="PassPercent">Pass Percentage:</label>
-			<input type="text" name="PassPercent" class="form-control" value="@((Model.Assessment.OutcomePassRate)*100)" required />
+			<label for="PassPercent">Pass Percentage:</label> 
+			<input id="percent" min="1" max="100" placeholder="50%" type="text" name="PassPercent" class="form-control" value="@((Model.Assessment.OutcomePassRate)*100)" required />
 		</div>
 	</div>
 	<fieldset class="form-group col-9">
@@ -102,3 +102,4 @@
 	    <input name="assessmentID" value="@Model.Assessment.AssessmentID" type="hidden" />
 	</div>-->
 </form>
+

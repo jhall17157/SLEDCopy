@@ -45,9 +45,9 @@
     </fieldset>
     <div class="form-row">
         <div class="form-group col-9">
-            @Html.Label("Pass Percentage:")
+            @Html.Label("Pass Percentage:")  
             @Html.EditorFor(Model => Model.OutcomeVM.CriteriaPassRate,
-            new { htmlAttributes = new { @class = "form-control" } })
+            new { htmlAttributes = new { @placeholder = "50%", @id = "percent", @class = "form-control" } })
             @Html.ValidationMessageFor(Model => Model.OutcomeVM.CriteriaPassRate)
         </div>
     </div>

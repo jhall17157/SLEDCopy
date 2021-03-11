@@ -351,7 +351,7 @@ namespace CLS_SLE.Controllers
         public ActionResult ViewScore(ScoreViewModel scoreVM, byte? ScoreSetID, string message)
         {
             var set = ScoreSetID;
-            var scoreList = db.Scores.Where(s => s.ScoreSetID == ScoreSetID).ToList();
+            var scoreList = db.Scores.Where(s => s.ScoreSetID == ScoreSetID).OrderByDescending(s => s.SortOrder).ToList();
             var name = db.ScoreSets.FirstOrDefault(s => s.ScoreSetID == set);
 
             scoreVM.scores = scoreList;
@@ -387,6 +387,7 @@ namespace CLS_SLE.Controllers
             score.CreatedDateTime = dateTime;
             score.Description = scoreVM.Description;
             score.Value = (byte)scoreVM.Value;
+            score.SortOrder = (byte)scoreVM.SortOrder;
 
             db.Scores.Add(score);
             db.SaveChanges();

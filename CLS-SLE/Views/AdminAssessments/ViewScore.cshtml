@@ -3,6 +3,8 @@
 @{
     ViewBag.Title = "View Scores";
 }
+
+<h1 class=" alert-danger">@Model.message</h1>
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">@Html.ActionLink("Admin Dashboard", "AdminDashboard", "Admin")</li>
@@ -15,16 +17,19 @@
 
 <hr />
 <div class="row">
-    <h4 class="col-5">Description</h4>
-    <h4 class="col-5">Value</h4>
+    <h4 class="col-3">Description</h4>
+    <h4 class="col-3">Value</h4>
+    <h4 class="col-3">Sort Order</h4>
 </div>
 @foreach (Score item in Model.scores)
 {
     <hr />
 <div class="row ">
 
-    <p class="col-5">@item.Description</p>
-    <p class="col-5">@item.Value</p>
+    <p class="col-3">@item.Description</p>
+    <p class="col-3">@item.Value</p>
+    <p class="col-3">@item.SortOrder</p>
+
     @using (Html.BeginForm("ToggleActive", "AdminAssessments", new { scoreId = item.ScoreID, scoreSetID= item.ScoreSetID }))
     {
         if (item.IsActive)
@@ -44,52 +49,60 @@
 </div>
 
 }
-<h1 class=" alert-danger">@Model.message</h1>
+
 <div>
     <hr />
     <h5>Add new Score</h5>
 
     @using (Html.BeginForm("CreateNewScore", "AdminAssessments", new { scoreSetID = Model.ScoreSetID }, FormMethod.Post))
     {
-        <div class="row border border-dark">
-            <div class="form-row col-5">
-                <div class="form-group">
-                    @Html.Label("Description:")
-                    @Html.EditorFor(Model => Model.Description,
-            new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                    @Html.ValidationMessageFor(Model => Model.Description)
+<div class="row border border-dark">
+    <div class="form-row col-4">
+        <div class="form-group">
+            @Html.Label("Description:")
+            @Html.EditorFor(Model => Model.Description,
+    new { htmlAttributes = new { @class = "form-control", required = "required" } })
+            @Html.ValidationMessageFor(Model => Model.Description)
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-3">
+            @Html.Label("Value:")
+            @Html.EditorFor(Model => Model.Value,
+             new { htmlAttributes = new { @class = "form-control", type = "number", required = "required", min = 0 } })
+            @Html.ValidationMessageFor(Model => Model.Value)
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-4">
+            @Html.Label("Order:")
+            @Html.EditorFor(Model => Model.SortOrder,
+             new { htmlAttributes = new { @class = "form-control", type = "number", required = "required", min = 0 } })
+            @Html.ValidationMessageFor(Model => Model.SortOrder)
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <div class="row form-check form-check-inline">
+                <div class="mt-4">
+                    @Html.CheckBoxFor(Model => Model.IsActive, true)
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-5">
-                    @Html.Label("Value:")
-                    @Html.EditorFor(Model => Model.Value,
-                     new { htmlAttributes = new { @class = "form-control", type = "number", required = "required", min = 0 } })
-                    @Html.ValidationMessageFor(Model => Model.Value)
+                <div class="mt-4">
+                    @Html.Label("Is Active", htmlAttributes: new { @class = "col-12" })
                 </div>
-            </div>
-            <div class="form-group">
-                <div>
-                    <div class="row form-check form-check-inline">
-                        <div class="mt-4">
-                            @Html.CheckBoxFor(Model => Model.IsActive, true)
-                        </div>
-                        <div class="mt-4">
-                            @Html.Label("Is Active", htmlAttributes: new { @class = "col-12" })
-                        </div>
 
-                    </div>
-                </div>
-            </div>
-            <div class="row col-9">
-                <div class="col-2 p-0 mx-1">
-                    <button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Submit</button>
-                </div>
-                <div class="col-2 p-0 mx-1">
-                    <a href="/AdminAssessments/ViewScoreSet" class="btn btn-danger col-12 mx-1">Cancel</a>
-                </div>
             </div>
         </div>
+    </div>
+    <div class="row col-9">
+        <div class="col-2 p-0 mx-1">
+            <button class="btn btn-primary mx-1 col-12" type="submit" name="submit" formmethod="post">Submit</button>
+        </div>
+        <div class="col-2 p-0 mx-1">
+            <a href="/AdminAssessments/ViewScoreSet" class="btn btn-danger col-12 mx-1">Cancel</a>
+        </div>
+    </div>
+</div>
 
 
     }

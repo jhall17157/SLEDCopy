@@ -280,31 +280,36 @@ namespace CLS_SLE.Controllers
         {
             if (ModelState.IsValid)
             {
-                SectionRubric sectionRubric = new SectionRubric
+                //start upload loop
+                foreach (var CRN in viewModel.SectionIDs) //in the viewmodel we have a list of CRNs called "sectionIDs" which is a reference back to the older single CRN upload method's sectionID
                 {
-                    SectionID = viewModel.SectionID,
-                    RubricID = (short)viewModel.RubricID,
-                    StartDate = viewModel.StartDate,
-                    EndDate = viewModel.EndDate,
-                    CreatedByLoginID = UserData.PersonId,
-                    CreatedDateTime = DateTime.Now
-            
+                    SectionRubric sectionRubric = new SectionRubric
+                    {
+                        SectionID = CRN, //The SectionID represents the course CRN selected
+                        RubricID = (short)viewModel.RubricID,
+                        StartDate = viewModel.StartDate,
+                        EndDate = viewModel.EndDate,
+                        CreatedByLoginID = UserData.PersonId,
+                        CreatedDateTime = DateTime.Now
 
-                };
-                try
-                {
-                    db.SectionRubrics.Add(sectionRubric);
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.ToString());
-                    Debug.WriteLine("Failed Scheduling information: \n" +
-                        "   SectionID: " + sectionRubric.SectionID + "\n" +
-                        "   RubricID: " + sectionRubric.RubricID + "\n" +
-                        "   Start Date: " + sectionRubric.StartDate.ToString() + "\n" +
-                        "   End Date: " + sectionRubric.EndDate.ToString());
-                }
-                db.SaveChanges();
+
+                    };
+                    try
+                    {
+                        db.SectionRubrics.Add(sectionRubric);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.ToString());
+                        Debug.WriteLine("Failed Scheduling information: \n" +
+                            "   SectionID: " + sectionRubric.SectionID + "\n" +
+                            "   RubricID: " + sectionRubric.RubricID + "\n" +
+                            "   Start Date: " + sectionRubric.StartDate.ToString() + "\n" +
+                            "   End Date: " + sectionRubric.EndDate.ToString());
+                    }
+                    db.SaveChanges();
+                }              
+                //end upload loop
                 TempData["SemesterID"] = viewModel.SemesterID;
                 return RedirectToAction("Index", "AdminScheduling");
 

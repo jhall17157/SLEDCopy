@@ -22,7 +22,8 @@ namespace CLS_SLE.ViewModels
         public List<SelectListItem> Sections { get; set; }
         public List<SelectListItem> SectionRubrics { get; set; }
 
-        public int SectionID { get; set; }
+        public int[] SectionIDs { get; set; } //This is what is used for CRNs
+        public int SectionID { get; set; } // This is what we used to use for passing CRNs
         public int RubricID { get; set; }
 
         

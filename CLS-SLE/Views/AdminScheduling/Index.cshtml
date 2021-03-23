@@ -392,6 +392,7 @@
         </div>
 
         <!-- Add Entry Modal-->
+                    <!--There is related javascript below at around line 500-->
         <div class="modal fade" id="addEntryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered p-2" role="document">
                 <div class="modal-content">
@@ -409,7 +410,7 @@
                                @class = "form-control selectpicker d-inline col-10 mb-2",
                            })
                             <p class="col-12 mb-1 pl-0">Select CRN:</p>
-                            @Html.DropDownListFor(s => s.SectionID, Model.Sections, "", new
+                            @Html.DropDownListFor(s => s.SectionIDs, Model.Sections, "", new
                            {
                                @class = "form-control selectpicker d-inline col-10 mb-2",
                                @multiple = "multiple"
@@ -488,26 +489,31 @@
         $('.lowerAccordionTrigger').click(toggleLowerAccordion);
         $('.assessmentHeader').hide();
     })
+
+    //The following code seems to populate the CRNs in the add entry modal. Right now it is set to look for
+    //the ID "SectionIDs" which was recently changed from "ScetionID" when changing to allow multiple CRNs to be selected.
+    //Maybe it would be better for the JSON object of SectionIDs to be stored and used rather than have to retype it over and over...?
+
     var sectionUrl = '@Url.Action("GetSections")';
-    var sections = $('#SectionID');
+    var sections = $('#SectionIDs');
     $('#CourseID').change(function () {
 
-        $('#SectionID').empty();
-        $('#SectionID').selectpicker('refresh');
+        $('#SectionIDs').empty();
+        $('#SectionIDs').selectpicker('refresh');
         $.getJSON(sectionUrl, { semesterID: @Html.Raw(Json.Encode(Model.SemesterID)), courseID: $(this).val() },
             function (data) {
                 if (!data) {
                     return;
                 }
-                $('#SectionID').append(new Option("-Select Section-", "", true));
+                $('#SectionIDs').append(new Option("-Select Section-", "", true)); 
                 $.each(data, function (index, item) {
                     //var entry = $('<option></option').val(item.Value).text(item.Text);
-                    $('#SectionID').append(new Option(item.Text, item.Value));
-                    $('#SectionID').selectpicker('refresh');
+                    $('#SectionIDs').append(new Option(item.Text, item.Value)); 
+                    $('#SectionIDs').selectpicker('refresh'); 
 
                 });
             });
-        $('#SectionID').selectpicker('refresh');
+        $('#SectionIDs').selectpicker('refresh'); 
     })
 
     function toggleAccordion() {

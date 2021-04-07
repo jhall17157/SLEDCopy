@@ -18,5 +18,9 @@ namespace CLS_SLE.ViewModels
         public List<StudentModel> newStudents { get; set; }
         public List<Enrollment> enrolled { get; set; }
         public List<Enrollment> dropped { get; set; }
+        public HttpPostedFileBase attachment { get; set; }
+        public List<Enrollment> newEnrollments { get; set; }
+        public List<Person> errorList { get; set; }
+        public List<Person> mismatchList { get; set; }
     }
 }

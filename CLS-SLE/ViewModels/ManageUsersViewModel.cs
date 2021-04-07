@@ -12,5 +12,6 @@ namespace CLS_SLE.ViewModels
         //public List<UserSecurity> UserSecurities;
         //public IQueryable<Role> Roles;
         public String SearchTerm { get; set; }
+        public PagingInfo PagingInfo { get; set; }
     }
 }

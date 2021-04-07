@@ -177,6 +177,37 @@
 
 
 </table>
+<div class="row mb-3">
+    <div class="col">
+        <a href="ManageUsers?page=@(1)">
+            <button disabled id="first" class="btn btn-outline-secondary" type="button" data-page="@(1)">
+                <i class="fas fa-angle-double-left"></i><span class="d-none d-md-inline"> First</span>
+            </button>
+        </a>
+        <a href="ManageUsers?page=@(Model.PagingInfo.PreviousPage)">
+            <button disabled id="prev" class="btn btn-outline-secondary" type="button" data-page="@(Model.PagingInfo.PreviousPage)">
+                <i class="fas fa-angle-left"></i><span class="d-none d-md-inline"> Prev</span>
+            </button>
+        </a>
+    </div>
+    <div class="col text-center text-secondary">
+        <span id="start">@(Model.PagingInfo.RangeStart)</span>-<span id="end">@(Model.PagingInfo.RangeEnd)</span>
+        of
+        <span id="total">@(Model.PagingInfo.TotalItems)</span>
+    </div>
+    <div class="col text-right">
+        <a href="ManageUsers?page=@(Model.PagingInfo.NextPage)">
+            <button disabled id="next" class="btn btn-outline-secondary" type="button" data-page="@(Model.PagingInfo.NextPage)">
+                <span class="d-none d-md-inline">Next </span><i class="fas fa-angle-right"></i>
+            </button>
+        </a>
+        <a href="ManageUsers?page=@(Model.PagingInfo.TotalPages)">
+            <button disabled id="last" class="btn btn-outline-secondary" type="button" data-page="@(Model.PagingInfo.TotalPages)">
+                <span class="d-none d-md-inline">Last </span><i class="fas fa-angle-double-right"></i>
+            </button>
+        </a>
+    </div>
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

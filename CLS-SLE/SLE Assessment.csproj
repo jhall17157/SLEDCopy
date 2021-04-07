@@ -2549,6 +2549,7 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\AdminAssessments\ViewScoreSet.cshtml" />
     <Content Include="Views\AdminAssessments\ViewScore.cshtml" />
+    <Content Include="Views\AdminSection\UploadScreen.cshtml" />
     <None Include="Web.Test.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2558,6 +2559,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\uploads\" />
     <Folder Include="obj\Deploy\" />
     <Folder Include="packages\" />
     <Folder Include="Scripts\main\" />

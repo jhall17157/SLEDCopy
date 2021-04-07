@@ -1,0 +1,80 @@
+﻿@using CLS_SLE.Models;
+@model CLS_SLE.ViewModels.SectionDetailViewModel
+@{
+    ViewBag.Title = "View Section";
+}
+
+<h2>Upload Screen</h2>
+
+
+@using (Html.BeginForm())
+{
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Enroll Students</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="errorMessage"></div>
+
+                    <label>Student ID:</label>
+                    <input type="text" id="addStudentID" /> <button><i class="fas fa-plus-circle"></i><span> <b>Close</b></span></button>
+                    <ul id="tempStudentList"></ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    @*<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="enrollAllStudents(@Model.section.SectionID)" id="AddEnrollmentSubmissionButton" disabled>Submit</button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Students To be enrolled</h4>
+    <hr />
+
+    <h5>Please check for error messages and correct if nescessary</h5>
+    @using (Html.BeginForm("UploadScreen", "AdminSection", new { sectionID = Model.section }, FormMethod.Post))
+    {
+        <table class="table">
+            <tr>
+                <th scope="row"></th>
+                <th scope="col">ID</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Error Message</th>
+            </tr>
+            @for (int i = 0; i < Model.newStudents.Count; i++)
+            {
+        <tr>
+            <th scope="row"> @Html.ActionLink("Delete", "deleteCSVitem", "AdminSection", new { sectionID = Model.section, @class = "btn btn-danger", key = Model.newStudents[i].listView, model = Model }) </th>
+            <th class="col-2">@Html.EditorFor(students => Model.newStudents[i].id)  </th>
+            <th class="col-2">@Html.EditorFor(students => Model.newStudents[i].firstName)</th>
+            <th class="col-2">@Html.EditorFor(students => Model.newStudents[i].lastName)</th>
+            <th class="col-2">@Model.newStudents[i].message</th>
+            <th class="col-2"></th>
+        </tr>
+            }
+        </table>
+        <input type="submit" value="Save" class="btn btn-primary col-4" />
+        <input type="button" value="Search ID's"class="btn btn-primary" data-toggle="modal" data-target="#editModal"/>
+    }
+
+</div>
+}
+
+
+
+@section Scripts {
+    <script>
+        function editStudent() {
+         
+        }
+    </script>
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -51,14 +51,15 @@
             </tr>
             @for (int i = 0; i < Model.newStudents.Count; i++)
             {
-        <tr>
-            <th scope="row"> @Html.ActionLink("Delete", "deleteCSVitem", "AdminSection", new { sectionID = Model.section, @class = "btn btn-danger", key = Model.newStudents[i].listView, model = Model }) </th>
-            <th class="col-2">@Html.EditorFor(students => Model.newStudents[i].id)  </th>
-            <th class="col-2">@Html.EditorFor(students => Model.newStudents[i].firstName)</th>
-            <th class="col-2">@Html.EditorFor(students => Model.newStudents[i].lastName)</th>
-            <th class="col-2">@Model.newStudents[i].message</th>
-            <th class="col-2"></th>
-        </tr>
+            <tr id="@Model.newStudents[i].id">
+                @*<th scope="row"> @Html.ActionLink("Delete", "deleteCSVitem", "AdminSection", new { sectionID = Model.section, @class = "btn btn-danger", key = Model.newStudents[i].id }) </th>*@
+                <th scope="row"> <button class="btn btn-danger" onclick="deleteStudent(@Model.newStudents[i].id)">Del</button> </th>
+                <th class="col-2">@Html.EditorFor(students => Model.newStudents[i].id)  </th>
+                <th class="col-2">@Html.EditorFor(students => Model.newStudents[i].firstName)</th>
+                <th class="col-2">@Html.EditorFor(students => Model.newStudents[i].lastName)</th>
+                <th class="col-2">@Model.newStudents[i].message</th>
+                <th class="col-2"></th>
+            </tr>
             }
         </table>
         <input type="submit" value="Save" class="btn btn-primary col-4" />
@@ -72,8 +73,27 @@
 
 @section Scripts {
     <script>
-        function editStudent() {
-         
+        function deleteStudent(studentId) {
+         $.ajax({
+                url: '@Url.Action("DeleteStudent", "AdminSection")',
+                dataType: "json",
+                data: { id: studentId },
+                success: function (data) {
+                    if (data.success) {
+                        console.log(data)
+                        
+
+                    }
+                    else {
+                        swal("Oops!", data.message, "error");
+                    }
+                },
+                error: function (data) {
+                    swal("Oops!", data.message, "error");
+        }
+            });
+            $('#addStudentID').val('');
+
         }
     </script>
     @Scripts.Render("~/bundles/jqueryval")

@@ -202,8 +202,7 @@ namespace CLS_SLE.Controllers
                 db.Entry(addAssessment).State = EntityState.Added;
                 db.SaveChanges();
 
-
-                return RedirectToAction(actionName: "Assessments", controllerName: "Admin");
+                return RedirectToAction(actionName: "ViewAssessment", controllerName: "Admin", new { assessmentId = (int)addAssessment.AssessmentID  });
 
             }
             catch (Exception e)

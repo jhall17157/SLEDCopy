@@ -522,7 +522,7 @@ namespace CLS_SLE.Controllers
 
             return RedirectToAction("UploadScreen", "AdminSection", new { sectionId = sectionId});
         }
-
+        List<Enrollment> newEnroll = new List<Enrollment>();
         //[HttpPost]
         public ActionResult UploadScreen(SectionDetailViewModel model, int? sectionId)
         {
@@ -535,7 +535,7 @@ namespace CLS_SLE.Controllers
             
             //var tempEnrollment = db.Enrollments.Where(e => e.EnrollmentID == sectionId).FirstOrDefault();
 
-            List<Enrollment> newEnroll = new List<Enrollment>();
+            
             int errors = 0;
             
             foreach (StudentModel line in model.newStudents)
@@ -636,20 +636,19 @@ namespace CLS_SLE.Controllers
             //   fix formatting on viewSection Screen
             return RedirectToAction("UploadScreen", "AdminSection", new { sectionID = sectionId });
         }
-        public ActionResult DeleteCSVitem(SectionDetailViewModel model, int? sectionId, string key)
-        {
-            foreach(StudentModel student in model.newStudents)
-            {
-                if(key == student.listView)
-                {
-                    var itemToRemove = model.newStudents.Single(r => r.listView == "2");
-                    model.newStudents.Remove(itemToRemove);
-                }
-            }
 
-            return RedirectToAction("UploadScreen", "AdminSection", new { sectionID = sectionId });
+        public JsonResult DeleteStudent(SectionDetailViewModel model, string id)
+        {
+            var removeFromList = model.newStudents.Single(r => r.id == id);
+            model.newStudents.Remove(removeFromList);
+
+            return  new JsonResult { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-
     }
-}
+};
+        
+
+       
+
+

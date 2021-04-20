@@ -11,7 +11,7 @@ namespace CLS_SLE.Controllers
     public class AdminUserController : SLEControllerBase
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
-
+        private readonly int PageSize = 10;
 
         //public ActionResult Index() => View(db.Users.OrderBy(u => u.Login));
 
@@ -171,16 +171,22 @@ namespace CLS_SLE.Controllers
             return View(vm);
         }
         */
-        public ActionResult ManageUsers(ManageUsersViewModel vm)
+        public ActionResult ManageUsers(ManageUsersViewModel vm, int page)
         {
-            if(vm.SearchTerm != null)
+            
+            int ResultsCount =1;
+            if (vm.SearchTerm != null)
             {
                 vm.Users = db.Users.Include("Person").Where(u => u.Login.ToLower().Contains(vm.SearchTerm.ToLower())||u.PersonID.ToString().ToLower().StartsWith(vm.SearchTerm.ToLower())||(u.Person.LastName + ", " + u.Person.FirstName).ToLower().Contains(vm.SearchTerm.ToLower())).OrderBy(u => u.Person.LastName).ToList();
+                ResultsCount = db.Users.Include("Person").OrderBy(u => u.Person.LastName).Count();
             }
             else
             {
-                vm.Users = db.Users.Include("Person").OrderBy(u => u.Person.LastName).ToList();
+                vm.Users = db.Users.Include("Person").OrderBy(u => u.Person.LastName).Skip((page - 1) * PageSize).Take(PageSize).ToList();
+                ResultsCount = db.Users.Include("Person").OrderBy(u => u.Person.LastName).Count();
             }
+            vm.PagingInfo = new ViewModels.PagingInfo { CurrentPage = page, ItemsPerPage = PageSize, TotalItems = ResultsCount };
+
             //vm.SearchTerm = "";
             return View(vm);
         }

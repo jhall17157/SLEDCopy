@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -471,5 +472,183 @@ namespace CLS_SLE.Controllers
 
             return new JsonResult { Data = resultLeadInsturctors, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
+        
+        public ActionResult uploader(SectionDetailViewModel model, int sectionId)
+        {
+            List<StudentModel> mod = new List<StudentModel>();
+            
+            if (Request.Files.Count > 0)
+            {
+                var file = Request.Files[0];
+                string filePath = string.Empty;
+
+                if (file != null && file.ContentLength > 0)
+                {
+                    string path = Server.MapPath("~/Content/uploads/");
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    filePath = path + Path.GetFileName(file.FileName);
+                    string extension = Path.GetExtension(file.FileName);
+                    file.SaveAs(filePath);
+                    if (mod.Count < 1)
+                    {
+                        string[] lines = System.IO.File.ReadAllLines(filePath);
+
+                        foreach (string line in lines)
+                        {
+                            
+                            StudentModel student = new StudentModel();
+                            string[] col = line.Split(',');
+                            student.listView = col[0];
+                            student.id = col[1];
+                            student.firstName = col[2];
+                            student.lastName = col[3];
+
+                            mod.Add(student);
+                        }
+
+                        TempData["mydata"] = mod;
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("ViewSection", "AdminSection", new { sectionID = sectionId });
+                }
+                
+
+            }
+
+            return RedirectToAction("UploadScreen", "AdminSection", new { sectionId = sectionId});
+        }
+        List<Enrollment> newEnroll = new List<Enrollment>();
+        //[HttpPost]
+        public ActionResult UploadScreen(SectionDetailViewModel model, int? sectionId)
+        {
+
+            var student = this.TempData["mydata"];
+            if(student != null)
+            {
+                model.newStudents = (List<StudentModel>)student;
+            }
+            
+            //var tempEnrollment = db.Enrollments.Where(e => e.EnrollmentID == sectionId).FirstOrDefault();
+
+            
+            int errors = 0;
+            
+            foreach (StudentModel line in model.newStudents)
+            {
+                try
+                {      
+                    string ID = line.id;
+                    var validate = db.People.Where(p => p.IdNumber == ID).FirstOrDefault();
+
+                    //Student ID is not valid
+                    if (validate == null )
+                    {
+                        line.success = false;
+                        line.message = "ID Not Valid";
+                        errors++;
+                    }
+                    else
+                    {
+                        if (validate.FirstName == line.firstName && validate.LastName == line.lastName)
+                        {
+                            line.success = true;
+                            line.message = "OK!";
+                        }
+                        else
+                        {
+                            //names do not match Student ID
+                            line.success = false;
+                            line.message = "Id is for " + validate.FirstName + " " + validate.LastName;
+                            errors++;
+                        }
+                    }
+                }
+                catch
+                {
+                    logger.Info("Error uploading person");
+                            
+                }    
+            }
+
+            if (errors > 0)
+            {
+                return View(model);
+            }
+            else
+            {
+                foreach (StudentModel e in model.newStudents)
+                {
+                    var studentId = db.People.Where(p => p.IdNumber == e.id).FirstOrDefault();
+                    var duplicate = db.Enrollments.Where(st => st.StudentID == studentId.PersonID ).ToList();
+                    
+                    if(duplicate is null)
+                    {
+                        Enrollment newEnrollment = new Enrollment
+                        {
+                            SectionID = (int)sectionId,
+                            StudentID = studentId.PersonID,
+                            EnrollmentStatusCode = "E",
+                            StatusDate = DateTime.Now,
+                            CreatedDateTime = DateTime.Now,
+                            CreatedByLoginID = UserData.PersonId
+
+                        }; 
+                        db.Enrollments.Add(newEnrollment);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        bool flag = true;
+                        
+                        foreach (Enrollment validate in duplicate)
+                        {
+                            if (validate.SectionID == (int)sectionId)
+                                flag = false;
+                        }
+                        if (flag)
+                        {
+                            Enrollment newEnrollment = new Enrollment
+                            {
+                                SectionID = (int)sectionId,
+                                StudentID = studentId.PersonID,
+                                EnrollmentStatusCode = "E",
+                                StatusDate = DateTime.Now,
+                                CreatedDateTime = DateTime.Now,
+                                CreatedByLoginID = UserData.PersonId
+                            };
+                            db.Enrollments.Add(newEnrollment);
+                            db.SaveChanges();
+                        }
+                    }
+                    
+                }
+                
+                return RedirectToAction("ViewSection", "AdminSection", new { sectionID = sectionId });
+            }
+
+            //   todo - Edit screen to have a delete option. Change Title of page. Format gaps.  Get rid of 
+            //   Student ID on upload modal.  Get buttons to look the same.  don't show button until there is a file
+            //   fix formatting on viewSection Screen
+            return RedirectToAction("UploadScreen", "AdminSection", new { sectionID = sectionId });
+        }
+
+        public JsonResult DeleteStudent(SectionDetailViewModel model, string id)
+        {
+            var removeFromList = model.newStudents.Single(r => r.id == id);
+            model.newStudents.Remove(removeFromList);
+
+            return  new JsonResult { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
     }
-}
+};
+        
+
+       
+
+

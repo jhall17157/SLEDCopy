@@ -186,7 +186,7 @@ namespace CLS_SLE.Controllers
 
         public JsonResult CourseAutoComplete (string search)
         {
-            List<CourseSearchModel> resultCourses = db.Courses.Where(c=> !c.CourseName.Contains("Folio180")).Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).Select(c => new CourseSearchModel
+            List<CourseSearchModel> resultCourses = db.Courses.Where(c=> !c.CourseName.Contains("Folio180")).Where(c => (c.CourseName.Contains(search) || c.Number.Contains(search))).OrderBy(c => c.Number).Select(c => new CourseSearchModel
             {
                 id = c.CourseID,
                 name = c.CourseName,

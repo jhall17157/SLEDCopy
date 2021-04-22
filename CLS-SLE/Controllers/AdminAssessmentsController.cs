@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
-    
+     [Authorize(Roles = "Assessments")]
     public class AdminAssessmentsController : SLEControllerBase
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();

@@ -13,14 +13,18 @@
     </ol>
 </nav>
 @*TODO: Add the condition to display Edit function to anyone who has permission*@
-<h1> @Model.program.Name  - <a style="font-size: 65%;" href="/AdminProgram/EditProgram?programID=@Model.program.ProgramID">Edit <i class="fas fa-edit"></i></a> </h1>
+<h1>
+    @Model.program.Name  -   @if (HttpContext.Current.User.IsInRole("EditPrograms"))
+    {<a style="font-size: 65%;" href="/AdminProgram/EditProgram?programID=@Model.program.ProgramID">Edit <i class="fas fa-edit"></i></a>}
+    </h1>
 <br />
 <div class="py-1">
     <b>Program Number: </b> @Model.program.Number
 </div>
 @foreach(Department department in Model.departments){
 <div class="py-1">
-    <b>Department:</b> <a  href="/AdminDepartment/ViewDepartment?departmentID=@department.DepartmentID">@department.Name</a>
+    <b>Department:</b>  @if (HttpContext.Current.User.IsInRole("ViewDepartments"))
+    {<a href="/AdminDepartment/ViewDepartment?departmentID=@department.DepartmentID">@department.Name</a>}
 </div>
 }
 <div class="py-1">

@@ -1,8 +1,8 @@
 ﻿@using CLS_SLE.Models;
 @{
-                /**/
+    /**/
 
-                ViewBag.Title = "View Assessment";
+    ViewBag.Title = "View Assessment";
 }
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -11,77 +11,89 @@
         <li class="breadcrumb-item active" aria-current="page">@Model.assessment.Name </li>
     </ol>
 </nav>
-<h1> @Model.assessment.Name  - <a style="font-size: 85%;" href="/AdminAssessments/EditAssessment?AssessmentID=@Model.assessment.AssessmentID"><b>Edit</b></a> </h1>
-<br />
-<div class="py-1">
-    <b>Category:</b> @Model.assessment.Category
-</div>
-<div class="py-1">
-    <b>Description:</b> @Model.assessment.Description
-</div>
-<div class="py-1">
-    <b>Pass Rate:</b> @(Model.assessment.OutcomePassRate * 100)%
-</div>
-<div>
-    <b>Calculate Pass Rate:</b> @Model.assessment.CalculateOutcomePassRate
-</div>
-<div class="py-1">
-    <b>Program:</b> @Model.program
-</div>
-<div class="py-1">
-    <b>Is Active:</b> @Model.assessment.IsActive
-</div>
-@if (Model.ModifierLogin != null)
+@if (HttpContext.Current.User.IsInRole("EditAssessments"))
 {
-    <div class="py-1">
-        <b>Last Modified:</b>  @Model.assessment.ModifiedDateTime
-    </div>
-    <div class="py-1">
-        <b>By User:</b> @Model.ModifierLogin
-    </div>
+    <h1> @Model.assessment.Name  - <a style="font-size: 85%;" href="/AdminAssessments/EditAssessment?AssessmentID=@Model.assessment.AssessmentID"><b>Edit</b></a> </h1>
 }
-else if (Model.CreatorLogin != null)
-{
+    <br />
     <div class="py-1">
-        <b>Created:</b> @Model.assessment.CreatedDateTime
+        <b>Category:</b> @Model.assessment.Category
     </div>
     <div class="py-1">
-        <b>By User:</b> @Model.CreatorLogin
+        <b>Description:</b> @Model.assessment.Description
     </div>
-}
-<br />
-<div>
-    <table class="table table-hover table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th class="h3">Rubrics</th>
-                <th><a href="~/Rubric/AddRubric?assessmentID=@Model.assessment.AssessmentID" class="float-right btn btn-success"><i class="fa fa-plus"></i> Add New Rubric </a></th>
-            </tr>
-        </thead>
-        <tbody>
-            @{ foreach (RubricAssessment rubricAssessment in Model.assessment.RubricAssessments)
-                {
-
-                    AssessmentRubric assessmentRubric = rubricAssessment.AssessmentRubric;
-
-                    if (assessmentRubric.IsActive.Equals(true))
+    <div class="py-1">
+        <b>Pass Rate:</b> @(Model.assessment.OutcomePassRate * 100)%
+    </div>
+    <div>
+        <b>Calculate Pass Rate:</b> @Model.assessment.CalculateOutcomePassRate
+    </div>
+    <div class="py-1">
+        <b>Program:</b> @Model.program
+    </div>
+    <div class="py-1">
+        <b>Is Active:</b> @Model.assessment.IsActive
+    </div>
+    @if (Model.ModifierLogin != null)
+    {
+        <div class="py-1">
+            <b>Last Modified:</b>  @Model.assessment.ModifiedDateTime
+        </div>
+        <div class="py-1">
+            <b>By User:</b> @Model.ModifierLogin
+        </div>
+    }
+    else if (Model.CreatorLogin != null)
+    {
+        <div class="py-1">
+            <b>Created:</b> @Model.assessment.CreatedDateTime
+        </div>
+        <div class="py-1">
+            <b>By User:</b> @Model.CreatorLogin
+        </div>
+    }
+    <br />
+    <div>
+        <table class="table table-hover table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="h3">Rubrics</th>
+                    @if (HttpContext.Current.User.IsInRole("AddRubrics"))
                     {
-                        <tr data-userID="person.PersonID">
-                            <td>@assessmentRubric.Name</td>
-
-                            <td class="text-right"><a href="@Url.Action("ViewRubric", "Rubric", new { rubricID = rubricAssessment.RubricID, assessmentID = Model.assessment.AssessmentID })" class="btn btn-primary mr-2">View</a></td>
-                        </tr>
+                        <th><a href="~/Rubric/AddRubric?assessmentID=@Model.assessment.AssessmentID" class="float-right btn btn-success"><i class="fa fa-plus"></i> Add New Rubric </a></th>
                     }
-                    else
+                    </tr>
+            </thead>
+            <tbody>
+                @{ foreach (RubricAssessment rubricAssessment in Model.assessment.RubricAssessments)
                     {
-                        <tr data-userID="person.PersonID">
-                            <td>@assessmentRubric.Name <span class="text-danger">(Not Active)</span></td>
 
-                            <td class="text-right"><a href="@Url.Action("ViewRubric", "Rubric", new { rubricID = rubricAssessment.RubricID, assessmentID = Model.assessment.AssessmentID })" class="btn btn-primary mr-2">View</a></td>
-                        </tr>
+                        AssessmentRubric assessmentRubric = rubricAssessment.AssessmentRubric;
+
+                        if (assessmentRubric.IsActive.Equals(true))
+                        {
+                                <tr data-userID="person.PersonID">
+                                    <td>@assessmentRubric.Name</td>
+
+                                    @if (HttpContext.Current.User.IsInRole("ViewRubrics"))
+                                    {
+                                        <td class="text-right"><a href="@Url.Action("ViewRubric", "Rubric", new { rubricID = rubricAssessment.RubricID, assessmentID = Model.assessment.AssessmentID })" class="btn btn-primary mr-2">View</a></td>
+                                    }
+                                </tr>
+                        }
+                        else
+                        {
+            <tr data-userID="person.PersonID">
+                <td>@assessmentRubric.Name <span class="text-danger">(Not Active)</span></td>
+
+                @if (HttpContext.Current.User.IsInRole("ViewRubrics"))
+                {
+                    <td class="text-right"><a href="@Url.Action("ViewRubric", "Rubric", new { rubricID = rubricAssessment.RubricID, assessmentID = Model.assessment.AssessmentID })" class="btn btn-primary mr-2">View</a></td>
+                }
+            </tr>
+                        }
                     }
                 }
-            }
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>

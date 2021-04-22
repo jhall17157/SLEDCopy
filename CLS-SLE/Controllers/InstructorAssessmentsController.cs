@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
-    [Authorize(Roles = "Faculty")]
+    [Authorize(Roles = "FacultyDashboard")]
     public class InstructorAssessmentsController : SLEControllerBase
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();

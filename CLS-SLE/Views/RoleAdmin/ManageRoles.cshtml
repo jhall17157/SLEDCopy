@@ -95,19 +95,25 @@
             {
                 if (Model.NonDeletableRoles.Contains(role))
                 {
-                    <tr id="Role@(role.RoleID)Row">
-                        <td>@Html.ActionLink(role.Name, "EditRoles", "RoleAdmin", new { id = role.RoleID }, null) </td>
-                        <td>@Html.ActionLink("" + role.UserRoles.Count(), "ManageRoleMembership", "RoleAdmin", new { roleID = role.RoleID }, null)</td>
-                        <td></td>
-                    </tr>
+        <tr id="Role@(role.RoleID)Row">
+            @if (HttpContext.Current.User.IsInRole("EditRoles"))
+            {
+            <td>@Html.ActionLink(role.Name, "EditRoles", "RoleAdmin", new { id = role.RoleID }, null) </td>
+            <td>@Html.ActionLink("" + role.UserRoles.Count(), "ManageRoleMembership", "RoleAdmin", new { roleID = role.RoleID }, null)</td>
+            }
+            <td></td>
+        </tr>
                 }
                 else if (Model.DeletableRoles.Contains(role))
                 {
-                    <tr id="Role@(role.RoleID)Row">
-                        <td>@Html.ActionLink(role.Name, "EditRoles", "RoleAdmin", new { id = role.RoleID }, null) </td>
-                        <td>@Html.ActionLink("" + role.UserRoles.Count(), "ManageRoleMembership", "RoleAdmin", new { roleID = role.RoleID }, null)</td>
-                        <td><button name="deleteRole@(role.RoleID)Button" id="deleteRole@(role.RoleID)Button" onclick="removeRoleRequest(@(role.RoleID),'@(role.Name)',@role.UserRoles.Count);" class="btn btn-danger"><i class="fas fa-trash"></i></button></td>
-                    </tr>
+    <tr id="Role@(role.RoleID)Row">
+        <td>@Html.ActionLink(role.Name, "EditRoles", "RoleAdmin", new { id = role.RoleID }, null) </td>
+        <td>@Html.ActionLink("" + role.UserRoles.Count(), "ManageRoleMembership", "RoleAdmin", new { roleID = role.RoleID }, null)</td>
+        @if (HttpContext.Current.User.IsInRole("EditRoles"))
+        {
+        <td><button name="deleteRole@(role.RoleID)Button" id="deleteRole@(role.RoleID)Button" onclick="removeRoleRequest(@(role.RoleID),'@(role.Name)',@role.UserRoles.Count);" class="btn btn-danger"><i class="fas fa-trash"></i></button></td>
+        }
+    </tr>
                 }
             }
         }

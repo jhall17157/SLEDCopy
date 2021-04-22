@@ -21,8 +21,11 @@
             <th scope="col" class="h3">Departments</th>
             <th scope="col" class="h3"></th>
             <th scope="col" class="text-right"></th>
-            <th scope="col" width="10%"><a class="float-right" href="/AdminDepartment/AddDepartment"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Department</button></a></th>
-        </tr>
+            @if (HttpContext.Current.User.IsInRole("AddDepartments"))
+            {
+                <th scope="col" width="10%"><a class="float-right" href="/AdminDepartment/AddDepartment"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Department</button></a></th>
+            }
+            </tr>
     </thead>
     <tbody>
         @foreach (Department department in Model.activeDepartments)
@@ -31,9 +34,11 @@
                 <td colspan="1" width="5">@department.Number</td>
                 <td colspan="2">@department.Name</td>
                 <td class="text-right">
-
-                    <a href="ViewDepartment?departmentID=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
-                </td>
+                    @if (HttpContext.Current.User.IsInRole("ViewDepartments"))
+                    {
+                        <a href="ViewDepartment?departmentID=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
+                    }
+                    </td>
             </tr>
         }
         @foreach (Department department in Model.inActiveDepartments)
@@ -42,8 +47,11 @@
                 @*<td colspan="1">@department.Number <span class="text-danger">(Not Active)</span></td>*@ @*Kevin says-uncomment this line for department number to show*@
                 <td colspan="2">@department.Name <span class="text-danger">(Not Active)</span></td>
                 <td class="text-right">
-                    <a href="ViewDepartment?departmentID=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
-                </td>
+                    @if (HttpContext.Current.User.IsInRole("ViewDepartments"))
+                    {
+                        <a href="ViewDepartment?departmentID=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
+                    }
+                    </td>
             </tr>
         }
     </tbody>

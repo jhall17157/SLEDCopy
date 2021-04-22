@@ -99,7 +99,7 @@
     </div>
 
     <div class="col-12 input-field">
-        @Html.TextBoxFor(model => model.role.Name, new { @class = "form-control",id ="RoleName", @readonly = true })<!-- Added read-only for now, as security is based on rolename-->
+        @Html.TextBoxFor(model => model.role.Name, new { @class = "form-control", id = "RoleName", @readonly = true })<!-- Added read-only for now, as security is based on rolename-->
 
     </div>
     <br />
@@ -112,10 +112,13 @@
     </div>
 
     <button id="updateNameAndDescButton" class="btn btn-primary">Update</button>
-    <button id="goToManageRoleMembership" class="btn btn-primary">Manage Role Membership</button>
-    <button id="changeRolePermissionsModal" class="btn btn-primary>Change Role Permissions</button>
+    @if (HttpContext.Current.User.IsInRole("ManageUserRoles"))
+    {
+        <button id="goToManageRoleMembership" class="btn btn-primary">Manage Role Membership</button>
+        <button id="changeRolePermissionsModal" class="btn btn-primary>Change Role Permissions</button>
+    }
 
-</div>
+    </div>
 <!-- not currently used - uncomment later
 <div id="RoleDataSecuritySection">
     <h2>Data Security for this Role</h2>

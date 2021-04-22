@@ -30,43 +30,53 @@
         </ol>
     </nav>
     <div class="row">
+        @if (HttpContext.Current.User.IsInRole("ViewSchools"))
+        {
+            <div class="col-3 mt-5">
+                <a href="/AdminSchool/Schools" class="card h-100">
+                    <div class="card-body text-center align-middle">
+                        <div class="card-title"><i class="fas fa-school fa-9x section-link" aria-hidden="true"></i></div>
+                        <div class="card-text h3 font-weight-bold text-wrap">Schools</div>
+                    </div>
+                </a>
+            </div>
+        }
 
-        <div class="col-3 mt-5">
-            <a href="/AdminSchool/Schools" class="card h-100">
-                <div class="card-body text-center align-middle">
-                    <div class="card-title"><i class="fas fa-school fa-9x section-link" aria-hidden="true"></i></div>
-                    <div class="card-text h3 font-weight-bold text-wrap">Schools</div>
-                </div>
-            </a>
+        @if (HttpContext.Current.User.IsInRole("ViewDepartments"))
+        {
+            <div class="col-3 mt-5">
+                <a href="/AdminDepartment/Departments" class="card h-100">
+                    <div class="card-body text-center align-middle">
+                        <div class="card-title"><i class="fas fa-address-card fa-9x section-link" aria-hidden="true"></i></div>
+                        <div class="card-text h3 font-weight-bold text-wrap">Departments</div>
+                    </div>
+                </a>
+            </div>
+        }
+
+        @if (HttpContext.Current.User.IsInRole("ProgramsCourses"))
+        {
+            <div class="col-3 mt-5">
+                <a href="/AdminProgram/Programs?page=@(1)" class="card h-100">
+                    <div class="card-body text-center align-middle">
+                        <div class="card-title"><i class="fas fa-chalkboard-teacher fa-9x section-link" aria-hidden="true"></i></div>
+                        <div class="card-text h3 font-weight-bold text-wrap">Programs</div>
+                    </div>
+                </a>
+            </div>
+        }
+
+        @if (HttpContext.Current.User.IsInRole("ProgramsCourses"))
+        {
+            <div class="col-3 mt-5">
+                <a href="/AdminCourse/Courses?page=@(1)" class="card h-100">
+                    <div class="card-body text-center align-middle">
+                        <div class="card-title"><i class="fas fa-book fa-9x section-link" aria-hidden="true"></i></div>
+                        <div class="card-text h3 font-weight-bold text-wrap">Courses</div>
+                    </div>
+                </a>
+            </div>
+        }
+
         </div>
-
-        <div class="col-3 mt-5">
-            <a href="/AdminDepartment/Departments" class="card h-100">
-                <div class="card-body text-center align-middle">
-                    <div class="card-title"><i class="fas fa-address-card fa-9x section-link" aria-hidden="true"></i></div>
-                    <div class="card-text h3 font-weight-bold text-wrap">Departments</div>
-                </div>
-            </a>
-        </div>
-
-
-        <div class="col-3 mt-5">
-            <a href="/AdminProgram/Programs?page=@(1)" class="card h-100">
-                <div class="card-body text-center align-middle">
-                    <div class="card-title"><i class="fas fa-chalkboard-teacher fa-9x section-link" aria-hidden="true"></i></div>
-                    <div class="card-text h3 font-weight-bold text-wrap">Programs</div>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-3 mt-5">
-            <a href="/AdminCourse/Courses?page=@(1)" class="card h-100">
-                <div class="card-body text-center align-middle">
-                    <div class="card-title"><i class="fas fa-book fa-9x section-link" aria-hidden="true"></i></div>
-                    <div class="card-text h3 font-weight-bold text-wrap">Courses</div>
-                </div>
-            </a>
-        </div>
-
-    </div>
 

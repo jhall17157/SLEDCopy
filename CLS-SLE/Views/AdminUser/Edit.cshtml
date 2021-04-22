@@ -110,7 +110,10 @@
             <div class="row" style="margin: 10px;">
                 <span class="col-3" id=@i>@Model.Roles[i]</span>
                 <div class="col-6">
-                <button type="button" id="@i-remove" class="btn-sm btn-danger role-remove-button"><i class="fas fa-trash"></i></button>
+                    @if (HttpContext.Current.User.IsInRole("ManageUserRoles"))
+                    {
+                    <button type="button" id="@i-remove" class="btn-sm btn-danger role-remove-button"><i class="fas fa-trash"></i></button>
+                    }
                 </div>
             </div>
         }

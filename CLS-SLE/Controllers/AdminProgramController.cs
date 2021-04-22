@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "ViewPrograms")]
     public class AdminProgramController : SLEControllerBase
     {
         private readonly int PageSize = 20;
@@ -25,6 +25,7 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view of programs that contains a list of programs ordered by the program's name
         /// </returns>
+        [Authorize(Roles = "ViewPrograms")]
         public ActionResult Programs(int page, string search, string updatedMessage, string addedName)
         {
             ProgramListViewModel programsViewModel = new ProgramListViewModel();
@@ -88,6 +89,7 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view that contains a submission form for adding a new program
         /// </returns>
+        [Authorize(Roles = "AddPrograms")]
         public ActionResult AddProgram() {
 
             AddProgramViewModel programVM = new AddProgramViewModel();
@@ -109,6 +111,7 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       returns the user to the list of programs if successful otherwise returns users back to the AddProgram submission form
         /// </returns>
+        [Authorize(Roles = "AddPrograms")]
         [HttpPost]
         public ActionResult CreateProgram(AddProgramViewModel programVM)
         {
@@ -158,6 +161,7 @@ namespace CLS_SLE.Controllers
            
         }
 
+        [Authorize(Roles = "EditPrograms")]
         public ActionResult EditProgram(short programID)
         {
             ViewBag.program = db.Programs.Where(p => p.ProgramID == programID).FirstOrDefault();
@@ -186,6 +190,7 @@ namespace CLS_SLE.Controllers
 
         //public ActionResult ViewProgram(short id) { return View(db.Programs.Where(p => p.ProgramID == id).FirstOrDefault()); }
 
+        [Authorize(Roles = "ViewPrograms")]
         public ActionResult ViewProgram(int? programID, string updatedMessage)
         {
             var programVM = new ViewProgramViewModel();
@@ -258,6 +263,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "EditPrograms")]
         [HttpPost]
         public ActionResult UpdateProgram(UpdateProgramViewModel programVM, short programID)
         {

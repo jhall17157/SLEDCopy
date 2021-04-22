@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Scheduling")]
     public class AdminSchedulingController : SLEControllerBase
     {
 
@@ -19,6 +19,7 @@ namespace CLS_SLE.Controllers
 
 
         // GET: Admin Scheduling home page with list of semesters to choose from.
+        [Authorize(Roles = "Scheduling")]
         public ActionResult Index()
         {
             SchedulingViewModel schedulingViewModel = new SchedulingViewModel();
@@ -30,8 +31,9 @@ namespace CLS_SLE.Controllers
             }
             return View(schedulingViewModel);
         }
-        
-    //Called when User Selects a Semester or Initiates a Search
+
+        //Called when User Selects a Semester or Initiates a Search
+        [Authorize(Roles = "Scheduling")]
         [HttpPost]
         public ActionResult Index(SchedulingViewModel viewModel, int page = 1)
         {
@@ -130,6 +132,7 @@ namespace CLS_SLE.Controllers
             return View(schedulingViewModel);
         }
 
+        [Authorize(Roles = "ScheduleSemester")]
         public ActionResult ScheduleSemester()
         {
             ScheduleSemesterViewModel scheduleSemesterViewModel = new ScheduleSemesterViewModel();
@@ -139,6 +142,7 @@ namespace CLS_SLE.Controllers
             return View(scheduleSemesterViewModel);
         }
 
+        [Authorize(Roles = "AddNewScheduleEntry")]
         [HttpPost]
         public ActionResult CreateSemesterSchedule(ScheduleSemesterViewModel viewModel)
         {
@@ -255,6 +259,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        
         [HttpGet]
         [Route("/Controllers/AdminScheduling/GetSections/{semesterID, courseID}")]
         public ActionResult GetSections(int semesterID, int courseID)
@@ -275,6 +280,7 @@ namespace CLS_SLE.Controllers
         }
         //TODO: Get SectionRubrics
 
+        [Authorize(Roles = "Scheduling")]
         [HttpPost]
         public ActionResult AddRubricToCRN(SchedulingViewModel viewModel)
         {
@@ -381,7 +387,7 @@ namespace CLS_SLE.Controllers
 
         }
 
-
+        [Authorize(Roles = "EditAssessmentSchedules")]
         [HttpPost]
         public ActionResult DeleteSchedule(int id, int sId)
         {
@@ -412,7 +418,7 @@ namespace CLS_SLE.Controllers
 
 
 
-
+        [Authorize(Roles = "Scheduling")]
         [HttpPost]
         public ActionResult SaveSchedule(SchedulingViewModel svm, int id, int sId)
         {

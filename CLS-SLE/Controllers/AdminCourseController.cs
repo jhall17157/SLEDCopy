@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "ViewCourses")]
     // class AdminController is extending the properties of the Controller class from System.Web.Mvc
     public class AdminCourseController : SLEControllerBase
     {
@@ -31,6 +31,7 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view of courses that contains a list of courses ordered by the course's Number
         /// </returns>
+        [Authorize(Roles = "ViewCourses")]
         public ActionResult Courses(int page, string search, string department, string ERP, string updatedMessage, string addedName)
         {
             CoursesViewModel coursesViewModel = new CoursesViewModel();
@@ -165,6 +166,7 @@ namespace CLS_SLE.Controllers
             return View(coursesViewModel);
         }
 
+        [Authorize(Roles = "ViewCourses")]
         [HttpPost]
         public ActionResult SearchCourse(CourseSearchViewModel searchVM) {
 
@@ -205,6 +207,7 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view that contains a submission form for adding a new course
         /// </returns>
+        [Authorize(Roles = "AddCourses")]
         public ActionResult AddCourse()
         {
             AddCourseViewModel courseVM = new AddCourseViewModel();
@@ -227,6 +230,7 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///     a view that contains the details of the course with a CourseID matching 'id'
         /// </returns>
+        [Authorize(Roles = "ViewCourses")]
         public ActionResult ViewCourse(int? courseID, string updatedMessage)
         {
             var courseVM = new ViewCourseViewModel();
@@ -311,6 +315,8 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       returns the user to the list of courses if successful otherwise returns users back to the AddCourse submission form
         /// </returns>
+
+        [Authorize(Roles = "AddCourses")]
         [HttpPost]
         public ActionResult CreateCourse(AddCourseViewModel courseVM)
         {
@@ -352,6 +358,7 @@ namespace CLS_SLE.Controllers
             else { return RedirectToAction("Courses", "AdminCourse", new { page = 1, updatedMessage = "error", addedName = courseVM.Course.CourseName }); }
         }
 
+        [Authorize(Roles = "EditCourses")]
         [HttpPost]
         public ActionResult UpdateCourse(EditCourseViewModel courseVM, short id)
         {

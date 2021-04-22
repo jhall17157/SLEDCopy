@@ -11,13 +11,14 @@ using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    
     public class AdminAssessmentsController : SLEControllerBase
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
         private Logger logger = LogManager.GetCurrentClassLogger();
 
         // GET: AdminAssessments
+        [Authorize(Roles = "Assessments")]
         public ActionResult Index()
         {
             return View();
@@ -26,7 +27,7 @@ namespace CLS_SLE.Controllers
         {
             return RedirectToAction(actionName: "AdminDashboard", controllerName: "Admin");
         }
-
+        [Authorize(Roles = "Assesments")]
         public ActionResult AssessmentMappings()
         {
             return View();
@@ -59,6 +60,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "ViewAssesments")]
         public ActionResult ViewAssessment(int? assessmentId)
         {
             var assessment = new Assessment();
@@ -111,6 +113,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "EditAssesments")]
         public ActionResult EditAssessment(int? assessmentId)
         {
             var assessment = new Assessment();
@@ -157,7 +160,7 @@ namespace CLS_SLE.Controllers
                 return Exceptions();
             }
         }
-
+        [Authorize(Roles = "AddAssesments")]
         [HttpGet]
         public ActionResult AddAssessment(String category)
         {
@@ -174,6 +177,7 @@ namespace CLS_SLE.Controllers
             return View(Model);
         }
 
+        [Authorize(Roles = "AddAssesments")]
         //no view was associated with this method below
         [HttpPost]
         public ActionResult InsertNewAssessment(FormCollection formCollection, string category)
@@ -214,6 +218,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "AddAssesments")]
         //no method was associated with this method below
         [HttpPost]
         public ActionResult SaveAssessment(FormCollection formCollection, short assessmentID)
@@ -264,17 +269,17 @@ namespace CLS_SLE.Controllers
                 // return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
         }
-
+        
         public ActionResult AssessmentScheduling()
         {
             return View();
         }
-
+       
         public ActionResult ProgramsCourses()
         {
             return View();
         }
-
+        
         public ActionResult SchoolsDepartments()
         {
             return View();

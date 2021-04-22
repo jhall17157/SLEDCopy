@@ -39,8 +39,11 @@
             <th scope="col" class="h3">Programs</th>
             <th scope="col" class="h3"></th>
             <th scope="col" class="text-right"></th>
-            <th scope="col" width="10%"><a class="float-right" href="/AdminProgram/AddProgram"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Program</button></a></th>
-        </tr>
+            @if (HttpContext.Current.User.IsInRole("AddPrograms"))
+            {
+                <th scope="col" width="10%"><a class="float-right" href="/AdminProgram/AddProgram"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Program</button></a></th>
+            }
+            </tr>
     </thead>
     <tbody>
         @foreach (Program program in Model.Programs)
@@ -51,8 +54,11 @@
                     <td colspan="1">@program.Number</td>
                     <td colspan="2">@program.Name <span class="text-danger">(Not Active)</span></td>
                     <td class="text-right">
-                        <a href="ViewProgram?programID=@program.ProgramID"><button type="button" class="btn btn-primary">View</button></a>
-                    </td>
+                        @if (HttpContext.Current.User.IsInRole("ViewPrograms"))
+                        {
+                            <a href="ViewProgram?programID=@program.ProgramID"><button type="button" class="btn btn-primary">View</button></a>
+                        }
+                        </td>
                 </tr>
             }
             else
@@ -61,8 +67,11 @@
                     <td colspan="1">@program.Number </td>
                     <td colspan="2">@program.Name</td>
                     <td class="text-right">
-                        <a href="ViewProgram?programID=@program.ProgramID"><button type="button" class="btn btn-primary">View</button></a>
-                    </td>
+                        @if (HttpContext.Current.User.IsInRole("ViewPrograms"))
+                        {
+                            <a href="ViewProgram?programID=@program.ProgramID"><button type="button" class="btn btn-primary">View</button></a>
+                        }
+                        </td>
                 </tr>
             }
         }

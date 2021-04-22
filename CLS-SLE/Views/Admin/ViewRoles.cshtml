@@ -13,9 +13,15 @@
 <h1>User Security</h1>
 <br />
 <div class="row px-3">
-    <h5 class="co-2"><a href="/Admin/ViewUsers">View All Users</a></h5>
-    <h5 class="col-2 ml-auto text-right p-0"><a href="~/RoleAdmin/Index"> Manage Roles </a></h5>
-</div>
+    @if (HttpContext.Current.User.IsInRole("Users"))
+    {
+        <h5 class="co-2"><a href="/Admin/ViewUsers">View All Users</a></h5>
+    }
+    @if (HttpContext.Current.User.IsInRole("Roles"))
+    {
+        <h5 class="col-2 ml-auto text-right p-0"><a href="~/RoleAdmin/Index"> Manage Roles </a></h5>
+    }
+    </div>
 
 
 <table class="table table-hover table-striped">
@@ -44,8 +50,11 @@
                             }
                         }
                     </td>
-                    <td class="text-right"><a href="~/Admin/ViewRoleMembers?roleID=@role.RoleID"><button type="button" class="btn btn-primary mr-2">View @role.RoleID</button></a></td>
-                </tr>
+                    @if (HttpContext.Current.User.IsInRole("Roles"))
+                    {
+                        <td class="text-right"><a href="~/Admin/ViewRoleMembers?roleID=@role.RoleID"><button type="button" class="btn btn-primary mr-2">View @role.RoleID</button></a></td>
+                    }
+                    </tr>
             }
         }
     </tbody>

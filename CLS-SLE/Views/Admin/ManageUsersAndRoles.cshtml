@@ -29,30 +29,33 @@
     <tbody >
         @foreach (UserSecurity person in Model.UserSecurityList)
         {
-            <tr data-userID="person.PersonID">
-                <td>@person.IDNumber</td>
-                <td>@person.LastName<text>,</text> @person.FirstName</td>
-                <td>
-                    @{int i = 0;
-                        if(person.Roles.Count == 0)
-                        {
-                            <text>None</text>
-                        }
-                        foreach (Role role in person.Roles)
-                        {
-                            @role.Name
-                            i++;
-                            if (person.Roles.Count > i)
-                            {
-                                <text>, </text> 
-                            }
-
-                        }
+        <tr data-userID="person.PersonID">
+            <td>@person.IDNumber</td>
+            <td>@person.LastName<text>,</text> @person.FirstName</td>
+            <td>
+                @{int i = 0;
+                    if (person.Roles.Count == 0)
+                    {
+                        <text>None</text>
                     }
+                    foreach (Role role in person.Roles)
+                    {
+                        @role.Name
+                        i++;
+                        if (person.Roles.Count > i)
+                        {
+                            <text>, </text>
+                        }
+
+                    }
+                }
 
 
-                </td>
+            </td>
+            @if (HttpContext.Current.User.IsInRole("EditRoles"))
+            {
                 <td class="text-right"><a href="~/Admin/ManageUserRoles?id=@person.PersonID"><button type="button" class="btn btn-primary mr-2">Edit</button></a></td>
+            }
             </tr>                
             }
     </tbody>

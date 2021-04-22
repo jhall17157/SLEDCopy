@@ -9,14 +9,14 @@ using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "ViewRubrics")]
 
     public class RubricController : SLEControllerBase
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
         // GET: Rubric
 
-
+        [Authorize(Roles = "ViewRubrics")]
         public ActionResult Index()
         {
             dynamic Model = new ExpandoObject();
@@ -27,7 +27,7 @@ namespace CLS_SLE.Controllers
             return View(Model);
         }
 
-
+        [Authorize(Roles = "ViewRubrics")]
         public ActionResult ViewRubric(int? rubricID, short? assessmentID)
         {
             dynamic Model = new ExpandoObject();
@@ -85,6 +85,7 @@ namespace CLS_SLE.Controllers
 
             return View(Model);
         }
+        [Authorize(Roles = "AddRubrics")]
         [HttpGet]
         public ActionResult AddRubric(short? assessmentID)
         {
@@ -97,6 +98,7 @@ namespace CLS_SLE.Controllers
         }
 
         //post for submitting a new Rubric
+        [Authorize(Roles = "AddRubrics")]
         [HttpPost]
         public ActionResult InsertNewRubric(RubricViewModel rubricViewModel, FormCollection formCollection)
         {
@@ -147,6 +149,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "EditRubrics")]
         [HttpGet]
         public ActionResult EditRubric(short rubricID, short assessmentID)
         {
@@ -170,6 +173,7 @@ namespace CLS_SLE.Controllers
         }
 
         //Post for saving an edited rubric
+        [Authorize(Roles = "EditRubrics")]
         [HttpPost]
         public ActionResult SaveRubric(UpdateRubric updateRubric, short rubricID, FormCollection formCollection, short assessmentID)
         {
@@ -232,6 +236,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "AddOutcomesCriteria")]
         [HttpGet]
         public ActionResult AddOutcome(short rubricID, short assessmentID)
         {
@@ -244,6 +249,7 @@ namespace CLS_SLE.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "AddOutcomesCriteria")]
         [HttpPost]
         public ActionResult InsertNewOutcome(OutcomeViewModel outcomeViewModel)
         {
@@ -277,6 +283,7 @@ namespace CLS_SLE.Controllers
         }
 
 
+        [Authorize(Roles = "EditOutcomesCriteria")]
         [HttpGet]
         public ActionResult EditOutcome(short outcomeID, short assessmentID)
         {
@@ -327,6 +334,7 @@ namespace CLS_SLE.Controllers
         }
         */
 
+        [Authorize(Roles = "EditOutcomesCriteria")]
         public ActionResult SaveOutcome(OutcomeViewModel outcomeViewModel)
         {
             try
@@ -366,6 +374,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "EditOutcomesCriteria")]
         public Boolean MoveOutcome(int rubricID, int assessmentID, int outcomeID, int currentID)
         {
             //must be moving to a valid rubric
@@ -390,6 +399,7 @@ namespace CLS_SLE.Controllers
             else return false;
         }
 
+        [Authorize(Roles = "AddOutcomesCriteria")]
         public ActionResult AddCriterion(short outcomeID, short assessmentID)
         {
             Criterion criterion = new Criterion { OutcomeID = outcomeID };
@@ -400,6 +410,7 @@ namespace CLS_SLE.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "AddOutcomesCriteria")]
         public ActionResult InsertNewCriterion(CriterionViewModel criterionViewModel)
         {
             try
@@ -432,6 +443,8 @@ namespace CLS_SLE.Controllers
                 return RedirectToAction(actionName: "Signin", controllerName: "User");
             }
         }
+
+        [Authorize(Roles = "EditOutcomesCriteria")]
         public ActionResult EditCriterion(short criterionID, short assessmentID)
         {
             Criterion criterion = db.Criteria.Where(c => c.CriteriaID == criterionID).FirstOrDefault();
@@ -440,6 +453,8 @@ namespace CLS_SLE.Controllers
 
             return View(model);
         }
+
+        [Authorize(Roles = "EditOutcomesCriteria")]
         public ActionResult SaveCriterion(CriterionViewModel criterionViewModel)
         {
             try

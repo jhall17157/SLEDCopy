@@ -124,10 +124,13 @@
         <div class="col-12 ml-0">
 
             @*<button type="submit" class="btn btn-success d-inline" data-toggle="modal" data-target="#addCourseModal"><i class="fas fa-plus"></i> Add Course</button>*@
-            <button class="btn btn-success d-inline" data-toggle="modal" data-target="#addEntryModal"><i class="fas fa-plus" aria-hidden="true"></i> Add Entry</button>
+            @if (HttpContext.Current.User.IsInRole("AddNewScheduleEntry"))
+            {
+                <button class="btn btn-success d-inline" data-toggle="modal" data-target="#addEntryModal"><i class="fas fa-plus" aria-hidden="true"></i> Add Entry</button>
+            }
 
 
-            <!--<button type="submit" class="btn btn-warning d-inline ml-1" data-toggle="modal" data-target="#editDueDatesModal"><i class="fas fa-calendar-alt"></i> Edit All Due Dates</button>-->
+                <!--<button type="submit" class="btn btn-warning d-inline ml-1" data-toggle="modal" data-target="#editDueDatesModal"><i class="fas fa-calendar-alt"></i> Edit All Due Dates</button>-->
             </div>
             </div>
         </div>
@@ -227,7 +230,10 @@
 
 
                                                 <!-- Delete trigger modal -->
-                                                <button type="button" class=" btn btn-danger btn-sm d-inline float-right ml-1" data-toggle="modal" data-target=".removeCourseModal@(sr.SectionRubricID)"><i class="fas fa-trash" aria-hidden="true"></i></button>
+                                                @if (HttpContext.Current.User.IsInRole("EditAssessmentSchedules"))
+                                                {
+                                                    <button type="button" class=" btn btn-danger btn-sm d-inline float-right ml-1" data-toggle="modal" data-target=".removeCourseModal@(sr.SectionRubricID)"><i class="fas fa-trash" aria-hidden="true"></i></button>
+                                                }
 
                                             </td>
                                         </tr>

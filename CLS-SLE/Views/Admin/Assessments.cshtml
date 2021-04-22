@@ -26,7 +26,10 @@
                     <th scope="col" class="h3">@category.Name</th>
                     <th scope="col" class="text-right">@category.Description</th>
                     @*<th scope="col" width="10%"><a class="float-right" href="/Admin/AddAssessment?category=@category.Name"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Assessment</button></a></th>*@
-                    <th scope="col" width="10%"><a class="float-right" href="/AdminAssessments/AddAssessment?category=@category.Name"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Assessment</button></a></th>
+                    @if (HttpContext.Current.User.IsInRole("AddAssessments"))
+                    {
+                        <th scope="col" width="10%"><a class="float-right" href="/AdminAssessments/AddAssessment?category=@category.Name"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Assessment</button></a></th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -44,9 +47,12 @@
                             <tr>
                                 <td colspan="2">@assessment.Name <span class="text-danger">(Not Active)</span></td>
                                 <td class="text-right">
-                                    <a href="ViewAssessment?assessmentId=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
-                                    @*@Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })*@
-                                </td>
+                                    @if (HttpContext.Current.User.IsInRole("ViewAssessments"))
+                                    {
+                                        <a href="ViewAssessment?assessmentId=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
+                                        @*@Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })*@
+                                    }
+                                    </td>
                             </tr>
                         }
                         else
@@ -54,9 +60,12 @@
                             <tr>
                                 <td colspan="2">@assessment.Name</td>
                                 <td class="text-right">
-                                    <a href="ViewAssessment?assessmentId=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
-                                    @*@Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })*@
-                                </td>
+                                    @if (HttpContext.Current.User.IsInRole("ViewAssessments"))
+                                    {
+                                        <a href="ViewAssessment?assessmentId=@assessment.AssessmentID"><button type="button" class="btn btn-primary">View</button></a>
+                                        @*@Html.ActionLink(assessment.Name, "ViewAssessment", new { assessment.AssessmentID })*@
+                                    }
+                                    </td>
                             </tr>
                         }
 

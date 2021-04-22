@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "AdminDashboard")]
     public class AdminController : SLEControllerBase
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
@@ -241,6 +241,7 @@ namespace CLS_SLE.Controllers
             return Json(JsonRequestBehavior.AllowGet);
         }
 
+        [Authorize(Roles ="Assessments")]
         public ActionResult Assessments()
         {
             try
@@ -267,6 +268,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "ViewAssessments")]
         public ActionResult ViewAssessment(int? assessmentId)
         {
             String DefaultUserCreateModifyValue = "Unknown";
@@ -336,6 +338,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "EditAssessments")]
         public ActionResult EditAssessment(int? assessmentId)
         {
             var assessment = new Assessment();
@@ -376,6 +379,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "AddRubrics")]
         public ActionResult AddRubricToCourse(int? rubricI)
         {
             try
@@ -392,6 +396,7 @@ namespace CLS_SLE.Controllers
         //public ActionResult ViewUsers(ViewUserViewModel viewUserViewModel)
         //{
 
+        [Authorize(Roles = "AddAssessments")]
         [HttpPost]
         public ActionResult InsertNewAssessment(FormCollection formCollection)
         {
@@ -430,6 +435,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "EditAssessments")]
         [HttpPost]
         public ActionResult SaveAssessment(FormCollection formCollection)
         {
@@ -509,18 +515,22 @@ namespace CLS_SLE.Controllers
         //    }
         //}
 
+        [Authorize(Roles = "ProgramsCourses")]
         public ActionResult ProgramsCourses()
         {
             return View();
         }
 
+        [Authorize(Roles = "ViewSchools")]
         public ActionResult SchoolsDepartments()
         {
             return View();
         }
 
+        [Authorize(Roles = "ProgramsCourses")]
         public ActionResult ProgramDashboard() => View();
 
+        [Authorize(Roles = "Users")]
         [HttpGet]
         public ActionResult ViewUsers(ViewUserViewModel viewUserViewModel)
         {
@@ -566,7 +576,7 @@ namespace CLS_SLE.Controllers
         }
 
 
-
+        [Authorize(Roles = "Roles")]
         [HttpGet]
         public ActionResult ViewRoles()
         {
@@ -578,6 +588,7 @@ namespace CLS_SLE.Controllers
             return View(Model);
         }
 
+        [Authorize(Roles = "Roles")]
         [HttpGet]
         public ActionResult ViewRoleMembers(Int16 roleID)
         {
@@ -593,7 +604,7 @@ namespace CLS_SLE.Controllers
         }
 
 
-
+        [Authorize(Roles = "CreateManageUsers")]
         [HttpGet]
         public ActionResult ManageUser(int id)
         {
@@ -622,7 +633,7 @@ namespace CLS_SLE.Controllers
         }
 
 
-
+        [Authorize(Roles = "CreateManageUsers")]
         [HttpPost]
         public ActionResult UpdateUser(FormCollection form, String submit, short personID, short roleID)
         {

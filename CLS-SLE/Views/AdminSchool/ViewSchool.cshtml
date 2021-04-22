@@ -11,7 +11,10 @@
         <li class="breadcrumb-item active" aria-current="page">@Model.school.Name </li>
     </ol>
 </nav>
-<h1> @Model.school.Name  - <a style="font-size: 60%;" href="/AdminSchool/EditSchool?schoolID=@Model.school.SchoolID">Edit <i class="fas fa-edit"></i></a> </h1>
+<h1>
+    @Model.school.Name  -  @if (HttpContext.Current.User.IsInRole("EditSchools"))
+    {<a style="font-size: 60%;" href="/AdminSchool/EditSchool?schoolID=@Model.school.SchoolID">Edit <i class="fas fa-edit"></i></a>}
+    </h1>
 <br />
 <div class="py-1">
     <b>Is Active:</b> @Model.school.IsActive
@@ -40,10 +43,13 @@
                 <th scope="col" class="h3"></th>
                 <th scope="col" class="text-right"></th>
                 <th scope="col" width="10%">
-                    <a href="~/AdminDepartment/AddDepartment" class="float-right btn btn-success">
-                        <i class="fa fa-plus"></i> Add New Department
-                    </a>
-                </th>
+                    @if (HttpContext.Current.User.IsInRole("AddDepartments"))
+                    {
+                        <a href="~/AdminDepartment/AddDepartment" class="float-right btn btn-success">
+                            <i class="fa fa-plus"></i> Add New Department
+                        </a>
+                    }
+                    </th>
             </tr>
         </thead>
         <tbody>
@@ -55,8 +61,11 @@
                 <td colspan="1">@department.Number</td>
                 <td colspan="2">@department.Name<span class="text-danger">(Not Active)</span></td>
                 <td class="text-right">
-                    <a href="../AdminDepartment/ViewDepartment?departmentID=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
-                </td>
+                    @if (HttpContext.Current.User.IsInRole("ViewDepartments"))
+                    {
+                        <a href="../AdminDepartment/ViewDepartment?departmentID=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
+                    }
+                    </td>
             </tr>
                 }
                 else
@@ -65,8 +74,11 @@
                         <td colspan="1">@department.Number</td>
                         <td colspan="2">@department.Name</td>
                         <td class="text-right">
-                            <a href="../AdminDepartment/ViewDepartment?departmentID=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
-                        </td>
+                            @if (HttpContext.Current.User.IsInRole("ViewDepartments"))
+                            {
+                                <a href="../AdminDepartment/ViewDepartment?departmentID=@department.DepartmentID"><button type="button" class="btn btn-primary">View</button></a>
+                            }
+                            </td>
                     </tr>
                 }
             }

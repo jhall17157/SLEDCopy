@@ -20,8 +20,11 @@
         <tr>
             <th scope="col" class="h3">Schools</th>
             <th scope="col" class="text-right"></th>
-            <th scope="col" width="10%"><a class="float-right" href="/AdminSchool/AddSchool"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New School</button></a></th>
-        </tr>
+            @if (HttpContext.Current.User.IsInRole("AddSchools"))
+            {
+                <th scope="col" width="10%"><a class="float-right" href="/AdminSchool/AddSchool"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New School</button></a></th>
+            }
+            </tr>
     </thead>
     <tbody>
         @foreach (School school in Model.activeSchools)
@@ -29,8 +32,11 @@
             <tr>
                 <td colspan="2">@school.Name</td>
                 <td class="text-right">
-                    <a href="ViewSchool?schoolId=@school.SchoolID"><button type="button" class="btn btn-primary">View</button></a>
-                </td>
+                    @if (HttpContext.Current.User.IsInRole("ViewSchools"))
+                    {
+                        <a href="ViewSchool?schoolId=@school.SchoolID"><button type="button" class="btn btn-primary">View</button></a>
+                    }
+                    </td>
             </tr>
         }
         @foreach (School school in Model.inActiveSchools)
@@ -38,8 +44,11 @@
             <tr>
                 <td colspan="2">@school.Name <span class="text-danger">(Not Active)</span></td>
                 <td class="text-right">
-                    <a href="ViewSchool?schoolId=@school.SchoolID"><button type="button" class="btn btn-primary">View</button></a>
-                </td>
+                    @if (HttpContext.Current.User.IsInRole("ViewSchools"))
+                    {
+                        <a href="ViewSchool?schoolId=@school.SchoolID"><button type="button" class="btn btn-primary">View</button></a>
+                    }
+                    </td>
             </tr>
         }
 

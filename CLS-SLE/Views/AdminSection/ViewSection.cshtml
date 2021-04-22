@@ -13,7 +13,10 @@
         <li class="breadcrumb-item active" aria-current="page">@Model.section.CRN</li>
     </ol>
 </nav>
-<h1>@Model.section.Course.Number @Model.section.CRN @Model.section.Course.CourseName <a style="font-size: 65%;" href="/AdminSection/EditSection?sectionID=@Model.section.SectionID">Edit <i class="fas fa-edit"></i></a> </h1>
+<h1>
+    @Model.section.Course.Number @Model.section.CRN @Model.section.Course.CourseName @if (HttpContext.Current.User.IsInRole("EditSections"))
+    {<a style="font-size: 65%;" href="/AdminSection/EditSection?sectionID=@Model.section.SectionID">Edit <i class="fas fa-edit"></i></a>}
+    </h1>
 <br />
 <div class="py-1">
     <b>Semester:</b> @Model.sectionSemester
@@ -73,8 +76,11 @@ else
                 <th scope="col">Student ID</th>
                 <th scope="col">Full Name</th>
                 <th scope="col">Status</th>
-                <th scope="col" class="text-right"><a class="float-right"><button type="button" class="btn btn-success" data-toggle="modal" data-target="#fileModal"><i class="fa fa-plus"></i> Upload Student Enrollment</button></a></th>
-                <th scope="col" class="text-right"><a class="float-right"><button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-plus"></i> Enroll Student</button></a></th>
+                @if (HttpContext.Current.User.IsInRole("ManageSectionenrollment"))
+                {
+                    <th scope="col" class="text-right"><a class="float-right"><button type="button" class="btn btn-success" data-toggle="modal" data-target="#fileModal"><i class="fa fa-plus"></i> Upload Student Enrollment</button></a></th>
+                    <th scope="col" class="text-right"><a class="float-right"><button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-plus"></i> Enroll Student</button></a></th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -94,10 +100,16 @@ else
                             <td scope="col">@enrollment.EnrollmentStatu.Name</td>
                             <td>
                                 @if (enrollment.EnrollmentStatusCode == "E")
-                                {<div class="form-group p-0 mx-1 float-right"><input type="submit" class="btn btn-danger col-12 mx-1" value="Drop/Withdraw" /></div>}
-                                else 
-                                {<div class="form-group p-0 mx-1 float-right"><input type="submit" class="btn btn-primary col-12 mx-1" value="Re-enroll" /></div>}
-                            </td>
+                                {
+                                    if (HttpContext.Current.User.IsInRole("ManageSectionEnrollment"))
+                                    {<div class="form-group p-0 mx-1 float-right"><input type="submit" class="btn btn-danger col-12 mx-1" value="Drop/Withdraw" /></div>}
+                                }
+                                else
+                                {
+                                    if (HttpContext.Current.User.IsInRole("ManageSectionEnrollment"))
+                                    {<div class="form-group p-0 mx-1 float-right"><input type="submit" class="btn btn-primary col-12 mx-1" value="Re-enroll" /></div>}
+                                }
+                                </td>
                         }
                     </tr>
                 }

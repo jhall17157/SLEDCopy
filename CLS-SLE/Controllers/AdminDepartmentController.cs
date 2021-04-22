@@ -16,7 +16,7 @@ using System.Web.Helpers;
 
 namespace CLS_SLE.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "ViewDepartments")]
     public class AdminDepartmentController : SLEControllerBase
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
@@ -29,6 +29,7 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view of departments that contains a list of departments ordered by the department's departmentID
         /// </returns>
+        [Authorize(Roles = "ViewDepartments")]
         public ActionResult Departments(string updatedMessage, string addedName) {
 
             DepartmentsViewModel departmentVM = new DepartmentsViewModel();
@@ -42,7 +43,7 @@ namespace CLS_SLE.Controllers
             }
             return View(departmentVM);
         }
-        
+
 
         // GET: AdminDepartment/AddDepartment
         /// <summary>
@@ -51,6 +52,7 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view that contains a submission form for adding a new department
         /// </returns>
+        [Authorize(Roles = "AddDepartments")]
         public ActionResult AddDepartment() {
 
             AddDepartmentViewModel departmentVM = new AddDepartmentViewModel();
@@ -61,6 +63,7 @@ namespace CLS_SLE.Controllers
             
             return View(departmentVM); }
 
+        [Authorize(Roles = "ViewDepartments")]
         public ActionResult ViewDepartment(short? departmentID, string updatedMessage)
         {
             if (departmentID == null)
@@ -117,6 +120,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "EditDepartments")]
         public ActionResult EditDepartment(short? departmentID) {
             //if (id == null) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
@@ -138,6 +142,8 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       returns the user to the list of departments if successful otherwise returns users back to the AddDepartment submission form
         /// </returns>
+
+        [Authorize(Roles = "AddDepartments")]
         [HttpPost]
         public ActionResult CreateDepartment(AddDepartmentViewModel departmentVM)
         {
@@ -185,6 +191,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "EditDepartments")]
         [HttpPost]
         public ActionResult UpdateDepartment(EditDepartmentViewModel departmentVM, short departmentID)
         {

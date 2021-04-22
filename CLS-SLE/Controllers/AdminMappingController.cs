@@ -9,13 +9,14 @@ namespace CLS_SLE.Controllers
 {
 
     //New controller for mapping page
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Mapping")]
     public class AdminMappingController : SLEControllerBase
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
 
 
         // GET: AdminMapping home page with list of Programs sorted by id
+        [Authorize(Roles = "Mapping")]
         public ActionResult Index()
         {
             MappingViewModel mappingViewModel = new MappingViewModel();
@@ -45,6 +46,7 @@ namespace CLS_SLE.Controllers
         }
 
         //returns index page with viewmodel populated by selected program
+        [Authorize(Roles = "Mapping")]
         [HttpPost]
         public ActionResult Index(MappingViewModel mappingVM)
         {
@@ -86,6 +88,7 @@ namespace CLS_SLE.Controllers
 
 
         //create new mapping
+        [Authorize(Roles = "ManageProgramAssessmentMap")]
         [HttpPost]
         public ActionResult CreateMapping(MappingViewModel mappingVM)
         {
@@ -144,7 +147,7 @@ namespace CLS_SLE.Controllers
 
 
 
-
+        [Authorize(Roles = "ManageProgramAssessmentMap")]
         [ActionName("DeleteMapping")]
         [HttpPost]
         public ActionResult DeleteMapping(MappingViewModel mappingViewModel, int mapID)

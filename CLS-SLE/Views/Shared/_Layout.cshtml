@@ -81,13 +81,13 @@
             <div class="row justify-content-center">
                 <ul class="nav nav-tabs col-12 pt-0">
                     @*Needs to be manually updated for each new controller*@
-                    @if (HttpContext.Current.User.IsInRole("Administrator"))
+                    @if (HttpContext.Current.User.IsInRole("AdminDashboard"))
                     {
                         <li class="nav-item h2">
                             <a class="nav-link align-bottom @((ControllerName.Equals("Admin") || ControllerName.Equals("RoleAdmin") || ControllerName.Equals("AdminUser") || ControllerName.Equals("Rubric") || ControllerName.Equals("AdminMapping") || ControllerName.Equals("AdminScheduling")) ? "active bg-white pb-4" : "bg-light mt-3")" href="~/Admin/AdminDashboard">Admin Dashboard</a>
                         </li>
                     }
-                    @if (HttpContext.Current.User.IsInRole("Faculty"))
+                    @if (HttpContext.Current.User.IsInRole("FacultyDashboard"))
                     {
                         <li class="nav-item h2">
                             <a class="nav-link align-bottom @(ControllerName.Equals("InstructorAssessments")  ? "active bg-white pb-4" : "bg-light mt-3")" href="~/InstructorAssessments/Dashboard">Faculty Dashboard</a>

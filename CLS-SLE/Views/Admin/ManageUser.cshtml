@@ -38,15 +38,27 @@
     }
         <div class="col-4 my-1 mr-auto h4">@role.Name</div>
         <div class="col-1 my-2">
-            <button @if (IsMember) { <text> class="btn btn-success col-12" type="button" </text>  } else { <text> class="btn btn-outline-success col-12" type="submit" name="submit" value="add" formmethod="post" </text> }>
-                <i class="fas fa-check"></i>
-            </button>
-        </div>
+            @if (HttpContext.Current.User.IsInRole("ManageUserRoles"))
+            {
+                <button @if (IsMember)
+                { <text> class="btn btn-success col-12" type="button" </text>  }
+                else
+                { <text> class="btn btn-outline-success col-12" type="submit" name="submit" value="add" formmethod="post" </text> }>
+                    <i class="fas fa-check"></i>
+                </button>
+            }
+            </div>
         <div class="col-1 my-2">
-            <button @if (IsMember) { <text> class="btn btn-outline-danger col-12" type="submit" name="submit" value="delete" formmethod="post" </text>  } else { <text> class="btn btn-danger col-12" type="button" </text> }>
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
+            @if (HttpContext.Current.User.IsInRole("ManageUserRoles"))
+            {
+                <button @if (IsMember)
+                { <text> class="btn btn-outline-danger col-12" type="submit" name="submit" value="delete" formmethod="post" </text>  }
+                else
+                { <text> class="btn btn-danger col-12" type="button" </text> }>
+                    <i class="fas fa-times"></i>
+                </button>
+            }
+            </div>
         <!--<input type="hidden" name="personID" value="@Model.PersonID" />
         <input type="hidden" name="roleID" value="@role.RoleID" />-->
     </form>

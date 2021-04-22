@@ -61,7 +61,10 @@
                         <tr href="#" data-target=".rubricCollapse@(rubricNumber)" class="accordionTrigger clickable">
                             <td class="bg-light align-self-center">
                                 <h4 class="d-inline half-indent subheader-lh"><i class="rubricIcon@(rubricNumber) fas fa-angle-right"></i>&emsp;@ra.AssessmentRubric.Name</h4>
-                                <button type="button" class="btn btn-success float-right addMapButton rubricButton@(rubricNumber)" data-toggle="modal" onclick="setMappingProgramAndRubric(@Model.Program.ProgramID,@ra.AssessmentRubric.RubricID);"  data-target="#addModal" data-program="@Model.ProgramID" data-rubric="@ra.RubricID"><i class="fa fa-plus" aria-hidden="true"></i> Add Mapping</button>
+                                @if (HttpContext.Current.User.IsInRole("ManageProgramAssessmentMap"))
+                                {
+                                    <button type="button" class="btn btn-success float-right addMapButton rubricButton@(rubricNumber)" data-toggle="modal" onclick="setMappingProgramAndRubric(@Model.Program.ProgramID,@ra.AssessmentRubric.RubricID);" data-target="#addModal" data-program="@Model.ProgramID" data-rubric="@ra.RubricID"><i class="fa fa-plus" aria-hidden="true"></i> Add Mapping</button>
+                                }
                             </td>
                         </tr>
                         if (!ra.AssessmentRubric.ProgramAssessmentMappings.Any())
@@ -81,34 +84,37 @@
                                         <p class="d-none d-md-none d-lg-inline offset-1">(@pam.Course.Number) @pam.Course.CourseName</p>
 
                                         <!-- Button trigger modal -->
-                                        <button type="button" class=" btn btn-danger btn-sm d-inline float-right" data-toggle="modal" data-target="#removeCourseModal@(pam.Course.Number)@(ra.AssessmentRubric.Name.Replace(" ","_").Replace("/","_"))"><i class="fas fa-times" aria-hidden="true"></i></button>
-                                        <!-- Modal For Deleting Courses-->
-                                        <!--
-                                        <div class="modal fade removeCourseModal@(pam.Course.Number)" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header bg-light">
-                                                        <h3 class="modal-title" id="removeConfirm">Delete Confirmation</h3>
-                                                        <i class="ml-auto fas fa-exclamation-triangle fa-2x"></i>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        Are you sure you want remove<br /><strong>(@pam.Course.Number) @pam.Course.CourseName</strong> from<br /><strong>@ra.AssessmentRubric.Name</strong>?
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-outline-secondary mr-auto" data-dismiss="modal">Cancel</button>
+                                        @if (HttpContext.Current.User.IsInRole("ManageProgramAssessmentMap"))
+                                        {
+                                            <button type="button" class=" btn btn-danger btn-sm d-inline float-right" data-toggle="modal" data-target="#removeCourseModal@(pam.Course.Number)@(ra.AssessmentRubric.Name.Replace(" ", "_").Replace("/", "_"))"><i class="fas fa-times" aria-hidden="true"></i></button>
+                                        }
+                                            <!-- Modal For Deleting Courses-->
+                                            <!--
+        <div class="modal fade removeCourseModal@(pam.Course.Number)" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-light">
+                        <h3 class="modal-title" id="removeConfirm">Delete Confirmation</h3>
+                        <i class="ml-auto fas fa-exclamation-triangle fa-2x"></i>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want remove<br /><strong>(@pam.Course.Number) @pam.Course.CourseName</strong> from<br /><strong>@ra.AssessmentRubric.Name</strong>?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary mr-auto" data-dismiss="modal">Cancel</button>
 
-                                                        @using (Html.BeginForm("DeleteMapping", "AdminMapping", new { mapID = pam.ProgramAssessmentMappingID }, FormMethod.Post))
-                                                        {
-                                                            @Html.HiddenFor(model => model.ProgramID);
-                                                            <button type="submit" class="btn btn-outline-danger float-right">Delete</button>
-                                                        }
+                        @using (Html.BeginForm("DeleteMapping", "AdminMapping", new { mapID = pam.ProgramAssessmentMappingID }, FormMethod.Post))
+                        {
+                            @Html.HiddenFor(model => model.ProgramID);
+                            <button type="submit" class="btn btn-outline-danger float-right">Delete</button>
+                        }
 
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                            -->
-                                    </td>
+                    </div>
+                </div>
+            </div>
+        </div>
+            -->
+                                        </td>
                                 </tr>
                             }
                         }
@@ -149,10 +155,14 @@
                     @using (Html.BeginForm("DeleteMapping", "AdminMapping", new { mapID = pam.ProgramAssessmentMappingID }, FormMethod.Post))
                     {
                         @Html.HiddenFor(model => model.ProgramID);
-                        <button type="submit" class="btn btn-outline-danger float-right">Delete</button>
-                    }
 
-                </div>
+                        @if (HttpContext.Current.User.IsInRole("ManageProgramAssessmentMap"))
+                        {
+                            <button type="submit" class="btn btn-outline-danger float-right">Delete</button>
+                            ]
+                        }
+
+                    </div>
             </div>
         </div>
     </div>

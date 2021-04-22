@@ -21,9 +21,12 @@
         <tr>
             <th class="h3">Name</th>
             <th scope="col" class="text-right"></th>
-            <th scope="col" class="text-right"><a href="/Rubric/AddRubric"><button type="button" class="btn btn-primary">Add New</button></a></th>
+            @if (HttpContext.Current.User.IsInRole("AddRubrics"))
+            {
+                <th scope="col" class="text-right"><a href="/Rubric/AddRubric"><button type="button" class="btn btn-primary">Add New</button></a></th>
+            }
 
-        </tr>
+            </tr>
     </thead>
     <tbody>
 
@@ -33,8 +36,11 @@
 
                 <td colspan="2">@rubric.Name</td>
                 <td class="text-right">
-                    <a href="/Rubric/ViewRubric?rubricID=@rubric.RubricID"><button type="button" class="btn btn-primary">View</button></a>
-                </td>
+                    @if (HttpContext.Current.User.IsInRole("ViewRubrics"))
+                    {
+                        <a href="/Rubric/ViewRubric?rubricID=@rubric.RubricID"><button type="button" class="btn btn-primary">View</button></a>
+                    }
+                    </td>
 
             </tr>
         }

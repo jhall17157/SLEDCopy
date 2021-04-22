@@ -11,82 +11,93 @@
         <li class="breadcrumb-item active" aria-current="page">@Model.Department.Name </li>
     </ol>
 </nav>
-<h1> @Model.Department.Name  - <a style="font-size: 65%;" href="/AdminDepartment/EditDepartment?departmentID=@Model.Department.DepartmentID">Edit <i class="fas fa-edit"></i></a> </h1>
-<br />
-<div class="py-1">
-    <b>Department Number:</b> @Model.Department.Number
-</div>
-@if (@Model.Department.School != null)
-{
-    <div class="py-1">
-        <b>School:</b> <a href="/AdminSchool/ViewSchool?schoolID=@Model.Department.School.SchoolID">@Model.Department.School.Name</a>
-    </div>
-}
-<div class="py-1">
-    <b>Is Active:</b> @Model.Department.IsActive
-</div>
 
-@if (Model.Department.ModifiedDateTime != null)
-{
-    <div class="py-1">
-        <b>Last Modified:</b>  @Model.Department.ModifiedDateTime
-    </div>
-    <div class="py-1">
-        <b>By User:</b> @Model.ModifierLogin
-    </div>
+<h1>
+    @Model.Department.Name  - @if (HttpContext.Current.User.IsInRole("EditDepartments"))
+    {<a style="font-size: 65%;" href="/AdminDepartment/EditDepartment?departmentID=@Model.Department.DepartmentID">Edit <i class="fas fa-edit"></i></a>}
+    </h1>
 }
-@if (Model.Department.CreatedDateTime != null)
-{
+    <br />
     <div class="py-1">
-        <b>Created:</b>  @Model.Department.CreatedDateTime
+        <b>Department Number:</b> @Model.Department.Number
     </div>
+    @if (@Model.Department.School != null)
+    {
+<div class="py-1">
+    @if (HttpContext.Current.User.IsInRole("ViewSchools"))
+    {
+        <b>School:</b> <a href="/AdminSchool/ViewSchool?schoolID=@Model.Department.School.SchoolID">@Model.Department.School.Name</a>
+    }
+    </div>
+    }
     <div class="py-1">
-        <b>By User:</b> @Model.CreatorLogin
+        <b>Is Active:</b> @Model.Department.IsActive
     </div>
-}
-<br />
-<div>
-    <table class="table table-hover table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th colspan="2" class="h3">Programs</th>
-                <th colspan="10" class="text-right"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (ProgramDepartment pd in Model.Department.ProgramDepartments)
-            {
-                if (pd.Program.IsActive.Equals(false))
+
+    @if (Model.Department.ModifiedDateTime != null)
+    {
+        <div class="py-1">
+            <b>Last Modified:</b>  @Model.Department.ModifiedDateTime
+        </div>
+        <div class="py-1">
+            <b>By User:</b> @Model.ModifierLogin
+        </div>
+    }
+    @if (Model.Department.CreatedDateTime != null)
+    {
+        <div class="py-1">
+            <b>Created:</b>  @Model.Department.CreatedDateTime
+        </div>
+        <div class="py-1">
+            <b>By User:</b> @Model.CreatorLogin
+        </div>
+    }
+    <br />
+    <div>
+        <table class="table table-hover table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th colspan="2" class="h3">Programs</th>
+                    <th colspan="10" class="text-right"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ProgramDepartment pd in Model.Department.ProgramDepartments)
                 {
-                    <tr>
-                        <td colspan="2">@pd.Program.Number <span class="text-danger">(Not Active)</span></td>
-                        <td colspan="2">@pd.Program.Name <span class="text-danger">(Not Active)</span></td>
-                        <td class="text-right">
-                            <a href="../AdminProgram/ViewProgram?programID=@pd.Program.ProgramID"><button type="button" class="btn btn-primary">View</button></a>
-                        </td>
-                    </tr>
+                    if (pd.Program.IsActive.Equals(false))
+                    {
+                        <tr>
+                            <td colspan="2">@pd.Program.Number <span class="text-danger">(Not Active)</span></td>
+                            <td colspan="2">@pd.Program.Name <span class="text-danger">(Not Active)</span></td>
+                            <td class="text-right">
+                                @if (HttpContext.Current.User.IsInRole("ViewPrograms"))
+                                {
+                                    <a href="../AdminProgram/ViewProgram?programID=@pd.Program.ProgramID"><button type="button" class="btn btn-primary">View</button></a>
+                                }
+                                </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2">@pd.Program.Number <span class="text-danger"></span></td>
+                            <td colspan="2">@pd.Program.Name</td>
+                            <td class="text-right">
+                                <a href="../AdminProgram/ViewProgram?programID=@pd.Program.ProgramID"><button type="button" class="btn btn-primary">View</button></a>
+                            </td>
+                        </tr>
+                    }
                 }
-                else
-                {
-                    <tr>
-                        <td colspan="2">@pd.Program.Number <span class="text-danger"></span></td>
-                        <td colspan="2">@pd.Program.Name</td>
-                        <td class="text-right">
-                            <a href="../AdminProgram/ViewProgram?programID=@pd.Program.ProgramID"><button type="button" class="btn btn-primary">View</button></a>
-                        </td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
-</div>
-@if (Model.updatedMessage != null)
-{
-    <script type="text/javascript">
+            </tbody>
+        </table>
+    </div>
+    @if (Model.updatedMessage != null)
+    {
+        <script type="text/javascript">
     console.log('here');
         window.onload = function () {
             swal("@Model.alertMessage", "", "@Model.updatedMessage");
             };
-    </script>
-}
+        </script>
+    }
 

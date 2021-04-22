@@ -12,7 +12,7 @@ using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "ViewSections")]
     public class AdminSectionController : SLEControllerBase
     {
         //private readonly int PageSize = 20;
@@ -20,6 +20,7 @@ namespace CLS_SLE.Controllers
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
         private Logger logger = LogManager.GetCurrentClassLogger();
 
+        [Authorize(Roles = "AddSections")]
         public ActionResult AddSection(short courseID)
         {
             try
@@ -61,6 +62,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "EditSections")]
         public ActionResult EditSection(short sectionID)
         {
             try
@@ -132,6 +134,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "ViewSections")]
         public ActionResult ViewSection(int? sectionID)
         {
             var section = new Section();
@@ -231,6 +234,7 @@ namespace CLS_SLE.Controllers
             return new JsonResult { Data = resultStudents, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        [Authorize(Roles = "AddSections")]
         [HttpPost]
         public ActionResult CreateSection(AddSectionViewModel sectionVM, short courseID)
         {
@@ -312,6 +316,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "EditSections")]
         [HttpPost]
         public ActionResult UpdateSection(UpdateSectionViewModel sectionVM, short sectionID)
         {
@@ -380,6 +385,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "ManageSectionEnrollment")]
         [HttpPost]
         public ActionResult AddStudent(SectionDetailViewModel studentVM, short sectionID)
         {
@@ -402,7 +408,7 @@ namespace CLS_SLE.Controllers
 
             return RedirectToAction("ViewSection", "AdminSection", new { sectionID = sectionID });
         }
-
+        [Authorize(Roles = "ManageSectionEnrollment")]
         [HttpPost]
         public ActionResult ToggleEnrollmentStatus(int? Id)
         {
@@ -439,6 +445,7 @@ namespace CLS_SLE.Controllers
             return new JsonResult { Data = dataStudent, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        [Authorize(Roles = "ManageSectionEnrollment")]
         public JsonResult SaveEnrollment(int id, int section)
         {
 
@@ -636,7 +643,7 @@ namespace CLS_SLE.Controllers
             //   fix formatting on viewSection Screen
             return RedirectToAction("UploadScreen", "AdminSection", new { sectionID = sectionId });
         }
-
+        [Authorize(Roles = "ManageSectionEnrollment")]
         public JsonResult DeleteStudent(SectionDetailViewModel model, string id)
         {
             var removeFromList = model.newStudents.Single(r => r.id == id);

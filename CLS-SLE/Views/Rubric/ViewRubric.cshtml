@@ -12,8 +12,9 @@
     </ol>
 </nav>
 <h1>
-	@Model.Rubric.AssessmentRubric.Name  - <a style="font-size: 85%;" href="@Url.Action("EditRubric", "Rubric", new { rubricID = Model.Rubric.RubricID, assessmentID = Model.Rubric.AssessmentID })"><b>Edit</b></a>
-</h1>
+    @Model.Rubric.AssessmentRubric.Name  - @if (HttpContext.Current.User.IsInRole("EditRubrics"))
+    {<a style="font-size: 85%;" href="@Url.Action("EditRubric", "Rubric", new { rubricID = Model.Rubric.RubricID, assessmentID = Model.Rubric.AssessmentID })"><b>Edit</b></a>}
+    </h1>
 <br />
 <div class="py-1">
 	<b>Description:</b> @Model.Rubric.AssessmentRubric.Description
@@ -48,7 +49,10 @@ else if (Model.CreatorLogin != null)
     <thead class="thead-dark">
         <tr>
             <th scope="col" class="h3">Outcomes</th>
-            <th scope="col"><a class="float-right btn btn-success" href="@Url.Action("AddOutcome", "Rubric", new { rubricID = Model.Rubric.RubricID, assessmentID = Model.Rubric.AssessmentID })"><i class="fa fa-plus"></i> Add New Outcome</a></th>
+            @if (HttpContext.Current.User.IsInRole("AddOutcomesCriteria"))
+            {
+                <th scope="col"><a class="float-right btn btn-success" href="@Url.Action("AddOutcome", "Rubric", new { rubricID = Model.Rubric.RubricID, assessmentID = Model.Rubric.AssessmentID })"><i class="fa fa-plus"></i> Add New Outcome</a></th>
+            }
         </tr>
     </thead>
 
@@ -63,10 +67,16 @@ else if (Model.CreatorLogin != null)
                     @*<a class="btn btn-block" role="button" href=".collapse@(outcome.OutcomeID)" data-toggle="collapse">Test</a>*@
                     <!--<button type="button" class="btn btn-primary outcomeDetailsButton">Details</button>-->
                     <a class="btn btn-primary" role="button" href=".collapseOutcome@(outcome.OutcomeID)" data-toggle="collapse">Details</a>
-                    <a href="@Url.Action("EditOutcome", "Rubric", new { outcomeID = outcome.OutcomeID, assessmentID = Model.Rubric.AssessmentID })" class="btn btn-primary">Edit</a>
-                    <a class="btn btn-primary movingOutcome" href="" role="button" data-toggle="modal" data-target="#moveModal" data-outcomeID="@(outcome.OutcomeID)" data-currentid="@Model.Rubric.AssessmentRubric.RubricID" data-outcomeName="@outcome.Name">Move</a>
-                    <a href="@Url.Action("AddCriterion", "Rubric", new { outcomeID = outcome.OutcomeID, assessmentID = Model.Rubric.AssessmentID })" class="btn btn-success"><i class="fa fa-plus"></i> Add New Criterion</a>
-                </td>
+                    @if (HttpContext.Current.User.IsInRole("EditOutcomesCriteria"))
+                    {
+                        <a href="@Url.Action("EditOutcome", "Rubric", new { outcomeID = outcome.OutcomeID, assessmentID = Model.Rubric.AssessmentID })" class="btn btn-primary">Edit</a>
+                        <a class="btn btn-primary movingOutcome" href="" role="button" data-toggle="modal" data-target="#moveModal" data-outcomeID="@(outcome.OutcomeID)" data-currentid="@Model.Rubric.AssessmentRubric.RubricID" data-outcomeName="@outcome.Name">Move</a>
+                    }
+                    @if (HttpContext.Current.User.IsInRole("AddOutcomesCriteria"))
+                    {
+                        <a href="@Url.Action("AddCriterion", "Rubric", new { outcomeID = outcome.OutcomeID, assessmentID = Model.Rubric.AssessmentID })" class="btn btn-success"><i class="fa fa-plus"></i> Add New Criterion</a>
+                    }
+                    </td>
             </tr>
         </tbody>
         <tbody class="collapseOutcome@(outcome.OutcomeID) collapse">

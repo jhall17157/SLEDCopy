@@ -32,45 +32,63 @@
     <tbody>
         @{ foreach (UserSecurity person in Model.UserSecurityList)
             {
-        <tr data-userID="person.PersonID">
-            <td>@person.Login</td>
-            <td>@person.LastName<text>,</text> @person.FirstName</td>
-            <td>
-                @{
-                    int i = 0;
-                    if (person.Roles.Count == 0)
-                    {
-                        <text>None</text>
-                    }
-                    foreach (Role role in person.Roles)
-                    {
-                        @role.Name
-                        i++;
-                        if (person.Roles.Count > i)
-                        {
-                            <text>, </text>
+                <tr data-userID="person.PersonID">
+                    <td>@person.Login</td>
+                    <td>@person.LastName<text>,</text> @person.FirstName</td>
+                    <td>
+                        @{
+                            int i = 0;
+                            if (person.Roles.Count == 0)
+                            {
+                                <text>None</text>
+                            }
+                            foreach (Role role in person.Roles)
+                            {
+                                @role.Name
+                                i++;
+                                if (person.Roles.Count > i)
+                                {
+                                    <text>, </text>
+                                }
+                            }
                         }
+                    </td>
+                    @if (HttpContext.Current.User.IsInRole("EditRoles"))
+                    {
+                        <td class="text-right"><a href="~/Admin/ManageUser?id=@person.PersonID" class="btn btn-primary mr-2">Edit Roles</a></td>
                     }
-                }
-            </td>
-            <td class="text-right"><a href="~/Admin/ManageUser?id=@person.PersonID" class="btn btn-primary mr-2">Edit Roles</a></td>
-            <td class="text-right"><a href="~/AdminUser/Edit?id=@person.PersonID" class="btn btn-primary mr-2">Edit User</a></td>
-            <td>
-                <form action="@Url.Action("Activate", "AdminUser", new { id = person.User.PersonID })" method="post" class="form form-inline float-right">
-                    <!--<input type="hidden" name="id" value="@person.User.PersonID" />-->
-                    <div class="form-group mx-1">
-                        <button @if (person.User.IsActive) { <text> class="btn btn-success col-12" type="button" </text>  } else { <text> class="btn btn-outline-success col-12" type="submit" name="submit" </text> }>
-                            Active
-                        </button>
-                    </div>
-                    <div class="form-group mx-1">
-                        <button @if (person.User.IsActive) { <text> class="btn btn-outline-danger col-12" type="submit" name="submit" </text>  } else { <text> class="btn btn-danger col-12" type="button" </text> }>
-                            Inactive
-                        </button>
-                    </div>
-                </form>
-            </td>
-        </tr>
+                    @if (HttpContext.Current.User.IsInRole("ManageUserRoles"))
+                    {
+                        <td class="text-right"><a href="~/AdminUser/Edit?id=@person.PersonID" class="btn btn-primary mr-2">Edit User</a></td>
+                    }
+                        <td>
+                            <form action="@Url.Action("Activate", "AdminUser", new { id = person.User.PersonID })" method="post" class="form form-inline float-right">
+                                <!--<input type="hidden" name="id" value="@person.User.PersonID" />-->
+                                @if (HttpContext.Current.User.IsInRole("ManageUserRoles"))
+                                {
+                                    <div class="form-group mx-1">
+                                        <button @if (person.User.IsActive)
+                                        { <text> class="btn btn-success col-12" type="button" </text>  }
+                                        else
+                                        { <text> class="btn btn-outline-success col-12" type="submit" name="submit" </text> }>
+                                            Active
+                                        </button>
+                                    </div>
+                                }
+                            <div class="form-group mx-1">
+                                @if (HttpContext.Current.User.IsInRole("ManageUserRoles"))
+                                {
+                                    <button @if (person.User.IsActive)
+                                    { <text> class="btn btn-outline-danger col-12" type="submit" name="submit" </text>  }
+                                    else
+                                    { <text> class="btn btn-danger col-12" type="button" </text> }>
+                                        Inactive
+                                    </button>
+                                }
+                                </div>
+                                </form>
+                        </td>
+                    </tr>
             }
         }
 

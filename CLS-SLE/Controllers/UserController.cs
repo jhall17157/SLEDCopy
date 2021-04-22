@@ -2,6 +2,7 @@
 using CLS_SLE.Utility.SAML;
 using NLog;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
@@ -156,9 +157,20 @@ namespace CLS_SLE.Controllers
         {
             var user = System.Web.HttpContext.Current.User;
 
-            String[] RolesArray = login.UserRoles.Select(x => x.Role.Name).ToArray();
 
+            var rolePermissions = login.UserRoles.Select(x => x.Role.RolePermissions).ToArray();
+            var permissions = new List<string>();
+            foreach (var item in rolePermissions)
+            {
+                foreach (var perm in item)
+                {
+                    RolePermission rp = perm;
+                    permissions.Add(rp.Permission.Name);
+                }
+            }
+            String[] RolesArray = permissions.ToArray();
             var UserIdentity = user.Identity;
+
 
             System.Web.HttpContext.Current.User = new GenericPrincipal(UserIdentity, RolesArray);
 

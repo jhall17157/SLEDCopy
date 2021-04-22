@@ -71,12 +71,15 @@
         <tbody>
             @{ foreach (UserSecurity person in Model.UsersInRole)
                 {
-                    <tr data-userID="person.PersonID">
-                        <td>@person.Login</td>
-                        <td>@person.LastName<text>,</text> @person.FirstName</td>
-                        <td>@person.IDNumber</td>
-                        <td class="text-right"><button class="btn btn-danger removeRoleButton" id="@person.PersonID"><i class="fas fa-trash"></i></button></td>
-                    </tr>
+                        <tr data-userID="person.PersonID">
+                            <td>@person.Login</td>
+                            <td>@person.LastName<text>,</text> @person.FirstName</td>
+                            <td>@person.IDNumber</td>
+                            @if (HttpContext.Current.User.IsInRole("ManageUserRoles"))
+                            {
+                            <td class="text-right"><button class="btn btn-danger removeRoleButton" id="@person.PersonID"><i class="fas fa-trash"></i></button></td>
+                            }
+                        </tr>
                 }
             }
         </tbody>

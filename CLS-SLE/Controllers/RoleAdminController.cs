@@ -10,15 +10,15 @@ using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Roles")]
     public class RoleAdminController : SLEControllerBase
     {
         List<int> NonDeletableRoleIDs = new List<int>() {1,2};
 
         SLE_TrackingEntities db = new SLE_TrackingEntities();
-       // public ActionResult Index() => View(db.Roles);
+        // public ActionResult Index() => View(db.Roles);
 
-
+        [Authorize(Roles = "AddRoles")]
         public ActionResult Create() => View();
 
         public ActionResult Confirm([Required]int id)
@@ -30,7 +30,7 @@ namespace CLS_SLE.Controllers
             return View();
         }
 
-
+        [Authorize(Roles = "AddRoles")]
         [HttpPost]
         public async Task<ActionResult> Create([Required]string name, [Required]string desc)
         {
@@ -48,6 +48,7 @@ namespace CLS_SLE.Controllers
             return RedirectToAction(actionName: "ManageRoles", controllerName: "RoleAdmin");
         }
 
+        [Authorize(Roles = "EditRoles")]
         [HttpPost]
         public ActionResult Delete(FormCollection form, short id)
         {
@@ -63,7 +64,8 @@ namespace CLS_SLE.Controllers
             db.SaveChanges();
             return RedirectToAction(actionName: "ManageRoles", controllerName: "RoleAdmin");
         }
- 
+
+        [Authorize(Roles = "ManageUserRoles")]
         public ActionResult RoleAssign(int role, List<Permission> permissions)
         {
             var results = db.RolePermissions.Where(rp => rp.RoleID == role);
@@ -88,6 +90,7 @@ namespace CLS_SLE.Controllers
             return RedirectToAction(actionName: "AdminDashboard", controllerName: "Admin");
         }
 
+        [Authorize(Roles = "EditRoles")]
         public ActionResult EditRoles(int id, EditRoleViewModel viewModel)
         {
 
@@ -108,7 +111,7 @@ namespace CLS_SLE.Controllers
             }
             return View(viewModel);
         }
-
+        [Authorize(Roles = "EditRoles")]
         public JsonResult updateRoleNameAndDescription(int roleID, string updatedRoleName, string updatedRoleDescription)
         {
             Role targetRole = db.Roles.Where(r => r.RoleID == roleID).FirstOrDefault();
@@ -124,7 +127,7 @@ namespace CLS_SLE.Controllers
                 return null;
             }
         }
-
+        [Authorize(Roles = "EditRoles")]
         public JsonResult toggleSchoolSecurity(int roleID, int SchoolID)
         {
             Role targetRole = db.Roles.Where(r => r.RoleID == roleID).FirstOrDefault();
@@ -157,6 +160,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "EditRoles")]
         public JsonResult toggleProgramSecurity(int roleID, int ProgramID)
         {
             Role targetRole = db.Roles.Where(r => r.RoleID == roleID).FirstOrDefault();
@@ -189,6 +193,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "EditRoles")]
         public JsonResult toggleDepartmentSecurity(int roleID, int DepartmentID)
         {
             Role targetRole = db.Roles.Where(r => r.RoleID == roleID).FirstOrDefault();
@@ -221,13 +226,14 @@ namespace CLS_SLE.Controllers
             }
         }
 
-
+        [Authorize(Roles = "AddRoles")]
         public ActionResult CreateRoles( CreateRoleViewModel vm)
         {
 
             return View(vm);
         }
 
+        [Authorize(Roles = "AddRoles")]
         public ActionResult SubmitRoleCreation(CreateRoleViewModel vm)
         {
             try
@@ -248,6 +254,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "EditRoles")]
         public ActionResult ManageRoles(ManageRolesViewModel vm)
         {
             if(vm!= null && vm.SearchTerm != null && vm.SearchTerm != "")
@@ -347,6 +354,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "EditRoles")]
         public JsonResult DeleteRole(int TargetID)
         {
             try
@@ -369,6 +377,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "ManageUserRoles")]
         public ActionResult ManageRoleMembership(int? roleID, string searchTerm)
         {
             var ManageRoleMembershipViewModel = new ManageRoleMembershipViewModel();
@@ -464,6 +473,7 @@ namespace CLS_SLE.Controllers
             return new JsonResult { Data = DataUser, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        [Authorize (Roles = "ManageUserRoles")]
         public ActionResult AddUserToRole( string personID, string roleID)
         {
             short pID = 0;
@@ -493,6 +503,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "ManageUserRoles")]
         public ActionResult RemoveUserFromRole(string personID, string roleID)
         {
             short pID = 0;

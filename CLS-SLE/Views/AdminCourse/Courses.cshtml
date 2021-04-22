@@ -71,8 +71,11 @@
         <tr>
             <th colspan="9">Course</th>
             <th colspan="2"></th>
-            <th colspan="1"><a class="float-right" href="/AdminCourse/AddCourse"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Course</button></a></th>
-        </tr>
+            @if (HttpContext.Current.User.IsInRole("AddCourses"))
+            {
+                <th colspan="1"><a class="float-right" href="/AdminCourse/AddCourse"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i> Add New Course</button></a></th>
+            }
+            </tr>
     </thead>
     <tbody>
         @foreach (Course course in Model.Courses)
@@ -85,8 +88,11 @@
                         <td colspan="9">@course.Number &nbsp;&nbsp;@course.CourseName &nbsp;<span class="text-info">(Non Banner)</span><span class="text-danger">(Not Active)</span></td>
                         <td colspan="2" class="text-left"></td>
                         <td colspan="1" class="text-right">
-                            <a href="ViewCourse?courseId=@course.CourseID"><button type="button" class="btn btn-primary">View</button></a>
-                        </td>
+                            @if (HttpContext.Current.User.IsInRole("ViewCourses"))
+                            {
+                                <a href="ViewCourse?courseId=@course.CourseID"><button type="button" class="btn btn-primary">View</button></a>
+                            }
+                            </td>
                     </tr>
                 }
                 else
@@ -95,8 +101,11 @@
                         <td colspan="9">@course.Number &nbsp;&nbsp;@course.CourseName &nbsp;<span class="text-danger">(Not Active)</span></td>
                         <td colspan="2"></td>
                         <td colspan="1" class="text-right">
-                            <a href="ViewCourse?courseId=@course.CourseID"><button type="button" class="btn btn-primary">View</button></a>
-                        </td>
+                            @if (HttpContext.Current.User.IsInRole("ViewCourses"))
+                            {
+                                <a href="ViewCourse?courseId=@course.CourseID"><button type="button" class="btn btn-primary">View</button></a>
+                            }
+                            </td>
                     </tr>
                 }
             }
@@ -108,8 +117,11 @@
                         <td colspan="9">@course.Number &nbsp;&nbsp; @course.CourseName &nbsp;<span class="text-info">(Non Banner)</span></td>
                         <td colspan="2"></td>
                         <td colspan="1" class="text-right">
-                            <a href="ViewCourse?courseId=@course.CourseID"><button type="button" class="btn btn-primary">View</button></a>
-                        </td>
+                            @if (HttpContext.Current.User.IsInRole("ViewCourses"))
+                            {
+                                <a href="ViewCourse?courseId=@course.CourseID"><button type="button" class="btn btn-primary">View</button></a>
+                            }
+                            </td>
                     </tr>
                 }
                 else
@@ -118,8 +130,11 @@
                         <td colspan="9">@course.Number  &nbsp;&nbsp;@course.CourseName</td>
                         <td colspan="2" class="text-left"></td>
                         <td colspan="1" class="text-right">
-                            <a href="ViewCourse?courseId=@course.CourseID"><button type="button" class="btn btn-primary">View</button></a>
-                        </td>
+                            @if (HttpContext.Current.User.IsInRole("ViewCourses"))
+                            {
+                                <a href="ViewCourse?courseId=@course.CourseID"><button type="button" class="btn btn-primary">View</button></a>
+                            }
+                            </td>
                     </tr>
                 }
             }

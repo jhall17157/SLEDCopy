@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "ViewSchools")]
     public class AdminSchoolController : SLEControllerBase
     {
         SLE_TrackingEntities db = new SLE_TrackingEntities();
@@ -23,6 +23,7 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view of schools that contains a list of schools ordered by the school's name
         /// </returns>
+        [Authorize(Roles = "ViewSchools")]
         public ActionResult Schools(string updatedMessage, string addedName) {
 
             SchoolsViewModel schoolVM = new SchoolsViewModel();
@@ -36,7 +37,7 @@ namespace CLS_SLE.Controllers
             }
             return View(schoolVM);
         }
-        
+
 
 
         // GET: AdminSchool/AddSchool
@@ -46,6 +47,7 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       a view that contains a submission form for adding a new school
         /// </returns>
+        [Authorize(Roles = "EditSchools")]
         public ActionResult AddSchool(){return View();}
 
         // POST: AdminSchool/CreateSchool
@@ -57,6 +59,7 @@ namespace CLS_SLE.Controllers
         /// <returns>
         ///       returns the user to the list of schools if successful otherwise returns users back to the AddSchool submission form
         /// </returns>
+        [Authorize(Roles = "EditSchools")]
         [HttpPost]
         public ActionResult CreateSchool(AddSchoolViewModel schoolVM)
         {
@@ -85,6 +88,7 @@ namespace CLS_SLE.Controllers
             else { return RedirectToAction("Schools", "AdminSchool", new {updatedMessage = "error", addedName = schoolVM.School.Name }); }
         }
 
+        [Authorize(Roles = "EditSchools")]
         public ActionResult EditSchool(short schoolID)
         {
             ViewBag.school = db.Schools.Where(s => s.SchoolID == schoolID).FirstOrDefault();
@@ -95,6 +99,7 @@ namespace CLS_SLE.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "ViewSchools")]
         public ActionResult ViewSchool(int? schoolId, string updatedMessage)
         {
             var school = new School();
@@ -138,6 +143,7 @@ namespace CLS_SLE.Controllers
             }
         }
 
+        [Authorize(Roles = "EditSchools")]
         [HttpPost]
         public ActionResult UpdateSchool(UpdateSchoolViewModel schoolVM, short schoolID)
         {

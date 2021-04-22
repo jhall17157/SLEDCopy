@@ -7,16 +7,17 @@ using System.Web.Mvc;
 
 namespace CLS_SLE.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Users")]
     public class AdminUserController : SLEControllerBase
     {
         private SLE_TrackingEntities db = new SLE_TrackingEntities();
         private readonly int PageSize = 10;
 
         //public ActionResult Index() => View(db.Users.OrderBy(u => u.Login));
-
+        [Authorize(Roles = "CreateManageUsers")]
         public ActionResult Create() => View();
 
+        [Authorize(Roles = "CreateManageUsers")]
         public ActionResult Edit(short id)
         {
             int UserID = id;
@@ -33,11 +34,12 @@ namespace CLS_SLE.Controllers
 
             return View(model);
         }
-        
+
         /**
          * Lucas Nolting
          * This is a method I will be converting to use Model binding
          */
+        [Authorize(Roles = "CreateManageUsers")]
         [HttpPost]
         public ActionResult CreateUser(AddUserViewModel userVM)
         {
@@ -87,6 +89,7 @@ namespace CLS_SLE.Controllers
         /**
          * TODO Document this and all other model bound method
          */
+        [Authorize(Roles = "ManageUserRoles")]
         [HttpPost]
         public JsonResult RemoveUserRole(string roleName, short id)
         {
@@ -119,6 +122,7 @@ namespace CLS_SLE.Controllers
             return RedirectToAction("ManageUsers", "AdminUser");
         }
 
+        [Authorize(Roles = "CreateManageUsers")]
         [HttpPost]
 
 

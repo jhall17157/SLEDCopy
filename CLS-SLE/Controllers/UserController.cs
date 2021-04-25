@@ -88,11 +88,11 @@ namespace CLS_SLE.Controllers
                             AuthorizeUser(user);
 
                             logger.Info("Successful login for " + user.Login + ", loading dashboard");
-                            if (System.Web.HttpContext.Current.User.IsInRole("Faculty"))
+                            if (System.Web.HttpContext.Current.User.IsInRole("FacultyDashboard"))
                             {
                                 return base.GetRedirectToInstructorAssessmentDashboard();
                             }
-                            else if (System.Web.HttpContext.Current.User.IsInRole("Administrator"))
+                            else if (System.Web.HttpContext.Current.User.IsInRole("AdminDashboard"))
                             {
                                 return base.GetRedirectToAdminDashboard();
                             }
